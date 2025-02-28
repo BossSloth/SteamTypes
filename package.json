@@ -1,0 +1,29 @@
+{
+  "name": "steam-types",
+  "version": "1.0.0",
+  "description": "TypeScript type definitions for the Steam client",
+  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [
+    "steam",
+    "types",
+    "typescript"
+  ],
+  "author": "BossSloth",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome-remote-interface": "^0.31.14",
+    "chrome-remote-interface": "^0.33.3",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
