@@ -1,4 +1,4 @@
-import {CompatibilityToolInfo} from "./App";
+import {CompatibilityToolInfo} from "./Apps";
 import { JsPbMessage, OperationResponse, Unregisterable } from "./shared";
 
 export interface Settings {

@@ -1,5 +1,5 @@
 import { Unregisterable } from "./shared";
-import {EAppUpdateError} from "./App";
+import {EAppUpdateError} from "./Apps";
 
 /**
  * Represents functions related to managing installs and installation wizards in Steam.

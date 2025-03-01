@@ -38,9 +38,9 @@ function generateTypeScriptInterfaces(jsonMap, interfaceName, outputLines) {
 
     for (const [key, value] of Object.entries(methods)) {
         if (value === null) {
-            stringBuilder += `\t${key}: any;\n`;
+            stringBuilder += `  ${key}: any;\n`;
         } else {
-            stringBuilder += `\t${key}: ${value};\n`;
+            stringBuilder += `  ${key}: ${value};\n`;
         }
     }
     stringBuilder += "}\n";

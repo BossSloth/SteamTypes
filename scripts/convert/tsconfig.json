@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": null,
+    "module": "CommonJS",
+    "noUnusedParameters": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+  },
+  "include": ["./**/*.ts", "./**/*.js"],
+}

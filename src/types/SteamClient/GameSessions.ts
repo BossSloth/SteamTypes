@@ -1,5 +1,5 @@
 import { Unregisterable } from "./shared";
-import {AppAchievements} from "./App";
+import {AppAchievements} from "./Apps";
 import { Screenshot } from "./Screenshots";
 
 /**

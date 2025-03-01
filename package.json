@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "test-convert": "bun scripts/convert/test-convert.ts",
+    "convert": "bun scripts/convert/convert-to-ts.js"
   },
   "keywords": [
     "steam",
@@ -19,8 +21,14 @@
   "author": "BossSloth",
   "license": "MIT",
   "devDependencies": {
+    "@inquirer/prompts": "^7.3.2",
     "@types/chrome-remote-interface": "^0.31.14",
+    "@types/diff": "^7.0.1",
+    "@types/node": "^22.13.5",
+    "chalk": "^5.4.1",
     "chrome-remote-interface": "^0.33.3",
+    "commander": "^13.1.0",
+    "diff": "^7.0.0",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {

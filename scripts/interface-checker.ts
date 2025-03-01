@@ -6,21 +6,30 @@
  * to identify added or removed functions/properties.
  * 
  * Usage:
- *   bun interface-checker.ts <interface-file> <interface-name>
+ *   bun interface-checker.ts --file <interface-file> --name <interface-name> --compare <interface-string-file>
  * 
  * Example:
- *   bun interface-checker.ts src/SteamClient/App.ts Apps
+ *   bun interface-checker.ts --file src/SteamClient/App.ts --name Apps --compare extracted/Apps.ts
  */
 
 import fs from 'fs';
 import ts from 'typescript';
+import { Command } from 'commander';
+import chalk from 'chalk';
+import { Logger } from './logger';
+
+let logger: Logger;
 
 // Function to parse TypeScript file and extract interface members
 function extractInterfaceMembers(filePath: string, interfaceName: string): string[] {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
+  return extractMembersFromString(fileContent, interfaceName);
+}
+
+function extractMembersFromString(interfaceString: string, interfaceName: string): string[] {
   const sourceFile = ts.createSourceFile(
-    filePath,
-    fileContent,
+    '',
+    interfaceString,
     ts.ScriptTarget.Latest,
     true
   );
@@ -45,22 +54,12 @@ function extractInterfaceMembers(filePath: string, interfaceName: string): strin
 
   visit(sourceFile);
   
-  return members;
-}
-
-// Function to parse an interface string and extract member names
-function extractMembersFromString(interfaceString: string): string[] {
-  const lines = interfaceString.split('\n');
-  const members: string[] = [];
-
-  for (const line of lines) {
-    // Match property or method name before a colon or parenthesis
-    const match = line.match(/^\s*([a-zA-Z0-9_]+)[\s:(/]/);
-    if (match && match[1]) {
-      members.push(match[1]);
-    }
+  if (members.length === 0) {
+    logger.error(chalk.yellow(`⚠️  Warning: No members found for interface ${chalk.bold(interfaceName)}`));
+  } else {
+    logger.debug(chalk.green(`✅ Found ${chalk.bold(members.length)} members in the interface`));
   }
-
+  
   return members;
 }
 
@@ -68,67 +67,106 @@ function extractMembersFromString(interfaceString: string): string[] {
 function compareInterfaces(
   filePath: string, 
   interfaceName: string, 
-  providedInterfaceString: string
-): void {
+  providedInterfaceString: string,
+  verbose: boolean = false,
+): { addedMembers: string[]; removedMembers: string[] } {
+  logger = new Logger({verbose});
+
+  logger.debug(chalk.cyan(`\n🔄 Comparing interfaces for ${chalk.bold(interfaceName)}...\n`));
+  
   // Extract members from the actual file
-  const actualMembers = extractInterfaceMembers(filePath, interfaceName);
+  logger.log(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceName)}...`));
+  const srcFileMembers = extractInterfaceMembers(filePath, interfaceName);
   
   // Extract members from the provided interface string
-  const providedMembers = extractMembersFromString(providedInterfaceString);
+  logger.debug(chalk.blue(`🔍 Extracting members from provided interface string...`));
+  const steamObjectMembers = extractMembersFromString(providedInterfaceString, interfaceName);
 
   // Find added members (in actual but not in provided)
-  const addedMembers = actualMembers.filter(
-    (member) => !providedMembers.includes(member)
+  const addedMembers = steamObjectMembers.filter(
+    (member) => !srcFileMembers.includes(member)
   );
 
   // Find removed members (in provided but not in actual)
-  const removedMembers = providedMembers.filter(
-    (member) => !actualMembers.includes(member)
+  const removedMembers = srcFileMembers.filter(
+    (member) => !steamObjectMembers.includes(member)
   );
 
   // Print results
-  console.log(`\n=== Interface Comparison for ${interfaceName} ===\n`);
+  logger.log(chalk.cyan(`\n=== ${chalk.bold('Interface Comparison Results')} ===\n`));
   
-  console.log(`Total members in actual file: ${actualMembers.length}`);
-  console.log(`Total members in provided interface: ${providedMembers.length}\n`);
+  logger.log(`📊 ${chalk.bold('Statistics:')}`);
+  logger.log(`  • Total members in ${filePath} file: ${chalk.bold(srcFileMembers.length)}`);
+  logger.log(`  • Total members in steam object: ${chalk.bold(steamObjectMembers.length)}`);
+  logger.log(`  • Added members: ${chalk.bold(addedMembers.length)}`);
+  logger.log(`  • Removed members: ${chalk.bold(removedMembers.length)}\n`);
 
   if (addedMembers.length > 0) {
-    console.log('Members added in actual file but missing in provided interface:');
-    addedMembers.forEach((member) => console.log(`  - ${member}`));
-    console.log('');
+    logger.log(chalk.green(`➕ ${chalk.bold('Members added')} in steam object but missing in src file:`));
+    addedMembers.forEach((member) => logger.log(`  • ${chalk.green(member)}`));
+    logger.log('');
   } else {
-    console.log('No members added in actual file.\n');
+    logger.log(`➕ No members added in the steam object.\n`);
   }
 
   if (removedMembers.length > 0) {
-    console.log('Members in provided interface but missing in actual file:');
-    removedMembers.forEach((member) => console.log(`  - ${member}`));
-    console.log('');
+    logger.log(chalk.red(`➖ ${chalk.bold('Members removed')} from steam object but present in src file:`));
+    removedMembers.forEach((member) => logger.log(`  • ${chalk.red(member)}`));
+    logger.log('');
   } else {
-    console.log('No members removed from actual file.\n');
+    logger.log(`➖ No members removed from the steam object.\n`);
   }
 
   if (addedMembers.length === 0 && removedMembers.length === 0) {
-    console.log('✅ The interfaces match perfectly!');
+    logger.log(chalk.green(`✅ ${chalk.bold('SUCCESS:')} The interfaces match perfectly!`));
   } else {
-    console.log('⚠️ The interfaces have differences that need to be addressed.');
+    logger.log(chalk.yellow(`⚠️  ${chalk.bold('ATTENTION:')} The interfaces have differences that need to be addressed.`));
   }
+
+  return {
+    addedMembers,
+    removedMembers,
+  };
 }
 
-// Command-line interface
+// Command-line interface using Commander
 function main() {
-  const args = process.argv.slice(2);
+  const program = new Command();
   
-  if (args.length < 3) {
-    console.error('Usage: bun interface-checker.ts <interface-file> <interface-name> [interface-string-file]');
-    process.exit(1);
-  }
-
-  const filePath = args[0];
-  const interfaceName = args[1];
-  let interfaceString = fs.readFileSync(args[2], 'utf-8');
-
-  compareInterfaces(filePath, interfaceName, interfaceString);
+  program
+    .name('interface-checker')
+    .description('Compare TypeScript interface definitions with their implementations')
+    .version('1.0.0');
+  
+  program
+    .requiredOption('-f, --file <path>', 'Path to the TypeScript interface file')
+    .requiredOption('-n, --name <name>', 'Name of the interface to check')
+    .requiredOption('-c, --compare <path>', 'Path to the file containing the interface string to compare against')
+    .option('-v, --verbose', 'Enable verbose output')
+    .action((options) => {
+      logger = new Logger(options);
+      try {
+        logger.log(chalk.cyan('\n🔍 Interface Checker Tool\n'));
+        
+        if (!fs.existsSync(options.file)) {
+          logger.error(chalk.red(`❌ Error: Interface file not found: ${options.file}`));
+          process.exit(1);
+        }
+        
+        if (!fs.existsSync(options.compare)) {
+          logger.error(chalk.red(`❌ Error: Compare file not found: ${options.compare}`));
+          process.exit(1);
+        }
+        
+        const interfaceString = fs.readFileSync(options.compare, 'utf-8');
+        compareInterfaces(options.file, options.name, interfaceString, options.verbose);
+      } catch (error) {
+        logger.error(chalk.red(`\n❌ Error: ${error.message}`));
+        process.exit(1);
+      }
+    });
+  
+  program.parse();
 }
 
 // Check if this script is being run directly

@@ -1,4 +1,4 @@
-import {Apps} from "./App";
+import {Apps} from "./Apps";
 import {Auth} from "./Auth";
 import {Broadcast} from "./Broadcast";
 import {Browser} from "./Browser";

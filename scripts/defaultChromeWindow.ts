@@ -238,3 +238,16 @@ export const defaultChromeWindowProperties = [
   "litElementVersions",
   "cr"
 ];
+
+export function windowDiff(windowObj: Window) {
+  const keys1 = new Set(Object.keys(windowObj));
+  const keys2 = new Set(defaultChromeWindowProperties);
+
+  const onlyInObj1 = [...keys1].filter(key => !keys2.has(key));
+  const onlyInObj2 = [...keys2].filter(key => !keys1.has(key));
+
+  return {
+      onlyInObj1,
+      onlyInObj2
+  };
+}
