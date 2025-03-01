@@ -272,6 +272,26 @@ export const testFunctions: Record<string, TestFunction> = {
     },
     expected: 'nestedReturns(x: unknown): unknown;',
   },
+  nestedReturnsNotCalled: {
+    func: (x) => {
+      let y = function inner() {
+        if (x > 0) {
+          return true;
+        }
+        return false;
+      };
+      return 'not called';
+    },
+    expected: 'nestedReturnsNotCalled(x: unknown): unknown;',
+  },
+  arrowFuncInFunction: {
+    func: function func(x) {
+      let i = () => {};
+
+      return false;
+    },
+    expected: 'arrowFuncInFunction(x: unknown): unknown;',
+  },
   earlyReturns: {
     func: (x) => {
       if (!x) return;
@@ -293,6 +313,10 @@ export const testFunctions: Record<string, TestFunction> = {
     },
     expected: 'returnInTryCatch(x: unknown): string;',
   },
+  nativeCode: {
+    func: Math.random,
+    expected: 'nativeCode(): unknown;',
+  }
 //#endregion
 };
 // #endregion
@@ -465,6 +489,7 @@ export const testSuites: TestSuite[] = [
       'property-with-dash': 'dash',
       'property.with.dots': 'dots',
       'property with spaces': 'spaces',
+      m_startWithUnderscore: {a: 5},
 
       // Nested empty structures
       nestedEmpty: {
@@ -481,6 +506,20 @@ export const testSuites: TestSuite[] = [
         } else {
           return y;
         }
+      },
+
+      sameStructureDifferentName: {
+        s_x: {k: 10},
+        s_y: {k: 15},
+      },
+
+      sameStructureSameName: {
+        x: {
+          id: {value: 'test'}
+        },
+        y: {
+          id: {value: 'test'}
+        },
       },
     },
   },

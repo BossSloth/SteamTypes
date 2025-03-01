@@ -105,12 +105,11 @@ program
             }
             passCount++;
           } else {
-            console.log(chalk.red(`  ✗ ${chalk.bold(funcName)}`) +  `: got "${chalk.underline(line)}" (expected: "${chalk.underline(expected)}")`);
+            console.log(chalk.red(`  ✗ ${chalk.bold(funcName)}`) +  `: Expected "${chalk.underline(expected)}" but got "${chalk.underline(line)}"`);
             // Print diff
             const diff = diffLib.diffWords(expected, line);
+            process.stdout.write('    ');
             for (const part of diff) {
-              const lines = part.value.split('\n').filter(line => line.length > 0);
-              
               if (part.added) {
                 process.stdout.write(chalk.green(part.value));
               } else if (part.removed) {

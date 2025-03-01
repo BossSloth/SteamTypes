@@ -30,7 +30,8 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
    * @param {Object} obj2 - Second object to compare
    * @returns {boolean} - Whether the objects have the same structure
    */
-  function deepSameStructure(obj1, obj2) {
+  function deepSameStructure(obj1, obj2, depth = 0) {
+    if (depth > 10) return false;
     if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
     if (!obj1 || !obj2) return obj1 === obj2;
 
@@ -41,7 +42,7 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
     return keys1.every(key => 
         keys2.includes(key) && 
         typeof obj1[key] === typeof obj2[key] && 
-        (typeof obj1[key] !== "object" || deepSameStructure(obj1[key], obj2[key]))
+        (typeof obj1[key] !== "object" || deepSameStructure(obj1[key], obj2[key], depth + 1))
     );
 }
   
@@ -79,36 +80,51 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
       case 'boolean': return 'boolean';
       case 'function': return 'unknown'; // This will be used differently in generateInterface
       case 'object':
+        if (value == {}) {
+          return 'object|unknown';
+        }
+
         if (Array.isArray(value)) {
           if (value.length === 0) {
             return 'unknown[]';
           }
           
           // Check if all items are the same type
-          const itemType = getType(value[0], path);
-          const allSameType = value.every(item => getType(item, path) === itemType);
+          const types = new Set(value.map(item => getType(item, path)));
+          const allSameType = Array.from(types).length === 1;
           
           if (allSameType) {
-            return `${itemType}[]`;
+            return `${Array.from(types)[0]}[]`;
           } else {
-            const types = new Set(value.map(item => getType(item, path)));
             return `(${[...types].join('|')})[]`;
           }
         }
         
-        // Create interface for nested objects
-        const valueName = path.split('.').slice(-1)[0];   
-        let interfaceName = path ? 
-          valueName.charAt(0).toUpperCase() + valueName.slice(1) :
-          `${mainInterfaceName}Nested${interfaces.size}`;
-        
-        // If the interface already exists add a number to it
-        let i = 2;
-        while (interfaces.has(interfaceName)) {
-          if (deepSameStructure(interfaces.get(interfaceName), value)) return interfaceName;
-          interfaceName = valueName.charAt(0).toUpperCase() + valueName.slice(1) + i;
-          i++;
+        // Generate a unique interface name for nested objects
+        const generateInterfaceName = (baseName) => {
+            let name = baseName;
+            let counter = 1;
+            while (interfaces.has(name)) {
+                // If same name and structure use already generated interface
+                if (deepSameStructure(interfaces.get(name), value)) return name;
+                name = `${baseName}${++counter}`;
+            }
+            return name;
+        };
+
+        const lastPathSegment = path.split('.').pop() || '';
+        let capitalizedName;
+        if (lastPathSegment.charAt(1) === '_') {
+            capitalizedName = lastPathSegment;
+        } else {
+            capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
         }
+        const baseName = path ? capitalizedName : `${mainInterfaceName}Nested${interfaces.size}`;
+
+        const sameInterface = [...interfaces].find(([_, i]) => deepSameStructure(i, value));
+
+        if (sameInterface) return sameInterface[0];
+        const interfaceName = generateInterfaceName(baseName);
 
         // Avoid circular references
         if (processedObjects.has(value)) {
@@ -148,8 +164,28 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
         paramsMatch = beforeArrow;
       } else {
         // Complex arrow function, try to extract from parentheses
-        const openParenIndex = beforeArrow.indexOf('(');
-        const closeParenIndex = beforeArrow.lastIndexOf(')');
+        // Find the outermost pair of parentheses
+        let parenDepth = 0;
+        let openParenIndex = -1;
+        let closeParenIndex = -1;
+        
+        for (let i = 0; i < beforeArrow.length; i++) {
+          const char = beforeArrow[i];
+          
+          if (char === '(') {
+            parenDepth++;
+            if (parenDepth === 1) {
+              openParenIndex = i;
+            }
+          } else if (char === ')') {
+            parenDepth--;
+            if (parenDepth === 0) {
+              closeParenIndex = i;
+              break;  // Found the outermost closing parenthesis
+            }
+          }
+        }
+        
         if (openParenIndex !== -1 && closeParenIndex !== -1) {
           paramsMatch = beforeArrow.substring(openParenIndex + 1, closeParenIndex);
         }
@@ -244,6 +280,10 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
     const funcStr = func.toString();
     const returnTypes = new Set();
 
+    if (funcStr.includes('[native code]')) {
+      return 'unknown';
+    }
+
     // If there are no return statements and no arrow functions, return 'void'
     if (!funcStr.includes('return') && !funcStr.includes('=>')) {
       return 'void';
@@ -252,7 +292,8 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
     // Check if there are nested functions or arrow functions
     // If so, return 'unknown' as we can't reliably determine the return type
     if ((funcStr.includes('function') && funcStr.indexOf('function') !== funcStr.lastIndexOf('function')) ||
-        (funcStr.includes('=>') && funcStr.indexOf('=>') !== funcStr.lastIndexOf('=>'))) {
+        (funcStr.includes('=>') && funcStr.indexOf('=>') !== funcStr.lastIndexOf('=>')) ||
+        (funcStr.includes('function ') && funcStr.includes('=>'))) {
       return 'unknown';
     }
 
@@ -394,13 +435,16 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
     const nonFunctions = [];
     
     // Process all properties
-    
     for (const key of getProperties(obj)) {
-      // if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
       const propertyPath = interfaceName + '.' + key;
-      const type = getType(value, propertyPath);
-      
+      let type;
+      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
+        type = 'object|unknown';
+      } else {
+        type = getType(value, propertyPath);
+      }
+
       if (typeof value === 'function') {
         const params = extractFunctionParams(value);
         const paramsList = params.map(param => {
@@ -470,16 +514,12 @@ function convertToTypescript(obj, mainInterfaceName, options = {exportKeyword: t
 
 function testConvert() {
   const testObj = {
-    //TODO: Things like this are broken now, FIX IT. Test it on appDetailsStore
-    regularFunc: function test(u, e, v, SteamClient) {
-      return u.O.SetCachedDataForApp(e.appid, v, 1, void 0),
-      SteamClient.Apps.ClearCustomLogoPositionForApp(e.appid).then((()=>{
-          let t = this.GetAppData(e.appid);
-          t.customImageInfo = void 0,
-          t.customImageInfoRtime = e.rt_custom_image_mtime
-      }
-      ))
-  },
+      testFunc: function test() {
+        let i = () => {};
+
+        return '';
+      },
+      func: Math.random
   };
   
   const tsInterfaces = convertToTypescript(testObj, 'TestObject');
