@@ -1,5 +1,5 @@
 import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
-import { testSuites } from './test-cases';
+import { testSuites } from './test-cases/test-cases';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
@@ -176,7 +176,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
 
     return parameters.map(param => {
       let paramName = param.getName();
-      let paramType = param.getType().getText(undefined, TypeFormatFlags.None);
+      let paramType = param.getType().getText(undefined, typeFormatFlags);
       let isOptional = param.isOptional();
       let defaultValue = param.getInitializer()?.getText();
       // Remove newlines and trim spaces
@@ -209,7 +209,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
 
   //#region Ext. Return Type
   function extractReturnType(initializer: FunctionExpression|ArrowFunction): string {
-    let returnType = initializer.getReturnType().getText(undefined, TypeFormatFlags.None);
+    let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
     
     // Always add spaces between types
     returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');

@@ -1,43 +1,12 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-// Import chalk as an ES module
 import { default as chalk } from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
 import { convertToTypescript } from './convert-to-ts';
 import * as diffLib from 'diff';
 import { checkbox, select } from '@inquirer/prompts';
-import { testFunctions, TestSuite, testSuites } from './test-cases';
-
-// #endregion
-
-async function testSuiteNotFound(suiteName: string, single = false): Promise<TestSuite[]> {
-  console.log(chalk.red(`Test suite "${suiteName}" not found.`));
-  // console.log(chalk.yellow('Available test suites:'));
-  // testSuites.forEach(s => console.log(`  - ${s.name}`));
-  let result: string[];
-  if (single) {
-    result = [await select({
-      message: 'Please select the test suite to run',
-      choices: [
-        ...testSuites.map(s => s.name),
-      ]
-    })];
-  } else {
-    result = await checkbox({
-      message: 'Please select the test suite(s) that you want to run',
-      choices: [
-        ...testSuites.map(s => s.name),
-      ]
-    }) as string[];
-    if (result.length === 0) {
-      return testSuiteNotFound(suiteName);
-    }
-  }
-
-  // Return an array of TestSuite objects that match the selected names
-  return testSuites.filter(s => result.includes(s.name));
-}
+import { TestSuite, testSuites, testFunctions } from './test-cases';
 
 // Create the CLI program
 const program = new Command();
@@ -346,6 +315,32 @@ program
     console.log(`  ⏱️ ${elapsed.toFixed(1)} ms`);
   });
 // #endregion
+
+async function testSuiteNotFound(suiteName: string, single = false): Promise<TestSuite[]> {
+  console.log(chalk.red(`Test suite "${suiteName}" not found.`));
+  let result: string[];
+  if (single) {
+    result = [await select({
+      message: 'Please select the test suite to run',
+      choices: [
+        ...testSuites.map(s => s.name),
+      ]
+    })];
+  } else {
+    result = await checkbox({
+      message: 'Please select the test suite(s) that you want to run',
+      choices: [
+        ...testSuites.map(s => s.name),
+      ]
+    }) as string[];
+    if (result.length === 0) {
+      return testSuiteNotFound(suiteName);
+    }
+  }
+
+  // Return an array of TestSuite objects that match the selected names
+  return testSuites.filter(s => result.includes(s.name));
+}
 
 // Parse command line arguments
 program.parse(process.argv);
