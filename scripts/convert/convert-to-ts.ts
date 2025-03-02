@@ -1,4 +1,4 @@
-import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction, MethodDeclaration } from 'ts-morph';
+import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
 import { testSuites } from './test-cases';
 
 /**
@@ -12,6 +12,11 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   const exportPrefix = exportKeyword ? 'export ' : '';
   const interfaces = new Map<string, any>();
   const processedObjects = new Set<any>();
+
+  //TODO: use these and discover which ones to use
+  const typeFormatFlags = 
+    TypeFormatFlags.UseSingleQuotesForStringLiteralType |
+    TypeFormatFlags.UseFullyQualifiedType;
 
   /**
    * Checks if two objects have the same structure
@@ -31,24 +36,20 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
         (typeof obj1[key] !== "object" || deepSameStructure(obj1[key], obj2[key], depth + 1))
     );
   }
-  
-  /**
-   * Formats a property name for TypeScript
-   */
+
   function formatPropertyName(propName: string): string {
-    // Check if the property name contains special characters
     if (/[\s\-\.]/.test(propName)) {
       // If it has spaces, dashes, or dots, wrap it in quotes
       return `'${propName}'`;
     }
     
-    // Otherwise return as is
     return propName;
   }
   
   /**
    * Gets the TypeScript type for a value
    */
+  //#region Ext. Value Type
   function getType(value: any, path = ''): string {
     if (value === null) return 'null';
     if (value === undefined) return 'undefined';
@@ -116,12 +117,24 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
         return 'any';
     }
   }
+  //#endregion Ext. Value Type
 
+  //#region Extract Function
   /**
-   * Extracts parameter information from a function using ts-morph
+   * Extracts both parameter information and return type from a function using ts-morph
    */
-  function extractFunctionParams(func: Function): Array<{name: string, type: string, optional: boolean, defaultValue?: string}> {
+  function extractFunctionInfo(func: Function): { 
+    params: MappedParam[],
+    returnType: string 
+  } {
     const funcStr = func.toString();
+    
+    if (funcStr.includes('[native code]')) {
+      return {
+        params: [],
+        returnType: 'unknown /* native code */'
+      };
+    }
     
     // Wrap the function in a variable declaration to make it easier to analyze
     let sourceCode: string;
@@ -133,120 +146,87 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       sourceCode = `const myFunc = function ${funcStr}`;
     }
     
-    try {
-      const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
-      const variableDeclaration = sourceFile.getVariableDeclarationOrThrow('myFunc');
-      let initializer: FunctionExpression|ArrowFunction|MethodDeclaration|undefined = 
-        variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
-        || variableDeclaration.getInitializerIfKind(ts.SyntaxKind.ArrowFunction)
-      if (!initializer) {
-        initializer = variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction)
-      }
-      
-      if (!ts.isFunctionExpression(initializer.compilerNode) && 
-          !ts.isArrowFunction(initializer.compilerNode)) {
-        return [];
-      }
-      
-      const parameters = initializer.getParameters();
-
-      
-      const mappedParams =  parameters.map(param => {
-        let paramName = param.getName();
-        let paramType = param.getType().getText(undefined, TypeFormatFlags.None);
-        let isOptional = param.isOptional();
-        let defaultValue = param.getInitializer()?.getText();
-        // Remove newlines and trim spaces
-        defaultValue = defaultValue?.split('\n').map(line => line.trim()).join('')
-
-        if (param.isRestParameter()) {
-          paramName = '...'+paramName;
-          isOptional = false;
-        }
-
-        if (paramType === 'any') {
-          paramType = 'unknown';
-        }
-        if (paramType === 'any[]') {
-          paramType = 'unknown[]';
-        }
-        if (paramType === '{}') {
-          paramType = 'unknown';
-        }
-        if (paramType === '[]' || paramType === 'never[]') {
-          paramType = 'unknown[]';
-        }
-
-        return {
-          name: paramName,
-          type: paramType || 'unknown',
-          optional: isOptional,
-          defaultValue
-        };
-      });
-
-      project.removeSourceFile(sourceFile);
-      return mappedParams;
-    } catch (error) {
-      // Fallback for cases where ts-morph can't parse the function
-      console.error('Error analyzing function parameters:', error);
-      return [];
-    }
-  }
-  
-  /**
-   * Detects the return type of a function using ts-morph
-   */
-  function detectReturnType(func: Function): string {
-    const funcStr = func.toString();
-    
-    if (funcStr.includes('[native code]')) {
-      return 'unknown /* native code */';
-    }
-    
-    // Wrap the function in a variable declaration
-    let sourceCode: string;
-    if (funcStr.startsWith('function')) {
-      sourceCode = `const myFunc = ${funcStr}`;
-    } else if (funcStr.startsWith('(')) {
-      sourceCode = `const myFunc = ${funcStr}`;
-    } else {
-      sourceCode = `const myFunc = function ${funcStr}`;
-    }
-    
     const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
     const variableDeclaration = sourceFile.getVariableDeclarationOrThrow('myFunc');
-    let initializer: FunctionExpression|ArrowFunction|undefined;
-    initializer = variableDeclaration.getInitializerIfKind(
-      ts.SyntaxKind.FunctionExpression, 
-    );
-    if (!initializer) {
-      initializer = variableDeclaration.getInitializerIfKindOrThrow(
-        ts.SyntaxKind.ArrowFunction
-      );
-    }
-
-    const returnType = initializer.getReturnType();
-    let returnTypeText = returnType.getText(undefined, TypeFormatFlags.None);
+    let initializer: FunctionExpression|ArrowFunction = 
+      variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
+      || variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
+    
+    const mappedParams = extractParams(initializer);
+    const returnType = extractReturnType(initializer);
 
     project.removeSourceFile(sourceFile);
-
-    // Always add spaces between types
-    returnTypeText = returnTypeText.replace(/(?!\s)\|(?!\s)/g, ' | ');
-
-    if (returnTypeText === 'any') {
-      return 'unknown';
-    }
-    if (returnTypeText === 'any[]') {
-      return 'unknown[]';
-    }
-    if (returnTypeText === '{}') {
-      return 'object|unknown';
-    }
     
-    return returnTypeText;
+    return {
+      params: mappedParams,
+      returnType: returnType
+    };
   }
 
+  type MappedParam = {
+    name: string;
+    type: string;
+    optional: boolean;
+    defaultValue?: string;
+  }
+
+  //#region Ext. Params
+  function extractParams(initializer: FunctionExpression|ArrowFunction): MappedParam[] {
+    const parameters = initializer.getParameters();
+
+    return parameters.map(param => {
+      let paramName = param.getName();
+      let paramType = param.getType().getText(undefined, TypeFormatFlags.None);
+      let isOptional = param.isOptional();
+      let defaultValue = param.getInitializer()?.getText();
+      // Remove newlines and trim spaces
+      defaultValue = defaultValue?.split('\n').map(line => line.trim()).join('');
+
+      if (param.isRestParameter()) {
+        paramName = '...'+paramName;
+        isOptional = false;
+      }
+
+      paramType.replaceAll('any[];', 'unknown[];');
+
+      switch (paramType) {
+        case 'any': paramType = 'unknown'; break;
+        case 'any[]': paramType = 'unknown[]'; break;
+        case '{}': paramType = 'unknown'; break;
+        case '[]': 
+        case 'never[]': paramType = 'unknown[]'; break;
+      }
+
+      return {
+        name: paramName,
+        type: paramType || 'unknown',
+        optional: isOptional,
+        defaultValue
+      };
+    });
+  }
+  //#endregion Extract Params
+
+  //#region Ext. Return Type
+  function extractReturnType(initializer: FunctionExpression|ArrowFunction): string {
+    let returnType = initializer.getReturnType().getText(undefined, TypeFormatFlags.None);
+    
+    // Always add spaces between types
+    returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');
+
+    returnType.replaceAll('any[];', 'unknown[];');
+
+    switch (returnType) {
+      case 'any': returnType = 'unknown'; break;
+      case 'any[]': returnType = 'unknown[]'; break;
+      case '{}': returnType = 'object|unknown'; break;
+    }
+
+    return returnType;
+  }
+  //#endregion Extract Return Type
+  //#endregion Extract Function
+  
   const defaultProtoProps = [
     "constructor",
     "__defineGetter__",
@@ -288,14 +268,16 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     const functions: string[] = [];
     const nonFunctions: string[] = [];
     
+    const properties = getProperties(obj);
+    
     // Process all properties
-    for (const key of getProperties(obj)) {
+    for (const key of properties) {
       const value = obj[key];
       const propertyPath = interfaceName + '.' + key;
       
       if (typeof value === 'function') {
-        // Get parameter information using ts-morph
-        const params = extractFunctionParams(value);
+        // Get parameter information and return type using ts-morph in a single call
+        const { params, returnType } = extractFunctionInfo(value);
         const paramsList = params.map(param => {
           let paramStr = param.name;
           
@@ -313,8 +295,6 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
           return paramStr;
         }).join(', ');
         
-        // Get return type using ts-morph
-        const returnType = detectReturnType(value);
         functions.push(`  ${formatPropertyName(key)}(${paramsList}): ${returnType};`);
       } else {
         let type;
@@ -327,8 +307,14 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       }
     }
     
+    const sortProps = (a: string, b: string) => {
+      const cleanA = a.replaceAll("'", '').trim();
+      const cleanB = b.replaceAll("'", '').trim();
+      return cleanA.localeCompare(cleanB);
+    };
+    
     // Add functions first
-    functions.sort((a, b) => a.replace("'", '').trim().localeCompare(b.replace("'", '').trim()));
+    functions.sort(sortProps);
     if (functions.length > 0) {
       result += functions.join('\n') + '\n';
       
@@ -338,7 +324,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       }
     }
     
-    nonFunctions.sort((a, b) => a.replace("'", '').trim().localeCompare(b.replace("'", '').trim()));
+    nonFunctions.sort(sortProps);
     // Add non-function properties
     if (nonFunctions.length > 0) {
       result += nonFunctions.join('\n') + '\n';
@@ -423,11 +409,6 @@ function testConvert() {
 
   const startTime = performance.now();
   const tsInterfaces = convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
-  // convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
-  // convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
-  // convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
-  // convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
-  // convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
   console.log(tsInterfaces);
   const endTime = performance.now();
   console.log(`Execution time: ${endTime - startTime} ms`);
@@ -454,5 +435,3 @@ globalThis.convertToTypescript = convertToTypescript;
 
 // Export the function for use in other modules
 export {convertToTypescript}
-
-// esbuild '.\scripts\ts-morph-converter copy.ts' --bundle --format=iife --platform=browser --outfile=test.js --minify-identifiers --minify-syntax

@@ -13,7 +13,8 @@
     "watch": "tsc -w",
     "test-convert": "bun scripts/convert/test-convert.ts",
     "convert": "bun scripts/convert/convert-to-ts.ts",
-    "build-convert": "esbuild scripts/convert/convert-to-ts.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=dist/scripts/convert-to-ts.js"
+    "build-convert-debug": "esbuild scripts/convert/convert-to-ts.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=dist/scripts/convert-to-ts.js",
+    "build-convert": "bun build-convert-debug --minify-identifiers"
   },
   "keywords": [
     "steam",
@@ -36,5 +37,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "long": "^5.3.1"
   }
 }
