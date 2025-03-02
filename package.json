@@ -1,6 +1,7 @@
 {
   "name": "steam-types",
   "version": "1.0.0",
+  "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
   "types": "dist/index.d.ts",
   "main": "./dist/index.js",
@@ -11,14 +12,14 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test-convert": "bun scripts/convert/test-convert.ts",
-    "convert": "bun scripts/convert/convert-to-ts.js"
+    "convert": "bun scripts/convert/convert-to-ts.ts",
+    "build-convert": "esbuild scripts/convert/convert-to-ts.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=dist/scripts/convert-to-ts.js"
   },
   "keywords": [
     "steam",
     "types",
     "typescript"
   ],
-  "author": "BossSloth",
   "license": "MIT",
   "devDependencies": {
     "@inquirer/prompts": "^7.3.2",
@@ -29,6 +30,8 @@
     "chrome-remote-interface": "^0.33.3",
     "commander": "^13.1.0",
     "diff": "^7.0.0",
+    "esbuild": "^0.25.0",
+    "ts-morph": "^25.0.1",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {

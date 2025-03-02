@@ -17,7 +17,7 @@ export interface TestSuite {
 export const testFunctions: Record<string, TestFunction> = {
   emptyFunction: {
     func: () => {},
-    expected: 'emptyFunction(): unknown;',
+    expected: 'emptyFunction(): void;',
   },
   returnNull: {
     func: () => {
@@ -32,8 +32,8 @@ export const testFunctions: Record<string, TestFunction> = {
     expected: 'voidReturn(): void;',
   },
   emptyReturn: {
-    func: () => {},
-    expected: 'emptyReturn(): unknown;',
+    func: function emptyReturn() {},
+    expected: 'emptyReturn(): void;',
   },
 //#endregion
 
@@ -44,11 +44,11 @@ export const testFunctions: Record<string, TestFunction> = {
   },
   directReturnTrue: {
     func: () => true,
-    expected: 'directReturnTrue(): true;',
+    expected: 'directReturnTrue(): boolean;',
   },
   directReturnFalse: {
     func: () => false,
-    expected: 'directReturnFalse(): false;',
+    expected: 'directReturnFalse(): boolean;',
   },
   directReturnNumber: {
     func: () => 42,
@@ -60,11 +60,11 @@ export const testFunctions: Record<string, TestFunction> = {
   },
   directReturnArray: {
     func: () => [1, 2, 3],
-    expected: 'directReturnArray(): unknown[];',
+    expected: 'directReturnArray(): number[];',
   },
   directReturnObject: {
     func: () => ({ a: 1, b: 2 }),
-    expected: 'directReturnObject(): object|unknown;',
+    expected: 'directReturnObject(): { a: number; b: number; };',
   },
   directReturnWithParens: {
     func: () => ('hello'),
@@ -76,7 +76,7 @@ export const testFunctions: Record<string, TestFunction> = {
   },
   directReturnEmptyArray: {
     func: () => [],
-    expected: 'directReturnEmptyArray(): unknown[];',
+    expected: 'directReturnEmptyArray(): never[];',
   },
   directReturnEmptyObject: {
     func: () => ({}),
@@ -93,13 +93,13 @@ export const testFunctions: Record<string, TestFunction> = {
     func: () => {
       return true;
     },
-    expected: 'returnTrue(): true;',
+    expected: 'returnTrue(): boolean;',
   },
   returnFalse: {
     func: () => {
       return false;
     },
-    expected: 'returnFalse(): false;',
+    expected: 'returnFalse(): boolean;',
   },
   returnConditionalBoolean: {
     func: () => {
@@ -126,13 +126,25 @@ export const testFunctions: Record<string, TestFunction> = {
     func: () => {
       return [];
     },
-    expected: 'returnEmptyArray(): unknown[];',
+    expected: 'returnEmptyArray(): never[];',
   },
   returnArrayOfNumbers: {
     func: () => {
       return [1, 2, 3];
     },
-    expected: 'returnArrayOfNumbers(): unknown[];',
+    expected: 'returnArrayOfNumbers(): number[];',
+  },
+  returnArrayOfStrings: {
+    func: () => {
+      return ['a', 'b', 'c'];
+    },
+    expected: 'returnArrayOfStrings(): string[];',
+  },
+  returnArrayOfObjects: {
+    func: () => {
+      return [{ a: 1 }, { a: 2 }];
+    },
+    expected: 'returnArrayOfObjects(): { a: number; }[];',
   },
   returnEmptyObject: {
     func: () => {
@@ -142,9 +154,9 @@ export const testFunctions: Record<string, TestFunction> = {
   },
   returnComplexObject: {
     func: () => {
-      return { a: 1, b: 'string' };
+      return { a: 1, b: 'string', c: Math.random };
     },
-    expected: 'returnComplexObject(): object|unknown;',
+    expected: 'returnComplexObject(): { a: number; b: string; c: () => number; };',
   },
 //#endregion
 
@@ -177,19 +189,19 @@ export const testFunctions: Record<string, TestFunction> = {
     func: (a, b = 10, c = 'default') => {
       return a + b + c;
     },
-    expected: 'defaultParameters(a: unknown, b?: unknown /* default = 10 */, c?: unknown /* default = "default" */): unknown;',
+    expected: 'defaultParameters(a: unknown, b?: number /* default = 10 */, c?: string /* default = "default" */): string;',
   },
   complexDefaultParameters: {
     func: (a = {}, b = [], c = () => {}) => {
       return typeof c;
     },
-    expected: 'complexDefaultParameters(a?: unknown /* default = {} */, b?: unknown /* default = [] */, c?: unknown /* default = ( */): unknown;',
+    expected: 'complexDefaultParameters(a?: unknown /* default = {} */, b?: unknown[] /* default = [] */, c?: () => void /* default = () => {} */): "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";',
   },
   commaInDefaultParameter: {
     func: (a, b, c = 'def, ault') => {
       return a + b + c;
     },
-    expected: 'commaInDefaultParameter(a: unknown, b: unknown, c?: unknown /* default = "def, ault" */): unknown;',
+    expected: 'commaInDefaultParameter(a: unknown, b: unknown, c?: string /* default = "def, ault" */): string;',
   },
 //#endregion
 
@@ -204,7 +216,7 @@ export const testFunctions: Record<string, TestFunction> = {
         return 'zero';
       }
     },
-    expected: 'multipleReturnTypes1(x: unknown): string;',
+    expected: 'multipleReturnTypes1(x: unknown): "positive" | "negative" | "zero";',
   },
   multipleReturnTypes2: {
     func: (flag) => {
@@ -218,11 +230,11 @@ export const testFunctions: Record<string, TestFunction> = {
   multipleReturnTypes3: {
     func: (flag) => {
       if (flag) {
-        return 'string';
+        return 'value';
       }
       return null;
     },
-    expected: 'multipleReturnTypes3(flag: unknown): string|null;',
+    expected: 'multipleReturnTypes3(flag: unknown): "value" | null;',
   },
   multipleReturnTypes4: {
     func: (value) => {
@@ -234,7 +246,7 @@ export const testFunctions: Record<string, TestFunction> = {
         return null;
       }
     },
-    expected: 'multipleReturnTypes4(value: unknown): unknown|null;',
+    expected: 'multipleReturnTypes4(value: unknown): string | number | null;',
   },
   multipleReturnTypes5: {
     func: (x) => {
@@ -243,7 +255,7 @@ export const testFunctions: Record<string, TestFunction> = {
       if (x > 10) return 'large';
       return [x];
     },
-    expected: 'multipleReturnTypes5(x: unknown): null|number|string|unknown[];',
+    expected: 'multipleReturnTypes5(x: unknown): any[] | 0 | "large" | null;',
   },
   multipleReturnTypesWithObjects: {
     func: (type) => {
@@ -255,7 +267,7 @@ export const testFunctions: Record<string, TestFunction> = {
         return null;
       }
     },
-    expected: 'multipleReturnTypesWithObjects(type: unknown): object|unknown|null;',
+    expected: 'multipleReturnTypesWithObjects(type: unknown): { name: string; id: number; permissions?: undefined; } | { name: string; permissions: string[]; id?: undefined; } | null;',
   },
 //#endregion
 
@@ -270,7 +282,7 @@ export const testFunctions: Record<string, TestFunction> = {
       };
       return inner();
     },
-    expected: 'nestedReturns(x: unknown): unknown;',
+    expected: 'nestedReturns(x: unknown): boolean;',
   },
   nestedReturnsNotCalled: {
     func: (x) => {
@@ -280,17 +292,20 @@ export const testFunctions: Record<string, TestFunction> = {
         }
         return false;
       };
+      y();
       return 'not called';
     },
-    expected: 'nestedReturnsNotCalled(x: unknown): unknown;',
+    expected: 'nestedReturnsNotCalled(x: unknown): string;',
   },
   arrowFuncInFunction: {
     func: function func(x) {
       let i = () => {};
 
+      i();
+
       return false;
     },
-    expected: 'arrowFuncInFunction(x: unknown): unknown;',
+    expected: 'arrowFuncInFunction(x: unknown): boolean;',
   },
   earlyReturns: {
     func: (x) => {
@@ -298,7 +313,7 @@ export const testFunctions: Record<string, TestFunction> = {
       if (x < 0) return null;
       return x;
     },
-    expected: 'earlyReturns(x: unknown): undefined|null|unknown;',
+    expected: 'earlyReturns(x: unknown): unknown;',
   },
   returnInTryCatch: {
     func: (x) => {
@@ -311,11 +326,11 @@ export const testFunctions: Record<string, TestFunction> = {
       }
       return 'default';
     },
-    expected: 'returnInTryCatch(x: unknown): string;',
+    expected: 'returnInTryCatch(x: unknown): "success" | "error" | "default";',
   },
   nativeCode: {
     func: Math.random,
-    expected: 'nativeCode(): unknown;',
+    expected: 'nativeCode(): unknown /* native code */;',
   }
 //#endregion
 };

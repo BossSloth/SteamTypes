@@ -1,6 +1,6 @@
 export interface MixedTypes {
   funcWithParams(a: unknown, b: unknown): unknown;
-  simpleFunc(): unknown;
+  simpleFunc(): void;
 
   booleanProp: boolean;
   nested: Nested;

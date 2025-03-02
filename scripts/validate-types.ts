@@ -19,6 +19,8 @@ import { interfaceMaps } from './maps';
 import { confirm} from '@inquirer/prompts';
 import { Logger } from './logger';
 
+const convertToTsFilePath = path.join(process.cwd(), 'dist', 'scripts', 'convert-to-ts.js');
+
 let logger: Logger;
 
 /**
@@ -66,7 +68,7 @@ async function getSharedJsContextTarget(): Promise<string | undefined> {
     return sharedJsContextTarget.targetId;
 }
 
-async function injectInterfaceJs(targetId: string) {
+async function injectConvertToTypescriptJs(targetId: string) {
     logger.debug(chalk.blue(`🔄 Injecting injection script into SharedJSContext window (ID: ${targetId})...`));
     
     const client = await ChromeRemoteInterface({
@@ -76,7 +78,7 @@ async function injectInterfaceJs(targetId: string) {
     
     // Inject the content of inject.js into the context of the target
     await client.Runtime.evaluate({
-        expression: fs.readFileSync(path.join(process.cwd(), 'scripts', 'inject.js'), 'utf8'),
+        expression: fs.readFileSync(convertToTsFilePath, 'utf8'),
     });
     
     client.close();
@@ -107,7 +109,7 @@ async function extractInterface(
     logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(objectPath)} to TypeScript interface...`));
     
     const response = await Runtime.evaluate({
-        expression: `window.convertToTypeScript(${objectPath}, '${interfaceName}')`,
+        expression: `window.convertToTypescript(${objectPath}, '${interfaceName}')`,
         returnByValue: true,
     });
 
@@ -136,7 +138,7 @@ async function run(options: ValidateTypesOptions) {
         process.exit(1);
     }
 
-    await injectInterfaceJs(targetId);
+    await injectConvertToTypescriptJs(targetId);
 
     let maps = interfaceMaps;
 
@@ -185,21 +187,21 @@ async function main() {
         .option('-v, --verbose', 'Enable verbose output')
         .action(async (options: ValidateTypesOptions) => {
             logger = new Logger(options);
-            try {
-                logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
+            // try {
+            logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
+            
+            await run(options);
+            
+            logger.log(chalk.green('\n✅ Operation completed successfully'));
                 
-                await run(options);
-                
-                logger.log(chalk.green('\n✅ Operation completed successfully'));
-                
-            } catch (error) {
-                logger.error(chalk.red(`\n❌ Error: ${error.message}`));
-                if (error.stack && options.verbose) {
-                    logger.error(chalk.gray('\nStack trace:'));
-                    logger.error(chalk.gray(error.stack));
-                }
-                process.exit(1);
-            }
+            // } catch (error: any) {
+            //     logger.error(chalk.red(`\n❌ Error: ${error.message}`));
+            //     if (error.stack && options.verbose) {
+            //         logger.error(chalk.gray('\nStack trace:'));
+            //         logger.error(chalk.gray(error.stack));
+            //     }
+            //     process.exit(1);
+            // }
         });
     
     await program.parseAsync();

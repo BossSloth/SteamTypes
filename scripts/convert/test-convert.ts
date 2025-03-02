@@ -6,24 +6,33 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { convertToTypescript } from './convert-to-ts';
 import * as diffLib from 'diff';
-import { checkbox } from '@inquirer/prompts';
+import { checkbox, select } from '@inquirer/prompts';
 import { testFunctions, TestSuite, testSuites } from './test-cases';
 
 // #endregion
 
-async function testSuiteNotFound(suiteName: string): Promise<TestSuite[]> {
+async function testSuiteNotFound(suiteName: string, single = false): Promise<TestSuite[]> {
   console.log(chalk.red(`Test suite "${suiteName}" not found.`));
   // console.log(chalk.yellow('Available test suites:'));
   // testSuites.forEach(s => console.log(`  - ${s.name}`));
-  const result = await checkbox({
-    message: 'Please select the test suite to run',
-    choices: [
-      ...testSuites.map(s => s.name),
-    ]
-  }) as string[];
-
-  if (result.length === 0) {
-    return testSuiteNotFound(suiteName);
+  let result: string[];
+  if (single) {
+    result = [await select({
+      message: 'Please select the test suite to run',
+      choices: [
+        ...testSuites.map(s => s.name),
+      ]
+    })];
+  } else {
+    result = await checkbox({
+      message: 'Please select the test suite(s) that you want to run',
+      choices: [
+        ...testSuites.map(s => s.name),
+      ]
+    }) as string[];
+    if (result.length === 0) {
+      return testSuiteNotFound(suiteName);
+    }
   }
 
   // Return an array of TestSuite objects that match the selected names
@@ -62,6 +71,7 @@ program
     if (suiteName && suitesToRun.length === 0) {
       suitesToRun = await testSuiteNotFound(suiteName);
     }
+    const startTime = performance.now();
 
     if (suiteName) {
       console.log(chalk.blue.bold(`Running test suites "${suitesToRun.map(s => s.name).join(', ')}"...\n`));
@@ -111,13 +121,22 @@ program
             process.stdout.write('    ');
             for (const part of diff) {
               if (part.added) {
-                process.stdout.write(chalk.green(part.value));
+                if (part.value.match(/^\s+$/)) {
+                  process.stdout.write(chalk.bgGreen(part.value));
+                } else {
+                  process.stdout.write(chalk.green(part.value));
+                }
               } else if (part.removed) {
-                process.stdout.write(chalk.red(part.value));
+                if (part.value.match(/^\s+$/)) {
+                  process.stdout.write(chalk.bgRed(part.value));
+                } else {
+                  process.stdout.write(chalk.red(part.value));
+                }
               } else {
                 process.stdout.write(chalk.gray(part.value));
               }
             }
+            process.stdout.write('\n');
             
             failCount++;
             passedAll = false;
@@ -175,6 +194,8 @@ program
     
     // Print summary
     console.log(chalk.blue.bold('Test Summary:'));
+    const elapsed = (performance.now() - startTime);
+    console.log(`  ⏱️ ${elapsed.toFixed(1)} ms`);
     console.log(chalk.green(`  ✓ ${passCount} tests passed`));
     if (failCount > 0) {
       console.log(chalk.red(`  ✗ ${failCount} tests failed`));
@@ -186,15 +207,12 @@ program
 program
   .command('generate')
   .description('Generate TypeScript interfaces for a specific test suite')
-  .argument('<suite>', 'Name of the test suite to generate')
-  .action((suiteName) => {
-    const suite = testSuites.find(s => s.name.toLowerCase() === suiteName.toLowerCase());
+  .argument('[suite]', 'Name of the test suite to generate')
+  .action(async (suiteName) => {
+    let suite = testSuites.find(s => s.name.toLowerCase() === suiteName?.toLowerCase());
     
     if (!suite) {
-      console.log(chalk.red(`Test suite "${suiteName}" not found.`));
-      console.log(chalk.yellow('Available test suites:'));
-      testSuites.forEach(s => console.log(`  - ${s.name}`));
-      return;
+      suite = (await testSuiteNotFound(suiteName, true))[0];
     }
     
     console.log(chalk.blue.bold(`Generating TypeScript for: ${suite.name}\n`));
@@ -213,6 +231,7 @@ program
   .option('-a, --all', 'Show full diff', false)
   .option('-c, --context-lines <lines>', 'Number of context lines in unified diff', '3')
   .action(async (suiteName, options) => {
+    const startTime = performance.now();
     const outputDir = __dirname + '/test-output';
     
     // Check if output directory exists
@@ -262,25 +281,15 @@ program
         
         // Show the differences using the diff package
         if (options.all) {
-          // Split the content into lines for line-by-line diff
-          const resultLines = normalizedResult.split('\n');
-          const expectedLines = normalizedExpected.split('\n');
-          
           // Calculate line-by-line diff
           const diffResult = diffLib.diffWords(normalizedExpected, normalizedResult);
           
           console.log('\n' + chalk.gray('─'.repeat(80)));
           
-          // Display the diff with line numbers
-          let expectedLineNum = 0;
-          let actualLineNum = 0;
-          
           for (const part of diffResult) {
-            const lines = part.value.split('\n').filter(line => line.length > 0);
-            
             if (part.added) {
               process.stdout.write(chalk.green(part.value));
-            } else if (part.removed) {
+            } else if (part.removed) {1
               process.stdout.write(chalk.red(part.value));
             } else {
               process.stdout.write(chalk.gray(part.value));
@@ -327,9 +336,14 @@ program
       console.log(''); // Empty line between suites
     }
     
-    if (!hasDifferences) {
-      console.log(chalk.green.bold('All outputs match expected files.'));
+    if (hasDifferences) {
+      console.log(chalk.red.bold('✗ Differences detected in one or more test suites.'));
+    } else {
+      console.log(chalk.green.bold('✓ All test suite outputs match their expected files.'));
     }
+    
+    const elapsed = (performance.now() - startTime);
+    console.log(`  ⏱️ ${elapsed.toFixed(1)} ms`);
   });
 // #endregion
 
