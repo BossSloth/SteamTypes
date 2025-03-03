@@ -1,6 +1,7 @@
 import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
 import { testSuites } from './test-cases/test-cases';
 import Long from 'long';
+import { isObservableMap } from 'mobx';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
@@ -12,6 +13,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   const exportKeyword = true;
   const exportPrefix = exportKeyword ? 'export ' : '';
   const interfaces = new Map<string, any>();
+  const imports = new Set<string>();
   
   // Track objects being processed to detect circular references
   // Map object reference to its path for better circular reference handling
@@ -50,7 +52,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   }
 
   function checkNonGenericObjectTypes(obj: any): string|null {
-    if (Long.isLong(obj)) return 'Long';
+    if (Long.isLong(obj)) { imports.add("import Long from 'long';"); return 'Long'; };
     if (obj instanceof Date) return 'Date';
     if (obj instanceof RegExp) return 'RegExp';
     if (obj instanceof Error) return obj.constructor.name;
@@ -74,8 +76,16 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
 
   //#region Iterable Types
   function getIterableType(value: any, path: string): string {
-    const isSet = value instanceof Set;
-    const isMap = value instanceof Map;
+    const isMap = value instanceof Map || isObservableMap(value);
+
+    let genericTypeName: string|null = null;
+
+    if (value instanceof Set) genericTypeName = 'Set';
+    else if (isObservableMap(value)) { 
+      genericTypeName = 'ObservableMap'; 
+      imports.add("import { ObservableMap } from 'mobx';"); 
+    } else if (value instanceof Map) genericTypeName = 'Map';
+    else genericTypeName = null;
     
     // Check for circular references in arrays/iterables
     if (processedObjectPaths.has(value)) {
@@ -135,9 +145,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     }
     
     // Format the final type string based on the collection type
-    return isSet ? `Set<${typeString}>` : 
-            isMap ? `Map<${typeString}>` : 
-            `${typeString}[]`;
+    return genericTypeName ? `${genericTypeName}<${typeString}>` : `${typeString}[]`;
   }
   //#endregion
   
@@ -159,7 +167,12 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       case 'symbol': return 'symbol';
       case 'function': return 'unknown'; // Placeholder, will be used differently in generateInterface
       case 'object':
-        if (Array.isArray(value) || value instanceof Set || value instanceof Map) {
+        if (
+          Array.isArray(value)
+          || value instanceof Set
+          || value instanceof Map
+          || isObservableMap(value)
+        ) {
           return getIterableType(value, path);
         }
 
@@ -231,8 +244,14 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     
     // Wrap the function in a variable declaration to make it easier to analyze
     let sourceCode: string;
-    if (funcStr.startsWith('function') || funcStr.startsWith('(') || funcStr.startsWith('async')) {
+    if (funcStr.startsWith('function') || funcStr.startsWith('(')) {
       sourceCode = `const myFunc = ${funcStr}`;
+    } else if (funcStr.startsWith('async')) {
+      if (funcStr.startsWith('async function') || funcStr.startsWith('async (')) {
+        sourceCode = `const myFunc = ${funcStr}`;
+      } else {
+        sourceCode = `const myFunc = ${funcStr.replace('async', 'async function')}`;
+      }
     } else {
       sourceCode = `const myFunc = function ${funcStr}`;
     }
@@ -371,7 +390,6 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       return cleanA.localeCompare(cleanB);
     });
 
-    
     // Process all properties
     for (const key of properties) {
       const value = obj[key];
@@ -437,7 +455,12 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     if (result) result += '\n';
     result += generateInterface(objValue, name);
   }
-  
+
+  // Add imports
+  if (imports.size > 0) {
+    result = Array.from(imports).join('\n') + '\n\n' + result;
+  }
+
   return result;
 }
 
@@ -503,8 +526,25 @@ function testConvert() {
   //   setFunc: () => new Set([1, 2, 3]),
   // };
 
+  class AdvancedClass {
+    property = 'value';
+    method() {
+      return 15;
+    }
+    otherMethod() {
+      return this.property;
+    }
+    callsOwnMethod() {
+      return this.method();
+    }
+
+    async asyncMethod() {
+      return 15;
+    }
+  }
+
   const testObj = {
-    sparse: [,,,3,,,6]
+    advancedClass: new AdvancedClass(),
   }
 
   const startTime = performance.now();

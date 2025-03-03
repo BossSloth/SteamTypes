@@ -1,13 +1,13 @@
 export interface AppDetailsStore {
-  AppDetailsChanged(): unknown;
-  BAchievementIsHiddenAndAchieved(e: unknown, t: unknown): unknown;
+  AppDetailsChanged(): unknown /* native code */;
+  BAchievementIsHiddenAndAchieved(e: unknown, t: unknown): boolean;
   BHasMarketPresence(e: unknown): unknown;
   BHasRecentlyLaunched(e: unknown): unknown;
   BIsWorkshopVisible(e: unknown): unknown;
   ClearCustomLogoPosition(e: unknown): unknown;
   CMInterface(): unknown;
   GetAchievements(e: unknown): unknown;
-  GetAjaxLibraryAppDetails(): unknown;
+  GetAjaxLibraryAppDetails(): unknown /* native code */;
   GetAppData(e: unknown): unknown;
   GetAppDetails(e: unknown): unknown;
   GetAppDetailsSpotlight(e: unknown): unknown;
@@ -15,26 +15,26 @@ export interface AppDetailsStore {
   GetCustomLogoPosition(e: unknown): unknown;
   GetDescriptions(e: unknown): unknown;
   GetHeaderImages(e: unknown): unknown[];
-  GetHeaderImagesForAppId(e: unknown, t: unknown, r: unknown): unknown;
+  GetHeaderImagesForAppId(e: unknown, t: unknown, r: unknown): unknown[];
   GetHeroBlurImages(e: unknown): unknown;
-  GetHeroBlurImagesForAppId(e: unknown, t: unknown, r: unknown): unknown;
-  GetHeroImages(e: unknown): object | unknown;
-  GetHeroImagesForAppId(e: unknown, t: unknown, r: unknown): object | unknown;
-  GetLogoImages(e: unknown): object | unknown;
-  GetLogoImagesForAppId(e: unknown, t: unknown, r: unknown): object | unknown;
-  Init(e: unknown): unknown;
+  GetHeroBlurImagesForAppId(e: unknown, t: unknown, r: unknown): unknown[];
+  GetHeroImages(e: unknown): { rgHeroImages: any[]; bHasHeroImage: any; appid: any };
+  GetHeroImagesForAppId(e: unknown, t: unknown, r: unknown): { rgHeroImages: any[]; bHasHeroImage: boolean };
+  GetLogoImages(e: unknown): { rgLogoImages: any[]; logoPosition: any };
+  GetLogoImagesForAppId(e: unknown, t: unknown, r: unknown): { rgLogoImages: any[]; logoPosition: any };
+  Init(e: unknown): void;
   MarkAppAsRecentlyLaunched(e: unknown): void;
-  RegisterForAppData(e: unknown, t: unknown): object | unknown;
-  RequestAchievements(): unknown;
+  RegisterForAppData(e: unknown, t: unknown): { unregister: () => void };
+  RequestAchievements(): unknown /* native code */;
   RequestAppDetails(): unknown;
   RequestAppDetailsSpotlight(): unknown;
-  RequestAssociationData(): unknown;
+  RequestAssociationData(): unknown /* native code */;
   RequestCustomImageInfo(): unknown;
-  RequestDescriptionsData(): unknown;
+  RequestDescriptionsData(): unknown /* native code */;
   SaveCustomLogoPosition(): unknown;
-  SetAjaxLibraryAppDetails(): unknown;
-  UnregisterForAppData(e: unknown, t: unknown): unknown;
-  ValidateCustomImageInfo(e: unknown): unknown;
+  SetAjaxLibraryAppDetails(): unknown /* native code */;
+  UnregisterForAppData(e: unknown, t: unknown): void;
+  ValidateCustomImageInfo(e: unknown): boolean;
 
   m_CMInterface: m_CMInterface;
   m_mapAppData: m_mapAppData;
@@ -43,13 +43,13 @@ export interface AppDetailsStore {
 }
 
 export interface m_mapAppData {
-  addValue_(e: unknown, t: unknown): unknown;
-  clear(): unknown;
+  addValue_(e: unknown, t: unknown): void;
+  clear(): void;
   dehanceValue_(e: unknown): unknown;
-  delete(e: unknown): unknown;
+  delete(e: unknown): boolean;
   enhancer_(e: unknown, t: unknown, r: unknown): unknown;
-  entries(): unknown | object | unknown;
-  forEach(e: unknown, t: unknown): unknown;
+  entries(): unknown;
+  forEach(e: unknown, t: unknown): void;
   get(e: unknown): unknown;
   has_(e: unknown): unknown;
   has(e: unknown): unknown;
@@ -60,8 +60,8 @@ export interface m_mapAppData {
   replace(e: unknown): unknown;
   set(e: unknown, t: unknown): unknown;
   toJSON(): unknown;
-  updateValue_(e: unknown, t: unknown): unknown;
-  values(): unknown | object | unknown;
+  updateValue_(e: unknown, t: unknown): void;
+  values(): unknown;
 
   changeListeners_: undefined;
   data_: m_setDetailsInProgress;
@@ -75,21 +75,21 @@ export interface m_mapAppData {
 }
 
 export interface m_setDetailsInProgress {
-  add(): unknown;
-  clear(): unknown;
-  delete(): unknown;
-  difference(): unknown;
-  entries(): unknown;
-  forEach(): unknown;
-  has(): unknown;
-  intersection(): unknown;
-  isDisjointFrom(): unknown;
-  isSubsetOf(): unknown;
-  isSupersetOf(): unknown;
-  keys(): unknown;
-  symmetricDifference(): unknown;
-  union(): unknown;
-  values(): unknown;
+  add(): unknown /* native code */;
+  clear(): unknown /* native code */;
+  delete(): unknown /* native code */;
+  difference(): unknown /* native code */;
+  entries(): unknown /* native code */;
+  forEach(): unknown /* native code */;
+  has(): unknown /* native code */;
+  intersection(): unknown /* native code */;
+  isDisjointFrom(): unknown /* native code */;
+  isSubsetOf(): unknown /* native code */;
+  isSupersetOf(): unknown /* native code */;
+  keys(): unknown /* native code */;
+  symmetricDifference(): unknown /* native code */;
+  union(): unknown /* native code */;
+  values(): unknown /* native code */;
 
   size: number;
 }
@@ -99,39 +99,39 @@ export interface m_CMInterface {
   AddOnLogonCallback(e: unknown, t: unknown): unknown;
   BConnectedToServer(e: unknown): unknown;
   BDisconnected(): unknown;
-  BInternalShouldDispatchMessage(e: unknown): unknown;
+  BInternalShouldDispatchMessage(e: unknown): boolean;
   BIsConnected(): unknown;
   BPerformedInitialClockAdjustment(): unknown;
-  ClearHeartbeatInterval(): unknown;
+  ClearHeartbeatInterval(): void;
   Connect(): unknown;
-  DEBUG_LogCMInterfaceActivity(e: unknown, t: unknown, n?: unknown /* default = ... */): unknown;
-  DEBUG_LogMessage(e: unknown, ...t: unknown[]): unknown;
-  Disconnect(): unknown;
+  DEBUG_LogCMInterfaceActivity(e: unknown, t: unknown, n?: boolean /* default = !0 */): void;
+  DEBUG_LogMessage(e: unknown, ...t: unknown[]): void;
+  Disconnect(): void;
   DispatchMessage(e: unknown): void;
-  ForceDisconnect(): unknown;
+  ForceDisconnect(): void;
   GetAnonymousServiceTransport(): unknown;
-  GetServerRTime32(): unknown;
+  GetServerRTime32(): number;
   GetServerTimeMS(): unknown;
   GetServiceTransport(): unknown;
   InternalAdjustClock(): unknown;
-  m_hEMsgRegistrationObserver(): unknown;
+  m_hEMsgRegistrationObserver(): void;
   MakeReady(): unknown;
-  OnConnect(): unknown;
-  OnConnectionAttemptThrottled(): unknown;
-  OnDisconnect(): unknown;
-  OnLoggedOn(): unknown;
-  OnLogonInfoChanged(e: unknown): unknown;
-  OnMsgRecvd(e: unknown): unknown;
-  OnSharedConnectionClosed(): unknown;
-  OnSharedConnectionEstablished(e: unknown): unknown;
-  ResetHeartbeatInterval(): unknown;
-  ResolveAwaitWithTransportError(e: unknown, t: unknown, n: unknown, r: unknown): unknown;
-  RTime32ToDate(e: unknown): unknown;
-  RunOnDisconnectCallbacks(e: unknown, t: unknown): unknown;
-  RunWhenLoggedOn(e: unknown, t: unknown): unknown;
+  OnConnect(): void;
+  OnConnectionAttemptThrottled(): unknown /* native code */;
+  OnDisconnect(): void;
+  OnLoggedOn(): void;
+  OnLogonInfoChanged(e: unknown): void;
+  OnMsgRecvd(e: unknown): void;
+  OnSharedConnectionClosed(): void;
+  OnSharedConnectionEstablished(e: unknown): void;
+  ResetHeartbeatInterval(): void;
+  ResolveAwaitWithTransportError(e: unknown, t: unknown, n: unknown, r: unknown): void;
+  RTime32ToDate(e: unknown): Date;
+  RunOnDisconnectCallbacks(e: unknown, t: unknown): void;
+  RunWhenLoggedOn(e: unknown, t: unknown): void;
   Send(e: unknown): unknown;
-  SendHeartbeat(): unknown;
-  SendInternal(e: unknown): unknown;
+  SendHeartbeat(): void;
+  SendInternal(e: unknown): boolean;
   SendMsgAndAwaitResponse(e: unknown, t: unknown): unknown;
   WaitUntilLoggedOn(): unknown;
 
@@ -172,9 +172,9 @@ export interface m_CMInterface {
 }
 
 export interface KeysAtom_ {
-  onBO(): unknown;
-  onBUO(): unknown;
-  reportChanged(): unknown;
+  onBO(): void;
+  onBUO(): void;
+  reportChanged(): void;
   reportObserved(): unknown;
 
   diffValue_: number;
@@ -190,15 +190,15 @@ export interface KeysAtom_ {
 }
 
 export interface m_ServiceTransport {
-  MakeReady(): unknown;
+  MakeReady(): unknown /* native code */;
   SendMsg(e: unknown, t: unknown, n: unknown): unknown;
   SendNotification(e: unknown, t: unknown): unknown;
 }
 
 export interface m_callbacksOnConnectOneTime {
   AddCallback(e: unknown, t: unknown): unknown;
-  RunAllCallbacks(e: unknown, ...t: unknown[]): unknown;
-  RunCallbacks(e: unknown, ...t: unknown[]): unknown;
+  RunAllCallbacks(e: unknown, ...t: unknown[]): void;
+  RunCallbacks(e: unknown, ...t: unknown[]): void;
 
   m_bRunOnce: boolean;
   m_ClientConnectionCallbacks: m_ClientConnectionCallbacks;
@@ -207,8 +207,8 @@ export interface m_callbacksOnConnectOneTime {
 
 export interface m_callbacksOnConnect {
   AddCallback(e: unknown, t: unknown): unknown;
-  RunAllCallbacks(e: unknown, ...t: unknown[]): unknown;
-  RunCallbacks(e: unknown, ...t: unknown[]): unknown;
+  RunAllCallbacks(e: unknown, ...t: unknown[]): void;
+  RunCallbacks(e: unknown, ...t: unknown[]): void;
 
   m_bRunOnce: boolean;
   m_ClientConnectionCallbacks: m_ClientConnectionCallbacks2;
@@ -217,8 +217,8 @@ export interface m_callbacksOnConnect {
 
 export interface m_callbacksOnDisconnect {
   AddCallback(e: unknown, t: unknown): unknown;
-  RunAllCallbacks(e: unknown, ...t: unknown[]): unknown;
-  RunCallbacks(e: unknown, ...t: unknown[]): unknown;
+  RunAllCallbacks(e: unknown, ...t: unknown[]): void;
+  RunCallbacks(e: unknown, ...t: unknown[]): void;
 
   m_bRunOnce: boolean;
   m_ClientConnectionCallbacks: m_ClientConnectionCallbacks3;
@@ -226,12 +226,12 @@ export interface m_callbacksOnDisconnect {
 }
 
 export interface m_messageHandlers {
-  AddCallback(e: unknown, t: unknown, n: unknown): object | unknown;
-  AddServiceMethodHandler(e: unknown, t: unknown): object | unknown;
-  AddServiceNotificationHandler(e: unknown, t: unknown): object | unknown;
-  DEBUG_LogMessageDispatch(e: unknown, t: unknown): unknown;
-  DispatchMsgToHandlers(e: unknown, t: unknown): unknown;
-  InstallErrorReportingStore(e: unknown): unknown;
+  AddCallback(e: unknown, t: unknown, n: unknown): { invoke: any; unregister: () => void };
+  AddServiceMethodHandler(e: unknown, t: unknown): { invoke: (n: any, r: any) => void; unregister: () => void };
+  AddServiceNotificationHandler(e: unknown, t: unknown): { invoke: (n: any, r: any) => void; unregister: () => void };
+  DEBUG_LogMessageDispatch(e: unknown, t: unknown): void;
+  DispatchMsgToHandlers(e: unknown, t: unknown): boolean;
+  InstallErrorReportingStore(e: unknown): void;
   RegisterBaseEMessageHandler(e: unknown, t: unknown): unknown;
   RegisterEMessageAction(e: unknown, t: unknown, n: unknown): unknown;
   RegisterEMessageHandler(e: unknown, t: unknown, n: unknown): unknown;
@@ -250,75 +250,75 @@ export interface m_messageHandlers {
 }
 
 export interface ClientServersAvailableHandler {
-  invoke(e: unknown): unknown;
-  unregister(): unknown;
+  invoke(): unknown;
+  unregister(): void;
 }
 
 export interface m_steamid {
-  BIsClanAccount(): unknown;
-  BIsIndividualAccount(): unknown;
-  BIsValid(): unknown;
+  BIsClanAccount(): boolean;
+  BIsIndividualAccount(): boolean;
+  BIsValid(): boolean;
   ConvertTo64BitString(): unknown;
   GetAccountID(): unknown;
-  GetAccountType(): unknown;
-  GetInstance(): unknown;
-  GetUniverse(): unknown;
-  Render(): unknown;
-  SetAccountID(e: unknown): unknown;
-  SetAccountType(e: unknown): unknown;
-  SetFromComponents(e: unknown, t: unknown, n: unknown, i: unknown): unknown;
-  SetInstance(e: unknown): unknown;
-  SetUniverse(e: unknown): unknown;
+  GetAccountType(): number;
+  GetInstance(): number;
+  GetUniverse(): number;
+  Render(): string;
+  SetAccountID(e: unknown): void;
+  SetAccountType(e: unknown): void;
+  SetFromComponents(e: unknown, t: unknown, n: unknown, i: unknown): void;
+  SetInstance(e: unknown): void;
+  SetUniverse(e: unknown): void;
 
   m_ulSteamID: m_ulSteamID;
 }
 
 export interface m_ClientConnectionCallbacks {
-  ClearAllCallbacks(): unknown;
+  ClearAllCallbacks(): void;
   CountRegistered(): unknown;
-  Dispatch(...e: unknown[]): unknown;
-  Register(e: unknown): object | unknown;
+  Dispatch(...e: unknown[]): void;
+  Register(e: unknown): { Unregister: () => void };
 
   m_vecCallbacks: unknown[];
 }
 
 export interface m_ClientConnectionCallbacks2 {
-  ClearAllCallbacks(): unknown;
+  ClearAllCallbacks(): void;
   CountRegistered(): unknown;
-  Dispatch(...e: unknown[]): unknown;
-  Register(e: unknown): object | unknown;
+  Dispatch(...e: unknown[]): void;
+  Register(e: unknown): { Unregister: () => void };
 
   m_vecCallbacks: unknown[];
 }
 
 export interface m_ClientConnectionCallbacks3 {
-  ClearAllCallbacks(): unknown;
+  ClearAllCallbacks(): void;
   CountRegistered(): unknown;
-  Dispatch(...e: unknown[]): unknown;
-  Register(e: unknown): object | unknown;
+  Dispatch(...e: unknown[]): void;
+  Register(e: unknown): { Unregister: () => void };
 
   m_vecCallbacks: unknown[];
 }
 
 export interface m_ErrorReportingStore {
-  BIsBlacklisted(e: unknown): unknown;
-  Init(e: unknown, t: unknown, r: unknown, n?: unknown /* default = {} */): unknown;
-  m_fnGetReportingInterval(): unknown;
-  PauseReporting(): unknown;
-  PauseReportingForDuration(e: unknown): unknown;
-  QueueReport(e: unknown): unknown;
+  BIsBlacklisted(e: unknown): boolean;
+  Init(e: unknown, t: unknown, r: unknown, n?: unknown /* default = {} */): void;
+  m_fnGetReportingInterval(): number;
+  PauseReporting(): void;
+  PauseReportingForDuration(e: unknown): void;
+  QueueReport(e: unknown): void;
   ReportError(): unknown;
-  ResumeReporting(): unknown;
-  ScheduleSend(): unknown;
-  SendErrorReport(e: unknown): unknown;
-  SendErrorReports(e: unknown): void | unknown;
+  ResumeReporting(): void;
+  ScheduleSend(): void;
+  SendErrorReport(e: unknown): void;
+  SendErrorReports(e: unknown): void;
 
   m_bEnabled: boolean;
   m_bInitialized: boolean;
   m_bReportingPaused: boolean;
   m_pauseTimer: number;
   m_rgErrorQueue: unknown[];
-  m_sendTimer: null;
+  m_sendTimer: number;
   m_strProduct: string;
   m_strVersion: string;
   m_transport: m_ServiceTransport;
@@ -331,46 +331,46 @@ export interface m_ulSteamID {
   add(e: unknown): unknown;
   and(e: unknown): unknown;
   clz(): unknown;
-  comp(e: unknown): number | unknown;
-  compare(e: unknown): number | unknown;
+  comp(e: unknown): 0 | 1 | -1;
+  compare(e: unknown): 0 | 1 | -1;
   countLeadingZeros(): unknown;
   countTrailingZeros(): unknown;
   ctz(): unknown;
   div(e: unknown): unknown;
   divide(e: unknown): unknown;
-  eq(e: unknown): unknown;
-  equals(e: unknown): unknown;
-  eqz(): unknown;
-  ge(e: unknown): unknown;
+  eq(e: unknown): boolean;
+  equals(e: unknown): boolean;
+  eqz(): boolean;
+  ge(e: unknown): boolean;
   getHighBits(): unknown;
-  getHighBitsUnsigned(): unknown;
+  getHighBitsUnsigned(): number;
   getLowBits(): unknown;
-  getLowBitsUnsigned(): unknown;
+  getLowBitsUnsigned(): number;
   getNumBitsAbs(): unknown;
-  greaterThan(e: unknown): unknown;
-  greaterThanOrEqual(e: unknown): unknown;
-  gt(e: unknown): unknown;
-  gte(e: unknown): unknown;
-  isEven(): unknown;
-  isNegative(): unknown;
-  isOdd(): unknown;
+  greaterThan(e: unknown): boolean;
+  greaterThanOrEqual(e: unknown): boolean;
+  gt(e: unknown): boolean;
+  gte(e: unknown): boolean;
+  isEven(): boolean;
+  isNegative(): boolean;
+  isOdd(): boolean;
   isPositive(): unknown;
-  isZero(): unknown;
-  le(e: unknown): unknown;
-  lessThan(e: unknown): unknown;
-  lessThanOrEqual(e: unknown): unknown;
-  lt(e: unknown): unknown;
-  lte(e: unknown): unknown;
+  isZero(): boolean;
+  le(e: unknown): boolean;
+  lessThan(e: unknown): boolean;
+  lessThanOrEqual(e: unknown): boolean;
+  lt(e: unknown): boolean;
+  lte(e: unknown): boolean;
   mod(e: unknown): unknown;
   modulo(e: unknown): unknown;
   mul(e: unknown): unknown;
   multiply(e: unknown): unknown;
-  ne(e: unknown): unknown;
+  ne(e: unknown): boolean;
   neg(): unknown;
   negate(): unknown;
-  neq(e: unknown): unknown;
+  neq(e: unknown): boolean;
   not(): unknown;
-  notEquals(e: unknown): unknown;
+  notEquals(e: unknown): boolean;
   or(e: unknown): unknown;
   rem(e: unknown): unknown;
   rotateLeft(e: unknown): unknown;
@@ -387,10 +387,10 @@ export interface m_ulSteamID {
   sub(e: unknown): unknown;
   subtract(e: unknown): unknown;
   toBytes(e: unknown): unknown;
-  toBytesBE(): unknown[];
-  toBytesLE(): unknown[];
+  toBytesBE(): number[];
+  toBytesLE(): number[];
   toInt(): unknown;
-  toNumber(): unknown;
+  toNumber(): number;
   toSigned(): unknown;
   toUnsigned(): unknown;
   xor(e: unknown): unknown;

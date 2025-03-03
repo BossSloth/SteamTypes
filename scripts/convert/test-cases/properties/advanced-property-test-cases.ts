@@ -1,4 +1,5 @@
 import Long from 'long';
+import { ObservableMap } from 'mobx';
 
 //#region Date and Time Property Test Cases
 export const datePropertyTests = {
@@ -79,6 +80,10 @@ export const mapSetPropertyTests = {
     nestedMap: new Map([['key1', new Map([['nestedKey1', 'nestedValue1'], ['nestedKey2', 'nestedValue2']])]]),
   
     weakMap: weakMap,
+
+    observableMap: new ObservableMap([['key1', 'value1'], ['key2', 'value2']]),
+
+    numberObservableMap: new ObservableMap([[1, 'one'], [2, 'two']]),
   },
   sets: {
     // Empty Set
@@ -184,6 +189,37 @@ export const specialTypePropertyTests = {
 };
 //#endregion
 
+//#region More specific types on objects
+// Here we test sets or array where some object in the arrays have move or less specific types or properties than the rest
+
+// TODO: make this work
+export const moreSpecificTypeOnObjectTests = {
+  arrayWithMoreSpecificObject: [
+    { id: 1, name: 'Generic' },
+    { id: 2, name: 'Specific', extra: 'property' }
+  ],
+
+  setWithMoreSpecificObject: new Set([
+    { type: 'basic', value: 10 },
+    { type: 'advanced', value: 20, details: { description: 'More info' } }
+  ]),
+
+  mapWithMoreSpecificValue: new Map([
+    ['key1', { simple: true }],
+    ['key2', { simple: false, complex: { nested: 'value' } }]
+  ]),
+
+  mixedArrayWithVaryingSpecificity: [
+    { common: 'field', id: 1 },
+    { common: 'field', id: 2, apps: [] },
+    { common: 'field', id: 3, apps: ['app1', 'app2'] },
+    { completelyDifferent: true }
+  ]
+
+};
+
+//#endregion
+
 // Export all advanced property test cases
 export const advancedPropertyTests = {
   datePropertyTests,
@@ -191,5 +227,5 @@ export const advancedPropertyTests = {
   errorPropertyTests,
   mapSetPropertyTests,
   typedArrayPropertyTests,
-  specialTypePropertyTests
+  specialTypePropertyTests,
 };

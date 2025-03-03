@@ -137,8 +137,8 @@ program
           const expectedOutput = fs.readFileSync(expectedFilePath, 'utf-8');
           
           // Normalize line endings and whitespace for comparison
-          const normalizedResult = result.replace(/\r\n/g, '\n').trim();
-          const normalizedExpected = expectedOutput.replace(/\r\n/g, '\n').trim();
+          const normalizedResult = result.replace(/\r\n/g, '\n');
+          const normalizedExpected = expectedOutput.replace(/\r\n/g, '\n');
           
           if (normalizedResult === normalizedExpected) {
             console.log(chalk.green(`  ✓ Output matches expected file: ${suite.interfaceName}.ts`));
@@ -248,9 +248,9 @@ program
       const expectedOutput = fs.readFileSync(expectedFilePath, 'utf-8');
       
       // Normalize line endings and whitespace for comparison
-      const normalizedResult = result.replace(/\r\n/g, '\n').trim();
-      const normalizedExpected = expectedOutput.replace(/\r\n/g, '\n').trim();
-      
+      const normalizedResult = result.replace(/\r\n/g, '\n');
+      const normalizedExpected = expectedOutput.replace(/\r\n/g, '\n');
+
       if (normalizedResult === normalizedExpected) {
         console.log(chalk.green(`  ✓ No differences found`));
       } else {

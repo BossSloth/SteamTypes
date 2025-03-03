@@ -1,3 +1,6 @@
+import Long from 'long';
+import { ObservableMap } from 'mobx';
+
 export interface AdvancedPropertyTypes {
   datePropertyTests: DatePropertyTests;
   errorPropertyTests: ErrorPropertyTests;
@@ -65,8 +68,10 @@ export interface Maps {
   mixedObjectMap: Map<string, (MixedObjectMap | MixedObjectMap2)>;
   nestedMap: Map<string, Map<string, string>>;
   numberKeyMap: Map<number, string>;
+  numberObservableMap: ObservableMap<number, string>;
   objectKeyMap: Map<ObjectKeyMap, string>;
   objectMap: Map<string, ObjectMap>;
+  observableMap: ObservableMap<string, string>;
   stringKeyMap: Map<string, string>;
   stringKeyNumberValueMap: Map<string, number>;
   weakMap: WeakMap<object, unknown>;

@@ -1,3 +1,6 @@
+import { ObservableMap } from 'mobx';
+import Long from 'long';
+
 export interface AppDetailsStore {
   AppDetailsChanged(): unknown /* native code */;
   BAchievementIsHiddenAndAchieved(e: unknown, t: unknown): boolean;
@@ -16,82 +19,30 @@ export interface AppDetailsStore {
   GetDescriptions(e: unknown): unknown;
   GetHeaderImages(e: unknown): unknown[];
   GetHeaderImagesForAppId(e: unknown, t: unknown, r: unknown): unknown[];
-  GetHeroBlurImages(e: unknown): unknown;
+  GetHeroBlurImages(e: unknown): unknown[];
   GetHeroBlurImagesForAppId(e: unknown, t: unknown, r: unknown): unknown[];
-  GetHeroImages(e: unknown): { rgHeroImages: any[]; bHasHeroImage: any; appid: any };
-  GetHeroImagesForAppId(e: unknown, t: unknown, r: unknown): { rgHeroImages: any[]; bHasHeroImage: boolean };
-  GetLogoImages(e: unknown): { rgLogoImages: any[]; logoPosition: any };
-  GetLogoImagesForAppId(e: unknown, t: unknown, r: unknown): { rgLogoImages: any[]; logoPosition: any };
+  GetHeroImages(e: unknown): { rgHeroImages: unknown[]; bHasHeroImage: unknown; appid: unknown; };
+  GetHeroImagesForAppId(e: unknown, t: unknown, r: unknown): { rgHeroImages: unknown[]; bHasHeroImage: boolean; };
+  GetLogoImages(e: unknown): { rgLogoImages: unknown[]; logoPosition: unknown; };
+  GetLogoImagesForAppId(e: unknown, t: unknown, r: unknown): { rgLogoImages: unknown[]; logoPosition: unknown; };
   Init(e: unknown): void;
   MarkAppAsRecentlyLaunched(e: unknown): void;
-  RegisterForAppData(e: unknown, t: unknown): { unregister: () => void };
+  RegisterForAppData(e: unknown, t: unknown): { unregister: () => void; };
   RequestAchievements(): unknown /* native code */;
-  RequestAppDetails(): unknown;
-  RequestAppDetailsSpotlight(): unknown;
+  RequestAppDetails(e: unknown): Promise<unknown>;
+  RequestAppDetailsSpotlight(e: unknown): Promise<undefined>;
   RequestAssociationData(): unknown /* native code */;
-  RequestCustomImageInfo(): unknown;
+  RequestCustomImageInfo(e: unknown): Promise<void>;
   RequestDescriptionsData(): unknown /* native code */;
-  SaveCustomLogoPosition(): unknown;
+  SaveCustomLogoPosition(e: unknown, t: unknown): Promise<unknown>;
   SetAjaxLibraryAppDetails(): unknown /* native code */;
   UnregisterForAppData(e: unknown, t: unknown): void;
   ValidateCustomImageInfo(e: unknown): boolean;
 
   m_CMInterface: m_CMInterface;
-  m_mapAppData: m_mapAppData;
-  m_mapRecentlyLaunchedApps: m_mapAppData;
-  m_setDetailsInProgress: m_setDetailsInProgress;
-}
-
-export interface m_mapAppData {
-  addValue_(e: unknown, t: unknown): void;
-  clear(): void;
-  dehanceValue_(e: unknown): unknown;
-  delete(e: unknown): boolean;
-  enhancer_(e: unknown, t: unknown, r: unknown): unknown;
-  entries(): unknown;
-  forEach(e: unknown, t: unknown): void;
-  get(e: unknown): unknown;
-  has_(e: unknown): unknown;
-  has(e: unknown): unknown;
-  intercept_(e: unknown): unknown;
-  keys(): unknown;
-  merge(e: unknown): unknown;
-  observe_(e: unknown, t: unknown): unknown;
-  replace(e: unknown): unknown;
-  set(e: unknown, t: unknown): unknown;
-  toJSON(): unknown;
-  updateValue_(e: unknown, t: unknown): void;
-  values(): unknown;
-
-  changeListeners_: undefined;
-  data_: m_setDetailsInProgress;
-  dehancer: undefined;
-  hasMap_: m_setDetailsInProgress;
-  interceptors_: undefined;
-  isMobXObservableMap: boolean;
-  keysAtom_: KeysAtom_;
-  name_: string;
-  size: number;
-}
-
-export interface m_setDetailsInProgress {
-  add(): unknown /* native code */;
-  clear(): unknown /* native code */;
-  delete(): unknown /* native code */;
-  difference(): unknown /* native code */;
-  entries(): unknown /* native code */;
-  forEach(): unknown /* native code */;
-  has(): unknown /* native code */;
-  intersection(): unknown /* native code */;
-  isDisjointFrom(): unknown /* native code */;
-  isSubsetOf(): unknown /* native code */;
-  isSupersetOf(): unknown /* native code */;
-  keys(): unknown /* native code */;
-  symmetricDifference(): unknown /* native code */;
-  union(): unknown /* native code */;
-  values(): unknown /* native code */;
-
-  size: number;
+  m_mapAppData: ObservableMap<number, (m_mapAppData | m_mapAppData2)>;
+  m_mapRecentlyLaunchedApps: ObservableMap<unknown, unknown>;
+  m_setDetailsInProgress: Set<unknown>;
 }
 
 export interface m_CMInterface {
@@ -103,7 +54,7 @@ export interface m_CMInterface {
   BIsConnected(): unknown;
   BPerformedInitialClockAdjustment(): unknown;
   ClearHeartbeatInterval(): void;
-  Connect(): unknown;
+  Connect(): Promise<unknown>;
   DEBUG_LogCMInterfaceActivity(e: unknown, t: unknown, n?: boolean /* default = !0 */): void;
   DEBUG_LogMessage(e: unknown, ...t: unknown[]): void;
   Disconnect(): void;
@@ -113,7 +64,7 @@ export interface m_CMInterface {
   GetServerRTime32(): number;
   GetServerTimeMS(): unknown;
   GetServiceTransport(): unknown;
-  InternalAdjustClock(): unknown;
+  InternalAdjustClock(): Promise<unknown>;
   m_hEMsgRegistrationObserver(): void;
   MakeReady(): unknown;
   OnConnect(): void;
@@ -132,8 +83,8 @@ export interface m_CMInterface {
   Send(e: unknown): unknown;
   SendHeartbeat(): void;
   SendInternal(e: unknown): boolean;
-  SendMsgAndAwaitResponse(e: unknown, t: unknown): unknown;
-  WaitUntilLoggedOn(): unknown;
+  SendMsgAndAwaitResponse(e: unknown, t: unknown): Promise<unknown>;
+  WaitUntilLoggedOn(): Promise<unknown>;
 
   account_flags: number;
   ClientServersAvailableHandler: ClientServersAvailableHandler;
@@ -153,13 +104,13 @@ export interface m_CMInterface {
   m_messageHandlers: m_messageHandlers;
   m_nPerfClockServerMSOffset: number;
   m_nWallClockDriftMS: number;
-  m_onConnect: m_setDetailsInProgress;
+  m_onConnect: Promise<unknown>;
   m_rtReconnectThrottleExpiration: number;
   m_rtReconnectThrottleStart: number;
   m_ServiceTransport: m_ServiceTransport;
-  m_setConnectedServers: m_setDetailsInProgress;
-  m_setEMsgHandlers: m_setDetailsInProgress;
-  m_setServiceMethodHandlers: m_setDetailsInProgress;
+  m_setConnectedServers: Set<number>;
+  m_setEMsgHandlers: Set<number>;
+  m_setServiceMethodHandlers: Set<string>;
   m_steamid: m_steamid;
   m_strIPCountry: string;
   m_strPersonaName: string;
@@ -171,38 +122,35 @@ export interface m_CMInterface {
   steamid: m_steamid;
 }
 
-export interface KeysAtom_ {
-  onBO(): void;
-  onBUO(): void;
-  reportChanged(): void;
-  reportObserved(): unknown;
-
-  diffValue_: number;
-  isBeingObserved: boolean;
-  isMobXAtom: boolean;
-  isPendingUnobservation: boolean;
-  lastAccessedBy_: number;
-  lowestObserverState_: number;
-  name_: string;
-  observers_: m_setDetailsInProgress;
-  onBOL: undefined;
-  onBUOL: undefined;
+export interface m_mapAppData {
+  appDetailsSpotlight: null;
+  associationData: null;
+  bLoadingAchievments: boolean;
+  cRegistered: number;
+  customImageInfo: null;
+  customImageInfoRtime: number;
+  descriptionsData: null;
+  details: Details;
+  hAppDetails: HAppDetails;
+  listeners: unknown[];
 }
 
-export interface m_ServiceTransport {
-  MakeReady(): unknown /* native code */;
-  SendMsg(e: unknown, t: unknown, n: unknown): unknown;
-  SendNotification(e: unknown, t: unknown): unknown;
+export interface m_mapAppData2 {
+  appDetailsSpotlight: null;
+  associationData: null;
+  bLoadingAchievments: boolean;
+  cRegistered: number;
+  customImageInfo: null;
+  customImageInfoRtime: number;
+  descriptionsData: null;
+  details: Details2;
+  hAppDetails: HAppDetails;
+  listeners: unknown[];
 }
 
-export interface m_callbacksOnConnectOneTime {
-  AddCallback(e: unknown, t: unknown): unknown;
-  RunAllCallbacks(e: unknown, ...t: unknown[]): void;
-  RunCallbacks(e: unknown, ...t: unknown[]): void;
-
-  m_bRunOnce: boolean;
-  m_ClientConnectionCallbacks: m_ClientConnectionCallbacks;
-  m_mapServerTypeCallbacks: m_setDetailsInProgress;
+export interface ClientServersAvailableHandler {
+  invoke(): unknown;
+  unregister(): void;
 }
 
 export interface m_callbacksOnConnect {
@@ -211,8 +159,18 @@ export interface m_callbacksOnConnect {
   RunCallbacks(e: unknown, ...t: unknown[]): void;
 
   m_bRunOnce: boolean;
+  m_ClientConnectionCallbacks: m_ClientConnectionCallbacks;
+  m_mapServerTypeCallbacks: Map<unknown, unknown>;
+}
+
+export interface m_callbacksOnConnectOneTime {
+  AddCallback(e: unknown, t: unknown): unknown;
+  RunAllCallbacks(e: unknown, ...t: unknown[]): void;
+  RunCallbacks(e: unknown, ...t: unknown[]): void;
+
+  m_bRunOnce: boolean;
   m_ClientConnectionCallbacks: m_ClientConnectionCallbacks2;
-  m_mapServerTypeCallbacks: m_setDetailsInProgress;
+  m_mapServerTypeCallbacks: Map<unknown, unknown>;
 }
 
 export interface m_callbacksOnDisconnect {
@@ -222,13 +180,13 @@ export interface m_callbacksOnDisconnect {
 
   m_bRunOnce: boolean;
   m_ClientConnectionCallbacks: m_ClientConnectionCallbacks3;
-  m_mapServerTypeCallbacks: m_setDetailsInProgress;
+  m_mapServerTypeCallbacks: Map<unknown, unknown>;
 }
 
 export interface m_messageHandlers {
-  AddCallback(e: unknown, t: unknown, n: unknown): { invoke: any; unregister: () => void };
-  AddServiceMethodHandler(e: unknown, t: unknown): { invoke: (n: any, r: any) => void; unregister: () => void };
-  AddServiceNotificationHandler(e: unknown, t: unknown): { invoke: (n: any, r: any) => void; unregister: () => void };
+  AddCallback(e: unknown, t: unknown, n: unknown): { invoke: unknown; unregister: () => void; };
+  AddServiceMethodHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
+  AddServiceNotificationHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
   DEBUG_LogMessageDispatch(e: unknown, t: unknown): void;
   DispatchMsgToHandlers(e: unknown, t: unknown): boolean;
   InstallErrorReportingStore(e: unknown): void;
@@ -242,16 +200,17 @@ export interface m_messageHandlers {
 
   emsg_list: number[];
   m_ErrorReportingStore: m_ErrorReportingStore;
-  m_mapCallbacks: m_setDetailsInProgress;
-  m_mapServiceMethodHandlers: m_setDetailsInProgress;
-  m_rgRegisteredEMsgs: number[];
+  m_mapCallbacks: Map<number, m_mapCallbacks[]>;
+  m_mapServiceMethodHandlers: Map<string, m_mapCallbacks[]>;
+  m_rgRegisteredEMsgs: unknown/* circular reference to emsg_list */;
   m_rgRegisteredServiceMethodHandlers: string[];
-  servicemethod_list: string[];
+  servicemethod_list: unknown/* circular reference to m_rgRegisteredServiceMethodHandlers */;
 }
 
-export interface ClientServersAvailableHandler {
-  invoke(): unknown;
-  unregister(): void;
+export interface m_ServiceTransport {
+  MakeReady(): unknown /* native code */;
+  SendMsg(e: unknown, t: unknown, n: unknown): unknown;
+  SendNotification(e: unknown, t: unknown): unknown;
 }
 
 export interface m_steamid {
@@ -270,14 +229,199 @@ export interface m_steamid {
   SetInstance(e: unknown): void;
   SetUniverse(e: unknown): void;
 
-  m_ulSteamID: m_ulSteamID;
+  m_ulSteamID: Long;
+}
+
+export interface Details {
+  achievements: Achievements;
+  bAvailableContentOnStore: boolean;
+  bCanMoveInstallFolder: boolean;
+  bCloudAvailable: boolean;
+  bCloudEnabledForAccount: boolean;
+  bCloudEnabledForApp: boolean;
+  bCloudSyncOnSuspendAvailable: boolean;
+  bCloudSyncOnSuspendEnabled: boolean;
+  bCommunityMarketPresence: boolean;
+  bControllerSurveyFilledOut: boolean;
+  bDisableUserMediaUpload: boolean;
+  bEnableAllowDesktopConfiguration: boolean;
+  bFreeRemovableLicense: boolean;
+  bGamepadRequired: boolean;
+  bHasAIGeneratedContent: boolean;
+  bHasAllLegacyCDKeys: boolean;
+  bHasAnyLocalContent: boolean;
+  bHasDifferentCopies: boolean;
+  bHasLockedPrivateBetas: boolean;
+  bIsExcludedFromSharing: boolean;
+  bIsFreeApp: boolean;
+  bIsSubscribedTo: boolean;
+  bIsThirdPartyUpdater: boolean;
+  bOverlayEnabled: boolean;
+  bOverrideInternalResolution: boolean;
+  bRemotePlayTogether: boolean;
+  bRequiresLegacyCDKey: boolean;
+  bShowCDKeyInMenus: boolean;
+  bShowControllerConfig: boolean;
+  bStorePagePublished: boolean;
+  bSupportsCDKeyCopyToClipboard: boolean;
+  bWorkshopVisible: boolean;
+  eAppOwnershipFlags: number;
+  eAppUpdateError: number;
+  eAutoUpdateValue: number;
+  eBackgroundDownloads: number;
+  eCloudStatus: number;
+  eCloudSync: number;
+  eControllerRumblePreference: number;
+  eDisplayStatus: number;
+  eEnableThirdPartyControllerConfiguration: number;
+  eSteamInputControllerMask: number;
+  iInstallFolder: number;
+  lDiskUsageBytes: number;
+  lDlcUsageBytes: number;
+  libraryAssets: LibraryAssets;
+  nBuildID: number;
+  nCompatToolPriority: number;
+  nPlaytimeForever: number;
+  nScreenshots: number;
+  rtLastTimePlayed: number;
+  rtLastUpdated: number;
+  rtPurchased: number;
+  selectedLanguage: SelectedLanguage;
+  strCloudBytesAvailable: string;
+  strCloudBytesUsed: string;
+  strCompatToolDisplayName: string;
+  strCompatToolName: string;
+  strDeveloperName: string;
+  strDisplayName: string;
+  strExternalSubscriptionURL: string;
+  strFlatpakAppID: string;
+  strHomepageURL: string;
+  strInstallFolder: string;
+  strLaunchOptions: string;
+  strLockedBySteamID: string;
+  strManualURL: string;
+  strOwnerSteamID: string;
+  strResolutionOverride: string;
+  strSelectedBeta: string;
+  strSteamDeckBlogURL: string;
+  strStoreHeaderImage: string;
+  unAppID: number;
+  unEntitledContentApp: number;
+  unMemberCopies: number;
+  unMembersPlaying: number;
+  unTimedTrialSecondsAllowed: number;
+  unTimedTrialSecondsPlayed: number;
+  vecBetas: VecBetas[];
+  vecChildConfigApps: number[];
+  vecDeckCompatTestResults: unknown[];
+  vecDLC: unknown[];
+  vecLanguages: SelectedLanguage[];
+  vecLegacyCDKeys: unknown[];
+  vecMusicAlbums: unknown[];
+  vecPlatforms: string[];
+  vecScreenShots: VecScreenShots[];
+}
+
+export interface HAppDetails {
+  unregister(): unknown /* native code */;
+}
+
+export interface Details2 {
+  achievements: Achievements;
+  bAvailableContentOnStore: boolean;
+  bCanMoveInstallFolder: boolean;
+  bCloudAvailable: boolean;
+  bCloudEnabledForAccount: boolean;
+  bCloudEnabledForApp: boolean;
+  bCloudSyncOnSuspendAvailable: boolean;
+  bCloudSyncOnSuspendEnabled: boolean;
+  bCommunityMarketPresence: boolean;
+  bControllerSurveyFilledOut: boolean;
+  bDisableUserMediaUpload: boolean;
+  bEnableAllowDesktopConfiguration: boolean;
+  bFreeRemovableLicense: boolean;
+  bGamepadRequired: boolean;
+  bHasAIGeneratedContent: boolean;
+  bHasAllLegacyCDKeys: boolean;
+  bHasAnyLocalContent: boolean;
+  bHasDifferentCopies: boolean;
+  bHasLockedPrivateBetas: boolean;
+  bIsExcludedFromSharing: boolean;
+  bIsFreeApp: boolean;
+  bIsSubscribedTo: boolean;
+  bIsThirdPartyUpdater: boolean;
+  bOverlayEnabled: boolean;
+  bOverrideInternalResolution: boolean;
+  bRemotePlayTogether: boolean;
+  bRequiresLegacyCDKey: boolean;
+  bShowCDKeyInMenus: boolean;
+  bShowControllerConfig: boolean;
+  bStorePagePublished: boolean;
+  bSupportsCDKeyCopyToClipboard: boolean;
+  bWorkshopVisible: boolean;
+  deckDerivedProperties: DeckDerivedProperties;
+  eAppOwnershipFlags: number;
+  eAppUpdateError: number;
+  eAutoUpdateValue: number;
+  eBackgroundDownloads: number;
+  eCloudStatus: number;
+  eCloudSync: number;
+  eControllerRumblePreference: number;
+  eDisplayStatus: number;
+  eEnableThirdPartyControllerConfiguration: number;
+  eSteamInputControllerMask: number;
+  iInstallFolder: number;
+  lDiskUsageBytes: number;
+  lDlcUsageBytes: number;
+  libraryAssets: LibraryAssets;
+  nBuildID: number;
+  nCompatToolPriority: number;
+  nPlaytimeForever: number;
+  nScreenshots: number;
+  rtLastTimePlayed: number;
+  rtLastUpdated: number;
+  rtPurchased: number;
+  selectedLanguage: SelectedLanguage;
+  strCloudBytesAvailable: string;
+  strCloudBytesUsed: string;
+  strCompatToolDisplayName: string;
+  strCompatToolName: string;
+  strDeveloperName: string;
+  strDisplayName: string;
+  strExternalSubscriptionURL: string;
+  strFlatpakAppID: string;
+  strHomepageURL: string;
+  strInstallFolder: string;
+  strLaunchOptions: string;
+  strLockedBySteamID: string;
+  strManualURL: string;
+  strOwnerSteamID: string;
+  strResolutionOverride: string;
+  strSelectedBeta: string;
+  strSteamDeckBlogURL: string;
+  strStoreHeaderImage: string;
+  unAppID: number;
+  unEntitledContentApp: number;
+  unMemberCopies: number;
+  unMembersPlaying: number;
+  unTimedTrialSecondsAllowed: number;
+  unTimedTrialSecondsPlayed: number;
+  vecBetas: VecBetas[];
+  vecChildConfigApps: number[];
+  vecDeckCompatTestResults: VecDeckCompatTestResults[];
+  vecDLC: unknown[];
+  vecLanguages: SelectedLanguage[];
+  vecLegacyCDKeys: unknown[];
+  vecMusicAlbums: unknown[];
+  vecPlatforms: string[];
+  vecScreenShots: VecScreenShots[];
 }
 
 export interface m_ClientConnectionCallbacks {
   ClearAllCallbacks(): void;
   CountRegistered(): unknown;
   Dispatch(...e: unknown[]): void;
-  Register(e: unknown): { Unregister: () => void };
+  Register(e: unknown): { Unregister: () => void; };
 
   m_vecCallbacks: unknown[];
 }
@@ -286,7 +430,7 @@ export interface m_ClientConnectionCallbacks2 {
   ClearAllCallbacks(): void;
   CountRegistered(): unknown;
   Dispatch(...e: unknown[]): void;
-  Register(e: unknown): { Unregister: () => void };
+  Register(e: unknown): { Unregister: () => void; };
 
   m_vecCallbacks: unknown[];
 }
@@ -295,7 +439,7 @@ export interface m_ClientConnectionCallbacks3 {
   ClearAllCallbacks(): void;
   CountRegistered(): unknown;
   Dispatch(...e: unknown[]): void;
-  Register(e: unknown): { Unregister: () => void };
+  Register(e: unknown): { Unregister: () => void; };
 
   m_vecCallbacks: unknown[];
 }
@@ -307,7 +451,7 @@ export interface m_ErrorReportingStore {
   PauseReporting(): void;
   PauseReportingForDuration(e: unknown): void;
   QueueReport(e: unknown): void;
-  ReportError(): unknown;
+  ReportError(e: unknown, t: unknown): Promise<{ identifier: unknown; identifierHash: unknown; message: unknown; } | null>;
   ResumeReporting(): void;
   ScheduleSend(): void;
   SendErrorReport(e: unknown): void;
@@ -318,7 +462,7 @@ export interface m_ErrorReportingStore {
   m_bReportingPaused: boolean;
   m_pauseTimer: number;
   m_rgErrorQueue: unknown[];
-  m_sendTimer: number;
+  m_sendTimer: null;
   m_strProduct: string;
   m_strVersion: string;
   m_transport: m_ServiceTransport;
@@ -327,76 +471,74 @@ export interface m_ErrorReportingStore {
   version: string;
 }
 
-export interface m_ulSteamID {
-  add(e: unknown): unknown;
-  and(e: unknown): unknown;
-  clz(): unknown;
-  comp(e: unknown): 0 | 1 | -1;
-  compare(e: unknown): 0 | 1 | -1;
-  countLeadingZeros(): unknown;
-  countTrailingZeros(): unknown;
-  ctz(): unknown;
-  div(e: unknown): unknown;
-  divide(e: unknown): unknown;
-  eq(e: unknown): boolean;
-  equals(e: unknown): boolean;
-  eqz(): boolean;
-  ge(e: unknown): boolean;
-  getHighBits(): unknown;
-  getHighBitsUnsigned(): number;
-  getLowBits(): unknown;
-  getLowBitsUnsigned(): number;
-  getNumBitsAbs(): unknown;
-  greaterThan(e: unknown): boolean;
-  greaterThanOrEqual(e: unknown): boolean;
-  gt(e: unknown): boolean;
-  gte(e: unknown): boolean;
-  isEven(): boolean;
-  isNegative(): boolean;
-  isOdd(): boolean;
-  isPositive(): unknown;
-  isZero(): boolean;
-  le(e: unknown): boolean;
-  lessThan(e: unknown): boolean;
-  lessThanOrEqual(e: unknown): boolean;
-  lt(e: unknown): boolean;
-  lte(e: unknown): boolean;
-  mod(e: unknown): unknown;
-  modulo(e: unknown): unknown;
-  mul(e: unknown): unknown;
-  multiply(e: unknown): unknown;
-  ne(e: unknown): boolean;
-  neg(): unknown;
-  negate(): unknown;
-  neq(e: unknown): boolean;
-  not(): unknown;
-  notEquals(e: unknown): boolean;
-  or(e: unknown): unknown;
-  rem(e: unknown): unknown;
-  rotateLeft(e: unknown): unknown;
-  rotateRight(e: unknown): unknown;
-  rotl(e: unknown): unknown;
-  rotr(e: unknown): unknown;
-  shiftLeft(e: unknown): unknown;
-  shiftRight(e: unknown): unknown;
-  shiftRightUnsigned(e: unknown): unknown;
-  shl(e: unknown): unknown;
-  shr_u(e: unknown): unknown;
-  shr(e: unknown): unknown;
-  shru(e: unknown): unknown;
-  sub(e: unknown): unknown;
-  subtract(e: unknown): unknown;
-  toBytes(e: unknown): unknown;
-  toBytesBE(): number[];
-  toBytesLE(): number[];
-  toInt(): unknown;
-  toNumber(): number;
-  toSigned(): unknown;
-  toUnsigned(): unknown;
-  xor(e: unknown): unknown;
+export interface m_mapCallbacks {
+  invoke(): unknown;
+  msgClass(): unknown;
+}
 
-  __isLong__: boolean;
-  high: number;
-  low: number;
-  unsigned: boolean;
+export interface Achievements {
+  nAchieved: number;
+  nTotal: number;
+  vecAchievedHidden: unknown[];
+  vecHighlight: unknown[];
+  vecUnachieved: unknown[];
+}
+
+export interface LibraryAssets {
+  logoPosition: LogoPosition;
+  strCapsuleImage: string;
+  strHeaderImage: string;
+  strHeroBlurImage: string;
+  strHeroImage: string;
+  strLogoImage: string;
+}
+
+export interface SelectedLanguage {
+  strDisplayName: string;
+  strShortName: string;
+}
+
+export interface VecBetas {
+  strDescription: string;
+  strName: string;
+}
+
+export interface VecScreenShots {
+  bSpoilers: boolean;
+  bUploaded: boolean;
+  ePrivacy: number;
+  hHandle: number;
+  nAppID: number;
+  nCreated: number;
+  nHeight: number;
+  nWidth: number;
+  publishedFileID: string;
+  strCaption: string;
+  strGameID: string;
+  strUrl: string;
+  ugcHandle: string;
+}
+
+export interface DeckDerivedProperties {
+  hdr_support: number;
+  non_deck_display_glyphs: boolean;
+  primary_player_is_controller_slot_0: boolean;
+  requires_h264: boolean;
+  requires_internet_for_setup: boolean;
+  requires_internet_for_singleplayer: boolean;
+  requires_manual_keyboard_invoke: boolean;
+  requires_non_controller_launcher_nav: boolean;
+  small_text: boolean;
+  supported_input: number;
+}
+
+export interface VecDeckCompatTestResults {
+  test_loc_token: string;
+  test_result: number;
+}
+
+export interface LogoPosition {
+  nHeightPct: number;
+  nWidthPct: number;
+  pinnedPosition: string;
 }
