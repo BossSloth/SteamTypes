@@ -1,5 +1,6 @@
 import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
 import { testSuites } from './test-cases/test-cases';
+import Long from 'long';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
@@ -11,9 +12,11 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   const exportKeyword = true;
   const exportPrefix = exportKeyword ? 'export ' : '';
   const interfaces = new Map<string, any>();
-  const processedObjects = new Set<any>();
+  
+  // Track objects being processed to detect circular references
+  // Map object reference to its path for better circular reference handling
+  const processedObjectPaths = new Map<any, string>();
 
-  //TODO: use these and discover which ones to use
   const typeFormatFlags = 
     TypeFormatFlags.UseSingleQuotesForStringLiteralType |
     TypeFormatFlags.UseFullyQualifiedType;
@@ -38,13 +41,105 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   }
 
   function formatPropertyName(propName: string): string {
-    if (/[\s\-\.]/.test(propName)) {
-      // If it has spaces, dashes, or dots, wrap it in quotes
+    if (/[\s\-\.@*#%^\p{Extended_Pictographic}]|^\d/u.test(propName)) {
+      // If it has spaces, dashes, or dots or other non-alphanumeric characters, wrap it in quotes
       return `'${propName}'`;
     }
     
     return propName;
   }
+
+  function checkNonGenericObjectTypes(obj: any): string|null {
+    if (Long.isLong(obj)) return 'Long';
+    if (obj instanceof Date) return 'Date';
+    if (obj instanceof RegExp) return 'RegExp';
+    if (obj instanceof Error) return obj.constructor.name;
+    if (obj instanceof Promise) return 'Promise<unknown>';
+    if (obj instanceof ArrayBuffer) return 'ArrayBuffer';
+    if (obj instanceof DataView) return 'DataView';
+    if (obj instanceof WeakMap) return 'WeakMap<object, unknown>';
+    if (obj instanceof WeakSet) return 'WeakSet<object>';
+    if (obj instanceof Int8Array) return 'Int8Array';
+    if (obj instanceof Uint8Array) return 'Uint8Array';
+    if (obj instanceof Uint8ClampedArray) return 'Uint8ClampedArray';
+    if (obj instanceof Int16Array) return 'Int16Array';
+    if (obj instanceof Uint16Array) return 'Uint16Array';
+    if (obj instanceof Int32Array) return 'Int32Array';
+    if (obj instanceof Uint32Array) return 'Uint32Array';
+    if (obj instanceof Float32Array) return 'Float32Array';
+    if (obj instanceof Float64Array) return 'Float64Array';
+
+    return null;
+  }
+
+  //#region Iterable Types
+  function getIterableType(value: any, path: string): string {
+    const isSet = value instanceof Set;
+    const isMap = value instanceof Map;
+    
+    // Check for circular references in arrays/iterables
+    if (processedObjectPaths.has(value)) {
+      // Return the interface name that this circular reference points to
+      const circularPath = processedObjectPaths.get(value)!;
+
+      return `unknown/* circular reference to ${circularPath} */`;
+    }
+    
+    // Register this iterable as being processed to detect circular references
+    processedObjectPaths.set(value, path.split('.').pop() || 'Item');
+    
+    const array = Array.from(value) as unknown[];
+
+    /**
+     * Extracts and formats the types from an array of values
+     * @param items Array of items to extract types from
+     * @returns A string representing the type or union of types
+     */
+    const getArrayTypes = (items: unknown[]): string => {
+      // Get unique types by mapping each item to its type and filtering out undefined
+      const uniqueTypes = new Set<string>();
+      
+      for (const item of items) {
+        const itemType = getType(item, path);
+        if (itemType !== undefined) {
+          uniqueTypes.add(itemType);
+        }
+      }
+
+      const types = Array.from(uniqueTypes);
+      
+      // If all items are the same type, return that type
+      // Otherwise, return a union of all types
+      if (types.length === 1) {
+        return types[0];
+      } else {
+        return `(${types.join(' | ')})`;
+      }
+    };
+
+    let typeString: string;
+    
+    if (array.length === 0) {
+      // Handle empty collections
+      typeString = 'unknown';
+      if (isMap) typeString = 'unknown, unknown';
+    } else if (isMap) {
+      // Handle Map objects
+      const map = value as Map<unknown, unknown>;
+      const keyType = getArrayTypes(Array.from(map.keys()));
+      const valueType = getArrayTypes(Array.from(map.values()));
+      typeString = `${keyType}, ${valueType}`;
+    } else {
+      // Handle arrays and Sets
+      typeString = getArrayTypes(array);
+    }
+    
+    // Format the final type string based on the collection type
+    return isSet ? `Set<${typeString}>` : 
+            isMap ? `Map<${typeString}>` : 
+            `${typeString}[]`;
+  }
+  //#endregion
   
   /**
    * Gets the TypeScript type for a value
@@ -60,23 +155,23 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       case 'string': return 'string';
       case 'number': return 'number';
       case 'boolean': return 'boolean';
+      case 'bigint': return 'bigint';
+      case 'symbol': return 'symbol';
       case 'function': return 'unknown'; // Placeholder, will be used differently in generateInterface
       case 'object':
-        if (Array.isArray(value)) {
-          if (value.length === 0) {
-            return 'unknown[]';
-          }
-          
-          // Check if all items are the same type
-          const types = new Set(value.map(item => getType(item, path)));
-          const allSameType = Array.from(types).length === 1;
-          
-          if (allSameType) {
-            return `${Array.from(types)[0]}[]`;
-          } else {
-            return `(${[...types].join('|')})[]`;
-          }
+        if (Array.isArray(value) || value instanceof Set || value instanceof Map) {
+          return getIterableType(value, path);
         }
+
+        if (processedObjectPaths.has(value)) {
+          // Return the interface name that this circular reference points to
+          const circularPath = processedObjectPaths.get(value)!;
+
+          return circularPath;
+        }
+        
+        const genericType = checkNonGenericObjectTypes(value);
+        if (genericType !== null) return genericType;
         
         // Generate a unique interface name for nested objects
         const generateInterfaceName = (baseName: string) => {
@@ -91,7 +186,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
         };
 
         const lastPathSegment = path.split('.').pop() || '';
-        let capitalizedName;
+        let capitalizedName: string;
         if (lastPathSegment.charAt(1) === '_') {
             capitalizedName = lastPathSegment;
         } else {
@@ -103,18 +198,16 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
 
         if (sameInterface) return sameInterface[0];
         const interfaceName = generateInterfaceName(baseName);
-
-        // Avoid circular references
-        if (processedObjects.has(value)) {
-          return path.split('.').slice(-2)[0];
-        }
         
-        processedObjects.add(value);
+        // Register this object as being processed to detect circular references
+        processedObjectPaths.set(value, interfaceName);
+        
+        // Add to interfaces map
         interfaces.set(interfaceName, value);
         
         return interfaceName;
       default:
-        return 'any';
+        return 'unknown';
     }
   }
   //#endregion Ext. Value Type
@@ -138,9 +231,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     
     // Wrap the function in a variable declaration to make it easier to analyze
     let sourceCode: string;
-    if (funcStr.startsWith('function')) {
-      sourceCode = `const myFunc = ${funcStr}`;
-    } else if (funcStr.startsWith('(')) {
+    if (funcStr.startsWith('function') || funcStr.startsWith('(') || funcStr.startsWith('async')) {
       sourceCode = `const myFunc = ${funcStr}`;
     } else {
       sourceCode = `const myFunc = function ${funcStr}`;
@@ -190,10 +281,10 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       paramType.replaceAll('any[];', 'unknown[];');
 
       switch (paramType) {
+        case '{}':
         case 'any': paramType = 'unknown'; break;
-        case 'any[]': paramType = 'unknown[]'; break;
-        case '{}': paramType = 'unknown'; break;
-        case '[]': 
+        case 'any[]':
+        case '[]':
         case 'never[]': paramType = 'unknown[]'; break;
       }
 
@@ -214,7 +305,12 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     // Always add spaces between types
     returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');
 
-    returnType.replaceAll('any[];', 'unknown[];');
+    returnType = returnType
+    .replaceAll('any[];', 'unknown[];')
+    .replaceAll('<any>', '<unknown>')
+    .replaceAll('<any, any>', '<unknown, unknown>')
+    .replaceAll(': any', ': unknown')
+    ;
 
     switch (returnType) {
       case 'any': returnType = 'unknown'; break;
@@ -268,7 +364,13 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     const functions: string[] = [];
     const nonFunctions: string[] = [];
     
-    const properties = getProperties(obj);
+    let properties = getProperties(obj);
+    properties = properties.sort((a: string, b: string) => {
+      const cleanA = a.replaceAll("'", '').trim();
+      const cleanB = b.replaceAll("'", '').trim();
+      return cleanA.localeCompare(cleanB);
+    });
+
     
     // Process all properties
     for (const key of properties) {
@@ -307,14 +409,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       }
     }
     
-    const sortProps = (a: string, b: string) => {
-      const cleanA = a.replaceAll("'", '').trim();
-      const cleanB = b.replaceAll("'", '').trim();
-      return cleanA.localeCompare(cleanB);
-    };
-    
     // Add functions first
-    functions.sort(sortProps);
     if (functions.length > 0) {
       result += functions.join('\n') + '\n';
       
@@ -324,7 +419,6 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       }
     }
     
-    nonFunctions.sort(sortProps);
     // Add non-function properties
     if (nonFunctions.length > 0) {
       result += nonFunctions.join('\n') + '\n';
@@ -357,55 +451,61 @@ class TestClass {
 
 // Test the function
 function testConvert() {
+  // const testObj = {
+  //   // Simple properties
+  //   stringProp: "hello",
+  //   numberProp: 42,
+  //   booleanProp: true,
+  //   nullProp: null,
+    
+  //   // Array properties
+  //   emptyArray: [],
+  //   numberArray: [1, 2, 3],
+  //   mixedArray: [1, "hello", true],
+    
+  //   // Nested objects
+  //   nestedObj: {
+  //     prop1: "value1",
+  //     prop2: 123
+  //   },
+    
+  //   // Functions
+  //   simpleFunc: function() {
+  //     return "hello";
+  //   },
+    
+  //   arrowFuncWithParams: (x) => x * 2,
+    
+  //   funcWithParams: function(a, b = 10, c = "default") {
+  //     return a + b + c;
+  //   },
+    
+  //   arrayFunc: function test() {
+  //     const t = () => {}, e = [];
+  //     return t(), e;
+  //   },
+    
+  //   complexFunc: function(a, b = () => {}, c = function() {}) {
+  //     let result = [];
+  //     a();
+  //     b();
+  //     return c(), result;
+  //   },
+
+  //   directReturn: () => 'string',
+
+  //   complexTest: S=>S>0?"positive":S<0?"negative":"zero",
+
+  //   testClass: new TestClass(),
+
+  //   allReturnTypes: testSuites[1].testObject,
+
+  //   setFunc: () => new Set([1, 2, 3]),
+  // };
+
   const testObj = {
-    // Simple properties
-    stringProp: "hello",
-    numberProp: 42,
-    booleanProp: true,
-    nullProp: null,
-    
-    // Array properties
-    emptyArray: [],
-    numberArray: [1, 2, 3],
-    mixedArray: [1, "hello", true],
-    
-    // Nested objects
-    nestedObj: {
-      prop1: "value1",
-      prop2: 123
-    },
-    
-    // Functions
-    simpleFunc: function() {
-      return "hello";
-    },
-    
-    arrowFuncWithParams: (x) => x * 2,
-    
-    funcWithParams: function(a, b = 10, c = "default") {
-      return a + b + c;
-    },
-    
-    arrayFunc: function test() {
-      const t = () => {}, e = [];
-      return t(), e;
-    },
-    
-    complexFunc: function(a, b = () => {}, c = function() {}) {
-      let result = [];
-      a();
-      b();
-      return c(), result;
-    },
-
-    directReturn: () => 'string',
-
-    complexTest: S=>S>0?"positive":S<0?"negative":"zero",
-
-    testClass: new TestClass(),
-
-    allReturnTypes: testSuites[1].testObject,
-  };
+    sparse: [,,,3,,,6]
+  }
 
   const startTime = performance.now();
   const tsInterfaces = convertToTypescript(testObj, 'TestObject', globalThis.tsProject);
@@ -418,7 +518,7 @@ globalThis.tsProject = new Project({
   compilerOptions: {
     target: ScriptTarget.Latest,
     emitDeclarationOnly: true,
-    lib: ["lib.es5.d.ts"], // We only load in es5 here because it is very performant and has all features we need to get return types
+    lib: ["lib.es5.d.ts", "lib.es2015.d.ts"], // We only load in es2015 here because it is more performant than newer versions and has all features we need to get return types
     strict: true,
   },
   useInMemoryFileSystem: true,

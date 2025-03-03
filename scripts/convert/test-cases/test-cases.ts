@@ -1,4 +1,14 @@
-import { testFunctions } from "./function-test-cases";
+import { 
+  testFunctions,
+  dataStructureTestFunctions,
+  advancedTestFunctions,
+  complexObjectTestFunctions
+} from "./functions";
+import { 
+  basicPropertyTests, 
+  advancedPropertyTests, 
+  edgeCasePropertyTests 
+} from "./properties";
 
 export interface TestFunction {
   func: Function;
@@ -9,66 +19,54 @@ export interface TestSuite {
   name: string;
   interfaceName: string;
   testObject: Record<string, any>;
-  expectedOutput?: string;
+  testFunctions?: Record<string, TestFunction>;
+}
+
+function mapFunctionsToTestSuite(testFunctions: Record<string, TestFunction>) {
+  return Object.fromEntries(Object.entries(testFunctions).map(([key, { func }]) => [key, func]));
 }
 
 // #region Test Suites
 // Create test suites
 export const testSuites: TestSuite[] = [
   {
-    name: 'Basic Types',
-    interfaceName: 'BasicTypes',
-    testObject: {
-      stringProp: 'string value',
-      numberProp: 42,
-      booleanProp: true,
-      nullProp: null,
-      undefinedProp: undefined,
-      arrayProp: [1, 2, 3],
-      objectProp: { a: 1, b: 2 },
-    },
-  },
-  {
     name: 'Function Return Types',
     interfaceName: 'FunctionTypes',
-    testObject: Object.fromEntries(Object.entries(testFunctions).map(([key, { func }]) => [key, func])),
+    testObject: mapFunctionsToTestSuite(testFunctions),
+    testFunctions: testFunctions,
   },
   {
-    name: 'Nested Objects',
-    interfaceName: 'NestedTypes',
-    testObject: {
-      level1: {
-        level2: {
-          level3: {
-            prop: 'deep property',
-            func: () => {
-              return 'deep function';
-            },
-          },
-        },
-        sibling: {
-          prop: 'sibling property',
-        },
-      },
-      sibling: { otherProp: 'top level sibling' },
-    },
+    name: 'Data Structure Return Types',
+    interfaceName: 'DataStructureTypes',
+    testObject: mapFunctionsToTestSuite(dataStructureTestFunctions),
+    testFunctions: dataStructureTestFunctions,
   },
   {
-    name: 'Array Types',
-    interfaceName: 'ArrayTypes',
-    testObject: {
-      emptyArray: [],
-      numberArray: [1, 2, 3],
-      stringArray: ['a', 'b', 'c'],
-      mixedArray: [1, 'a', true, null],
-      objectArray: [{ a: 1 }, { b: 2 }],
-      functionArray: [
-        () => {},
-        () => {
-          return true;
-        },
-      ],
-    },
+    name: 'Advanced Return Types',
+    interfaceName: 'AdvancedTypes',
+    testObject: mapFunctionsToTestSuite(advancedTestFunctions),
+    testFunctions: advancedTestFunctions,
+  },
+  {
+    name: 'Complex Object Return Types',
+    interfaceName: 'ComplexObjectTypes',
+    testObject: mapFunctionsToTestSuite(complexObjectTestFunctions),
+    testFunctions: complexObjectTestFunctions,  
+  },
+  {
+    name: 'Basic Property Tests',
+    interfaceName: 'BasicPropertyTypes',
+    testObject: basicPropertyTests,
+  },
+  {
+    name: 'Advanced Property Tests',
+    interfaceName: 'AdvancedPropertyTypes',
+    testObject: advancedPropertyTests,
+  },
+  {
+    name: 'Edge Case Property Tests',
+    interfaceName: 'EdgeCasePropertyTypes',
+    testObject: edgeCasePropertyTests,
   },
   {
     name: 'Complex Object Arrays',
@@ -141,77 +139,6 @@ export const testSuites: TestSuite[] = [
           },
         },
       ],
-    },
-  },
-  {
-    name: 'Mixed Types',
-    interfaceName: 'MixedTypes',
-    testObject: {
-      // Basic types
-      stringProp: 'string value',
-      numberProp: 42,
-      booleanProp: true,
-
-      // Functions
-      simpleFunc: () => {},
-      funcWithParams: (a, b) => a + b,
-
-      // Nested objects
-      nested: {
-        prop1: 'value1',
-        prop2: 123,
-        func: () => 'hello',
-      },
-
-      // Edge cases
-      nullValue: null,
-      undefinedValue: undefined,
-    },
-  },
-  {
-    name: 'Edge Cases',
-    interfaceName: 'EdgeCases',
-    testObject: {
-      // Empty objects and arrays
-      emptyObject: {},
-      emptyArray: [],
-
-      // Special characters in property names
-      'property-with-dash': 'dash',
-      'property.with.dots': 'dots',
-      'property with spaces': 'spaces',
-      m_startWithUnderscore: {a: 5},
-
-      // Nested empty structures
-      nestedEmpty: {
-        emptyObj: {},
-        emptyArr: [],
-      },
-
-      // Functions with complex bodies
-      complexFunc: function () {
-        const x = 1;
-        const y = 2;
-        if (x > y) {
-          return x;
-        } else {
-          return y;
-        }
-      },
-
-      sameStructureDifferentName: {
-        s_x: {k: 10},
-        s_y: {k: 15},
-      },
-
-      sameStructureSameName: {
-        x: {
-          id: {value: 'test'}
-        },
-        y: {
-          id: {value: 'test'}
-        },
-      },
     },
   },
 ];

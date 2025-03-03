@@ -1,58 +1,31 @@
 export interface ComplexObjectArrays {
   arrayOfArrays: number[][];
-  arrayOfMixedArrays: (number[]|string[]|(boolean|null)[])[];
+  arrayOfMixedArrays: (number[] | string[] | (boolean | null)[])[];
   complexNested: ComplexNested[];
-  mixedArray: (ObjectArray|MixedArray|MixedArray2)[];
-  mixedEmptiness: (MixedEmptiness|MixedEmptiness2|MixedEmptiness3)[];
-  mixedNestedArray: (NestedObjectArray|MixedNestedArray|MixedNestedArray2)[];
-  mixedValueArray: (MixedValueArray|ObjectArray|MixedValueArray2)[];
-  nestedObjectArray: NestedObjectArray[];
-  objectArray: ObjectArray[];
+  mixedArray: (MixedArray | MixedArray2 | MixedArray3)[];
+  mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | MixedEmptiness3)[];
+  mixedNestedArray: (MixedNestedArray | MixedNestedArray2 | MixedNestedArray3)[];
+  mixedValueArray: (MixedValueArray | MixedArray | MixedValueArray2)[];
+  nestedObjectArray: MixedNestedArray[];
+  objectArray: MixedArray[];
   objectsWithArrays: ObjectsWithArrays[];
   objectsWithFunctions: ObjectsWithFunctions[];
 }
 
-export interface ObjectArray {
-  foo: number;
+export interface ComplexNested {
+  level1: Level1;
 }
 
 export interface MixedArray {
-  bar: number;
+  foo: number;
 }
 
 export interface MixedArray2 {
+  bar: number;
+}
+
+export interface MixedArray3 {
   baz: number;
-}
-
-export interface MixedValueArray {
-  foo: string;
-}
-
-export interface MixedValueArray2 {
-  foo: null;
-}
-
-export interface NestedObjectArray {
-  nested: Nested;
-}
-
-export interface MixedNestedArray {
-  nested: Nested2;
-}
-
-export interface MixedNestedArray2 {
-  completelyDifferent: CompletelyDifferent;
-}
-
-export interface ObjectsWithArrays {
-  name: string;
-  values: number[];
-}
-
-export interface ObjectsWithFunctions {
-  process(): string;
-
-  id: number;
 }
 
 export interface MixedEmptiness {
@@ -66,8 +39,39 @@ export interface MixedEmptiness3 {
   otherProp: number;
 }
 
-export interface ComplexNested {
-  level1: Level1;
+export interface MixedNestedArray {
+  nested: Nested;
+}
+
+export interface MixedNestedArray2 {
+  nested: Nested2;
+}
+
+export interface MixedNestedArray3 {
+  completelyDifferent: CompletelyDifferent;
+}
+
+export interface MixedValueArray {
+  foo: string;
+}
+
+export interface MixedValueArray2 {
+  foo: null;
+}
+
+export interface ObjectsWithArrays {
+  name: string;
+  values: number[];
+}
+
+export interface ObjectsWithFunctions {
+  process(): string;
+
+  id: number;
+}
+
+export interface Level1 {
+  level2: Level2;
 }
 
 export interface Nested {
@@ -80,10 +84,6 @@ export interface Nested2 {
 
 export interface CompletelyDifferent {
   something: number;
-}
-
-export interface Level1 {
-  level2: Level2;
 }
 
 export interface Level2 {

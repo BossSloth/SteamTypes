@@ -1,4 +1,4 @@
-import { TestFunction } from "./test-cases";
+import { TestFunction } from "../test-cases";
 
 //#region Test Functions
 // Define test functions with expected return types

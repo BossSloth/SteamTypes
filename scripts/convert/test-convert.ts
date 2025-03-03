@@ -6,7 +6,7 @@ import * as path from 'path';
 import { convertToTypescript } from './convert-to-ts';
 import * as diffLib from 'diff';
 import { checkbox, select } from '@inquirer/prompts';
-import { TestSuite, testSuites, testFunctions } from './test-cases';
+import { TestSuite, testSuites } from './test-cases';
 
 // Create the CLI program
 const program = new Command();
@@ -47,6 +47,12 @@ program
     } else {
       console.log(chalk.blue.bold('Running all test suites...\n'));
     }
+
+    suitesToRun = suitesToRun.sort((a, b) => {
+      if (a.testFunctions && !b.testFunctions) return 1;
+      if (!a.testFunctions && b.testFunctions) return -1;
+      return a.name.localeCompare(b.name);
+    });
     
     for (const suite of suitesToRun) {
       console.log(chalk.yellow(`Test Suite: ${suite.name}`));
@@ -61,11 +67,11 @@ program
 
       // Check function return types if this is the function test suite
       // #region Test Functions
-      if (suite.name === 'Function Return Types') {
+      if (suite.testFunctions) {
         const lines = result.split('\n');
         let passedAll = true;
         
-        for (const [funcName, { expected }] of Object.entries(testFunctions)) {
+        for (const [funcName, { expected }] of Object.entries(suite.testFunctions)) {
           // Find the line with this function
           const funcLine = lines.find(line => line.trim().startsWith(funcName));
           
@@ -212,11 +218,13 @@ program
     // Filter test suites if a specific one is requested
     let suitesToDiff = suiteName 
       ? testSuites.filter(s => s.name.toLowerCase() === suiteName.toLowerCase())
-      : testSuites.filter(s => s.name !== 'Function Return Types');
+      : testSuites.filter(s => !s.testFunctions);
     
     if (suiteName && suitesToDiff.length === 0) {
       suitesToDiff = await testSuiteNotFound(suiteName);
     }
+
+    suitesToDiff = suitesToDiff.sort((a, b) => a.name.localeCompare(b.name));
     
     console.log(chalk.blue.bold('Showing differences between current output and expected output:\n'));
     
