@@ -1,33 +1,6 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
-import { ConversionContext } from './types';
 import { context, deepSameStructure } from './utils';
-
-/**
- * Checks for non-generic object types and returns their TypeScript type
- */
-export function checkNonGenericObjectTypes(obj: any): string|null {
-  if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; };
-  if (obj instanceof Date) return 'Date';
-  if (obj instanceof RegExp) return 'RegExp';
-  if (obj instanceof Error) return obj.constructor.name;
-  if (obj instanceof Promise) return 'Promise<unknown>';
-  if (obj instanceof ArrayBuffer) return 'ArrayBuffer';
-  if (obj instanceof DataView) return 'DataView';
-  if (obj instanceof WeakMap) return 'WeakMap<object, unknown>';
-  if (obj instanceof WeakSet) return 'WeakSet<object>';
-  if (obj instanceof Int8Array) return 'Int8Array';
-  if (obj instanceof Uint8Array) return 'Uint8Array';
-  if (obj instanceof Uint8ClampedArray) return 'Uint8ClampedArray';
-  if (obj instanceof Int16Array) return 'Int16Array';
-  if (obj instanceof Uint16Array) return 'Uint16Array';
-  if (obj instanceof Int32Array) return 'Int32Array';
-  if (obj instanceof Uint32Array) return 'Uint32Array';
-  if (obj instanceof Float32Array) return 'Float32Array';
-  if (obj instanceof Float64Array) return 'Float64Array';
-
-  return null;
-}
 
 /**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
@@ -143,8 +116,8 @@ export function getType(value: any, path: string): string {
         return circularPath;
       }
       
-      const genericType = checkNonGenericObjectTypes(value);
-      if (genericType !== null) return genericType;
+      const nonGenericType = checkNonGenericObjectTypes(value);
+      if (nonGenericType !== null) return nonGenericType;
       
       // Generate a unique interface name for nested objects
       const generateInterfaceName = (baseName: string) => {
@@ -158,6 +131,11 @@ export function getType(value: any, path: string): string {
           return name;
       };
 
+      if (!path) {
+        console.error('❌ Error: path is undefined?', path, value);
+        return 'unknown';
+      }
+
       const lastPathSegment = path.split('.').pop() || '';
       let capitalizedName: string;
       if (lastPathSegment.charAt(1) === '_') {
@@ -165,7 +143,7 @@ export function getType(value: any, path: string): string {
       } else {
           capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
       }
-      const baseName = path ? capitalizedName : `${context.mainInterfaceName}Nested${context.interfaces.size}`;
+      const baseName = capitalizedName;
 
       const sameInterface = [...context.interfaces].find(([_, i]) => deepSameStructure(i, value));
 
@@ -183,3 +161,29 @@ export function getType(value: any, path: string): string {
       return 'unknown';
   }
 };
+
+/**
+ * Checks for non-generic object types and returns their TypeScript type
+ */
+function checkNonGenericObjectTypes(obj: any): string|null {
+  if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; };
+  if (obj instanceof Date) return 'Date';
+  if (obj instanceof RegExp) return 'RegExp';
+  if (obj instanceof Error) return obj.constructor.name;
+  if (obj instanceof Promise) return 'Promise<unknown>';
+  if (obj instanceof ArrayBuffer) return 'ArrayBuffer';
+  if (obj instanceof DataView) return 'DataView';
+  if (obj instanceof WeakMap) return 'WeakMap<object, unknown>';
+  if (obj instanceof WeakSet) return 'WeakSet<object>';
+  if (obj instanceof Int8Array) return 'Int8Array';
+  if (obj instanceof Uint8Array) return 'Uint8Array';
+  if (obj instanceof Uint8ClampedArray) return 'Uint8ClampedArray';
+  if (obj instanceof Int16Array) return 'Int16Array';
+  if (obj instanceof Uint16Array) return 'Uint16Array';
+  if (obj instanceof Int32Array) return 'Int32Array';
+  if (obj instanceof Uint32Array) return 'Uint32Array';
+  if (obj instanceof Float32Array) return 'Float32Array';
+  if (obj instanceof Float64Array) return 'Float64Array';
+
+  return null;
+}

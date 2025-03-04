@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph';
-import { generateInterface } from './interface-generation';
+import { createInterfaceDefinition, generateInterfaceString } from './interface-generation';
 import { context, initContext } from './utils';
 
 /**
@@ -16,10 +16,24 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, project
   context.interfaces.set(mainInterfaceName, obj);
   
   // Process all interfaces
+  // We need to iterate in a loop because new interfaces might be added during processing
+  let processedCount = 0;
+  
+  while (processedCount < context.interfaces.size) {
+    const entries = Array.from(context.interfaces.entries());
+    
+    for (let i = processedCount; i < entries.length; i++) {
+      const [name, objValue] = entries[i];
+      createInterfaceDefinition(objValue, name, project);
+      processedCount++;
+    }
+  }
+  
+  // Generate interface strings
   let result = '';
-  for (const [name, objValue] of context.interfaces.entries()) {
+  for (const interfaceObj of context.interfaceDefinitions.values()) {
     if (result) result += '\n';
-    result += generateInterface(objValue, name, project);
+    result += generateInterfaceString(interfaceObj);
   }
 
   // Add imports

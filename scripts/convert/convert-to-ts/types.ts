@@ -17,10 +17,29 @@ export type FunctionInfo = {
 };
 
 /**
+ * Represents a property in an interface
+ */
+export type InterfaceProperty = {
+  name: string;
+  type: string;
+  functionInfo?: FunctionInfo;
+  optional?: boolean;
+};
+
+/**
+ * Represents a TypeScript interface
+ */
+export type TypeScriptInterface = {
+  name: string;
+  properties: InterfaceProperty[];
+};
+
+/**
  * Represents the context for type conversion
  */
 export type ConversionContext = {
-  interfaces: Map<string, any>;
+  interfaces: Map<string, any>; // Key: interface name, Value: object interface is based on
+  interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
   imports: Set<string>;
   processedObjectPaths: Map<any, string>;
   mainInterfaceName: string;

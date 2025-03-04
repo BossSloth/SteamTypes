@@ -2,37 +2,87 @@ import { Project } from 'ts-morph';
 import { extractFunctionInfo } from './function-extraction';
 import { formatPropertyName, getProperties } from './utils';
 import { getType } from './prop-type-detection';
+import { InterfaceProperty, TypeScriptInterface } from './types';
+import { context } from './utils';
 
 /**
- * Generates interface definition for an object
+ * Creates or updates an interface definition object
  */
-export function generateInterface(
+export function createInterfaceDefinition(
   obj: any, 
   interfaceName: string, 
   project: Project,
-): string {
-  let result = `export interface ${interfaceName} {\n`;
+): TypeScriptInterface {
+  let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
+
+  if (interfaceDefinition) {
+    console.error('❌ Error: duplicate interface name?: ' + interfaceName, obj);
+    return interfaceDefinition;
+  }
   
-  // First collect functions and non-functions separately
-  const functions: string[] = [];
-  const nonFunctions: string[] = [];
+  // Create a new interface definition
+  interfaceDefinition = {
+    name: interfaceName,
+    properties: []
+  };
+  context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
   
+  // Get all properties
   let properties = getProperties(obj);
-  properties = properties.sort((a: string, b: string) => {
-    const cleanA = a.replaceAll("'", '').trim();
-    const cleanB = b.replaceAll("'", '').trim();
-    return cleanA.localeCompare(cleanB);
-  });
+  properties = properties.sort(propertyStringSorter);
 
   // Process all properties
   for (const key of properties) {
     const value = obj[key];
     const propertyPath = interfaceName + '.' + key;
+    const formattedName = formatPropertyName(key);
+    
+    let interfaceProperty: InterfaceProperty;
     
     if (typeof value === 'function') {
       // Get parameter information and return type using ts-morph in a single call
-      const { params, returnType } = extractFunctionInfo(value, project);
-      const paramsList = params.map(param => {
+      const functionInfo = extractFunctionInfo(value, project);
+      
+      interfaceProperty = {
+        name: formattedName,
+        type: 'function',
+        functionInfo
+      };
+    } else {
+      let type;
+      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
+        type = 'object|unknown';
+      } else {
+        type = getType(value, propertyPath);
+      }
+      
+      interfaceProperty = {
+        name: formattedName,
+        type,
+      };
+    }
+    
+    interfaceDefinition.properties.push(interfaceProperty);
+  }
+  
+  return interfaceDefinition;
+}
+
+/**
+ * Generates interface definition string from TypeScriptInterface object
+ */
+export function generateInterfaceString(interfaceDefinition: TypeScriptInterface): string {
+  let result = `export interface ${interfaceDefinition.name} {\n`;
+  
+  // First collect functions and non-functions separately
+  const functions: string[] = [];
+  const nonFunctions: string[] = [];
+  
+  const sortedProperties = interfaceDefinition.properties.sort(propertySorter);
+  // Process all properties
+  for (const property of sortedProperties) {
+    if (property.functionInfo) {
+      const paramsList = property.functionInfo.params.map(param => {
         let paramStr = param.name;
         
         // Add optional marker for optional parameters
@@ -49,15 +99,10 @@ export function generateInterface(
         return paramStr;
       }).join(', ');
       
-      functions.push(`  ${formatPropertyName(key)}(${paramsList}): ${returnType};`);
+      functions.push(`  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
     } else {
-      let type;
-      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
-        type = 'object|unknown';
-      } else {
-        type = getType(value, propertyPath);
-      }
-      nonFunctions.push(`  ${formatPropertyName(key)}: ${type};`);
+      const optionalMarker = property.optional ? '?' : '';
+      nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type};`);
     }
   }
   
@@ -78,4 +123,14 @@ export function generateInterface(
   
   result += '}\n';
   return result;
+}
+
+function propertySorter(a: InterfaceProperty, b: InterfaceProperty) {
+  return propertyStringSorter(a.name, b.name);
+}
+
+function propertyStringSorter(a: string, b: string) {
+  const cleanA = a.replaceAll("'", '').trim();
+  const cleanB = b.replaceAll("'", '').trim();
+  return cleanA.localeCompare(cleanB);
 }
