@@ -3,24 +3,87 @@ import { isObservableMap, isObservableSet } from 'mobx';
 import { context, deepSameStructure } from './utils';
 
 /**
+ * Gets the TypeScript type for a value
+ */
+export function getType(value: any, path: string): string {
+  if (value === null) return 'null';
+  if (value === undefined) return 'undefined';
+  
+  const type = typeof value;
+  
+  switch (type) {
+    case 'string': return 'string';
+    case 'number': return 'number';
+    case 'boolean': return 'boolean';
+    case 'bigint': return 'bigint';
+    case 'symbol': return 'symbol';
+    case 'function': return 'unknown'; // Placeholder, will be used differently in generateInterface
+    case 'object': return getObjectType(value, path);
+    default:
+      return 'unknown';
+  }
+};
+
+function getObjectType(value: any, path: string): string {
+  if (isIterable(value)) {
+    return getIterableType(value, path);
+  }
+
+  if (context.processedObjectPaths.has(value)) {
+    // Return the interface name that this circular reference points to
+    const circularPath = context.processedObjectPaths.get(value)!;
+
+    return circularPath;
+  }
+  
+  const nonGenericType = checkNonGenericObjectTypes(value);
+  if (nonGenericType !== null) return nonGenericType;
+  
+  // Generate a unique interface name for nested objects
+  const generateInterfaceName = (baseName: string) => {
+      let name = baseName;
+      let counter = 1;
+      while (context.interfaces.has(name)) {
+          // If same name and structure use already generated interface
+          if (deepSameStructure(context.interfaces.get(name), value)) return name;
+          name = `${baseName}${++counter}`;
+      }
+      return name;
+  };
+
+  if (!path) {
+    console.error('❌ Error: path is undefined?', path, value);
+    return 'unknown';
+  }
+
+  const lastPathSegment = path.split('.').pop() || '';
+  let capitalizedName: string;
+  if (lastPathSegment.charAt(1) === '_') {
+      capitalizedName = lastPathSegment;
+  } else {
+      capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
+  }
+  const baseName = capitalizedName;
+
+  const sameInterface = [...context.interfaces].find(([_, i]) => deepSameStructure(i, value));
+
+  if (sameInterface) return sameInterface[0];
+  const interfaceName = generateInterfaceName(baseName);
+  
+  // Register this object as being processed to detect circular references
+  context.processedObjectPaths.set(value, interfaceName);
+  
+  // Add to interfaces map
+  context.interfaces.set(interfaceName, value);
+  
+  return interfaceName;
+}
+
+/**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
  */
-export function getIterableType(value: any, path: string): string {
+function getIterableType(value: any, path: string): string {
   const isMap = value instanceof Map || isObservableMap(value);
-
-  let genericTypeName: string|null = null;
-
-  if (isObservableSet(value)) {
-    genericTypeName = 'ObservableSet';
-    context.imports.add("import { ObservableSet } from 'mobx';"); 
-  } else if (value instanceof Set) {
-    genericTypeName = 'Set';
-  } else if (isObservableMap(value)) {
-    genericTypeName = 'ObservableMap'; 
-    context.imports.add("import { ObservableMap } from 'mobx';"); 
-  } else if (value instanceof Map) {
-    genericTypeName = 'Map';
-  } else genericTypeName = null;
   
   // Check for circular references in arrays/iterables
   if (context.processedObjectPaths.has(value)) {
@@ -77,90 +140,41 @@ export function getIterableType(value: any, path: string): string {
     // Handle arrays and Sets
     typeString = getArrayTypes(array);
   }
+
+  const iterableTypeName = getIterableTypeName(value);
   
   // Format the final type string based on the collection type
-  return genericTypeName ? `${genericTypeName}<${typeString}>` : `${typeString}[]`;
+  return iterableTypeName ? `${iterableTypeName}<${typeString}>` : `${typeString}[]`;
 }
 
-/**
- * Gets the TypeScript type for a value
+/** 
+ * Gets the TypeScript type name for an object
+ * And also adds the import for the object if it's not already imported
  */
-export function getType(value: any, path: string): string {
-  if (value === null) return 'null';
-  if (value === undefined) return 'undefined';
-  
-  const type = typeof value;
-  
-  switch (type) {
-    case 'string': return 'string';
-    case 'number': return 'number';
-    case 'boolean': return 'boolean';
-    case 'bigint': return 'bigint';
-    case 'symbol': return 'symbol';
-    case 'function': return 'unknown'; // Placeholder, will be used differently in generateInterface
-    case 'object':
-      if (
-        Array.isArray(value)
-        || value instanceof Set
-        || isObservableSet(value)
-        || value instanceof Map
-        || isObservableMap(value)
-      ) {
-        return getIterableType(value, path);
-      }
-
-      if (context.processedObjectPaths.has(value)) {
-        // Return the interface name that this circular reference points to
-        const circularPath = context.processedObjectPaths.get(value)!;
-
-        return circularPath;
-      }
-      
-      const nonGenericType = checkNonGenericObjectTypes(value);
-      if (nonGenericType !== null) return nonGenericType;
-      
-      // Generate a unique interface name for nested objects
-      const generateInterfaceName = (baseName: string) => {
-          let name = baseName;
-          let counter = 1;
-          while (context.interfaces.has(name)) {
-              // If same name and structure use already generated interface
-              if (deepSameStructure(context.interfaces.get(name), value)) return name;
-              name = `${baseName}${++counter}`;
-          }
-          return name;
-      };
-
-      if (!path) {
-        console.error('❌ Error: path is undefined?', path, value);
-        return 'unknown';
-      }
-
-      const lastPathSegment = path.split('.').pop() || '';
-      let capitalizedName: string;
-      if (lastPathSegment.charAt(1) === '_') {
-          capitalizedName = lastPathSegment;
-      } else {
-          capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
-      }
-      const baseName = capitalizedName;
-
-      const sameInterface = [...context.interfaces].find(([_, i]) => deepSameStructure(i, value));
-
-      if (sameInterface) return sameInterface[0];
-      const interfaceName = generateInterfaceName(baseName);
-      
-      // Register this object as being processed to detect circular references
-      context.processedObjectPaths.set(value, interfaceName);
-      
-      // Add to interfaces map
-      context.interfaces.set(interfaceName, value);
-      
-      return interfaceName;
-    default:
-      return 'unknown';
+function getIterableTypeName(value: any): string|null
+{
+  if (isObservableSet(value)) {
+    context.imports.add("import { ObservableSet } from 'mobx';"); 
+    return 'ObservableSet';
+  } else if (value instanceof Set) {
+    return 'Set';
+  } else if (isObservableMap(value)) {
+    context.imports.add("import { ObservableMap } from 'mobx';"); 
+    return 'ObservableMap';
+  } else if (value instanceof Map) {
+    return 'Map';
   }
-};
+
+  return null;
+}
+
+function isIterable(value: any): boolean {
+  return Array.isArray(value)
+    || value instanceof Set
+    || isObservableSet(value)
+    || value instanceof Map
+    || isObservableMap(value);
+}
 
 /**
  * Checks for non-generic object types and returns their TypeScript type
