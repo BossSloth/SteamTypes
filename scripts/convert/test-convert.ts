@@ -3,7 +3,7 @@ import { Command } from 'commander';
 import { default as chalk } from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
-import { convertToTypescript } from './convert-to-ts';
+import { convertToTypescript } from './convert-to-ts/';
 import * as diffLib from 'diff';
 import { checkbox, select } from '@inquirer/prompts';
 import { TestSuite, testSuites } from './test-cases';
