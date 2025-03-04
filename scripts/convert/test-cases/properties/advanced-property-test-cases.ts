@@ -1,5 +1,5 @@
 import Long from 'long';
-import { ObservableMap } from 'mobx';
+import { ObservableMap, ObservableSet } from 'mobx';
 
 //#region Date and Time Property Test Cases
 export const datePropertyTests = {
@@ -104,7 +104,11 @@ export const mapSetPropertyTests = {
   
     nestedSet: new Set([new Set([1, 2, 3])]),
   
-    weakSet: weakSet
+    weakSet: weakSet,
+
+    observableSet: new ObservableSet(['a', 'b', 'c']),
+
+    numberObservableSet: new ObservableSet([1, 2, 3]),
   }
 };
 //#endregion
@@ -156,6 +160,10 @@ class AdvancedClass {
   }
   callsOwnMethod() {
     return this.method();
+  }
+
+  async asyncMethod() {
+    return 15;
   }
 }
 
@@ -228,4 +236,5 @@ export const advancedPropertyTests = {
   mapSetPropertyTests,
   typedArrayPropertyTests,
   specialTypePropertyTests,
+  // moreSpecificTypeOnObjectTests
 };

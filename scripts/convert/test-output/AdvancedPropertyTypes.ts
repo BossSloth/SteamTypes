@@ -1,5 +1,6 @@
 import Long from 'long';
 import { ObservableMap } from 'mobx';
+import { ObservableSet } from 'mobx';
 
 export interface AdvancedPropertyTypes {
   datePropertyTests: DatePropertyTests;
@@ -82,13 +83,16 @@ export interface Sets {
   mixedObjectSet: Set<(MixedObjectSet | MixedObjectSet2)>;
   mixedSet: Set<(number | string | boolean | null)>;
   nestedSet: Set<Set<number>>;
+  numberObservableSet: ObservableSet<number>;
   numberSet: Set<number>;
   objectSet: Set<ObjectKeyMap>;
+  observableSet: ObservableSet<string>;
   stringSet: Set<string>;
   weakSet: WeakSet<object>;
 }
 
 export interface AdvancedClassInstance {
+  asyncMethod(): Promise<number>;
   callsOwnMethod(): unknown;
   method(): number;
   otherMethod(): unknown;

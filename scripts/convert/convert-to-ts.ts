@@ -1,7 +1,7 @@
 import { Project, ScriptTarget, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
 import { testSuites } from './test-cases/test-cases';
 import Long from 'long';
-import { isObservableMap } from 'mobx';
+import { isObservableMap, isObservableSet } from 'mobx';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
@@ -80,12 +80,17 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
 
     let genericTypeName: string|null = null;
 
-    if (value instanceof Set) genericTypeName = 'Set';
-    else if (isObservableMap(value)) { 
+    if (isObservableSet(value)) {
+      genericTypeName = 'ObservableSet';
+      imports.add("import { ObservableSet } from 'mobx';"); 
+    } else if (value instanceof Set) {
+      genericTypeName = 'Set';
+    } else if (isObservableMap(value)) {
       genericTypeName = 'ObservableMap'; 
       imports.add("import { ObservableMap } from 'mobx';"); 
-    } else if (value instanceof Map) genericTypeName = 'Map';
-    else genericTypeName = null;
+    } else if (value instanceof Map) {
+      genericTypeName = 'Map';
+    } else genericTypeName = null;
     
     // Check for circular references in arrays/iterables
     if (processedObjectPaths.has(value)) {
@@ -117,7 +122,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
       }
 
       const types = Array.from(uniqueTypes);
-      
+
       // If all items are the same type, return that type
       // Otherwise, return a union of all types
       if (types.length === 1) {
@@ -148,7 +153,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
     return genericTypeName ? `${genericTypeName}<${typeString}>` : `${typeString}[]`;
   }
   //#endregion
-  
+
   /**
    * Gets the TypeScript type for a value
    */
@@ -170,6 +175,7 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
         if (
           Array.isArray(value)
           || value instanceof Set
+          || isObservableSet(value)
           || value instanceof Map
           || isObservableMap(value)
         ) {
@@ -464,87 +470,37 @@ function convertToTypescript(obj: any, mainInterfaceName: string, project: Proje
   return result;
 }
 
-class TestClass {
-  m_stringProp: string = 'begin';
-
-  randomFunction() {
-    return this.m_stringProp;
-  }
-}
-
 // Test the function
 function testConvert() {
-  // const testObj = {
-  //   // Simple properties
-  //   stringProp: "hello",
-  //   numberProp: 42,
-  //   booleanProp: true,
-  //   nullProp: null,
-    
-  //   // Array properties
-  //   emptyArray: [],
-  //   numberArray: [1, 2, 3],
-  //   mixedArray: [1, "hello", true],
-    
-  //   // Nested objects
-  //   nestedObj: {
-  //     prop1: "value1",
-  //     prop2: 123
-  //   },
-    
-  //   // Functions
-  //   simpleFunc: function() {
-  //     return "hello";
-  //   },
-    
-  //   arrowFuncWithParams: (x) => x * 2,
-    
-  //   funcWithParams: function(a, b = 10, c = "default") {
-  //     return a + b + c;
-  //   },
-    
-  //   arrayFunc: function test() {
-  //     const t = () => {}, e = [];
-  //     return t(), e;
-  //   },
-    
-  //   complexFunc: function(a, b = () => {}, c = function() {}) {
-  //     let result = [];
-  //     a();
-  //     b();
-  //     return c(), result;
-  //   },
-
-  //   directReturn: () => 'string',
-
-  //   complexTest: S=>S>0?"positive":S<0?"negative":"zero",
-
-  //   testClass: new TestClass(),
-
-  //   allReturnTypes: testSuites[1].testObject,
-
-  //   setFunc: () => new Set([1, 2, 3]),
-  // };
-
-  class AdvancedClass {
-    property = 'value';
-    method() {
-      return 15;
-    }
-    otherMethod() {
-      return this.property;
-    }
-    callsOwnMethod() {
-      return this.method();
-    }
-
-    async asyncMethod() {
-      return 15;
-    }
-  }
-
   const testObj = {
-    advancedClass: new AdvancedClass(),
+    arrayExtraTypeLater: [
+      { id: 1, idx: 5, name: 'Generic', appDetails: undefined },
+      { id: 2, idx: 9, name: 'Specific', appDetails: {foo: 2, bar: 3} },
+    ],
+    // arrayMoreSpecificObjectLater: [
+    //   { id: 1, idx: 5, name: 'Generic' },
+    //   { id: 2, idx: 9, name: 'Specific', extra: 'property' },
+    //   // { id: 2, idx: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 } //TODO: problem adding this one makes extra no longer optional why?
+    // ],
+    // optionalDissapears: [
+    //   { id: 1, idx1: 5, name: 'Generic' },
+    //   { id: 2, idx1: 9, name: 'Specific', extra: 'property' },
+    //   { id: 2, idx1: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
+    // ],
+    // arrayNestedMoreSpecificObjectLater: [
+    //   { id: 1, idx: 5, name: 'Generic', extra: {foo: 2, bar: 3, baz: 5, other: 'other'}},
+    //   { id: 2, idx: 9, name: 'Specific', extra: {foo: 2, bar: 3, baz: 5, other: 'other', test5: 'property'} }, //TODO: problem extra.test5 goes lost here
+    //   // { id: 2, idx: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
+    // ],
+    // brokenMultiArray: [ //TODO: this array just fully get's the wrong type
+    //   { id: 1, idx: 5, name: 'Generic'},
+    //   { id: 2, idx: 9, name: 'Specific', extra: {foo: 2, bar: 3, baz: 5, other: 'other', test5: 'property'} },
+    //   // { id: 2, idx: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
+    // ],
+    // setMoreSpecificObjectLater: new Set([
+    //   { id1: 1, idx3: 5, name: 'Generic' },
+    //   { id1: 2, idx3: 9, name: 'Specific', extra: 'property' }
+    // ]),
   }
 
   const startTime = performance.now();
