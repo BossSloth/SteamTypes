@@ -25,7 +25,6 @@ export function createInterfaceDefinition(
     name: interfaceName,
     properties: []
   };
-  context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
   
   // Get all properties
   let properties = getProperties(obj);
@@ -64,6 +63,8 @@ export function createInterfaceDefinition(
     
     interfaceDefinition.properties.push(interfaceProperty);
   }
+
+  context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
   
   return interfaceDefinition;
 }

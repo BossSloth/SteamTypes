@@ -38,7 +38,7 @@ export type TypeScriptInterface = {
  * Represents the context for type conversion
  */
 export type ConversionContext = {
-  interfaces: Map<string, any>; // Key: interface name, Value: object interface is based on
+  interfacesToProcess: Map<string, any>; // Key: interface name, Value: object interface is based on
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
   imports: Set<string>;
   processedObjectPaths: Map<any, string>;

@@ -1,7 +1,7 @@
 import { ConversionContext, defaultProtoProps } from './types';
 
 export const context: ConversionContext = {
-  interfaces: new Map<string, any>(),
+  interfacesToProcess: new Map<string, any>(),
   interfaceDefinitions: new Map<string, any>(),
   imports: new Set<string>(),
   processedObjectPaths: new Map<any, string>(),
@@ -9,7 +9,7 @@ export const context: ConversionContext = {
 };
 
 export function initContext(mainInterfaceName: string): void {
-  context.interfaces = new Map<string, any>();
+  context.interfacesToProcess = new Map<string, any>();
   context.interfaceDefinitions = new Map<string, any>();
   context.imports = new Set<string>();
   context.processedObjectPaths = new Map<any, string>();

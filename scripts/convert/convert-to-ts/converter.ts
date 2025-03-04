@@ -13,14 +13,14 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, project
   initContext(mainInterfaceName);
   
   // Add the main interface
-  context.interfaces.set(mainInterfaceName, obj);
+  context.interfacesToProcess.set(mainInterfaceName, obj);
   
   // Process all interfaces
   // We need to iterate in a loop because new interfaces might be added during processing
   let processedCount = 0;
   
-  while (processedCount < context.interfaces.size) {
-    const entries = Array.from(context.interfaces.entries());
+  while (processedCount < context.interfacesToProcess.size) {
+    const entries = Array.from(context.interfacesToProcess.entries());
     
     for (let i = processedCount; i < entries.length; i++) {
       const [name, objValue] = entries[i];

@@ -10,16 +10,15 @@ export function testConvert() {
       { id: 1, idx: 5, name: 'Generic', appDetails: undefined },
       { id: 2, idx: 9, name: 'Specific', appDetails: {foo: 2, bar: 3} },
     ],
-    // arrayMoreSpecificObjectLater: [
-    //   { id: 1, idx: 5, name: 'Generic' },
-    //   { id: 2, idx: 9, name: 'Specific', extra: 'property' },
-    //   // { id: 2, idx: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 } //TODO: problem adding this one makes extra no longer optional why?
-    // ],
-    // optionalDissapears: [
-    //   { id: 1, idx1: 5, name: 'Generic' },
-    //   { id: 2, idx1: 9, name: 'Specific', extra: 'property' },
-    //   { id: 2, idx1: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
-    // ],
+    arrayExtraxPropertyLater: [
+      { id: 1, idx: 5, name: 'Generic' },
+      { id: 2, idx: 9, name: 'Specific', extra: 'property' },
+    ],
+    doubleExtraPropertyTypes: [
+      { id: 1, idx1: 5, name: 'Generic' },
+      { id: 2, idx1: 9, name: 'Specific', extra: 'property' },
+      { id: 2, idx1: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
+    ],
     // arrayNestedMoreSpecificObjectLater: [
     //   { id: 1, idx: 5, name: 'Generic', extra: {foo: 2, bar: 3, baz: 5, other: 'other'}},
     //   { id: 2, idx: 9, name: 'Specific', extra: {foo: 2, bar: 3, baz: 5, other: 'other', test5: 'property'} }, //TODO: problem extra.test5 goes lost here

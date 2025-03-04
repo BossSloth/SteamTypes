@@ -43,9 +43,9 @@ function getObjectType(value: any, path: string): string {
   const generateInterfaceName = (baseName: string) => {
       let name = baseName;
       let counter = 1;
-      while (context.interfaces.has(name)) {
+      while (context.interfacesToProcess.has(name)) {
           // If same name and structure use already generated interface
-          if (deepSameStructure(context.interfaces.get(name), value)) return name;
+          if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
           name = `${baseName}${++counter}`;
       }
       return name;
@@ -65,7 +65,7 @@ function getObjectType(value: any, path: string): string {
   }
   const baseName = capitalizedName;
 
-  const sameInterface = [...context.interfaces].find(([_, i]) => deepSameStructure(i, value));
+  const sameInterface = [...context.interfacesToProcess].find(([_, i]) => deepSameStructure(i, value));
 
   if (sameInterface) return sameInterface[0];
   const interfaceName = generateInterfaceName(baseName);
@@ -74,7 +74,7 @@ function getObjectType(value: any, path: string): string {
   context.processedObjectPaths.set(value, interfaceName);
   
   // Add to interfaces map
-  context.interfaces.set(interfaceName, value);
+  context.interfacesToProcess.set(interfaceName, value);
   
   return interfaceName;
 }
