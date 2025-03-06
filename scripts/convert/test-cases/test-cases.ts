@@ -7,7 +7,8 @@ import {
 import { 
   basicPropertyTests, 
   advancedPropertyTests, 
-  edgeCasePropertyTests 
+  edgeCasePropertyTests, 
+  mergedInterfaceTests
 } from "./properties";
 
 export interface TestFunction {
@@ -67,6 +68,11 @@ export const testSuites: TestSuite[] = [
     name: 'Edge Case Property Tests',
     interfaceName: 'EdgeCasePropertyTypes',
     testObject: edgeCasePropertyTests,
+  },
+  {
+    name: 'Merged Interface Tests',
+    interfaceName: 'MergedInterfaceTypes',
+    testObject: mergedInterfaceTests,
   },
   {
     name: 'Complex Object Arrays',

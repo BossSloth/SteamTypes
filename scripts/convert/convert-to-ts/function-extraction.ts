@@ -9,7 +9,7 @@ const typeFormatFlags =
 /**
  * Extracts parameter information from a function
  */
-export function extractParams(initializer: FunctionExpression|ArrowFunction): MappedParam[] {
+function extractParams(initializer: FunctionExpression|ArrowFunction): MappedParam[] {
   const parameters = initializer.getParameters();
 
   return parameters.map(param => {
@@ -47,7 +47,7 @@ export function extractParams(initializer: FunctionExpression|ArrowFunction): Ma
 /**
  * Extracts return type from a function
  */
-export function extractReturnType(initializer: FunctionExpression|ArrowFunction): string {
+function extractReturnType(initializer: FunctionExpression|ArrowFunction): string {
   let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
   
   // Always add spaces between types

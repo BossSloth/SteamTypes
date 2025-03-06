@@ -1,6 +1,8 @@
 import { Project } from 'ts-morph';
 import { createInterfaceDefinition, generateInterfaceString } from './interface-generation';
 import { context, initContext } from './utils';
+import { mergeInterfaces } from './interface-merger';
+import { TypeScriptInterface } from './types';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
@@ -8,8 +10,8 @@ import { context, initContext } from './utils';
  * @param {string} mainInterfaceName - The name for the main interface
  * @returns {string} TypeScript interface definitions
  */
-export function convertToTypescript(obj: any, mainInterfaceName: string, project: Project = globalThis.tsProject): string {
-  // Initialize the conversion context
+export function convertToTypescript(obj: any, mainInterfaceName: string): string {
+  // Initialize the context
   initContext(mainInterfaceName);
   
   // Add the main interface
@@ -24,18 +26,42 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, project
     
     for (let i = processedCount; i < entries.length; i++) {
       const [name, objValue] = entries[i];
-      createInterfaceDefinition(objValue, name, project);
-      processedCount++;
+      createInterfaceDefinition(objValue, name, globalThis.tsProject);
     }
+    
+    processedCount = entries.length;
   }
+  
+  // Merge similar interfaces
+  const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions, 3);
   
   // Generate interface strings
   let result = '';
-  for (const interfaceObj of context.interfaceDefinitions.values()) {
+  const processedNames = new Set<string>();
+  
+  // First, add the main interface
+  if (mergedInterfaces.has(mainInterfaceName)) {
+    result += generateInterfaceString(mergedInterfaces.get(mainInterfaceName)!);
+    processedNames.add(mainInterfaceName);
+  }
+  
+  // Then add all other interfaces
+  for (const [name, interfaceObj] of mergedInterfaces.entries()) {
+    // Skip already processed interfaces and the main interface
+    if (processedNames.has(name) || name === mainInterfaceName) {
+      continue;
+    }
+    
+    // Skip duplicate interfaces (those that were merged)
+    if (processedNames.has(interfaceObj.name)) {
+      continue;
+    }
+    
     if (result) result += '\n';
     result += generateInterfaceString(interfaceObj);
+    processedNames.add(interfaceObj.name);
   }
-
+  
   // Add imports
   if (context.imports.size > 0) {
     result = Array.from(context.imports).join('\n') + '\n\n' + result;
