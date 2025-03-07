@@ -156,7 +156,7 @@ export function mergeInterfaceGroup(
     }
 
     // If undefined is present, make the property optional and remove undefined from the types
-    if (types.includes(new PrimitiveType('undefined'))) {
+    if (types.find(t => t.kind === 'undefined')) {
       isOptional = true;
       types = types.filter(t => t.kind !== 'undefined');
     }
