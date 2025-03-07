@@ -1,6 +1,6 @@
 import { updateTypeReferences } from './replace-duplicate-types';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
-import { Type, UnionType } from './Type';
+import { PrimitiveType, Type, UnionType } from './Type';
 
 const REQUIRED_OVERLAP = 3/4;
 
@@ -139,11 +139,11 @@ export function mergeInterfaceGroup(
   // Now create the merged properties
   for (const [propertyName, propertyVersions] of allProperties.entries()) {
     // Determine if this property should be optional
-    const isOptional = !basePropertyNames.has(propertyName) || 
+    let isOptional = !basePropertyNames.has(propertyName) || 
                        propertyVersions.length < group.length;
     
     // Collect all types for this property
-    const types: Type[] = [];
+    let types: Type[] = [];
     let functionInfo: FunctionInfo|undefined = undefined;
     
     for (const property of propertyVersions) {
@@ -153,6 +153,12 @@ export function mergeInterfaceGroup(
       if (property.functionInfo) {
         functionInfo = property.functionInfo;
       }
+    }
+
+    // If undefined is present, make the property optional and remove undefined from the types
+    if (types.includes(new PrimitiveType('undefined'))) {
+      isOptional = true;
+      types = types.filter(t => t.kind !== 'undefined');
     }
     
     // Create the merged property with a union type if needed

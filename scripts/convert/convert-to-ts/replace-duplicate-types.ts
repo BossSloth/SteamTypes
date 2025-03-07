@@ -1,5 +1,5 @@
 import { TypeScriptInterface } from './types';
-import { Type, PrimitiveType, InterfaceType, ArrayType, GenericType, UnionType } from './Type';
+import { Type, InterfaceType, ArrayType, GenericType, UnionType } from './Type';
 
 /**
  * Updates type references in all interfaces based on the alias map
@@ -56,19 +56,6 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
   else if (type instanceof UnionType) {
     // Recursively update each type in the union
     const updatedTypes = type.types.map(t => replaceTypeReferences(t, aliasMap));
-    
-    // Check if all types in the union map to the same interface
-    const interfaceTypes = updatedTypes.filter(t => t instanceof InterfaceType) as InterfaceType[];
-    
-    if (interfaceTypes.length === updatedTypes.length && interfaceTypes.length > 0) {
-      // If all types are interface types, check if they're all the same
-      const uniqueInterfaces = new Set(interfaceTypes.map(t => t.kind));
-      
-      if (uniqueInterfaces.size === 1) {
-        // If all interfaces are the same, return just one
-        return interfaceTypes[0];
-      }
-    }
     
     return new UnionType(updatedTypes);
   }

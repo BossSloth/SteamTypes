@@ -1,16 +1,16 @@
-import { Project } from 'ts-morph';
 import { createInterfaceDefinition, generateInterfaceString } from './interface-generation';
 import { context, initContext } from './utils';
 import { mergeInterfaces } from './interface-merger';
-import { TypeScriptInterface } from './types';
 
 /**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
  * @param {Object} obj - The JavaScript object to convert
  * @param {string} mainInterfaceName - The name for the main interface
+ * @param {boolean} profiling - Whether to output profiling information
  * @returns {string} TypeScript interface definitions
  */
-export function convertToTypescript(obj: any, mainInterfaceName: string): string {
+export function convertToTypescript(obj: any, mainInterfaceName: string, profiling: boolean = false): string {
+  const startTime = performance.now();
   // Initialize the context
   initContext(mainInterfaceName);
   
@@ -67,5 +67,10 @@ export function convertToTypescript(obj: any, mainInterfaceName: string): string
     result = Array.from(context.imports).join('\n') + '\n\n' + result;
   }
 
+  if (profiling) {
+    console.log(`Processed ${processedCount} interfaces`);
+    const endTime = performance.now();
+    console.log(`Execution time: ${endTime - startTime} ms`);
+  }
   return result;
 }

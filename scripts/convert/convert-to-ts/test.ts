@@ -1,6 +1,6 @@
 import { convertToTypescript } from './index';
 import { testSuites } from '../test-cases/test-cases';
-// import allApps from '../test-cases/steam_favorites_allapps.json';
+import allApps from '../test-cases/steam_favorites_allapps.json';
 
 class TestClass {
   name: string;
@@ -86,14 +86,18 @@ export function testConvert() {
       ['key2', { id2: 2, idx3: 9, name: 'Specific', extra: 'property' }],
       ['key3', { extra: 'property' }]
     ]),
-    // performanceArray: [],
+    performanceArray: [],
   };
 
-  // for (let i = 0; i < 100; i++) {
-  //   testObj['performanceArray'].push(new BigObject(`other${i}`));
-  // }
+  for (let i = 0; i < 100; i++) {
+    testObj['performanceArray'].push(new BigObject(`other${i}`));
+  }
   const startTime = performance.now();
-  const tsInterfaces = convertToTypescript(testObj, 'TestObject');
+  const extendedApps = Array(100).fill(allApps.apps).flat();
+  allApps.apps = extendedApps;
+  console.log(allApps.apps.length)
+  
+  const tsInterfaces = convertToTypescript(allApps, 'TestObject');
   const endTime = performance.now();
   console.log(tsInterfaces);
   console.log(`Execution time: ${endTime - startTime} ms`);

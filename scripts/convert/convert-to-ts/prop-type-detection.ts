@@ -94,40 +94,8 @@ function getIterableType(value: any, path: string): ArrayType|GenericType {
   
   const array = Array.from(value) as unknown[];
 
-  /**
-   * Extracts and formats the types from an array of values
-   * @param items Array of items to extract types from
-   * @returns A string representing the type or union of types
-   */
-  const getArrayTypes = (items: unknown[]): Type => {
-    if (items.length === 0) {
-      // Handle empty collections
-      return new PrimitiveType('unknown');
-    }
-
-    // Get unique types by mapping each item to its type and filtering out undefined
-    const uniqueTypes = new Set<Type>();
-    
-    for (const item of items) {
-      const itemType = getType(item, path);
-      if (itemType !== undefined) {
-        uniqueTypes.add(itemType);
-      }
-    }
-
-    const types = Array.from(uniqueTypes);
-
-    // If all items are the same type, return that type
-    // Otherwise, return a union of all types
-    if (types.length === 1) {
-      return types[0];
-    } else {
-      return new UnionType(types);
-    }
-  };
-
   if (Array.isArray(value)) {
-    return new ArrayType(getArrayTypes(array));
+    return new ArrayType(getArrayTypes(array, path));
   }
 
   const iterableTypeName = getIterableTypeName(value);
@@ -137,18 +105,50 @@ function getIterableType(value: any, path: string): ArrayType|GenericType {
   if (isMap) {
     // Handle Map objects
     const map = value as Map<unknown, unknown>;
-    const keyType = getArrayTypes(Array.from(map.keys()));
-    const valueType = getArrayTypes(Array.from(map.values()));
+    const keyType = getArrayTypes(Array.from(map.keys()), path);
+    const valueType = getArrayTypes(Array.from(map.values()), path);
     return createMapType(keyType, valueType, iterableTypeName)
   } else if (isSet) {
     // Handle Set objects
     const set = value as Set<unknown>;
-    const valueType = getArrayTypes(Array.from(set.values()));
+    const valueType = getArrayTypes(Array.from(set.values()), path);
     return createSetType(valueType, iterableTypeName);
   }
 
   throw new Error('Invalid iterable type');
 }
+
+/**
+ * Extracts and formats the types from an array of values
+ * @param items Array of items to extract types from
+ * @returns A string representing the type or union of types
+ */
+const getArrayTypes = (items: unknown[], path: string): Type => {
+  if (items.length === 0) {
+    // Handle empty collections
+    return new PrimitiveType('unknown');
+  }
+
+  // Get unique types by mapping each item to its type and filtering out undefined
+  const uniqueTypes = new Set<Type>();
+  
+  for (const item of items) {
+    const itemType = getType(item, path);
+    if (itemType !== undefined) {
+      uniqueTypes.add(itemType);
+    }
+  }
+
+  const types = Array.from(uniqueTypes);
+
+  // If all items are the same type, return that type
+  // Otherwise, return a union of all types
+  if (types.length === 1) {
+    return types[0];
+  } else {
+    return new UnionType(types);
+  }
+};
 
 /** 
  * Gets the TypeScript type name for an object
