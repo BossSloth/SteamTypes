@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph';
-import { extractFunctionInfo } from './function-extraction';
+import { massExtractFunctionInfo } from './function-extraction';
 import { formatPropertyName, getProperties } from './utils';
 import { getType } from './prop-type-detection';
 import { InterfaceProperty, TypeScriptInterface } from './types';
@@ -37,17 +37,11 @@ export function createInterfaceDefinition(
     const propertyPath = interfaceName + '.' + key;
     const formattedName = formatPropertyName(key);
     
-    let interfaceProperty: InterfaceProperty;
-    
     if (typeof value === 'function') {
-      // Get parameter information and return type using ts-morph in a single call
-      const functionInfo = extractFunctionInfo(value, project);
-      
-      interfaceProperty = {
-        name: formattedName,
-        type: new PrimitiveType('function'),
-        functionInfo
-      };
+      if (!context.functionsToProcess.has(interfaceName)) {
+        context.functionsToProcess.set(interfaceName, new Map());
+      }
+      context.functionsToProcess.get(interfaceName)?.set(formattedName, value);
     } else {
       let type: Type;
       if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
@@ -56,13 +50,25 @@ export function createInterfaceDefinition(
         type = getType(value, propertyPath);
       }
       
-      interfaceProperty = {
+      const interfaceProperty = {
         name: formattedName,
         type,
       };
+      interfaceDefinition.properties.push(interfaceProperty);
     }
-    
-    interfaceDefinition.properties.push(interfaceProperty);
+  }
+
+  // Get parameter information and return type using ts-morph in one big call
+  if (context.functionsToProcess.has(interfaceName)) {
+    const functionInfos = massExtractFunctionInfo(context.functionsToProcess.get(interfaceName)!, project);
+    for (const [name, functionInfo] of functionInfos) {
+      const interfaceProperty: InterfaceProperty = {
+        name,
+        type: new PrimitiveType('function'),
+        functionInfo
+      };
+      interfaceDefinition.properties.push(interfaceProperty);
+    }
   }
 
   context.interfaceDefinitions.set(interfaceName, interfaceDefinition);

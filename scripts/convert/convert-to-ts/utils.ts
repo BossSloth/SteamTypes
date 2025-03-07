@@ -6,6 +6,7 @@ export const context: ConversionContext = {
   imports: new Set<string>(),
   processedObjectPaths: new Map<any, string>(),
   mainInterfaceName: '',
+  functionsToProcess: new Map<string, Map<string, Function>>(),
 };
 
 export function initContext(mainInterfaceName: string): void {
@@ -14,6 +15,7 @@ export function initContext(mainInterfaceName: string): void {
   context.imports = new Set<string>();
   context.processedObjectPaths = new Map<any, string>();
   context.mainInterfaceName = mainInterfaceName;
+  context.functionsToProcess = new Map<string, Map<string, Function>>();
 }
 
 /**

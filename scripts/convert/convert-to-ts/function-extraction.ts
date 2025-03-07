@@ -6,6 +6,8 @@ const typeFormatFlags =
   TypeFormatFlags.UseSingleQuotesForStringLiteralType |
   TypeFormatFlags.UseFullyQualifiedType;
 
+const enableDiagnostics = false;
+
 /**
  * Extracts parameter information from a function
  */
@@ -69,46 +71,62 @@ function extractReturnType(initializer: FunctionExpression|ArrowFunction): strin
   return returnType;
 }
 
-/**
- * Extracts both parameter information and return type from a function using ts-morph
- */
-export function extractFunctionInfo(func: Function, project: Project): FunctionInfo { 
-  const funcStr = func.toString();
-  
-  if (funcStr.includes('[native code]')) {
-    return {
-      params: [],
-      returnType: 'unknown /* native code */'
-    };
+export function massExtractFunctionInfo(funcs: Map<string, Function>, project: Project): Map<string, FunctionInfo> {
+  let sourceCode = '';
+  const functionInfos = new Map<string, FunctionInfo>();
+  for (const [name, func] of funcs) {
+    const code = createSourceCode(name, func);
+    if (code) {
+      sourceCode += code;
+    } else {
+      functionInfos.set(name, {
+        params: [],
+        returnType: 'unknown /* native code */'
+      });
+    }
   }
-  
-  // Wrap the function in a variable declaration to make it easier to analyze
-  let sourceCode: string;
+
+  if (sourceCode === '') {
+    return functionInfos;
+  }
+
+  const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
+  if (enableDiagnostics) {
+    const diagnostics = project.getPreEmitDiagnostics();
+    if (diagnostics.length > 0) {
+      throw new Error('❌ Error: diagnostics found: ' + project.formatDiagnosticsWithColorAndContext(diagnostics));
+    }
+  }
+
+  const variableDeclarations = sourceFile.getVariableDeclarations();
+  for (const variableDeclaration of variableDeclarations) {
+    const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
+      || variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
+    const mappedParams = extractParams(initializer);
+    const returnType = extractReturnType(initializer);
+    functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), { params: mappedParams, returnType });
+  }
+  project.removeSourceFile(sourceFile);
+
+  return functionInfos;
+}
+
+function createSourceCode(name: string, func: Function): string|null {
+  const funcStr = func.toString();
+
+  if (funcStr.includes('[native code]')) {
+    return null;
+  }
+
   if (funcStr.startsWith('function') || funcStr.startsWith('(')) {
-    sourceCode = `const myFunc = ${funcStr}`;
+    return `const _${name} = ${funcStr};`;
   } else if (funcStr.startsWith('async')) {
     if (funcStr.startsWith('async function') || funcStr.startsWith('async (')) {
-      sourceCode = `const myFunc = ${funcStr}`;
+      return `const _${name} = ${funcStr};`;
     } else {
-      sourceCode = `const myFunc = ${funcStr.replace('async', 'async function')}`;
+      return `const _${name} = ${funcStr.replace('async', 'async function')};`;
     }
   } else {
-    sourceCode = `const myFunc = function ${funcStr}`;
+    return `const _${name} = function ${funcStr};`;
   }
-  
-  const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
-  const variableDeclaration = sourceFile.getVariableDeclarationOrThrow('myFunc');
-  let initializer: FunctionExpression|ArrowFunction = 
-    variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
-    || variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
-  
-  const mappedParams = extractParams(initializer);
-  const returnType = extractReturnType(initializer);
-
-  project.removeSourceFile(sourceFile);
-  
-  return {
-    params: mappedParams,
-    returnType: returnType
-  };
 }

@@ -45,6 +45,7 @@ export type ConversionContext = {
   imports: Set<string>;
   processedObjectPaths: Map<any, string>;
   mainInterfaceName: string;
+  functionsToProcess: Map<string, Map<string, Function>>; // Key: interface name, Value: Map of function name to function
 };
 
 /**

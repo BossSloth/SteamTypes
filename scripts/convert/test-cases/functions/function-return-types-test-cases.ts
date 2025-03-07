@@ -316,7 +316,7 @@ export const testFunctions: Record<string, TestFunction> = {
         }
         return 'default';
       },
-      expected: "returnInTryCatch(x: unknown): 'success' | 'error' | 'default';",
+      expected: "returnInTryCatch(x: unknown): 'default' | 'success' | 'error';",
     },
     nativeCode: {
       func: Math.random,
