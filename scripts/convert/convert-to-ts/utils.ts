@@ -18,6 +18,7 @@ export function initContext(mainInterfaceName: string): void {
 
 /**
  * Checks if two objects have the same structure
+ * TODO: This is not performant at all, please optimize
  */
 export function deepSameStructure(obj1: any, obj2: any, depth = 0): boolean {
   if (depth > 10) return false;

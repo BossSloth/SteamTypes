@@ -4,7 +4,7 @@ export interface BasicPropertyTypes {
   bigIntValue: bigint;
   booleanArray: boolean[];
   emptyArray: unknown[];
-  emptyObject: object|unknown;
+  emptyObject: (object | unknown);
   emptyString: string;
   falseValue: boolean;
   floatingPoint: number;
@@ -85,12 +85,12 @@ export interface SimpleObject {
 }
 
 export interface SpecialPropertyNames {
-  _underscore: number;
   $dollar: number;
   '123numericStart': number;
-  'property with spaces': number;
+  _underscore: number;
   'property-with-dash': number;
   'property.with.dots': number;
+  'property with spaces': number;
 }
 
 export interface Outer {

@@ -4,6 +4,7 @@ import { formatPropertyName, getProperties } from './utils';
 import { getType } from './prop-type-detection';
 import { InterfaceProperty, TypeScriptInterface } from './types';
 import { context } from './utils';
+import { PrimitiveType, UnionType, Type } from './Type';
 
 /**
  * Creates or updates an interface definition object
@@ -44,13 +45,13 @@ export function createInterfaceDefinition(
       
       interfaceProperty = {
         name: formattedName,
-        type: 'function',
+        type: new PrimitiveType('function'),
         functionInfo
       };
     } else {
-      let type;
+      let type: Type;
       if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
-        type = 'object|unknown';
+        type = new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
       } else {
         type = getType(value, propertyPath);
       }
@@ -126,12 +127,28 @@ export function generateInterfaceString(interfaceDefinition: TypeScriptInterface
   return result;
 }
 
-function propertySorter(a: InterfaceProperty, b: InterfaceProperty) {
+function propertySorter(a: InterfaceProperty, b: InterfaceProperty): number {
   return propertyStringSorter(a.name, b.name);
 }
 
-function propertyStringSorter(a: string, b: string) {
-  const cleanA = a.replaceAll("'", '').trim();
-  const cleanB = b.replaceAll("'", '').trim();
-  return cleanA.localeCompare(cleanB);
+const singleQuote = "'".charCodeAt(0);
+const space = " ".charCodeAt(0);
+
+function propertyStringSorter(a: string, b: string): number {
+  let i = 0, j = 0;
+  const lenA = a.length, lenB = b.length;
+
+  while (i < lenA && j < lenB) {
+    let charA = a.charCodeAt(i);
+    let charB = b.charCodeAt(j);
+
+    // Skip single quotes and spaces
+    while (charA === singleQuote || charA === space) charA = a.charCodeAt(++i);
+    while (charB === singleQuote || charB === space) charB = b.charCodeAt(++j);
+
+    if (charA !== charB) return charA - charB;
+    i++; j++;
+  }
+
+  return (lenA - i) - (lenB - j);
 }

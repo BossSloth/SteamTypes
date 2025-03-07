@@ -1,3 +1,5 @@
+import { Type } from "./Type";
+
 /**
  * Represents a mapped function parameter
  */
@@ -21,7 +23,7 @@ export type FunctionInfo = {
  */
 export type InterfaceProperty = {
   name: string;
-  type: string;
+  type: Type;
   functionInfo?: FunctionInfo;
   optional?: boolean;
 };

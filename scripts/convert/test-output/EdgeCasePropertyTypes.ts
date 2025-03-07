@@ -37,8 +37,8 @@ export interface SpecialValueTests {
   epsilonNumber: number;
   maxNumber: number;
   minNumber: number;
-  objectWithOnlyToString: object|unknown;
-  objectWithOnlyValueOf: object|unknown;
+  objectWithOnlyToString: (object | unknown);
+  objectWithOnlyValueOf: (object | unknown);
   objectWithToStringAndOther: ObjectWithToStringAndOther;
   whitespaceString: string;
 }
@@ -102,10 +102,10 @@ export interface ReservedKeywords {
 }
 
 export interface SpecialCharacterPropertyNames {
-  '@special': string;
-  '*asterisk': string;
   '#hashtag': string;
   '%percent': string;
+  '*asterisk': string;
+  '@special': string;
   '^caret': string;
 }
 

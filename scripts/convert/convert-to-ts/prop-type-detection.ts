@@ -1,43 +1,49 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
 import { context, deepSameStructure } from './utils';
+import { PrimitiveType, InterfaceType, Type, ArrayType, GenericType, GenericTypeName, UnionType, createMapType, createSetType } from './Type';
 
 /**
  * Gets the TypeScript type for a value
  */
-export function getType(value: any, path: string): string {
-  if (value === null) return 'null';
-  if (value === undefined) return 'undefined';
+export function getType(value: any, path: string): Type {
+  if (value === null) return new PrimitiveType('null');
+  if (value === undefined) return new PrimitiveType('undefined');
   
   const type = typeof value;
   
   switch (type) {
-    case 'string': return 'string';
-    case 'number': return 'number';
-    case 'boolean': return 'boolean';
-    case 'bigint': return 'bigint';
-    case 'symbol': return 'symbol';
-    case 'function': return 'unknown'; // Placeholder, will be used differently in generateInterface
+    case 'string': return new PrimitiveType('string');
+    case 'number': return new PrimitiveType('number');
+    case 'boolean': return new PrimitiveType('boolean');
+    case 'bigint': return new PrimitiveType('bigint');
+    case 'symbol': return new PrimitiveType('symbol');
+    case 'function': return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
     case 'object': return getObjectType(value, path);
     default:
-      return 'unknown';
+      return new PrimitiveType('unknown');
   }
 };
 
-function getObjectType(value: any, path: string): string {
-  if (isIterable(value)) {
-    return getIterableType(value, path);
-  }
-
+function getObjectType(value: any, path: string): Type {
+  const isValueIterable = isIterable(value);
   if (context.processedObjectPaths.has(value)) {
     // Return the interface name that this circular reference points to
     const circularPath = context.processedObjectPaths.get(value)!;
 
-    return circularPath;
+    if (isValueIterable) {
+      return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
+    } else {
+      return new InterfaceType(circularPath);
+    }
+  }
+
+  if (isValueIterable) {
+    return getIterableType(value, path);
   }
   
-  const nonGenericType = checkNonGenericObjectTypes(value);
-  if (nonGenericType !== null) return nonGenericType;
+  const primitiveObjectType = getPrimitiveObjectTypes(value);
+  if (primitiveObjectType !== null) return new PrimitiveType(primitiveObjectType);
   
   // Generate a unique interface name for nested objects
   const generateInterfaceName = (baseName: string) => {
@@ -53,7 +59,7 @@ function getObjectType(value: any, path: string): string {
 
   if (!path) {
     console.error('❌ Error: path is undefined?', path, value);
-    return 'unknown';
+    return new PrimitiveType('unknown');
   }
 
   const lastPathSegment = path.split('.').pop() || '';
@@ -67,7 +73,7 @@ function getObjectType(value: any, path: string): string {
 
   const sameInterface = [...context.interfacesToProcess].find(([_, i]) => deepSameStructure(i, value));
 
-  if (sameInterface) return sameInterface[0];
+  if (sameInterface) return new InterfaceType(sameInterface[0]);
   const interfaceName = generateInterfaceName(baseName);
   
   // Register this object as being processed to detect circular references
@@ -76,22 +82,13 @@ function getObjectType(value: any, path: string): string {
   // Add to interfaces map
   context.interfacesToProcess.set(interfaceName, value);
   
-  return interfaceName;
+  return new InterfaceType(interfaceName);
 }
 
 /**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
  */
-function getIterableType(value: any, path: string): string {
-  const isMap = value instanceof Map || isObservableMap(value);
-  
-  // Check for circular references in arrays/iterables
-  if (context.processedObjectPaths.has(value)) {
-    const circularPath = context.processedObjectPaths.get(value)!;
-
-    return `unknown/* circular reference to ${circularPath} */`;
-  }
-  
+function getIterableType(value: any, path: string): ArrayType|GenericType {
   // Register this iterable as being processed to detect circular references
   context.processedObjectPaths.set(value, path.split('.').pop() || 'Item');
   
@@ -102,9 +99,14 @@ function getIterableType(value: any, path: string): string {
    * @param items Array of items to extract types from
    * @returns A string representing the type or union of types
    */
-  const getArrayTypes = (items: unknown[]): string => {
+  const getArrayTypes = (items: unknown[]): Type => {
+    if (items.length === 0) {
+      // Handle empty collections
+      return new PrimitiveType('unknown');
+    }
+
     // Get unique types by mapping each item to its type and filtering out undefined
-    const uniqueTypes = new Set<string>();
+    const uniqueTypes = new Set<Type>();
     
     for (const item of items) {
       const itemType = getType(item, path);
@@ -120,38 +122,39 @@ function getIterableType(value: any, path: string): string {
     if (types.length === 1) {
       return types[0];
     } else {
-      return `(${types.join(' | ')})`;
+      return new UnionType(types);
     }
   };
 
-  let typeString: string;
+  if (Array.isArray(value)) {
+    return new ArrayType(getArrayTypes(array));
+  }
+
+  const iterableTypeName = getIterableTypeName(value);
+  const isMap = iterableTypeName === 'Map' || iterableTypeName === 'ObservableMap';
+  const isSet = iterableTypeName === 'Set' || iterableTypeName === 'ObservableSet';
   
-  if (array.length === 0) {
-    // Handle empty collections
-    typeString = 'unknown';
-    if (isMap) typeString = 'unknown, unknown';
-  } else if (isMap) {
+  if (isMap) {
     // Handle Map objects
     const map = value as Map<unknown, unknown>;
     const keyType = getArrayTypes(Array.from(map.keys()));
     const valueType = getArrayTypes(Array.from(map.values()));
-    typeString = `${keyType}, ${valueType}`;
-  } else {
-    // Handle arrays and Sets
-    typeString = getArrayTypes(array);
+    return createMapType(keyType, valueType, iterableTypeName)
+  } else if (isSet) {
+    // Handle Set objects
+    const set = value as Set<unknown>;
+    const valueType = getArrayTypes(Array.from(set.values()));
+    return createSetType(valueType, iterableTypeName);
   }
 
-  const iterableTypeName = getIterableTypeName(value);
-  
-  // Format the final type string based on the collection type
-  return iterableTypeName ? `${iterableTypeName}<${typeString}>` : `${typeString}[]`;
+  throw new Error('Invalid iterable type');
 }
 
 /** 
  * Gets the TypeScript type name for an object
  * And also adds the import for the object if it's not already imported
  */
-function getIterableTypeName(value: any): string|null
+function getIterableTypeName(value: any): GenericTypeName
 {
   if (isObservableSet(value)) {
     context.imports.add("import { ObservableSet } from 'mobx';"); 
@@ -165,7 +168,7 @@ function getIterableTypeName(value: any): string|null
     return 'Map';
   }
 
-  return null;
+  throw new Error('Invalid iterable type');
 }
 
 function isIterable(value: any): boolean {
@@ -179,7 +182,7 @@ function isIterable(value: any): boolean {
 /**
  * Checks for non-generic object types and returns their TypeScript type
  */
-function checkNonGenericObjectTypes(obj: any): string|null {
+function getPrimitiveObjectTypes(obj: any): string|null {
   if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; };
   if (obj instanceof Date) return 'Date';
   if (obj instanceof RegExp) return 'RegExp';

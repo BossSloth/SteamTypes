@@ -1,5 +1,6 @@
 import { updateTypeReferences } from './replace-duplicate-types';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
+import { Type, UnionType } from './Type';
 
 const REQUIRED_OVERLAP = 3/4;
 
@@ -14,39 +15,27 @@ export function shouldMergeInterfaces(
   interface2: TypeScriptInterface,
 ): boolean {
   // Get property names from both interfaces
-  const props1 = new Set(interface1.properties.map(p => p.name));
-  const props2 = new Set(interface2.properties.map(p => p.name));
+  const props1 = interface1.properties.map(p => p.name);
+  const props2 = interface2.properties.map(p => p.name);
+  const [smaller, larger] = props1.length < props2.length ? [props1, props2] : [props2, props1];
 
-  if (props1.size < props2.size * REQUIRED_OVERLAP || props2.size < props1.size * REQUIRED_OVERLAP) {
-    return false;
-  }
+  const minOverlap = Math.ceil(REQUIRED_OVERLAP * larger.length);
+  if (smaller.length < minOverlap) return false;
+  const maxFaults = smaller.length - minOverlap;
 
-  let larger: Set<string>;
-  let smaller: Set<string>;
-  if (props1.size > props2.size) {
-    larger = props1;
-    smaller = props2;
-  } else {
-    larger = props2;
-    smaller = props1;
-  }
-
-  const minOverlap = Math.ceil(REQUIRED_OVERLAP * larger.size);
-  const maxFaults = smaller.size - minOverlap;
-  
-  // Find common and uncommon properties
+  const largerSet = new Set(larger);
   let commonCount = 0;
-  let faults = 0;
+  let faultCount = 0;
+
   for (const prop of smaller) {
-    if (larger.has(prop)) {
-      commonCount++;
+    if (largerSet.has(prop)) {
+      if (++commonCount >= minOverlap) return true;
     } else {
-      faults++;
-      if (faults > maxFaults) return false;
+      if (++faultCount > maxFaults) return false;
     }
   }
-  
-  return commonCount >= minOverlap;
+
+  return false;
 }
 
 /**
@@ -153,12 +142,12 @@ export function mergeInterfaceGroup(
     const isOptional = !basePropertyNames.has(propertyName) || 
                        propertyVersions.length < group.length;
     
-    // Collect all unique types for this property
-    const types = new Set<string>();
+    // Collect all types for this property
+    const types: Type[] = [];
     let functionInfo: FunctionInfo|undefined = undefined;
     
     for (const property of propertyVersions) {
-      types.add(property.type);
+      types.push(property.type);
       
       // If any version has function info, use it
       if (property.functionInfo) {
@@ -166,10 +155,10 @@ export function mergeInterfaceGroup(
       }
     }
     
-    // Create the merged property
+    // Create the merged property with a union type if needed
     const mergedProperty: InterfaceProperty = {
       name: propertyName,
-      type: Array.from(types).join(' | '),
+      type: types.length === 1 ? types[0] : new UnionType(types),
       optional: isOptional,
     };
     
@@ -218,7 +207,6 @@ export function mergeInterfaces(
       for (let i = 1; i < group.length; i++) {
         const aliasName = group[i];
         aliasMap.set(aliasName, mergedInterface.name);
-        mergedInterfaces.set(aliasName, mergedInterface); //TODO: this line maybe isn't needed
       }
     }
   }

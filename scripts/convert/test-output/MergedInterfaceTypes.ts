@@ -14,7 +14,7 @@ export interface ArrayWithArraysOfObjects {
   calculate(x: unknown): number;
 
   child?: ArrayWithArraysOfObjects;
-  children?: Children[] | Children[];
+  children?: Children[];
   createdAt: Date;
   data?: Map<string, Set<number>>;
   id: number;
@@ -24,21 +24,21 @@ export interface ArrayWithArraysOfObjects {
   parent?: ArrayWithArraysOfObjects;
   settings?: Settings;
   status: string;
-  tags?: string[] | number[];
+  tags?: (string[] | number[]);
   type: string;
-  value?: number | string | Value;
+  value?: (number | string | Value);
   values?: number[];
 }
 
 export interface ArrayWithDifferentTypes {
   createdAt: Date;
-  details?: Details | Details2;
+  details?: (Details | Details2);
   email?: string;
   id: number;
   name: string;
   status: string;
   updatedAt?: Date;
-  value?: number | string | boolean;
+  value?: (number | string | boolean);
 }
 
 export interface ArrayWithExtraProperties {
@@ -114,12 +114,12 @@ export interface ArrayWithGenericTypes {
   createdAt: Date;
   id: number;
   items?: ObservableSet<string>;
-  mappings: Map<string, number> | Map<string, Value> | ObservableMap<string, string>;
+  mappings: (Map<string, number> | Map<string, Value> | ObservableMap<string, string>);
   name: string;
   sets?: Set<number>;
   status: string;
   type: string;
-  values?: number[] | string[];
+  values?: (number[] | string[]);
 }
 
 export interface Children {
@@ -180,9 +180,9 @@ export interface ClassBasedMergedInterfaceTests {
 
 export interface ComplexMergedInterfaceTests {
   deeplyNestedArray: DeeplyNestedArray[];
-  mapWithMergeableValues: Map<string, (MapWithMergeableValues | MapWithMergeableValues2)>;
+  mapWithMergeableValues: Map<string, (ArrayWithDifferentTypes | DeeplyNestedArray)>;
   objectWithArrayProperties: ObjectWithArrayProperties;
-  setWithMergeableObjects: Set<(SetWithMergeableObjects | SetWithMergeableObjects2)>;
+  setWithMergeableObjects: Set<SetWithMergeableObjects>;
 }
 
 export interface EdgeCaseMergedInterfaceTests {

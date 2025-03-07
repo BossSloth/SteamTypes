@@ -4,7 +4,7 @@ export interface ComplexObjectArrays {
   complexNested: ComplexNested[];
   mixedArray: (MixedArray | MixedArray2 | MixedArray3)[];
   mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | MixedEmptiness3)[];
-  mixedNestedArray: (MixedNestedArray | MixedNestedArray | MixedNestedArray3)[];
+  mixedNestedArray: (MixedNestedArray | MixedNestedArray3)[];
   mixedValueArray: MixedArray[];
   nestedObjectArray: MixedNestedArray[];
   objectArray: MixedArray[];
@@ -13,15 +13,15 @@ export interface ComplexObjectArrays {
 }
 
 export interface MixedArray {
-  foo: number | string | null;
+  foo: (number | string | null);
 }
 
 export interface MixedNestedArray {
-  nested: Nested | Nested2;
+  nested: (Nested | Nested2);
 }
 
 export interface Nested {
-  prop: number | string;
+  prop: (number | string);
 }
 
 export interface ComplexNested {
