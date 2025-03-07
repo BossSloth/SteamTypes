@@ -33,7 +33,7 @@ export function convertToTypescript(obj: any, mainInterfaceName: string): string
   }
   
   // Merge similar interfaces
-  const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions, 3);
+  const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions);
   
   // Generate interface strings
   let result = '';

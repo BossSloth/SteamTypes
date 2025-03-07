@@ -48,7 +48,7 @@ export interface NestedCircularArray {
 }
 
 export interface NestedCircularReference {
-  level1: Level1;
+  level5: Level5;
 }
 
 export interface SimpleCircularReference {
@@ -68,7 +68,7 @@ export interface ComplexMixedObject {
 }
 
 export interface DeeplyNestedMixedObject {
-  level1: Level12;
+  level1: Level1;
 }
 
 export interface ObjectWithUndefined {
@@ -125,8 +125,8 @@ export interface ObjectWithToStringAndOther {
   fooOther: string;
 }
 
-export interface Level1 {
-  level2: Level2;
+export interface Level5 {
+  level6: Level6;
 }
 
 export interface Metadata {
@@ -134,27 +134,27 @@ export interface Metadata {
   version: string;
 }
 
-export interface Level12 {
+export interface Level1 {
   array: number[];
-  level2: Level22;
+  level2: Level2;
   primitive: string;
 }
 
-export interface Level2 {
-  level3: Level3;
+export interface Level6 {
+  level7: Level7;
 }
 
-export interface Level22 {
+export interface Level2 {
   date: Date;
-  level3: Level32;
+  level3: Level3;
   regex: RegExp;
 }
 
-export interface Level3 {
+export interface Level7 {
   back: NestedCircularReference;
 }
 
-export interface Level32 {
+export interface Level3 {
   function(): string;
 
   map: Map<string, string>;

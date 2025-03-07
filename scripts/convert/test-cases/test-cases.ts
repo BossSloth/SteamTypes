@@ -124,7 +124,7 @@ export const testSuites: TestSuite[] = [
       ],
 
       // Empty and non-empty mixed
-      mixedEmptiness: [{}, { prop: 'value' }, { otherProp: 123 }],
+      mixedEmptiness: [{}, { proper: 'value' }, { otherProp: 123 }],
 
       // Complex nested structures
       complexNested: [

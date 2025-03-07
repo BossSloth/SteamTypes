@@ -41,7 +41,7 @@ export const objectPropertyTests = {
   simpleObject: { a: 1, b: 'string', c: true },
   
   // Nested objects
-  nestedObject: { outer: { inner: { value: 42 } } },
+  nestedObject: { outer: { inner: { other: 42 } } },
   
   // Object with special property names
   specialPropertyNames: { 
@@ -73,10 +73,10 @@ export const objectPropertyTests = {
 
   sameStructureSameName: {
     x: {
-      id: {value: 'test'}
+      structure: {value: 'test'}
     },
     y: {
-      id: {value: 'test'}
+      structure: {value: 'test'}
     },
   },
 

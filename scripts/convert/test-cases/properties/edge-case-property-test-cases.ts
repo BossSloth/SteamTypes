@@ -4,13 +4,13 @@ const circularObj: any = { name: 'circular' };
 circularObj.self = circularObj;
 
 const nestedCircularObj: any = { 
-  level1: { 
-    level2: { 
-      level3: {} 
+  level5: { 
+    level6: { 
+      level7: {} 
     } 
   } 
 };
-nestedCircularObj.level1.level2.level3.back = nestedCircularObj;
+nestedCircularObj.level5.level6.level7.back = nestedCircularObj;
 
 const circularArray: any[] = [1, 2, 3];
 circularArray.push(circularArray);

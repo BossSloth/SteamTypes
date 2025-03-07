@@ -1,43 +1,61 @@
 import { updateTypeReferences } from './replace-duplicate-types';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
 
+const REQUIRED_OVERLAP = 3/4;
+
 /**
  * Determines if two interfaces are similar enough to be merged
  * @param interface1 First interface to compare
  * @param interface2 Second interface to compare
- * @param minCommonProperties Minimum number of common properties required for merging
  * @returns True if interfaces should be merged
  */
 export function shouldMergeInterfaces(
   interface1: TypeScriptInterface,
   interface2: TypeScriptInterface,
-  minCommonProperties: number = 3
 ): boolean {
   // Get property names from both interfaces
   const props1 = new Set(interface1.properties.map(p => p.name));
   const props2 = new Set(interface2.properties.map(p => p.name));
+
+  if (props1.size < props2.size * REQUIRED_OVERLAP || props2.size < props1.size * REQUIRED_OVERLAP) {
+    return false;
+  }
+
+  let larger: Set<string>;
+  let smaller: Set<string>;
+  if (props1.size > props2.size) {
+    larger = props1;
+    smaller = props2;
+  } else {
+    larger = props2;
+    smaller = props1;
+  }
+
+  const minOverlap = Math.ceil(REQUIRED_OVERLAP * larger.size);
+  const maxFaults = smaller.size - minOverlap;
   
-  // Find common properties
+  // Find common and uncommon properties
   let commonCount = 0;
-  for (const prop of props1) {
-    if (props2.has(prop)) {
+  let faults = 0;
+  for (const prop of smaller) {
+    if (larger.has(prop)) {
       commonCount++;
+    } else {
+      faults++;
+      if (faults > maxFaults) return false;
     }
-    if (commonCount >= minCommonProperties) return true;
   }
   
-  return commonCount >= minCommonProperties;
+  return commonCount >= minOverlap;
 }
 
 /**
  * Finds groups of interfaces that should be merged
  * @param interfaces Map of interfaces to analyze
- * @param minCommonProperties Minimum number of common properties required for merging
  * @returns Array of interface groups that should be merged
  */
 export function findInterfaceGroups(
   interfaces: Map<string, TypeScriptInterface>,
-  minCommonProperties: number = 3
 ): string[][] {
   const interfaceArray = Array.from(interfaces.entries());
   const groups: string[][] = [];
@@ -61,7 +79,7 @@ export function findInterfaceGroups(
       if (processedInterfaces.has(name2)) continue;
       
       // Check if interfaces should be merged
-      if (shouldMergeInterfaces(interface1, interface2, minCommonProperties)) {
+      if (shouldMergeInterfaces(interface1, interface2)) {
         group.push(name2);
       }
     }
@@ -169,15 +187,13 @@ export function mergeInterfaceGroup(
 /**
  * Merges similar interfaces in the provided map
  * @param interfaces Map of interfaces to merge
- * @param minCommonProperties Minimum number of common properties required for merging
  * @returns Map of merged interfaces
  */
 export function mergeInterfaces(
   interfaces: Map<string, TypeScriptInterface>,
-  minCommonProperties: number = 3
 ): Map<string, TypeScriptInterface> {
   // Find groups of interfaces to merge
-  const groups = findInterfaceGroups(interfaces, minCommonProperties);
+  const groups = findInterfaceGroups(interfaces);
   
   // Create a new map for the merged interfaces
   const mergedInterfaces = new Map<string, TypeScriptInterface>();

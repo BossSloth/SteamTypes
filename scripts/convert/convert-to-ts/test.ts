@@ -1,5 +1,6 @@
-import { convertToTypescript } from './converter';
+import { convertToTypescript } from './index';
 import { testSuites } from '../test-cases/test-cases';
+import allApps from '../test-cases/steam_favorites_allapps.json';
 
 class TestClass {
   name: string;
@@ -53,6 +54,23 @@ export function testConvert() {
     //   { id: 2, idx3: 9, name: 'Specific', extra: {foo: 2, bar: 3, baz: 5, other: 'other', test5: 'property'} },
     //   // { id: 2, idx: 9, name: 'Specific', extra: 'property', other: 3, foo: 2 }
     // ],
+    arrayWithDifferentItemTypes: [
+      { id: 1, name: 'Array 1', type: 'tags', status: 'active', createdAt: new Date(), tags: ['tag1', 'tag2'] },
+      { id: 2, name: 'Array 2', type: 'tags', status: 'active', createdAt: new Date(), tags: [1, 2, 3] }
+    ],
+    
+    // Test case for arrays with objects that have array properties
+    // with different lengths
+    arrayWithDifferentLengths: [
+      { id: 1, name: 'Length 1', type: 'array', status: 'active', createdAt: new Date(), values: [1] },
+      { id: 2, name: 'Length 2', type: 'array', status: 'active', createdAt: new Date(), values: [1, 2, 3, 4, 5] }
+    ],
+    
+    // Test case for arrays with objects that have nested arrays
+    arrayWithNestedArrays: [
+      { id: 1, name: 'Nested 1', type: 'matrix', status: 'active', createdAt: new Date(), matrix: [[1, 2], [3, 4]] },
+      { id: 2, name: 'Nested 2', type: 'matrix', status: 'active', createdAt: new Date(), matrix: [[5, 6], [7, 8]], vector: [9, 10] }
+    ],
     // arrayOfArrays: [
     //   [new TestClass('test', 1)],
     //   [new TestClass('test', 2)],
@@ -68,17 +86,30 @@ export function testConvert() {
     //   ['key2', { id2: 2, idx3: 9, name: 'Specific', extra: 'property' }],
     //   ['key3', { extra: 'property' }]
     // ]),
-    performanceArray: [],
+    // performanceArray: [],
   };
 
-  for (let i = 0; i < 100; i++) {
-    testObj['performanceArray'].push(new BigObject(`other${i}`));
-  }
+  // for (let i = 0; i < 100; i++) {
+  //   testObj['performanceArray'].push(new BigObject(`other${i}`));
+  // }
 
   const startTime = performance.now();
-  const tsInterfaces = convertToTypescript(testObj, 'TestObject');
-  // console.log(tsInterfaces);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  allApps.apps = allApps.apps.concat(allApps.apps);
+  
+  const tsInterfaces = convertToTypescript({allApps: allApps, bigObj1: new BigObject('test')}, 'TestObject');
   const endTime = performance.now();
+  console.log(tsInterfaces);
   console.log(`Execution time: ${endTime - startTime} ms`);
 }
 

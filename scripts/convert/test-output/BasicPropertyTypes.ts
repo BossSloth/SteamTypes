@@ -102,13 +102,13 @@ export interface s_x {
 }
 
 export interface X {
-  id: Id;
+  structure: Structure;
 }
 
 export interface Inner {
-  value: number;
+  other: number;
 }
 
-export interface Id {
+export interface Structure {
   value: string;
 }

@@ -11,54 +11,115 @@ export interface MergedInterfaceTypes {
 }
 
 export interface ArrayWithArraysOfObjects {
-  calculate(a: unknown, b: unknown): unknown;
-  format(value: unknown): string;
+  calculate(x: unknown): number;
 
-  category?: string;
   child?: ArrayWithArraysOfObjects;
   children?: Children[] | Children[];
-  config?: Config;
-  createdAt?: Date;
-  data?: Map<string, Set<number>> | Map<string, (Set<string> | Data)>;
-  description?: string;
-  details?: Details | Details2 | Details3 | Details3;
-  email?: string;
-  enabled?: boolean;
-  extraData?: Set<Map<string, boolean>>;
-  id?: number;
-  index?: number;
-  items?: ObservableSet<number> | ObservableSet<string>;
-  mappings?: Map<string, number> | Map<string, Value> | ObservableMap<string, string>;
+  createdAt: Date;
+  data?: Map<string, Set<number>>;
+  id: number;
+  items?: ObservableSet<number>;
   matrix?: number[][];
-  metadata?: Metadata | Metadata2;
   name: string;
   parent?: ArrayWithArraysOfObjects;
-  permissions?: string[];
-  priority?: string;
-  reason?: string;
-  role?: string;
-  sets?: Set<number>;
   settings?: Settings;
-  statistics?: Statistics;
-  status?: string;
+  status: string;
   tags?: string[] | number[];
-  test1?: boolean;
-  type?: string;
-  updatedAt?: Date;
-  value?: number | string | boolean | Value;
-  values?: number[] | string[];
-  vector?: number[];
-  version?: string;
+  type: string;
+  value?: number | string | Value;
+  values?: number[];
 }
 
-export interface InsufficientCommonProperties {
+export interface ArrayWithDifferentTypes {
+  createdAt: Date;
+  details?: Details | Details2;
+  email?: string;
+  id: number;
+  name: string;
+  status: string;
+  updatedAt?: Date;
+  value?: number | string | boolean;
+}
+
+export interface ArrayWithExtraProperties {
+  category: string;
+  description?: string;
+  id: number;
+  name: string;
+  priority: string;
+  status: string;
+}
+
+export interface DifferentClassInstances2 {
+  createdAt: Date;
+  email: string;
+  id: number;
+  name: string;
+  permissions?: string[];
+  role: string;
+  status?: string;
+}
+
+export interface MergedClassInstances {
+  createdAt: Date;
+  details: Details3;
+  index: number;
+  name: string;
+  status: string;
+  test1?: boolean;
+}
+
+export interface DeeplyNestedArray {
+  createdAt: Date;
+  id: number;
+  metadata?: Metadata;
+  name: string;
+  reason?: string;
+  statistics?: Statistics;
+  status: string;
+  updatedAt: Date;
+}
+
+export interface SetWithMergeableObjects {
+  config?: Config;
+  createdAt: Date;
+  enabled: boolean;
+  id: number;
+  name: string;
+  type: string;
+}
+
+export interface MinimalCommonProperties {
   prop1: string;
-  prop2?: string;
-  prop3?: string;
+  prop2: string;
+  prop3: string;
   prop4?: string;
   shared1: boolean;
   shared2: number;
-  shared3?: string;
+  shared3: string;
+}
+
+export interface ObjectsWithFunctions {
+  calculate(a: unknown, b: unknown): unknown;
+  format(value: unknown): string;
+
+  id: number;
+  name: string;
+  status: string;
+  type: string;
+  version: string;
+}
+
+export interface ArrayWithGenericTypes {
+  createdAt: Date;
+  id: number;
+  items?: ObservableSet<string>;
+  mappings: Map<string, number> | Map<string, Value> | ObservableMap<string, string>;
+  name: string;
+  sets?: Set<number>;
+  status: string;
+  type: string;
+  values?: number[] | string[];
 }
 
 export interface Children {
@@ -73,6 +134,11 @@ export interface Details3 {
   name: string;
   other: number;
   test2?: string;
+}
+
+export interface Metadata {
+  created: Date;
+  owner: Owner;
 }
 
 export interface Products {
@@ -96,24 +162,24 @@ export interface ArrayTypeMergedInterfaceTests {
   arrayWithArraysOfObjects: ArrayWithArraysOfObjects[];
   arrayWithDifferentItemTypes: ArrayWithArraysOfObjects[];
   arrayWithDifferentLengths: ArrayWithArraysOfObjects[];
-  arrayWithNestedArrays: ArrayWithArraysOfObjects[];
+  arrayWithNestedArrays: (ArrayWithArraysOfObjects | ArrayWithNestedArrays2)[];
 }
 
 export interface BasicMergedInterfaceTests {
-  arrayWithDifferentTypes: ArrayWithArraysOfObjects[];
-  arrayWithExtraProperties: ArrayWithArraysOfObjects[];
-  arrayWithNestedObjects: ArrayWithArraysOfObjects[];
+  arrayWithDifferentTypes: ArrayWithDifferentTypes[];
+  arrayWithExtraProperties: ArrayWithExtraProperties[];
+  arrayWithNestedObjects: ArrayWithDifferentTypes[];
 }
 
 export interface ClassBasedMergedInterfaceTests {
-  differentClassInstances: ArrayWithArraysOfObjects[];
-  mergedClassInstances: ArrayWithArraysOfObjects[];
+  differentClassInstances: (ArrayWithDifferentTypes | DifferentClassInstances2)[];
+  mergedClassInstances: MergedClassInstances[];
   objectsWithDifferentMethods: ArrayWithArraysOfObjects[];
   objectsWithSymbolProperties: ArrayWithArraysOfObjects[];
 }
 
 export interface ComplexMergedInterfaceTests {
-  deeplyNestedArray: ArrayWithArraysOfObjects[];
+  deeplyNestedArray: DeeplyNestedArray[];
   mapWithMergeableValues: Map<string, (MapWithMergeableValues | MapWithMergeableValues2)>;
   objectWithArrayProperties: ObjectWithArrayProperties;
   setWithMergeableObjects: Set<(SetWithMergeableObjects | SetWithMergeableObjects2)>;
@@ -121,21 +187,56 @@ export interface ComplexMergedInterfaceTests {
 
 export interface EdgeCaseMergedInterfaceTests {
   circularReferences: ArrayWithArraysOfObjects[];
-  insufficientCommonProperties: InsufficientCommonProperties[];
-  minimalCommonProperties: InsufficientCommonProperties[];
-  objectsWithFunctions: ArrayWithArraysOfObjects[];
+  insufficientCommonProperties: (InsufficientCommonProperties | InsufficientCommonProperties2)[];
+  minimalCommonProperties: MinimalCommonProperties[];
+  objectsWithFunctions: ObjectsWithFunctions[];
   unionTypeProperties: ArrayWithArraysOfObjects[];
 }
 
 export interface GenericTypeMergedInterfaceTests {
-  arrayWithGenericTypes: ArrayWithArraysOfObjects[];
-  arrayWithObservableCollections: ArrayWithArraysOfObjects[];
-  nestedGenericTypes: ArrayWithArraysOfObjects[];
+  arrayWithGenericTypes: ArrayWithGenericTypes[];
+  arrayWithObservableCollections: (ArrayWithArraysOfObjects | ArrayWithGenericTypes)[];
+  nestedGenericTypes: (ArrayWithArraysOfObjects | NestedGenericTypes2)[];
+}
+
+export interface ArrayWithNestedArrays2 {
+  createdAt: Date;
+  id: number;
+  matrix: number[][];
+  name: string;
+  status: string;
+  type: string;
+  vector: number[];
 }
 
 export interface ObjectWithArrayProperties {
   products: Products[];
-  users: ArrayWithArraysOfObjects[];
+  users: DifferentClassInstances2[];
+}
+
+export interface InsufficientCommonProperties {
+  prop1: string;
+  prop2: string;
+  shared1: boolean;
+  shared2: number;
+}
+
+export interface InsufficientCommonProperties2 {
+  prop1: string;
+  prop3: string;
+  prop4: string;
+  shared1: boolean;
+  shared2: number;
+}
+
+export interface NestedGenericTypes2 {
+  createdAt: Date;
+  data: Map<string, (Set<string> | Data)>;
+  extraData: Set<Map<string, boolean>>;
+  id: number;
+  name: string;
+  status: string;
+  type: string;
 }
 
 export interface Settings {
@@ -149,16 +250,6 @@ export interface Details {
 export interface Details2 {
   features: string[];
   name: string;
-}
-
-export interface Metadata {
-  created: Date;
-  owner: Owner;
-}
-
-export interface Metadata2 {
-  created: Date;
-  owner: Owner;
 }
 
 export interface Statistics {
