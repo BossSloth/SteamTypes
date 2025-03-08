@@ -149,7 +149,6 @@ export interface ObjectsWithSymbolProperties {
   name: string;
   status: string;
   type: string;
-  
 }
 
 export interface DeeplyNestedArray {
