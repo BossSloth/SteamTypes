@@ -47,7 +47,7 @@ export class UnionType extends Type {
             }
 
             // Filter out fully unknown generic types
-            if (type instanceof GenericType && type.isFullyUnknown() && types.length > 1) {
+            if ((type instanceof GenericType || type instanceof ArrayType) && type.isFullyUnknown() && types.length > 1) {
                 continue;
             }
             
@@ -86,6 +86,10 @@ export class ArrayType extends Type {
 
     public toString(): string {
         return `${this.valueType.toString()}[]`;
+    }
+
+    public isFullyUnknown(): boolean {
+        return this.valueType.kind === 'unknown';
     }
 }
 

@@ -88,10 +88,10 @@ export function testConvert() {
     //   ['key3', { extra: 'property' }]
     // ]),
     performanceArray: [],
-    setTest: [
-      {values: new Set([]), id: 2, other: 5},
-      {values: new Set([1, 2, 3]), id: 2, other: 5},
-      {values: new Set([1, 2, 3]), id: 2, extra: 'property'},
+    valueTest: [
+      {values: [1, 543, 534], id: 2, other: 5},
+      {values: [1, 2, 3], id: 2, other: 5},
+      {values: [], id: 2, other: 'property'},
     ]
   };
 
