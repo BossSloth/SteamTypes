@@ -36,14 +36,6 @@ export interface BasicPropertyTypes {
   zero: number;
 }
 
-export interface s_x {
-  k: number;
-}
-
-export interface X {
-  structure: Structure;
-}
-
 export interface MixedObjectArray {
   id: number;
 }
@@ -103,6 +95,14 @@ export interface SpecialPropertyNames {
 
 export interface Outer {
   inner: Inner;
+}
+
+export interface s_x {
+  k: number;
+}
+
+export interface X {
+  structure: Structure;
 }
 
 export interface Inner {

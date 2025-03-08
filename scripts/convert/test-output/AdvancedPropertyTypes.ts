@@ -11,10 +11,6 @@ export interface AdvancedPropertyTypes {
   typedArrayPropertyTests: TypedArrayPropertyTests;
 }
 
-export interface ObjectKeyMap {
-  key: string;
-}
-
 export interface DatePropertyTests {
   dateObject: Date;
   dateTimestamp: number;
@@ -114,6 +110,10 @@ export interface MixedObjectMap {
 
 export interface MixedObjectMap2 {
   mixedBar: string;
+}
+
+export interface ObjectKeyMap {
+  key: string;
 }
 
 export interface ObjectMap {

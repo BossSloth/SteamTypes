@@ -1,7 +1,6 @@
 import { ObservableMap, ObservableSet } from 'mobx';
 
 // IMPORTANT objects must have at least 3 properties in common to be merged
-//TODO: something goes horribly wrong here almost all types are lost/combined into one big type
 
 //#region Basic Merged Interface Test Cases
 export const basicMergedInterfaceTests = {

@@ -34,6 +34,7 @@ export type InterfaceProperty = {
 export type TypeScriptInterface = {
   name: string;
   properties: InterfaceProperty[];
+  order: number;
 };
 
 /**

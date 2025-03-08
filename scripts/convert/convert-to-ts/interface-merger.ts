@@ -114,7 +114,8 @@ export function mergeInterfaceGroup(
   // Create a new merged interface
   const mergedInterface: TypeScriptInterface = {
     name: baseName,
-    properties: []
+    properties: [],
+    order: baseInterface.order,
   };
   
   // Track all properties across all interfaces

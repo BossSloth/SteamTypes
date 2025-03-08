@@ -12,20 +12,12 @@ export interface ComplexObjectArrays {
   objectsWithFunctions: ObjectsWithFunctions[];
 }
 
-export interface MixedArray {
-  foo: (number | string | null);
-}
-
-export interface MixedNestedArray {
-  nested: (Nested | Nested2);
-}
-
-export interface Nested {
-  prop: (number | string);
-}
-
 export interface ComplexNested {
   level1: Level1;
+}
+
+export interface MixedArray {
+  foo: (number | string | null);
 }
 
 export interface MixedArray2 {
@@ -47,6 +39,10 @@ export interface MixedEmptiness3 {
   otherProp: number;
 }
 
+export interface MixedNestedArray {
+  nested: (Nested | Nested2);
+}
+
 export interface MixedNestedArray3 {
   completelyDifferent: CompletelyDifferent;
 }
@@ -64,6 +60,10 @@ export interface ObjectsWithFunctions {
 
 export interface Level1 {
   level2: Level2;
+}
+
+export interface Nested {
+  prop: (number | string);
 }
 
 export interface Nested2 {

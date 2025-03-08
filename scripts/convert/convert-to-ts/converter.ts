@@ -42,15 +42,16 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
   const processedNames = new Set<string>();
   
   // First, add the main interface
-  if (mergedInterfaces.has(mainInterfaceName)) {
-    result += generateInterfaceString(mergedInterfaces.get(mainInterfaceName)!);
-    processedNames.add(mainInterfaceName);
-  }
+  // if (mergedInterfaces.has(mainInterfaceName)) {
+  //   result += generateInterfaceString(mergedInterfaces.get(mainInterfaceName)!);
+  //   processedNames.add(mainInterfaceName); 
+  // }
+  const sortedInterfaces = Array.from(mergedInterfaces.entries()).sort((a, b) => a[1].order - b[1].order);
   
   // Then add all other interfaces
-  for (const [name, interfaceObj] of mergedInterfaces.entries()) {
+  for (const [name, interfaceObj] of sortedInterfaces) {
     // Skip already processed interfaces and the main interface
-    if (processedNames.has(name) || name === mainInterfaceName) {
+    if (processedNames.has(name)) {
       continue;
     }
     

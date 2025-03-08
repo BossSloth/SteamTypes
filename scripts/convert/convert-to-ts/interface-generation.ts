@@ -6,6 +6,8 @@ import { InterfaceProperty, TypeScriptInterface } from './types';
 import { context } from './utils';
 import { PrimitiveType, UnionType, Type } from './Type';
 
+let order = 0;
+
 /**
  * Creates or updates an interface definition object
  */
@@ -24,7 +26,8 @@ export function createInterfaceDefinition(
   // Create a new interface definition
   interfaceDefinition = {
     name: interfaceName,
-    properties: []
+    properties: [],
+    order: order++
   };
   
   // Get all properties
