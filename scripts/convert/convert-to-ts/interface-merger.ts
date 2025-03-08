@@ -116,6 +116,7 @@ export function mergeInterfaceGroup(
     name: baseName,
     properties: [],
     order: baseInterface.order,
+    extends: baseInterface.extends,
   };
   
   // Track all properties across all interfaces

@@ -1,0 +1,3 @@
+TODO:
+- More support for protobuf messages check [protobuf.md](./protobuf.md) and add [https://github.com/SteamDatabase/Protobufs] as submodule to compile the typescript types (command will look something like this `protoc --plugin="protoc-gen-ts=.\node_modules\.bin\protoc-gen-ts.exe" --ts_out=".\dist\generated" --js_out="import_style=commonjs,binary:.\dist\generated" .\Protobufs\webui\service_usernews.proto`)
+- merged interfaces better number at end

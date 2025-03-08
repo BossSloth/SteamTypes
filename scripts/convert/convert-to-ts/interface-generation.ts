@@ -2,7 +2,7 @@ import { Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { formatPropertyName, getProperties } from './utils';
 import { getType } from './prop-type-detection';
-import { InterfaceProperty, TypeScriptInterface } from './types';
+import { defaultJsProtoBufProps, InterfaceProperty, TypeScriptInterface } from './types';
 import { context } from './utils';
 import { PrimitiveType, UnionType, Type } from './Type';
 
@@ -32,6 +32,14 @@ export function createInterfaceDefinition(
   
   // Get all properties
   let properties = getProperties(obj);
+
+  // Check if object is a protobuf message
+  if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
+    properties = properties.filter(item => !defaultJsProtoBufProps.includes(item));
+    interfaceDefinition.extends = 'JsPbMessage';
+    context.imports.add('import { Message as JsPbMessage } from "google-protobuf";');
+  }
+
   properties = properties.sort(propertyStringSorter);
 
   // Process all properties
@@ -83,7 +91,12 @@ export function createInterfaceDefinition(
  * Generates interface definition string from TypeScriptInterface object
  */
 export function generateInterfaceString(interfaceDefinition: TypeScriptInterface): string {
-  let result = `export interface ${interfaceDefinition.name} {\n`;
+  let result = '';
+  if (interfaceDefinition.extends) {
+    result = `export interface ${interfaceDefinition.name} extends ${interfaceDefinition.extends} {\n`;
+  } else {
+    result = `export interface ${interfaceDefinition.name} {\n`;
+  }
   
   // First collect functions and non-functions separately
   const functions: string[] = [];
