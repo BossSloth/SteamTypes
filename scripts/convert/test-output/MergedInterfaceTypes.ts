@@ -11,7 +11,7 @@ export interface MergedInterfaceTypes {
 }
 
 export interface ArrayWithArraysOfObjects {
-  calculate(x: unknown): number;
+  calculate(x: unknown, y: unknown): unknown;
 
   child?: ArrayWithArraysOfObjects;
   children?: Children[];
@@ -151,6 +151,10 @@ export interface Products {
   title: string;
 }
 
+export interface Value {
+  nested: boolean;
+}
+
 export interface Owner {
   email: string;
   id: number;
@@ -259,10 +263,6 @@ export interface Statistics {
 
 export interface Config {
   timeout: number;
-}
-
-export interface Value {
-  nested: boolean;
 }
 
 export interface Data {

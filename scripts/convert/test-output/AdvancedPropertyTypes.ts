@@ -11,6 +11,10 @@ export interface AdvancedPropertyTypes {
   typedArrayPropertyTests: TypedArrayPropertyTests;
 }
 
+export interface ObjectKeyMap {
+  key: string;
+}
+
 export interface DatePropertyTests {
   dateObject: Date;
   dateTimestamp: number;
@@ -44,7 +48,7 @@ export interface SpecialTypePropertyTests {
   generatorFunction(): Generator<1 | 2, void, unknown>;
 
   advancedClassInstance: AdvancedClassInstance;
-  classInstance: AdvancedClassInstance;
+  classInstance: ClassInstance;
   longInteger: Long;
   promise: Promise<unknown>;
 }
@@ -100,16 +104,16 @@ export interface AdvancedClassInstance {
   property: string;
 }
 
+export interface ClassInstance {
+  property: string;
+}
+
 export interface MixedObjectMap {
   mixedFoo: string;
 }
 
 export interface MixedObjectMap2 {
   mixedBar: string;
-}
-
-export interface ObjectKeyMap {
-  key: string;
 }
 
 export interface ObjectMap {

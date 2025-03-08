@@ -27,16 +27,9 @@ export function getType(value: any, path: string): Type {
 
 function getObjectType(value: any, path: string): Type {
   const isValueIterable = isIterable(value);
-  if (context.processedObjectPaths.has(value)) {
-    // Return the interface name that this circular reference points to
-    const circularPath = context.processedObjectPaths.get(value)!;
+  const circularReference = getCircularReference(value, isValueIterable);
 
-    if (isValueIterable) {
-      return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
-    } else {
-      return new InterfaceType(circularPath);
-    }
-  }
+  if (circularReference) return circularReference;
 
   if (isValueIterable) {
     return getIterableType(value, path);
@@ -44,19 +37,6 @@ function getObjectType(value: any, path: string): Type {
   
   const primitiveObjectType = getPrimitiveObjectTypes(value);
   if (primitiveObjectType !== null) return new PrimitiveType(primitiveObjectType);
-  
-  // Generate a unique interface name for nested objects
-  const generateInterfaceName = (baseName: string) => {
-    baseName = formatInterfaceName(baseName)
-    let name = baseName;
-    let counter = 1;
-    while (context.interfacesToProcess.has(name)) {
-        // If same name and structure use already generated interface
-        if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
-        name = `${baseName}${++counter}`;
-    }
-    return name;
-  };
 
   if (!path) {
     console.error('❌ Error: path is undefined?', path, value);
@@ -70,12 +50,8 @@ function getObjectType(value: any, path: string): Type {
   } else {
       capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
   }
-  const baseName = capitalizedName;
 
-  const sameInterface = [...context.interfacesToProcess].find(([_, i]) => deepSameStructure(i, value));
-
-  if (sameInterface) return new InterfaceType(sameInterface[0]);
-  const interfaceName = generateInterfaceName(baseName);
+  const interfaceName = generateInterfaceName(capitalizedName, value);
   
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
@@ -85,6 +61,34 @@ function getObjectType(value: any, path: string): Type {
   
   return new InterfaceType(interfaceName);
 }
+
+function getCircularReference(value: any, isValueIterable: boolean): Type|null {
+  if (context.processedObjectPaths.has(value)) {
+    // Return the interface name that this circular reference points to
+    const circularPath = context.processedObjectPaths.get(value)!;
+
+    if (isValueIterable) {
+      return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
+    } else {
+      return new InterfaceType(circularPath);
+    }
+  }
+
+  return null;
+}
+
+// Generate a unique interface name for nested objects
+function generateInterfaceName(baseName: string, value: any): string {
+  baseName = formatInterfaceName(baseName)
+  let name = baseName;
+  let counter = 1;
+  while (context.interfacesToProcess.has(name)) {
+      // If same name and structure use already generated interface
+      if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
+      name = `${baseName}${++counter}`;
+  }
+  return name;
+};
 
 /**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
@@ -124,7 +128,7 @@ function getIterableType(value: any, path: string): ArrayType|GenericType {
  * @param items Array of items to extract types from
  * @returns A string representing the type or union of types
  */
-const getArrayTypes = (items: unknown[], path: string): Type => {
+function getArrayTypes(items: unknown[], path: string): Type {
   if (items.length === 0) {
     // Handle empty collections
     return new PrimitiveType('unknown');
