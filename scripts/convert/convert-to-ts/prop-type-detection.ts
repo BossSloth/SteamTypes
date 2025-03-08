@@ -1,6 +1,6 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
-import { context, deepSameStructure } from './utils';
+import { context, deepSameStructure, formatInterfaceName } from './utils';
 import { PrimitiveType, InterfaceType, Type, ArrayType, GenericType, GenericTypeName, UnionType, createMapType, createSetType } from './Type';
 
 /**
@@ -47,14 +47,15 @@ function getObjectType(value: any, path: string): Type {
   
   // Generate a unique interface name for nested objects
   const generateInterfaceName = (baseName: string) => {
-      let name = baseName;
-      let counter = 1;
-      while (context.interfacesToProcess.has(name)) {
-          // If same name and structure use already generated interface
-          if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
-          name = `${baseName}${++counter}`;
-      }
-      return name;
+    baseName = formatInterfaceName(baseName)
+    let name = baseName;
+    let counter = 1;
+    while (context.interfacesToProcess.has(name)) {
+        // If same name and structure use already generated interface
+        if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
+        name = `${baseName}${++counter}`;
+    }
+    return name;
   };
 
   if (!path) {

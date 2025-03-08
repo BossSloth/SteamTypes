@@ -100,7 +100,9 @@ export const propertyNameEdgeCases = {
     'function': 'Function',
     'if': 'If',
     'return': 'Return',
-    'var': 'Var'
+    'var': 'Var',
+    other: 5,
+    foo: 'bar',
   },
   
   // Object with numeric property names
@@ -116,17 +118,55 @@ export const propertyNameEdgeCases = {
     '#hashtag': 'hash',
     '%percent': 'percent',
     '^caret': 'caret',
-    '*asterisk': 'asterisk'
+    '*asterisk': 'asterisk',
+    'space between': 'space between',
   },
   
   // Object with emoji property names
   emojiPropertyNames: {
-    '🙂': 'smile',
-    '👍': 'thumbs up',
-    '🚀': 'rocket'
+    '🌟': 'star',
+    '🚀': 'rocket',
+    '🌙': 'moon'
   },
 
   m_startWithUnderscore: {a: 5},
+
+  // Object with reserved keywords as property names
+  reservedKeywordsObject: {
+    'class': { id1: 1, value: 'Class' },
+    'function': { id2: 2, value: 'Function' },
+    'if': { id3: 3, value: 'If' },
+    'return': { id4: 4, value: 'Return' },
+    'var': { id5: 5, value: 'Var' }
+  },
+  
+  // Object with numeric property names
+  numericPropertyNamesObject: {
+    '3': { index0: 0, value: 'zero' },
+    '4': { index1: 1, value: 'one' },
+    '5': { index2: 2, value: 'two' },
+    'Other3': { index3: 3, value: 'other' },
+  },
+  
+  // Object with special characters in property names
+  specialCharacterPropertyNamesObject: {
+    '@special': { type1: 'at', value: 'at' },
+    '#hashtag': { type2: 'hash', value: 'hash' },
+    '%percent': { type3: 'percent', value: 'percent' },
+    '^caret': { type4: 'caret', value: 'caret' },
+    '*asterisk': { type5: 'asterisk', value: 'asterisk' },
+    'space between': { type6: 'space', value: 'space between' },
+    'dashed-property': { type7: 'dashed', value: 'dashed' },
+    'under_score': { type8: 'under', value: 'under' },
+    '#multiple_ #_': { type9: 'multiple', value: 'multiple' },
+  },
+  
+  // Object with emoji property names
+  emojiPropertyNamesObject: {
+    '🙂': { emoji1: '🙂', name: 'smile' },
+    '👍': { emoji2: '👍', name: 'thumbs up' },
+    '🚀': { emoji3: '🚀', name: 'rocket' }
+  },
 };
 //#endregion
 

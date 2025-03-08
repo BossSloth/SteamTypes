@@ -45,6 +45,11 @@ export class UnionType extends Type {
                 typesToProcess.push(...type.types);
                 continue;
             }
+
+            // Filter out fully unknown generic types
+            if (type instanceof GenericType && type.isFullyUnknown() && types.length > 1) {
+                continue;
+            }
             
             // Use a string representation for quick comparison
             const typeString = type.toString();
@@ -105,6 +110,10 @@ export class GenericType extends Type {
         
         const typeParamsString = this.typeParameters.map(t => t.toString()).join(', ');
         return `${this.genericName}<${typeParamsString}>`;
+    }
+
+    public isFullyUnknown(): boolean {
+        return this.typeParameters.every(t => t.kind === 'unknown');
     }
 }
 

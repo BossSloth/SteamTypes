@@ -102,7 +102,7 @@ export const complexObjectTestFunctions: Record<string, TestFunction> = {
       objects: [{ id: 1 }, { id: 2 }],
       sparse: [,,,3,,,6]
     }),
-    expected: 'returnObjectWithArrays(): { empty: never[]; numbers: number[]; strings: string[]; mixed: (string | number | boolean)[]; nested: number[][]; objects: { id: number; }[]; sparse: (number | undefined)[]; };',
+    expected: 'returnObjectWithArrays(): { empty: unknown[]; numbers: number[]; strings: string[]; mixed: (string | number | boolean)[]; nested: number[][]; objects: { id: number; }[]; sparse: (number | undefined)[]; };',
   },
   
   // Object with function properties of various types

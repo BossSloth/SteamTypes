@@ -130,7 +130,7 @@ export interface Children {
 }
 
 export interface Details3 {
-  m_data: undefined;
+  m_data?: never;
   name: string;
   other: number;
   test2?: string;

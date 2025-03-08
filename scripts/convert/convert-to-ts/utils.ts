@@ -38,16 +38,26 @@ export function deepSameStructure(obj1: any, obj2: any, depth = 0): boolean {
   );
 }
 
+const specialCharactersRegex = /[\s\-\.@*#%^\p{Extended_Pictographic}]|^\d/u;
 /**
  * Formats a property name to handle special characters
  */
 export function formatPropertyName(propName: string): string {
-  if (/[\s\-\.@*#%^\p{Extended_Pictographic}]|^\d/u.test(propName)) {
+  if (specialCharactersRegex.test(propName)) {
     // If it has spaces, dashes, or dots or other non-alphanumeric characters, wrap it in quotes
     return `'${propName}'`;
   }
   
   return propName;
+}
+
+export function formatInterfaceName(interfaceName: string): string {
+  let trimmed = interfaceName.replaceAll(new RegExp(specialCharactersRegex.source, 'gu'), '')
+  if (trimmed.length === 0) {
+    return 'InvalidName'
+  }
+  
+  return trimmed;
 }
 
 /**

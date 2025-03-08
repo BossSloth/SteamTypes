@@ -60,6 +60,7 @@ function extractReturnType(initializer: FunctionExpression|ArrowFunction): strin
   .replaceAll('<any>', '<unknown>')
   .replaceAll('<any, any>', '<unknown, unknown>')
   .replaceAll(': any', ': unknown')
+  .replaceAll('never[];', 'unknown[];')
   ;
 
   switch (returnType) {

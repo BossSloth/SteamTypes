@@ -34,6 +34,8 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
   
   // Merge similar interfaces
   const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions);
+
+  //TODO: sort interfaces based on index which is set based on a incrementing number so it sorts by when it was discovered
   
   // Generate interface strings
   let result = '';

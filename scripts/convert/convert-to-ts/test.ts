@@ -1,6 +1,7 @@
 import { convertToTypescript } from './index';
 import { testSuites } from '../test-cases/test-cases';
 import allApps from '../test-cases/steam_favorites_allapps.json';
+import { ObservableSet } from 'mobx';
 
 class TestClass {
   name: string;
@@ -87,20 +88,16 @@ export function testConvert() {
     //   ['key3', { extra: 'property' }]
     // ]),
     performanceArray: [],
-    deeplyNestedMixedObject: {
-      date: new Date(),
-      regex: /test/,
-      function: () => 'result',
-      level3: {
-        map: new Map([['key', 'value']]),
-        set: new Set([1, 2, 3]),
-      }
-    }
+    setTest: [
+      {values: new Set([]), id: 2, other: 5},
+      {values: new Set([1, 2, 3]), id: 2, other: 5},
+      {values: new Set([1, 2, 3]), id: 2, extra: 'property'},
+    ]
   };
 
-  for (let i = 0; i < 100; i++) {
-    testObj['performanceArray'].push(new BigObject(`other${i}`));
-  }
+  // for (let i = 0; i < 100; i++) {
+  //   testObj['performanceArray'].push(new BigObject(`other${i}`));
+  // }
   const startTime = performance.now();
   const extendedApps = Array(100).fill(allApps.apps).flat();
   allApps.apps = extendedApps;
