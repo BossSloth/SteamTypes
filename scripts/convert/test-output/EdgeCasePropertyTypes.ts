@@ -8,7 +8,7 @@ export interface EdgeCasePropertyTypes {
 
 export interface CircularReferenceTests {
   circularArray: (number | unknown/* circular reference to circularArray */)[];
-  nestedCircularArray: (number | NestedCircularArray)[];
+  nestedCircularArray: (NestedCircularArray | number)[];
   nestedCircularReference: NestedCircularReference;
   simpleCircularReference: SimpleCircularReference;
 }
@@ -107,6 +107,7 @@ export interface NumericPropertyNamesObject {
   '3': InvalidName4;
   '4': InvalidName5;
   '5': InvalidName6;
+  '6543': InvalidName7;
   Other3: Other3;
 }
 
@@ -210,8 +211,13 @@ export interface InvalidName6 {
   value: string;
 }
 
-export interface Other3 {
+export interface InvalidName7 {
   index3: number;
+  value: string;
+}
+
+export interface Other3 {
+  index4: number;
   value: string;
 }
 

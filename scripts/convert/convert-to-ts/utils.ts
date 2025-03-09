@@ -53,6 +53,10 @@ export function formatPropertyName(propName: string): string {
 
 export function formatInterfaceName(interfaceName: string): string {
   let trimmed = interfaceName.replaceAll(new RegExp(specialCharactersRegex.source, 'gu'), '')
+  // Recursively remove numbers
+  while (trimmed.match(/^\d/)) {
+    trimmed = trimmed.replace(/^\d/g, '');
+  }
   if (trimmed.length === 0) {
     return 'InvalidName'
   }

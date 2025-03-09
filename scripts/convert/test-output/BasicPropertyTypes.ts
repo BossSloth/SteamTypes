@@ -9,7 +9,7 @@ export interface BasicPropertyTypes {
   falseValue: boolean;
   floatingPoint: number;
   infinity: number;
-  mixedArray: (number | string | boolean | null)[];
+  mixedArray: (boolean | null | number | string)[];
   mixedObjectArray: (MixedObjectArray | MixedObjectArray2 | MixedObjectArray3)[];
   multilineString: string;
   nan: number;
@@ -27,7 +27,7 @@ export interface BasicPropertyTypes {
   sameStructureSameName: SameStructureSameName;
   simpleObject: SimpleObject;
   simpleString: string;
-  sparseArray: (undefined | number)[];
+  sparseArray: (number | undefined)[];
   specialPropertyNames: SpecialPropertyNames;
   stringArray: string[];
   symbolValue: symbol;

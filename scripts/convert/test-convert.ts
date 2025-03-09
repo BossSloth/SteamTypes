@@ -27,11 +27,7 @@ program
     let passCount = 0;
     let failCount = 0;
     
-    // Create test-output directory if it doesn't exist
     const outputDir = path.join(__dirname, 'test-output');
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
 
     let suitesToRun = suiteName
       ? testSuites.filter(suite => suite.name.toLowerCase() === suiteName.toLowerCase())
@@ -208,12 +204,6 @@ program
   .action(async (suiteName, options) => {
     const startTime = performance.now();
     const outputDir = __dirname + '/test-output';
-    
-    // Check if output directory exists
-    if (!fs.existsSync(outputDir)) {
-      console.log(chalk.red(`Output directory does not exist: ${outputDir}`));
-      return;
-    }
     
     // Filter test suites if a specific one is requested
     let suitesToDiff = suiteName 

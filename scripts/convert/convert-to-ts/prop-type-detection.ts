@@ -51,13 +51,13 @@ function getObjectType(value: any, path: string): Type {
       capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
   }
 
-  const interfaceName = generateInterfaceName(capitalizedName, value);
+  const [interfaceName, nameCounter] = generateInterfaceName(capitalizedName, value);
   
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
   
   // Add to interfaces map
-  context.interfacesToProcess.set(interfaceName, value);
+  context.interfacesToProcess.set(interfaceName, [value, nameCounter]);
   
   return new InterfaceType(interfaceName);
 }
@@ -78,16 +78,16 @@ function getCircularReference(value: any, isValueIterable: boolean): Type|null {
 }
 
 // Generate a unique interface name for nested objects
-function generateInterfaceName(baseName: string, value: any): string {
+function generateInterfaceName(baseName: string, value: any): [string, number|undefined] {
   baseName = formatInterfaceName(baseName)
   let name = baseName;
   let counter = 1;
   while (context.interfacesToProcess.has(name)) {
       // If same name and structure use already generated interface
-      if (deepSameStructure(context.interfacesToProcess.get(name), value)) return name;
+      if (deepSameStructure(context.interfacesToProcess.get(name)![0], value)) return [name, counter === 1 ? undefined : counter];
       name = `${baseName}${++counter}`;
   }
-  return name;
+  return [name, counter === 1 ? undefined : counter];
 };
 
 /**

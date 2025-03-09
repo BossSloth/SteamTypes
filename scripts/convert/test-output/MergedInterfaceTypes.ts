@@ -66,7 +66,7 @@ export interface ArrayWithDifferentItemTypes {
   id13: number;
   name: string;
   status: string;
-  tags: (string[] | number[]);
+  tags: (number[] | string[]);
   type: string;
 }
 
@@ -94,7 +94,7 @@ export interface ArrayWithDifferentTypes {
   id2: number;
   name: string;
   status: string;
-  value: (number | string | boolean);
+  value: (boolean | number | string);
 }
 
 export interface ArrayWithExtraProperties {
@@ -262,7 +262,7 @@ export interface ArrayWithObservableCollections {
 
 export interface NestedGenericTypes {
   createdAt: Date;
-  data: (Map<string, Set<number>> | Map<string, (Set<string> | Data)>);
+  data: (Map<string, (Data | Set<string>)> | Map<string, Set<number>>);
   extraData?: Set<Map<string, boolean>>;
   id12: number;
   name: string;

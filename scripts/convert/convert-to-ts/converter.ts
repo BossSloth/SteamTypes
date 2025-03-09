@@ -15,7 +15,7 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
   initContext(mainInterfaceName);
   
   // Add the main interface
-  context.interfacesToProcess.set(mainInterfaceName, obj);
+  context.interfacesToProcess.set(mainInterfaceName, [obj, undefined]);
   
   // Process all interfaces
   // We need to iterate in a loop because new interfaces might be added during processing
@@ -25,8 +25,8 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
     const entries = Array.from(context.interfacesToProcess.entries());
     
     for (let i = processedCount; i < entries.length; i++) {
-      const [name, objValue] = entries[i];
-      createInterfaceDefinition(objValue, name, globalThis.tsProject);
+      const [name, [objValue, nameCounter]] = entries[i];
+      createInterfaceDefinition(objValue, name, nameCounter, globalThis.tsProject);
     }
     
     processedCount = entries.length;

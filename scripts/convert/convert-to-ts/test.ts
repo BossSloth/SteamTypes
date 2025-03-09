@@ -1,7 +1,6 @@
 import { convertToTypescript } from './index';
 import { testSuites } from '../test-cases/test-cases';
 import allApps from '../test-cases/steam_favorites_allapps.json';
-import { ObservableSet } from 'mobx';
 
 class TestClass {
   name: string;
@@ -88,11 +87,6 @@ export function testConvert() {
     //   ['key3', { extra: 'property' }]
     // ]),
     performanceArray: [],
-    valueTest: [
-      {values: [1, 543, 534], id: 2, other: 5},
-      {values: [1, 2, 3], id: 2, other: 5},
-      {values: [], id: 2, other: 'property'},
-    ]
   };
 
   // for (let i = 0; i < 100; i++) {

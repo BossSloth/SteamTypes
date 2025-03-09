@@ -65,7 +65,7 @@ export interface TypedArrayPropertyTests {
 
 export interface Maps {
   emptyMap: Map<unknown, unknown>;
-  mixedKeyMap: Map<(string | number), string>;
+  mixedKeyMap: Map<(number | string), string>;
   mixedObjectMap: Map<string, (MixedObjectMap | MixedObjectMap2)>;
   nestedMap: Map<string, Map<string, string>>;
   numberKeyMap: Map<number, string>;
@@ -81,7 +81,7 @@ export interface Maps {
 export interface Sets {
   emptySet: Set<unknown>;
   mixedObjectSet: Set<(MixedObjectSet | MixedObjectSet2)>;
-  mixedSet: Set<(number | string | boolean | null)>;
+  mixedSet: Set<(boolean | null | number | string)>;
   nestedSet: Set<Set<number>>;
   numberObservableSet: ObservableSet<number>;
   numberSet: Set<number>;

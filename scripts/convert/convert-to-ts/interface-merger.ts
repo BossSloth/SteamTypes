@@ -117,6 +117,7 @@ export function mergeInterfaceGroup(
     properties: [],
     order: baseInterface.order,
     extends: baseInterface.extends,
+    nameCounter: baseInterface.nameCounter,
   };
   
   // Track all properties across all interfaces
@@ -196,7 +197,7 @@ export function mergeInterfaces(
   const mergedInterfaces = new Map<string, TypeScriptInterface>();
   
   // Create a map of original interface names to their merged equivalents
-  const aliasMap = new Map<string, string>();
+  let aliasMap = new Map<string, string>();
   
   // Process each group
   for (const group of groups) {
@@ -221,6 +222,94 @@ export function mergeInterfaces(
   
   // Update all type references based on the alias map
   updateTypeReferences(mergedInterfaces, aliasMap);
-  
+
+  // Fix numbering for interfaces with similar names
+  aliasMap = fixInterfaceNumbering(mergedInterfaces);
+
+  // Update all references again
+  updateTypeReferences(mergedInterfaces, aliasMap);
+
   return mergedInterfaces;
+}
+
+/**
+ * Fixes the numbering of interfaces to ensure sequential numbering
+ * @param interfaces Map of interfaces to fix numbering for
+ */
+function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Map<string, string> {
+  // Group interfaces by their base name (without number)
+  const interfaceGroups = new Map<string, string[]>();
+  
+  // Extract base names and group interfaces
+  for (const name of interfaces.keys()) {
+    // Use nameCounter if available, otherwise fall back to regex
+    const interfaceObj = interfaces.get(name)!;
+    let baseName = name;
+    
+    if (interfaceObj.nameCounter) {
+      // If nameCounter is available, use it to determine the base name
+      baseName = name.substring(0, name.length - String(interfaceObj.nameCounter).length);
+    }
+    
+    if (!interfaceGroups.has(baseName)) {
+      interfaceGroups.set(baseName, []);
+    }
+    interfaceGroups.get(baseName)!.push(name);
+  }
+
+  const aliasMap = new Map<string, string>();
+  
+  // Process each group with more than one interface
+  for (const [baseName, group] of interfaceGroups.entries()) {
+    if (group.length <= 1) continue;
+    
+    // Sort interfaces by their nameCounter
+    group.sort((a, b) => {
+      const aInterface = interfaces.get(a)!;
+      const bInterface = interfaces.get(b)!;
+      
+      // If both have nameCounter, use that
+      if (aInterface.nameCounter !== undefined && bInterface.nameCounter !== undefined) {
+        return aInterface.nameCounter - bInterface.nameCounter;
+      }
+      
+      // If only one has nameCounter, prioritize the one without (base interface)
+      if (aInterface.nameCounter === undefined) return -1;
+      if (bInterface.nameCounter === undefined) return 1;
+
+      return 0;
+    });
+    
+    // Rename interfaces to ensure sequential numbering
+    // const baseInterface = group[0];
+    // const baseInterfaceObj = interfaces.get(baseInterface)!;
+    
+    // // If the base interface has a nameCounter, rename it
+    // if (baseInterfaceObj.nameCounter !== undefined) {
+    //   // Rename the base interface to remove any number
+    //   interfaces.delete(baseInterface);
+    //   baseInterfaceObj.name = baseName;
+    //   baseInterfaceObj.nameCounter = undefined; // Remove the counter from base interface
+    //   interfaces.set(baseName, baseInterfaceObj);
+    //   aliasMap.set(baseInterface, baseName);
+    //   group[0] = baseName;
+    // }
+    
+    // Rename the rest with sequential numbers
+    for (let i = 1; i < group.length; i++) {
+      const oldName = group[i];
+      const newName = `${baseName}${i + 1}`;
+      const interfaceObj = interfaces.get(oldName)!;
+      
+      if (oldName !== newName) {
+        interfaces.delete(oldName);
+        interfaceObj.name = newName;
+        interfaceObj.nameCounter = i + 1; // Update nameCounter to match the new name
+        interfaces.set(newName, interfaceObj);
+        aliasMap.set(oldName, newName);
+      }
+    }
+  }
+
+  return aliasMap;
 }

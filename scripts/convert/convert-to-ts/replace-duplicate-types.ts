@@ -16,7 +16,6 @@ export function updateTypeReferences(
     for (const property of interfaceObj.properties) {
       // Update the property type
       property.type = replaceTypeReferences(property.type, aliasMap);
-
     }
   }
 }
@@ -33,7 +32,7 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
     // Check if this interface has an alias
     const interfaceName = type.kind;
     const aliasedName = aliasMap.get(interfaceName);
-    
+
     if (aliasedName) {
       return new InterfaceType(aliasedName);
     }

@@ -14,3 +14,4 @@ Used packages:
 - @types/google-protobuf
 - ts-protoc-gen (probably or some fork of it or a post process script)
 - or else (protoc-gen-ts)
+- or else (ts-proto)

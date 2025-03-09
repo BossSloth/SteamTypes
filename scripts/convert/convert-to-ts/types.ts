@@ -33,6 +33,7 @@ export type InterfaceProperty = {
  */
 export type TypeScriptInterface = {
   name: string;
+  nameCounter?: number;
   properties: InterfaceProperty[];
   order: number;
   extends?: string;
@@ -42,7 +43,7 @@ export type TypeScriptInterface = {
  * Represents the context for type conversion
  */
 export type ConversionContext = {
-  interfacesToProcess: Map<string, any>; // Key: interface name, Value: object interface is based on
+  interfacesToProcess: Map<string, [any, number|undefined]>; // Key: interface name, Value: object interface is based on
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
   imports: Set<string>;
   processedObjectPaths: Map<any, string>;

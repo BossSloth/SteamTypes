@@ -58,6 +58,9 @@ export class UnionType extends Type {
                 uniqueTypes.push(type);
             }
         }
+
+        // Sort types for consistent output
+        uniqueTypes.sort((a, b) => a.toString().localeCompare(b.toString()));
         
         this.types = uniqueTypes;
     }

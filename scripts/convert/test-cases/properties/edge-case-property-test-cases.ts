@@ -145,7 +145,8 @@ export const propertyNameEdgeCases = {
     '3': { index0: 0, value: 'zero' },
     '4': { index1: 1, value: 'one' },
     '5': { index2: 2, value: 'two' },
-    'Other3': { index3: 3, value: 'other' },
+    '6543': { index3: 3, value: 'other' },
+    'Other3': { index4: 4, value: 'other' },
   },
   
   // Object with special characters in property names
