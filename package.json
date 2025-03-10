@@ -14,7 +14,7 @@
     "test-convert": "bun scripts/convert/test-convert.ts",
     "test-convert-watch": "bun --watch scripts/convert/test-convert.ts",
     "convert": "bun $1 scripts/convert/convert-to-ts/test.ts",
-    "build-convert-debug": "esbuild scripts/convert/convert-to-ts/test.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=dist/scripts/convert-to-ts.js",
+    "build-convert-debug": "esbuild scripts/convert/convert-to-ts/test.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=build/scripts/convert-to-ts.js",
     "build-convert": "bun build-convert-debug --minify-identifiers",
     "profile": "tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert/convert-to-ts/test.ts"
   },

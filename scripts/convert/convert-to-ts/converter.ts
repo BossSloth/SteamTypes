@@ -34,18 +34,11 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
   
   // Merge similar interfaces
   const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions);
-
-  //TODO: sort interfaces based on index which is set based on a incrementing number so it sorts by when it was discovered
   
   // Generate interface strings
   let result = '';
   const processedNames = new Set<string>();
-  
-  // First, add the main interface
-  // if (mergedInterfaces.has(mainInterfaceName)) {
-  //   result += generateInterfaceString(mergedInterfaces.get(mainInterfaceName)!);
-  //   processedNames.add(mainInterfaceName); 
-  // }
+
   const sortedInterfaces = Array.from(mergedInterfaces.entries()).sort((a, b) => a[1].order - b[1].order);
   
   // Then add all other interfaces
@@ -75,5 +68,9 @@ export function convertToTypescript(obj: any, mainInterfaceName: string, profili
     const endTime = performance.now();
     console.log(`Execution time: ${endTime - startTime} ms`);
   }
+
+  // Cleanup by reinitializing the context
+  initContext(mainInterfaceName);
+
   return result;
 }

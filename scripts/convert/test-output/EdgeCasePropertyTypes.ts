@@ -1,9 +1,16 @@
 export interface EdgeCasePropertyTypes {
+  arrayTypeOptimizationTests: ArrayTypeOptimizationTests;
   circularReferenceTests: CircularReferenceTests;
   mixedComplexEdgeCases: MixedComplexEdgeCases;
   propertyNameEdgeCases: PropertyNameEdgeCases;
   prototypeInheritanceTests: PrototypeInheritanceTests;
   specialValueTests: SpecialValueTests;
+}
+
+export interface ArrayTypeOptimizationTests {
+  mergeableArrays: (number | string)[][];
+  nestedArrays: ((boolean | NestedArrays2)[] | (NestedArrays | NestedArrays2)[] | (number | string)[])[];
+  unmergableArrays: (number[] | string[])[];
 }
 
 export interface CircularReferenceTests {
@@ -45,6 +52,14 @@ export interface SpecialValueTests {
   objectWithOnlyValueOf: (object | unknown);
   objectWithToStringAndOther: ObjectWithToStringAndOther;
   whitespaceString: string;
+}
+
+export interface NestedArrays {
+  b: number;
+}
+
+export interface NestedArrays2 {
+  c: number;
 }
 
 export interface NestedCircularArray {

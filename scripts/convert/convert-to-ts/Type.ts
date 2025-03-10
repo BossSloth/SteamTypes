@@ -31,7 +31,6 @@ export class UnionType extends Type {
         }
 
         // Use a Set with a custom equality function based on kind and other properties
-        // This is more efficient than using toString() for each comparison
         const uniqueTypes: Type[] = [];
         const typeStrings = new Set<string>();
         
@@ -59,10 +58,142 @@ export class UnionType extends Type {
             }
         }
 
+        // Optimize array types
+        this.types = this.optimizeArrayTypes(uniqueTypes);
+
         // Sort types for consistent output
-        uniqueTypes.sort((a, b) => a.toString().localeCompare(b.toString()));
+        this.types.sort((a, b) => a.toString().localeCompare(b.toString()));
+    }
+
+    /**
+     * Optimizes array types within a union to simplify expressions like:
+     * 
+     * ((A | B)[] | A[] | B[]) to (A | B)[]
+     * 
+     * Only merges array types when a union array type already exists
+     * that contains all the element types to be merged like in the example.
+     */
+    private optimizeArrayTypes(types: Type[]): Type[] {
+        // Early return for simple cases
+        if (types.length <= 1) {
+            return types;
+        }
+
+        // Separate array types from non-array types
+        const arrayTypes: ArrayType[] = [];
+        const nonArrayTypes: Type[] = [];
         
-        this.types = uniqueTypes;
+        for (const type of types) {
+            if (type instanceof ArrayType) {
+                arrayTypes.push(type);
+            } else {
+                nonArrayTypes.push(type);
+            }
+        }
+        
+        // If we have fewer than 2 array types, no optimization needed
+        if (arrayTypes.length < 2) {
+            return types;
+        }
+        
+        // Find all union array types and create groups based on them
+        const arrayGroups = new Map<string, ArrayType[]>();
+        
+        // First pass: identify all union array types
+        for (const arrayType of arrayTypes) {
+            if (arrayType.valueType instanceof UnionType) {
+                const key = arrayType.valueType.toString();
+                
+                if (!arrayGroups.has(key)) {
+                    arrayGroups.set(key, []);
+                }
+                arrayGroups.get(key)!.push(arrayType);
+            }
+        }
+
+        // If no union array types found, no optimization possible
+        if (arrayGroups.size === 0) {
+            return types;
+        }
+        
+        // Second pass: assign simple array types to appropriate groups
+        for (const arrayType of arrayTypes) {
+            if (!(arrayType.valueType instanceof UnionType)) {
+                const elementTypeString = arrayType.valueType.toString();
+                let assigned = false;
+                
+                // Try to find a group where this element type is part of the union
+                for (const [_, group] of arrayGroups.entries()) {
+                    if (group.length === 0) continue;
+                    
+                    const firstGroupType = group[0];
+                    if (firstGroupType.valueType instanceof UnionType) {
+                        const unionElementStrings = firstGroupType.valueType.types.map(t => t.toString());
+                        
+                        // If this element type is in the union, add it to the group
+                        if (unionElementStrings.includes(elementTypeString)) {
+                            group.push(arrayType);
+                            assigned = true;
+                            break;
+                        }
+                    }
+                }
+                
+                // If not assigned to any existing group, create a new group
+                if (!assigned) {
+                    const key = elementTypeString;
+                    if (!arrayGroups.has(key)) {
+                        arrayGroups.set(key, []);
+                    }
+                    arrayGroups.get(key)!.push(arrayType);
+                }
+            }
+        }
+        
+        // Process each group to create optimized array types
+        const optimizedArrayTypes: ArrayType[] = [];
+        
+        for (const group of arrayGroups.values()) {
+            if (group.length <= 1) {
+                // Single array type in group, keep as is
+                optimizedArrayTypes.push(group[0]);
+            } else {
+                // Merge multiple array types in group
+                const uniqueElementTypes: Type[] = [];
+                const seenTypeStrings = new Set<string>();
+                
+                // Collect all unique element types from the group
+                for (const arrayType of group) {
+                    if (arrayType.valueType instanceof UnionType) {
+                        // Extract component types from union
+                        for (const elementType of arrayType.valueType.types) {
+                            const typeString = elementType.toString();
+                            if (!seenTypeStrings.has(typeString)) {
+                                seenTypeStrings.add(typeString);
+                                uniqueElementTypes.push(elementType);
+                            }
+                        }
+                    } else {
+                        // Handle non-union element types
+                        const typeString = arrayType.valueType.toString();
+                        if (!seenTypeStrings.has(typeString)) {
+                            seenTypeStrings.add(typeString);
+                            uniqueElementTypes.push(arrayType.valueType);
+                        }
+                    }
+                }
+                
+                // Create optimized array type with union of all element types
+                const unionElementType = uniqueElementTypes.length === 1 
+                    ? uniqueElementTypes[0] 
+                    : new UnionType(uniqueElementTypes);
+                
+                optimizedArrayTypes.push(new ArrayType(unionElementType));
+            }
+        }
+        
+        // Combine non-array types with optimized array types
+        return [...nonArrayTypes, ...optimizedArrayTypes];
     }
 
     public toString(): string {

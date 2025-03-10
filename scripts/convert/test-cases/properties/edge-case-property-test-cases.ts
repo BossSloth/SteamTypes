@@ -206,11 +206,32 @@ export const mixedComplexEdgeCases = {
 };
 //#endregion
 
+//#region Array Type Optimization Test Cases
+// Test cases for array type optimization in union types
+export const arrayTypeOptimizationTests = {
+  // This should remain as (string[] | number[]) and not be merged to (string | number)[]
+  unmergableArrays: [['a', 'b', 'c'], [1, 2, 3]],
+
+  // This should be merged to (string | number)[] because (string | number)[] exists
+  mergeableArrays: [['a', 'b', 'c'], [1, 2, 3], ['a', 1, 'b', 2]],
+
+  nestedArrays: [
+    [{b: 1}, {c: 2}],
+    [true, false],
+    ['a', 'b'],
+    [1, 2],
+    [true, {c: 3}],
+    ['a', 1],
+  ],
+};
+//#endregion
+
 // Export all edge case property tests
 export const edgeCasePropertyTests = {
   circularReferenceTests,
   prototypeInheritanceTests,
   specialValueTests,
   propertyNameEdgeCases,
-  mixedComplexEdgeCases
+  mixedComplexEdgeCases,
+  arrayTypeOptimizationTests,
 };

@@ -19,7 +19,7 @@ import { interfaceMaps } from './maps';
 import { confirm} from '@inquirer/prompts';
 import { Logger } from './logger';
 
-const convertToTsFilePath = path.join(process.cwd(), 'dist', 'scripts', 'convert-to-ts.js');
+const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'convert-to-ts.js');
 
 let logger: Logger;
 
@@ -165,9 +165,9 @@ async function run(options: ValidateTypesOptions) {
             options.verbose,
         );
 
-        if ((result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
-            await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
-        }
+        // if ((result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
+        //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
+        // }
     }
 }
 
@@ -190,10 +190,13 @@ async function main() {
             // try {
             logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
             
+            const startTime = performance.now();
             await run(options);
+            const endTime = performance.now();
             
             logger.log(chalk.green('\n✅ Operation completed successfully'));
-                
+            logger.log(chalk.gray(`\nExecution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
+            
             // } catch (error: any) {
             //     logger.error(chalk.red(`\n❌ Error: ${error.message}`));
             //     if (error.stack && options.verbose) {

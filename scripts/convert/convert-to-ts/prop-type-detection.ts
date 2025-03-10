@@ -135,23 +135,26 @@ function getArrayTypes(items: unknown[], path: string): Type {
   }
 
   // Get unique types by mapping each item to its type and filtering out undefined
-  const uniqueTypes = new Set<Type>();
+  const uniqueTypes: Type[] = []
+  const typeStrings = new Set<string>();
   
   for (const item of items) {
     const itemType = getType(item, path);
     if (itemType !== undefined) {
-      uniqueTypes.add(itemType);
+      const typeString = itemType.toString();
+      if (!typeStrings.has(typeString)) {
+        typeStrings.add(typeString);
+        uniqueTypes.push(itemType);
+      }
     }
   }
 
-  const types = Array.from(uniqueTypes);
-
   // If all items are the same type, return that type
   // Otherwise, return a union of all types
-  if (types.length === 1) {
-    return types[0];
+  if (uniqueTypes.length === 1) {
+    return uniqueTypes[0];
   } else {
-    return new UnionType(types);
+    return new UnionType(uniqueTypes);
   }
 };
 

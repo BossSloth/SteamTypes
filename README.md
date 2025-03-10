@@ -12,3 +12,10 @@ npm install steam-types
 # or
 pnpm add steam-types
 ```
+
+
+## Useful command
+Fill the app details cache with the first 100 apps
+```javascript
+collectionStore.allAppsCollection.m_rgApps.slice(0, 100).forEach(item => appDetailsCache.FetchDataForApp(item))
+```

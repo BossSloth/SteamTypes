@@ -111,7 +111,7 @@ export interface AppDetailsCache {
   LookupCachedDataForApp(e: unknown, t: unknown, r: unknown): unknown;
   SetCachedDataForApp(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
 
-  m_mapAppDetailsCache: ObservableMap<number, Map<string, m_mapAppDetailsCache>>;
+  m_mapAppDetailsCache: ObservableMap<number, (Map<string, (m_mapAppDetailsCache | m_mapAppDetailsCache2)> | Map<string, m_mapAppDetailsCache>)>;
 }
 
 export interface AppDetailsStore {
@@ -200,7 +200,7 @@ export interface AppReviewStore {
 
   CMInterface: Cm;
   m_CMInterface: Cm;
-  m_mapRecommendationDetailsByApp: ObservableMap<number, (ObservableMap<string, null> | ObservableMap<string, m_mapRecommendationDetailsByApp>)>;
+  m_mapRecommendationDetailsByApp: ObservableMap<number, (ObservableMap<string, m_mapRecommendationDetailsByApp> | ObservableMap<string, null>)>;
 }
 
 export interface AppSpotlightStore {
@@ -241,7 +241,7 @@ export interface AppSpotlightStore {
   m_dlcLocalStore: m_dlcLocalStore;
   m_gamePlayLocalStore: (object | unknown);
   m_localStorage: m_localStorage;
-  m_mapAppData: Map<number, m_mapAppData24>;
+  m_mapAppData: Map<number, m_mapAppData2>;
 }
 
 export interface AppStore {
@@ -439,19 +439,23 @@ export interface m_mapAppActivity {
 }
 
 export interface m_mapAppDetailsCache {
-  data?: (Data | Data2 | Data3 | Data4 | string | string[] | Data25[]);
+  data?: (Data | Data2 | Data3 | Data4 | Data5 | Data6[] | string | string[]);
+  version: number;
+}
+
+export interface m_mapAppDetailsCache2 {
   version: number;
 }
 
 export interface m_mapAppData {
   appDetailsSpotlight: null;
-  associationData: (null | Data3);
+  associationData: (Data2 | null);
   bLoadingAchievments: boolean;
   cRegistered: number;
   customImageInfo?: null;
   customImageInfoRtime: number;
-  descriptionsData: (null | Data4);
-  details: (Details | null);
+  descriptionsData: (Data3 | null);
+  details: Details;
   hAppDetails: HAppDetails;
   listeners: never;
 }
@@ -462,7 +466,7 @@ export interface m_fnCallbackOnAppInfoLoaded {
   Dispatch(...e: unknown[]): void;
   Register(e: unknown): { Unregister: () => void; };
 
-  m_vecCallbacks: unknown[];
+  m_vecCallbacks: never;
 }
 
 export interface m_mapAppInfo {
@@ -554,18 +558,19 @@ export interface m_mapRecommendationDetailsByApp {
 }
 
 export interface m_dlcLocalStore {
-  '360430': 60430;
-  '50130': 60430;
+  '2951770': InvalidName;
+  '360430': InvalidName;
+  '50130': InvalidName;
 }
 
-export interface m_mapAppData24 {
+export interface m_mapAppData2 {
   m_hAppDetailsAutorun(): void;
 
   m_bLoadedPreviousSessionData: boolean;
   m_bRerunUpdate: boolean;
   m_bUpdateInProgress: boolean;
   m_postGameSummary: null;
-  m_rgNewDLC: never;
+  m_rgNewDLC: m_rgNewDLC[];
   m_session: m_session;
   m_unAppID: number;
 }
@@ -634,8 +639,8 @@ export interface AllApps {
   gameid: string;
   gamepad_preferred: boolean;
   header_filename?: string;
-  icon_data?: never;
-  icon_data_format?: never;
+  icon_data?: string;
+  icon_data_format?: string;
   icon_hash?: string;
   installed?: boolean;
   is_available_on_current_platform?: boolean;
@@ -811,15 +816,15 @@ export interface AppActivityByDay {
   SortEvents(): void;
 
   dayBegin?: never;
-  events: (LastAddedPartnerEvent[] | Events[] | (LastAddedPartnerEvent | Events)[] | (Events | LastAddedPartnerEvent)[]);
+  events: ((Events2 | LastAddedPartnerEvent)[] | Events2[]);
   isValid: boolean;
-  m_mapAchievementsByUser: Map<number, Events>;
+  m_mapAchievementsByUser: Map<number, Events2>;
   m_mapReceivedGameByUser: never;
   m_mapScreenshotsByUser: never;
-  m_mapTradingCardsByUser: Map<number, Events>;
-  m_mapVideosByUser: Map<number, Events>;
-  m_mapWishlistedGameByUser: Map<number, Events>;
-  m_rgEvents: (LastAddedPartnerEvent[] | Events[] | (LastAddedPartnerEvent | Events)[] | (Events | LastAddedPartnerEvent)[]);
+  m_mapTradingCardsByUser: Map<number, Events2>;
+  m_mapVideosByUser: never;
+  m_mapWishlistedGameByUser: Map<number, Events2>;
+  m_rgEvents: ((Events2 | LastAddedPartnerEvent)[] | Events2[]);
   m_rtDayBegin?: never;
 }
 
@@ -863,17 +868,6 @@ export interface LastAddedPartnerEvent {
   upvotes?: number;
 }
 
-export interface m_AchievementMap {
-  bAchieved?: boolean;
-  bHidden?: boolean;
-  flAchieved: number;
-  rtUnlocked?: number;
-  strDescription: string;
-  strID: string;
-  strImage: string;
-  strName: string;
-}
-
 export interface m_rgCachedUserNewsEvents extends JsPbMessage {
   achievement_names(): unknown;
   add_achievement_names(t: unknown, n: unknown): void;
@@ -905,6 +899,17 @@ export interface m_rgCachedUserNewsEvents extends JsPbMessage {
   shortcutid(): unknown;
   steamid_actor(): unknown;
   steamid_target(): unknown;
+}
+
+export interface m_AchievementMap {
+  bAchieved?: boolean;
+  bHidden?: boolean;
+  flAchieved: number;
+  rtUnlocked?: number;
+  strDescription: string;
+  strID: string;
+  strImage: string;
+  strName: string;
 }
 
 export interface m_rgCachedGameActivityEvents extends JsPbMessage {
@@ -941,8 +946,19 @@ export interface Data {
 }
 
 export interface Data2 {
+  rgDevelopers: RgDevelopers[];
+  rgFranchises: RgDevelopers[];
+  rgPublishers: RgDevelopers[];
+}
+
+export interface Data3 {
+  strFullDescription: string;
+  strSnippet: string;
+}
+
+export interface Data4 {
   bMaxed: null;
-  dtNextRetry: number;
+  dtNextRetry: (null | number);
   nLevel: number;
   nMaxLevel: number;
   nNextLevelXP: number;
@@ -953,18 +969,16 @@ export interface Data2 {
   strNextLevelName: string;
 }
 
-export interface Data3 {
-  rgDevelopers: RgDevelopers[];
-  rgFranchises: RgDevelopers[];
-  rgPublishers: RgDevelopers[];
+export interface Data5 {
+  in_game: never;
+  in_wishlist: never;
+  owns: Owns[];
+  played_ever: never;
+  played_recently: never;
+  your_info?: Your_info;
 }
 
-export interface Data4 {
-  strFullDescription: string;
-  strSnippet: string;
-}
-
-export interface Data25 {
+export interface Data6 {
   active: boolean;
   appid: number;
   item_class: number;
@@ -1070,7 +1084,7 @@ export interface Details {
   vecBetas: VecBetas[];
   vecChildConfigApps: number[];
   vecDeckCompatTestResults: VecDeckCompatTestResults[];
-  vecDLC: VecDLC[];
+  vecDLC: m_rgNewDLC[];
   vecLanguages: SelectedLanguage[];
   vecLegacyCDKeys: never;
   vecMusicAlbums: VecMusicAlbums[];
@@ -1082,9 +1096,21 @@ export interface HAppDetails {
   unregister(): unknown /* native code */;
 }
 
-export interface 60430 {
+export interface InvalidName {
   rtFirstShow: number;
   rtShowStart: number;
+}
+
+export interface m_rgNewDLC {
+  bAvailableOnStore: boolean;
+  bEnabled: boolean;
+  lDiskUsageBytes: number;
+  rtPurchaseDate: number;
+  rtStoreAssetModifyTime: number;
+  strHeaderFilename: string;
+  strName: string;
+  strState: string;
+  unAppID: number;
 }
 
 export interface m_session {
@@ -1144,51 +1170,6 @@ export interface m_ErrorReportingStore {
 export interface m_mapCallbacks {
   invoke(n: unknown, r: unknown): void;
   msgClass(): unknown;
-}
-
-export interface Events {
-  AddAchievement(e: unknown, t: unknown): void;
-  AddAppId(e: unknown): void;
-  AddCommentThread(e: unknown, t: unknown): void;
-  AddTradingCard(e: unknown): void;
-  AddVideo(e: unknown): Promise<void>;
-  BIsValid(): unknown;
-  BSupportsCommentThreads(): unknown;
-  BUserCanDelete(): unknown;
-  DeleteOnServer(): void;
-  GetActiveCommentThread(): unknown;
-  GetAppIds(): unknown[];
-  GetCommentThreadType(): 0 | 5 | 15 | 16 | 11 | 8;
-  GetCurrentPublishedFileID(): unknown;
-  GetFilteredAppIds(): unknown[];
-  GetHeadline(): '#AppActivity_SteamTradingCards_EarnedTradingCard' | '#AppActivity_SteamTradingCards_EarnedTradingCards';
-  GetParentalFeature(): 2 | 3;
-  InitFromGameActivity(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): void;
-  InitFromUserNewsEvent(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): void;
-  SetActiveCommentThread(e: unknown): void;
-
-  achievements?: m_AchievementMap[];
-  activeThread: number;
-  appid: number;
-  bIsGameActivity: boolean;
-  commentThreads: CommentThreads[];
-  eEventSubType?: number;
-  eEventType?: number;
-  eGameActivityType?: number;
-  gameid?: string;
-  m_bIsValid?: boolean;
-  m_cardAssetIDs?: string[];
-  m_rgAchievements?: unknown/* circular reference to achievements */;
-  m_rgAppIds?: number[];
-  m_rgTradingCards?: number[];
-  m_rgVideos?: string[];
-  m_rtOldestAchievement?: number;
-  publishedfileids?: unknown/* circular reference to m_rgVideos */;
-  rtEventTime: number;
-  steamIDActor: m_steamid;
-  steamIDTarget?: never;
-  tradingCards?: unknown/* circular reference to m_rgTradingCards */;
-  unUniqueID: number;
 }
 
 export interface EventModel {
@@ -1346,25 +1327,61 @@ export interface EventModel {
   timestamp_loc_updated: ObservableMap<unknown, unknown>;
   type: number;
   vecTags: string[];
-  video_preview_id: string;
-  video_preview_type: string;
+  video_preview_id: undefined;
+  video_preview_type: undefined;
   visibility_state: number;
   visibilityEndTime: number;
   visibilityStartTime: number;
 }
 
-export interface RgCards {
-  nOwned: number;
-  strArtworkURL: string;
-  strImgURL: string;
-  strMarketHash: string;
-  strName: string;
-  strTitle: string;
+export interface Events2 {
+  AddAchievement(e: unknown, t: unknown): void;
+  AddAppId(e: unknown): void;
+  AddCommentThread(e: unknown, t: unknown): void;
+  AddTradingCard(e: unknown): void;
+  BIsValid(): boolean;
+  BSupportsCommentThreads(): unknown;
+  BUserCanDelete(): unknown;
+  DeleteOnServer(): void;
+  GetActiveCommentThread(): unknown;
+  GetAppIds(): unknown[];
+  GetCommentThreadType(): 0 | 5 | 15 | 16 | 11 | 8;
+  GetFilteredAppIds(): unknown[];
+  GetHeadline(): '#AppActivity_SteamTradingCards_EarnedTradingCard' | '#AppActivity_SteamTradingCards_EarnedTradingCards';
+  GetParentalFeature(): 2 | 3;
+  InitFromGameActivity(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): void;
+  InitFromUserNewsEvent(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): void;
+  SetActiveCommentThread(e: unknown): void;
+
+  achievements?: (m_AchievementMap[] | VecAchievedHidden[]);
+  activeThread: number;
+  appid: number;
+  bIsGameActivity: boolean;
+  commentThreads: CommentThreads[];
+  eEventSubType?: number;
+  eEventType?: number;
+  eGameActivityType?: number;
+  gameid?: string;
+  m_cardAssetIDs?: string[];
+  m_rgAchievements?: unknown/* circular reference to achievements */;
+  m_rgAppIds?: number[];
+  m_rgTradingCards?: number[];
+  m_rtOldestAchievement?: number;
+  rtEventTime: number;
+  steamIDActor: m_steamid;
+  steamIDTarget?: never;
+  tradingCards?: unknown/* circular reference to m_rgTradingCards */;
+  unUniqueID: number;
 }
 
-export interface RgDevelopers {
+export interface VecAchievedHidden {
+  bAchieved: boolean;
+  flAchieved: number;
+  rtUnlocked: number;
+  strDescription: string;
+  strID: string;
+  strImage: string;
   strName: string;
-  strURL: (string | null);
 }
 
 export interface VecHighlight {
@@ -1381,14 +1398,40 @@ export interface VecHighlight {
   strName: string;
 }
 
-export interface VecAchievedHidden {
-  bAchieved: boolean;
-  flAchieved: number;
-  rtUnlocked: number;
-  strDescription: string;
-  strID: string;
-  strImage: string;
+export interface RgDevelopers {
   strName: string;
+  strURL: (null | string);
+}
+
+export interface RgCards {
+  nOwned: number;
+  strArtworkURL: string;
+  strImgURL: string;
+  strMarketHash: string;
+  strName: string;
+  strTitle: string;
+}
+
+export interface Owns {
+  steamid: string;
+}
+
+export interface Your_info {
+  owned: boolean;
+}
+
+export interface DeckDerivedProperties {
+  gamescope_frame_limiter_not_supported?: boolean;
+  hdr_support: number;
+  non_deck_display_glyphs: boolean;
+  primary_player_is_controller_slot_0: boolean;
+  requires_h264?: boolean;
+  requires_internet_for_setup: boolean;
+  requires_internet_for_singleplayer: boolean;
+  requires_manual_keyboard_invoke: boolean;
+  requires_non_controller_launcher_nav: boolean;
+  small_text: boolean;
+  supported_input: number;
 }
 
 export interface LibraryAssets {
@@ -1405,9 +1448,9 @@ export interface SelectedLanguage {
   strShortName: string;
 }
 
-export interface VecBetas {
-  strDescription: string;
-  strName: string;
+export interface VecDeckCompatTestResults {
+  test_loc_token: string;
+  test_result: number;
 }
 
 export interface VecScreenShots {
@@ -1426,35 +1469,9 @@ export interface VecScreenShots {
   ugcHandle: string;
 }
 
-export interface DeckDerivedProperties {
-  gamescope_frame_limiter_not_supported?: boolean;
-  hdr_support: number;
-  non_deck_display_glyphs: boolean;
-  primary_player_is_controller_slot_0: boolean;
-  requires_h264?: boolean;
-  requires_internet_for_setup: boolean;
-  requires_internet_for_singleplayer: boolean;
-  requires_manual_keyboard_invoke: boolean;
-  requires_non_controller_launcher_nav: boolean;
-  small_text: boolean;
-  supported_input: number;
-}
-
-export interface VecDeckCompatTestResults {
-  test_loc_token: string;
-  test_result: number;
-}
-
-export interface VecDLC {
-  bAvailableOnStore: boolean;
-  bEnabled: boolean;
-  lDiskUsageBytes: number;
-  rtPurchaseDate: number;
-  rtStoreAssetModifyTime: number;
-  strHeaderFilename: string;
+export interface VecBetas {
+  strDescription: string;
   strName: string;
-  strState: string;
-  unAppID: number;
 }
 
 export interface VecMusicAlbums {
@@ -1465,15 +1482,7 @@ export interface VecMusicAlbums {
   unAppID: number;
 }
 
-export interface CommentThreads {
-  commentThread?: CommentThread;
-  eCommentThreadType: number;
-  gidFeature: string;
-  gidFeature2?: string;
-}
-
 export interface Jsondata {
-  automatically_push_updated_source: boolean;
   bBroadcastEnabled: boolean;
   broadcast_whitelist: unknown[];
   broadcastChatSetting: string;
@@ -1483,15 +1492,16 @@ export interface Jsondata {
   localized_broadcast_left_image: null[];
   localized_broadcast_right_image: null[];
   localized_broadcast_title: null[];
-  localized_capsule_image: (string | null)[];
+  localized_capsule_image: null[];
   localized_sale_header: null[];
-  localized_sale_logo: null[];
+  localized_sale_logo: undefined[];
   localized_sale_overlay: null[];
   localized_sale_product_banner: null[];
   localized_sale_product_mobile_banner: null[];
-  localized_subtitle: (string | null)[];
+  localized_spotlight_image: null[];
+  localized_subtitle: null[];
   localized_summary: null[];
-  localized_title_image: (string | null)[];
+  localized_title_image: null[];
   referenced_appids: unknown[];
   sale_background_color: string;
   sale_browsemore_bgcolor: string;
@@ -1500,9 +1510,18 @@ export interface Jsondata {
   sale_browsemore_url: string;
   sale_font: string;
   sale_header_offset: number;
+  sale_header_overlay: boolean;
   sale_sections: unknown[];
   sale_show_creator: boolean;
+  sale_title_overlay: boolean;
   scheduleEntries: unknown[];
+}
+
+export interface CommentThreads {
+  commentThread?: CommentThread;
+  eCommentThreadType: number;
+  gidFeature: string;
+  gidFeature2: string;
 }
 
 export interface LogoPosition {
@@ -1526,9 +1545,9 @@ export interface CommentThread {
   m_bUpdating: boolean;
   m_eThreadType: number;
   m_gidfeature: string;
-  m_gidfeature2?: string;
+  m_gidfeature2: string;
   m_msLastUpdated: number;
-  m_rgComments: never;
+  m_rgComments: unknown[];
   m_steamIDActor: m_steamid;
   m_threadInfo: m_threadInfo;
 }

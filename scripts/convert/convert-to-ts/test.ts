@@ -86,15 +86,21 @@ export function testConvert() {
     //   ['key2', { id2: 2, idx3: 9, name: 'Specific', extra: 'property' }],
     //   ['key3', { extra: 'property' }]
     // ]),
-    performanceArray: [],
+    // performanceArray: [],
+    // appActivity: [
+    //   {events: [obj1, obj2]},
+    //   {events: [obj1]},
+    //   {events: [obj2]},
+    // ],
+    suites: testSuites[0].testObject
   };
 
   // for (let i = 0; i < 100; i++) {
   //   testObj['performanceArray'].push(new BigObject(`other${i}`));
   // }
   const startTime = performance.now();
-  const extendedApps = Array(100).fill(allApps.apps).flat();
-  allApps.apps = extendedApps;
+  // const extendedApps = Array(100).fill(allApps.apps).flat();
+  // allApps.apps = extendedApps;
   
   const tsInterfaces = convertToTypescript(testObj, 'TestObject');
   const endTime = performance.now();
