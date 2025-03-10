@@ -67,39 +67,76 @@ program
         const lines = result.split('\n');
         let passedAll = true;
         
-        for (const [funcName, { expected }] of Object.entries(suite.testFunctions)) {
+        for (let [funcName, { expected }] of Object.entries(suite.testFunctions)) {
           // Find the line with this function
-          const funcLine = lines.find(line => line.trim().startsWith(funcName));
+          const funcLineIndex = lines.findIndex(line => line.trim().startsWith(funcName));
           
-          if (!funcLine) {
+          if (funcLineIndex === -1) {
             console.log(chalk.red(`  ✗ Function ${funcName} not found in output`));
             failCount++;
             passedAll = false;
             continue;
           }
           
-          const line = funcLine.trim();
+          // Get the function line
+          let line = lines[funcLineIndex].trim();
           
+          // Check for JSDoc comments above the function
+          let jsdocLines = [];
+          let i = funcLineIndex - 1;
+          // Go backwards from the function line to find JSDoc comments
+          while (i >= 0 && 
+                (lines[i].trim().startsWith('*') || 
+                 lines[i].trim().startsWith('/**') || 
+                 lines[i].trim().startsWith('*/') || 
+                 lines[i].trim() === '')) {
+            // Only add non-empty lines
+            if (lines[i].trim() !== '') {
+              jsdocLines.unshift(lines[i]);
+            }
+            i--;
+          }
+          
+          // If JSDoc comments were found, prepend them to the function line
+          if (jsdocLines.length > 0) {
+            line = jsdocLines.join('\n') + '\n' + line;
+          }
+          
+          expected = expected.replace(/^\n/g, '')
           if (line === expected) {
             if (options.verbose) {
               console.log(chalk.green(`  ✓ ${funcName}() => ${line}`));
             }
             passCount++;
           } else {
-            console.log(chalk.red(`  ✗ ${chalk.bold(funcName)}`) +  `: Expected "${chalk.underline(expected)}" but got "${chalk.underline(line)}"`);
+            console.log(chalk.red(`  ✗ ${chalk.bold(funcName)}`) +  `: Expected "${chalk.underline(expected.replace(/\n/g, ''))}" but got "${chalk.underline(line.replace(/\n/g, ''))}"`);
             // Print diff
-            const diff = diffLib.diffWords(expected, line);
+            const diff = diffLib.diffWordsWithSpace(expected, line);
             process.stdout.write('    ');
             for (const part of diff) {
               if (part.added) {
-                if (part.value.match(/^\s+$/)) {
-                  process.stdout.write(chalk.bgGreen(part.value));
+                if (part.value.includes(' ')) {
+                  const parts = part.value.split('');
+                  for (const part of parts) {
+                    if (part === ' ') {
+                      process.stdout.write(chalk.bgGreen(part));
+                    } else {
+                      process.stdout.write(chalk.green(part));
+                    }
+                  }
                 } else {
                   process.stdout.write(chalk.green(part.value));
                 }
               } else if (part.removed) {
-                if (part.value.match(/^\s+$/)) {
-                  process.stdout.write(chalk.bgRed(part.value));
+                if (part.value.includes(' ')) {
+                  const parts = part.value.split('');
+                  for (const part of parts) {
+                    if (part === ' ') {
+                      process.stdout.write(chalk.bgRed(part));
+                    } else {
+                      process.stdout.write(chalk.red(part));
+                    }
+                  }
                 } else {
                   process.stdout.write(chalk.red(part.value));
                 }

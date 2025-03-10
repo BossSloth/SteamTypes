@@ -179,19 +179,34 @@ export const testFunctions: Record<string, TestFunction> = {
       func: (a, b = 10, c = 'default') => {
         return a + b + c;
       },
-      expected: 'defaultParameters(a: unknown, b?: number /* default = 10 */, c?: string /* default = "default" */): string;',
+      expected: `
+  /**
+   * @param b default: 10
+   * @param c default: "default"
+   */
+defaultParameters(a: unknown, b?: number, c?: string): string;`,
     },
     complexDefaultParameters: {
       func: (a = {}, b = [], c = () => {}) => {
         return typeof c;
       },
-      expected: "complexDefaultParameters(a?: unknown /* default = {} */, b?: unknown[] /* default = [] */, c?: () => void /* default = () => {} */): 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';",
+      expected: `
+  /**
+   * @param a default: {}
+   * @param b default: []
+   * @param c default: () => {}
+   */
+complexDefaultParameters(a?: unknown, b?: unknown[], c?: () => void): 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';`,
     },
     commaInDefaultParameter: {
       func: (a, b, c = 'def, ault') => {
         return a + b + c;
       },
-      expected: 'commaInDefaultParameter(a: unknown, b: unknown, c?: string /* default = "def, ault" */): string;',
+      expected: `
+  /**
+   * @param c default: "def, ault"
+   */
+commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
     },
   //#endregion
   
@@ -320,7 +335,11 @@ export const testFunctions: Record<string, TestFunction> = {
     },
     nativeCode: {
       func: Math.random,
-      expected: 'nativeCode(): unknown /* native code */;',
+      expected: `
+  /**
+   * native code
+   */
+nativeCode(): unknown;`,
     }
   //#endregion
   };

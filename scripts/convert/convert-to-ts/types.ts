@@ -16,6 +16,7 @@ export type MappedParam = {
 export type FunctionInfo = {
   params: MappedParam[];
   returnType: string;
+  jsDoc?: string[];
 };
 
 /**

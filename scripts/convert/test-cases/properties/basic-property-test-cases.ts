@@ -89,6 +89,12 @@ export const objectPropertyTests = {
       return y;
     }
   },
+
+  funcWithDefault: function (x = 1, y = 'string') {
+    return x;
+  },
+
+  nativeCode: Math.random,
 };
 //#endregion
 

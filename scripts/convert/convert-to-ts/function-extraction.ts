@@ -72,6 +72,26 @@ function extractReturnType(initializer: FunctionExpression|ArrowFunction): strin
   return returnType;
 }
 
+/**
+ * Generates JSDoc for a function
+ */
+function generateJsDoc(params: MappedParam[]): string[]|undefined {
+  const jsDoc: string[] = [];
+  
+  // Add parameters
+  for (const param of params) {
+    if (param.defaultValue) {
+      jsDoc.push(`@param ${param.name} default: ${param.defaultValue}`);
+    }
+  }
+
+  if (jsDoc.length === 0) {
+    return undefined;
+  }
+  
+  return jsDoc;
+}
+
 export function massExtractFunctionInfo(funcs: Map<string, Function>, project: Project): Map<string, FunctionInfo> {
   let sourceCode = '';
   const functionInfos = new Map<string, FunctionInfo>();
@@ -82,7 +102,8 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
     } else {
       functionInfos.set(name, {
         params: [],
-        returnType: 'unknown /* native code */'
+        returnType: 'unknown',
+        jsDoc: ['native code']
       });
     }
   }
@@ -103,9 +124,12 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   for (const variableDeclaration of variableDeclarations) {
     const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
       || variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
+
     const mappedParams = extractParams(initializer);
     const returnType = extractReturnType(initializer);
-    functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), { params: mappedParams, returnType });
+    const jsDoc = generateJsDoc(mappedParams);
+
+    functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), { params: mappedParams, returnType, jsDoc });
   }
   project.removeSourceFile(sourceFile);
 

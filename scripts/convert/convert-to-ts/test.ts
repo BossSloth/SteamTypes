@@ -2,22 +2,6 @@ import { convertToTypescript } from './index';
 import { testSuites } from '../test-cases/test-cases';
 import allApps from '../test-cases/steam_favorites_allapps.json';
 
-class TestClass {
-  name: string;
-  details: { name: string; };
-  index: number;
-
-  constructor(name: string, index: number, extra: boolean = false) {
-    this.name = name;
-    this.index = index;
-    this.details = { name: name, other: 5, m_data: undefined };
-    if(extra) {
-      this.test1 = false;
-      this.details.test2 = name;
-    }
-  }
-}
-
 class BigObject {
   constructor(key: string) {
     for (let i = 0; i < 100; i++) {
@@ -92,7 +76,8 @@ export function testConvert() {
     //   {events: [obj1]},
     //   {events: [obj2]},
     // ],
-    suites: testSuites[0].testObject
+    suites: testSuites[0].testObject,
+    internal: Math.random,
   };
 
   // for (let i = 0; i < 100; i++) {

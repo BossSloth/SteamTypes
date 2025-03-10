@@ -119,14 +119,18 @@ export function generateInterfaceString(interfaceDefinition: TypeScriptInterface
         
         paramStr += `: ${param.type}`;
 
-        if (param.defaultValue) {
-          paramStr += ` /* default = ${param.defaultValue} */`
-        }
-        
         return paramStr;
       }).join(', ');
-      
-      functions.push(`  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
+
+      if (property.functionInfo.jsDoc) {
+        functions.push(`
+  /**
+${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
+   */
+  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
+      } else {
+        functions.push(`  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
+      }
     } else {
       const optionalMarker = property.optional ? '?' : '';
       nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type};`);
