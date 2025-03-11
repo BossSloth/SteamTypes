@@ -1,12 +1,10 @@
 export interface BasicPropertyTypes {
   complexFunc(): number;
-
   /**
    * @param x default: 1
    * @param y default: "string"
    */
   funcWithDefault(x?: number, y?: string): number;
-
   /**
    * native code
    */

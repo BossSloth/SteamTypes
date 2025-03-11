@@ -123,8 +123,7 @@ export function generateInterfaceString(interfaceDefinition: TypeScriptInterface
       }).join(', ');
 
       if (property.functionInfo.jsDoc) {
-        functions.push(`
-  /**
+        functions.push(`  /**
 ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
    */
   ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
