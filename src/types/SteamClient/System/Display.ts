@@ -1,15 +1,15 @@
-import { Unregisterable } from "../shared";
+import { Unregisterable } from '../shared';
 
 export interface Display {
-    EnableUnderscan(param0: boolean): any;
+  EnableUnderscan(param0: boolean): unknown;
 
-    RegisterForBrightnessChanges(callback: (brightnessChanges: BrightnessChange) => void): Unregisterable;
+  RegisterForBrightnessChanges(callback: (brightnessChanges: BrightnessChange) => void): Unregisterable;
 
-    SetBrightness(brightness: number): any;
+  SetBrightness(brightness: number): unknown;
 
-    SetUnderscanLevel(param0: any): any;
+  SetUnderscanLevel(param0: unknown): unknown;
 }
 
 export interface BrightnessChange {
-    flBrightness: number;
+  flBrightness: number;
 }

@@ -1,122 +1,121 @@
-import { Unregisterable } from "./shared";
-
+import { Unregisterable } from './shared';
 
 export interface OpenVR {
-    Device: VRDevice;
-    DeviceProperties: DeviceProperties;
+  Device: VRDevice;
+  DeviceProperties: DeviceProperties;
 
-    /**
-     * @throws OperationResponse if mutual capabilities haven't been loaded.
-     */
-    GetMutualCapabilities(): Promise<any>;
+  /**
+   * @throws OperationResponse if mutual capabilities haven't been loaded.
+   */
+  GetMutualCapabilities(): Promise<unknown>;
 
-    GetWebSecret(): Promise<string>;
+  GetWebSecret(): Promise<string>;
 
-    InstallVR(): any;
+  InstallVR(): unknown;
 
-    Keyboard: Keyboard;
-    PathProperties: PathProperties;
+  Keyboard: Keyboard;
+  PathProperties: PathProperties;
 
-    QuitAllVR(): any;
+  QuitAllVR(): unknown;
 
-    RegisterForButtonPress: Unregisterable;
+  RegisterForButtonPress: Unregisterable;
 
-    RegisterForHMDActivityLevelChanged(callback: (m_eHMDActivityLevel: EHMDActivityLevel) => void): Unregisterable;
+  RegisterForHMDActivityLevelChanged(callback: (m_eHMDActivityLevel: EHMDActivityLevel) => void): Unregisterable;
 
-    RegisterForInstallDialog: Unregisterable;
+  RegisterForInstallDialog: Unregisterable;
 
-    RegisterForStartupErrors(callback: (clientError: any, initError: any, initErrorString: string) => void): Unregisterable;
+  RegisterForStartupErrors(callback: (clientError: unknown, initError: unknown, initErrorString: string) => void): Unregisterable;
 
-    RegisterForVRHardwareDetected(callback: (m_bHMDPresent: any, m_bHMDHardwareDetected: any, m_strHMDName: any) => void): Unregisterable;
+  RegisterForVRHardwareDetected(callback: (m_bHMDPresent: unknown, m_bHMDHardwareDetected: unknown, m_strHMDName: unknown) => void): Unregisterable;
 
-    RegisterForVRModeChange(callback: (m_bIsVRRunning: boolean) => void): Unregisterable;
+  RegisterForVRModeChange(callback: (m_bIsVRRunning: boolean) => void): Unregisterable;
 
-    RegisterForVRSceneAppChange(callback: (param0: number) => void): Unregisterable;
+  RegisterForVRSceneAppChange(callback: (param0: number) => void): Unregisterable;
 
-    SetOverlayInteractionAffordance: any;
+  SetOverlayInteractionAffordance: unknown;
 
-    StartVR: any;
-    TriggerOverlayHapticEffect: any;
-    VRNotifications: VRNotifications;
-    VROverlay: VROverlay;
+  StartVR: unknown;
+  TriggerOverlayHapticEffect: unknown;
+  VRNotifications: VRNotifications;
+  VROverlay: VROverlay;
 }
 
 export interface VRDevice {
-    BIsConnected: any;
-    RegisterForDeviceConnectivityChange: Unregisterable;
+  BIsConnected: unknown;
+  RegisterForDeviceConnectivityChange: Unregisterable;
 
-    RegisterForVRDeviceSeenRecently(callback: (m_bVRDeviceSeenRecently: any) => void): Unregisterable;
+  RegisterForVRDeviceSeenRecently(callback: (m_bVRDeviceSeenRecently: unknown) => void): Unregisterable;
 }
 
 export interface DeviceProperties {
-    GetBoolDeviceProperty: any;
-    GetDoubleDeviceProperty: any;
-    GetFloatDeviceProperty: any;
-    GetInt32DeviceProperty: any;
-    GetStringDeviceProperty: any;
-    RegisterForDevicePropertyChange: Unregisterable;
+  GetBoolDeviceProperty: unknown;
+  GetDoubleDeviceProperty: unknown;
+  GetFloatDeviceProperty: unknown;
+  GetInt32DeviceProperty: unknown;
+  GetStringDeviceProperty: unknown;
+  RegisterForDevicePropertyChange: Unregisterable;
 }
 
 export interface Keyboard {
-    Hide(): any;
+  Hide(): unknown;
 
-    /**
-     * {@link EKeyboardFlags} could be useful here
-     */
-    RegisterForStatus(callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: number, m_sInitialKeyboardText: string) => void): Unregisterable;
+  /**
+   * {@link EKeyboardFlags} could be useful here
+   */
+  RegisterForStatus(callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: number, m_sInitialKeyboardText: string) => void): Unregisterable;
 
-    SendDone(): any;
+  SendDone(): unknown;
 
-    SendText(key: string): any; //???
-    Show(): any;
+  SendText(key: string): unknown; //???
+  Show(): unknown;
 }
 
 export interface PathProperties {
-    GetBoolPathProperty: any;
-    GetDoublePathProperty: any;
-    GetFloatPathProperty: any;
-    GetInt32PathProperty: any;
-    GetStringPathProperty: any;
-    RegisterForPathPropertyChange: any;
-    SetBoolPathProperty: any;
-    SetDoublePathProperty: any;
-    SetFloatPathProperty: any;
-    SetInt32PathProperty: any;
-    SetStringPathProperty: any;
+  GetBoolPathProperty: unknown;
+  GetDoublePathProperty: unknown;
+  GetFloatPathProperty: unknown;
+  GetInt32PathProperty: unknown;
+  GetStringPathProperty: unknown;
+  RegisterForPathPropertyChange: unknown;
+  SetBoolPathProperty: unknown;
+  SetDoublePathProperty: unknown;
+  SetFloatPathProperty: unknown;
+  SetInt32PathProperty: unknown;
+  SetStringPathProperty: unknown;
 }
 
 export interface VRNotifications {
-    HideCustomNotification: any;
-    RegisterForNotificationEvent: Unregisterable;
-    ShowCustomNotification: any;
+  HideCustomNotification: unknown;
+  RegisterForNotificationEvent: Unregisterable;
+  ShowCustomNotification: unknown;
 }
 
 export interface VROverlay {
-    HideDashboard: any;
+  HideDashboard: unknown;
 
-    IsDashboardVisible(): Promise<boolean>;
+  IsDashboardVisible(): Promise<boolean>;
 
-    RegisterForButtonPress: Unregisterable;
-    RegisterForCursorMovement: Unregisterable;
-    RegisterForThumbnailChanged: Unregisterable;
-    RegisterForVisibilityChanged: Unregisterable;
-    ShowDashboard: any;
+  RegisterForButtonPress: Unregisterable;
+  RegisterForCursorMovement: Unregisterable;
+  RegisterForThumbnailChanged: Unregisterable;
+  RegisterForVisibilityChanged: Unregisterable;
+  ShowDashboard: unknown;
 
-    SwitchToDashboardOverlay(param0: string): void;
+  SwitchToDashboardOverlay(param0: string): void;
 }
 
 export enum EHMDActivityLevel {
-    Unknown = -1,
-    Idle,
-    UserInteraction,
-    UserInteraction_Timeout,
-    Standby,
-    Idle_Timeout,
+  Unknown = -1,
+  Idle,
+  UserInteraction,
+  UserInteraction_Timeout,
+  Standby,
+  Idle_Timeout,
 }
 
 export enum EKeyboardFlags {
-    Minimal = 1 << 0,
-    Modal = 1 << 1,
-    ShowArrowKeys = 1 << 2,
-    HideDoneKey = 1 << 3,
+  Minimal = 1 << 0,
+  Modal = 1 << 1,
+  ShowArrowKeys = 1 << 2,
+  HideDoneKey = 1 << 3,
 }

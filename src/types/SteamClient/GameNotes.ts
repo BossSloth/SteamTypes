@@ -1,8 +1,8 @@
 export interface GameNotes {
-    DeleteImage(param0: any): any;
+  DeleteImage(param0: unknown): unknown;
 
-    DeleteNotes: any;
-    /*
+  DeleteNotes: unknown;
+  /*
         FilenameForNotes(e) {
         return "appid" in e ? `notes_${Number(e.appid)}` : `notes_shortcut_${h(e.shortcut)}`
     }
@@ -10,21 +10,21 @@ export interface GameNotes {
         return "appid" in e ? `notes_${Number(e.appid)}_images/` : `notes_shortcut_${h(e.shortcut)}_images/`
     }
      */
-    // {"result":1,"notes":"<escaped json>"}
-    // <escaped json> example: {"notes":[{"id":"lmuudzqn","appid":1716740,"ordinal":0,"time_created":1695401684,"time_modified":1695403395,"title":"Old Earth Cuisine 1:","content":"[h1]Old Earth Cuisine 1:[/h1][list][*][p]Red Meat[/p][/*][/list][h1]Beverage Development 2:[/h1][list][*][p]Tranquilitea Sunray[/p][/*][/list][p][/p]"}]}
-    GetNotes(filenameForNotes: string, directoryForNoteImages: string): Promise<any>;
+  // {"result":1,"notes":"<escaped json>"}
+  // <escaped json> example: {"notes":[{"id":"lmuudzqn","appid":1716740,"ordinal":0,"time_created":1695401684,"time_modified":1695403395,"title":"Old Earth Cuisine 1:","content":"[h1]Old Earth Cuisine 1:[/h1][list][*][p]Red Meat[/p][/*][/list][h1]Beverage Development 2:[/h1][list][*][p]Tranquilitea Sunray[/p][/*][/list][p][/p]"}]}
+  GetNotes(filenameForNotes: string, directoryForNoteImages: string): Promise<unknown>;
 
-    GetNotesMetadata: any;
-    GetNumNotes: any;
-    GetQuota: any;
+  GetNotesMetadata: unknown;
+  GetNumNotes: unknown;
+  GetQuota: unknown;
 
-    IterateNotes(appId: number, length: number): any; // Results array of {"result":1,"filename":"","filesize":0,"timestamp":0}
-    ResolveSyncConflicts: any;
+  IterateNotes(appId: number, length: number): unknown; // Results array of {"result":1,"filename":"","filesize":0,"timestamp":0}
+  ResolveSyncConflicts: unknown;
 
-    SaveNotes(filenameForNotes: string, param1: string): Promise<any>; // param1 - notes like escaped json in GetNotes
-    SyncToClient(): Promise<any>;
+  SaveNotes(filenameForNotes: string, param1: string): Promise<unknown>; // param1 - notes like escaped json in GetNotes
+  SyncToClient(): Promise<unknown>;
 
-    SyncToServer(): Promise<any>;
+  SyncToServer(): Promise<unknown>;
 
-    UploadImage: any;
+  UploadImage: unknown;
 }

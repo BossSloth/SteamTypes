@@ -257,7 +257,7 @@ export interface JsPbMessageClass {
   /**
    * @todo Returns {@link JsPbMessage}, but not sure how to do it for the messages.
    */
-  deserializeBinary(data: ArrayBuffer): any;
+  deserializeBinary(data: ArrayBuffer): unknown;
 }
 
 /**
@@ -273,5 +273,5 @@ export interface JsPbMessage {
   /**
    * Converts the message to an object.
    */
-  toObject(includeJsPbInstance: boolean): any;
+  toObject(includeJsPbInstance: boolean): unknown;
 }

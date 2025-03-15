@@ -1,5 +1,5 @@
 export interface CommunityItems {
-    /*
+  /*
     DownloadMovie(e) {
             return (0, o.mG)(this, void 0, void 0, (function* () {
                 if (0 != e.movie_webm_local_path.length) return !0;
@@ -16,9 +16,9 @@ export interface CommunityItems {
             }))
         }
      */
-    DownloadItemAsset(communityItemId: string, param1: any, param2: string): any;
+  DownloadItemAsset(communityItemId: string, param1: unknown, param2: string): unknown;
 
-    GetItemAssetPath(communityItemId: string, param1: any, param2: string): any;
+  GetItemAssetPath(communityItemId: string, param1: unknown, param2: string): unknown;
 
-    RemoveDownloadedItemAsset(communityItemId: string, param1: any, param2: string): any;
+  RemoveDownloadedItemAsset(communityItemId: string, param1: unknown, param2: string): unknown;
 }

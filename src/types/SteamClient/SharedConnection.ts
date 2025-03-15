@@ -1,43 +1,43 @@
-import { ESteamRealm, Unregisterable } from "./shared";
+import { ESteamRealm, Unregisterable } from './shared';
 
 /**
  * `hSharedConnection` is the number from {@link AllocateSharedConnection}.
  */
 export interface SharedConnection {
-    AllocateSharedConnection(): Promise<number>;
+  AllocateSharedConnection(): Promise<number>;
 
-    // if no such number, sends this warning:
-    // src\clientdll\clientsharedconnection.cpp (154) : m_mapSharedConnections.HasElement( hSharedConnection )
-    Close(hSharedConnection: number): void;
+  // if no such number, sends this warning:
+  // src\clientdll\clientsharedconnection.cpp (154) : m_mapSharedConnections.HasElement( hSharedConnection )
+  Close(hSharedConnection: number): void;
 
-    RegisterOnBinaryMessageReceived(hSharedConnection: number, callback: (data: ArrayBuffer) => void): Unregisterable;
+  RegisterOnBinaryMessageReceived(hSharedConnection: number, callback: (data: ArrayBuffer) => void): Unregisterable;
 
-    RegisterOnLogonInfoChanged(hSharedConnection: number, callback: (info: LogonInfo) => void): Unregisterable;
+  RegisterOnLogonInfoChanged(hSharedConnection: number, callback: (info: LogonInfo) => void): Unregisterable;
 
-    RegisterOnMessageReceived(hSharedConnection: number, callback: (param0: any) => void): Unregisterable;
+  RegisterOnMessageReceived(hSharedConnection: number, callback: (param0: unknown) => void): Unregisterable;
 
-    SendMsg: any;
-    SendMsgAndAwaitBinaryResponse: any;
+  SendMsg: unknown;
+  SendMsgAndAwaitBinaryResponse: unknown;
 
-    SendMsgAndAwaitResponse(hSharedConnection: number, msg: string): Promise<any>;
+  SendMsgAndAwaitResponse(hSharedConnection: number, msg: string): Promise<unknown>;
 
-    SubscribeToClientServiceMethod(hSharedConnection: number, param1: any): any;
+  SubscribeToClientServiceMethod(hSharedConnection: number, param1: unknown): unknown;
 
-    SubscribeToEMsg(hSharedConnection: number, param1: any): any;
+  SubscribeToEMsg(hSharedConnection: number, param1: unknown): unknown;
 }
 
 export interface LogonInfo {
-    /** `true` if logged on, `false` otherwise. */
-    bLoggedOn: boolean;
-    eUniverse: ESteamRealm;
-    /** Account username. Empty if not logged on. */
-    strAccountName: string;
-    /** URL for community content. */
-    strCommunityImagesURL: string;
-    /** Account nickname. Empty if not logged on. */
-    strPersonaName: string;
-    /** Steam64 ID. */
-    strSteamid: string;
-    /** Country code. */
-    strUserCountry: string;
+  /** `true` if logged on, `false` otherwise. */
+  bLoggedOn: boolean;
+  eUniverse: ESteamRealm;
+  /** Account username. Empty if not logged on. */
+  strAccountName: string;
+  /** URL for community content. */
+  strCommunityImagesURL: string;
+  /** Account nickname. Empty if not logged on. */
+  strPersonaName: string;
+  /** Steam64 ID. */
+  strSteamid: string;
+  /** Country code. */
+  strUserCountry: string;
 }

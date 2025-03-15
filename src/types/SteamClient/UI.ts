@@ -1,73 +1,73 @@
-import { EUIMode, Unregisterable } from "./shared";
-import {EOSType} from "./System";
+import { EUIMode, Unregisterable } from './shared';
+import { EOSType } from './System';
 
 export interface UI {
-    EnsureMainWindowCreated(): void;
+  EnsureMainWindowCreated(): void;
 
-    ExitBigPictureMode(): void;
+  ExitBigPictureMode(): void;
 
-    GetDesiredSteamUIWindows(): Promise<SteamWindow[]>;
+  GetDesiredSteamUIWindows(): Promise<SteamWindow[]>;
 
-    /**
-     * Gets information about whether your OS will be unsupported in the future or not.
-     */
-    GetOSEndOfLifeInfo(): Promise<OSEndOfLifeInfo>;
+  /**
+   * Gets information about whether your OS will be unsupported in the future or not.
+   */
+  GetOSEndOfLifeInfo(): Promise<OSEndOfLifeInfo>;
 
-    /**
-     * Retrieves the current UI mode.
-     * @returns A Promise that resolves to the current UI mode.
-     */
-    GetUIMode(): Promise<EUIMode>;
+  /**
+   * Retrieves the current UI mode.
+   * @returns A Promise that resolves to the current UI mode.
+   */
+  GetUIMode(): Promise<EUIMode>;
 
-    NotifyAppInitialized(): void;
+  NotifyAppInitialized(): void;
 
-    RegisterDesiredSteamUIWindowsChanged(callback: () => void): Unregisterable;
+  RegisterDesiredSteamUIWindowsChanged(callback: () => void): Unregisterable;
 
-    /**
-     * Registers a callback function to be called when a convar's value gets changed.
-     *
-     * Hard crashes if such a convar does not exist or if you can't set it.
-     *
-     * @param convar The ConVar to watch.
-     * @param callback The callback function to be called.
-     */
-    RegisterForClientConVar(convar: string, callback: (value: string) => void): Unregisterable;
+  /**
+   * Registers a callback function to be called when a convar's value gets changed.
+   *
+   * Hard crashes if such a convar does not exist or if you can't set it.
+   *
+   * @param convar The ConVar to watch.
+   * @param callback The callback function to be called.
+   */
+  RegisterForClientConVar(convar: string, callback: (value: string) => void): Unregisterable;
 
-    RegisterForErrorCondition(callback: (param0: number, param1: number) => void): Unregisterable;
+  RegisterForErrorCondition(callback: (param0: number, param1: number) => void): Unregisterable;
 
-    RegisterForKioskModeResetSignal(callback: () => void): Unregisterable;
+  RegisterForKioskModeResetSignal(callback: () => void): Unregisterable;
 
-    /**
-     * @todo This fires multiple times.
-     */
-    RegisterForStartupFinished(callback: () => void): Unregisterable;
+  /**
+   * @todo This fires multiple times.
+   */
+  RegisterForStartupFinished(callback: () => void): Unregisterable;
 
-    RegisterForUIModeChanged(callback: (mode: EUIMode) => void): Unregisterable;
+  RegisterForUIModeChanged(callback: (mode: EUIMode) => void): Unregisterable;
 
-    ResetErrorCondition(): void;
+  ResetErrorCondition(): void;
 
-    /**
-     * Sets the UI mode to the specified value.
-     * @param mode The UI mode to set.
-     */
-    SetUIMode(mode: EUIMode): void;
+  /**
+   * Sets the UI mode to the specified value.
+   * @param mode The UI mode to set.
+   */
+  SetUIMode(mode: EUIMode): void;
 }
 
 export enum EWindowType {
-    MainGamepadUI,
-    OverlayGamepadUI,
-    Keyboard,
-    ControllerConfigurator,
-    VR,
-    MainDesktopUI,
-    DesktopLogin,
-    OverlayDesktopUI,
-    SteamChinaReviewLauncher,
+  MainGamepadUI,
+  OverlayGamepadUI,
+  Keyboard,
+  ControllerConfigurator,
+  VR,
+  MainDesktopUI,
+  DesktopLogin,
+  OverlayDesktopUI,
+  SteamChinaReviewLauncher,
 }
 
 export interface OSEndOfLifeInfo {
-    bOSWillBeUnsupported: boolean;
-    osType: EOSType;
+  bOSWillBeUnsupported: boolean;
+  osType: EOSType;
 }
 
 /**
@@ -75,13 +75,13 @@ export interface OSEndOfLifeInfo {
  * https://github.com/SteamDatabase/SteamTracking/blob/master/Protobufs/webuimessages_sharedjscontext.proto
  */
 export interface SteamWindow {
-    appid: number;
-    hwndParent: number;
-    nBrowserID: number;
-    strAppName: string;
-    unID: number;
-    unPID: number;
-    windowType: EWindowType;
-    x: number;
-    y: number;
+  appid: number;
+  hwndParent: number;
+  nBrowserID: number;
+  strAppName: string;
+  unID: number;
+  unPID: number;
+  windowType: EWindowType;
+  x: number;
+  y: number;
 }

@@ -1,189 +1,191 @@
-import { OperationResponse, Unregisterable } from "./shared";
+import { OperationResponse, Unregisterable } from './shared';
 
 export interface User {
-    AuthorizeMicrotxn(txnId: any): any;
+  AuthorizeMicrotxn(txnId: unknown): unknown;
 
-    CancelLogin: any;
+  CancelLogin: unknown;
 
-    CancelMicrotxn(txnId: any): any;
+  CancelMicrotxn(txnId: unknown): unknown;
 
-    /**
-     * Tries to cancel Steam shutdown.
-     * @remarks Used in the "Shutting down" dialog.
-     */
-    CancelShutdown(): void;
+  /**
+   * Tries to cancel Steam shutdown.
+   * @remarks Used in the "Shutting down" dialog.
+   */
+  CancelShutdown(): void;
 
-    /**
-     * Opens the "Change Account" dialog.
-     */
-    ChangeUser(): void;
+  /**
+   * Opens the "Change Account" dialog.
+   */
+  ChangeUser(): void;
 
-    Connect(): Promise<OperationResponse>;
+  Connect(): Promise<OperationResponse>;
 
-    FlipToLogin(): void;
+  FlipToLogin(): void;
 
-    /**
-     * Forces a shutdown while shutting down.
-     * @remarks Used in the "Shutting down" dialog.
-     */
-    ForceShutdown(): void;
+  /**
+   * Forces a shutdown while shutting down.
+   * @remarks Used in the "Shutting down" dialog.
+   */
+  ForceShutdown(): void;
 
-    /**
-     * Forgets an account's password.
-     * @param accountName Login of the account to forget.
-     * @returns A Promise that resolves to a boolean indicating whether the operation succeeded or not.
-     */
-    ForgetPassword(accountName: string): Promise<boolean>;
+  /**
+   * Forgets an account's password.
+   * @param accountName Login of the account to forget.
+   * @returns A Promise that resolves to a boolean indicating whether the operation succeeded or not.
+   */
+  ForgetPassword(accountName: string): Promise<boolean>;
 
-    /**
-     * Gets your country code.
-     * @returns A Promise that resolves to a string containing your country code.
-     */
-    GetIPCountry(): Promise<string>;
+  /**
+   * Gets your country code.
+   * @returns A Promise that resolves to a string containing your country code.
+   */
+  GetIPCountry(): Promise<string>;
 
-    GetLoginProgress(callback: (param0: number, param1: number) => void): Unregisterable;
+  GetLoginProgress(callback: (param0: number, param1: number) => void): Unregisterable;
 
-    GetLoginUsers(): Promise<LoginUser[]>;
+  GetLoginUsers(): Promise<LoginUser[]>;
 
-    GoOffline(): void;
+  GoOffline(): void;
 
-    GoOnline(): void;
+  GoOnline(): void;
 
-    OptOutOfSurvey(): void;
+  OptOutOfSurvey(): void;
 
-    PrepareForSystemSuspend(): any;
+  PrepareForSystemSuspend(): unknown;
 
-    Reconnect(): void;
+  Reconnect(): void;
 
-    RegisterForConnectionAttemptsThrottled(callback: (data: ConnectionAttempt) => void): Unregisterable;
+  RegisterForConnectionAttemptsThrottled(callback: (data: ConnectionAttempt) => void): Unregisterable;
 
-    RegisterForCurrentUserChanges(callback: (user: CurrentUser) => void): void;
+  RegisterForCurrentUserChanges(callback: (user: CurrentUser) => void): void;
 
-    RegisterForLoginStateChange(callback: (accountName: string, loginState: ELoginState, loginResult: number, loginPercentage: number, param4: number) => void): Unregisterable;
+  RegisterForLoginStateChange(
+    callback: (accountName: string, loginState: ELoginState, loginResult: number, loginPercentage: number, param4: number) => void,
+  ): Unregisterable;
 
-    RegisterForPrepareForSystemSuspendProgress(callback: (data: any) => void): Unregisterable;
+  RegisterForPrepareForSystemSuspendProgress(callback: (data: unknown) => void): Unregisterable;
 
-    RegisterForResumeSuspendedGamesProgress: Unregisterable;
+  RegisterForResumeSuspendedGamesProgress: Unregisterable;
 
-    RegisterForShowHardwareSurvey(callback: () => void): Unregisterable;
+  RegisterForShowHardwareSurvey(callback: () => void): Unregisterable;
 
-    RegisterForShutdownDone(callback: () => void): Unregisterable;
+  RegisterForShutdownDone(callback: () => void): Unregisterable;
 
-    RegisterForShutdownFailed: Unregisterable;
+  RegisterForShutdownFailed: Unregisterable;
 
-    /**
-     * Register a function to be executed when a shutdown start is detected.
-     * @param callback The function to be executed on shutdown start.
-     */
-    RegisterForShutdownStart(callback: () => void): Unregisterable;
+  /**
+   * Register a function to be executed when a shutdown start is detected.
+   * @param callback The function to be executed on shutdown start.
+   */
+  RegisterForShutdownStart(callback: () => void): Unregisterable;
 
-    RegisterForShutdownState: Unregisterable;
+  RegisterForShutdownState: Unregisterable;
 
-    /**
-     * Removes an account from remembered users.
-     * @param accountName The account to remove.
-     */
-    RemoveUser(accountName: string): void;
+  /**
+   * Removes an account from remembered users.
+   * @param accountName The account to remove.
+   */
+  RemoveUser(accountName: string): void;
 
-    RequestSupportSystemReport(reportId: string): Promise<{
-        bSuccess: boolean;
-    }>;
+  RequestSupportSystemReport(reportId: string): Promise<{
+    bSuccess: boolean;
+  }>;
 
-    ResumeSuspendedGames(param0: boolean): any;
+  ResumeSuspendedGames(param0: boolean): unknown;
 
-    // Hardware survey information
-    RunSurvey(callback: (surveySections: SurveySection[]) => void): void;
+  // Hardware survey information
+  RunSurvey(callback: (surveySections: SurveySection[]) => void): void;
 
-    SendSurvey(): void;
+  SendSurvey(): void;
 
-    SetAsyncNotificationEnabled(appId: number, enable: boolean): any;
+  SetAsyncNotificationEnabled(appId: number, enable: boolean): unknown;
 
-    /**
-     * Sets given login credentials, but don't log in to that account.
-     * @param accountName Account name.
-     * @param password Account password.
-     * @param rememberMe Whether to remember that account.
-     */
-    SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
+  /**
+   * Sets given login credentials, but don't log in to that account.
+   * @param accountName Account name.
+   * @param password Account password.
+   * @param rememberMe Whether to remember that account.
+   */
+  SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
 
-    SetOOBEComplete(): void;
+  SetOOBEComplete(): void;
 
-    ShouldShowUserChooser(): Promise<boolean>;
+  ShouldShowUserChooser(): Promise<boolean>;
 
-    /**
-     * Signs out and restarts Steam.
-     */
-    SignOutAndRestart(): void;
+  /**
+   * Signs out and restarts Steam.
+   */
+  SignOutAndRestart(): void;
 
-    StartLogin(): void;
+  StartLogin(): void;
 
-    // is param0 offline mode?
-    StartOffline(param0: boolean): any;
+  // is param0 offline mode?
+  StartOffline(param0: boolean): unknown;
 
-    /**
-     * Restarts the Steam client.
-     */
-    StartRestart(): any;
+  /**
+   * Restarts the Steam client.
+   */
+  StartRestart(): unknown;
 
-    StartShutdown(flag: boolean): any;
+  StartShutdown(flag: boolean): unknown;
 }
 
 export interface ConnectionAttempt {
-    rtCooldownExpiration: number;
+  rtCooldownExpiration: number;
 }
 
 export interface CurrentUser {
-    NotificationCounts: {
-        async_game_updates: number;
-        comments: number;
-        gifts: number;
-        help_request_replies: number;
-        inventory_items: number;
-        invites: number;
-        moderator_messages: number;
-        offline_messages: number;
-        trade_offers: number;
-    };
-    bHWSurveyPending: boolean;
-    bIsLimited: boolean;
-    bIsOfflineMode: boolean;
-    bPromptToChangePassword: boolean;
-    bSupportAckOnlyMessages: boolean;
-    bSupportAlertActive: boolean;
-    bSupportPopupMessage: boolean;
-    clientinstanceid: string;
-    strAccountBalance: string;
-    strAccountBalancePending: string;
-    strAccountName: string;
-    strFamilyGroupID: string;
-    strSteamID: string;
+  NotificationCounts: {
+    async_game_updates: number;
+    comments: number;
+    gifts: number;
+    help_request_replies: number;
+    inventory_items: number;
+    invites: number;
+    moderator_messages: number;
+    offline_messages: number;
+    trade_offers: number;
+  };
+  bHWSurveyPending: boolean;
+  bIsLimited: boolean;
+  bIsOfflineMode: boolean;
+  bPromptToChangePassword: boolean;
+  bSupportAckOnlyMessages: boolean;
+  bSupportAlertActive: boolean;
+  bSupportPopupMessage: boolean;
+  clientinstanceid: string;
+  strAccountBalance: string;
+  strAccountBalancePending: string;
+  strAccountName: string;
+  strFamilyGroupID: string;
+  strSteamID: string;
 }
 
 export enum ELoginState {
-    None,
-    WelcomeDialog,
-    WaitingForCreateUser,
-    WaitingForCredentials,
-    WaitingForNetwork,
-    WaitingForServerResponse,
-    WaitingForLibraryReady,
-    Success,
-    Quit,
+  None,
+  WelcomeDialog,
+  WaitingForCreateUser,
+  WaitingForCredentials,
+  WaitingForNetwork,
+  WaitingForServerResponse,
+  WaitingForLibraryReady,
+  Success,
+  Quit,
 }
 
 export interface LoginUser {
-    personaName: string;
-    accountName: string;
-    rememberPassword: boolean;
-    avatarUrl: string;
+  personaName: string;
+  accountName: string;
+  rememberPassword: boolean;
+  avatarUrl: string;
 }
 
 export interface SurveyEntry {
-    strName: string;
-    vecArgs: string[];
+  strName: string;
+  vecArgs: string[];
 }
 
 export interface SurveySection {
-    strSectionName: string;
-    vecEntries: SurveyEntry[];
+  strSectionName: string;
+  vecEntries: SurveyEntry[];
 }
