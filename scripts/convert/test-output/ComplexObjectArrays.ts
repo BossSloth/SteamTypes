@@ -1,14 +1,24 @@
 export interface ComplexObjectArrays {
   arrayOfArrays: number[][];
+
   arrayOfMixedArrays: ((boolean | null)[] | number[] | string[])[];
+
   complexNested: ComplexNested[];
+
   mixedArray: (MixedArray | MixedArray2 | MixedArray3)[];
+
   mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | MixedEmptiness3)[];
+
   mixedNestedArray: (MixedNestedArray | MixedNestedArray2)[];
+
   mixedValueArray: MixedArray[];
+
   nestedObjectArray: MixedNestedArray[];
+
   objectArray: MixedArray[];
+
   objectsWithArrays: ObjectsWithArrays[];
+
   objectsWithFunctions: ObjectsWithFunctions[];
 }
 
@@ -49,6 +59,7 @@ export interface MixedNestedArray2 {
 
 export interface ObjectsWithArrays {
   name: string;
+
   values: number[];
 }
 
@@ -76,5 +87,6 @@ export interface CompletelyDifferent {
 
 export interface Level2 {
   array: number[];
+
   object: Nested;
 }

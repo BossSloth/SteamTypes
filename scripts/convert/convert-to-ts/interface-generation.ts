@@ -1,10 +1,9 @@
 import { Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
-import { formatPropertyName, getProperties } from './utils';
 import { getType } from './prop-type-detection';
+import { PrimitiveType, Type, UnionType } from './Type';
 import { defaultJsProtoBufProps, InterfaceProperty, TypeScriptInterface } from './types';
-import { context } from './utils';
-import { PrimitiveType, UnionType, Type } from './Type';
+import { context, formatPropertyName, getProperties } from './utils';
 
 let order = 0;
 
@@ -94,7 +93,7 @@ export function createInterfaceDefinition(
  * Generates interface definition string from TypeScriptInterface object
  */
 export function generateInterfaceString(interfaceDefinition: TypeScriptInterface): string {
-  let result = '';
+  let result: string;
   if (interfaceDefinition.extends) {
     result = `export interface ${interfaceDefinition.name} extends ${interfaceDefinition.extends} {\n`;
   } else {
@@ -138,7 +137,7 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
   
   // Add functions first
   if (functions.length > 0) {
-    result += functions.join('\n') + '\n';
+    result += functions.join('\n\n') + '\n';
     
     // Add empty line between functions and properties if both exist
     if (nonFunctions.length > 0) {
@@ -148,7 +147,7 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
   
   // Add non-function properties
   if (nonFunctions.length > 0) {
-    result += nonFunctions.join('\n') + '\n';
+    result += nonFunctions.join('\n\n') + '\n';
   }
   
   result += '}\n';
