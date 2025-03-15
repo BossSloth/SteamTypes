@@ -293,7 +293,7 @@ program
           for (const part of diffResult) {
             if (part.added) {
               process.stdout.write(chalk.green(part.value));
-            } else if (part.removed) {1
+            } else if (part.removed) {
               process.stdout.write(chalk.red(part.value));
             } else {
               process.stdout.write(chalk.gray(part.value));

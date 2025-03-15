@@ -9,15 +9,14 @@
  *   bun validate-types.ts [options]
  */
 
+import chalk from 'chalk';
 import ChromeRemoteInterface from 'chrome-remote-interface';
+import { Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
-import { Command } from 'commander';
-import chalk from 'chalk';
-import { compareInterfaces } from './interface-checker';
-import { interfaceMaps } from './maps';
-import { confirm} from '@inquirer/prompts';
+import { compareInterfaces } from './compare/interface-checker';
 import { Logger } from './logger';
+import { interfaceMaps } from './maps';
 
 const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'convert-to-ts.js');
 
@@ -27,12 +26,13 @@ let logger: Logger;
  * Connects to the Steam client and finds the SharedJSContext target
  */
 async function getSharedJsContextTarget(): Promise<string | undefined> {
-    logger.log(chalk.blue('🔌 Connecting to CEF instance on port 8080...'));
+    logger.debug(chalk.blue('🔌 Connecting to CEF instance on port 8080...'));
         
     // Connect to the Chrome DevTools Protocol endpoint
     let client: ChromeRemoteInterface.Client;
     try {
         client = await ChromeRemoteInterface({
+            host: '127.0.0.1',
             port: 8080,
         });
     } catch (error) {
@@ -68,13 +68,25 @@ async function getSharedJsContextTarget(): Promise<string | undefined> {
     return sharedJsContextTarget.targetId;
 }
 
-async function injectConvertToTypescriptJs(targetId: string) {
+async function injectConvertToTypescriptJs(targetId: string, force: boolean = false) {
     logger.debug(chalk.blue(`🔄 Injecting injection script into SharedJSContext window (ID: ${targetId})...`));
     
     const client = await ChromeRemoteInterface({
+        host: '127.0.0.1',
         port: 8080,
         target: targetId,
     });
+
+    const hasScript = await client.Runtime.evaluate({
+        expression: `typeof window.convertToTypescript !== 'undefined'`,
+        returnByValue: true,
+    });
+
+    if (hasScript.result.value && !force) {
+        logger.debug(chalk.green('✅ Script already injected'));
+        client.close();
+        return;
+    }
     
     // Inject the content of inject.js into the context of the target
     await client.Runtime.evaluate({
@@ -92,9 +104,11 @@ async function extractInterface(
     objectPath: string, 
     interfaceName: string,
 ): Promise<string> {
+    logger.debug('\n')
     logger.log(chalk.blue(`\n🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
 
     const client = await ChromeRemoteInterface({
+        host: '127.0.0.1',
         port: 8080,
         target: targetId,
     });
@@ -109,13 +123,14 @@ async function extractInterface(
     logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(objectPath)} to TypeScript interface...`));
     
     const response = await Runtime.evaluate({
-        expression: `window.convertToTypescript(${objectPath}, '${interfaceName}')`,
+        expression: `async function evalConvert() { const result = window.convertToTypescript(${objectPath}, '${interfaceName}'); return result; } evalConvert()`,
         returnByValue: true,
+        awaitPromise: true,
     });
 
     if (response.exceptionDetails) {
         await client.close();
-        throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception)}`);
+        throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
     }
     
     const interfaceContent = response.result.value;
@@ -130,6 +145,8 @@ async function extractInterface(
 type ValidateTypesOptions = {
     single?: string;
     verbose?: boolean;
+    interactive?: boolean;
+    force?: boolean;
 };
 
 async function run(options: ValidateTypesOptions) {
@@ -138,7 +155,7 @@ async function run(options: ValidateTypesOptions) {
         process.exit(1);
     }
 
-    await injectConvertToTypescriptJs(targetId);
+    await injectConvertToTypescriptJs(targetId, options.force);
 
     let maps = interfaceMaps;
 
@@ -151,23 +168,42 @@ async function run(options: ValidateTypesOptions) {
 
         maps = [map];
     }
+
+    const diffs: string[] = [];
     
     for (const map of maps) {
         const interfaceContent = await extractInterface(
             targetId,
             map.object,
-            map.name,
+            map.srcName,
         );
 
-        let result = compareInterfaces(
-            `src/types/${map.file}.ts`,
-            map.name, interfaceContent,
+        const filePath = `src/types/${map.file}.ts`;
+        // Check if the file exists
+        if (!fs.existsSync(filePath)) {
+            // Create the file
+            fs.writeFileSync(filePath, interfaceContent);
+        }
+
+        const diff = compareInterfaces(
+            filePath,
+            map.srcName,
+            interfaceContent,
             options.verbose,
         );
 
-        // if ((result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
+        // if (options.interactive && (result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
         //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
         // }
+
+        if (diff) {
+            diffs.push(diff);
+        }
+    }
+
+    if (diffs.length > 0) {
+        logger.log('\n')
+        logger.log(diffs.join('\n\n'));
     }
 }
 
@@ -185,6 +221,8 @@ async function main() {
     program
         .option('-s, --single <object>', 'Extract only one object interface specified by file path in maps.ts')
         .option('-v, --verbose', 'Enable verbose output')
+        .option('-i, --interactive', 'Enable interactive mode')
+        .option('-f, --force', 'Force reload the inject script')
         .action(async (options: ValidateTypesOptions) => {
             logger = new Logger(options);
             // try {
@@ -194,8 +232,9 @@ async function main() {
             await run(options);
             const endTime = performance.now();
             
-            logger.log(chalk.green('\n✅ Operation completed successfully'));
-            logger.log(chalk.gray(`\nExecution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
+            logger.log(chalk.green('\n✅ Operation completed successfully\n'));
+            logger.log(chalk.gray(`Memory usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`))
+            logger.log(chalk.gray(`Execution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
             
             // } catch (error: any) {
             //     logger.error(chalk.red(`\n❌ Error: ${error.message}`));
