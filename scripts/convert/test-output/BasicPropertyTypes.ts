@@ -8,7 +8,7 @@ export interface BasicPropertyTypes {
   funcWithDefault(x?: number, y?: string): number;
 
   /**
-   * native code
+   * @native
    */
   nativeCode(): unknown;
 

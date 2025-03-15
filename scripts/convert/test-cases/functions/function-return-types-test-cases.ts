@@ -337,7 +337,7 @@ commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
       func: Math.random,
       expected: `
   /**
-   * native code
+   * @native
    */
 nativeCode(): unknown;`,
     }

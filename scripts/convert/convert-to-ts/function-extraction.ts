@@ -1,4 +1,4 @@
-import { Project, TypeFormatFlags, ts, FunctionExpression, ArrowFunction } from 'ts-morph';
+import { ArrowFunction, FunctionExpression, Project, TypeFormatFlags, ts } from 'ts-morph';
 import { FunctionInfo, MappedParam } from './types';
 
 // Type format flags for consistent output
@@ -103,7 +103,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
       functionInfos.set(name, {
         params: [],
         returnType: 'unknown',
-        jsDoc: ['native code']
+        jsDoc: ['@native']
       });
     }
   }
