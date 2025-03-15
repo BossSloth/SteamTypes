@@ -36,9 +36,11 @@ export interface Auth {
 }
 
 export interface AuthRefreshInfo {
-  reason: number;
   account_name: string;
-  login_id_token: string;
+
+  login_token_id: string;
+
+  reason: number;
 }
 
 /**

@@ -13,7 +13,8 @@ export interface Browser {
 
   GetSpellingSuggestions(word: string): string[];
 
-  GetSteamBrowserID(): Promise<number>; // 16-bit unsigned integer?
+  // 16-bit unsigned integer?
+  GetSteamBrowserID(): Promise<number>;
 
   /**
    * Hides the mouse cursor until input.
@@ -39,9 +40,9 @@ export interface Browser {
    */
   RegisterForGestureEvents(callback: (gesture: TouchGesture) => void): Unregisterable;
 
-  RegisterForOpenNewTab: Unregisterable;
+  RegisterForOpenNewTab(): Unregisterable;
 
-  ReplaceMisspelling: unknown;
+  ReplaceMisspelling(): unknown;
 
   /**
    * Restarts the Steam JS context.

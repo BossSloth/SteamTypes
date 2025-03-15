@@ -1,5 +1,5 @@
-import { Unregisterable } from './shared';
 import { EAppUpdateError } from './Apps';
+import { Unregisterable } from './shared';
 
 /**
  * Represents functions related to managing downloads in Steam.
@@ -23,7 +23,8 @@ export interface Downloads {
    */
   MoveAppUpdateUp(appId: number): void;
 
-  PauseAppUpdate(appId: number): void; // Broken? It seems to be removing it from download list like RemoveFromDownloadList
+  // Broken? It seems to be removing it from download list like RemoveFromDownloadList
+  PauseAppUpdate(appId: number): void;
 
   /**
    * Adds the update for a specific app to the download queue.

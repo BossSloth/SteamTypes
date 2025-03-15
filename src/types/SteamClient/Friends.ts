@@ -16,7 +16,7 @@ export interface Friends {
    */
   GetCoplayData(): Promise<CoplayData>;
 
-  //(e.ConvertTo64BitString(), t.steamidTarget)
+  // (e.ConvertTo64BitString(), t.steamidTarget)
   InviteUserToCurrentGame(steam64Id: string, param1: unknown): unknown;
 
   /**
@@ -28,10 +28,10 @@ export interface Friends {
    */
   InviteUserToGame(steamId: string, appId: number, connectString: string): Promise<boolean>;
 
-  //(e.ConvertTo64BitString(), t.steamidTarget)
+  // (e.ConvertTo64BitString(), t.steamidTarget)
   InviteUserToLobby(steam64Id: string, param1: unknown): unknown;
 
-  //(e.ConvertTo64BitString())
+  // (e.ConvertTo64BitString())
   InviteUserToRemotePlayTogetherCurrentGame(steam64Id: string): unknown;
 
   RegisterForMultiplayerSessionShareURLChanged(param0: unknown, param1: unknown): Unregisterable;

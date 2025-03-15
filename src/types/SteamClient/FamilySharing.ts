@@ -19,9 +19,7 @@ export interface FamilySharing {
 
   GetAvailableLenders(appId: number): Promise<Lender[]>;
 
-  GetFamilyGroupInfo(): Promise<string>;
-
-  RegisterForKickedBorrower: unknown;
+  RegisterForKickedBorrower(): unknown;
 
   SetPreferredLender(appId: number, param1: number): Promise<number>;
 

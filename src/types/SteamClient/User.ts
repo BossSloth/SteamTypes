@@ -3,7 +3,7 @@ import { OperationResponse, Unregisterable } from './shared';
 export interface User {
   AuthorizeMicrotxn(txnId: unknown): unknown;
 
-  CancelLogin: unknown;
+  CancelLogin(): unknown;
 
   CancelMicrotxn(txnId: unknown): unknown;
 
@@ -65,13 +65,13 @@ export interface User {
 
   RegisterForPrepareForSystemSuspendProgress(callback: (data: unknown) => void): Unregisterable;
 
-  RegisterForResumeSuspendedGamesProgress: Unregisterable;
+  RegisterForResumeSuspendedGamesProgress(): Unregisterable;
 
   RegisterForShowHardwareSurvey(callback: () => void): Unregisterable;
 
   RegisterForShutdownDone(callback: () => void): Unregisterable;
 
-  RegisterForShutdownFailed: Unregisterable;
+  RegisterForShutdownFailed(): Unregisterable;
 
   /**
    * Register a function to be executed when a shutdown start is detected.
@@ -79,7 +79,7 @@ export interface User {
    */
   RegisterForShutdownStart(callback: () => void): Unregisterable;
 
-  RegisterForShutdownState: Unregisterable;
+  RegisterForShutdownState(): Unregisterable;
 
   /**
    * Removes an account from remembered users.
