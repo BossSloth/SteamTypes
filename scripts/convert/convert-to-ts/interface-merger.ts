@@ -30,9 +30,7 @@ export function shouldMergeInterfaces(
   for (const prop of smaller) {
     if (largerSet.has(prop)) {
       if (++commonCount >= minOverlap) return true;
-    } else {
-      if (++faultCount > maxFaults) return false;
-    }
+    } else if (++faultCount > maxFaults) return false;
   }
 
   return false;
@@ -156,7 +154,7 @@ export function mergeInterfaceGroup(
     
     // Collect all types for this property
     let types: Type[] = [];
-    let functionInfo: FunctionInfo|undefined = undefined;
+    let functionInfo: FunctionInfo|undefined;
     
     for (const property of propertyVersions) {
       types.push(property.type);
@@ -264,7 +262,7 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
     
     let baseName = name;
     
-    if (interfaceObj.nameCounter) {
+    if (interfaceObj.nameCounter !== undefined) {
       // If nameCounter is available, use it to determine the base name
       baseName = name.substring(0, name.length - String(interfaceObj.nameCounter).length);
     }

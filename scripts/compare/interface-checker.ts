@@ -26,7 +26,7 @@ function extractInterfaceMembers(filePath: string): SourceFile {
 }
 
 function extractMembersFromString(interfaceString: string): SourceFile  {
-  return project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', interfaceString);
+  return project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, interfaceString);
 }
 
 // Main function to compare interfaces

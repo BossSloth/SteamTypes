@@ -1,5 +1,5 @@
 // This can be obtained by running `Object.keys(window)` in a empty Chrome tab
-export const defaultChromeWindowProperties = [
+const defaultChromeWindowProperties = [
   "0",
   "window",
   "self",
@@ -239,7 +239,7 @@ export const defaultChromeWindowProperties = [
   "cr"
 ];
 
-export function windowDiff(windowObj: Window) {
+function windowDiff(windowObj) {
   const keys1 = new Set(Object.keys(windowObj));
   const keys2 = new Set(defaultChromeWindowProperties);
 

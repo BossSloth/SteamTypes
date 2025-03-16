@@ -56,19 +56,19 @@ program
 /**
  * Runs the specified test suites or all test suites if none specified
  */
-function runTestSuites(suitesToRun: TestSuite[], options: { verbose: boolean; update: boolean }) {
+function runTestSuites(suitesToRun: TestSuite[], options: { verbose: boolean; update: boolean }): { passCount: number; failCount: number } {
   let passCount = 0;
   let failCount = 0;
   
   const outputDir = path.join(__dirname, 'test-output');
 
-  suitesToRun = suitesToRun.sort((a, b) => {
+  const sortedSuites = suitesToRun.sort((a, b) => {
     if (a.testFunctions && !b.testFunctions) return 1;
     if (!a.testFunctions && b.testFunctions) return -1;
     return a.name.localeCompare(b.name);
   });
   
-  for (const suite of suitesToRun) {
+  for (const suite of sortedSuites) {
     console.log(chalk.yellow(`Test Suite: ${suite.name}`));
     
     // Convert the test object to TypeScript
@@ -99,7 +99,7 @@ function runTestSuites(suitesToRun: TestSuite[], options: { verbose: boolean; up
 /**
  * Processes function-based tests, comparing function signatures
  */
-function processFunctionTests(suite: TestSuite, result: string) {
+function processFunctionTests(suite: TestSuite, result: string): { passCount: number; failCount: number } {
   let passCount = 0;
   let failCount = 0;
   let passedAll = true;
@@ -144,14 +144,14 @@ function processFunctionTests(suite: TestSuite, result: string) {
     
     // If JSDoc comments were found, prepend them to the function line
     if (jsdocLines.length > 0) {
-      line = jsdocLines.join('\n') + '\n' + line;
+      line = `${jsdocLines.join('\n')}\n${line}`;
     }
     
     expected = expected.replace(/^\n/g, '')
     if (line === expected) {
       passCount++;
     } else {
-      console.log(chalk.red(`  ✗ ${chalk.bold(funcName)}`) +  `: Expected "${chalk.underline(expected.replace(/\n/g, ''))}" but got "${chalk.underline(line.replace(/\n/g, ''))}"`);
+      console.log(`${chalk.red(`  ✗ ${chalk.bold(funcName)}`)}: Expected "${chalk.underline(expected.replace(/\n/g, ''))}" but got "${chalk.underline(line.replace(/\n/g, ''))}"`);
       // Print diff
       printDiff(expected, line);
       
@@ -170,38 +170,40 @@ function processFunctionTests(suite: TestSuite, result: string) {
 /**
  * Prints a colored diff between expected and actual values
  */
-function printDiff(expected: string, actual: string) {
-  const diff = diffLib.diffWordsWithSpace(expected, actual);
+function printDiff(expected: string, actual: string): void {
+  const changes = diffLib.diffWordsWithSpace(expected, actual);
   process.stdout.write('    ');
-  for (const part of diff) {
-    if (part.added) {
-      if (part.value.includes(' ')) {
-        const parts = part.value.split('');
-        for (const part of parts) {
-          if (part === ' ') {
-            process.stdout.write(chalk.bgGreen(part));
-          } else {
-            process.stdout.write(chalk.green(part));
-          }
-        }
-      } else {
-        process.stdout.write(chalk.green(part.value));
+  for (const change of changes) {
+    if (change.added) {
+      if (!change.value.includes(' ')) {
+        process.stdout.write(chalk.green(change.value));
+        continue;
       }
-    } else if (part.removed) {
-      if (part.value.includes(' ')) {
-        const parts = part.value.split('');
-        for (const part of parts) {
-          if (part === ' ') {
-            process.stdout.write(chalk.bgRed(part));
-          } else {
-            process.stdout.write(chalk.red(part));
-          }
+
+      const parts = change.value.split('');
+      for (const part of parts) {
+        if (part === ' ') {
+          process.stdout.write(chalk.bgGreen(part));
+        } else {
+          process.stdout.write(chalk.green(part));
         }
-      } else {
-        process.stdout.write(chalk.red(part.value));
+      }
+    } else if (change.removed) {
+      if (!change.value.includes(' ')) {
+        process.stdout.write(chalk.red(change.value));
+        continue;
+      }
+
+      const parts = change.value.split('');
+      for (const part of parts) {
+        if (part === ' ') {
+          process.stdout.write(chalk.bgRed(part));
+        } else {
+          process.stdout.write(chalk.red(part));
+        }
       }
     } else {
-      process.stdout.write(chalk.gray(part.value));
+      process.stdout.write(chalk.gray(change.value));
     }
   }
   process.stdout.write('\n');
@@ -210,7 +212,7 @@ function printDiff(expected: string, actual: string) {
 /**
  * Processes file-based tests, comparing against expected output files
  */
-function processFileTests(suite: TestSuite, result: string, outputDir: string, updateFiles: boolean) {
+function processFileTests(suite: TestSuite, result: string, outputDir: string, updateFiles: boolean): { passCount: number; failCount: number } {
   let passCount = 0;
   let failCount = 0;
   
@@ -255,7 +257,7 @@ program
     let suite = testSuites.find(s => s.name.toLowerCase() === suiteName?.toLowerCase());
     
     if (!suite) {
-      suite = (await testSuiteNotFound(suiteName, true))[0];
+      [suite] = await testSuiteNotFound(suiteName, true);
     }
     
     console.log(chalk.blue.bold(`Generating TypeScript for: ${suite.name}\n`));
@@ -275,17 +277,23 @@ program
   .option('-c, --context-lines <lines>', 'Number of context lines in unified diff', '3')
   .action(async (suiteName?: string, options: { all: boolean; contextLines: string } = {all: false, contextLines: '3'}) => {
     const startTime = performance.now();
-    const outputDir = __dirname + '/test-output';
+    const outputDir = `${__dirname}/test-output`;
     
     // Filter test suites if a specific one is requested
-    let suitesToDiff = suiteName 
-      ? testSuites.filter(s => s.name.toLowerCase() === suiteName.toLowerCase())
-      : testSuites.filter(s => !s.testFunctions);
+    let suitesToDiff: TestSuite[] = testSuites;
     
-    if (suiteName && suitesToDiff.length === 0) {
-      suitesToDiff = await testSuiteNotFound(suiteName);
+    if (suiteName !== undefined) {
+      // If a valid suite name is provided, filter by that name
+      suitesToDiff = testSuites.filter(s => s.name.toLowerCase() === suiteName.toLowerCase());
+      
+      // If no matching suites found, prompt user to select one
+      if (suitesToDiff.length === 0) {
+        suitesToDiff = await testSuiteNotFound(suiteName);
+      }
     }
 
+    suitesToDiff = suitesToDiff.filter(s => !s.testFunctions);
+    
     suitesToDiff = suitesToDiff.sort((a, b) => a.name.localeCompare(b.name));
     
     console.log(chalk.blue.bold('Showing differences between current output and expected output:\n'));
@@ -362,7 +370,7 @@ function showFullDiff(expected: string, actual: string): void {
   // Calculate word-by-word diff
   const diffResult = diffLib.diffWords(expected, actual);
   
-  console.log('\n' + chalk.gray('─'.repeat(80)));
+  console.log(`\n${chalk.gray('─'.repeat(80))}`);
   
   for (const part of diffResult) {
     if (part.added) {
@@ -401,7 +409,7 @@ function showContextDiff(
   // Format and display the patch
   const lines = patch.split('\n').slice(4); // Skip the header lines
   
-  console.log('\n' + chalk.gray('─'.repeat(80)));
+  console.log(`\n${chalk.gray('─'.repeat(80))}`);
   console.log(chalk.gray(filePath))
 
   for (const line of lines) {

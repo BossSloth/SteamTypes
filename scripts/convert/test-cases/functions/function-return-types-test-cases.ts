@@ -4,7 +4,7 @@ import { TestFunction } from "../test-cases";
 // Define test functions with expected return types
 
 //#region Basic Return Types
-export const testFunctions: Record<string, TestFunction> = {
+export const returnTypesTestFunctions: Record<string, TestFunction> = {
     emptyFunction: {
       func: () => {},
       expected: 'emptyFunction(): void;',

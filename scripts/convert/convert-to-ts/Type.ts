@@ -57,7 +57,7 @@ export class UnionType extends Type {
         }
 
         // Optimize array types
-        this.types = this.optimizeArrayTypes(uniqueTypes);
+        this.types = UnionType.optimizeArrayTypes(uniqueTypes);
 
         // Sort types for consistent output
         this.types.sort((a, b) => a.toString().localeCompare(b.toString()));
@@ -71,14 +71,14 @@ export class UnionType extends Type {
      * Only merges array types when a union array type already exists
      * that contains all the element types to be merged like in the example.
      */
-    private optimizeArrayTypes(types: Type[]): Type[] {
+    private static optimizeArrayTypes(types: Type[]): Type[] {
         // Early return for simple cases
         if (types.length <= 1) {
             return types;
         }
 
         // Separate array types from non-array types
-        const { arrayTypes, nonArrayTypes } = this.separateArrayTypes(types);
+        const { arrayTypes, nonArrayTypes } = UnionType.separateArrayTypes(types);
         
         // If we have fewer than 2 array types, no optimization needed
         if (arrayTypes.length < 2) {
@@ -86,7 +86,7 @@ export class UnionType extends Type {
         }
         
         // Find all union array types and create groups based on them
-        const arrayGroups = this.createArrayGroups(arrayTypes);
+        const arrayGroups = UnionType.createArrayGroups(arrayTypes);
 
         // If no union array types found, no optimization possible
         if (arrayGroups.size === 0) {
@@ -94,13 +94,13 @@ export class UnionType extends Type {
         }
         
         // Process each group to create optimized array types
-        const optimizedArrayTypes = this.processArrayGroups(arrayGroups);
+        const optimizedArrayTypes = UnionType.processArrayGroups(arrayGroups);
         
         // Combine non-array types with optimized array types
         return [...nonArrayTypes, ...optimizedArrayTypes];
     }
 
-    private separateArrayTypes(types: Type[]): { arrayTypes: ArrayType[], nonArrayTypes: Type[] } {
+    private static separateArrayTypes(types: Type[]): { arrayTypes: ArrayType[], nonArrayTypes: Type[] } {
         const arrayTypes: ArrayType[] = [];
         const nonArrayTypes: Type[] = [];
         
@@ -115,7 +115,7 @@ export class UnionType extends Type {
         return { arrayTypes, nonArrayTypes };
     }
 
-    private createArrayGroups(arrayTypes: ArrayType[]): Map<string, ArrayType[]> {
+    private static createArrayGroups(arrayTypes: ArrayType[]): Map<string, ArrayType[]> {
         const arrayGroups = new Map<string, ArrayType[]>();
         
         // First pass: identify all union array types
@@ -131,41 +131,43 @@ export class UnionType extends Type {
 
         // Second pass: assign simple array types to appropriate groups
         for (const arrayType of arrayTypes) {
-            if (!(arrayType.valueType instanceof UnionType)) {
-                const elementTypeString = arrayType.valueType.toString();
-                let assigned = false;
+            if (arrayType.valueType instanceof UnionType) {
+                continue;
+            }
+
+            const elementTypeString = arrayType.valueType.toString();
+            let assigned = false;
+            
+            // Try to find a group where this element type is part of the union
+            for (const [, group] of arrayGroups.entries()) {
+                if (group.length === 0) continue;
                 
-                // Try to find a group where this element type is part of the union
-                for (const [, group] of arrayGroups.entries()) {
-                    if (group.length === 0) continue;
+                const firstGroupType = group[0];
+                if (firstGroupType.valueType instanceof UnionType) {
+                    const unionElementStrings = firstGroupType.valueType.types.map(t => t.toString());
                     
-                    const firstGroupType = group[0];
-                    if (firstGroupType.valueType instanceof UnionType) {
-                        const unionElementStrings = firstGroupType.valueType.types.map(t => t.toString());
-                        
-                        // If this element type is in the union, add it to the group
-                        if (unionElementStrings.includes(elementTypeString)) {
-                            group.push(arrayType);
-                            assigned = true;
-                            break;
-                        }
+                    // If this element type is in the union, add it to the group
+                    if (unionElementStrings.includes(elementTypeString)) {
+                        group.push(arrayType);
+                        assigned = true;
+                        break;
                     }
                 }
-                
-                // If not assigned to any existing group, create a new group
-                if (!assigned) {
-                    const key = elementTypeString;
-                    const group = arrayGroups.get(key) ?? [];
-                    group.push(arrayType);
-                    arrayGroups.set(key, group);
-                }
+            }
+            
+            // If not assigned to any existing group, create a new group
+            if (!assigned) {
+                const key = elementTypeString;
+                const group = arrayGroups.get(key) ?? [];
+                group.push(arrayType);
+                arrayGroups.set(key, group);
             }
         }
 
         return arrayGroups;
     }
 
-    private processArrayGroups(arrayGroups: Map<string, ArrayType[]>): ArrayType[] {
+    private static processArrayGroups(arrayGroups: Map<string, ArrayType[]>): ArrayType[] {
         const optimizedArrayTypes: ArrayType[] = [];
         
         for (const group of arrayGroups.values()) {
@@ -174,7 +176,7 @@ export class UnionType extends Type {
                 optimizedArrayTypes.push(group[0]);
             } else {
                 // Create optimized array type with union of all element types
-                const unionElementType = this.createUnionElementType(group);
+                const unionElementType = UnionType.createUnionElementType(group);
                 optimizedArrayTypes.push(new ArrayType(unionElementType));
             }
         }
@@ -182,7 +184,7 @@ export class UnionType extends Type {
         return optimizedArrayTypes;
     }
 
-    private createUnionElementType(arrayTypes: ArrayType[]): Type {
+    private static createUnionElementType(arrayTypes: ArrayType[]): Type {
         const uniqueElementTypes: Type[] = [];
         const seenTypeStrings = new Set<string>();
         

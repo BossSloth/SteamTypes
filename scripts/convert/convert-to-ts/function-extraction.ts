@@ -23,7 +23,7 @@ function extractParams(initializer: FunctionExpression|ArrowFunction): MappedPar
     defaultValue = defaultValue?.split('\n').map(line => line.trim()).join('');
 
     if (param.isRestParameter()) {
-      paramName = '...'+paramName;
+      paramName = `...${paramName}`;
       isOptional = false;
     }
 
@@ -35,6 +35,7 @@ function extractParams(initializer: FunctionExpression|ArrowFunction): MappedPar
       case 'any[]':
       case '[]':
       case 'never[]': paramType = 'unknown[]'; break;
+      default: break;
     }
 
     return {
@@ -67,6 +68,7 @@ function extractReturnType(initializer: FunctionExpression|ArrowFunction): strin
     case 'any': returnType = 'unknown'; break;
     case 'any[]': returnType = 'unknown[]'; break;
     case '{}': returnType = 'object|unknown'; break;
+    default: break;
   }
 
   return returnType;
@@ -80,7 +82,7 @@ function generateJsDoc(params: MappedParam[]): string[]|undefined {
   
   // Add parameters
   for (const param of params) {
-    if (param.defaultValue) {
+    if (param.defaultValue !== undefined) {
       jsDoc.push(`@param ${param.name} default: ${param.defaultValue}`);
     }
   }
@@ -97,7 +99,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   const functionInfos = new Map<string, FunctionInfo>();
   for (const [name, func] of funcs) {
     const code = createSourceCode(name, func);
-    if (code) {
+    if (code !== null) {
       sourceCode += code;
     } else {
       functionInfos.set(name, {
@@ -112,12 +114,12 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
     return functionInfos;
   }
 
-  const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
+  const sourceFile = project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, sourceCode);
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (enableDiagnostics) {
     const diagnostics = project.getPreEmitDiagnostics();
     if (diagnostics.length > 0) {
-      throw new Error('❌ Error: diagnostics found: ' + project.formatDiagnosticsWithColorAndContext(diagnostics));
+      throw new Error(`❌ Error: diagnostics found: ${project.formatDiagnosticsWithColorAndContext(diagnostics)}`);
     }
   }
 
@@ -137,6 +139,12 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   return functionInfos;
 }
 
+/**
+ * Creates TypeScript source code for a function to be analyzed
+ * @param name The name to assign to the function
+ * @param func The function to convert to source code
+ * @returns The TypeScript source code or null for native functions
+ */
 function createSourceCode(name: string, func: Function): string|null {
   const funcStr = func.toString();
 
@@ -144,15 +152,24 @@ function createSourceCode(name: string, func: Function): string|null {
     return null;
   }
 
+  const prefix = `const _${name} = `;
+  
+  // Case 1: Regular function or arrow function
   if (funcStr.startsWith('function') || funcStr.startsWith('(')) {
-    return `const _${name} = ${funcStr};`;
-  } else if (funcStr.startsWith('async')) {
+    return `${prefix}${funcStr};`;
+  } 
+  
+  // Case 2: Async function
+  if (funcStr.startsWith('async')) {
+    // Handle async function or async arrow function
     if (funcStr.startsWith('async function') || funcStr.startsWith('async (')) {
-      return `const _${name} = ${funcStr};`;
-    } else {
-      return `const _${name} = ${funcStr.replace('async', 'async function')};`;
-    }
-  } else {
-    return `const _${name} = function ${funcStr};`;
-  }
+      return `${prefix}${funcStr};`;
+    } 
+    
+    // Handle async shorthand method
+    return `${prefix}${funcStr.replace('async', 'async function')};`;
+  } 
+  
+  // Case 3: Method shorthand or other format
+  return `${prefix}function ${funcStr};`;
 }

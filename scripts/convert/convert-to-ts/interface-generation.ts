@@ -19,7 +19,7 @@ export function createInterfaceDefinition(
   let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
 
   if (interfaceDefinition) {
-    console.error('❌ Error: duplicate interface name?: ' + interfaceName, obj);
+    console.error(`❌ Error: duplicate interface name?: ${interfaceName}`, obj);
     return interfaceDefinition;
   }
   
@@ -46,7 +46,7 @@ export function createInterfaceDefinition(
   // Process all properties
   for (const key of properties) {
     const value = obj[key];
-    const propertyPath = interfaceName + '.' + key;
+    const propertyPath = `${interfaceName}.${key}`;
     const formattedName = formatPropertyName(key);
     
     if (typeof value === 'function') {
@@ -95,7 +95,7 @@ export function createInterfaceDefinition(
  */
 export function generateInterfaceString(interfaceDefinition: TypeScriptInterface): string {
   let result: string;
-  if (interfaceDefinition.extends) {
+  if (interfaceDefinition.extends !== undefined) {
     result = `export interface ${interfaceDefinition.name} extends ${interfaceDefinition.extends} {\n`;
   } else {
     result = `export interface ${interfaceDefinition.name} {\n`;
@@ -131,14 +131,14 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
         functions.push(`  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
       }
     } else {
-      const optionalMarker = property.optional ? '?' : '';
+      const optionalMarker = property.optional ?? false ? '?' : '';
       nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type.toString()};`);
     }
   }
   
   // Add functions first
   if (functions.length > 0) {
-    result += functions.join('\n\n') + '\n';
+    result += `${functions.join('\n\n')}\n`;
     
     // Add empty line between functions and properties if both exist
     if (nonFunctions.length > 0) {
@@ -148,7 +148,7 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
   
   // Add non-function properties
   if (nonFunctions.length > 0) {
-    result += nonFunctions.join('\n\n') + '\n';
+    result += `${nonFunctions.join('\n\n')}\n`;
   }
   
   result += '}\n';

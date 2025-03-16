@@ -1,5 +1,4 @@
-import { JsPbMessage } from '../shared';
-import { Unregisterable } from '../shared';
+import { JsPbMessage, Unregisterable } from '../shared';
 
 // CMsgSystemPerfUpdateSettings, CMsgSystemPerfState, CMsgSystemPerfSettings
 export interface Perf {

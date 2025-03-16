@@ -2,7 +2,7 @@ import {
   advancedTestFunctions,
   complexObjectTestFunctions,
   dataStructureTestFunctions,
-  testFunctions
+  returnTypesTestFunctions
 } from "./functions";
 import {
   advancedPropertyTests,
@@ -23,7 +23,7 @@ export interface TestSuite {
   testFunctions?: Record<string, TestFunction>;
 }
 
-function mapFunctionsToTestSuite(functions: Record<string, TestFunction>) {
+function mapFunctionsToTestSuite(functions: Record<string, TestFunction>): Record<string, Function> {
   return Object.fromEntries(Object.entries(functions).map(([key, { func }]) => [key, func]));
 }
 
@@ -33,8 +33,8 @@ export const testSuites: TestSuite[] = [
   {
     name: 'Function Return Types',
     interfaceName: 'FunctionTypes',
-    testObject: mapFunctionsToTestSuite(testFunctions),
-    testFunctions: testFunctions,
+    testObject: mapFunctionsToTestSuite(returnTypesTestFunctions),
+    testFunctions: returnTypesTestFunctions,
   },
   {
     name: 'Data Structure Return Types',

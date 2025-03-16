@@ -134,13 +134,12 @@ function compareAndCorrectMembers(
           docs: sourceProp.getJsDocs().map(doc => doc.getText())
         });
       }
-    } else {
-      // Property exists in both, check for type differences
-      if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
+    } 
+    // Property exists in both, check for type differences
+    else if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
         compareAndCorrectPropertyTypes(targetProp, sourceProp);
-      } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
+    } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
         compareAndCorrectMethodTypes(targetProp, sourceProp);
-      }
     }
   }
 
@@ -158,6 +157,7 @@ function compareAndCorrectMembers(
  * @param targetProp The property to be edited
  * @param sourceProp The property to use as the source of truth
  */
+// eslint-disable-next-line complexity
 function compareAndCorrectPropertyTypes(
   targetProp: PropertySignature,
   sourceProp: PropertySignature
@@ -195,7 +195,7 @@ function compareAndCorrectPropertyTypes(
     const targetTypeName = getTypeReferenceName(targetTypeNode);
     const sourceTypeName = getTypeReferenceName(sourceTypeNode);
     
-    if (targetTypeName && sourceTypeName) {
+    if (targetTypeName !== null && sourceTypeName !== null) {
       // Try to find the interfaces in their respective source files
       const targetTypeInterface = currentTargetSourceFile.getInterface(targetTypeName);
       const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
@@ -252,14 +252,14 @@ function compareAndCorrectPropertyTypes(
 /**
  * Gets the name of a type reference
  * @param typeNode The type node to extract the name from
- * @returns The name of the type reference or undefined if not a type reference
+ * @returns The name of the type reference or null if not a type reference
  */
-function getTypeReferenceName(typeNode: TypeNode): string | undefined {
+function getTypeReferenceName(typeNode: TypeNode): string | null {
   if (typeNode.getKind() === SyntaxKind.TypeReference) {
     // Extract the name from the type reference
     return typeNode.getText().split('<')[0].trim();
   }
-  return undefined;
+  return null;
 }
 
 /**
@@ -336,7 +336,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
     // Make sure there is a newline between members
     if (i !== members.length - 1 && !text.startsWith('\n\n')) {
       text = text.replace(/^\n\n*/, '')
-      members[i].replaceWithText('\n' + text);
+      members[i].replaceWithText(`\n${text}`);
     }
   }
 
@@ -377,19 +377,17 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
   );
 
   // Format the diff with colors
-  const formattedDiff = diffResult.split('\n').map(line => {
+  return diffResult.split('\n').map(line => {
     if (line.startsWith('+')) {
       return chalk.green(line);
     } else if (line.startsWith('-')) {
       return chalk.red(line);
     } else if (line.startsWith('@')) {
       return chalk.cyan(line);
-    } else {
-      return chalk.gray(line);
     }
-  }).join('\n');
 
-  return formattedDiff;
+    return chalk.gray(line);
+  }).join('\n');
 }
 
 /**

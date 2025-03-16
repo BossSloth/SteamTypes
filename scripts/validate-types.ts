@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/* eslint-disable new-cap */
 /**
  * Validate Types Script
  * 
@@ -25,7 +26,7 @@ let logger: Logger;
 /**
  * Connects to the Steam client and finds the SharedJSContext target
  */
-async function getSharedJsContextTarget(): Promise<string | null> {
+async function getSharedJsContextTarget(): Promise<string> {
     logger.debug(chalk.blue('🔌 Connecting to CEF instance on port 8080...'));
         
     // Connect to the Chrome DevTools Protocol endpoint
@@ -36,10 +37,9 @@ async function getSharedJsContextTarget(): Promise<string | null> {
             port: 8080,
         });
     } catch (error) {
-        logger.error(chalk.red('❌ Unable to connect to Steam on port 8080.'));
-        logger.error(chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.'));
-        logger.error(chalk.gray('Error details:', error));
-        return null;
+        throw new Error(`
+${chalk.red('❌ Unable to connect to Steam on port 8080.')}
+${chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.')}`, {cause: error});
     }
 
     logger.log(chalk.green('✅ Connected to Steam CEF instance'));
@@ -56,10 +56,8 @@ async function getSharedJsContextTarget(): Promise<string | null> {
     );
     
     if (!sharedJsContextTarget) {
-        logger.error(chalk.red('❌ Could not find window with title "SharedJSContext"'));
-        logger.error(chalk.yellow('⚠️  Make sure Steam is running with the correct configuration'));
         await client.close();
-        return null;
+        throw new Error(`${chalk.red('❌ Could not find window with title "SharedJSContext".')}\n${chalk.yellow('⚠️  Make sure Steam is running with the correct configuration.')}`);
     }
 
     logger.debug(chalk.green(`✅ Found SharedJSContext window (ID: ${sharedJsContextTarget.targetId})`));
@@ -68,7 +66,7 @@ async function getSharedJsContextTarget(): Promise<string | null> {
     return sharedJsContextTarget.targetId;
 }
 
-async function injectConvertToTypescriptJs(targetId: string, force = false) {
+async function injectConvertToTypescriptJs(targetId: string, force = false): Promise<void> {
     logger.debug(chalk.blue(`🔄 Injecting injection script into SharedJSContext window (ID: ${targetId})...`));
     
     const client = await ChromeRemoteInterface({
@@ -82,7 +80,9 @@ async function injectConvertToTypescriptJs(targetId: string, force = false) {
         returnByValue: true,
     });
 
-    if (hasScript.result.value && !force) {
+    const returnValue = hasScript.result.value as boolean;
+
+    if (returnValue && !force) {
         logger.debug(chalk.green('✅ Script already injected'));
         client.close();
         return;
@@ -132,7 +132,7 @@ async function extractInterface(
         await client.close();
         throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
     }
-    
+
     const interfaceContent = response.result.value as string;
     logger.debug(chalk.green('✅ Successfully generated TypeScript interface'));
     
@@ -144,23 +144,20 @@ async function extractInterface(
 
 interface ValidateTypesOptions {
     single?: string;
-    verbose?: boolean;
-    interactive?: boolean;
-    force?: boolean;
+    verbose: boolean;
+    interactive: boolean;
+    force: boolean;
 }
 
-async function run(options: ValidateTypesOptions) {
+async function run(options: ValidateTypesOptions): Promise<void> {
     const targetId = await getSharedJsContextTarget();
-    if (!targetId) {
-        process.exit(1);
-    }
 
     await injectConvertToTypescriptJs(targetId, options.force);
 
     let maps = interfaceMaps;
 
-    if (options.single) {
-        const map = interfaceMaps.find(map => map.file === options.single);
+    if (options.single !== undefined) {
+        const map = interfaceMaps.find(m => m.file === options.single);
         if (!map) {
             logger.error(chalk.red(`❌ Invalid object: ${options.single}`));
             process.exit(1);
@@ -171,7 +168,8 @@ async function run(options: ValidateTypesOptions) {
 
     const diffs: string[] = [];
     
-    for (const map of maps) {
+    // Create an array of promises for parallel execution
+    const interfacePromises = maps.map(async (map) => {
         const interfaceContent = await extractInterface(
             targetId,
             map.object,
@@ -196,11 +194,13 @@ async function run(options: ValidateTypesOptions) {
         //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
         // }
 
-        if (diff) {
-            diffs.push(diff);
-        }
-    }
+        return diff;
+    });
 
+    const results = await Promise.all(interfacePromises);
+
+    diffs.push(...results.filter((r) => r !== null));
+    
     if (diffs.length > 0) {
         logger.log('\n')
         logger.log(diffs.join('\n\n'));
@@ -210,7 +210,7 @@ async function run(options: ValidateTypesOptions) {
 /**
  * Main function
  */
-async function main() {   
+async function main(): Promise<void> {   
     const program = new Command();
     
     program
@@ -220,10 +220,10 @@ async function main() {
     
     program
         .option('-s, --single <object>', 'Extract only one object interface specified by file path in maps.ts')
-        .option('-v, --verbose', 'Enable verbose output')
-        .option('-i, --interactive', 'Enable interactive mode')
-        .option('-f, --force', 'Force reload the inject script')
-        .action(async (options: ValidateTypesOptions) => {
+        .option('-v, --verbose', 'Enable verbose output', false)
+        .option('-i, --interactive', 'Enable interactive mode', false)
+        .option('-f, --force', 'Force reload the inject script', false)
+        .action(async (options: ValidateTypesOptions = { verbose: false, interactive: false, force: false }) => {
             logger = new Logger(options);
             // try {
             logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));

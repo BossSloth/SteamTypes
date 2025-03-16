@@ -33,7 +33,7 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
     const interfaceName = type.kind;
     const aliasedName = aliasMap.get(interfaceName);
 
-    if (aliasedName) {
+    if (aliasedName !== undefined) {
       return new InterfaceType(aliasedName);
     }
     

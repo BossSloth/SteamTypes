@@ -8,11 +8,11 @@ import { context, deepSameStructure, formatInterfaceName } from './utils';
  */
 export function getType(value: unknown, path: string): Type {
   if (value === null) return new PrimitiveType('null');
-  if (value === undefined) return new PrimitiveType('undefined');
   
   const type = typeof value;
   
   switch (type) {
+    case 'undefined': return new PrimitiveType('undefined');
     case 'string': return new PrimitiveType('string');
     case 'number': return new PrimitiveType('number');
     case 'boolean': return new PrimitiveType('boolean');
@@ -64,14 +64,14 @@ function getObjectType(value: Record<string, unknown>, path: string): Type {
 
 function getCircularReference(value: Record<string, unknown>, isValueIterable: boolean): Type|null {
   const circularPath = context.processedObjectPaths.get(value);
-  if (circularPath) {
+  if (circularPath !== undefined) {
     // Return the interface name that this circular reference points to
 
     if (isValueIterable) {
       return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
-    } else {
-      return new InterfaceType(circularPath);
-    }
+    } 
+
+    return new InterfaceType(circularPath);
   }
 
   return null;
@@ -79,13 +79,13 @@ function getCircularReference(value: Record<string, unknown>, isValueIterable: b
 
 // Generate a unique interface name for nested objects
 function generateInterfaceName(baseName: string, value: Record<string, unknown>): [string, number|undefined] {
-  baseName = formatInterfaceName(baseName)
-  let name = baseName;
+  const formattedName = formatInterfaceName(baseName)
+  let name = formattedName;
   let counter = 1;
   while (context.interfacesToProcess.has(name)) {
       // If same name and structure use already generated interface
       if (deepSameStructure(context.interfacesToProcess.get(name)?.[0], value)) return [name, counter === 1 ? undefined : counter];
-      name = `${baseName}${++counter}`;
+      name = `${formattedName}${++counter}`;
   }
   return [name, counter === 1 ? undefined : counter];
 }
@@ -151,9 +151,9 @@ function getArrayTypes(items: unknown[], path: string): Type {
   // Otherwise, return a union of all types
   if (uniqueTypes.length === 1) {
     return uniqueTypes[0];
-  } else {
-    return new UnionType(uniqueTypes);
   }
+
+  return new UnionType(uniqueTypes);
 }
 
 /** 

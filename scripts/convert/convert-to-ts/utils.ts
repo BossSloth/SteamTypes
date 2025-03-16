@@ -82,7 +82,7 @@ export function getProperties(obj: unknown): string[] {
   
   do {
     Object.getOwnPropertyNames(currentObj).map(item => properties.add(item));
-  } while ((currentObj = Object.getPrototypeOf(currentObj)));
+  } while ((currentObj = Object.getPrototypeOf(currentObj)) !== null);
   
   return [...properties.keys()].filter(item => !defaultProtoProps.includes(item));
 }

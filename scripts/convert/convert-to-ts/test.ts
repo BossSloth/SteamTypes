@@ -12,7 +12,7 @@ import { convertToTypescript } from './index';
 /**
  * Test function for the converter
  */
-export function testConvert() {
+export function testConvert(): void {
   const testObj = {
     // arrayExtraTypeLater: [
     //   { id: 1, idx: 5, name: 'Generic', appDetails: undefined },
