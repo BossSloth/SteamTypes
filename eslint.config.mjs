@@ -36,7 +36,7 @@ export default tseslint.config(
       'max-lines-per-function': ['error', { max: 100 }],
       'curly': ['error', 'multi-line'],
       // '@stylistic/function-call-argument-newline': ['error', 'consistent'],
-      '@typescript-eslint/member-ordering': 'off', //TODO: put this on later to put functions first then properties
+      '@typescript-eslint/member-ordering': ['error', {interfaces: ['method', 'field']}],
 
       '@typescript-eslint/prefer-regexp-exec': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
@@ -93,6 +93,12 @@ export default tseslint.config(
       //   'error',
       //   { blankLine: 'always', prev: '*', next: 'function' },
       // ],    
+    }
+  },
+  {
+    files: ['src/types/SteamClient/**'],
+    rules: {
+      '@typescript-eslint/member-ordering': 'off', //TODO: remove this when member-ordering is fixed in all SteamClient files
     }
   }
 );

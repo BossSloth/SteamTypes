@@ -91,7 +91,7 @@ export interface WebChat {
 
   SetNumChatsWithUnreadPriorityMessages(size: number): void;
 
-  SetPersonaName: unknown;
+  SetPersonaName(): unknown;
 
   SetPushToMuteEnabled(value: boolean): unknown;
 
@@ -101,9 +101,11 @@ export interface WebChat {
 
   SetPushToTalkMouseButton(param0: number): void;
 
-  SetVoiceChatActive: unknown;
-  SetVoiceChatStatus: unknown;
-  ShowChatRoomGroupDialog: unknown;
+  SetVoiceChatActive(): unknown;
+
+  SetVoiceChatStatus(): unknown;
+
+  ShowChatRoomGroupDialog(): unknown;
 
   /**
    * @todo Does not actually show the dialog.

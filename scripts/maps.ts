@@ -24,6 +24,7 @@ export const interfaceMaps: Map[] = [
     { file: 'SteamClient/FriendSettings', object: 'SteamClient.FriendSettings', srcName: 'FriendSettings' },
     { file: 'SteamClient/GameNotes', object: 'SteamClient.GameNotes', srcName: 'GameNotes' },
     { file: 'SteamClient/GameRecording', object: 'SteamClient.GameRecording', srcName: 'GameRecording' },
+    { file: 'SteamClient/WebChat', object: 'SteamClient.WebChat', srcName: 'WebChat' },
     { file: 'SteamClient/User', object: 'SteamClient.User', srcName: 'User' },
     { file: 'Global/App', object: 'window.App', srcName: 'App' },
     { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager'},
