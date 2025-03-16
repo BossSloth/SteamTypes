@@ -44,9 +44,11 @@ export interface TypeScriptInterface {
  * Represents the context for type conversion
  */
 export interface ConversionContext {
+  addImport(moduleName: string, type: string, defaultImport?: boolean): void;
+
   interfacesToProcess: Map<string, [Record<string, unknown>, number|undefined]>; // Key: interface name, Value: object interface is based on
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
-  imports: Set<string>;
+  imports: Map<string, {types: Set<string>, defaultImport?: boolean}>; // Key: module name, Value: Set of imported types
   processedObjectPaths: Map<unknown, string>;
   mainInterfaceName: string;
   functionsToProcess: Map<string, Map<string, Function>>; // Key: interface name, Value: Map of function name to function

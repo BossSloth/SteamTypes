@@ -38,7 +38,7 @@ export function createInterfaceDefinition(
   if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
     properties = properties.filter(item => !defaultJsProtoBufProps.includes(item));
     interfaceDefinition.extends = 'JsPbMessage';
-    context.imports.add('import { Message as JsPbMessage } from "google-protobuf";');
+    context.addImport('google-protobuf', 'Message as JsPbMessage');
   }
 
   properties = properties.sort(propertyStringSorter);

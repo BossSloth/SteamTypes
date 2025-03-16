@@ -1,6 +1,5 @@
 import Long from 'long';
-import { ObservableMap } from 'mobx';
-import { ObservableSet } from 'mobx';
+import { ObservableMap, ObservableSet } from 'mobx';
 
 export interface AdvancedPropertyTypes {
   datePropertyTests: DatePropertyTests;

@@ -61,7 +61,18 @@ export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceN
   
   // Add imports
   if (context.imports.size > 0) {
-    result = Array.from(context.imports).join('\n') + '\n\n' + result;
+    result = `\n${result}`;
+    const sortedImports = Array.from(context.imports.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+    for (const [moduleName, {types, defaultImport}] of sortedImports) {
+      if (defaultImport) {
+        if (types.size > 1) {
+          throw new Error('Cannot import multiple types with default import');
+        }
+        result = `import ${Array.from(types)[0]} from '${moduleName}';\n${result}`;
+      } else {
+        result = `import { ${Array.from(types).sort().join(', ')} } from '${moduleName}';\n${result}`;
+      }
+    }
   }
 
   if (profiling) {

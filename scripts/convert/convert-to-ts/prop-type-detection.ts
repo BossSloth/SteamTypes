@@ -163,12 +163,12 @@ function getArrayTypes(items: unknown[], path: string): Type {
 function getIterableTypeName(value: unknown): GenericTypeName
 {
   if (isObservableSet(value)) {
-    context.imports.add("import { ObservableSet } from 'mobx';"); 
+    context.addImport('mobx', 'ObservableSet');
     return 'ObservableSet';
   } else if (value instanceof Set) {
     return 'Set';
   } else if (isObservableMap(value)) {
-    context.imports.add("import { ObservableMap } from 'mobx';"); 
+    context.addImport('mobx', 'ObservableMap');
     return 'ObservableMap';
   } else if (value instanceof Map) {
     return 'Map';
@@ -189,7 +189,7 @@ function isIterable(value: unknown): value is Iterable<unknown> {
  * Checks for non-generic object types and returns their TypeScript type
  */
 function getPrimitiveObjectTypes(obj: unknown): string|null {
-  if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; }
+  if (Long.isLong(obj)) { context.addImport('long', 'Long', true); return 'Long'; }
   if (obj instanceof Date) return 'Date';
   if (obj instanceof RegExp) return 'RegExp';
   if (obj instanceof Error) return obj.constructor.name;
