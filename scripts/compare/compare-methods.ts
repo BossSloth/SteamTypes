@@ -1,4 +1,4 @@
-import { MethodSignature } from 'ts-morph';
+import type { MethodSignature } from 'ts-morph';
 
 /**
  * Compares and corrects method types
@@ -6,7 +6,6 @@ import { MethodSignature } from 'ts-morph';
  * @param sourceMethod The method to use as the source of truth
  */
 export function compareAndCorrectMethodTypes(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
-  
   // Check if the method has a question token (optional method)
   if (sourceMethod.hasQuestionToken() !== targetMethod.hasQuestionToken()) {
     targetMethod.setHasQuestionToken(sourceMethod.hasQuestionToken());
@@ -50,33 +49,37 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
   // Different number of parameters - replace all
   if (targetParams.length !== sourceParams.length) {
     // Remove all existing parameters
-    targetParams.forEach((param) => param.remove());
+    targetParams.forEach((param) => {
+      param.remove();
+    });
 
     // Add all parameters from source
     targetMethod.addParameters(sourceParams.map(param => param.getStructure()));
-  } else {
-    // Same number of parameters - update by index
-    for (let i = 0; i < sourceParams.length; i++) {
-      const sourceParam = sourceParams[i];
-      const targetParam = targetParams[i];
-      
-      // Update type if needed
-      const sourceTypeNode = sourceParam.getTypeNode();
-      const targetTypeNode = targetParam.getTypeNode();
-      
-      if (sourceTypeNode && sourceTypeNode.getText() !== 'unknown' && (!targetTypeNode || targetTypeNode.getText() !== sourceTypeNode.getText())) {
-        targetParam.setType(sourceTypeNode.getText());
-      }
-      
-      // Update question token
-      if (sourceParam.hasQuestionToken() !== targetParam.hasQuestionToken()) {
-        targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
-      }
-      
-      // Update rest parameter
-      if (sourceParam.isRestParameter() !== targetParam.isRestParameter()) {
-        targetParam.setIsRestParameter(sourceParam.isRestParameter());
-      }
+
+    return;
+  }
+
+  // Same number of parameters - update by index
+  for (let i = 0; i < sourceParams.length; i++) {
+    const sourceParam = sourceParams[i];
+    const targetParam = targetParams[i];
+
+    // Update type if needed
+    const sourceTypeNode = sourceParam.getTypeNode();
+    const targetTypeNode = targetParam.getTypeNode();
+
+    if (sourceTypeNode && sourceTypeNode.getText() !== 'unknown' && (!targetTypeNode || targetTypeNode.getText() !== sourceTypeNode.getText())) {
+      targetParam.setType(sourceTypeNode.getText());
+    }
+
+    // Update question token
+    if (sourceParam.hasQuestionToken() !== targetParam.hasQuestionToken()) {
+      targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
+    }
+
+    // Update rest parameter
+    if (sourceParam.isRestParameter() !== targetParam.isRestParameter()) {
+      targetParam.setIsRestParameter(sourceParam.isRestParameter());
     }
   }
 }

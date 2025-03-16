@@ -1,12 +1,12 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
+import { ArrayType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType, createMapType, createSetType } from './Type';
 import { context, deepSameStructure, formatInterfaceName } from './utils';
-import { PrimitiveType, InterfaceType, Type, ArrayType, GenericType, GenericTypeName, UnionType, createMapType, createSetType } from './Type';
 
 /**
  * Gets the TypeScript type for a value
  */
-export function getType(value: any, path: string): Type {
+export function getType(value: unknown, path: string): Type {
   if (value === null) return new PrimitiveType('null');
   if (value === undefined) return new PrimitiveType('undefined');
   
@@ -19,13 +19,13 @@ export function getType(value: any, path: string): Type {
     case 'bigint': return new PrimitiveType('bigint');
     case 'symbol': return new PrimitiveType('symbol');
     case 'function': return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
-    case 'object': return getObjectType(value, path);
+    case 'object': return getObjectType(value as Record<string, unknown>, path);
     default:
       return new PrimitiveType('unknown');
   }
-};
+}
 
-function getObjectType(value: any, path: string): Type {
+function getObjectType(value: Record<string, unknown>, path: string): Type {
   const isValueIterable = isIterable(value);
   const circularReference = getCircularReference(value, isValueIterable);
 
@@ -43,7 +43,7 @@ function getObjectType(value: any, path: string): Type {
     return new PrimitiveType('unknown');
   }
 
-  const lastPathSegment = path.split('.').pop() || '';
+  const lastPathSegment = path.split('.').pop() ?? '';
   let capitalizedName: string;
   if (lastPathSegment.charAt(1) === '_') {
       capitalizedName = lastPathSegment;
@@ -62,10 +62,10 @@ function getObjectType(value: any, path: string): Type {
   return new InterfaceType(interfaceName);
 }
 
-function getCircularReference(value: any, isValueIterable: boolean): Type|null {
-  if (context.processedObjectPaths.has(value)) {
+function getCircularReference(value: Record<string, unknown>, isValueIterable: boolean): Type|null {
+  const circularPath = context.processedObjectPaths.get(value);
+  if (circularPath) {
     // Return the interface name that this circular reference points to
-    const circularPath = context.processedObjectPaths.get(value)!;
 
     if (isValueIterable) {
       return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
@@ -78,26 +78,26 @@ function getCircularReference(value: any, isValueIterable: boolean): Type|null {
 }
 
 // Generate a unique interface name for nested objects
-function generateInterfaceName(baseName: string, value: any): [string, number|undefined] {
+function generateInterfaceName(baseName: string, value: Record<string, unknown>): [string, number|undefined] {
   baseName = formatInterfaceName(baseName)
   let name = baseName;
   let counter = 1;
   while (context.interfacesToProcess.has(name)) {
       // If same name and structure use already generated interface
-      if (deepSameStructure(context.interfacesToProcess.get(name)![0], value)) return [name, counter === 1 ? undefined : counter];
+      if (deepSameStructure(context.interfacesToProcess.get(name)?.[0], value)) return [name, counter === 1 ? undefined : counter];
       name = `${baseName}${++counter}`;
   }
   return [name, counter === 1 ? undefined : counter];
-};
+}
 
 /**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
  */
-function getIterableType(value: any, path: string): ArrayType|GenericType {
+function getIterableType(value: Iterable<unknown>, path: string): ArrayType|GenericType {
   // Register this iterable as being processed to detect circular references
-  context.processedObjectPaths.set(value, path.split('.').pop() || 'Item');
+  context.processedObjectPaths.set(value, path.split('.').pop() ?? 'Item');
   
-  const array = Array.from(value) as unknown[];
+  const array = Array.from(value);
 
   if (Array.isArray(value)) {
     return new ArrayType(getArrayTypes(array, path));
@@ -140,12 +140,10 @@ function getArrayTypes(items: unknown[], path: string): Type {
   
   for (const item of items) {
     const itemType = getType(item, path);
-    if (itemType !== undefined) {
-      const typeString = itemType.toString();
-      if (!typeStrings.has(typeString)) {
-        typeStrings.add(typeString);
-        uniqueTypes.push(itemType);
-      }
+    const typeString = itemType.toString();
+    if (!typeStrings.has(typeString)) {
+      typeStrings.add(typeString);
+      uniqueTypes.push(itemType);
     }
   }
 
@@ -156,13 +154,13 @@ function getArrayTypes(items: unknown[], path: string): Type {
   } else {
     return new UnionType(uniqueTypes);
   }
-};
+}
 
 /** 
  * Gets the TypeScript type name for an object
  * And also adds the import for the object if it's not already imported
  */
-function getIterableTypeName(value: any): GenericTypeName
+function getIterableTypeName(value: unknown): GenericTypeName
 {
   if (isObservableSet(value)) {
     context.imports.add("import { ObservableSet } from 'mobx';"); 
@@ -179,7 +177,7 @@ function getIterableTypeName(value: any): GenericTypeName
   throw new Error('Invalid iterable type');
 }
 
-function isIterable(value: any): boolean {
+function isIterable(value: unknown): value is Iterable<unknown> {
   return Array.isArray(value)
     || value instanceof Set
     || isObservableSet(value)
@@ -190,8 +188,8 @@ function isIterable(value: any): boolean {
 /**
  * Checks for non-generic object types and returns their TypeScript type
  */
-function getPrimitiveObjectTypes(obj: any): string|null {
-  if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; };
+function getPrimitiveObjectTypes(obj: unknown): string|null {
+  if (Long.isLong(obj)) { context.imports.add("import Long from 'long';"); return 'Long'; }
   if (obj instanceof Date) return 'Date';
   if (obj instanceof RegExp) return 'RegExp';
   if (obj instanceof Error) return obj.constructor.name;

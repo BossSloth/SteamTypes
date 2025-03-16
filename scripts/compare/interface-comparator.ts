@@ -54,6 +54,7 @@ export function compareAndCorrectInterfaces(
  */
 function processInterfaceQueue(): void {
   while (interfaceQueue.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { targetInterface, sourceInterface } = interfaceQueue.shift()!;
     const interfaceId = `${targetInterface.getSourceFile().getFilePath()}:${targetInterface.getName()}`;
     
@@ -110,24 +111,24 @@ function compareAndCorrectMembers(
       // Property missing in target, add it
       if (sourceProp instanceof MethodSignature) {
         // Filter out @native jsdoc
-        const docs = sourceProp.getJsDocs().map(doc => doc.getTags()?.[0]?.getTagName() === 'native' ? '' : doc.getInnerText());
+         const docs = sourceProp.getJsDocs().map(doc => doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText());
         const filteredDocs = docs.filter(doc => doc !== '');
         
         targetInterface.addMethod({
           name: propName,
           parameters: sourceProp.getParameters().map(param => ({
             name: param.getName(),
-            type: param.getTypeNode()!.getText(),
+            type: param.getTypeNode()?.getText(),
             hasQuestionToken: param.hasQuestionToken()
           })),
-          returnType: sourceProp.getReturnTypeNode()!.getText(),
+          returnType: sourceProp.getReturnTypeNode()?.getText(),
           hasQuestionToken: sourceProp.hasQuestionToken(),
           docs: filteredDocs,
         });
       } else {
         targetInterface.addProperty({
           name: propName,
-          type: sourceProp.getTypeNode()!.getText(),
+          type: sourceProp.getTypeNode()?.getText(),
           hasQuestionToken: sourceProp.hasQuestionToken(),
           isReadonly: sourceProp.isReadonly(),
           docs: sourceProp.getJsDocs().map(doc => doc.getText())
@@ -395,8 +396,7 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
  * Main function to compare and correct interfaces between two source files
  * @param targetSourceFile The source file containing interfaces to be edited
  * @param sourceSourceFile The source file containing interfaces to use as the source of truth
- * @param targetInterfaceName The name of the interface in the target file
- * @param sourceInterfaceName The name of the interface in the source file
+ * @param interfaceName The name of the interface
  * @param filePath The file path for labeling the diff
  * @returns A diff of all changes made to the entire source file
  */
@@ -427,7 +427,5 @@ export function compareAndCorrectAllInterfaces(
   const newSourceText = targetSourceFile.getFullText();
   
   // Generate a diff of the entire source file
-  const fileDiff = generateDiff(originalSourceText, newSourceText, filePath);
-  
-  return fileDiff;
+  return generateDiff(originalSourceText, newSourceText, filePath);
 }

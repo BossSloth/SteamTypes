@@ -84,11 +84,9 @@ export interface RemotePlay {
 
   RegisterForRestrictedSessionChanges(callback: (restrictedSession: boolean) => void): Unregisterable;
 
-  RegisterForSessionStopped(callback: (steam64Id: unknown, guestId: unknown, avatarHash: string) => void): Unregisterable;
+  RegisterForSessionStopped(callback: (steam64Id: unknown, guestId: unknown, avatarHash?: string) => void): Unregisterable;
 
   RegisterForSessionStarted(callback: (steam64Id: unknown, gameId: unknown, guestId: unknown) => void): Unregisterable;
-
-  RegisterForSessionStopped(callback: (steam64Id: unknown, guestId: unknown) => void): Unregisterable;
 
   RegisterForSettingsChanges(callback: (remotePlaySettings: RemotePlaySettings) => void): Unregisterable;
 

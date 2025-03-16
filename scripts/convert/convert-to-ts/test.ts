@@ -1,14 +1,13 @@
+import { testSuites } from '../test-cases';
 import { convertToTypescript } from './index';
-import { testSuites } from '../test-cases/test-cases';
-import allApps from '../test-cases/steam_favorites_allapps.json';
 
-class BigObject {
-  constructor(key: string) {
-    for (let i = 0; i < 100; i++) {
-      this[`key${i}${key}`] = (x, y) => x / (y + 1);
-    }
-  }
-}
+// class BigObject {
+//   constructor(key: string) {
+//     for (let i = 0; i < 100; i++) {
+//       this[`key${i}${key}`] = (x, y) => x / (y + 1);
+//     }
+//   }
+// }
 
 /**
  * Test function for the converter

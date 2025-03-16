@@ -1,13 +1,13 @@
-import { 
-  testFunctions,
-  dataStructureTestFunctions,
+import {
   advancedTestFunctions,
-  complexObjectTestFunctions
+  complexObjectTestFunctions,
+  dataStructureTestFunctions,
+  testFunctions
 } from "./functions";
-import { 
-  basicPropertyTests, 
-  advancedPropertyTests, 
-  edgeCasePropertyTests, 
+import {
+  advancedPropertyTests,
+  basicPropertyTests,
+  edgeCasePropertyTests,
   mergedInterfaceTests
 } from "./properties";
 
@@ -19,12 +19,12 @@ export interface TestFunction {
 export interface TestSuite {
   name: string;
   interfaceName: string;
-  testObject: Record<string, any>;
+  testObject: Record<string, unknown>;
   testFunctions?: Record<string, TestFunction>;
 }
 
-function mapFunctionsToTestSuite(testFunctions: Record<string, TestFunction>) {
-  return Object.fromEntries(Object.entries(testFunctions).map(([key, { func }]) => [key, func]));
+function mapFunctionsToTestSuite(functions: Record<string, TestFunction>) {
+  return Object.fromEntries(Object.entries(functions).map(([key, { func }]) => [key, func]));
 }
 
 // #region Test Suites
@@ -152,7 +152,9 @@ export const testSuites: TestSuite[] = [
 // Add circular reference to EdgeCases test object
 const edgeCasesTestSuite = testSuites.find((suite) => suite.name === 'Edge Cases');
 if (edgeCasesTestSuite) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const circularObj: any = {};
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   circularObj.self = circularObj;
   edgeCasesTestSuite.testObject.circularReference = circularObj;
 }

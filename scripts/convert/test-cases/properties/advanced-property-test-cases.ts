@@ -19,7 +19,7 @@ export const regexPropertyTests = {
   
   regexWithFlags: /test/gi,
   
-  complexRegex: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+  complexRegex: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
 };
 //#endregion
 

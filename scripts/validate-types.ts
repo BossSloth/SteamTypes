@@ -25,7 +25,7 @@ let logger: Logger;
 /**
  * Connects to the Steam client and finds the SharedJSContext target
  */
-async function getSharedJsContextTarget(): Promise<string | undefined> {
+async function getSharedJsContextTarget(): Promise<string | null> {
     logger.debug(chalk.blue('🔌 Connecting to CEF instance on port 8080...'));
         
     // Connect to the Chrome DevTools Protocol endpoint
@@ -39,7 +39,7 @@ async function getSharedJsContextTarget(): Promise<string | undefined> {
         logger.error(chalk.red('❌ Unable to connect to Steam on port 8080.'));
         logger.error(chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.'));
         logger.error(chalk.gray('Error details:', error));
-        return undefined;
+        return null;
     }
 
     logger.log(chalk.green('✅ Connected to Steam CEF instance'));
@@ -59,7 +59,7 @@ async function getSharedJsContextTarget(): Promise<string | undefined> {
         logger.error(chalk.red('❌ Could not find window with title "SharedJSContext"'));
         logger.error(chalk.yellow('⚠️  Make sure Steam is running with the correct configuration'));
         await client.close();
-        return undefined;
+        return null;
     }
 
     logger.debug(chalk.green(`✅ Found SharedJSContext window (ID: ${sharedJsContextTarget.targetId})`));
@@ -68,7 +68,7 @@ async function getSharedJsContextTarget(): Promise<string | undefined> {
     return sharedJsContextTarget.targetId;
 }
 
-async function injectConvertToTypescriptJs(targetId: string, force: boolean = false) {
+async function injectConvertToTypescriptJs(targetId: string, force = false) {
     logger.debug(chalk.blue(`🔄 Injecting injection script into SharedJSContext window (ID: ${targetId})...`));
     
     const client = await ChromeRemoteInterface({
@@ -133,7 +133,7 @@ async function extractInterface(
         throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
     }
     
-    const interfaceContent = response.result.value;
+    const interfaceContent = response.result.value as string;
     logger.debug(chalk.green('✅ Successfully generated TypeScript interface'));
     
     // Clean up
@@ -142,12 +142,12 @@ async function extractInterface(
     return interfaceContent;
 }
 
-type ValidateTypesOptions = {
+interface ValidateTypesOptions {
     single?: string;
     verbose?: boolean;
     interactive?: boolean;
     force?: boolean;
-};
+}
 
 async function run(options: ValidateTypesOptions) {
     const targetId = await getSharedJsContextTarget();

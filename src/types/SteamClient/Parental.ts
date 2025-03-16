@@ -71,10 +71,7 @@ export interface ParentalSettings {
 
 /**
  * Represents a list of applications with their IDs.
+ *
+ * Key-value pairs where the key is the `appId` (e.g., "App_123456") and the value indicates whether the appId is allowed during parental lock.
  */
-interface AppList {
-  /**
-   * Key-value pairs where the key is the `appId` (e.g., "App_123456") and the value indicates whether the appId is allowed during parental lock.
-   */
-  [appId: string]: number;
-}
+type AppList = Record<string, number>;

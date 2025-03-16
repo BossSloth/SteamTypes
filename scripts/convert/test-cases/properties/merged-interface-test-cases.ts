@@ -126,7 +126,7 @@ export const edgeCaseMergedInterfaceTests = {
       version: '2.0',
       status: 'active',
       calculate: function(a, b) { return a + b; },
-      format: function(value) { return `$${value.toFixed(2)}`; }
+      format: function(value: number) { return `$${value.toFixed(2)}`; }
     }
   ],
   
@@ -274,7 +274,7 @@ class TestClass {
   status: string;
   createdAt: Date;
 
-  constructor(name: string, index: number, extra: boolean = false) {
+  constructor(name: string, index: number, extra = false) {
     this.name = name;
     this.index = index;
     this.status = 'active';

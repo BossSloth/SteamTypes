@@ -1,5 +1,5 @@
-import { TestFunction } from "../test-cases";
 import Long from "long";
+import { TestFunction } from "../test-cases";
 
 //#region Async Function Test Cases
 // Basic async functions
@@ -70,7 +70,7 @@ const asyncTestFunctions: Record<string, TestFunction> = {
 
 //#region Class Test Cases
 class SimpleClass {
-  property: string = 'value';
+  property = 'value';
   method() {
     return this.property;
   }
@@ -135,7 +135,7 @@ const classTestFunctions: Record<string, TestFunction> = {
   },
   returnClassFactory: {
     func: () => {
-      return (name) => {
+      return (name: string) => {
         return {
           name,
           greet() {

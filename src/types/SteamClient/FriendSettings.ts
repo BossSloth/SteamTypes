@@ -45,9 +45,7 @@ export type FriendSettingsFeature =
   | 'ServerVirtualizedMemberLists'
   | 'SteamworksChatAPI';
 
-export type FriendSettingsEnabledFeatures<T> = {
-  [feature in FriendSettingsFeature]: T;
-};
+export type FriendSettingsEnabledFeatures<T> = Record<FriendSettingsFeature, T>;
 
 export interface FriendSettingsChange {
   bNotifications_ShowIngame: VDFBoolean;

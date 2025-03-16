@@ -34,7 +34,7 @@ function compareInterfaces(
   filePath: string, 
   interfaceName: string,
   providedInterfaceString: string,
-  verbose: boolean = false,
+  verbose = false,
 ): string|null {
   setLogger(new Logger({verbose}));
 

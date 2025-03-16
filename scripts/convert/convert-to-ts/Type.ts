@@ -36,9 +36,7 @@ export class UnionType extends Type {
         
         // Process all types, flattening unions
         const typesToProcess = [...types];
-        for (let i = 0; i < typesToProcess.length; i++) {
-            const type = typesToProcess[i];
-            
+        for (const type of typesToProcess) {
             // If it's a union type, add its types to the processing queue
             if (type instanceof UnionType) {
                 typesToProcess.push(...type.types);
@@ -80,6 +78,29 @@ export class UnionType extends Type {
         }
 
         // Separate array types from non-array types
+        const { arrayTypes, nonArrayTypes } = this.separateArrayTypes(types);
+        
+        // If we have fewer than 2 array types, no optimization needed
+        if (arrayTypes.length < 2) {
+            return types;
+        }
+        
+        // Find all union array types and create groups based on them
+        const arrayGroups = this.createArrayGroups(arrayTypes);
+
+        // If no union array types found, no optimization possible
+        if (arrayGroups.size === 0) {
+            return types;
+        }
+        
+        // Process each group to create optimized array types
+        const optimizedArrayTypes = this.processArrayGroups(arrayGroups);
+        
+        // Combine non-array types with optimized array types
+        return [...nonArrayTypes, ...optimizedArrayTypes];
+    }
+
+    private separateArrayTypes(types: Type[]): { arrayTypes: ArrayType[], nonArrayTypes: Type[] } {
         const arrayTypes: ArrayType[] = [];
         const nonArrayTypes: Type[] = [];
         
@@ -90,13 +111,11 @@ export class UnionType extends Type {
                 nonArrayTypes.push(type);
             }
         }
-        
-        // If we have fewer than 2 array types, no optimization needed
-        if (arrayTypes.length < 2) {
-            return types;
-        }
-        
-        // Find all union array types and create groups based on them
+
+        return { arrayTypes, nonArrayTypes };
+    }
+
+    private createArrayGroups(arrayTypes: ArrayType[]): Map<string, ArrayType[]> {
         const arrayGroups = new Map<string, ArrayType[]>();
         
         // First pass: identify all union array types
@@ -104,18 +123,12 @@ export class UnionType extends Type {
             if (arrayType.valueType instanceof UnionType) {
                 const key = arrayType.valueType.toString();
                 
-                if (!arrayGroups.has(key)) {
-                    arrayGroups.set(key, []);
-                }
-                arrayGroups.get(key)!.push(arrayType);
+                const group = arrayGroups.get(key) ?? [];
+                group.push(arrayType);
+                arrayGroups.set(key, group);
             }
         }
 
-        // If no union array types found, no optimization possible
-        if (arrayGroups.size === 0) {
-            return types;
-        }
-        
         // Second pass: assign simple array types to appropriate groups
         for (const arrayType of arrayTypes) {
             if (!(arrayType.valueType instanceof UnionType)) {
@@ -123,7 +136,7 @@ export class UnionType extends Type {
                 let assigned = false;
                 
                 // Try to find a group where this element type is part of the union
-                for (const [_, group] of arrayGroups.entries()) {
+                for (const [, group] of arrayGroups.entries()) {
                     if (group.length === 0) continue;
                     
                     const firstGroupType = group[0];
@@ -142,15 +155,17 @@ export class UnionType extends Type {
                 // If not assigned to any existing group, create a new group
                 if (!assigned) {
                     const key = elementTypeString;
-                    if (!arrayGroups.has(key)) {
-                        arrayGroups.set(key, []);
-                    }
-                    arrayGroups.get(key)!.push(arrayType);
+                    const group = arrayGroups.get(key) ?? [];
+                    group.push(arrayType);
+                    arrayGroups.set(key, group);
                 }
             }
         }
-        
-        // Process each group to create optimized array types
+
+        return arrayGroups;
+    }
+
+    private processArrayGroups(arrayGroups: Map<string, ArrayType[]>): ArrayType[] {
         const optimizedArrayTypes: ArrayType[] = [];
         
         for (const group of arrayGroups.values()) {
@@ -158,42 +173,43 @@ export class UnionType extends Type {
                 // Single array type in group, keep as is
                 optimizedArrayTypes.push(group[0]);
             } else {
-                // Merge multiple array types in group
-                const uniqueElementTypes: Type[] = [];
-                const seenTypeStrings = new Set<string>();
-                
-                // Collect all unique element types from the group
-                for (const arrayType of group) {
-                    if (arrayType.valueType instanceof UnionType) {
-                        // Extract component types from union
-                        for (const elementType of arrayType.valueType.types) {
-                            const typeString = elementType.toString();
-                            if (!seenTypeStrings.has(typeString)) {
-                                seenTypeStrings.add(typeString);
-                                uniqueElementTypes.push(elementType);
-                            }
-                        }
-                    } else {
-                        // Handle non-union element types
-                        const typeString = arrayType.valueType.toString();
-                        if (!seenTypeStrings.has(typeString)) {
-                            seenTypeStrings.add(typeString);
-                            uniqueElementTypes.push(arrayType.valueType);
-                        }
-                    }
-                }
-                
                 // Create optimized array type with union of all element types
-                const unionElementType = uniqueElementTypes.length === 1 
-                    ? uniqueElementTypes[0] 
-                    : new UnionType(uniqueElementTypes);
-                
+                const unionElementType = this.createUnionElementType(group);
                 optimizedArrayTypes.push(new ArrayType(unionElementType));
             }
         }
+
+        return optimizedArrayTypes;
+    }
+
+    private createUnionElementType(arrayTypes: ArrayType[]): Type {
+        const uniqueElementTypes: Type[] = [];
+        const seenTypeStrings = new Set<string>();
         
-        // Combine non-array types with optimized array types
-        return [...nonArrayTypes, ...optimizedArrayTypes];
+        // Collect all unique element types from the group
+        for (const arrayType of arrayTypes) {
+            if (arrayType.valueType instanceof UnionType) {
+                // Extract component types from union
+                for (const elementType of arrayType.valueType.types) {
+                    const typeString = elementType.toString();
+                    if (!seenTypeStrings.has(typeString)) {
+                        seenTypeStrings.add(typeString);
+                        uniqueElementTypes.push(elementType);
+                    }
+                }
+            } else {
+                // Handle non-union element types
+                const typeString = arrayType.valueType.toString();
+                if (!seenTypeStrings.has(typeString)) {
+                    seenTypeStrings.add(typeString);
+                    uniqueElementTypes.push(arrayType.valueType);
+                }
+            }
+        }
+        
+        return uniqueElementTypes.length === 1 
+            ? uniqueElementTypes[0] 
+            : new UnionType(uniqueElementTypes);
     }
 
     public toString(): string {
@@ -256,10 +272,10 @@ export class GenericType extends Type {
 }
 
 // Convenience factory methods for common generic types
-export const createSetType = (valueType: Type, setName: SetName = 'Set'): GenericType => {
+export function createSetType(valueType: Type, setName: SetName = 'Set'): GenericType {
     return new GenericType(setName, [valueType]);
-};
+}
 
-export const createMapType = (keyType: Type, valueType: Type, mapName: MapName = 'Map'): GenericType => {
+export function createMapType(keyType: Type, valueType: Type, mapName: MapName = 'Map'): GenericType {
     return new GenericType(mapName, [keyType, valueType]);
-};
+}

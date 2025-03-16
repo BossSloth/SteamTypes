@@ -1,6 +1,6 @@
-import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
 import type { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
+import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
 
 /**
  * Represents various functions related to Steam applications.
@@ -731,13 +731,13 @@ export enum ELibraryAssetType {
   HeroBlur,
 }
 
-export type AppAchievements = {
+export interface AppAchievements {
   nAchieved: number;
   nTotal: number;
   vecAchievedHidden: AppAchievement[];
   vecHighlight: AppAchievement[];
   vecUnachieved: AppAchievement[];
-};
+}
 
 export interface AppAchievement {
   bAchieved: boolean;
@@ -1336,11 +1336,11 @@ export enum ESteamDeckCompatibilityTestResult {
   FailMinor,
 }
 
-export type AppLanguage = {
+export interface AppLanguage {
   strDisplayName: string;
   /** A localization string for the language. */
   strShortName: string;
-};
+}
 
 export interface AppBeta {
   /** Beta name. */

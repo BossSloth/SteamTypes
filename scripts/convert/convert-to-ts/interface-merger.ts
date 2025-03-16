@@ -1,6 +1,6 @@
 import { updateTypeReferences } from './replace-duplicate-types';
+import { Type, UnionType } from './Type';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
-import { PrimitiveType, Type, UnionType } from './Type';
 
 const REQUIRED_OVERLAP = 3/4;
 
@@ -109,7 +109,11 @@ export function mergeInterfaceGroup(
   
   // Use the first interface as the base
   const baseName = group[0];
-  const baseInterface = interfaces.get(baseName)!;
+  const baseInterface = interfaces.get(baseName);
+
+  if (!baseInterface) {
+    throw new Error(`Base interface ${baseName} not found`);
+  }
   
   // Create a new merged interface
   const mergedInterface: TypeScriptInterface = {
@@ -125,14 +129,19 @@ export function mergeInterfaceGroup(
   
   // First, collect all properties from all interfaces
   for (const interfaceName of group) {
-    const currentInterface = interfaces.get(interfaceName)!;
+    const currentInterface = interfaces.get(interfaceName);
+
+    if (!currentInterface) {
+      throw new Error(`Interface ${interfaceName} not found`);
+    }
     
     for (const property of currentInterface.properties) {
-      if (!allProperties.has(property.name)) {
-        allProperties.set(property.name, []);
+      const existingProperties = allProperties.get(property.name);
+      if (existingProperties) {
+        existingProperties.push(property);
+      } else {
+        allProperties.set(property.name, [property]);
       }
-      
-      allProperties.get(property.name)!.push(property);
     }
   }
   
@@ -204,7 +213,12 @@ export function mergeInterfaces(
     if (group.length === 1) {
       // If group has only one interface, just copy it
       const name = group[0];
-      mergedInterfaces.set(name, { ...interfaces.get(name)! });
+      const interfaceObj = interfaces.get(name);
+      if (!interfaceObj) {
+        throw new Error(`Interface ${name} not found`);
+      }
+
+      mergedInterfaces.set(name, { ...interfaceObj });
     } else {
       // Merge the group
       const mergedInterface = mergeInterfaceGroup(interfaces, group);
@@ -243,7 +257,11 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
   // Extract base names and group interfaces
   for (const name of interfaces.keys()) {
     // Use nameCounter if available, otherwise fall back to regex
-    const interfaceObj = interfaces.get(name)!;
+    const interfaceObj = interfaces.get(name);
+    if (!interfaceObj) {
+      throw new Error(`Interface ${name} not found`);
+    }
+    
     let baseName = name;
     
     if (interfaceObj.nameCounter) {
@@ -251,10 +269,8 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
       baseName = name.substring(0, name.length - String(interfaceObj.nameCounter).length);
     }
     
-    if (!interfaceGroups.has(baseName)) {
-      interfaceGroups.set(baseName, []);
-    }
-    interfaceGroups.get(baseName)!.push(name);
+    const group = interfaceGroups.get(baseName) ?? [];
+    interfaceGroups.set(baseName, [...group, name]);
   }
 
   const aliasMap = new Map<string, string>();
@@ -265,8 +281,12 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
     
     // Sort interfaces by their nameCounter
     group.sort((a, b) => {
-      const aInterface = interfaces.get(a)!;
-      const bInterface = interfaces.get(b)!;
+      const aInterface = interfaces.get(a);
+      const bInterface = interfaces.get(b);
+
+      if (!aInterface || !bInterface) {
+        throw new Error(`Interface ${a} or ${b} not found`);
+      }
       
       // If both have nameCounter, use that
       if (aInterface.nameCounter !== undefined && bInterface.nameCounter !== undefined) {
@@ -280,26 +300,15 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
       return 0;
     });
     
-    // Rename interfaces to ensure sequential numbering
-    // const baseInterface = group[0];
-    // const baseInterfaceObj = interfaces.get(baseInterface)!;
-    
-    // // If the base interface has a nameCounter, rename it
-    // if (baseInterfaceObj.nameCounter !== undefined) {
-    //   // Rename the base interface to remove any number
-    //   interfaces.delete(baseInterface);
-    //   baseInterfaceObj.name = baseName;
-    //   baseInterfaceObj.nameCounter = undefined; // Remove the counter from base interface
-    //   interfaces.set(baseName, baseInterfaceObj);
-    //   aliasMap.set(baseInterface, baseName);
-    //   group[0] = baseName;
-    // }
-    
     // Rename the rest with sequential numbers
     for (let i = 1; i < group.length; i++) {
       const oldName = group[i];
       const newName = `${baseName}${i + 1}`;
-      const interfaceObj = interfaces.get(oldName)!;
+      const interfaceObj = interfaces.get(oldName);
+
+      if (!interfaceObj) {
+        throw new Error(`Interface ${oldName} not found`);
+      }
       
       if (oldName !== newName) {
         interfaces.delete(oldName);

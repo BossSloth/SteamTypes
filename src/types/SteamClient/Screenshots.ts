@@ -2,6 +2,7 @@
  * Interface for managing screenshots.
  */
 export interface Screenshots {
+
   /**
    * Deletes a local screenshot.
    * @param appId The ID of the application.

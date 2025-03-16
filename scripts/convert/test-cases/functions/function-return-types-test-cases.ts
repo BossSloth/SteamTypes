@@ -291,7 +291,7 @@ commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
     },
     nestedReturnsNotCalled: {
       func: (x) => {
-        let y = function inner() {
+        const y = function inner() {
           if (x > 0) {
             return true;
           }
@@ -304,7 +304,7 @@ commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
     },
     arrowFuncInFunction: {
       func: function func(x) {
-        let i = () => {};
+        const i = () => {};
   
         i();
   

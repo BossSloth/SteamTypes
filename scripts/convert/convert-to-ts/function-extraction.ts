@@ -113,6 +113,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   }
 
   const sourceFile = project.createSourceFile(Math.random().toString(36).substring(2) + '.ts', sourceCode);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (enableDiagnostics) {
     const diagnostics = project.getPreEmitDiagnostics();
     if (diagnostics.length > 0) {
@@ -123,7 +124,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   const variableDeclarations = sourceFile.getVariableDeclarations();
   for (const variableDeclaration of variableDeclarations) {
     const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
-      || variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
+      ?? variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
 
     const mappedParams = extractParams(initializer);
     const returnType = extractReturnType(initializer);

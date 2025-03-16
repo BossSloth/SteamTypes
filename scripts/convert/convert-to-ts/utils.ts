@@ -1,28 +1,28 @@
 import { ConversionContext, defaultProtoProps } from './types';
 
 export const context: ConversionContext = {
-  interfacesToProcess: new Map<string, any>(),
-  interfaceDefinitions: new Map<string, any>(),
+  interfacesToProcess: new Map(),
+  interfaceDefinitions: new Map(),
   imports: new Set<string>(),
-  processedObjectPaths: new Map<any, string>(),
+  processedObjectPaths: new Map(),
   mainInterfaceName: '',
-  functionsToProcess: new Map<string, Map<string, Function>>(),
+  functionsToProcess: new Map(),
 };
 
 export function initContext(mainInterfaceName: string): void {
-  context.interfacesToProcess = new Map<string, any>();
-  context.interfaceDefinitions = new Map<string, any>();
+  context.interfacesToProcess = new Map();
+  context.interfaceDefinitions = new Map();
   context.imports = new Set<string>();
-  context.processedObjectPaths = new Map<any, string>();
+  context.processedObjectPaths = new Map();
   context.mainInterfaceName = mainInterfaceName;
-  context.functionsToProcess = new Map<string, Map<string, Function>>();
+  context.functionsToProcess = new Map();
 }
 
 /**
  * Checks if two objects have the same structure
  * TODO: This is not performant at all, please optimize
  */
-export function deepSameStructure(obj1: any, obj2: any, depth = 0): boolean {
+export function deepSameStructure(obj1: unknown, obj2: unknown, depth = 0): boolean {
   if (depth > 10) return false;
   if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
   if (!obj1 || !obj2) return obj1 === obj2;
@@ -38,7 +38,7 @@ export function deepSameStructure(obj1: any, obj2: any, depth = 0): boolean {
   );
 }
 
-const specialCharactersRegex = /[\s\-\.@*#%^\p{Extended_Pictographic}]|^\d/u;
+const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}]|^\d/u;
 /**
  * Formats a property name to handle special characters
  */
@@ -69,8 +69,8 @@ export function formatInterfaceName(interfaceName: string): string {
  * and returns them as an array, excluding default prototype properties.
  * This also includes all functions
  */
-export function getProperties(obj: any): string[] {
-  let properties = new Set<string>();
+export function getProperties(obj: unknown): string[] {
+  const properties = new Set<string>();
   let currentObj = obj;
   
   do {

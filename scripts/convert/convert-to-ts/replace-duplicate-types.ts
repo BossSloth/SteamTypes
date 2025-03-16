@@ -1,5 +1,5 @@
+import { ArrayType, GenericType, InterfaceType, Type, UnionType } from './Type';
 import { TypeScriptInterface } from './types';
-import { Type, InterfaceType, ArrayType, GenericType, UnionType } from './Type';
 
 /**
  * Updates type references in all interfaces based on the alias map
@@ -11,7 +11,7 @@ export function updateTypeReferences(
   aliasMap: Map<string, string>,
 ): void {
   // For each interface
-  for (const [_, interfaceObj] of interfaces.entries()) {
+  for (const [, interfaceObj] of interfaces.entries()) {
     // For each property in the interface
     for (const property of interfaceObj.properties) {
       // Update the property type

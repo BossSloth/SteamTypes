@@ -169,6 +169,4 @@ export interface SteamURL {
   feature: number;
 }
 
-export type SteamURLs = {
-  [url in SteamWebURL]: SteamURL;
-};
+export type SteamURLs = Record<SteamWebURL, SteamURL>;

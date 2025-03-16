@@ -11,7 +11,7 @@ let order = 0;
  * Creates or updates an interface definition object
  */
 export function createInterfaceDefinition(
-  obj: any, 
+  obj: Record<string, unknown>, 
   interfaceName: string, 
   nameCounter: number|undefined,
   project: Project,
@@ -72,8 +72,9 @@ export function createInterfaceDefinition(
 
   // Get parameter information and return type using ts-morph in one big call
   // This is still the biggest performance hit because of ts-morph being slow
-  if (context.functionsToProcess.has(interfaceName)) {
-    const functionInfos = massExtractFunctionInfo(context.functionsToProcess.get(interfaceName)!, project);
+  const functions = context.functionsToProcess.get(interfaceName);
+  if (functions) {
+    const functionInfos = massExtractFunctionInfo(functions, project);
     for (const [name, functionInfo] of functionInfos) {
       const interfaceProperty: InterfaceProperty = {
         name,
@@ -131,7 +132,7 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
       }
     } else {
       const optionalMarker = property.optional ? '?' : '';
-      nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type};`);
+      nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type.toString()};`);
     }
   }
   
