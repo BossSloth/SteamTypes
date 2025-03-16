@@ -45,9 +45,7 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
     return new ArrayType(updatedValueType);
   } else if (type instanceof GenericType) {
     // Recursively update each type parameter
-    const updatedTypeParams = type.typeParameters.map(param =>
-      replaceTypeReferences(param, aliasMap),
-    );
+    const updatedTypeParams = type.typeParameters.map(param => replaceTypeReferences(param, aliasMap));
 
     return new GenericType(type.genericName, updatedTypeParams);
   } else if (type instanceof UnionType) {

@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable new-cap */
 /**
  * Validate Types Script
@@ -51,9 +52,7 @@ ${chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.')}`, { ca
   const targets = await Target.getTargets();
 
   // Find the target with title 'SharedJsContext'
-  const sharedJsContextTarget = targets.targetInfos.find(target =>
-    target.title === 'SharedJSContext',
-  );
+  const sharedJsContextTarget = targets.targetInfos.find(target => target.title === 'SharedJSContext');
 
   if (!sharedJsContextTarget) {
     await client.close();

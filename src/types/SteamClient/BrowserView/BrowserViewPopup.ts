@@ -153,7 +153,7 @@ interface BrowserViewEventMap {
   /**
    * Fires when an `alert()` dialog appears.
    */
-  'alert-dialog': (message: string) => void;
+  'alert-dialog'(message: string): void;
 
   /**
    * Fires when the browser is about to get destroyed.

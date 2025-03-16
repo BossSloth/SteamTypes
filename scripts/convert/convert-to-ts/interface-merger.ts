@@ -41,9 +41,7 @@ export function shouldMergeInterfaces(
  * @param interfaces Map of interfaces to analyze
  * @returns Array of interface groups that should be merged
  */
-export function findInterfaceGroups(
-  interfaces: Map<string, TypeScriptInterface>,
-): string[][] {
+export function findInterfaceGroups(interfaces: Map<string, TypeScriptInterface>): string[][] {
   const interfaceArray = Array.from(interfaces.entries());
   const groups: string[][] = [];
   const processedInterfaces = new Set<string>();
@@ -97,6 +95,7 @@ export function findInterfaceGroups(
  * @param group Array of interface names to merge
  * @returns The merged interface
  */
+// eslint-disable-next-line max-lines-per-function
 export function mergeInterfaceGroup(
   interfaces: Map<string, TypeScriptInterface>,
   group: string[],
@@ -194,9 +193,7 @@ export function mergeInterfaceGroup(
  * @param interfaces Map of interfaces to merge
  * @returns Map of merged interfaces
  */
-export function mergeInterfaces(
-  interfaces: Map<string, TypeScriptInterface>,
-): Map<string, TypeScriptInterface> {
+export function mergeInterfaces(interfaces: Map<string, TypeScriptInterface>): Map<string, TypeScriptInterface> {
   // Find groups of interfaces to merge
   const groups = findInterfaceGroups(interfaces);
 

@@ -45,31 +45,7 @@ export function createInterfaceDefinition(
   properties = properties.sort(propertyStringSorter);
 
   // Process all properties
-  for (const key of properties) {
-    const value = obj[key];
-    const propertyPath = `${interfaceName}.${key}`;
-    const formattedName = formatPropertyName(key);
-
-    if (typeof value === 'function') {
-      if (!context.functionsToProcess.has(interfaceName)) {
-        context.functionsToProcess.set(interfaceName, new Map());
-      }
-      context.functionsToProcess.get(interfaceName)?.set(formattedName, value);
-    } else {
-      let type: Type;
-      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
-        type = new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
-      } else {
-        type = getType(value, propertyPath);
-      }
-
-      const interfaceProperty = {
-        name: formattedName,
-        type,
-      };
-      interfaceDefinition.properties.push(interfaceProperty);
-    }
-  }
+  processInterfaceProperties(obj, properties, interfaceName, interfaceDefinition);
 
   // Get parameter information and return type using ts-morph in one big call
   // This is still the biggest performance hit because of ts-morph being slow
@@ -89,6 +65,35 @@ export function createInterfaceDefinition(
   context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
 
   return interfaceDefinition;
+}
+
+function processInterfaceProperties(obj: Record<string, unknown>, properties: string[], interfaceName: string, interfaceDefinition: TypeScriptInterface): void {
+  for (const key of properties) {
+    const value = obj[key];
+    const propertyPath = `${interfaceName}.${key}`;
+    const formattedName = formatPropertyName(key);
+
+    if (typeof value === 'function') {
+      if (!context.functionsToProcess.has(interfaceName)) {
+        context.functionsToProcess.set(interfaceName, new Map());
+      }
+      context.functionsToProcess.get(interfaceName)?.set(formattedName, value);
+    } else {
+      let type: Type;
+      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
+        type = new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
+      } else {
+        type = getType(value, propertyPath);
+      }
+
+      const interfaceProperty: InterfaceProperty = {
+        name: formattedName,
+        type,
+      };
+
+      interfaceDefinition.properties.push(interfaceProperty);
+    }
+  }
 }
 
 /**
@@ -167,8 +172,10 @@ const space = ' '.charCodeAt(0);
 function propertyStringSorter(a: string, b: string): number {
   a = a.toLowerCase();
   b = b.toLowerCase();
-  let i = 0, j = 0;
-  const lenA = a.length, lenB = b.length;
+  let i = 0;
+  let j = 0;
+  const lenA = a.length;
+  const lenB = b.length;
 
   while (i < lenA && j < lenB) {
     let charA = a.charCodeAt(i);

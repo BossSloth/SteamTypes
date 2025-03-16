@@ -433,18 +433,16 @@ async function testSuiteNotFound(suiteName?: string, single = false): Promise<Te
   console.log(chalk.red(`Test suite "${suiteName}" not found.`));
   let result: string[];
   if (single) {
-    result = [await select({
-      message: 'Please select the test suite to run',
-      choices: [
-        ...testSuites.map(s => s.name),
-      ],
-    })];
+    result = [
+      await select({
+        message: 'Please select the test suite to run',
+        choices: testSuites.map(s => s.name),
+      }),
+    ];
   } else {
     result = await checkbox({
       message: 'Please select the test suite(s) that you want to run',
-      choices: [
-        ...testSuites.map(s => s.name),
-      ],
+      choices: testSuites.map(s => s.name),
     });
     if (result.length === 0) {
       return testSuiteNotFound(suiteName);

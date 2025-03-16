@@ -4,9 +4,9 @@ import { InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceF
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { logger } from './shared';
 
-enum CustomJsDocTags {
-  originalName = 'compareOriginalName',
-}
+const CustomJsDocTags = {
+  originalName: 'compareOriginalName',
+};
 
 /**
  * Interface to represent a task in the processing queue
@@ -108,32 +108,7 @@ function compareAndCorrectMembers(
     }
 
     if (!targetProp) {
-      // Property missing in target, add it
-      if (sourceProp instanceof MethodSignature) {
-        // Filter out @native jsdoc
-        const docs = sourceProp.getJsDocs().map(doc => doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText());
-        const filteredDocs = docs.filter(doc => doc !== '');
-
-        targetInterface.addMethod({
-          name: propName,
-          parameters: sourceProp.getParameters().map(param => ({
-            name: param.getName(),
-            type: param.getTypeNode()?.getText(),
-            hasQuestionToken: param.hasQuestionToken(),
-          })),
-          returnType: sourceProp.getReturnTypeNode()?.getText(),
-          hasQuestionToken: sourceProp.hasQuestionToken(),
-          docs: filteredDocs,
-        });
-      } else {
-        targetInterface.addProperty({
-          name: propName,
-          type: sourceProp.getTypeNode()?.getText(),
-          hasQuestionToken: sourceProp.hasQuestionToken(),
-          isReadonly: sourceProp.isReadonly(),
-          docs: sourceProp.getJsDocs().map(doc => doc.getText()),
-        });
-      }
+      addMissingMember(targetInterface, sourceProp, propName);
 
       return;
     }
@@ -156,11 +131,49 @@ function compareAndCorrectMembers(
 }
 
 /**
+ * Adds a missing property to the target interface
+ * @param targetInterface The interface to add the property to
+ * @param sourceProp The property to add
+ * @param propName The name of the property to add
+ */
+function addMissingMember(
+  targetInterface: InterfaceDeclaration,
+  sourceProp: PropertySignature | MethodSignature,
+  propName: string,
+): void {
+  // Property missing in target, add it
+  if (sourceProp instanceof MethodSignature) {
+    // Filter out @native jsdoc
+    const docs = sourceProp.getJsDocs().map(doc => (doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText()));
+    const filteredDocs = docs.filter(doc => doc !== '');
+
+    targetInterface.addMethod({
+      name: propName,
+      parameters: sourceProp.getParameters().map(param => ({
+        name: param.getName(),
+        type: param.getTypeNode()?.getText(),
+        hasQuestionToken: param.hasQuestionToken(),
+      })),
+      returnType: sourceProp.getReturnTypeNode()?.getText(),
+      hasQuestionToken: sourceProp.hasQuestionToken(),
+      docs: filteredDocs,
+    });
+  } else {
+    targetInterface.addProperty({
+      name: propName,
+      type: sourceProp.getTypeNode()?.getText(),
+      hasQuestionToken: sourceProp.hasQuestionToken(),
+      isReadonly: sourceProp.isReadonly(),
+      docs: sourceProp.getJsDocs().map(doc => doc.getText()),
+    });
+  }
+}
+
+/**
  * Compares and corrects property types
  * @param targetProp The property to be edited
- * @param sourceProp The property to use as the source of truth
+ * @param sourceProp The property to compare against
  */
-// eslint-disable-next-line complexity
 function compareAndCorrectPropertyTypes(
   targetProp: PropertySignature,
   sourceProp: PropertySignature,
@@ -168,9 +181,8 @@ function compareAndCorrectPropertyTypes(
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
-  // If either type node is missing, we can't compare properly
+  // Handle case where one of the types is missing
   if (!targetTypeNode || !sourceTypeNode) {
-    // If source has a type node but target doesn't, update target
     if (sourceTypeNode && !targetTypeNode) {
       targetProp.setType(sourceTypeNode.getText());
     }
@@ -178,77 +190,101 @@ function compareAndCorrectPropertyTypes(
     return;
   }
 
-  if (targetProp.getType().isAny()) {
-    const isImported = currentTargetSourceFile.getImportDeclarations().some(importDecl =>
-      importDecl.getNamedImports().some(importSpec =>
-        importSpec.getName() === targetProp.getType().getText(),
-      ),
-    );
-    if (isImported) {
-      return;
-    }
+  // Check if the target type is imported
+  if (isImportedType(targetProp)) {
+    return;
   }
 
-  // Get the text representation of both types
-  const targetTypeText = targetTypeNode.getText();
-  let sourceTypeText = sourceTypeNode.getText();
-
-  // Check if the types are interfaces with different names but same structure
+  // Handle interface references
   if (isInterfaceType(targetTypeNode) && isInterfaceType(sourceTypeNode)) {
-    // add them to the queue for processing
-    const targetTypeName = getTypeReferenceName(targetTypeNode);
-    const sourceTypeName = getTypeReferenceName(sourceTypeNode);
+    handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
 
-    if (targetTypeName !== null && sourceTypeName !== null) {
-      // Try to find the interfaces in their respective source files
-      const targetTypeInterface = currentTargetSourceFile.getInterface(targetTypeName);
-      const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
-
-      // Check if targetInterface has a original jsdoc
-      const originalJsDoc = targetTypeNode.getType().getSymbol()?.getJsDocTags().find(tag => tag.getName() === CustomJsDocTags.originalName);
-      if (originalJsDoc && originalJsDoc.getText()[0].text === sourceTypeName) {
-        sourceTypeInterface?.rename(targetTypeName);
-        sourceTypeText = targetTypeName;
-      }
-
-      // If both interfaces are found, add them to the queue for processing
-      if (targetTypeInterface && sourceTypeInterface) {
-        interfaceQueue.push({
-          targetInterface: targetTypeInterface,
-          sourceInterface: sourceTypeInterface,
-        });
-      }
-    }
+    return;
   }
 
   // If sourcefile is missing the interface, add it
   if (isInterfaceType(sourceTypeNode)) {
-    const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeText);
-    const hasInterface = currentTargetSourceFile.getInterface(sourceTypeText) !== undefined;
-    if (sourceTypeInterface && !hasInterface) {
-      currentTargetSourceFile.addInterface(sourceTypeInterface.getStructure());
+    const sourceTypeName = getTypeReferenceName(sourceTypeNode);
+    if (sourceTypeName !== null && sourceTypeName.length > 0) {
+      const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
+      if (sourceTypeInterface && !currentTargetSourceFile.getInterface(sourceTypeName)) {
+        // Add the interface to the target source file
+        currentTargetSourceFile.addInterface(sourceTypeInterface.getStructure());
+      }
     }
   }
 
-  // If types are identical, no need to do anything
-  if (targetTypeText === sourceTypeText) {
-    return;
+  // Update the type if different
+  updatePropertyTypeIfDifferent(targetProp, sourceProp);
+}
+
+/**
+ * Checks if a property type is imported
+ */
+function isImportedType(targetProp: PropertySignature): boolean {
+  const isImported = currentTargetSourceFile.getImportDeclarations().some(importDecl =>
+    importDecl.getNamedImports().some(importSpec => importSpec.getName() === targetProp.getType().getText()));
+
+  return isImported;
+}
+
+/**
+ * Handles interface type references by adding them to the processing queue
+ */
+function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
+  // If both types are interface references, find the interfaces and
+  // add them to the queue for processing
+  const targetTypeName = getTypeReferenceName(targetTypeNode);
+  const sourceTypeName = getTypeReferenceName(sourceTypeNode);
+
+  if (targetTypeName !== null && sourceTypeName !== null) {
+    // Try to find the interfaces in their respective source files
+    const targetTypeInterface = currentTargetSourceFile.getInterface(targetTypeName);
+    const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
+
+    // Check if targetInterface has a original jsdoc
+    const originalJsDoc = targetTypeInterface
+      ?.getJsDocs()
+      .find(doc => doc.getTags()[0]?.getTagName() === CustomJsDocTags.originalName);
+    if (originalJsDoc && originalJsDoc.getText() === sourceTypeName) {
+      sourceTypeInterface?.rename(targetTypeName);
+    }
+
+    // If both interfaces are found, add them to the queue for processing
+    if (targetTypeInterface && sourceTypeInterface) {
+      interfaceQueue.push({
+        targetInterface: targetTypeInterface,
+        sourceInterface: sourceTypeInterface,
+      });
+    }
+  }
+}
+
+/**
+ * Updates a property's type if it's different from the source
+ */
+function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature): void {
+  const targetTypeNode = targetProp.getTypeNode();
+  const sourceTypeNode = sourceProp.getTypeNode();
+
+  if (!targetTypeNode || !sourceTypeNode) return;
+
+  const targetTypeText = targetTypeNode.getText();
+  const sourceTypeText = sourceTypeNode.getText();
+
+  // Update the type if it's different
+  if (targetTypeText !== sourceTypeText) {
+    logger.debug(chalk.yellow(`Updating property type: ${targetProp.getName()} from ${targetTypeText} to ${sourceTypeText}`));
+    targetProp.setType(sourceTypeText);
   }
 
-  if (sourceProp.getType().isUnknown()) {
-    return;
-  }
-
-  // If we get here, types are different and need to be updated
-  targetProp.setType(sourceTypeText);
-
-  // Check if the property has a question token (optional property)
-  if (sourceProp.hasQuestionToken() !== targetProp.hasQuestionToken()) {
+  // Update optional status if different
+  if (targetProp.hasQuestionToken() !== sourceProp.hasQuestionToken()) {
     targetProp.setHasQuestionToken(sourceProp.hasQuestionToken());
   }
 
-  // Check if the property is readonly
-  if (sourceProp.isReadonly() !== targetProp.isReadonly()) {
+  // Update readonly status if different
+  if (targetProp.isReadonly() !== sourceProp.isReadonly()) {
     targetProp.setIsReadonly(sourceProp.isReadonly());
   }
 }

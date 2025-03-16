@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 // export type PrimitiveTypeKind = "string" | "number" | "boolean" | "bigint" | "symbol" | "null" | "undefined";
 // export type ObjectTypeKind = ""
 // export type TypeKind = PrimitiveTypeKind

@@ -41,8 +41,7 @@ export function deepSameStructure(obj1: unknown, obj2: unknown, depth = 0): bool
   return keys1.every(key =>
     keys2.includes(key)
     && typeof obj1[key] === typeof obj2[key]
-    && (typeof obj1[key] !== 'object' || deepSameStructure(obj1[key], obj2[key], depth + 1)),
-  );
+    && (typeof obj1[key] !== 'object' || deepSameStructure(obj1[key], obj2[key], depth + 1)));
 }
 
 const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}]|^\d/u;

@@ -20,7 +20,7 @@ function extractParams(initializer: FunctionExpression | ArrowFunction): MappedP
     let isOptional = param.isOptional();
     let defaultValue = param.getInitializer()?.getText();
     // Remove newlines and trim spaces
-    defaultValue = defaultValue?.split('\n').map(line => line.trim()).join('');
+    defaultValue = defaultValue?.replace(/\s+/g, ' ');
 
     if (param.isRestParameter()) {
       paramName = `...${paramName}`;
@@ -65,8 +65,7 @@ function extractReturnType(initializer: FunctionExpression | ArrowFunction): str
     .replaceAll('<any>', '<unknown>')
     .replaceAll('<any, any>', '<unknown, unknown>')
     .replaceAll(': any', ': unknown')
-    .replaceAll('never[];', 'unknown[];')
-  ;
+    .replaceAll('never[];', 'unknown[];');
 
   switch (returnType) {
     case 'any':
