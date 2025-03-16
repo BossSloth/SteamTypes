@@ -5,7 +5,7 @@ import { compareAndCorrectMethodTypes } from './compare-methods';
 import { logger } from './shared';
 
 enum CustomJsDocTags {
-  originalName = 'compareOriginalName'
+  originalName = 'compareOriginalName',
 }
 
 /**
@@ -32,7 +32,7 @@ let currentSourceSourceFile: SourceFile;
 export function compareAndCorrectInterfaces(
   targetSourceFile: SourceFile,
   sourceSourceFile: SourceFile,
-  interfaceName: string
+  interfaceName: string,
 ): void {
   // Get the interfaces from both source files
   const targetInterface = targetSourceFile.getInterface(interfaceName);
@@ -44,7 +44,7 @@ export function compareAndCorrectInterfaces(
 
   // Initialize global state
   interfaceQueue = [{ targetInterface, sourceInterface }];
-  
+
   // Process all interfaces in the queue
   processInterfaceQueue();
 }
@@ -57,12 +57,12 @@ function processInterfaceQueue(): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { targetInterface, sourceInterface } = interfaceQueue.shift()!;
     const interfaceId = `${targetInterface.getSourceFile().getFilePath()}:${targetInterface.getName()}`;
-    
+
     // Skip if already processed
     if (processedInterfaces.has(interfaceId)) {
       continue;
     }
-    
+
     logger.debug(chalk.cyan(`Processing interface: ${targetInterface.getName()}`));
     processedInterfaces.add(interfaceId);
 
@@ -84,15 +84,15 @@ function processInterfaceQueue(): void {
  */
 function compareAndCorrectMembers(
   targetInterface: InterfaceDeclaration,
-  sourceInterface: InterfaceDeclaration
+  sourceInterface: InterfaceDeclaration,
 ): void {
   const targetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
   const sourceMembers = sourceInterface.getMembers() as (PropertySignature | MethodSignature)[];
-  
+
   // Create maps for easier lookup
   const targetMembersMap = new Map<string, PropertySignature | MethodSignature>();
   targetMembers.forEach(member => targetMembersMap.set(member.getName(), member));
-  
+
   const sourceMembersMap = new Map<string, PropertySignature | MethodSignature>();
   sourceMembers.forEach(member => sourceMembersMap.set(member.getName(), member));
 
@@ -111,15 +111,15 @@ function compareAndCorrectMembers(
       // Property missing in target, add it
       if (sourceProp instanceof MethodSignature) {
         // Filter out @native jsdoc
-         const docs = sourceProp.getJsDocs().map(doc => doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText());
+        const docs = sourceProp.getJsDocs().map(doc => doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText());
         const filteredDocs = docs.filter(doc => doc !== '');
-        
+
         targetInterface.addMethod({
           name: propName,
           parameters: sourceProp.getParameters().map(param => ({
             name: param.getName(),
             type: param.getTypeNode()?.getText(),
-            hasQuestionToken: param.hasQuestionToken()
+            hasQuestionToken: param.hasQuestionToken(),
           })),
           returnType: sourceProp.getReturnTypeNode()?.getText(),
           hasQuestionToken: sourceProp.hasQuestionToken(),
@@ -131,15 +131,18 @@ function compareAndCorrectMembers(
           type: sourceProp.getTypeNode()?.getText(),
           hasQuestionToken: sourceProp.hasQuestionToken(),
           isReadonly: sourceProp.isReadonly(),
-          docs: sourceProp.getJsDocs().map(doc => doc.getText())
+          docs: sourceProp.getJsDocs().map(doc => doc.getText()),
         });
       }
-    } 
+
+      return;
+    }
+
     // Property exists in both, check for type differences
-    else if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
-        compareAndCorrectPropertyTypes(targetProp, sourceProp);
+    if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
+      compareAndCorrectPropertyTypes(targetProp, sourceProp);
     } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
-        compareAndCorrectMethodTypes(targetProp, sourceProp);
+      compareAndCorrectMethodTypes(targetProp, sourceProp);
     }
   }
 
@@ -160,7 +163,7 @@ function compareAndCorrectMembers(
 // eslint-disable-next-line complexity
 function compareAndCorrectPropertyTypes(
   targetProp: PropertySignature,
-  sourceProp: PropertySignature
+  sourceProp: PropertySignature,
 ): void {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
@@ -171,14 +174,15 @@ function compareAndCorrectPropertyTypes(
     if (sourceTypeNode && !targetTypeNode) {
       targetProp.setType(sourceTypeNode.getText());
     }
+
     return;
   }
 
   if (targetProp.getType().isAny()) {
-    const isImported = currentTargetSourceFile.getImportDeclarations().some(importDecl => 
-      importDecl.getNamedImports().some(importSpec => 
-        importSpec.getName() === targetProp.getType().getText()
-      )
+    const isImported = currentTargetSourceFile.getImportDeclarations().some(importDecl =>
+      importDecl.getNamedImports().some(importSpec =>
+        importSpec.getName() === targetProp.getType().getText(),
+      ),
     );
     if (isImported) {
       return;
@@ -194,7 +198,7 @@ function compareAndCorrectPropertyTypes(
     // add them to the queue for processing
     const targetTypeName = getTypeReferenceName(targetTypeNode);
     const sourceTypeName = getTypeReferenceName(sourceTypeNode);
-    
+
     if (targetTypeName !== null && sourceTypeName !== null) {
       // Try to find the interfaces in their respective source files
       const targetTypeInterface = currentTargetSourceFile.getInterface(targetTypeName);
@@ -206,16 +210,16 @@ function compareAndCorrectPropertyTypes(
         sourceTypeInterface?.rename(targetTypeName);
         sourceTypeText = targetTypeName;
       }
-      
+
       // If both interfaces are found, add them to the queue for processing
       if (targetTypeInterface && sourceTypeInterface) {
         interfaceQueue.push({
           targetInterface: targetTypeInterface,
-          sourceInterface: sourceTypeInterface
+          sourceInterface: sourceTypeInterface,
         });
       }
     }
-  } 
+  }
 
   // If sourcefile is missing the interface, add it
   if (isInterfaceType(sourceTypeNode)) {
@@ -259,6 +263,7 @@ function getTypeReferenceName(typeNode: TypeNode): string | null {
     // Extract the name from the type reference
     return typeNode.getText().split('<')[0].trim();
   }
+
   return null;
 }
 
@@ -279,7 +284,7 @@ function isInterfaceType(typeNode: Node): boolean {
  */
 function compareAndCorrectHeritageClause(
   targetInterface: InterfaceDeclaration,
-  sourceInterface: InterfaceDeclaration
+  sourceInterface: InterfaceDeclaration,
 ): void {
   const targetExtends = targetInterface.getExtends();
   const sourceExtends = sourceInterface.getExtends();
@@ -298,18 +303,18 @@ function compareAndCorrectHeritageClause(
   // Process extended interfaces
   for (const sourceExt of sourceExtends) {
     const sourceExtName = sourceExt.getText();
-    
+
     // Find the extended interface in the source file
     const sourceExtInterface = sourceInterface.getSourceFile().getInterface(sourceExtName);
-    
+
     // Find the corresponding interface in the target file
     const targetExtInterface = targetInterface.getSourceFile().getInterface(sourceExtName);
-    
+
     // If both interfaces exist, add them to the queue for processing
     if (sourceExtInterface && targetExtInterface) {
       interfaceQueue.push({
         targetInterface: targetExtInterface,
-        sourceInterface: sourceExtInterface
+        sourceInterface: sourceExtInterface,
       });
     }
   }
@@ -319,7 +324,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
   const newText = targetInterface.getFullText()
     .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
-    .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2') // Multi line comments
+    .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
   targetInterface.replaceWithText(newText.trim());
 
   const members = targetInterface.getMembers();
@@ -327,6 +332,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
     // Method signatures should come before property signatures
     if (a instanceof MethodSignature && b instanceof PropertySignature) return 1;
     if (a instanceof PropertySignature && b instanceof MethodSignature) return -1;
+
     return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
   });
 
@@ -335,7 +341,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
     let text = members[i].getFullText();
     // Make sure there is a newline between members
     if (i !== members.length - 1 && !text.startsWith('\n\n')) {
-      text = text.replace(/^\n\n*/, '')
+      text = text.replace(/^\n\n*/, '');
       members[i].replaceWithText(`\n${text}`);
     }
   }
@@ -343,7 +349,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
   // Replace all moved jsdoc back to single line comments
   const newText2 = targetInterface.getFullText()
     .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
-    .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2') // Multi line comments
+    .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
   targetInterface.replaceWithText(newText2.trim());
 
   // targetInterface.getProperties().forEach(prop => {
@@ -373,11 +379,11 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
     newText,
     '',
     '',
-    {context: 5}
+    { context: 5 },
   );
 
   // Format the diff with colors
-  return diffResult.split('\n').map(line => {
+  return diffResult.split('\n').map((line) => {
     if (line.startsWith('+')) {
       return chalk.green(line);
     } else if (line.startsWith('-')) {
@@ -403,27 +409,27 @@ export function compareAndCorrectAllInterfaces(
   sourceSourceFile: SourceFile,
   interfaceName: string,
   filePath: string,
-): string|null {
+): string | null {
   // Reset global state
   interfaceQueue = [];
   processedInterfaces = new Set<string>();
   currentTargetSourceFile = targetSourceFile;
   currentSourceSourceFile = sourceSourceFile;
-  
+
   // Store the original text of the entire source file for diff generation
   const originalSourceText = targetSourceFile.getFullText();
-  
+
   // Compare and correct the interfaces
   compareAndCorrectInterfaces(targetSourceFile, sourceSourceFile, interfaceName);
-  
+
   // Get the updated text of the entire source file
   targetSourceFile.formatText({
     indentSize: 2,
     ensureNewLineAtEndOfFile: true,
   });
-  
+
   const newSourceText = targetSourceFile.getFullText();
-  
+
   // Generate a diff of the entire source file
   return generateDiff(originalSourceText, newSourceText, filePath);
 }

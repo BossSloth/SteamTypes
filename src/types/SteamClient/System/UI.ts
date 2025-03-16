@@ -10,7 +10,7 @@ export interface UI {
   // appId is 0 if unknown app is focused
   RegisterForOverlayGameWindowFocusChanged(callback: (appId: number, param1: number) => void): Unregisterable;
 
-  //event.eKey, event.nControllerIndex
+  // event.eKey, event.nControllerIndex
   RegisterForSystemKeyEvents(callback: (event: unknown) => void): Unregisterable; // eKey
 }
 

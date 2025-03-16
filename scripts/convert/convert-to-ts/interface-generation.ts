@@ -11,18 +11,19 @@ let order = 0;
  * Creates or updates an interface definition object
  */
 export function createInterfaceDefinition(
-  obj: Record<string, unknown>, 
-  interfaceName: string, 
-  nameCounter: number|undefined,
+  obj: Record<string, unknown>,
+  interfaceName: string,
+  nameCounter: number | undefined,
   project: Project,
 ): TypeScriptInterface {
   let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
 
   if (interfaceDefinition) {
     console.error(`❌ Error: duplicate interface name?: ${interfaceName}`, obj);
+
     return interfaceDefinition;
   }
-  
+
   // Create a new interface definition
   interfaceDefinition = {
     name: interfaceName,
@@ -30,7 +31,7 @@ export function createInterfaceDefinition(
     order: order++,
     nameCounter,
   };
-  
+
   // Get all properties
   let properties = getProperties(obj);
 
@@ -48,7 +49,7 @@ export function createInterfaceDefinition(
     const value = obj[key];
     const propertyPath = `${interfaceName}.${key}`;
     const formattedName = formatPropertyName(key);
-    
+
     if (typeof value === 'function') {
       if (!context.functionsToProcess.has(interfaceName)) {
         context.functionsToProcess.set(interfaceName, new Map());
@@ -61,7 +62,7 @@ export function createInterfaceDefinition(
       } else {
         type = getType(value, propertyPath);
       }
-      
+
       const interfaceProperty = {
         name: formattedName,
         type,
@@ -79,14 +80,14 @@ export function createInterfaceDefinition(
       const interfaceProperty: InterfaceProperty = {
         name,
         type: new PrimitiveType('function'),
-        functionInfo
+        functionInfo,
       };
       interfaceDefinition.properties.push(interfaceProperty);
     }
   }
 
   context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
-  
+
   return interfaceDefinition;
 }
 
@@ -100,23 +101,23 @@ export function generateInterfaceString(interfaceDefinition: TypeScriptInterface
   } else {
     result = `export interface ${interfaceDefinition.name} {\n`;
   }
-  
+
   // First collect functions and non-functions separately
   const functions: string[] = [];
   const nonFunctions: string[] = [];
-  
+
   const sortedProperties = interfaceDefinition.properties.sort(propertySorter);
   // Process all properties
   for (const property of sortedProperties) {
     if (property.functionInfo) {
-      const paramsList = property.functionInfo.params.map(param => {
+      const paramsList = property.functionInfo.params.map((param) => {
         let paramStr = param.name;
-        
+
         // Add optional marker for optional parameters
         if (param.optional) {
           paramStr += '?';
         }
-        
+
         paramStr += `: ${param.type}`;
 
         return paramStr;
@@ -135,23 +136,24 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
       nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type.toString()};`);
     }
   }
-  
+
   // Add functions first
   if (functions.length > 0) {
     result += `${functions.join('\n\n')}\n`;
-    
+
     // Add empty line between functions and properties if both exist
     if (nonFunctions.length > 0) {
       result += '\n';
     }
   }
-  
+
   // Add non-function properties
   if (nonFunctions.length > 0) {
     result += `${nonFunctions.join('\n\n')}\n`;
   }
-  
+
   result += '}\n';
+
   return result;
 }
 
@@ -160,7 +162,7 @@ function propertySorter(a: InterfaceProperty, b: InterfaceProperty): number {
 }
 
 const singleQuote = "'".charCodeAt(0);
-const space = " ".charCodeAt(0);
+const space = ' '.charCodeAt(0);
 
 function propertyStringSorter(a: string, b: string): number {
   a = a.toLowerCase();
@@ -177,7 +179,9 @@ function propertyStringSorter(a: string, b: string): number {
     while (charB === singleQuote || charB === space) charB = b.charCodeAt(++j);
 
     if (charA !== charB) return charA - charB;
-    i++; j++;
+
+    i++;
+    j++;
   }
 
   return (lenA - i) - (lenB - j);

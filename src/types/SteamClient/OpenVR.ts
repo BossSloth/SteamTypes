@@ -66,7 +66,7 @@ export interface Keyboard {
 
   SendDone(): unknown;
 
-  SendText(key: string): unknown; //???
+  SendText(key: string): unknown; // ???
   Show(): unknown;
 }
 

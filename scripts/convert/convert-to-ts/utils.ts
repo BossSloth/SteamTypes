@@ -3,7 +3,7 @@ import { ConversionContext, defaultProtoProps } from './types';
 export const context: ConversionContext = {
   addImport(moduleName: string, type: string, defaultImport = false): void {
     if (!context.imports.has(moduleName)) {
-      context.imports.set(moduleName, {types: new Set<string>(), defaultImport});
+      context.imports.set(moduleName, { types: new Set<string>(), defaultImport });
     }
     context.imports.get(moduleName)?.types.add(type);
   },
@@ -31,17 +31,17 @@ export function initContext(mainInterfaceName: string): void {
  */
 export function deepSameStructure(obj1: unknown, obj2: unknown, depth = 0): boolean {
   if (depth > 10) return false;
-  if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
   if (!obj1 || !obj2) return obj1 === obj2;
 
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   if (keys1.length !== keys2.length) return false;
 
-  return keys1.every(key => 
-      keys2.includes(key) && 
-      typeof obj1[key] === typeof obj2[key] && 
-      (typeof obj1[key] !== "object" || deepSameStructure(obj1[key], obj2[key], depth + 1))
+  return keys1.every(key =>
+    keys2.includes(key)
+    && typeof obj1[key] === typeof obj2[key]
+    && (typeof obj1[key] !== 'object' || deepSameStructure(obj1[key], obj2[key], depth + 1)),
   );
 }
 
@@ -54,20 +54,20 @@ export function formatPropertyName(propName: string): string {
     // If it has spaces, dashes, or dots or other non-alphanumeric characters, wrap it in quotes
     return `'${propName}'`;
   }
-  
+
   return propName;
 }
 
 export function formatInterfaceName(interfaceName: string): string {
-  let trimmed = interfaceName.replaceAll(new RegExp(specialCharactersRegex.source, 'gu'), '')
+  let trimmed = interfaceName.replaceAll(new RegExp(specialCharactersRegex.source, 'gu'), '');
   // Recursively remove numbers
   while (trimmed.match(/^\d/)) {
     trimmed = trimmed.replace(/^\d/g, '');
   }
   if (trimmed.length === 0) {
-    return 'InvalidName'
+    return 'InvalidName';
   }
-  
+
   return trimmed;
 }
 
@@ -79,10 +79,10 @@ export function formatInterfaceName(interfaceName: string): string {
 export function getProperties(obj: unknown): string[] {
   const properties = new Set<string>();
   let currentObj = obj;
-  
+
   do {
     Object.getOwnPropertyNames(currentObj).map(item => properties.add(item));
   } while ((currentObj = Object.getPrototypeOf(currentObj)) !== null);
-  
+
   return [...properties.keys()].filter(item => !defaultProtoProps.includes(item));
 }

@@ -13,57 +13,57 @@ export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceN
   const startTime = performance.now();
   // Initialize the context
   initContext(mainInterfaceName);
-  
+
   // Add the main interface
   context.interfacesToProcess.set(mainInterfaceName, [obj, undefined]);
-  
+
   // Process all interfaces
   // We need to iterate in a loop because new interfaces might be added during processing
   let processedCount = 0;
-  
+
   while (processedCount < context.interfacesToProcess.size) {
     const entries = Array.from(context.interfacesToProcess.entries());
-    
+
     for (let i = processedCount; i < entries.length; i++) {
       const [name, [objValue, nameCounter]] = entries[i];
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       createInterfaceDefinition(objValue, name, nameCounter, globalThis.tsProject);
     }
-    
+
     processedCount = entries.length;
   }
-  
+
   // Merge similar interfaces
   const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions);
-  
+
   // Generate interface strings
   let result = '';
   const processedNames = new Set<string>();
 
   const sortedInterfaces = Array.from(mergedInterfaces.entries()).sort((a, b) => a[1].order - b[1].order);
-  
+
   // Then add all other interfaces
   for (const [name, interfaceObj] of sortedInterfaces) {
     // Skip already processed interfaces and the main interface
     if (processedNames.has(name)) {
       continue;
     }
-    
+
     // Skip duplicate interfaces (those that were merged)
     if (processedNames.has(interfaceObj.name)) {
       continue;
     }
-    
+
     if (result) result += '\n';
     result += generateInterfaceString(interfaceObj);
     processedNames.add(interfaceObj.name);
   }
-  
+
   // Add imports
   if (context.imports.size > 0) {
     result = `\n${result}`;
     const sortedImports = Array.from(context.imports.entries()).sort((a, b) => b[0].localeCompare(a[0]));
-    for (const [moduleName, {types, defaultImport}] of sortedImports) {
+    for (const [moduleName, { types, defaultImport }] of sortedImports) {
       if (defaultImport ?? false) {
         if (types.size > 1) {
           throw new Error('Cannot import multiple types with default import');

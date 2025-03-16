@@ -105,7 +105,7 @@ export interface DownloadItem {
   paused: boolean;
   /** Queue index, -1 if the item is unqueued */
   queue_index: number;
-  /** Build ID that this download is moving towards. This can be the same as buildid.*/
+  /** Build ID that this download is moving towards. This can be the same as buildid. */
   target_buildid: number;
   /** Total bytes to download, sum across all content types */
   total_bytes: number;

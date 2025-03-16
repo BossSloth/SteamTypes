@@ -29,8 +29,8 @@ export interface RemotePlay {
 
   GetClientID(): Promise<string>;
 
-  GetClientStreamingBitrate(): Promise<number>; //todo: -1 not streaming??
-  GetClientStreamingQuality(): Promise<number>; //todo: -1 not streaming??
+  GetClientStreamingBitrate(): Promise<number>; // todo: -1 not streaming??
+  GetClientStreamingQuality(): Promise<number>; // todo: -1 not streaming??
   GetControllerType(param0: number): Promise<EControllerType>; // todo: param0 with value 0 is host controller type - param0 is likely an index of clients or guestId?
   GetGameSystemVolume(): Promise<number>;
 

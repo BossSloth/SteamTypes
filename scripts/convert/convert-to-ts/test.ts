@@ -41,14 +41,14 @@ export function testConvert(): void {
     //   { id: 1, name: 'Array 1', type: 'tags', status: 'active', createdAt: new Date(), tags: ['tag1', 'tag2'] },
     //   { id: 2, name: 'Array 2', type: 'tags', status: 'active', createdAt: new Date(), tags: [1, 2, 3] }
     // ],
-    
+
     // // Test case for arrays with objects that have array properties
     // // with different lengths
     // arrayWithDifferentLengths: [
     //   { id: 1, name: 'Length 1', type: 'array', status: 'active', createdAt: new Date(), values: [1] },
     //   { id: 2, name: 'Length 2', type: 'array', status: 'active', createdAt: new Date(), values: [1, 2, 3, 4, 5] }
     // ],
-    
+
     // // Test case for arrays with objects that have nested arrays
     // arrayWithNestedArrays: [
     //   { id: 1, name: 'Nested 1', type: 'matrix', status: 'active', createdAt: new Date(), matrix: [[1, 2], [3, 4]] },
@@ -85,7 +85,7 @@ export function testConvert(): void {
   const startTime = performance.now();
   // const extendedApps = Array(100).fill(allApps.apps).flat();
   // allApps.apps = extendedApps;
-  
+
   const tsInterfaces = convertToTypescript(testObj, 'TestObject');
   const endTime = performance.now();
   console.log(tsInterfaces);

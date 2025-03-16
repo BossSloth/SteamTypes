@@ -119,7 +119,7 @@ const iterableTestFunctions: Record<string, TestFunction> = {
       yield Promise.resolve(1);
       yield Promise.resolve(2);
     },
-    expected: 'asyncGenerator(): object|unknown;',
+    expected: 'asyncGenerator(): object | unknown;',
   },
   customIterable: {
     func: () => {

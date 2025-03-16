@@ -2,19 +2,19 @@ import { ArrowFunction, FunctionExpression, Project, TypeFormatFlags, ts } from 
 import { FunctionInfo, MappedParam } from './types';
 
 // Type format flags for consistent output
-const typeFormatFlags = 
-  TypeFormatFlags.UseSingleQuotesForStringLiteralType |
-  TypeFormatFlags.UseFullyQualifiedType;
+const typeFormatFlags
+    = TypeFormatFlags.UseSingleQuotesForStringLiteralType
+      | TypeFormatFlags.UseFullyQualifiedType;
 
 const enableDiagnostics = false;
 
 /**
  * Extracts parameter information from a function
  */
-function extractParams(initializer: FunctionExpression|ArrowFunction): MappedParam[] {
+function extractParams(initializer: FunctionExpression | ArrowFunction): MappedParam[] {
   const parameters = initializer.getParameters();
 
-  return parameters.map(param => {
+  return parameters.map((param) => {
     let paramName = param.getName();
     let paramType = param.getType().getText(undefined, typeFormatFlags);
     let isOptional = param.isOptional();
@@ -31,10 +31,14 @@ function extractParams(initializer: FunctionExpression|ArrowFunction): MappedPar
 
     switch (paramType) {
       case '{}':
-      case 'any': paramType = 'unknown'; break;
+      case 'any':
+        paramType = 'unknown';
+        break;
       case 'any[]':
       case '[]':
-      case 'never[]': paramType = 'unknown[]'; break;
+      case 'never[]':
+        paramType = 'unknown[]';
+        break;
       default: break;
     }
 
@@ -42,7 +46,7 @@ function extractParams(initializer: FunctionExpression|ArrowFunction): MappedPar
       name: paramName,
       type: paramType || 'unknown',
       optional: isOptional,
-      defaultValue
+      defaultValue,
     };
   });
 }
@@ -50,24 +54,30 @@ function extractParams(initializer: FunctionExpression|ArrowFunction): MappedPar
 /**
  * Extracts return type from a function
  */
-function extractReturnType(initializer: FunctionExpression|ArrowFunction): string {
+function extractReturnType(initializer: FunctionExpression | ArrowFunction): string {
   let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
-  
+
   // Always add spaces between types
   returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');
 
   returnType = returnType
-  .replaceAll('any[];', 'unknown[];')
-  .replaceAll('<any>', '<unknown>')
-  .replaceAll('<any, any>', '<unknown, unknown>')
-  .replaceAll(': any', ': unknown')
-  .replaceAll('never[];', 'unknown[];')
+    .replaceAll('any[];', 'unknown[];')
+    .replaceAll('<any>', '<unknown>')
+    .replaceAll('<any, any>', '<unknown, unknown>')
+    .replaceAll(': any', ': unknown')
+    .replaceAll('never[];', 'unknown[];')
   ;
 
   switch (returnType) {
-    case 'any': returnType = 'unknown'; break;
-    case 'any[]': returnType = 'unknown[]'; break;
-    case '{}': returnType = 'object|unknown'; break;
+    case 'any':
+      returnType = 'unknown';
+      break;
+    case 'any[]':
+      returnType = 'unknown[]';
+      break;
+    case '{}':
+      returnType = 'object | unknown';
+      break;
     default: break;
   }
 
@@ -77,9 +87,9 @@ function extractReturnType(initializer: FunctionExpression|ArrowFunction): strin
 /**
  * Generates JSDoc for a function
  */
-function generateJsDoc(params: MappedParam[]): string[]|undefined {
+function generateJsDoc(params: MappedParam[]): string[] | undefined {
   const jsDoc: string[] = [];
-  
+
   // Add parameters
   for (const param of params) {
     if (param.defaultValue !== undefined) {
@@ -90,7 +100,7 @@ function generateJsDoc(params: MappedParam[]): string[]|undefined {
   if (jsDoc.length === 0) {
     return undefined;
   }
-  
+
   return jsDoc;
 }
 
@@ -105,7 +115,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
       functionInfos.set(name, {
         params: [],
         returnType: 'unknown',
-        jsDoc: ['@native']
+        jsDoc: ['@native'],
       });
     }
   }
@@ -145,7 +155,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
  * @param func The function to convert to source code
  * @returns The TypeScript source code or null for native functions
  */
-function createSourceCode(name: string, func: Function): string|null {
+function createSourceCode(name: string, func: Function): string | null {
   const funcStr = func.toString();
 
   if (funcStr.includes('[native code]')) {
@@ -153,23 +163,23 @@ function createSourceCode(name: string, func: Function): string|null {
   }
 
   const prefix = `const _${name} = `;
-  
+
   // Case 1: Regular function or arrow function
   if (funcStr.startsWith('function') || funcStr.startsWith('(')) {
     return `${prefix}${funcStr};`;
-  } 
-  
+  }
+
   // Case 2: Async function
   if (funcStr.startsWith('async')) {
     // Handle async function or async arrow function
     if (funcStr.startsWith('async function') || funcStr.startsWith('async (')) {
       return `${prefix}${funcStr};`;
-    } 
-    
+    }
+
     // Handle async shorthand method
     return `${prefix}${funcStr.replace('async', 'async function')};`;
-  } 
-  
+  }
+
   // Case 3: Method shorthand or other format
   return `${prefix}function ${funcStr};`;
 }

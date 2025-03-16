@@ -26,7 +26,7 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
       expected: 'emptyReturn(): void;',
     },
   //#endregion
-  
+
   //#region Direct Return Types
     directReturnNull: {
       func: () => null,
@@ -70,14 +70,14 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
     },
     directReturnEmptyObject: {
       func: () => ({}),
-      expected: 'directReturnEmptyObject(): object|unknown;',
+      expected: 'directReturnEmptyObject(): object | unknown;',
     },
     directReturnExpression: {
       func: (x) => x + 1,
       expected: 'directReturnExpression(x: unknown): unknown;',
     },
   //#endregion
-  
+
   //#region Regular Return Types
     returnTrue: {
       func: () => {
@@ -140,7 +140,7 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
       func: () => {
         return {};
       },
-      expected: 'returnEmptyObject(): object|unknown;',
+      expected: 'returnEmptyObject(): object | unknown;',
     },
     returnComplexObject: {
       func: () => {
@@ -149,7 +149,7 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
       expected: 'returnComplexObject(): { a: number; b: string; c: () => number; };',
     },
   //#endregion
-  
+
   //#region Parameters
     returnParameter: {
       func: (param) => {
@@ -209,7 +209,7 @@ complexDefaultParameters(a?: unknown, b?: unknown[], c?: () => void): 'string' |
 commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
     },
   //#endregion
-  
+
   //#region Multiple Return Types
     multipleReturnTypes1: {
       func: (x) => {
@@ -275,7 +275,7 @@ commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
       expected: 'multipleReturnTypesWithObjects(type: unknown): { name: string; id: number; permissions?: undefined; } | { name: string; permissions: string[]; id?: undefined; } | null;',
     },
   //#endregion
-  
+
   //#region Edge Cases
     nestedReturns: {
       func: (x) => {
@@ -305,9 +305,9 @@ commaInDefaultParameter(a: unknown, b: unknown, c?: string): string;`,
     arrowFuncInFunction: {
       func: function func(x) {
         const i = () => {};
-  
+
         i();
-  
+
         return false;
       },
       expected: 'arrowFuncInFunction(x: unknown): boolean;',

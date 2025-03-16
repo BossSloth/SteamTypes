@@ -1,5 +1,6 @@
 import pluginJs from '@eslint/js';
-import { globalIgnores } from "eslint/config";
+import stylistic from '@stylistic/eslint-plugin';
+import { globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -11,7 +12,7 @@ export default tseslint.config(
       globals: globals.node,
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.mjs']
+          allowDefaultProject: ['*.mjs'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -20,23 +21,32 @@ export default tseslint.config(
 
   pluginJs.configs.all,
   ...tseslint.configs.all,
-  // stylistic.configs.all,
-  // stylistic.configs['disable-legacy'],
-  // stylistic.configs.customize({
-  //   indent: 2,
-  //   semi: true,
-  //   quotes: 'single',
-  //   braceStyle: '1tbs',
-  // }),
+  stylistic.configs.recommended,
+  stylistic.configs['disable-legacy'],
+  stylistic.configs.customize({
+    indent: 2,
+    semi: true,
+    quotes: 'single',
+    braceStyle: '1tbs',
+    blockSpacing: true,
+    commaDangle: 'always-multiline',
+  }),
   {
     rules: {
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
       '@typescript-eslint/prefer-literal-enum-member': ['error', { allowBitwiseExpressions: true }],
       'func-style': ['error', 'declaration'],
       'max-lines-per-function': ['error', { max: 100 }],
-      'curly': ['error', 'multi-line'],
+      curly: ['error', 'multi-line'],
       // '@stylistic/function-call-argument-newline': ['error', 'consistent'],
-      '@typescript-eslint/member-ordering': ['error', {interfaces: ['method', 'field']}],
+      '@stylistic/quote-props': ['error', 'as-needed'],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      '@stylistic/member-delimiter-style': ['error', { singleline: { requireLast: true } }],
+      '@typescript-eslint/member-ordering': ['error', { interfaces: ['method', 'field'] }],
+      '@stylistic/padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: ['return', 'function', 'class', 'interface', 'type', 'enum'] },
+      ],
 
       '@typescript-eslint/prefer-regexp-exec': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
@@ -50,7 +60,7 @@ export default tseslint.config(
       'one-var': 'off',
       '@typescript-eslint/no-magic-numbers': 'off',
       'no-magic-numbers': 'off',
-      'camelcase': 'off',
+      camelcase: 'off',
       'no-underscore-dangle': 'off',
       'no-use-before-define': 'off',
       '@typescript-eslint/no-use-before-define': 'off',
@@ -67,7 +77,7 @@ export default tseslint.config(
       'no-ternary': 'off',
       'no-continue': 'off',
       'no-console': 'off',
-      'radix': 'off',
+      radix: 'off',
       '@typescript-eslint/max-params': 'off',
       '@typescript-eslint/prefer-enum-initializers': 'off',
       '@typescript-eslint/consistent-type-exports': 'off',
@@ -89,16 +99,12 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-redundant-type-constituents': 'off',
       '@typescript-eslint/no-shadow': 'off',
-      // '@stylistic/padding-line-between-statements': [
-      //   'error',
-      //   { blankLine: 'always', prev: '*', next: 'function' },
-      // ],    
-    }
+    },
   },
   {
     files: ['src/types/SteamClient/**'],
     rules: {
-      '@typescript-eslint/member-ordering': 'off', //TODO: remove this when member-ordering is fixed in all SteamClient files
-    }
-  }
+      '@typescript-eslint/member-ordering': 'off', // TODO: remove this when member-ordering is fixed in all SteamClient files
+    },
+  },
 );

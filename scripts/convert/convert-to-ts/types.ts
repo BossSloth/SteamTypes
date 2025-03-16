@@ -1,4 +1,4 @@
-import { Type } from "./Type";
+import { Type } from './Type';
 
 /**
  * Represents a mapped function parameter
@@ -46,9 +46,9 @@ export interface TypeScriptInterface {
 export interface ConversionContext {
   addImport(moduleName: string, type: string, defaultImport?: boolean): void;
 
-  interfacesToProcess: Map<string, [Record<string, unknown>, number|undefined]>; // Key: interface name, Value: object interface is based on
+  interfacesToProcess: Map<string, [Record<string, unknown>, number | undefined]>; // Key: interface name, Value: object interface is based on
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
-  imports: Map<string, {types: Set<string>, defaultImport?: boolean}>; // Key: module name, Value: Set of imported types
+  imports: Map<string, { types: Set<string>; defaultImport?: boolean; }>; // Key: module name, Value: Set of imported types
   processedObjectPaths: Map<unknown, string>;
   mainInterfaceName: string;
   functionsToProcess: Map<string, Map<string, Function>>; // Key: interface name, Value: Map of function name to function
@@ -58,36 +58,36 @@ export interface ConversionContext {
  * Default prototype properties to exclude
  */
 export const defaultProtoProps = [
-  "constructor",
-  "__defineGetter__",
-  "__defineSetter__",
-  "hasOwnProperty",
-  "__lookupGetter__",
-  "__lookupSetter__",
-  "isPrototypeOf",
-  "propertyIsEnumerable",
-  "toString",
-  "valueOf",
-  "__proto__",
-  "toLocaleString"
+  'constructor',
+  '__defineGetter__',
+  '__defineSetter__',
+  'hasOwnProperty',
+  '__lookupGetter__',
+  '__lookupSetter__',
+  'isPrototypeOf',
+  'propertyIsEnumerable',
+  'toString',
+  'valueOf',
+  '__proto__',
+  'toLocaleString',
 ];
 
 export const defaultJsProtoBufProps = [
-  "clone",
-  "cloneMessage",
-  "getClassName",
-  "getExtension",
-  "setExtension",
-  "getJsPbMessageId",
-  "serializeBase64String",
-  "serializeBinary",
-  "syncMapFields_",
-  "toObject",
-  "toArray",
-  "array",
-  "arrayIndexOffset_",
-  "convertedPrimitiveFields_",
-  "messageId_",
-  "pivot_",
-  "wrappers_"
+  'clone',
+  'cloneMessage',
+  'getClassName',
+  'getExtension',
+  'setExtension',
+  'getJsPbMessageId',
+  'serializeBase64String',
+  'serializeBinary',
+  'syncMapFields_',
+  'toObject',
+  'toArray',
+  'array',
+  'arrayIndexOffset_',
+  'convertedPrimitiveFields_',
+  'messageId_',
+  'pivot_',
+  'wrappers_',
 ];

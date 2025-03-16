@@ -2,14 +2,14 @@ import {
   advancedTestFunctions,
   complexObjectTestFunctions,
   dataStructureTestFunctions,
-  returnTypesTestFunctions
-} from "./functions";
+  returnTypesTestFunctions,
+} from './functions';
 import {
   advancedPropertyTests,
   basicPropertyTests,
   edgeCasePropertyTests,
-  mergedInterfaceTests
-} from "./properties";
+  mergedInterfaceTests,
+} from './properties';
 
 export interface TestFunction {
   func: Function;
@@ -52,7 +52,7 @@ export const testSuites: TestSuite[] = [
     name: 'Complex Object Return Types',
     interfaceName: 'ComplexObjectTypes',
     testObject: mapFunctionsToTestSuite(complexObjectTestFunctions),
-    testFunctions: complexObjectTestFunctions,  
+    testFunctions: complexObjectTestFunctions,
   },
   {
     name: 'Basic Property Tests',
@@ -150,7 +150,7 @@ export const testSuites: TestSuite[] = [
 ];
 
 // Add circular reference to EdgeCases test object
-const edgeCasesTestSuite = testSuites.find((suite) => suite.name === 'Edge Cases');
+const edgeCasesTestSuite = testSuites.find(suite => suite.name === 'Edge Cases');
 if (edgeCasesTestSuite) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const circularObj: any = {};

@@ -41,7 +41,7 @@ export interface Input {
 
   DeletePersonalControllerConfiguration(param0: unknown): unknown;
 
-  //f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.DuplicateControllerConfigurationSourceMode(this.m_unControllerIndex, e))), this.SaveEditingConfiguration(e), this
+  // f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.DuplicateControllerConfigurationSourceMode(this.m_unControllerIndex, e))), this.SaveEditingConfiguration(e), this
   DuplicateControllerConfigurationSourceMode(controllerIndex: number, param1: unknown): unknown;
 
   EndControllerDeviceSupportFlow(): unknown;
@@ -94,8 +94,8 @@ export interface Input {
   QueryControllerConfigsForApp(appId: number, controllerIndex: number, param2: boolean): unknown;
 
   RegisterForActiveControllerChanges: Unregisterable; // {"nActiveController":0}
-  //param0 - e possibly appid?
-  //param1 - some index?
+  // param0 - e possibly appid?
+  // param1 - some index?
   RegisterForConfigSelectionChanges(callback: (param0: number, param1: number) => void): Unregisterable;
 
   RegisterForControllerAccountChanges: Unregisterable;
@@ -152,7 +152,7 @@ export interface Input {
 
   RegisterForRemotePlayConfigChanges(callback: () => void): Unregisterable;
 
-  //data.appId, data.ulConfigId
+  // data.appId, data.ulConfigId
   RegisterForShowControllerLayoutPreviewMessages(callback: (data: unknown) => void): Unregisterable;
 
   /*
@@ -167,7 +167,7 @@ export interface Input {
 
   RegisterForTouchMenuMessages(callback: (touchMenuMessage: TouchMenuMessage) => void): Unregisterable;
 
-  //param0 - index?
+  // param0 - index?
   RegisterForUIVisualization(param0: unknown, param1: unknown, param2: unknown): Unregisterable;
 
   RegisterForUnboundControllerListChanges(callback: (m_unboundControllerList: unknown) => void): Unregisterable; // param0 is an array
@@ -199,7 +199,7 @@ export interface Input {
 
   SaveEditingControllerConfiguration(controllerIndex: number, sharedConfig: boolean): unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.sL, (e => SteamClient.Input.SetControllerConfigurationModeShiftBinding(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.sL, (e => SteamClient.Input.SetControllerConfigurationModeShiftBinding(this.m_unControllerIndex, e)))
   SetControllerConfigurationModeShiftBinding(controllerIndex: number, param1: unknown): unknown;
 
   SetControllerHapticSetting(controllerIndex: number, eHapticSetting: unknown): unknown;
@@ -211,7 +211,7 @@ export interface Input {
   SetControllerNintendoLayoutSetting: unknown;
   SetControllerPersonalizationName: unknown;
 
-  //param0 - nLStickDeadzone, bSWAntiDrift, nRHapticStrength, flRPadPressureCurve
+  // param0 - nLStickDeadzone, bSWAntiDrift, nRHapticStrength, flRPadPressureCurve
   /*
                 SteamClient.Input.SetControllerPersonalizationSetting("nLStickDeadzone", e.nLStickDeadzone),
                 SteamClient.Input.SetControllerPersonalizationSetting("nRStickDeadzone", e.nRStickDeadzone),
@@ -236,7 +236,7 @@ export interface Input {
      */
   SetControllerPersonalizationSetting(param0: string, param1: number): unknown;
 
-  //param0 - flGyroStationaryTolerance, flAccelerometerStationaryTolerance,
+  // param0 - flGyroStationaryTolerance, flAccelerometerStationaryTolerance,
   /*
                     SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroNaturalSensitivity", e.flGyroNaturalSensitivity),
                     SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroXYRatio", e.flGyroXYRatio),
@@ -275,19 +275,19 @@ export interface Input {
      */
   SetEditingControllerConfigurationActionSet(controllerIndex: number, param1: unknown): unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.io, (e => SteamClient.Input.SetEditingControllerConfigurationInputActivator(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.io, (e => SteamClient.Input.SetEditingControllerConfigurationInputActivator(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationInputActivator(controllerIndex: number, param1: unknown): unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.tH, (e => SteamClient.Input.SetEditingControllerConfigurationInputActivatorEnabled(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.tH, (e => SteamClient.Input.SetEditingControllerConfigurationInputActivatorEnabled(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationInputActivatorEnabled(controllerIndex: number, param1: unknown): unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.J2, (e => SteamClient.Input.SetEditingControllerConfigurationInputBinding(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.J2, (e => SteamClient.Input.SetEditingControllerConfigurationInputBinding(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationInputBinding(controllerIndex: number, param1: unknown): unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.Sz, (e => SteamClient.Input.SetEditingControllerConfigurationMiscSetting(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.Sz, (e => SteamClient.Input.SetEditingControllerConfigurationMiscSetting(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationMiscSetting(controllerIndex: number, param1: unknown): unknown;
 
-  //f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.SetEditingControllerConfigurationSourceMode(this.m_unControllerIndex, e)))
+  // f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.SetEditingControllerConfigurationSourceMode(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationSourceMode(controllerIndex: number, param1: unknown): unknown;
 
   SetGamepadKeyboardText(param0: boolean, param1: string): unknown;
@@ -343,7 +343,7 @@ export interface Input {
 
   SwapControllerConfigurationSourceModes: unknown;
 
-  //this.SetEditingConfigurationValue(e, t, c.Qb, (e => SteamClient.Input.SwapControllerModeInputBindings(this.m_unControllerIndex, e)))
+  // this.SetEditingConfigurationValue(e, t, c.Qb, (e => SteamClient.Input.SwapControllerModeInputBindings(this.m_unControllerIndex, e)))
   SwapControllerModeInputBindings(controllerIndex: number, param1: unknown): unknown;
 
   SwapControllerOrder(controllerIndex1: number, controllerIndex2: number): unknown;

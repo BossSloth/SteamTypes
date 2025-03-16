@@ -810,7 +810,7 @@ export interface GameAction {
   strTaskName: LaunchAppTask;
   strTaskDetails: string;
   nLaunchOption: number;
-  nSecondsRemaing: number; //fixme: not a typo, actually valve
+  nSecondsRemaing: number; // fixme: not a typo, actually valve
   strNumDone: string;
   strNumTotal: string;
   bWaitingForUI: boolean;
