@@ -1,8 +1,7 @@
 import { Unregisterable } from './shared';
 
 export interface OpenVR {
-  Device: VRDevice;
-  DeviceProperties: DeviceProperties;
+  ExtendActivityTimeout(): unknown;
 
   /**
    * @throws OperationResponse if mutual capabilities haven't been loaded.
@@ -13,16 +12,13 @@ export interface OpenVR {
 
   InstallVR(): unknown;
 
-  Keyboard: Keyboard;
-  PathProperties: PathProperties;
-
   QuitAllVR(): unknown;
 
-  RegisterForButtonPress: Unregisterable;
+  RegisterForButtonPress(): Unregisterable;
 
   RegisterForHMDActivityLevelChanged(callback: (m_eHMDActivityLevel: EHMDActivityLevel) => void): Unregisterable;
 
-  RegisterForInstallDialog: Unregisterable;
+  RegisterForInstallDialog(): Unregisterable;
 
   RegisterForStartupErrors(callback: (clientError: unknown, initError: unknown, initErrorString: string) => void): Unregisterable;
 
@@ -32,28 +28,45 @@ export interface OpenVR {
 
   RegisterForVRSceneAppChange(callback: (param0: number) => void): Unregisterable;
 
-  SetOverlayInteractionAffordance: unknown;
+  SetOverlayInteractionAffordance(): unknown;
 
-  StartVR: unknown;
-  TriggerOverlayHapticEffect: unknown;
+  StartVR(): unknown;
+
+  TriggerOverlayHapticEffect(): unknown;
+
+  Device: VRDevice;
+
+  DeviceProperties: DeviceProperties;
+
+  Keyboard: Keyboard;
+
+  PathProperties: PathProperties;
+
   VRNotifications: VRNotifications;
+
   VROverlay: VROverlay;
 }
 
 export interface VRDevice {
-  BIsConnected: unknown;
-  RegisterForDeviceConnectivityChange: Unregisterable;
+  BIsConnected(): unknown;
+
+  RegisterForDeviceConnectivityChange(): Unregisterable;
 
   RegisterForVRDeviceSeenRecently(callback: (m_bVRDeviceSeenRecently: unknown) => void): Unregisterable;
 }
 
 export interface DeviceProperties {
-  GetBoolDeviceProperty: unknown;
-  GetDoubleDeviceProperty: unknown;
-  GetFloatDeviceProperty: unknown;
-  GetInt32DeviceProperty: unknown;
-  GetStringDeviceProperty: unknown;
-  RegisterForDevicePropertyChange: Unregisterable;
+  GetBoolDeviceProperty(): unknown;
+
+  GetDoubleDeviceProperty(): unknown;
+
+  GetFloatDeviceProperty(): unknown;
+
+  GetInt32DeviceProperty(): unknown;
+
+  GetStringDeviceProperty(): unknown;
+
+  RegisterForDevicePropertyChange(): Unregisterable;
 }
 
 export interface Keyboard {
@@ -66,22 +79,34 @@ export interface Keyboard {
 
   SendDone(): unknown;
 
-  SendText(key: string): unknown; // ???
+  // ???
+  SendText(key: string): unknown;
+
   Show(): unknown;
 }
 
 export interface PathProperties {
-  GetBoolPathProperty: unknown;
-  GetDoublePathProperty: unknown;
-  GetFloatPathProperty: unknown;
-  GetInt32PathProperty: unknown;
-  GetStringPathProperty: unknown;
-  RegisterForPathPropertyChange: unknown;
-  SetBoolPathProperty: unknown;
-  SetDoublePathProperty: unknown;
-  SetFloatPathProperty: unknown;
-  SetInt32PathProperty: unknown;
-  SetStringPathProperty: unknown;
+  GetBoolPathProperty(): unknown;
+
+  GetDoublePathProperty(): unknown;
+
+  GetFloatPathProperty(): unknown;
+
+  GetInt32PathProperty(): unknown;
+
+  GetStringPathProperty(): unknown;
+
+  RegisterForPathPropertyChange(): unknown;
+
+  SetBoolPathProperty(): unknown;
+
+  SetDoublePathProperty(): unknown;
+
+  SetFloatPathProperty(): unknown;
+
+  SetInt32PathProperty(): unknown;
+
+  SetStringPathProperty(): unknown;
 }
 
 export interface VRNotifications {
@@ -91,17 +116,21 @@ export interface VRNotifications {
 }
 
 export interface VROverlay {
-  HideDashboard: unknown;
-
   IsDashboardVisible(): Promise<boolean>;
 
-  RegisterForButtonPress: Unregisterable;
-  RegisterForCursorMovement: Unregisterable;
-  RegisterForThumbnailChanged: Unregisterable;
-  RegisterForVisibilityChanged: Unregisterable;
-  ShowDashboard: unknown;
-
   SwitchToDashboardOverlay(param0: string): void;
+
+  HideDashboard: unknown;
+
+  RegisterForButtonPress: Unregisterable;
+
+  RegisterForCursorMovement: Unregisterable;
+
+  RegisterForThumbnailChanged: Unregisterable;
+
+  RegisterForVisibilityChanged: Unregisterable;
+
+  ShowDashboard: unknown;
 }
 
 export enum EHMDActivityLevel {

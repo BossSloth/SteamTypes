@@ -32,25 +32,6 @@ export interface Parental {
  */
 export interface ParentalSettings {
   /**
-   * Indicates whether parental settings are enabled.
-   */
-  enabled: boolean;
-  /**
-   * Indicates whether parental settings are locked.
-   */
-  locked: boolean;
-  /**
-   * Bitmask representing enabled features.
-   * - Bit 0: Unknown (@todo Please provide more details if known)
-   * - Bit 1: Online content & features - Steam Store
-   * - Bit 2: Online content & features - Community-generated content
-   * - Bit 3: Online content & features - My online profile, screenshots, and achievements
-   * - Bit 4: Online content & features - Friends, chat, and groups
-   * - Bit 5-11: Unknown (@todo Please provide more details if known)
-   * - Bit 12: Library content - 0: Only games I choose, 1: All games
-   */
-  features: number;
-  /**
    * Indicates whether all apps are allowed.
    */
   allowallapps: boolean;
@@ -63,6 +44,25 @@ export interface ParentalSettings {
    * Custom list of allowed applications.
    */
   customlist: AppList;
+  /**
+   * Indicates whether parental settings are enabled.
+   */
+  enabled: boolean;
+  /**
+   * Bitmask representing enabled features.
+   * - Bit 0: Unknown (@todo Please provide more details if known)
+   * - Bit 1: Online content & features - Steam Store
+   * - Bit 2: Online content & features - Community-generated content
+   * - Bit 3: Online content & features - My online profile, screenshots, and achievements
+   * - Bit 4: Online content & features - Friends, chat, and groups
+   * - Bit 5-11: Unknown (@todo Please provide more details if known)
+   * - Bit 12: Library content - 0: Only games I choose, 1: All games
+   */
+  features: number;
+  /**
+   * Indicates whether parental settings are locked.
+   */
+  locked: boolean;
   /**
    * Email for recovery (if applicable).
    */

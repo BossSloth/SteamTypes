@@ -64,6 +64,20 @@ export interface BrowserViewPopup {
   NotifyUserActivation(): void;
 
   /**
+   * Stop listening for an event.
+   * @param event The event to stop listening to.
+   * @param callback The callback function to be called.
+   */
+  off<K extends keyof BrowserViewEventMap>(event: K, callback: BrowserViewEventMap[K]): void;
+
+  /**
+   * Start listening for an event.
+   * @param event The event to start listening to.
+   * @param callback The callback function to be called.
+   */
+  on<K extends keyof BrowserViewEventMap>(event: K, callback: BrowserViewEventMap[K]): void;
+
+  /**
    * Paste the current clipboard selection.
    */
   Paste(): void;
@@ -123,9 +137,9 @@ export interface BrowserViewPopup {
    */
   SetTouchGesturesToCancel(gestures: ETouchGesture[]): void;
 
-  SetVRKeyboardVisibility(value: boolean): void;
-
   SetVisible(value: boolean): void;
+
+  SetVRKeyboardVisibility(value: boolean): void;
 
   SetWindowStackingOrder(order: EWindowStackingOrder): void;
 
@@ -133,20 +147,6 @@ export interface BrowserViewPopup {
    * Stop the 'find in page' function.
    */
   StopFindInPage(): void;
-
-  /**
-   * Stop listening for an event.
-   * @param event The event to stop listening to.
-   * @param callback The callback function to be called.
-   */
-  off<K extends keyof BrowserViewEventMap>(event: K, callback: BrowserViewEventMap[K]): void;
-
-  /**
-   * Start listening for an event.
-   * @param event The event to start listening to.
-   * @param callback The callback function to be called.
-   */
-  on<K extends keyof BrowserViewEventMap>(event: K, callback: BrowserViewEventMap[K]): void;
 }
 
 interface BrowserViewEventMap {
@@ -248,10 +248,10 @@ interface BrowserViewEventMap {
 }
 
 export interface BrowserViewBounds {
+  height: number;
+  width: number;
   x: number;
   y: number;
-  width: number;
-  height: number;
 }
 
 export interface BrowserViewContextMenu {
@@ -275,16 +275,16 @@ export interface BrowserViewContextMenu {
   edit_state_flags?: number;
 
   /**
-   * The misspelled word the cursor is on.
-   * @remarks Appears on an editable element with text.
-   */
-  misspelled_word?: string;
-
-  /**
    * Browser page URL.
    * @todo Appears when there is selected text?
    */
   link_url?: string;
+
+  /**
+   * The misspelled word the cursor is on.
+   * @remarks Appears on an editable element with text.
+   */
+  misspelled_word?: string;
 
   /**
    * Browser page URL.
@@ -351,8 +351,8 @@ export enum EWindowStackingOrder {
 }
 
 export interface BrowserViewHistory {
-  index: number;
   entries: BrowserViewHistoryEntry[];
+  index: number;
 }
 
 export interface BrowserViewHistoryEntry {

@@ -1,5 +1,5 @@
-import { Unregisterable } from './shared';
 import { EAppUpdateError } from './Apps';
+import { Unregisterable } from './shared';
 
 /**
  * Represents functions related to Steam Install Folders.
@@ -99,37 +99,37 @@ export interface InstallFolder {
  * Represents information about an installation folder.
  */
 export interface SteamInstallFolder extends PotentialInstallFolder {
-  /** Index of the folder. */
-  nFolderIndex: number;
-  /** Used space in the folder. */
-  strUsedSize: string;
-  /** Size of DLC storage used in the folder. */
-  strDLCSize: string;
-  /** Size of workshop storage used in the folder. */
-  strWorkshopSize: string;
-  /** Size of staged storage used in the folder. */
-  strStagedSize: string;
   /** Indicates if the folder is set as the default installation folder. */
   bIsDefaultFolder: boolean;
   /** Indicates if the folder is currently mounted. */
   bIsMounted: boolean;
+  /** Index of the folder. */
+  nFolderIndex: number;
+  /** Size of DLC storage used in the folder. */
+  strDLCSize: string;
+  /** Size of staged storage used in the folder. */
+  strStagedSize: string;
+  /** Used space in the folder. */
+  strUsedSize: string;
+  /** Size of workshop storage used in the folder. */
+  strWorkshopSize: string;
   /** List of applications installed in the folder. */
   vecApps: AppInfo[];
 }
 
 export interface PotentialInstallFolder {
-  /** Path of the folder. */
-  strFolderPath: string;
-  /** User label for the folder. */
-  strUserLabel: string;
-  /** Name of the drive where the folder is located. */
-  strDriveName: string;
-  /** Total capacity of the folder. */
-  strCapacity: string;
-  /** Available free space in the folder. */
-  strFreeSpace: string;
   /** Indicates if the folder is on a fixed drive. */
   bIsFixed: boolean;
+  /** Total capacity of the folder. */
+  strCapacity: string;
+  /** Name of the drive where the folder is located. */
+  strDriveName: string;
+  /** Path of the folder. */
+  strFolderPath: string;
+  /** Available free space in the folder. */
+  strFreeSpace: string;
+  /** User label for the folder. */
+  strUserLabel: string;
 }
 
 /**
@@ -138,20 +138,20 @@ export interface PotentialInstallFolder {
 export interface AppInfo {
   /** ID of the application. */
   nAppID: number;
-  /** Name of the application. */
-  strAppName: string;
-  /** Sorting information for the application. */
-  strSortAs: string;
   /** Last played time in Unix Epoch time format. */
   rtLastPlayed: number;
-  /** Size of used storage by the application. */
-  strUsedSize: string;
+  /** Name of the application. */
+  strAppName: string;
   /** Size of DLC storage used by the application. */
   strDLCSize: string;
-  /** Size of workshop storage used by the application. */
-  strWorkshopSize: string;
+  /** Sorting information for the application. */
+  strSortAs: string;
   /** Size of staged storage used by the application. */
   strStagedSize: string;
+  /** Size of used storage by the application. */
+  strUsedSize: string;
+  /** Size of workshop storage used by the application. */
+  strWorkshopSize: string;
 }
 
 export interface FolderChange {
@@ -162,7 +162,7 @@ export interface MoveContentProgress {
   appid: number;
   eError: EAppUpdateError;
   flProgress: number;
+  nFilesMoved: number;
   strBytesMoved: string;
   strTotalBytesToMove: string;
-  nFilesMoved: number;
 }

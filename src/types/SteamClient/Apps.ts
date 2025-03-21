@@ -298,11 +298,13 @@ export interface Apps {
 
   /**
    * @throws if the user does not own the app or no EULA.
+   * @note Doesn't bring up the EULA dialog, just returns the eula data
    */
-  LoadEula(appId: number): Promise<EndUserLicenseAgreement[]>; // Doesn't bring up the EULA dialog, just returns the eula data
+  LoadEula(appId: number): Promise<EndUserLicenseAgreement[]>;
+
   MarkEulaAccepted(param0: unknown, param1: unknown, param2: unknown): unknown;
 
-  MarkEulaRejected: unknown;
+  MarkEulaRejected(appId: number): unknown;
 
   /**
    * Move specified workshop item load order.
@@ -426,7 +428,11 @@ export interface Apps {
   RegisterForLocalizationChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
   RegisterForPrePurchasedAppChanges(callback: () => void): Unregisterable; // Unknown, did have it show up a few times, but not callback parameters
-  RegisterForShowMarketingMessageDialog: Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForShowMarketingMessageDialog(): Unregisterable;
 
   /**
    * Registers a callback function to be notified when workshop items are added or removed from a Steam application.
@@ -437,7 +443,10 @@ export interface Apps {
 
   RegisterForWorkshopItemDownloads(appId: number, callback: (appId: number, publishedFileId: string, param2: number) => void): Unregisterable;
 
-  RegisterForWorkshopItemInstalled: unknown;
+  /**
+   * @params unknown
+   */
+  RegisterForWorkshopItemInstalled(): unknown;
 
   /**
    * Removes a non-Steam application shortcut from the Steam library.
@@ -665,7 +674,10 @@ export interface Apps {
    */
   ShowStore(appId: number): void;
 
-  SpecifyCompatExperiment: unknown;
+  /**
+   * @params unknown
+   */
+  SpecifyCompatExperiment(): unknown;
 
   /**
    * Specifies a compatibility tool by its name for a given application. If strToolName is an empty string, the specified application will no longer use a compatibility tool.
@@ -742,11 +754,11 @@ export interface AppAchievements {
 export interface AppAchievement {
   bAchieved: boolean;
   bHidden: boolean;
-  flMinProgress: number;
-  flCurrentProgress: number;
-  flMaxProgress: number;
   /** How many players have this achievement, in percentage. */
   flAchieved: number;
+  flCurrentProgress: number;
+  flMaxProgress: number;
+  flMinProgress: number;
   /** When this achievement was unlocked. */
   rtUnlocked: number;
   /** Achievement description. */
@@ -804,16 +816,16 @@ export type LaunchAppTask =
   | 'WaitingGameWindow';
 
 export interface GameAction {
-  nGameActionID: number;
+  bWaitingForUI: boolean;
   gameid: string;
-  strActionName: AppAction;
-  strTaskName: LaunchAppTask;
-  strTaskDetails: string;
+  nGameActionID: number;
   nLaunchOption: number;
   nSecondsRemaing: number; // fixme: not a typo, actually valve
+  strActionName: AppAction;
   strNumDone: string;
   strNumTotal: string;
-  bWaitingForUI: boolean;
+  strTaskDetails: string;
+  strTaskName: LaunchAppTask;
 }
 
 export interface ConflictingFileTimestamp {
@@ -825,10 +837,10 @@ export interface ConflictingFileTimestamp {
  * Represents information about a compatibility tool.
  */
 export interface CompatibilityToolInfo {
-  /** Name of the compatibility tool. */
-  strToolName: string;
   /** Display name of the compatibility tool. */
   strDisplayName: string;
+  /** Name of the compatibility tool. */
+  strToolName: string;
 }
 
 /**
@@ -836,11 +848,6 @@ export interface CompatibilityToolInfo {
  */
 export interface DetailsForScreenshotUpload {
   /**
-   * The size of the screenshot upload on disk (including thumbnail).
-   */
-  strSizeOnDisk: string;
-
-  /**
    * The amount of cloud storage available.
    */
   strCloudAvailable: string;
@@ -849,6 +856,11 @@ export interface DetailsForScreenshotUpload {
    * The total cloud storage.
    */
   strCloudTotal: string;
+
+  /**
+   * The size of the screenshot upload on disk (including thumbnail).
+   */
+  strSizeOnDisk: string;
 }
 
 /**
@@ -856,11 +868,6 @@ export interface DetailsForScreenshotUpload {
  */
 export interface DetailsForScreenshotUploads {
   /**
-   * The total size of all screenshot uploads on disk (sum of sizes including thumbnails).
-   */
-  unSizeOnDisk: number;
-
-  /**
    * The amount of cloud storage available.
    */
   strCloudAvailable: string;
@@ -869,11 +876,16 @@ export interface DetailsForScreenshotUploads {
    * The total cloud storage.
    */
   strCloudTotal: string;
+
+  /**
+   * The total size of all screenshot uploads on disk (sum of sizes including thumbnails).
+   */
+  unSizeOnDisk: number;
 }
 
 export interface WorkshopItem {
-  unAppID: number;
   ulPublishedFileID: string;
+  unAppID: number;
 }
 
 export interface AppAchievementData {
@@ -881,8 +893,8 @@ export interface AppAchievementData {
 }
 
 export interface AppAchievementResponse {
-  result: number;
   data: AppAchievementData;
+  result: number;
 }
 
 export interface LaunchOption {
@@ -907,17 +919,17 @@ export interface LaunchOption {
  * Represents playtime information for an application.
  */
 export interface Playtime {
-  /** Total playtime in minutes for the last 2 weeks. */
-  nPlaytimeLastTwoWeeks: number;
   /** Total playtime in minutes. */
   nPlaytimeForever: number;
+  /** Total playtime in minutes for the last 2 weeks. */
+  nPlaytimeLastTwoWeeks: number;
   /** Last played time in Unix Epoch time format. */
   rtLastTimePlayed: number;
 }
 
 export interface PrePurchaseApp {
-  nAppID: number;
   eState: EAppReleaseState;
+  nAppID: number;
 }
 
 export interface PrePurchaseInfo {
@@ -958,26 +970,26 @@ export enum EAppLaunchOptionType {
 export interface Shortcut {
   bIsApplication: boolean;
   strAppName: string;
-  strExePath: string;
   strArguments: string;
   strCmdline: string;
+  strExePath: string;
+  strIconDataBase64: string | undefined;
   strShortcutPath: string | undefined;
   strSortAs: string | undefined;
-  strIconDataBase64: string | undefined;
 }
 
 export interface SoundtrackDetails {
-  tracks: Track[];
   metadata: SoundtrackMetadata;
-  vecAdditionalImageAssetURLs: string[];
   strCoverImageAssetURL: string;
+  tracks: Track[];
+  vecAdditionalImageAssetURLs: string[];
 }
 
 export interface Track {
   discNumber: number;
-  trackNumber: number;
   durationSeconds: number;
   trackDisplayName: string;
+  trackNumber: number;
 }
 
 export interface SoundtrackMetadata {
@@ -985,8 +997,8 @@ export interface SoundtrackMetadata {
 }
 
 export interface StoreTagLocalization {
-  tag: number;
   string: string;
+  tag: number;
 }
 
 export interface WorkshopItemDetails {
@@ -1055,8 +1067,8 @@ export interface EndUserLicenseAgreement {
 export interface AppBackupStatus {
   appid: number;
   eError: EAppUpdateError;
-  strBytesToProcess: string;
   strBytesProcessed: string;
+  strBytesToProcess: string;
   strTotalBytesWritten: string;
 }
 
@@ -1187,6 +1199,7 @@ export interface AppDetails {
   lDiskUsageBytes: number;
   /** DLC disk space usage, in bytes. */
   lDlcUsageBytes: number;
+  libraryAssets?: AppLibraryAssets;
   nBuildID: number;
   nCompatToolPriority: number;
   /** Total play time, in minutes. */
@@ -1223,15 +1236,14 @@ export interface AppDetails {
   unTimedTrialSecondsPlayed: number;
   vecBetas: AppBeta[];
   vecChildConfigApps: number[];
-  vecDLC: AppDLC[];
   vecDeckCompatTestResults: DeckCompatTestResult[];
+  vecDLC: AppDLC[];
   vecLanguages: AppLanguage[];
   vecLegacyCDKeys: unknown[];
   vecMusicAlbums: AppSoundtrack[];
   /** windows | osx | linux */
   vecPlatforms: string[];
   vecScreenShots: Screenshot[];
-  libraryAssets?: AppLibraryAssets;
 }
 
 export interface AppDeckDerivedProperties {
@@ -1343,10 +1355,10 @@ export interface AppLanguage {
 }
 
 export interface AppBeta {
-  /** Beta name. */
-  strName: string;
   /** Beta description. */
   strDescription: string;
+  /** Beta name. */
+  strName: string;
 }
 
 export interface AppDLC {
@@ -1369,9 +1381,9 @@ export interface AppDLC {
 }
 
 export interface DeckCompatTestResult {
-  test_result: ESteamDeckCompatibilityTestResult;
   /** A localization string. */
   test_loc_token: string;
+  test_result: ESteamDeckCompatibilityTestResult;
 }
 
 export interface AppSoundtrack {
@@ -1395,9 +1407,9 @@ export interface AppLibraryAssets {
 }
 
 export interface LogoPosition {
-  pinnedPosition: LogoPinPositions;
-  nWidthPct: number;
   nHeightPct: number;
+  nWidthPct: number;
+  pinnedPosition: LogoPinPositions;
 }
 
 export type LogoPinPositions = 'BottomLeft' | 'UpperLeft' | 'CenterCenter' | 'UpperCenter' | 'BottomCenter';
@@ -1438,24 +1450,24 @@ export enum ELaunchSource {
 export interface NonSteamApp {
   bIsApplication: boolean;
   strAppName: string;
-  strExePath: string;
   strArguments: string;
   strCmdline: string;
+  strExePath: string;
   strIconDataBase64: string;
 }
 
 export interface LogoPositionForApp {
-  nVersion: number; // Usually 1
   logoPosition: LogoPosition;
+  nVersion: number; // Usually 1
 }
 
 /**
  * CLibraryBootstrapData
  */
 export interface LibraryBootstrapData extends JsPbMessage {
-  app_data(): AppBootstrapData[];
-
   add_app_data(param0: unknown, param1: unknown): unknown;
+
+  app_data(): AppBootstrapData[];
 
   set_app_data(param0: unknown): unknown;
 }
@@ -1470,17 +1482,15 @@ export interface AppBootstrapData {
  * CAppOverview_Change
  */
 export interface AppOverview_Change extends JsPbMessage {
+  add_app_overview(param0: unknown, param1: unknown): unknown;
+
+  add_removed_appid(param0: unknown, param1: unknown): unknown;
+
   app_overview(): SteamAppOverview[];
 
   full_update(): boolean;
 
   removed_appid(): number[];
-
-  update_complete(): boolean;
-
-  add_app_overview(param0: unknown, param1: unknown): unknown;
-
-  add_removed_appid(param0: unknown, param1: unknown): unknown;
 
   set_app_overview(param0: unknown): unknown;
 
@@ -1489,6 +1499,8 @@ export interface AppOverview_Change extends JsPbMessage {
   set_removed_appid(param0: unknown): unknown;
 
   set_update_complete(param0: unknown): unknown;
+
+  update_complete(): boolean;
 }
 
 export enum ECloudPendingRemoteOperation {
@@ -1500,12 +1512,12 @@ export enum ECloudPendingRemoteOperation {
 }
 
 export interface CCloud_PendingRemoteOperation {
-  operation(): ECloudPendingRemoteOperation;
-  machine_name(): string;
   client_id(): number;
-  time_last_updated(): number;
-  os_type(): number;
   device_type(): number;
+  machine_name(): string;
+  operation(): ECloudPendingRemoteOperation;
+  os_type(): number;
+  time_last_updated(): number;
 }
 
 export interface CMsgCloudPendingRemoteOperations extends JsPbMessage {
@@ -1514,66 +1526,66 @@ export interface CMsgCloudPendingRemoteOperations extends JsPbMessage {
 
 // Appears to be all optional fields :disaster:
 export interface SteamAppOverview {
-  appid: number;
-  display_name: string;
-  visible_in_game_list: boolean;
-  sort_as: string;
-
   /*
    * Possible bitmask values, but I haven't spotted unknown of them being masked in the app_type field.
    * Should be safe as an enum.
    */
   app_type: EAppType;
-  mru_index: number | undefined;
-  rt_recent_activity_time: number;
-  minutes_playtime_forever: number;
-  minutes_playtime_last_two_weeks: number;
-  rt_last_time_played_or_installed: number;
-  rt_last_time_played: number;
-  store_tag?: number[];
+  appid: number;
   association: SteamAppOverviewAssociation[];
-  store_category?: number[];
-  rt_original_release_date: number;
-  rt_steam_release_date: number;
-  icon_hash: string;
+  canonicalAppType: number;
+
   controller_support?: EAppControllerSupportLevel; // default none
-  vr_supported?: boolean;
-  metacritic_score: number;
-  size_on_disk?: number;
-  third_party_mod?: boolean;
+  display_name: string;
+  gameid: string;
+  gamepad_preferred?: boolean;
+  header_filename?: string;
   icon_data?: string;
   icon_data_format?: string;
-  gameid: string;
+  icon_hash: string;
   library_capsule_filename?: string;
-  per_client_data: SteamAppOverviewClientData[];
-  most_available_clientid: string;
-  selected_clientid?: string;
-  rt_store_asset_mtime: number;
-  rt_custom_image_mtime?: number;
-  optional_parent_app_id?: number;
-  owner_account_id?: number;
-  review_score_with_bombs: number;
-  review_percentage_with_bombs: number;
-  review_score_without_bombs: number;
-  review_percentage_without_bombs: number;
   library_id?: string;
-  vr_only?: boolean;
+  local_cache_version?: number;
+  local_per_client_data: SteamAppOverviewClientData;
   mastersub_appid?: number;
   mastersub_includedwith_logo?: string;
-  site_license_site_name?: string;
-  shortcut_override_appid?: number;
-  steam_deck_compat_category: ESteamDeckCompatibilityCategory; // Default should be Unknown
-  rt_last_time_locally_played?: number;
-  rt_purchased_time: number;
-  header_filename?: string;
-  local_cache_version?: number;
+  metacritic_score: number;
+  minutes_playtime_forever: number;
+  minutes_playtime_last_two_weeks: number;
+  most_available_clientid: string;
+  most_available_per_client_data: SteamAppOverviewClientData;
+  mru_index: number | undefined;
+  optional_parent_app_id?: number;
+  owner_account_id?: number;
+  per_client_data: SteamAppOverviewClientData[];
   ps4_controller_support?: EAppControllerSupportLevel;
   ps5_controller_support?: EAppControllerSupportLevel;
-  gamepad_preferred?: boolean;
-  canonicalAppType: number;
-  local_per_client_data: SteamAppOverviewClientData;
-  most_available_per_client_data: SteamAppOverviewClientData;
+  review_percentage_with_bombs: number;
+  review_percentage_without_bombs: number;
+  review_score_with_bombs: number;
+  review_score_without_bombs: number;
+  rt_custom_image_mtime?: number;
+  rt_last_time_locally_played?: number;
+  rt_last_time_played: number;
+  rt_last_time_played_or_installed: number;
+  rt_original_release_date: number;
+  rt_purchased_time: number;
+  rt_recent_activity_time: number;
+  rt_steam_release_date: number;
+  rt_store_asset_mtime: number;
+  selected_clientid?: string;
   selected_per_client_data: SteamAppOverviewClientData;
+  shortcut_override_appid?: number;
+  site_license_site_name?: string;
+  size_on_disk?: number;
+  sort_as: string;
+  steam_deck_compat_category: ESteamDeckCompatibilityCategory; // Default should be Unknown
+  store_category?: number[];
+  store_tag?: number[];
+  third_party_mod?: boolean;
+  visible_in_game_list: boolean;
+  vr_only?: boolean;
+  vr_supported?: boolean;
 }
 
 export enum EAppType {
@@ -1600,8 +1612,8 @@ export enum EAppType {
 }
 
 export interface SteamAppOverviewAssociation {
-  type: EAppAssociationType; // Default should be Invalid
   name: string;
+  type: EAppAssociationType; // Default should be Invalid
 }
 
 export enum EAppAssociationType {
@@ -1618,19 +1630,19 @@ export enum EAppControllerSupportLevel {
 }
 
 export interface SteamAppOverviewClientData {
-  clientid: string;
-  client_name: string;
-  display_status: EDisplayStatus; // Default should be Invalid
-  status_percentage: number;
   active_beta?: string;
-  installed?: boolean;
   bytes_downloaded: string;
   bytes_total: string;
-  streaming_to_local_client?: boolean;
+  client_name: string;
+  clientid: string;
+  cloud_status: EAppCloudStatus;
+  display_status: EDisplayStatus; // Default should be Invalid
+  installed?: boolean;
   is_available_on_current_platform: boolean;
   is_invalid_os_type?: boolean;
   playtime_left?: number;
-  cloud_status: EAppCloudStatus;
+  status_percentage: number;
+  streaming_to_local_client?: boolean;
 }
 
 export enum ESteamDeckCompatibilityCategory {

@@ -115,6 +115,11 @@ export interface ApplicationsAudio {
  */
 export interface ApplicationAudio {
   /**
+   * The volume level of the application (floating point value between 0 and 1).
+   */
+  flVolume: number;
+
+  /**
    * The ID of the application audio.
    */
   id: number;
@@ -123,11 +128,6 @@ export interface ApplicationAudio {
    * The name of the application (e.g., Spotify, YouTube from a browser, etc.).
    */
   strName: string;
-
-  /**
-   * The volume level of the application (floating point value between 0 and 1).
-   */
-  flVolume: number;
 }
 
 /**
@@ -135,24 +135,24 @@ export interface ApplicationAudio {
  */
 export interface AudioDeviceInfo {
   /**
-   * The ID of the active output audio device.
-   */
-  activeOutputDeviceId: number;
-
-  /**
    * The ID of the active input audio device.
    */
   activeInputDeviceId: number;
 
   /**
-   * The ID of the overridden output audio device (-1 if not overridden).
+   * The ID of the active output audio device.
    */
-  overrideOutputDeviceId: number;
+  activeOutputDeviceId: number;
 
   /**
    * The ID of the overridden input audio device (-1 if not overridden).
    */
   overrideInputDeviceId: number;
+
+  /**
+   * The ID of the overridden output audio device (-1 if not overridden).
+   */
+  overrideOutputDeviceId: number;
 
   /**
    * An array of audio devices.
@@ -165,6 +165,36 @@ export interface AudioDeviceInfo {
  */
 export interface Device {
   /**
+   * Indicates if the device has audio input.
+   */
+  bHasInput: boolean;
+
+  /**
+   * Indicates if the device has audio output.
+   */
+  bHasOutput: boolean;
+
+  /**
+   * Indicates if the device is the default input device.
+   */
+  bIsDefaultInputDevice: boolean;
+
+  /**
+   * Indicates if the device is the default output device.
+   */
+  bIsDefaultOutputDevice: boolean;
+
+  /**
+   * The volume level of the audio input device (floating point value between 0 and 1).
+   */
+  flInputVolume: number;
+
+  /**
+   * The volume level of the audio output device (floating point value between 0 and 1).
+   */
+  flOutputVolume: number;
+
+  /**
    * The identifier of the audio device.
    */
   id: number;
@@ -173,34 +203,4 @@ export interface Device {
    * The name of the audio device.
    */
   sName: string;
-
-  /**
-   * Indicates if the device has audio output.
-   */
-  bHasOutput: boolean;
-
-  /**
-   * Indicates if the device is the default output device.
-   */
-  bIsDefaultOutputDevice: boolean;
-
-  /**
-   * The volume level of the audio output device (floating point value between 0 and 1).
-   */
-  flOutputVolume: number;
-
-  /**
-   * Indicates if the device has audio input.
-   */
-  bHasInput: boolean;
-
-  /**
-   * Indicates if the device is the default input device.
-   */
-  bIsDefaultInputDevice: boolean;
-
-  /**
-   * The volume level of the audio input device (floating point value between 0 and 1).
-   */
-  flInputVolume: number;
 }

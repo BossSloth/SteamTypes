@@ -202,11 +202,11 @@ export interface ServerBrowserServer {
   appid: number;
   /** The server IP. */
   ip: string;
+  /** Last time played as a UNIX timestamp. */
+  lastPlayed: number;
   /** The server port. */
   port: number;
   queryPort: number;
-  /** Last time played as a UNIX timestamp. */
-  lastPlayed: number;
 }
 
 export interface ServerBrowserServerFull extends ServerBrowserServer {
@@ -214,12 +214,12 @@ export interface ServerBrowserServerFull extends ServerBrowserServer {
   bDoNotRefresh: boolean;
   /** Found the server? */
   bHadSuccessfulResponse: boolean;
+  /** How many bot players there currently are. */
+  botPlayers: number;
   /** Has password? */
   bPassword: boolean;
   /** Is VAC secured? */
   bSecure: boolean;
-  /** How many bot players there currently are. */
-  botPlayers: number;
   /** The server's game name/description. */
   gameDesc: string;
   /** The game folder. */
@@ -258,17 +258,17 @@ export type ServerBrowserTab = 'internet' | 'favorites' | 'history' | 'lan' | 'f
 export interface ServerBrowserGame {
   /** The ID of the game. */
   appid: number;
-  /** The ID of the game. */
-  gameid: string;
   /** The game folder. */
   gamedir: string;
+  /** The ID of the game. */
+  gameid: string;
   /** The game's name. */
   name: string;
 }
 
 export interface ServerBrowserPreferences {
-  GameList: string;
   filters: ServerBrowserTabFilters;
+  GameList: string;
 }
 
 export interface ServerBrowserTabFilters {
@@ -280,22 +280,22 @@ export interface ServerBrowserTabFilters {
 }
 
 export interface ServerBrowserGameFilter {
-  /** Has users playing */
-  NoEmpty: boolean;
-  /** Server not full */
-  NoFull: boolean;
-  /** Is not password protected */
-  NoPassword: boolean;
-  /** Anti-cheat */
-  Secure: EServerBrowserGameFilterAntiCheat;
   /** The ID of the game */
   appid: number;
   /** The game folder */
   game: string;
   /** Map filter */
   map: string;
+  /** Has users playing */
+  NoEmpty: boolean;
+  /** Server not full */
+  NoFull: boolean;
+  /** Is not password protected */
+  NoPassword: boolean;
   /** Latency */
   ping: EServerBrowserGameFilterPing;
+  /** Anti-cheat */
+  Secure: EServerBrowserGameFilterAntiCheat;
 }
 
 export enum EServerBrowserGameFilterAntiCheat {
@@ -322,9 +322,9 @@ export interface ServerBrowserFriendServer {
   appid: number;
   /** Non-Steam server? */
   bNonSteamServer: boolean;
-  gameText: string;
   /** The ID of the game. */
   gameid: string;
+  gameText: string;
   steamIDLobby: string;
 }
 
@@ -336,8 +336,8 @@ export interface ServerBrowserDialog {
 }
 
 export interface ServerBrowserPlayerRefreshStatus {
-  bSuccess: boolean;
   bRefreshComplete: boolean;
+  bSuccess: boolean;
 }
 
 export interface ServerBrowserPlayer extends ServerBrowserPlayerRefreshStatus {

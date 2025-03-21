@@ -182,7 +182,7 @@ export interface Window {
   /**
    * Toggles the window's fullscreen state.
    */
-  ToggleFullscreen(): void;
+  ToggleFullScreen(): void;
 
   /**
    * Toggles the window's maximized state.
@@ -222,8 +222,8 @@ export interface WindowDetails {
 }
 
 export interface WindowDimensions {
+  height: number;
+  width: number;
   x: number;
   y: number;
-  width: number;
-  height: number;
 }

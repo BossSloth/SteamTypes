@@ -29,12 +29,12 @@ export interface FamilySharing {
 }
 
 export interface Lender {
+  appid: number;
+  bPreferred: boolean;
+  numDlc: number;
   /**
    * A Steam64 ID.
    */
   steamid: string;
-  appid: number;
-  numDlc: number;
-  bPreferred: boolean;
   vecDLC: unknown[];
 }

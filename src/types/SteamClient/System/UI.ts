@@ -22,8 +22,8 @@ export interface FocusChangeEvent {
 export interface FocusedApp {
   appid: number;
   pid: number;
-  windowid: number;
   strExeName: string;
+  windowid: number;
 }
 
 export interface GameWindowInfo {

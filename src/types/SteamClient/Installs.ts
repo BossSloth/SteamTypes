@@ -1,5 +1,5 @@
-import { Unregisterable } from './shared';
 import { EAppUpdateError } from './Apps';
+import { Unregisterable } from './shared';
 
 /**
  * Represents functions related to managing installs and installation wizards in Steam.
@@ -40,7 +40,8 @@ export interface Installs {
    */
   OpenUninstallWizard(appIds: number[], dontPrompt: boolean): void;
 
-  RegisterForShowConfirmUninstall: Unregisterable; // Broken? doesn't seem to work
+  // Broken? doesn't seem to work
+  RegisterForShowConfirmUninstall(): Unregisterable;
 
   /**
    * Registers a callback function to be called when the "Failed Uninstall" dialog is shown.
@@ -56,7 +57,7 @@ export interface Installs {
    */
   RegisterForShowInstallWizard(callback: (data: InstallInfo) => void): Unregisterable;
 
-  RegisterForShowRegisterCDKey: unknown;
+  RegisterForShowRegisterCDKey(): unknown;
 
   /**
    * Sets a list of app identifiers for downloads in the installation wizard.
@@ -82,32 +83,32 @@ export interface Installs {
 }
 
 export interface InstallInfo {
-  rgAppIDs: InstallInfoApps[];
-  eInstallState: EInstallMgrState;
-  nDiskSpaceRequired: number;
-  nDiskSpaceAvailable: number;
-  nCurrentDisk: number;
-  nTotalDisks: number;
   bCanChangeInstallFolder: boolean;
+  bDesktopShortcut: boolean;
+  bIsBackupInstall: boolean;
+  bPeerContentServerAvailable: boolean;
+  bPeerContentServerOnline: boolean;
+  bSystemMenuShortcut: boolean;
+  currentAppID: number;
+  eAppError: EAppUpdateError;
+  eInstallState: EInstallMgrState;
+  errorDetail: string;
   /**
    * Index of the install folder. -1 if not installed.
    */
   iInstallFolder: number;
   iUnmountedFolder: number;
-  currentAppID: number;
-  eAppError: EAppUpdateError;
-  errorDetail: string;
-  bSystemMenuShortcut: boolean;
-  bDesktopShortcut: boolean;
-  bIsBackupInstall: boolean;
+  nCurrentDisk: number;
+  nDiskSpaceAvailable: number;
+  nDiskSpaceRequired: number;
+  nTotalDisks: number;
+  rgAppIDs: InstallInfoApps[];
   strPeerContentServer: string;
-  bPeerContentServerOnline: boolean;
-  bPeerContentServerAvailable: boolean;
 }
 
 export interface InstallInfoApps {
-  nAppID: number;
   lDiskSpaceRequiredBytes: number;
+  nAppID: number;
 }
 
 export enum EInstallMgrState {

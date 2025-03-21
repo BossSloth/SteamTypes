@@ -4,7 +4,10 @@ import { Unregisterable } from '../shared';
 export interface DisplayManager {
   ClearModeOverride(displayId: unknown): unknown;
 
-  GetState: unknown;
+  /**
+   * @params unknown
+   */
+  GetState(): unknown;
 
   RegisterForStateChanges(callback: () => void): Unregisterable;
 

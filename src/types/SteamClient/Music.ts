@@ -75,13 +75,13 @@ export interface Music {
 }
 
 export interface MusicTrack {
-  uSoundtrackAppId: number;
+  bShuffle: boolean;
   ePlaybackStatus: EAudioPlayback;
   eRepeatStatus: EMusicPlayingRepeatStatus;
-  bShuffle: boolean;
-  nVolume: number;
   nActiveTrack: number;
   nLengthInMsec: number;
+  nVolume: number;
+  uSoundtrackAppId: number;
 }
 
 export enum EAudioPlayback {

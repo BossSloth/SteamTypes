@@ -113,17 +113,17 @@ export interface Screenshots {
 }
 
 export interface Screenshot {
-  nAppID: number;
-  strGameID: string;
-  hHandle: number;
-  nWidth: number;
-  nHeight: number;
-  nCreated: number; // timestamp
-  ePrivacy: EUCMFilePrivacyState;
-  strCaption: '';
   bSpoilers: boolean;
-  strUrl: string;
   bUploaded: boolean;
+  ePrivacy: EUCMFilePrivacyState;
+  hHandle: number;
+  nAppID: number;
+  nCreated: number; // timestamp
+  nHeight: number;
+  nWidth: number;
+  strCaption: '';
+  strGameID: string;
+  strUrl: string;
   ugcHandle: string;
 }
 

@@ -12,22 +12,16 @@ import { Report } from './Report';
 import { UI } from './UI';
 
 export interface System {
-  Audio: Audio;
-  AudioDevice: AudioDevice;
-  Bluetooth: Bluetooth;
-
   /**
    * @returns a boolean indicating whether the operation succeeded.
    */
   CopyFile(target: string, destination: string): Promise<boolean>;
-
   /**
    * Copies specified files to clipboard.
    * Does not throw if not found.
    * @param paths File paths to copy.
    */
   CopyFilesToClipboard(paths: string[]): void;
-
   /**
    * Creates a temporary folder.
    * @param path The folder to create.
@@ -36,11 +30,6 @@ export interface System {
    */
   CreateTempPath(path: string): Promise<string>;
 
-  Devkit: Devkit;
-  Display: Display;
-  DisplayManager: DisplayManager;
-  Dock: Dock;
-
   ExitFakeCaptivePortal(): unknown;
 
   FactoryReset(): unknown;
@@ -48,11 +37,8 @@ export interface System {
   FormatStorage(force: boolean): unknown;
 
   GetOSType(): Promise<EOSType>;
-
   GetSystemInfo(): Promise<SystemInfo>;
-
   IsDeckFactoryImage(): Promise<boolean>;
-
   IsSteamInTournamentMode(): Promise<boolean>;
 
   /**
@@ -62,8 +48,6 @@ export interface System {
    * @remarks Does not throw on error.
    */
   MoveFile(target: string, destination: string): void;
-
-  Network: Network;
 
   NotifyGameOverlayStateChanged(latestAppOverlayStateActive: boolean, appId: number): unknown;
 
@@ -81,7 +65,6 @@ export interface System {
   OpenInSystemBrowser(url: string): void;
 
   OpenLocalDirectoryInSystemExplorer(directory: string): void; // Opens local directory in system explorer
-  Perf: Perf;
 
   RebootToAlternateSystemPartition(): never;
 
@@ -101,9 +84,6 @@ export interface System {
    * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link MsgSystemManagerSettings}.
    */
   RegisterForSettingsChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
-
-  Report: Report;
-
   /**
    * Restarts the system.
    */
@@ -125,10 +105,31 @@ export interface System {
    */
   SwitchToDesktop(): unknown;
 
-  UI: UI;
-  UpdateSettings: unknown;
-
   VideoRecordingDriverCheck(): unknown;
+
+  Audio: Audio;
+
+  AudioDevice: AudioDevice;
+
+  Bluetooth: Bluetooth;
+
+  Devkit: Devkit;
+
+  Display: Display;
+
+  DisplayManager: DisplayManager;
+
+  Dock: Dock;
+
+  Network: Network;
+
+  Perf: Perf;
+
+  Report: Report;
+
+  UI: UI;
+
+  UpdateSettings: unknown;
 }
 
 export interface AirplaneModeChange {
@@ -137,11 +138,11 @@ export interface AirplaneModeChange {
 
 export interface BatteryStateChange {
   bHasBattery: boolean;
+  bShutdownRequested: boolean;
   eACState: EACState;
   eBatteryState: EBatteryState;
   flLevel: number; // Battery Percentage in floating point 0-1
   nSecondsRemaining: number; // Appears to be charge time remaining or time remaining on battery
-  bShutdownRequested: boolean;
 }
 
 export enum EACState {
@@ -187,15 +188,15 @@ export interface FileDialog {
 }
 
 export interface FileDialogFilter {
-  /** A localization string for the file type. */
-  strFileTypeName: string;
+  /** Whether to use this filter by default. */
+  bUseAsDefault?: boolean;
   /**
    * File patterns.
    * @example [ "*.application", "*.exe", "*.sh", "*.AppImage" ]
    */
   rFilePatterns: string[];
-  /** Whether to use this filter by default. */
-  bUseAsDefault?: boolean;
+  /** A localization string for the file type. */
+  strFileTypeName: string;
 }
 
 export enum EOSType {
@@ -286,27 +287,27 @@ export enum EOSType {
 }
 
 export interface SystemInfo {
-  sOSName: string;
-  sKernelVersion: string;
+  bIsUnsupportedPrototypeHardware: boolean;
+  nCPUHz: number;
+  nCPULogicalCores: number;
+  nCPUPhysicalCores: number;
+  nSteamVersion: number;
+  nSystemRAMSizeMB: number;
+  nVideoRAMSizeMB: number;
   sBIOSVersion: string;
+  sCPUName: string;
+  sCPUVendor: string;
   sHostname: string;
+  sKernelVersion: string;
+  sOSBuildId: string;
   sOSCodename: string;
+  sOSName: string;
   sOSVariantId: string;
   sOSVersionId: string;
-  sOSBuildId: string;
-  nSteamVersion: number;
-  sSteamBuildDate: string;
   sSteamAPI: string;
-  sCPUVendor: string;
-  sCPUName: string;
-  nCPUHz: number;
-  nCPUPhysicalCores: number;
-  nCPULogicalCores: number;
-  nSystemRAMSizeMB: number;
+  sSteamBuildDate: string;
   sVideoCardName: string;
   sVideoDriverVersion: string;
-  nVideoRAMSizeMB: number;
-  bIsUnsupportedPrototypeHardware: boolean;
 }
 
 /**

@@ -162,11 +162,11 @@ export type SteamWebURL =
   | 'YearInReview';
 
 export interface SteamURL {
-  url: string;
   /**
    * @todo enum?
    */
   feature: number;
+  url: string;
 }
 
 export type SteamURLs = Record<SteamWebURL, SteamURL>;

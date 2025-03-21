@@ -1,5 +1,6 @@
 import pluginJs from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
+import perfectionist from 'eslint-plugin-perfectionist';
 import { globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -32,6 +33,11 @@ export default tseslint.config(
     commaDangle: 'always-multiline',
   }),
   {
+    plugins: {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      perfectionist,
+    },
+
     rules: {
       // #region Formatting preferences
       '@stylistic/function-call-argument-newline': ['error', 'consistent'],
@@ -44,6 +50,7 @@ export default tseslint.config(
       '@stylistic/quote-props': ['error', 'as-needed'],
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       curly: ['error', 'multi-line'],
+      'perfectionist/sort-interfaces': ['error', { type: 'natural', groups: ['method', 'property'] }],
 
       '@stylistic/array-element-newline': 'off',
       '@stylistic/implicit-arrow-linebreak': 'off',
@@ -116,6 +123,12 @@ export default tseslint.config(
     files: ['src/types/SteamClient/**'],
     rules: {
       '@typescript-eslint/member-ordering': 'off', // TODO: remove this when member-ordering is fixed in all SteamClient files
+    },
+  },
+  {
+    files: ['scripts/**'],
+    rules: {
+      'perfectionist/sort-interfaces': 'off',
     },
   },
 );

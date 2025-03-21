@@ -14,7 +14,10 @@ export interface Input {
 
   ClearSelectedConfigForApp(appId: number, controllerIndex: number): unknown;
 
-  CloseDesktopConfigurator: unknown;
+  /**
+   * @params unknown
+   */
+  CloseDesktopConfigurator(): unknown;
 
   /**
    * Writes text.
@@ -85,7 +88,10 @@ export interface Input {
 
   ModalKeyboardDismissed(): void;
 
-  OpenDesktopConfigurator: unknown;
+  /**
+   * @params unknown
+   */
+  OpenDesktopConfigurator(): unknown;
 
   PreviewConfigForAppAndController(appId: number, controllerIndex: number, workshopUri: string): unknown;
 
@@ -93,12 +99,20 @@ export interface Input {
 
   QueryControllerConfigsForApp(appId: number, controllerIndex: number, param2: boolean): unknown;
 
-  RegisterForActiveControllerChanges: Unregisterable; // {"nActiveController":0}
+  /**
+   * @params unknown
+  */
+  // {"nActiveController":0}
+  RegisterForActiveControllerChanges(): Unregisterable;
+
   // param0 - e possibly appid?
   // param1 - some index?
   RegisterForConfigSelectionChanges(callback: (param0: number, param1: number) => void): Unregisterable;
 
-  RegisterForControllerAccountChanges: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForControllerAccountChanges(): Unregisterable;
 
   RegisterForControllerAnalogInputMessages(callback: (controllerAnalogInputMessages: ControllerAnalogInputMessage[]) => void): Unregisterable;
 
@@ -179,7 +193,10 @@ export interface Input {
      */
   RegisterForUserDismissKeyboardMessages(callback: (param0: unknown) => void): Unregisterable;
 
-  RegisterForUserKeyboardMessages: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForUserKeyboardMessages(): Unregisterable;
 
   RequestGyroActive(controllerIndex: number, param1: boolean): unknown;
 
@@ -195,7 +212,10 @@ export interface Input {
 
   SaveControllerPersonalizationSettings(param0: unknown): unknown;
 
-  SaveControllerSounds: unknown;
+  /**
+   * @params unknown
+   */
+  SaveControllerSounds(): unknown;
 
   SaveEditingControllerConfiguration(controllerIndex: number, sharedConfig: boolean): unknown;
 
@@ -208,8 +228,15 @@ export interface Input {
 
   SetControllerName(controllerIndex: number, controllerName: string): unknown;
 
-  SetControllerNintendoLayoutSetting: unknown;
-  SetControllerPersonalizationName: unknown;
+  /**
+   * @params unknown
+   */
+  SetControllerNintendoLayoutSetting(): unknown;
+
+  /**
+   * @params unknown
+   */
+  SetControllerPersonalizationName(): unknown;
 
   // param0 - nLStickDeadzone, bSWAntiDrift, nRHapticStrength, flRPadPressureCurve
   /*
@@ -341,7 +368,10 @@ export interface Input {
 
   StopEditingControllerConfiguration(controllerIndex: number): unknown;
 
-  SwapControllerConfigurationSourceModes: unknown;
+  /**
+   * @params unknown
+   */
+  SwapControllerConfigurationSourceModes(): unknown;
 
   // this.SetEditingConfigurationValue(e, t, c.Qb, (e => SteamClient.Input.SwapControllerModeInputBindings(this.m_unControllerIndex, e)))
   SwapControllerModeInputBindings(controllerIndex: number, param1: unknown): unknown;
@@ -484,9 +514,9 @@ export enum EHIDKeyboardKey {
 
 export interface ControllerAnalogInputMessage {
   nA: number;
+  nC: number;
   x: number;
   y: number;
-  nC: number;
 }
 
 export interface ControllerCommandMessage {
@@ -498,8 +528,8 @@ export interface ControllerCommandMessage {
 }
 
 export interface ControllerConfigCloudStateChange {
-  bSyncDone: boolean;
   bSyncConflict: boolean;
+  bSyncDone: boolean;
   bSyncError: boolean;
 }
 
@@ -512,27 +542,27 @@ export interface ControllerConfigInfoMessageQuery extends ControllerConfigInfoMe
 }
 
 export interface ControllerConfigInfoMessageList extends ControllerConfigInfoMessage {
-  nControllerType: number;
-  publishedFileID: string;
   accountID: number;
-  Title: string;
-  Description: string;
-  URL: string;
-  timeUpdated: string;
   bOfficial: boolean;
   bProgenitorOfficial: boolean;
-  bRecommended: boolean;
   bProgenitorRecommended: boolean;
-  bUsesSIAPI: boolean;
-  bUsesMouse: boolean;
-  bUsesKeyboard: boolean;
+  bRecommended: boolean;
+  bSelected: boolean;
   bUsesGamepad: boolean;
+  bUsesKeyboard: boolean;
+  bUsesMouse: boolean;
+  bUsesSIAPI: boolean;
+  Description: string;
   /**
    * @todo unconfirmed
    */
   eExportType: EControllerConfigExportType;
+  nControllerType: number;
   playtime: string;
-  bSelected: boolean;
+  publishedFileID: string;
+  timeUpdated: string;
+  Title: string;
+  URL: string;
 }
 
 export enum EControllerConfigExportType {
@@ -560,52 +590,52 @@ export enum EThirdPartyControllerConfiguration {
 }
 
 export interface ControllerInputMessage {
-  nA: number;
   bS: boolean;
+  nA: number;
   nC: number;
 }
 
 export interface ActiveAccount {
   strActiveAccountID: string;
-  strName: string;
   strAvatarHash: string;
+  strName: string;
 }
 
 export interface ControllerInfo {
-  strName: string;
-  eControllerType: EControllerType;
-  nXInputIndex: number;
-  nControllerIndex: number;
-  eRumblePreference: EControllerRumbleSetting;
+  ActiveAccount: ActiveAccount | undefined;
+  bHaptics: boolean;
+  bNintendoLayout: boolean;
+  bRemoteDevice: boolean;
+  bSWAntiDrift: boolean;
+  bUseReversedLayout: boolean;
   bWireless: boolean;
-  unUniqueID: number;
-  unVendorID: number;
-  unProductID: number;
-  unCapabilities: number;
-  strFirmwareBuildTime: string;
-  strSerialNumber: string;
-  strChipID: string;
-  nLEDColorR: number;
-  nLEDColorG: number;
-  nLEDColorB: number;
+  eControllerType: EControllerType;
+  eRumblePreference: EControllerRumbleSetting;
+  flAccelerometerStationaryTolerance: number;
+  flGyroStationaryTolerance: number;
   flLEDBrightness: number;
   flLEDSaturation: number;
-  nTurnOnSound: number;
-  nTurnOffSound: number;
-  nLStickDeadzone: number;
-  nRStickDeadzone: number;
-  nLHapticStrength: number;
-  nRHapticStrength: number;
   flLPadPressureCurve: number;
   flRPadPressureCurve: number;
-  bHaptics: boolean;
-  bSWAntiDrift: boolean;
-  flGyroStationaryTolerance: number;
-  flAccelerometerStationaryTolerance: number;
-  bRemoteDevice: boolean;
-  bNintendoLayout: boolean;
-  bUseReversedLayout: boolean;
-  ActiveAccount: ActiveAccount | undefined;
+  nControllerIndex: number;
+  nLEDColorB: number;
+  nLEDColorG: number;
+  nLEDColorR: number;
+  nLHapticStrength: number;
+  nLStickDeadzone: number;
+  nRHapticStrength: number;
+  nRStickDeadzone: number;
+  nTurnOffSound: number;
+  nTurnOnSound: number;
+  nXInputIndex: number;
+  strChipID: string;
+  strFirmwareBuildTime: string;
+  strName: string;
+  strSerialNumber: string;
+  unCapabilities: number;
+  unProductID: number;
+  unUniqueID: number;
+  unVendorID: number;
   vecAltAccounts: unknown[]; // The type for this property might need to be more specific based on the actual data structure
 }
 
@@ -641,20 +671,46 @@ export enum EControllerType {
 }
 
 export interface ControllerStateChange {
-  unControllerIndex: number;
-  unPacketNum: number;
-  /**
-   * Bitmask representing pressed upper buttons.
-   * - Bit 0-8: Unknown (@todo Please provide more details if known)
-   * - Bit 9: L4
-   * - Bit 10: R4
-   * - Bit 11-13: Unknown (@todo Please provide more details if known)
-   * - Bit 14: Left Joystick Touch
-   * - Bit 15: Right Joystick Touch
-   * - Bit 16-17: Unknown (@todo Please provide more details if known)
-   * - Bit 18: Quick Access Menu
-   */
-  ulUpperButtons: number;
+  flAccelerometerNoiseLength: number;
+  flGravityVectorX: number;
+  flGravityVectorY: number;
+  flGravityVectorZ: number;
+  flGyroCalibrationProgress: number;
+  flGyroNoiseLength: number;
+  flHardwareGyroDegreesPerSecondPitch: number;
+  flHardwareGyroDegreesPerSecondRoll: number;
+  flHardwareGyroDegreesPerSecondYaw: number;
+  flHardwareQuatW: number;
+  flHardwareQuatX: number;
+  flHardwareQuatY: number;
+  flHardwareQuatZ: number;
+  flSoftwareGyroDegreesPerSecondPitch: number;
+  flSoftwareGyroDegreesPerSecondRoll: number;
+  flSoftwareGyroDegreesPerSecondYaw: number;
+  flSoftwareQuatW: number;
+  flSoftwareQuatX: number;
+  flSoftwareQuatY: number;
+  flSoftwareQuatZ: number;
+  flTrustedGravityVectorX: number;
+  flTrustedGravityVectorY: number;
+  flTrustedGravityVectorZ: number;
+  sBatteryLevel: number;
+  sCenterPadX: number;
+  sCenterPadY: number;
+  sLeftPadX: number;
+  sLeftPadY: number;
+  sLeftStickX: number;
+  sLeftStickY: number;
+  sPressureBumperLeft: number;
+  sPressureBumperRight: number;
+  sPressurePadLeft: number;
+  sPressurePadRight: number;
+  sRightPadX: number;
+  sRightPadY: number;
+  sRightStickX: number;
+  sRightStickY: number;
+  sTriggerL: number;
+  sTriggerR: number;
   /**
    * Bitmask representing pressed buttons.
    * - Bit 0: R2
@@ -687,66 +743,40 @@ export interface ControllerStateChange {
    * - Bit 30-31: Unknown (@todo Please provide more details if known)
    */
   ulButtons: number;
-  sLeftPadX: number;
-  sLeftPadY: number;
-  sRightPadX: number;
-  sRightPadY: number;
-  sCenterPadX: number;
-  sCenterPadY: number;
-  sLeftStickX: number;
-  sLeftStickY: number;
-  sRightStickX: number;
-  sRightStickY: number;
-  sTriggerL: number;
-  sTriggerR: number;
-  flTrustedGravityVectorX: number;
-  flTrustedGravityVectorY: number;
-  flTrustedGravityVectorZ: number;
-  flSoftwareQuatW: number;
-  flSoftwareQuatX: number;
-  flSoftwareQuatY: number;
-  flSoftwareQuatZ: number;
-  flSoftwareGyroDegreesPerSecondPitch: number;
-  flSoftwareGyroDegreesPerSecondYaw: number;
-  flSoftwareGyroDegreesPerSecondRoll: number;
-  flHardwareQuatW: number;
-  flHardwareQuatX: number;
-  flHardwareQuatY: number;
-  flHardwareQuatZ: number;
-  flHardwareGyroDegreesPerSecondPitch: number;
-  flHardwareGyroDegreesPerSecondYaw: number;
-  flHardwareGyroDegreesPerSecondRoll: number;
-  flGyroNoiseLength: number;
-  flGyroCalibrationProgress: number;
-  flGravityVectorX: number;
-  flGravityVectorY: number;
-  flGravityVectorZ: number;
-  flAccelerometerNoiseLength: number;
-  sBatteryLevel: number;
-  sPressurePadLeft: number;
-  sPressurePadRight: number;
-  sPressureBumperLeft: number;
-  sPressureBumperRight: number;
+  /**
+   * Bitmask representing pressed upper buttons.
+   * - Bit 0-8: Unknown (@todo Please provide more details if known)
+   * - Bit 9: L4
+   * - Bit 10: R4
+   * - Bit 11-13: Unknown (@todo Please provide more details if known)
+   * - Bit 14: Left Joystick Touch
+   * - Bit 15: Right Joystick Touch
+   * - Bit 16-17: Unknown (@todo Please provide more details if known)
+   * - Bit 18: Quick Access Menu
+   */
+  ulUpperButtons: number;
+  unControllerIndex: number;
   unHardwareUpdateInMicrosec: number;
+  unPacketNum: number;
 }
 
 export interface GameKeyboardMessage {
   m_bOpen: boolean;
-  nAppID: number;
-  m_dwPID: number;
   m_dwOverlayPID: number;
-  m_hPipe: number;
+  m_dwPID: number;
   /** @todo enum */
   m_eInputMode: number;
   /** @todo enum */
   m_eLineInputMode: number;
+  m_hPipe: number;
   m_pchDescription: string;
-  m_unCharMax: number;
   m_pchExistingText: string;
+  m_unCharMax: number;
+  nAppID: number;
 }
 
 export interface TouchMenuMessage {
+  appID: number;
   bHasVirtualMenus: boolean;
   unControllerIndex: number;
-  appID: number;
 }

@@ -1,6 +1,6 @@
-import { Unregisterable } from './shared';
 import { AppAchievements } from './Apps';
 import { Screenshot } from './Screenshots';
+import { Unregisterable } from './shared';
 
 /**
  * Represents functions related to Steam Game Sessions.
@@ -39,9 +39,9 @@ export interface AchievementNotification {
  * @prop unAppID is not properly set by Steam for non-steam game shortcuts, so it defaults to 0 for them
  */
 export interface AppLifetimeNotification {
-  unAppID: number;
-  nInstanceID: number;
   bRunning: boolean;
+  nInstanceID: number;
+  unAppID: number;
 }
 
 export interface ScreenshotNotification {

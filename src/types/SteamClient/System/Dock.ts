@@ -22,11 +22,11 @@ export interface MsgSystemDockState extends JsPbMessage {
 }
 
 export interface SystemDockUpdateState {
-  state: EUpdaterState | undefined;
-  rtime_last_checked: number | undefined;
-  version_current: string | undefined;
-  version_available: string | undefined;
-  stage_progress: number | undefined;
-  rtime_estimated_completion: number | undefined;
   old_fw_workaround: number | undefined;
+  rtime_estimated_completion: number | undefined;
+  rtime_last_checked: number | undefined;
+  stage_progress: number | undefined;
+  state: EUpdaterState | undefined;
+  version_available: string | undefined;
+  version_current: string | undefined;
 }

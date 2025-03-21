@@ -233,14 +233,14 @@ export interface BrowserContext {
  */
 export interface OperationResponse {
   /**
-   * The result code of the operation.
-   */
-  result: EResult;
-
-  /**
    * A message describing the result of the operation.
    */
   message: string;
+
+  /**
+   * The result code of the operation.
+   */
+  result: EResult;
 }
 
 export interface Unregisterable {

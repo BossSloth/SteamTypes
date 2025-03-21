@@ -16,8 +16,15 @@ export interface SharedConnection {
 
   RegisterOnMessageReceived(hSharedConnection: number, callback: (param0: unknown) => void): Unregisterable;
 
-  SendMsg: unknown;
-  SendMsgAndAwaitBinaryResponse: unknown;
+  /**
+   * @params unknown
+   */
+  SendMsg(): unknown;
+
+  /**
+   * @params unknown
+   */
+  SendMsgAndAwaitBinaryResponse(): unknown;
 
   SendMsgAndAwaitResponse(hSharedConnection: number, msg: string): Promise<unknown>;
 

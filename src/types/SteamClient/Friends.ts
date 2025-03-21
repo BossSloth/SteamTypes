@@ -55,12 +55,12 @@ export interface CoplayData {
 
 export interface CoplayUser {
   accountid: number;
-  rtTimePlayed: number;
   appid: number;
+  rtTimePlayed: number;
 }
 
 export interface VoiceChatStatus {
-  bVoiceChatActive: boolean;
   bMicMuted: boolean;
   bOutputMuted: boolean;
+  bVoiceChatActive: boolean;
 }

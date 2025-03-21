@@ -12,7 +12,10 @@ export interface Overlay {
 
   HandleProtocolForOverlayBrowser(appId: number, protocol: string): unknown;
 
-  RegisterForActivateOverlayRequests: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForActivateOverlayRequests(): Unregisterable;
 
   /**
    * Registers a callback function to be called when a microtransaction authorization is requested.
@@ -81,7 +84,7 @@ export interface OverlayBrowserInfo {
 }
 
 export interface OverlayBrowserProtocols {
-  unAppID: number;
-  strScheme: string;
   bAdded: boolean;
+  strScheme: string;
+  unAppID: number;
 }

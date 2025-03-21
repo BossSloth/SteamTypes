@@ -23,40 +23,40 @@ export interface MsgSystemAudioManagerState extends JsPbMessage {
 
 export interface MsgSystemAudioManagerStateHW {
   devices: MsgSystemAudioManagerDevice[];
+  links: MsgSystemAudioManagerLink[];
   nodes: MsgSystemAudioManagerNode[];
   ports: MsgSystemAudioManagerPort[];
-  links: MsgSystemAudioManagerLink[];
 }
 
 export interface MsgSystemAudioManagerDevice {
+  api: string | undefined;
   base: MsgSystemAudioManagerObject | undefined;
+  description: string | undefined;
   name: string | undefined;
   nick: string | undefined;
-  description: string | undefined;
-  api: string | undefined;
 }
 
 export interface MsgSystemAudioManagerNode {
   base: MsgSystemAudioManagerObject | undefined;
+  description: string | undefined;
   device_id: number | undefined;
+  edirection: ESystemAudioDirection | undefined;
   name: string | undefined;
   nick: string | undefined;
-  description: string | undefined;
-  edirection: ESystemAudioDirection | undefined;
   volume: MsgSystemAudioVolume | undefined;
 }
 
 export interface MsgSystemAudioManagerPort {
-  base: MsgSystemAudioManagerObject | undefined;
-  node_id: number | undefined;
-  name: string | undefined;
   alias: string | undefined;
-  etype: ESystemAudioPortType | undefined;
+  base: MsgSystemAudioManagerObject | undefined;
   edirection: ESystemAudioPortDirection | undefined;
-  is_physical: boolean | undefined;
-  is_terminal: boolean | undefined;
+  etype: ESystemAudioPortType | undefined;
   is_control: boolean | undefined;
   is_monitor: boolean | undefined;
+  is_physical: boolean | undefined;
+  is_terminal: boolean | undefined;
+  name: string | undefined;
+  node_id: number | undefined;
 }
 
 export interface MsgSystemAudioVolume {
@@ -71,10 +71,10 @@ export interface MsgSystemAudioVolumeChannelEntry {
 
 export interface MsgSystemAudioManagerLink {
   base: MsgSystemAudioManagerObject | undefined;
-  output_node_id: number | undefined;
-  output_port_id: number | undefined;
   input_node_id: number | undefined;
   input_port_id: number | undefined;
+  output_node_id: number | undefined;
+  output_port_id: number | undefined;
 }
 
 export interface MsgSystemAudioManagerObject {

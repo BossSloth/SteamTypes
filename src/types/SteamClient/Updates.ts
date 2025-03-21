@@ -40,9 +40,9 @@ export enum EOSBranch {
  * CMsgSystemUpdateState
  */
 export interface MsgSystemUpdateState extends JsPbMessage {
-  state(): EUpdaterState | undefined;
-
   progress(): UpdateProgress | undefined;
+
+  state(): EUpdaterState | undefined;
 
   supports_os_updates(): boolean | undefined;
 
@@ -52,23 +52,23 @@ export interface MsgSystemUpdateState extends JsPbMessage {
 }
 
 export interface UpdateApplyResult {
-  type: EUpdaterType;
   eresult: EResult;
   requires_client_restart: boolean;
   requires_system_restart: boolean;
+  type: EUpdaterType;
 }
 
 export interface UpdateCheckResult {
-  type: EUpdaterType;
+  available: boolean;
   eresult: EResult;
   rtime_checked: number;
-  available: boolean;
+  type: EUpdaterType;
 }
 
 export interface UpdateProgress {
+  rtime_estimated_completion: number | undefined;
   stage_progress: number | undefined;
   stage_size_bytes: number | undefined;
-  rtime_estimated_completion: number | undefined;
 }
 
 export enum EUpdaterState {

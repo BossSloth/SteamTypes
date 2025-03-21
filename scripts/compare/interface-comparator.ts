@@ -107,7 +107,7 @@ function compareAndCorrectMembers(
     if (!targetProp) {
       addMissingMember(targetInterface, sourceProp, propName);
 
-      return;
+      continue;
     }
 
     // Property exists in both, check for type differences

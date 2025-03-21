@@ -86,24 +86,24 @@ export enum EGameRecordingErrorType {
 }
 
 export interface ClientNotificationGroupChatMessage extends JsPbMessage {
-  tag(): string;
-
-  /** A Steam64 ID. */
-  steamid_sender(): string;
+  body(): string;
 
   chat_group_id(): string;
 
   chat_id(): string;
 
-  title(): string;
-
-  body(): string;
-
-  rawbody(): string;
-
   icon(): string;
 
   notificationid(): number;
+
+  rawbody(): string;
+
+  /** A Steam64 ID. */
+  steamid_sender(): string;
+
+  tag(): string;
+
+  title(): string;
 }
 
 export interface ClientNotificationFriendMessage extends JsPbMessage {
@@ -132,9 +132,9 @@ export interface ClientNotificationCloudSyncConflict extends JsPbMessage {
 }
 
 export interface ClientNotificationScreenshot extends JsPbMessage {
-  screenshot_handle(): string;
   description(): string;
   local_url(): string;
+  screenshot_handle(): string;
 }
 
 export interface ClientNotificationDownloadCompleted extends JsPbMessage {
@@ -151,8 +151,8 @@ export interface ClientNotificationFriendInviteRollup extends JsPbMessage {
 }
 
 export interface ClientNotificationFriendInGame extends JsPbMessage {
-  steamid(): number;
   game_name(): string;
+  steamid(): number;
 }
 
 export interface ClientNotificationFriendOnline extends JsPbMessage {
@@ -160,17 +160,17 @@ export interface ClientNotificationFriendOnline extends JsPbMessage {
 }
 
 export interface ClientNotificationAchievement extends JsPbMessage {
+  achieved(): boolean;
   achievement_id(): string;
   appid(): number;
-  name(): string;
-  description(): string;
-  image_url(): string;
-  achieved(): boolean;
-  rtime_unlocked(): number;
-  min_progress(): number;
   current_progress(): number;
-  max_progress(): number;
+  description(): string;
   global_achieved_pct(): number;
+  image_url(): string;
+  max_progress(): number;
+  min_progress(): number;
+  name(): string;
+  rtime_unlocked(): number;
 }
 
 export interface ClientNotificationLowBattery extends JsPbMessage {
@@ -182,25 +182,25 @@ export interface ClientNotificationSystemUpdate extends JsPbMessage {
 }
 
 export interface ClientNotificationFriendMessage extends JsPbMessage {
-  tag(): string;
-  steamid(): string;
-  title(): string;
   body(): string;
   icon(): string;
   notificationid(): number;
   response_steamurl(): string;
+  steamid(): string;
+  tag(): string;
+  title(): string;
 }
 
 export interface ClientNotificationGroupChatMessage extends JsPbMessage {
-  tag(): string;
-  steamid_sender(): string;
+  body(): string;
   chat_group_id(): string;
   chat_id(): string;
-  title(): string;
-  body(): string;
-  rawbody(): string;
   icon(): string;
   notificationid(): number;
+  rawbody(): string;
+  steamid_sender(): string;
+  tag(): string;
+  title(): string;
 }
 
 export interface ClientNotificationFamilySharingDeviceAuthorizationChanged extends JsPbMessage {
@@ -210,8 +210,8 @@ export interface ClientNotificationFamilySharingDeviceAuthorizationChanged exten
 
 export interface ClientNotificationFamilySharingStopPlaying extends JsPbMessage {
   accountid_owner(): number;
-  seconds_remaining(): number;
   appid(): number;
+  seconds_remaining(): number;
 }
 
 export interface ClientNotificationFamilySharingLibraryAvailable extends JsPbMessage {
@@ -229,8 +229,8 @@ export interface ClientNotificationGiftReceived extends JsPbMessage {
 }
 
 export interface ClientNotificationItemAnnouncement extends JsPbMessage {
-  new_item_count(): number;
   new_backpack_items(): boolean;
+  new_item_count(): number;
 }
 
 export interface ClientNotificationHardwareSurveyPending extends JsPbMessage {}
@@ -240,8 +240,8 @@ export interface ClientNotificationLowDiskSpace extends JsPbMessage {
 }
 
 export interface ClientNotificationBatteryTemperature extends JsPbMessage {
-  temperature(): number;
   notification_type(): string;
+  temperature(): number;
 }
 
 export interface ClientNotificationDockUnsupportedFirmware extends JsPbMessage {}
@@ -262,10 +262,10 @@ export interface ClientNotificationBroadcastAvailableToWatch extends JsPbMessage
 }
 
 export interface ClientNotificationTimedTrialRemaining extends JsPbMessage {
+  allowed_seconds(): number;
   appid(): number;
   icon(): string;
   offline(): boolean;
-  allowed_seconds(): number;
   played_seconds(): number;
 }
 
@@ -274,34 +274,34 @@ export interface ClientNotificationLoginRefresh extends JsPbMessage {}
 export interface ClientNotificationTimerExpired extends JsPbMessage {}
 
 export interface ClientNotificationSteamInputActionSetChanged extends JsPbMessage {
-  controller_index(): number;
   action_set_name(): string;
+  controller_index(): number;
 }
 
 export interface ClientNotificationRemoteClientConnection extends JsPbMessage {
-  machine(): string;
   connected(): boolean;
+  machine(): string;
 }
 
 export interface ClientNotificationRemoteClientStartStream extends JsPbMessage {
-  machine(): string;
   game_name(): string;
+  machine(): string;
 }
 
 export interface ClientNotificationStreamingClientConnection extends JsPbMessage {
+  connected(): boolean;
   hostname(): string;
   machine(): string;
-  connected(): boolean;
 }
 
 export interface ClientNotificationPlaytimeWarning extends JsPbMessage {
-  type(): string;
   playtime_remaining(): number;
+  type(): string;
 }
 
 export interface ClientNotificationGameRecordingError extends JsPbMessage {
-  game_id(): number;
   error_type(): EGameRecordingErrorType;
+  game_id(): number;
 }
 
 export interface ClientNotificationGameRecordingStart extends JsPbMessage {
@@ -309,9 +309,9 @@ export interface ClientNotificationGameRecordingStart extends JsPbMessage {
 }
 
 export interface ClientNotificationGameRecordingStop extends JsPbMessage {
-  game_id(): number;
   clip_id(): string;
   duration_secs(): number;
+  game_id(): number;
 }
 
 export interface ClientNotificationGameRecordingUserMarkerAdded extends JsPbMessage {
@@ -319,7 +319,7 @@ export interface ClientNotificationGameRecordingUserMarkerAdded extends JsPbMess
 }
 
 export interface CClientNotificationGameRecordingInstantClip extends JsPbMessage {
-  game_id(): number;
   clip_id(): string;
   duration_secs(): number;
+  game_id(): number;
 }

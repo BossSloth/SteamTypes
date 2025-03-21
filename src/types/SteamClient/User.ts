@@ -139,10 +139,10 @@ export interface ConnectionAttempt {
 }
 
 export interface LoginUser {
-  personaName: string;
   accountName: string;
-  rememberPassword: boolean;
   avatarUrl: string;
+  personaName: string;
+  rememberPassword: boolean;
 }
 
 export interface SurveyEntry {

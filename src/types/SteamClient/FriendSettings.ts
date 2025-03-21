@@ -31,8 +31,8 @@ export enum EChatFlashMode {
 }
 
 export interface FriendSettingsFeatureObject {
-  feature: FriendSettingsFeature;
   bEnabled: boolean;
+  feature: FriendSettingsFeature;
 }
 
 export type FriendSettingsFeature =
@@ -48,32 +48,32 @@ export type FriendSettingsFeature =
 export type FriendSettingsEnabledFeatures<T> = Record<FriendSettingsFeature, T>;
 
 export interface FriendSettingsChange {
-  bNotifications_ShowIngame: VDFBoolean;
-  bNotifications_ShowOnline: VDFBoolean;
-  bNotifications_ShowMessage: VDFBoolean;
-  bNotifications_EventsAndAnnouncements: VDFBoolean;
-  bSounds_PlayIngame: VDFBoolean;
-  bSounds_PlayOnline: VDFBoolean;
-  bSounds_PlayMessage: VDFBoolean;
-  bSounds_EventsAndAnnouncements: VDFBoolean;
-  bAlwaysNewChatWindow: VDFBoolean;
-  bForceAlphabeticFriendSorting: VDFBoolean;
-  nChatFlashMode: EChatFlashMode;
-  bRememberOpenChats: VDFBoolean;
-  bCompactQuickAccess: VDFBoolean;
-  bCompactFriendsList: VDFBoolean;
-  bNotifications_ShowChatRoomNotification: VDFBoolean;
-  bSounds_PlayChatRoomNotification: VDFBoolean;
-  bHideOfflineFriendsInTagGroups: VDFBoolean;
-  bHideCategorizedFriends: VDFBoolean;
-  bCategorizeInGameFriendsByGame: VDFBoolean;
-  nChatFontSize: number;
   b24HourClock: VDFBoolean;
-  bDoNotDisturbMode: VDFBoolean;
-  bDisableEmbedInlining: VDFBoolean;
-  bSignIntoFriends: VDFBoolean;
-  bDisableSpellcheck: VDFBoolean;
-  bDisableRoomEffects: VDFBoolean;
+  bAlwaysNewChatWindow: VDFBoolean;
   bAnimatedAvatars: VDFBoolean;
+  bCategorizeInGameFriendsByGame: VDFBoolean;
+  bCompactFriendsList: VDFBoolean;
+  bCompactQuickAccess: VDFBoolean;
+  bDisableEmbedInlining: VDFBoolean;
+  bDisableRoomEffects: VDFBoolean;
+  bDisableSpellcheck: VDFBoolean;
+  bDoNotDisturbMode: VDFBoolean;
+  bForceAlphabeticFriendSorting: VDFBoolean;
+  bHideCategorizedFriends: VDFBoolean;
+  bHideOfflineFriendsInTagGroups: VDFBoolean;
+  bNotifications_EventsAndAnnouncements: VDFBoolean;
+  bNotifications_ShowChatRoomNotification: VDFBoolean;
+  bNotifications_ShowIngame: VDFBoolean;
+  bNotifications_ShowMessage: VDFBoolean;
+  bNotifications_ShowOnline: VDFBoolean;
+  bRememberOpenChats: VDFBoolean;
+  bSignIntoFriends: VDFBoolean;
+  bSounds_EventsAndAnnouncements: VDFBoolean;
+  bSounds_PlayChatRoomNotification: VDFBoolean;
+  bSounds_PlayIngame: VDFBoolean;
+  bSounds_PlayMessage: VDFBoolean;
+  bSounds_PlayOnline: VDFBoolean;
   featuresEnabled: FriendSettingsEnabledFeatures<VDFBoolean>;
+  nChatFlashMode: EChatFlashMode;
+  nChatFontSize: number;
 }

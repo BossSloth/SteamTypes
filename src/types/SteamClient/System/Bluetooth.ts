@@ -72,6 +72,11 @@ export interface Bluetooth {
  */
 export interface BluetoothStateChange {
   /**
+   * Indicates whether Bluetooth is enabled (`true`) or disabled (`false`).
+   */
+  bEnabled: boolean;
+
+  /**
    * An array of Bluetooth adapters with their current state.
    */
   vecAdapters: BluetoothAdapter[];
@@ -80,17 +85,22 @@ export interface BluetoothStateChange {
    * An array of Bluetooth devices with their current state.
    */
   vecDevices: BluetoothDevice[];
-
-  /**
-   * Indicates whether Bluetooth is enabled (`true`) or disabled (`false`).
-   */
-  bEnabled: boolean;
 }
 
 /**
  * Represents information about a Bluetooth adapter.
  */
 export interface BluetoothAdapter {
+  /**
+   * Indicates whether the Bluetooth adapter is in discovering mode.
+   */
+  bDiscovering: boolean;
+
+  /**
+   * Indicates whether the Bluetooth adapter is enabled.
+   */
+  bEnabled: boolean;
+
   /**
    * The unique identifier of the Bluetooth adapter.
    */
@@ -105,47 +115,12 @@ export interface BluetoothAdapter {
    * The name of the Bluetooth adapter.
    */
   sName: string;
-
-  /**
-   * Indicates whether the Bluetooth adapter is enabled.
-   */
-  bEnabled: boolean;
-
-  /**
-   * Indicates whether the Bluetooth adapter is in discovering mode.
-   */
-  bDiscovering: boolean;
 }
 
 /**
  * Represents information about a Bluetooth device.
  */
 export interface BluetoothDevice {
-  /**
-   * The unique identifier of the Bluetooth device.
-   */
-  nId: number;
-
-  /**
-   * The ID of the Bluetooth adapter to which this device is discovered by / connected to.
-   */
-  nAdapterId: number;
-
-  /**
-   * The type of the Bluetooth device (e.g., headphones, mouse, keyboard).
-   */
-  eType: EBluetoothDeviceType;
-
-  /**
-   * The MAC address of the Bluetooth device.
-   */
-  sMAC: string;
-
-  /**
-   * The name of the Bluetooth device.
-   */
-  sName: string;
-
   /**
    * Indicates whether the Bluetooth device is currently connected to the adapter.
    */
@@ -157,9 +132,34 @@ export interface BluetoothDevice {
   bPaired: boolean;
 
   /**
+   * The type of the Bluetooth device (e.g., headphones, mouse, keyboard).
+   */
+  eType: EBluetoothDeviceType;
+
+  /**
+   * The ID of the Bluetooth adapter to which this device is discovered by / connected to.
+   */
+  nAdapterId: number;
+
+  /**
+   * The unique identifier of the Bluetooth device.
+   */
+  nId: number;
+
+  /**
    * The raw signal strength of the Bluetooth device.
    */
   nStrengthRaw: number;
+
+  /**
+   * The MAC address of the Bluetooth device.
+   */
+  sMAC: string;
+
+  /**
+   * The name of the Bluetooth device.
+   */
+  sName: string;
 }
 
 export enum EBluetoothDeviceType {

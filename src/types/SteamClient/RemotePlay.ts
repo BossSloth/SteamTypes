@@ -2,8 +2,15 @@ import { EControllerType } from './Input';
 import { Unregisterable } from './shared';
 
 export interface RemotePlay {
-  BCanAcceptInviteForGame: unknown;
-  BCanCreateInviteForGame: unknown;
+  /**
+   * @params unknown
+   */
+  BCanAcceptInviteForGame(): unknown;
+
+  /**
+   * @params unknown
+   */
+  BCanCreateInviteForGame(): unknown;
 
   BCanHostIsolatedGameAudio(): Promise<boolean>;
 
@@ -21,7 +28,10 @@ export interface RemotePlay {
 
   CloseGroup(): Promise<number>;
 
-  CreateGroup: unknown;
+  /**
+   * @params unknown
+   */
+  CreateGroup(): unknown;
 
   CreateInviteAndSession(steam64Id: string, param1: unknown): unknown;
 
@@ -40,25 +50,71 @@ export interface RemotePlay {
 
   IdentifyController(nControllerIndex: number): unknown;
 
-  InstallAudioDriver: unknown;
-  InstallInputDriver: unknown;
-  MoveControllerToSlot: unknown;
-  RegisterForAdditionalParentalBlocks: Unregisterable;
-  RegisterForAudioDriverPrompt: Unregisterable;
-  RegisterForBitrateOverride: Unregisterable;
+  /**
+   * @params unknown
+   */
+  InstallAudioDriver(): unknown;
+
+  /**
+   * @params unknown
+   */
+  InstallInputDriver(): unknown;
+
+  /**
+   * @params unknown
+   */
+  MoveControllerToSlot(): unknown;
+
+  /**
+   * @params unknown
+   */
+  RegisterForAdditionalParentalBlocks(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForAudioDriverPrompt(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForBitrateOverride(): Unregisterable;
+
   RegisterForClearControllers(callback: () => void): Unregisterable;
-  RegisterForControllerIndexSet: Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForControllerIndexSet(): Unregisterable;
 
   RegisterForDevicesChanges(callback: (devicesChange: RemotePlayDevice[]) => void): Unregisterable;
 
-  RegisterForGroupCreated: Unregisterable;
-  RegisterForGroupDisbanded: Unregisterable;
-  RegisterForInputDriverPrompt: Unregisterable;
-  RegisterForInputDriverRestartNotice: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForGroupCreated(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForGroupDisbanded(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForInputDriverPrompt(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForInputDriverRestartNotice(): Unregisterable;
 
   RegisterForInputUsed(callback: (steam64Id: string, type: EClientUsedInputType, guestId: number) => void): Unregisterable; // only fires on host
 
-  RegisterForInviteResult: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForInviteResult(): Unregisterable;
 
   RegisterForNetworkUtilizationUpdate(
     callback: (steam64Id: string, guestId: number, networkUtilization: number, networkDuration: number) => void,
@@ -66,11 +122,17 @@ export interface RemotePlay {
 
   RegisterForPlaceholderStateChanged(callback: (isShowingPlaceholder: boolean) => void): Unregisterable;
 
-  RegisterForPlayerInputSettingsChanged: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForPlayerInputSettingsChanged(): Unregisterable;
 
   RegisterForQualityOverride(callback: (hostStreamingQualityOverride: number) => void): Unregisterable;
 
-  RegisterForRemoteClientLaunchFailed: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForRemoteClientLaunchFailed(): Unregisterable;
 
   RegisterForRemoteClientStarted(callback: (steam64Id: string, appId: number) => void): Unregisterable; // only fires on client
 
@@ -84,9 +146,9 @@ export interface RemotePlay {
 
   RegisterForRestrictedSessionChanges(callback: (restrictedSession: boolean) => void): Unregisterable;
 
-  RegisterForSessionStopped(callback: (steam64Id: unknown, guestId: unknown, avatarHash?: string) => void): Unregisterable;
-
   RegisterForSessionStarted(callback: (steam64Id: unknown, gameId: unknown, guestId: unknown) => void): Unregisterable;
+
+  RegisterForSessionStopped(callback: (steam64Id: unknown, guestId: unknown, avatarHash?: string) => void): Unregisterable;
 
   RegisterForSettingsChanges(callback: (remotePlaySettings: RemotePlaySettings) => void): Unregisterable;
 
@@ -108,25 +170,53 @@ export interface RemotePlay {
 
   SetPerUserMouseInputEnabledWithGuestID(steam64Id: string, guestId: number, enabled: boolean): unknown;
 
-  SetRemoteDeviceAuthorized: unknown;
+  /**
+   * @params unknown
+   */
+  SetRemoteDeviceAuthorized(): unknown;
 
   SetRemoteDevicePIN(pin: number): void;
 
   SetRemotePlayEnabled(enabled: boolean): void;
 
-  SetStreamingClientConfig: unknown;
-  SetStreamingClientConfigEnabled: unknown;
+  /**
+   * @params unknown
+   */
+  SetStreamingClientConfig(): unknown;
+
+  /**
+   * @params unknown
+   */
+  SetStreamingClientConfigEnabled(): unknown;
 
   SetStreamingDesktopToRemotePlayTogetherEnabled(enabled: boolean): unknown;
 
-  SetStreamingP2PScope: unknown;
-  SetStreamingServerConfig: unknown;
-  SetStreamingServerConfigEnabled: unknown;
+  /**
+   * @params unknown
+   */
+  SetStreamingP2PScope(): unknown;
+
+  /**
+   * @params unknown
+   */
+  SetStreamingServerConfig(): unknown;
+
+  /**
+   * @params unknown
+   */
+  SetStreamingServerConfigEnabled(): unknown;
 
   StopStreamingClient(): void;
 
-  StopStreamingSession: unknown;
-  StopStreamingSessionAndSuspendDevice: unknown;
+  /**
+   * @params unknown
+   */
+  StopStreamingSession(): unknown;
+
+  /**
+   * @params unknown
+   */
+  StopStreamingSessionAndSuspendDevice(): unknown;
 
   UnlockH264(): void;
 
@@ -141,30 +231,30 @@ export enum EClientUsedInputType {
 }
 
 export interface RemotePlayDevice {
-  clientName: string;
-  status: string; // "Connected", "Paired",
-  formFactor: number;
-  unStreamingSessionID: number;
   bCanSuspend: boolean;
+  clientName: string;
+  formFactor: number;
+  status: string; // "Connected", "Paired",
+  unStreamingSessionID: number;
 }
 
 export interface RemotePlaySettings {
-  bRemotePlaySupported: boolean;
-  bRemotePlayEnabled: boolean;
-  eRemotePlayP2PScope: EStreamP2PScope;
-  bRemotePlayServerConfigAvailable: boolean;
-  bRemotePlayServerConfigEnabled: boolean;
-  RemotePlayServerConfig: unknown; // todo: document {}
-  bRemotePlayClientConfigEnabled: boolean;
-  unStreamingSessionID: number;
-  strStreamingClientName: string;
-  RemotePlayClientConfig: unknown; // todo: document {}
-  nDefaultAudioChannels: number;
-  bDefaultEncodeNVIDIA: boolean;
   bDefaultEncodeAMD: boolean;
   bDefaultEncodeIntel: boolean;
+  bDefaultEncodeNVIDIA: boolean;
+  bRemotePlayClientConfigEnabled: boolean;
+  bRemotePlayEnabled: boolean;
+  bRemotePlayServerConfigAvailable: boolean;
+  bRemotePlayServerConfigEnabled: boolean;
+  bRemotePlaySupported: boolean;
+  eRemotePlayP2PScope: EStreamP2PScope;
   nAutomaticResolutionX: number;
   nAutomaticResolutionY: number;
+  nDefaultAudioChannels: number;
+  RemotePlayClientConfig: unknown; // todo: document {}
+  RemotePlayServerConfig: unknown; // todo: document {}
+  strStreamingClientName: string;
+  unStreamingSessionID: number;
 }
 
 export enum EStreamP2PScope {

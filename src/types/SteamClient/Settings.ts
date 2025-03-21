@@ -48,7 +48,10 @@ export interface Settings {
    */
   OpenWindowsMicSettings(): void;
 
-  RegisterForMicVolumeUpdates: Unregisterable;
+  /**
+   * @params unknown
+   */
+  RegisterForMicVolumeUpdates(): Unregisterable;
 
   /**
    * If `data` is deserialized, returns {@link MsgClientSettings}.
@@ -75,13 +78,19 @@ export interface Settings {
 
   SetHostname(hostname: string): void;
 
-  SetMicTestMode: unknown;
+  /**
+   * @params unknown
+   */
+  SetMicTestMode(): unknown;
 
   SetOOBETestMode(value: boolean): void;
 
   SetPreferredMonitor(monitor: string): void;
 
-  SetRegisteredSteamDeck: unknown;
+  /**
+   * @params unknown
+   */
+  SetRegisteredSteamDeck(): unknown;
 
   /**
    * Sets the "Don't save account credentials on this computer" option.
@@ -105,13 +114,13 @@ export interface Settings {
 }
 
 export interface AccountSettings {
-  strEmail: string;
   bEmailValidated: boolean;
   bHasAnyVACBans: boolean;
   bHasTwoFactor: boolean;
+  bSaveAccountCredentials: boolean;
   eSteamGuardState: ESteamGuardState;
   rtSteamGuardEnableTime: number;
-  bSaveAccountCredentials: boolean;
+  strEmail: string;
 }
 
 /**
@@ -173,17 +182,17 @@ export enum ELanguage {
   Max,
 }
 export interface RegisteredSteamDeck {
-  bRegistered: boolean;
   bIgnoreRegistrationPrompt: boolean;
-  strSteamID: string;
+  bRegistered: boolean;
   strSerialNumber: string;
+  strSteamID: string;
 }
 
 export interface TimeZone {
-  utcOffset: number;
+  regionsLocalizationToken: string;
   timezoneID: string;
   timezoneLocalizationToken: string;
-  regionsLocalizationToken: string;
+  utcOffset: number;
 }
 
 interface Region {
@@ -202,32 +211,32 @@ interface AvailableClientBeta {
 }
 
 interface SteamSettings {
-  bIsInClientBeta: boolean;
-  bIsSteamSideload: boolean;
-  eClientBetaState: EClientBetaState;
-  strSelectedBetaName: string;
-  nAvailableBetas: number;
   bChangeBetaEnabled: boolean;
-  nSelectedBetaID: number;
-  vecAvailableClientBetas: AvailableClientBeta[];
-  bIsValveEmail: boolean;
-  bIsInDesktopUIBeta: boolean;
-  bEnableSoftProcessKill: boolean;
-  vecValidDownloadRegions: Region[];
-  vecValidAutoUpdateRestrictHours: Hour[];
   bCompatEnabled: boolean;
   bCompatEnabledForOtherTitles: boolean;
-  strCompatTool: string;
-  strDisplayName: string;
   bDisplayIsExternal: boolean;
+  bDisplayIsUsingAutoScale: boolean;
+  bEnableSoftProcessKill: boolean;
+  bIsInClientBeta: boolean;
+  bIsInDesktopUIBeta: boolean;
+  bIsSteamSideload: boolean;
+  bIsValveEmail: boolean;
+  bUnderscanEnabled: boolean;
+  eClientBetaState: EClientBetaState;
   flAutoDisplayScaleFactor: number;
   flCurrentDisplayScaleFactor: number;
-  bDisplayIsUsingAutoScale: boolean;
-  flMinDisplayScaleFactor: number;
-  flMaxDisplayScaleFactor: number;
   flCurrentUnderscanLevel: number;
-  bUnderscanEnabled: boolean;
+  flMaxDisplayScaleFactor: number;
+  flMinDisplayScaleFactor: number;
+  nAvailableBetas: number;
+  nSelectedBetaID: number;
+  strCompatTool: string;
+  strDisplayName: string;
+  strSelectedBetaName: string;
+  vecAvailableClientBetas: AvailableClientBeta[];
   vecNightModeScheduledHours: Hour[];
+  vecValidAutoUpdateRestrictHours: Hour[];
+  vecValidDownloadRegions: Region[];
 }
 
 export enum EClientBetaState {
@@ -242,11 +251,11 @@ export enum EClientBetaState {
  * CMsgMonitorInfo
  */
 export interface MsgMonitorInfo extends JsPbMessage {
+  add_monitors(param0: unknown, param1: unknown): unknown;
+
   monitors(): Monitor[];
 
   selected_display_name(): string;
-
-  add_monitors(param0: unknown, param1: unknown): unknown;
 
   set_monitors(param0: unknown): unknown;
 
@@ -365,26 +374,27 @@ export interface MsgClientSettings extends JsPbMessage {
 
   force_oobe(): boolean;
 
-  g_background_audio(): EGRAudio;
-
   g_background_a_m(): number;
 
   g_background_a_s(): boolean;
 
-  g_background_path(): string;
+  g_background_audio(): EGRAudio;
 
   g_background_max_keep(): string;
 
+  g_background_mk(): CMsgHotkey;
+
   g_background_mode(): EGRMode;
 
-  g_background_time_resolution(): number;
-
-  g_background_mk(): CMsgHotkey;
+  g_background_path(): string;
 
   g_background_tg(): CMsgHotkey;
 
+  g_background_time_resolution(): number;
+
   g_max_fps(): number;
 
+  game_notes_enable_spellcheck(): boolean;
   gamerecording_automatic_gain_control(): boolean;
   gamerecording_export_codec(): EExportCodec;
   gamerecording_export_directory(): number;
@@ -392,15 +402,14 @@ export interface MsgClientSettings extends JsPbMessage {
   gamerecording_export_limit_frame_rate(): number;
   gamerecording_export_limit_height(): number;
   gamerecording_export_limit_size_mb(): number;
-  gamerecording_export_limit_width(): number;
   gamerecording_export_limit_type(): EGRExportLimitType;
+  gamerecording_export_limit_width(): number;
   gamerecording_force_mic_mono(): boolean;
   gamerecording_hotkey_ic(): CMsgHotkey;
   gamerecording_ic_seconds(): number;
   gamerecording_video_bitrate(): string;
-  gamerecording_video_maxheight(): number;
 
-  game_notes_enable_spellcheck(): boolean;
+  gamerecording_video_maxheight(): number;
 
   gamescope_allow_tearing(): boolean;
 
@@ -515,15 +524,15 @@ export interface MsgClientSettings extends JsPbMessage {
 
   setting_validation_enum(): EHDRVisualization;
 
+  setting_validation_float(): number;
+
   setting_validation_int32(): number;
+
+  setting_validation_string(): string;
 
   setting_validation_uint32(): number;
 
   setting_validation_uint64(): number;
-
-  setting_validation_float(): number;
-
-  setting_validation_string(): string;
 
   shader_precached_size(): string;
 
@@ -601,12 +610,12 @@ export interface MsgClientSettings extends JsPbMessage {
 }
 
 export interface CMsgHotkey extends JsPbMessage {
-  key_code(): number;
   alt_key(): boolean;
-  shift_key(): boolean;
   ctrl_key(): boolean;
-  meta_key(): boolean;
   display_name(): string;
+  key_code(): number;
+  meta_key(): boolean;
+  shift_key(): boolean;
 }
 
 export enum EBroadcastEncoderSetting {

@@ -141,11 +141,11 @@ export interface PushToTalkInfo {
   bEnabled: boolean;
   /** Indicates whether push-to-mute is in use instead. */
   bPushToMute: boolean;
+  /** Push-to-talk hotkey name. */
+  strKeyName: string;
   /**
    * Push-to-talk hotkey.
    * @todo enum? this is not EHIDKeyboardKey
    */
   vkHotKey: number;
-  /** Push-to-talk hotkey name. */
-  strKeyName: string;
 }
