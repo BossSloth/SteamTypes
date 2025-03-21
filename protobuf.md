@@ -15,3 +15,5 @@ Used packages:
 - ts-protoc-gen (probably or some fork of it or a post process script)
 - or else (protoc-gen-ts)
 - or else (ts-proto)
+
+Check https://github.com/IsThereAnyDeal/AugmentedSteam/tree/develop/src/js/Core/Protobufs for inspiration

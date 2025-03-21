@@ -27,6 +27,7 @@ export interface InterfaceProperty {
   type: Type;
   functionInfo?: FunctionInfo;
   optional?: boolean;
+  jsDoc?: string[];
 }
 
 /**

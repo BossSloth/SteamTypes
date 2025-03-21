@@ -28,6 +28,12 @@ export interface BasicPropertyTypes {
 
   infinity: number;
 
+  /**
+   * this value is an enum
+   * @currentValue 7
+   */
+  m_eEnumValue: number;
+
   mixedArray: (boolean | null | number | string)[];
 
   mixedObjectArray: (MixedObjectArray | MixedObjectArray2 | MixedObjectArray3)[];

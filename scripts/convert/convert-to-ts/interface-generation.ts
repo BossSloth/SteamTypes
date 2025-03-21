@@ -86,14 +86,32 @@ function processInterfaceProperties(obj: Record<string, unknown>, properties: st
         type = getType(value, propertyPath);
       }
 
+      const jsDoc = generatePropertyJsDoc(type, key, value);
+
       const interfaceProperty: InterfaceProperty = {
         name: formattedName,
         type,
+        jsDoc,
       };
 
       interfaceDefinition.properties.push(interfaceProperty);
     }
   }
+}
+
+function generatePropertyJsDoc(type: Type, propertyName: string, value: unknown): string[] | undefined {
+  if (!(
+    type instanceof PrimitiveType
+    && type.kind === 'number'
+    && typeof value === 'number'
+    && propertyName.startsWith('m_e')
+  )) {
+    return undefined;
+  }
+
+  // If we got here we have a property that is likely an enum value
+
+  return ['this value is an enum', `@currentValue ${value}`];
 }
 
 /**
@@ -108,11 +126,38 @@ export function generateInterfaceString(interfaceDefinition: TypeScriptInterface
   }
 
   // First collect functions and non-functions separately
+  const sortedProperties = interfaceDefinition.properties.sort(propertySorter);
+  const [functionProperties, nonFunctionProperties] = processProperties(sortedProperties);
+
+  // Add functions first
+  if (functionProperties.length > 0) {
+    result += `${functionProperties.join('\n\n')}\n`;
+
+    // Add empty line between functions and properties if both exist
+    if (nonFunctionProperties.length > 0) {
+      result += '\n';
+    }
+  }
+
+  // Add non-function properties
+  if (nonFunctionProperties.length > 0) {
+    result += `${nonFunctionProperties.join('\n\n')}\n`;
+  }
+
+  result += '}\n';
+
+  return result;
+}
+
+/**
+ * Processes properties and returns two arrays: one for functions and one for non-functions
+ * @param sortedProperties - Array of sorted properties
+ * @returns Tuple of two arrays: [functions, nonFunctions]
+ */
+function processProperties(sortedProperties: InterfaceProperty[]): [string[], string[]] {
   const functions: string[] = [];
   const nonFunctions: string[] = [];
 
-  const sortedProperties = interfaceDefinition.properties.sort(propertySorter);
-  // Process all properties
   for (const property of sortedProperties) {
     if (property.functionInfo) {
       const paramsList = property.functionInfo.params.map((param) => {
@@ -138,28 +183,18 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
       }
     } else {
       const optionalMarker = property.optional ?? false ? '?' : '';
-      nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type.toString()};`);
+      if (property.jsDoc) {
+        nonFunctions.push(`  /**
+${property.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
+   */
+  ${property.name}${optionalMarker}: ${property.type.toString()};`);
+      } else {
+        nonFunctions.push(`  ${property.name}${optionalMarker}: ${property.type.toString()};`);
+      }
     }
   }
 
-  // Add functions first
-  if (functions.length > 0) {
-    result += `${functions.join('\n\n')}\n`;
-
-    // Add empty line between functions and properties if both exist
-    if (nonFunctions.length > 0) {
-      result += '\n';
-    }
-  }
-
-  // Add non-function properties
-  if (nonFunctions.length > 0) {
-    result += `${nonFunctions.join('\n\n')}\n`;
-  }
-
-  result += '}\n';
-
-  return result;
+  return [functions, nonFunctions];
 }
 
 function propertySorter(a: InterfaceProperty, b: InterfaceProperty): number {
