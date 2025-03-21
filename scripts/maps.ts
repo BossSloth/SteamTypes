@@ -34,20 +34,20 @@ export const interfaceMaps: Map[] = [
   { file: 'SteamClient/Music', object: 'SteamClient.Music', srcName: 'Music' },
   // { file: 'SteamClient/Notifications', object: 'SteamClient.Notifications', srcName: 'Notifications' }, // TODO: problem
   { file: 'SteamClient/OpenVR', object: 'SteamClient.OpenVR', srcName: 'OpenVR' },
-  // { file: 'SteamClient/Overlay', object: 'SteamClient.Overlay', srcName: 'Overlay' },
-  // { file: 'SteamClient/Parental', object: 'SteamClient.Parental', srcName: 'Parental' },
-  // { file: 'SteamClient/RemotePlay', object: 'SteamClient.RemotePlay', srcName: 'RemotePlay' },
-  // { file: 'SteamClient/Screenshots', object: 'SteamClient.Screenshots', srcName: 'Screenshots' },
-  // { file: 'SteamClient/ServerBrowser', object: 'SteamClient.ServerBrowser', srcName: 'ServerBrowser' },
-  // { file: 'SteamClient/Settings', object: 'SteamClient.Settings', srcName: 'Settings' },
-  // { file: 'SteamClient/SharedConnection', object: 'SteamClient.SharedConnection', srcName: 'SharedConnection' },
-  // { file: 'SteamClient/Stats', object: 'SteamClient.Stats', srcName: 'Stats' },
-  // { file: 'SteamClient/SteamChina', object: 'SteamClient.SteamChina', srcName: 'SteamChina' },
-  // { file: 'SteamClient/Storage', object: 'SteamClient.Storage', srcName: 'Storage' },
-  // { file: 'SteamClient/Streaming', object: 'SteamClient.Streaming', srcName: 'Streaming' },
-  // { file: 'SteamClient/UI', object: 'SteamClient.UI', srcName: 'UI' },
-  // { file: 'SteamClient/Updates', object: 'SteamClient.Updates', srcName: 'Updates' },
-  // { file: 'SteamClient/URL', object: 'SteamClient.URL', srcName: 'URL' },
+  { file: 'SteamClient/Overlay', object: 'SteamClient.Overlay', srcName: 'Overlay' },
+  // { file: 'SteamClient/Parental', object: 'SteamClient.Parental', srcName: 'Parental' }, // TODO: problem
+  { file: 'SteamClient/RemotePlay', object: 'SteamClient.RemotePlay', srcName: 'RemotePlay' },
+  { file: 'SteamClient/Screenshots', object: 'SteamClient.Screenshots', srcName: 'Screenshots' },
+  // { file: 'SteamClient/ServerBrowser', object: 'SteamClient.ServerBrowser', srcName: 'ServerBrowser' }, // TODO: big problems
+  { file: 'SteamClient/Settings', object: 'SteamClient.Settings', srcName: 'Settings' },
+  { file: 'SteamClient/SharedConnection', object: 'SteamClient.SharedConnection', srcName: 'SharedConnection' },
+  { file: 'SteamClient/Stats', object: 'SteamClient.Stats', srcName: 'Stats' },
+  { file: 'SteamClient/SteamChina', object: 'SteamClient.SteamChina', srcName: 'SteamChina' },
+  { file: 'SteamClient/Storage', object: 'SteamClient.Storage', srcName: 'Storage' },
+  { file: 'SteamClient/Streaming', object: 'SteamClient.Streaming', srcName: 'Streaming' },
+  { file: 'SteamClient/UI', object: 'SteamClient.UI', srcName: 'UI' },
+  { file: 'SteamClient/Updates', object: 'SteamClient.Updates', srcName: 'Updates' },
+  // { file: 'SteamClient/URL', object: 'SteamClient.URL', srcName: 'URL' }, //TODO: problem
   { file: 'SteamClient/User', object: 'SteamClient.User', srcName: 'User' },
   { file: 'SteamClient/WebChat', object: 'SteamClient.WebChat', srcName: 'WebChat' },
   { file: 'SteamClient/WebUITransport', object: 'SteamClient.WebUITransport', srcName: 'WebUITransport' },
@@ -56,3 +56,5 @@ export const interfaceMaps: Map[] = [
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
 ];
+
+export const testMaps: Map[] = [{ file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }]; // TODO: problem

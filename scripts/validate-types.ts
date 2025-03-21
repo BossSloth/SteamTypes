@@ -105,7 +105,7 @@ async function extractInterface(
   interfaceName: string,
 ): Promise<string> {
   logger.debug('\n');
-  logger.log(chalk.blue(`\n🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
+  logger.log(chalk.blue(`🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
 
   const client = await ChromeRemoteInterface({
     host: '127.0.0.1',
@@ -157,7 +157,7 @@ async function run(options: ValidateTypesOptions): Promise<void> {
   let maps = interfaceMaps;
 
   if (options.single !== undefined) {
-    const map = interfaceMaps.find(m => m.file === options.single);
+    const map = maps.find(m => m.file === options.single);
     if (!map) {
       logger.error(chalk.red(`❌ Invalid object: ${options.single}`));
       process.exit(1);

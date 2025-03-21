@@ -49,6 +49,15 @@ export interface Settings {
   OpenWindowsMicSettings(): void;
 
   /**
+   * Registers a callback function to be called when applications with auto-update overrides change.
+   * @note this also get's called when the downloads settings page is opened
+   *
+   * @param callback The callback function to be called.
+   * @returns An object that can be used to unregister the callback.
+   */
+  RegisterForAppsWithAutoUpdateOverrides(callback: (updateOverrides: { appid: number; }[][]) => void): Unregisterable;
+
+  /**
    * @params unknown
    */
   RegisterForMicVolumeUpdates(): Unregisterable;
@@ -61,20 +70,31 @@ export interface Settings {
 
   RegisterForSettingsChanges(callback: (steamSettings: SteamSettings) => void): Unregisterable;
 
-  RegisterForTimeZoneChange(callback: (timezoneId: string) => void): Unregisterable; // When timezone is changed from settings, callback will return new timezoneId
+  /**
+   * Registers a callback function to be called when the timezone is changed.
+   *
+   * When timezone is changed from settings, callback will return new timezoneId
+   * @param callback The callback function to be called.
+   * @returns An object that can be used to unregister the callback.
+   */
+  RegisterForTimeZoneChange(callback: (timezoneId: string) => void): Unregisterable;
+
   ReinitMicSettings(): void;
 
   RenderHotkey(event: KeyCaptureEvent): Promise<string>;
 
   RequestDeviceAuthInfo(): void;
 
-  //
   SelectClientBeta(nBetaID: unknown): unknown;
 
-  // Get from available languages
+  /**
+   * Sets the current language.
+   * @param strShortName The short name of the language. — You can get valid short names from GetAvailableLanguages()
+   */
   SetCurrentLanguage(strShortName: string): void;
 
-  SetEnableSoftProcessKill(value: boolean): void; // Default value is false, this is Valve internal menu
+  // Default value is false, this is Valve internal menu
+  SetEnableSoftProcessKill(value: boolean): void;
 
   SetHostname(hostname: string): void;
 
@@ -100,7 +120,11 @@ export interface Settings {
 
   SetSetting(serializedBase64: string): unknown;
 
-  SetTimeZone(timezoneId: string): void; // You can get valid timezoneIds from GetAvailableTimeZones()
+  /**
+   * Sets the timezone.
+   * @param timezoneId The timezone ID — You can get valid timezoneIds from GetAvailableTimeZones()
+   */
+  SetTimeZone(timezoneId: string): void;
 
   SetUseNintendoButtonLayout(controllerIndex: number, value: boolean): void;
 

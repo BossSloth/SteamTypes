@@ -1,10 +1,11 @@
-import { EResult, Unregisterable } from './shared';
 import { LaunchOption } from './Apps';
+import { EResult, Unregisterable } from './shared';
 
 export interface Streaming {
   AcceptStreamingEULA(param0: unknown, param1: unknown, param2: unknown): unknown;
 
-  CancelStreamGame(): void; // existing stream
+  // existing stream
+  CancelStreamGame(): void;
 
   /**
    * Registers a callback function to be called when the streaming client finishes.
@@ -43,9 +44,10 @@ export interface Streaming {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForStreamingShowLaunchOptions(callback: (appId: number, launchOptions: LaunchOption[]) => void): Unregisterable; // Callback when streaming client receives launch options from host
+  RegisterForStreamingShowLaunchOptions(callback: (appId: number, launchOptions: LaunchOption[]) => void): Unregisterable;
 
-  StreamingContinueStreamGame(): void; // existing game running on another streaming capable device
+  // existing game running on another streaming capable device
+  StreamingContinueStreamGame(): void;
 
   /**
    * Chooses the launch option for the streamed app by its index

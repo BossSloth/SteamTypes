@@ -110,27 +110,56 @@ export interface PathProperties {
 }
 
 export interface VRNotifications {
-  HideCustomNotification: unknown;
-  RegisterForNotificationEvent: Unregisterable;
-  ShowCustomNotification: unknown;
+  /**
+   * @params unknown
+   */
+  HideCustomNotification(): unknown;
+
+  /**
+   * @params unknown
+   */
+  RegisterForNotificationEvent(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  ShowCustomNotification(): unknown;
 }
 
 export interface VROverlay {
+  /**
+   * @params unknown
+   */
+  HideDashboard(): unknown;
+
   IsDashboardVisible(): Promise<boolean>;
 
+  /**
+   * @params unknown
+   */
+  RegisterForButtonPress(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForCursorMovement(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForThumbnailChanged(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForVisibilityChanged(): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  ShowDashboard(): unknown;
+
   SwitchToDashboardOverlay(param0: string): void;
-
-  HideDashboard: unknown;
-
-  RegisterForButtonPress: Unregisterable;
-
-  RegisterForCursorMovement: Unregisterable;
-
-  RegisterForThumbnailChanged: Unregisterable;
-
-  RegisterForVisibilityChanged: Unregisterable;
-
-  ShowDashboard: unknown;
 }
 
 export enum EHMDActivityLevel {

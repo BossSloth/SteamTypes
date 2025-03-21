@@ -6,5 +6,10 @@ export interface Stats {
   // Showcases: Delete, Save-Modify, Save-New
   RecordActivationEvent(param0: string, param1: string): unknown;
 
-  RecordDisplayEvent: unknown;
+  /**
+   * @param param0
+   * @param param1 PlayNextShowcase_NumDisplayed
+   * @param param2 array.length.toString()
+   */
+  RecordDisplayEvent(param0: boolean, param1: string, param2: string): unknown;
 }

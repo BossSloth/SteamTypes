@@ -3,7 +3,8 @@ import { EResult, JsPbMessage, OperationResponse, Unregisterable } from './share
 export interface Updates {
   ApplyUpdates(param0: string): Promise<OperationResponse>;
 
-  CheckForUpdates(): Promise<OperationResponse>; // Checks for software updates
+  // Checks for software updates
+  CheckForUpdates(): Promise<OperationResponse>;
 
   GetCurrentOSBranch(): Promise<OSBranch>;
 

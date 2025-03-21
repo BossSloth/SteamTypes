@@ -12,10 +12,6 @@ export interface RemotePlay {
    */
   BCanCreateInviteForGame(): unknown;
 
-  BCanHostIsolatedGameAudio(): Promise<boolean>;
-
-  BEnabled(): Promise<boolean>;
-
   BRemotePlayTogetherGuestOnPhoneOrTablet(steam64Id: string, guestId: number): Promise<boolean>;
 
   BRemotePlayTogetherGuestSupported(): Promise<boolean>;
@@ -39,9 +35,15 @@ export interface RemotePlay {
 
   GetClientID(): Promise<string>;
 
-  GetClientStreamingBitrate(): Promise<number>; // todo: -1 not streaming??
-  GetClientStreamingQuality(): Promise<number>; // todo: -1 not streaming??
-  GetControllerType(param0: number): Promise<EControllerType>; // todo: param0 with value 0 is host controller type - param0 is likely an index of clients or guestId?
+  // todo: -1 not streaming??
+  GetClientStreamingBitrate(): Promise<number>;
+
+  // todo: -1 not streaming??
+  GetClientStreamingQuality(): Promise<number>;
+
+  // todo: param0 with value 0 is host controller type - param0 is likely an index of clients or guestId?
+  GetControllerType(param0: number): Promise<EControllerType>;
+
   GetGameSystemVolume(): Promise<number>;
 
   GetPerUserInputSettings(steam64Id: string): unknown;
@@ -109,16 +111,18 @@ export interface RemotePlay {
    */
   RegisterForInputDriverRestartNotice(): Unregisterable;
 
-  RegisterForInputUsed(callback: (steam64Id: string, type: EClientUsedInputType, guestId: number) => void): Unregisterable; // only fires on host
+  // only fires on host
+  RegisterForInputUsed(callback: (steam64Id: string, type: EClientUsedInputType, guestId: number) => void): Unregisterable;
 
   /**
    * @params unknown
    */
   RegisterForInviteResult(): Unregisterable;
 
+  // only fires on host
   RegisterForNetworkUtilizationUpdate(
     callback: (steam64Id: string, guestId: number, networkUtilization: number, networkDuration: number) => void,
-  ): Unregisterable; // only fires on host
+  ): Unregisterable;
 
   RegisterForPlaceholderStateChanged(callback: (isShowingPlaceholder: boolean) => void): Unregisterable;
 
@@ -134,9 +138,11 @@ export interface RemotePlay {
    */
   RegisterForRemoteClientLaunchFailed(): Unregisterable;
 
-  RegisterForRemoteClientStarted(callback: (steam64Id: string, appId: number) => void): Unregisterable; // only fires on client
+  // only fires on client
+  RegisterForRemoteClientStarted(callback: (steam64Id: string, appId: number) => void): Unregisterable;
 
-  RegisterForRemoteClientStopped(callback: (steam64Id: string, appId: number) => void): Unregisterable; // only fires on client
+  // only fires on client
+  RegisterForRemoteClientStopped(callback: (steam64Id: string, appId: number) => void): Unregisterable;
 
   RegisterForRemoteDeviceAuthorizationCancelled(callback: () => void): Unregisterable;
 
@@ -145,6 +151,11 @@ export interface RemotePlay {
   RegisterForRemoteDevicePairingPINChanged(callback: (device: string, pin: string) => void): Unregisterable;
 
   RegisterForRestrictedSessionChanges(callback: (restrictedSession: boolean) => void): Unregisterable;
+
+  /**
+   * @params unknown
+   */
+  RegisterForSessionJoined(): unknown;
 
   RegisterForSessionStarted(callback: (steam64Id: unknown, gameId: unknown, guestId: unknown) => void): Unregisterable;
 
@@ -220,7 +231,8 @@ export interface RemotePlay {
 
   UnlockH264(): void;
 
-  UnpairRemoteDevices(): void; // unpairs all devices
+  // unpairs all devices
+  UnpairRemoteDevices(): void;
 }
 
 export enum EClientUsedInputType {
