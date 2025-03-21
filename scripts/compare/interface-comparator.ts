@@ -1,11 +1,12 @@
 import chalk from 'chalk';
 import * as diff from 'diff';
-import { InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, SyntaxKind, TypeNode } from 'ts-morph';
+import { EnumDeclaration, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, SyntaxKind, TypeNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
-import { logger } from './shared';
+import { getJsDocTagValue, logger } from './shared';
 
 const CustomJsDocTags = {
   originalName: 'compareOriginalName',
+  currentValue: 'currentValue',
 };
 
 /**
@@ -19,7 +20,7 @@ interface InterfaceProcessingTask {
 // Global state for interface processing
 let interfaceQueue: InterfaceProcessingTask[] = [];
 let processedInterfaces = new Set<string>();
-let currentTargetSourceFile: SourceFile;
+export let currentTargetSourceFile: SourceFile;
 let currentSourceSourceFile: SourceFile;
 
 /**
@@ -101,7 +102,7 @@ function compareAndCorrectMembers(
     let targetProp = targetMembersMap.get(propName);
 
     // Check for mismatched kinds
-    if (targetProp && targetProp.getKind() !== sourceProp.getKind()) {
+    if (targetProp && targetProp.getKind() !== sourceProp.getKind() && !targetProp.hasQuestionToken()) {
       // Property kind mismatch, remove the property
       targetProp.remove();
       targetProp = undefined;
@@ -123,7 +124,7 @@ function compareAndCorrectMembers(
 
   // Check for extra properties in target that don't exist in source
   for (const [propName, targetProp] of targetMembersMap) {
-    if (!sourceMembersMap.has(propName)) {
+    if (!sourceMembersMap.has(propName) && !targetProp.hasQuestionToken()) {
       // Property exists in target but not in source, remove it
       targetProp.remove();
     }
@@ -195,6 +196,10 @@ function compareAndCorrectPropertyTypes(
     return;
   }
 
+  if (compareEnums(targetProp, sourceProp)) {
+    return;
+  }
+
   // Handle interface references
   if (isInterfaceType(targetTypeNode) && isInterfaceType(sourceTypeNode)) {
     handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
@@ -226,6 +231,70 @@ function isImportedType(targetProp: PropertySignature): boolean {
     importDecl.getNamedImports().some(importSpec => importSpec.getName() === targetProp.getType().getText()));
 
   return isImported;
+}
+
+/**
+ * Compares two enum properties and updates the target property if different
+ *
+ * @returns true if the rest of the comparison should be skipped
+ */
+function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignature): boolean {
+// Check if the source property has a @currentValue JSDoc tag (indicating it's an enum)
+  const currentStrValue = getJsDocTagValue(sourceProp, CustomJsDocTags.currentValue);
+  const enumCurrentValue = currentStrValue !== undefined ? parseInt(currentStrValue) : undefined;
+
+  // If it's an enum in the source, preserve the type and copy the JSDoc
+  if (enumCurrentValue !== undefined) {
+    if (!targetProp.getType().isEnum()) {
+      const enumName = sourceProp.getName().replace(/^m_e/, 'E');
+      // Check if the enum already exists in the target file
+      const existingEnum = currentTargetSourceFile.getEnum(enumName);
+      if (!existingEnum) {
+        // Add new enum to target
+        currentTargetSourceFile.addEnum({
+          name: enumName,
+          members: [
+            {
+              name: enumName,
+              value: enumCurrentValue,
+            },
+          ],
+          isExported: true,
+          docs: ['@generated'],
+        });
+      }
+
+      // Update target property to use the new enum
+      targetProp.setType(enumName);
+
+      return true;
+    }
+
+    const targetSymbol = targetProp.getType().getSymbol();
+    if (!targetSymbol) {
+      throw new Error(`Failed to get symbol for property ${targetProp.getName()}`);
+    }
+    const enumDeclaration = targetSymbol.getDeclarations()[0] as EnumDeclaration;
+
+    const enumMembers = enumDeclaration.getMembers();
+
+    // Check if current value is in the enum
+    if (!enumMembers.some(member => member.getValue() === enumCurrentValue)) {
+      // Add new enum member
+      enumDeclaration.addMember({
+        name: 'TODO: change me',
+        value: enumCurrentValue,
+      });
+    }
+
+    return true;
+  }
+
+  if (targetProp.getType().isEnum() && sourceProp.getType().isNumber()) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -269,8 +338,8 @@ function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp
 
   if (!targetTypeNode || !sourceTypeNode) return;
 
-  const targetTypeText = targetTypeNode.getText();
-  const sourceTypeText = sourceTypeNode.getText();
+  const targetTypeText = targetTypeNode.getType().getText();
+  const sourceTypeText = sourceTypeNode.getType().getText();
 
   // Update the type if it's different
   if (targetTypeText !== sourceTypeText) {

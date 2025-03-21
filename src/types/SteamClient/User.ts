@@ -1,3 +1,4 @@
+import { CurrentUser, ELoginState } from '../Global/App';
 import { OperationResponse, Unregisterable } from './shared';
 
 export interface User {
@@ -125,52 +126,16 @@ export interface User {
   /**
    * Restarts the Steam client.
    */
-  StartRestart(): unknown;
+  StartRestart(param0: boolean): never;
 
-  StartShutdown(flag: boolean): unknown;
+  /**
+   * Shuts down the Steam client.
+   */
+  StartShutdown(param0: boolean): never;
 }
 
 export interface ConnectionAttempt {
   rtCooldownExpiration: number;
-}
-
-export interface CurrentUser {
-  NotificationCounts: {
-    async_game_updates: number;
-    comments: number;
-    gifts: number;
-    help_request_replies: number;
-    inventory_items: number;
-    invites: number;
-    moderator_messages: number;
-    offline_messages: number;
-    trade_offers: number;
-  };
-  bHWSurveyPending: boolean;
-  bIsLimited: boolean;
-  bIsOfflineMode: boolean;
-  bPromptToChangePassword: boolean;
-  bSupportAckOnlyMessages: boolean;
-  bSupportAlertActive: boolean;
-  bSupportPopupMessage: boolean;
-  clientinstanceid: string;
-  strAccountBalance: string;
-  strAccountBalancePending: string;
-  strAccountName: string;
-  strFamilyGroupID: string;
-  strSteamID: string;
-}
-
-export enum ELoginState {
-  None,
-  WelcomeDialog,
-  WaitingForCreateUser,
-  WaitingForCredentials,
-  WaitingForNetwork,
-  WaitingForServerResponse,
-  WaitingForLibraryReady,
-  Success,
-  Quit,
 }
 
 export interface LoginUser {

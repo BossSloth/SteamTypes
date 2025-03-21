@@ -1,13 +1,13 @@
 import { ConnectionManager } from './ConnectionManager';
 
 export interface App {
-  BFinishedInitStageOne(): unknown;
+  BFinishedInitStageOne(): boolean;
 
-  BHardwareSurveyPending(): boolean;
+  BHardwareSurveyPending(): CurrentUser['bHWSurveyPending'];
 
-  BHasAckOnlyActiveSupportAlerts(): boolean;
+  BHasAckOnlyActiveSupportAlerts(): CurrentUser['bSupportAckOnlyMessages'];
 
-  BHasActiveSupportAlerts(): boolean;
+  BHasActiveSupportAlerts(): CurrentUser['bSupportAlertActive'];
 
   BHasCurrentUser(): boolean;
 
@@ -17,23 +17,23 @@ export interface App {
 
   BIsInOOBE(): boolean;
 
-  BIsOfflineMode(): unknown;
+  BIsOfflineMode(): CurrentUser['bIsOfflineMode'];
 
-  BMustShowSupportAlertDialog(): boolean;
+  BMustShowSupportAlertDialog(): CurrentUser['bSupportPopupMessage'];
 
-  BSupportAlertDialogActive(): unknown;
+  BSupportAlertDialogActive(): App['m_bSupportAlertModalActive'];
 
-  BWasEverLoggedIn(): unknown;
+  BWasEverLoggedIn(): boolean;
 
   CloseSupportAlertsModal(): void;
 
-  GetCloudStorageForLibrary(): unknown;
+  GetCloudStorageForLibrary(): CloudStorage;
 
-  GetCurrentUser(): unknown;
+  GetCurrentUser(): CurrentUser;
 
-  GetFamilyGroupID(): unknown;
+  GetFamilyGroupID(): CurrentUser['strFamilyGroupID'];
 
-  GetFamilyGroupName(): unknown;
+  GetFamilyGroupName(): CurrentUser['strFamilyGroupName'];
 
   GetServicesInitialized(): boolean;
 
@@ -69,11 +69,11 @@ export interface App {
 
   ShowSupportAlertsModal(): void;
 
-  WaitForServicesInitialized(): Promise<unknown>;
+  WaitForServicesInitialized(): Promise<boolean>;
 
   cm: ConnectionManager;
 
-  LoginState: number;
+  LoginState: ELoginState;
 
   m_bFinishedStage1: boolean;
 
@@ -87,16 +87,16 @@ export interface App {
 
   m_bWasEverLoggedIn: boolean;
 
-  m_cloudStorage: m_cloudStorage;
+  m_cloudStorage: CloudStorage;
 
   m_cm: ConnectionManager;
 
-  m_CurrentUser: m_CurrentUser;
+  m_CurrentUser: CurrentUser;
 
-  m_eLoginState: number;
+  m_eLoginState: ELoginState;
 }
 
-export interface m_cloudStorage {
+export interface CloudStorage {
   Get(e: unknown): unknown;
 
   GetByPrefix(e: unknown): unknown;
@@ -115,10 +115,10 @@ export interface m_cloudStorage {
 
   StoreString(e: unknown, t: unknown, r: unknown, n: unknown): Promise<void>;
 
-  m_eNamespace: number;
+  m_eNamespace: ENamespace;
 }
 
-export interface m_CurrentUser {
+export interface CurrentUser {
   bHWSurveyPending: boolean;
 
   bIsLimited: boolean;
@@ -145,6 +145,8 @@ export interface m_CurrentUser {
 
   strFamilyGroupID: string;
 
+  strFamilyGroupName?: string;
+
   strSteamID: string;
 }
 
@@ -166,4 +168,21 @@ export interface NotificationCounts {
   offline_messages: number;
 
   trade_offers: number;
+}
+
+export enum ELoginState {
+  None,
+  WelcomeDialog,
+  WaitingForCreateUser,
+  WaitingForCredentials,
+  WaitingForNetwork,
+  WaitingForServerResponse,
+  WaitingForLibraryReady,
+  Success,
+  Quit,
+}
+
+export enum ENamespace {
+  Invalid,
+  Library,
 }

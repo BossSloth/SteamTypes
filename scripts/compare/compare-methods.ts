@@ -1,4 +1,4 @@
-import type { MethodSignature } from 'ts-morph';
+import { MethodSignature } from 'ts-morph';
 
 /**
  * Compares and corrects method types
@@ -31,8 +31,8 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
     targetMethod.setReturnType(sourceReturnTypeNode.getText());
   } else if (targetReturnTypeNode && sourceReturnTypeNode) {
     // Both have return types, check if they're different
-    const targetReturnTypeText = targetReturnTypeNode.getText();
-    const sourceReturnTypeText = sourceReturnTypeNode.getText();
+    const targetReturnTypeText = targetReturnTypeNode.getType().getText();
+    const sourceReturnTypeText = sourceReturnTypeNode.getType().getText();
 
     if (!sourceReturnTypeText.includes('unknown') && targetReturnTypeText !== sourceReturnTypeText) {
       // Update the return type
