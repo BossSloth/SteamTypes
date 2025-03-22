@@ -70,7 +70,7 @@ function processInterfaceQueue(): void {
     compareAndCorrectHeritageClause(targetInterface, sourceInterface);
 
     // Order members
-    orderMembers(targetInterface);
+    // orderMembers(targetInterface);
   }
 }
 
@@ -209,45 +209,45 @@ function compareAndCorrectHeritageClause(
   }
 }
 
-function orderMembers(targetInterface: InterfaceDeclaration): void {
-  // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
-  const newText = targetInterface.getFullText()
-    .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
-    .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
-  targetInterface.replaceWithText(newText.trim());
+// function orderMembers(targetInterface: InterfaceDeclaration): void {
+//   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
+//   const newText = targetInterface.getFullText()
+//     .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
+//     .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
+//   targetInterface.replaceWithText(newText.trim());
 
-  const members = targetInterface.getMembers();
-  members.sort((a, b) => {
-    // Method signatures should come before property signatures
-    if (a instanceof MethodSignature && b instanceof PropertySignature) return 1;
-    if (a instanceof PropertySignature && b instanceof MethodSignature) return -1;
+//   const members = targetInterface.getMembers();
+//   members.sort((a, b) => {
+//     // Method signatures should come before property signatures
+//     if (a instanceof MethodSignature && b instanceof PropertySignature) return 1;
+//     if (a instanceof PropertySignature && b instanceof MethodSignature) return -1;
 
-    return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
-  });
+//     return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
+//   });
 
-  for (let i = members.length - 1; i >= 0; i--) {
-    members[i].setOrder(members.length - 1 - i);
-    let text = members[i].getFullText();
-    // Make sure there is a newline between members
-    if (i !== members.length - 1 && !text.startsWith('\n\n')) {
-      text = text.replace(/^\n\n*/, '');
-      members[i].replaceWithText(`\n${text}`);
-    }
-  }
+//   for (let i = members.length - 1; i >= 0; i--) {
+//     members[i].setOrder(members.length - 1 - i);
+//     let text = members[i].getFullText();
+//     // Make sure there is a newline between members
+//     if (i !== members.length - 1 && !text.startsWith('\n\n')) {
+//       text = text.replace(/^\n\n*/, '');
+//       members[i].replaceWithText(`\n${text}`);
+//     }
+//   }
 
-  // Replace all moved jsdoc back to single line comments
-  const newText2 = targetInterface.getFullText()
-    .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
-    .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
-  targetInterface.replaceWithText(newText2.trim());
+//   // Replace all moved jsdoc back to single line comments
+//   const newText2 = targetInterface.getFullText()
+//     .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
+//     .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
+//   targetInterface.replaceWithText(newText2.trim());
 
-  // targetInterface.getProperties().forEach(prop => {
-  //   if (prop.getFullText().endsWith('\n')) {
-  //     return;
-  //   }
-  //   prop.replaceWithText(prop.getFullText().replaceAll('\n', '') + '\n');
-  // });
-}
+//   // targetInterface.getProperties().forEach(prop => {
+//   //   if (prop.getFullText().endsWith('\n')) {
+//   //     return;
+//   //   }
+//   //   prop.replaceWithText(prop.getFullText().replaceAll('\n', '') + '\n');
+//   // });
+// }
 
 /**
  * Generates a colored diff between original and new text

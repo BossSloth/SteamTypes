@@ -1,4 +1,4 @@
-interface Map {
+export interface InterfaceMap {
   /** Path to the file relative to src/types */
   file: string;
   /** The SharedJs object so like `SteamClient.Apps` */
@@ -7,7 +7,7 @@ interface Map {
   srcName: string;
 }
 
-export const interfaceMaps: Map[] = [
+export const interfaceMaps: InterfaceMap[] = [
   // { object: 'SteamClient.Apps', file: 'SteamClient/Apps', srcName: 'Apps' }, //TODO: Apps doesn't work it crashes on some comment lines
   { file: 'SteamClient/Auth', object: 'SteamClient.Auth', srcName: 'Auth' },
   { file: 'SteamClient/Auth', object: 'await SteamClient.Auth.GetRefreshInfo()', srcName: 'AuthRefreshInfo' },
@@ -55,6 +55,7 @@ export const interfaceMaps: Map[] = [
   { file: 'Global/App', object: 'window.App', srcName: 'App' },
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
+  { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
 ];
 
-export const testMaps: Map[] = [{ file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }]; // TODO: problem
+export const testMaps: InterfaceMap[] = [{ file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }]; // TODO: problem

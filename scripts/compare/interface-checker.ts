@@ -30,6 +30,8 @@ function extractMembersFromString(interfaceString: string): SourceFile {
   return project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, interfaceString);
 }
 
+let sourceSourceFile: SourceFile;
+
 // Main function to compare interfaces
 function compareInterfaces(
   filePath: string,
@@ -42,12 +44,14 @@ function compareInterfaces(
   logger.debug(chalk.cyan(`🔄 Comparing interfaces for ${chalk.bold(interfaceName)}...`));
 
   // Extract members from the actual file
-  logger.log(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceName)}...`));
+  logger.debug(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceName)}...`));
   const targetSourceFile = extractInterfaceMembers(filePath);
 
+  // if (sourceSourceFile === undefined) {
   // Extract members from the provided interface string
   logger.debug(chalk.blue('🔍 Extracting members from provided interface string...'));
-  const sourceSourceFile = extractMembersFromString(providedInterfaceString);
+  sourceSourceFile = extractMembersFromString(providedInterfaceString);
+  // }
 
   // Compare members and optionally apply changes
   // const result = editInterfaceToMatch(srcFileInfo.interfaceDeclaration, steamObjectInfo.interfaceDeclaration, srcFileInfo.sourceFile, filePath);

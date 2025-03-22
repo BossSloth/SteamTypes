@@ -15,7 +15,8 @@ pnpm add steam-types
 
 
 ## Useful command
-Fill the app details cache with the first 100 apps
+Fill the app details cache with the first 500 apps
 ```javascript
-collectionStore.allAppsCollection.m_rgApps.slice(0, 100).forEach(item => appDetailsCache.FetchDataForApp(item))
+collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDetailsCache.FetchDataForApp(item))
+collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDetailsStore.GetAppDetails(item))
 ```

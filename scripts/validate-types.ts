@@ -24,6 +24,8 @@ const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'conver
 
 let logger: Logger;
 
+let sharedJsClient: ChromeRemoteInterface.Client;
+
 /**
  * Connects to the Steam client and finds the SharedJSContext target
  */
@@ -68,13 +70,13 @@ ${chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.')}`, { ca
 async function injectConvertToTypescriptJs(targetId: string, force = false): Promise<void> {
   logger.debug(chalk.blue(`🔄 Injecting injection script into SharedJSContext window (ID: ${targetId})...`));
 
-  const client = await ChromeRemoteInterface({
+  sharedJsClient = await ChromeRemoteInterface({
     host: '127.0.0.1',
     port: 8080,
     target: targetId,
   });
 
-  const hasScript = await client.Runtime.evaluate({
+  const hasScript = await sharedJsClient.Runtime.evaluate({
     expression: "typeof window.convertToTypescript !== 'undefined'",
     returnByValue: true,
   });
@@ -83,64 +85,72 @@ async function injectConvertToTypescriptJs(targetId: string, force = false): Pro
 
   if (returnValue && !force) {
     logger.debug(chalk.green('✅ Script already injected'));
-    client.close();
 
     return;
   }
 
   // Inject the content of inject.js into the context of the target
-  await client.Runtime.evaluate({
+  await sharedJsClient.Runtime.evaluate({
     expression: fs.readFileSync(convertToTsFilePath, 'utf8'),
   });
-
-  client.close();
 }
+
+let extractTime = 0;
 
 /**
  * Extracts TypeScript interface from a Steam client object
  */
 async function extractInterface(
-  targetId: string,
   objectPath: string,
   interfaceName: string,
 ): Promise<string> {
   logger.debug('\n');
-  logger.log(chalk.blue(`🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
-
-  const client = await ChromeRemoteInterface({
-    host: '127.0.0.1',
-    port: 8080,
-    target: targetId,
-  });
-
-  // Extract domains we need
-  const { Runtime } = client;
-
-  // Enable the Runtime domain
-  await Runtime.enable();
+  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
 
   // Execute the conversion function
   logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(objectPath)} to TypeScript interface...`));
 
-  const response = await Runtime.evaluate({
+  const startTime = Date.now();
+
+  const response = await sharedJsClient.Runtime.evaluate({
     expression: `async function evalConvert() { const result = window.convertToTypescript(${objectPath}, '${interfaceName}'); return result; } evalConvert()`,
     returnByValue: true,
     awaitPromise: true,
   });
 
   if (response.exceptionDetails) {
-    await client.close();
     throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
   }
 
   const interfaceContent = response.result.value as string;
   logger.debug(chalk.green('✅ Successfully generated TypeScript interface'));
 
-  // Clean up
-  await client.close();
+  extractTime += Date.now() - startTime;
 
   return interfaceContent;
 }
+
+// TODO: check when we have more mapped if this improves performance
+// async function extractInterfaces(maps: InterfaceMap[]): Promise<string> {
+//   const mappedObject = maps.map(map => `${map.srcName}: ${map.object}`);
+
+//   const expression = `async function evalConvert() { const result = window.convertToTypescript({${mappedObject.join(',')}}, 'AllObjects'); return result; } evalConvert()`;
+
+//   const response = await sharedJsClient.Runtime.evaluate({
+//     expression,
+//     returnByValue: true,
+//     awaitPromise: true,
+//   });
+
+//   if (response.exceptionDetails) {
+//     throw new Error(`Failed to extract interfaces: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
+//   }
+
+//   const interfaceContents = response.result.value as string;
+//   // logger.debug(chalk.green('✅ Successfully extracted TypeScript interfaces'));
+
+//   return interfaceContents;
+// }
 
 interface ValidateTypesOptions {
   single?: string;
@@ -168,10 +178,13 @@ async function run(options: ValidateTypesOptions): Promise<void> {
 
   const diffs: string[] = [];
 
+  // const startExtractTime = Date.now();
+  // const interfaceContent = await extractInterfaces(maps);
+  // extractTime = Date.now() - startExtractTime;
+
   // Create an array of promises for parallel execution
   const interfacePromises = maps.map(async (map) => {
     const interfaceContent = await extractInterface(
-      targetId,
       map.object,
       map.srcName,
     );
@@ -180,7 +193,7 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     // Check if the file exists
     if (!fs.existsSync(filePath)) {
       // Create the file
-      fs.writeFileSync(filePath, interfaceContent);
+      fs.writeFileSync(filePath, await extractInterface(map.object, map.srcName));
     }
 
     // if (options.interactive && (result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
@@ -203,6 +216,8 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     logger.log('\n');
     logger.log(diffs.join('\n\n'));
   }
+
+  logger.log(chalk.blue(`Extract time: ${extractTime} ms`));
 }
 
 /**
@@ -227,7 +242,11 @@ async function main(): Promise<void> {
       logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
 
       const startTime = performance.now();
-      await run(options);
+      try {
+        await run(options);
+      } finally {
+        sharedJsClient.close();
+      }
       const endTime = performance.now();
 
       logger.log(chalk.green('\n✅ Operation completed successfully\n'));
