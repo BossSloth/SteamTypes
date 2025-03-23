@@ -1,0 +1,121 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Interface Comparator > simple add missing property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,4 @@
+ export interface SimpleInterface {
+   existingProp: string;
++  newProp: number;
+ }
+"
+`;
+
+exports[`Interface Comparator > simple array type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: string[];
++  existingProp: number[];
+ }
+"
+`;
+
+exports[`Interface Comparator > simple number, set mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: number;
++  existingProp: Set<number>;
+ }
+"
+`;
+
+exports[`Interface Comparator > simple remove property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,3 @@
+ export interface SimpleInterface {
+   existingProp: string;
+-  newProp: number;
+ }
+"
+`;
+
+exports[`Interface Comparator > simple set type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: Set<string>;
++  existingProp: Set<number>;
+ }
+"
+`;
+
+exports[`Interface Comparator > simple string, array mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: string;
++  existingProp: string[];
+ }
+"
+`;
+
+exports[`Interface Comparator > simple type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: string;
++  existingProp: number;
+ }
+"
+`;
+
+exports[`Interface Comparator > simple union type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: string;
++  existingProp: number | string;
+ }
+"
+`;
+
+exports[`Interface Comparator > single 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface SimpleInterface {
+-  existingProp: Set<string>;
++  existingProp: Set<number>;
+ }
+"
+`;
+
+exports[`Interface Comparator > union type with interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+ export interface Container {
+-  data: string | null;
++  data: DataType | null;
+ }
+"
+`;

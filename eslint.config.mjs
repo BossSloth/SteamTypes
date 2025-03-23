@@ -7,13 +7,20 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   { files: ['**/*.{js,mjs,cjs,ts}'] },
-  globalIgnores(['build/*', 'dist/*', '**/*.js', 'scripts/convert/test-output/*', 'scripts/convert/test-cases/functions/*', 'scripts/convert/test-cases/properties/*']),
+  globalIgnores([
+    'build/*',
+    'dist/*',
+    '**/*.js',
+    'scripts/convert/test-output/*',
+    'scripts/convert/test-cases/functions/*',
+    'scripts/convert/test-cases/properties/*',
+  ]),
   {
     languageOptions: {
       globals: globals.node,
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.mjs'],
+          allowDefaultProject: ['*.mjs', '*.config.ts'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -129,6 +136,13 @@ export default tseslint.config(
     files: ['scripts/**'],
     rules: {
       'perfectionist/sort-interfaces': 'off',
+    },
+  },
+  {
+    files: ['tests/**'],
+    rules: {
+      'max-lines-per-function': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
     },
   },
 );

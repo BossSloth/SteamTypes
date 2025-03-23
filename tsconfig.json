@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "src",
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
@@ -21,6 +19,6 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": ["src"],
+  "include": ["src/**/*", "scripts/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]
 }
