@@ -1,6 +1,7 @@
 import { Project, SourceFile } from 'ts-morph';
-import { expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { compareAndCorrectAllInterfaces } from '../../scripts/compare/interface-comparator';
+import { ComparatorTest } from './test-cases';
 
 const project = new Project({
   compilerOptions: {
@@ -10,6 +11,28 @@ const project = new Project({
   },
   useInMemoryFileSystem: true,
 });
+
+export function createTest(name: string, testCases: Record<string, ComparatorTest>): void {
+  describe(`Comparator ${name}`, () => {
+    Object.entries(testCases).forEach(([testName, testValues]) => {
+      it(testName, () => {
+        runComparisonTest(testValues);
+      });
+    });
+  });
+}
+
+export function runComparisonTest(testValues: ComparatorTest): void {
+  const { targetFile, sourceFile } = createTestFiles(testValues.target, testValues.source);
+
+  const diff = runComparison(targetFile, sourceFile, testValues.interfaceName);
+
+  if (testValues.expectsNoDiff ?? false) {
+    expect(diff).toBeNull();
+  } else {
+    assertDiff(diff);
+  }
+}
 
 /**
  * Creates source files with the given content for testing
