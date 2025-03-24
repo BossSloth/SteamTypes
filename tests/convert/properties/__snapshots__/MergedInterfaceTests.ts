@@ -1,6 +1,6 @@
 import { ObservableMap, ObservableSet } from 'mobx';
 
-export interface MergedInterfaceTypes {
+export interface MergedInterfaceTests {
   arrayTypeMergedInterfaceTests: ArrayTypeMergedInterfaceTests;
 
   basicMergedInterfaceTests: BasicMergedInterfaceTests;

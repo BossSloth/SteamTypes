@@ -1,4 +1,4 @@
-export interface ComplexObjectArrays {
+export interface ObjectArraysTests {
   arrayOfArrays: number[][];
 
   arrayOfMixedArrays: ((boolean | null)[] | number[] | string[])[];

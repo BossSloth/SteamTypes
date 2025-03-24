@@ -1,6 +1,6 @@
-import { TestFunction } from "../test-cases";
+import { TestFunction } from './shared';
 
-//#region Map Test Functions
+// #region Map Test Functions
 const mapTestFunctions: Record<string, TestFunction> = {
   // Basic Map operations
   returnEmptyMap: {
@@ -18,14 +18,14 @@ const mapTestFunctions: Record<string, TestFunction> = {
   returnNestedMap: {
     func: () => new Map([
       ['outer1', new Map([['inner1', 1], ['inner2', 2]])],
-      ['outer2', new Map([['inner3', 3], ['inner4', 4]])]
+      ['outer2', new Map([['inner3', 3], ['inner4', 4]])],
     ]),
     expected: 'returnNestedMap(): Map<string, Map<string, number>>;',
   },
   returnMapWithObjects: {
     func: () => new Map([
       ['user1', { id: 1, name: 'John' }],
-      ['user2', { id: 2, name: 'Jane' }]
+      ['user2', { id: 2, name: 'Jane' }],
     ]),
     expected: 'returnMapWithObjects(): Map<string, { id: number; name: string; }>;',
   },
@@ -34,14 +34,15 @@ const mapTestFunctions: Record<string, TestFunction> = {
       const map = new Map();
       map.set('a', 1);
       map.set('b', 2);
+
       return map;
     },
     expected: 'mapOperations(): Map<unknown, unknown>;',
   },
 };
-//#endregion
+// #endregion
 
-//#region Set Test Functions
+// #region Set Test Functions
 const setTestFunctions: Record<string, TestFunction> = {
   // Basic Set operations
   returnEmptySet: {
@@ -63,14 +64,14 @@ const setTestFunctions: Record<string, TestFunction> = {
   returnNestedSet: {
     func: () => new Set([
       new Set([1, 2]),
-      new Set([3, 4])
+      new Set([3, 4]),
     ]),
     expected: 'returnNestedSet(): Set<Set<number>>;',
   },
   returnSetOfObjects: {
     func: () => new Set([
       { id: 1, name: 'John' },
-      { id: 2, name: 'Jane' }
+      { id: 2, name: 'Jane' },
     ]),
     expected: 'returnSetOfObjects(): Set<{ id: number; name: string; }>;',
   },
@@ -79,14 +80,15 @@ const setTestFunctions: Record<string, TestFunction> = {
       const set = new Set();
       set.add('a');
       set.add('b');
+
       return set;
     },
     expected: 'setOperations(): Set<unknown>;',
   },
 };
-//#endregion
+// #endregion
 
-//#region Iterable Test Functions
+// #region Iterable Test Functions
 const iterableTestFunctions: Record<string, TestFunction> = {
   // Generator functions and other iterables
   simpleGenerator: {
@@ -101,6 +103,7 @@ const iterableTestFunctions: Record<string, TestFunction> = {
     func: function* generatorWithReturn() {
       yield 'a';
       yield 'b';
+
       return 'final result';
     },
     expected: "generatorWithReturn(): Generator<'a' | 'b', string, unknown>;",
@@ -112,7 +115,7 @@ const iterableTestFunctions: Record<string, TestFunction> = {
         yield i++;
       }
     },
-    expected: 'infiniteGenerator(): Generator<number, void, unknown>;',
+    expected: 'infiniteGenerator(): Generator<number, never, unknown>;',
   },
   asyncGenerator: {
     func: async function* asyncGenerator() {
@@ -127,7 +130,7 @@ const iterableTestFunctions: Record<string, TestFunction> = {
         [Symbol.iterator]: function* () {
           yield 1;
           yield 2;
-        }
+        },
       };
     },
     expected: 'customIterable(): { [Symbol.iterator]: () => Generator<1 | 2, void, unknown>; };',
@@ -135,16 +138,16 @@ const iterableTestFunctions: Record<string, TestFunction> = {
   iterableWithNext: {
     func: () => {
       return {
-        next: () => ({ value: Math.random(), done: false })
+        next: () => ({ value: Math.random(), done: false }),
       };
     },
     expected: 'iterableWithNext(): { next: () => { value: number; done: boolean; }; };',
   },
 };
-//#endregion
+// #endregion
 
 export const dataStructureTestFunctions = {
   ...mapTestFunctions,
   ...setTestFunctions,
-  ...iterableTestFunctions
+  ...iterableTestFunctions,
 };

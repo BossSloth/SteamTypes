@@ -1,4 +1,4 @@
-export interface EdgeCasePropertyTypes {
+export interface EdgeCasePropertyTests {
   arrayTypeOptimizationTests: ArrayTypeOptimizationTests;
 
   circularReferenceTests: CircularReferenceTests;

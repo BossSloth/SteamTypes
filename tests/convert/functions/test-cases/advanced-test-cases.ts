@@ -1,7 +1,8 @@
-import Long from "long";
-import { TestFunction } from "../test-cases";
+/* eslint-disable max-classes-per-file */
+import Long from 'long';
+import { TestFunction } from './shared';
 
-//#region Async Function Test Cases
+// #region Async Function Test Cases
 // Basic async functions
 const asyncTestFunctions: Record<string, TestFunction> = {
   basicAsyncFunction: {
@@ -25,6 +26,7 @@ const asyncTestFunctions: Record<string, TestFunction> = {
   asyncWithAwait: {
     func: async () => {
       const result = await Promise.resolve(42);
+
       return result * 2;
     },
     expected: 'asyncWithAwait(): Promise<number>;',
@@ -33,6 +35,7 @@ const asyncTestFunctions: Record<string, TestFunction> = {
     func: async () => {
       const a = await Promise.resolve(10);
       const b = await Promise.resolve(20);
+
       return a + b;
     },
     expected: 'asyncWithMultipleAwaits(): Promise<number>;',
@@ -54,7 +57,7 @@ const asyncTestFunctions: Record<string, TestFunction> = {
     expected: 'asyncReturningObject(): Promise<{ status: string; data: number[]; }>;',
   },
   asyncReturningPromise: {
-    func: () => {
+    func: async () => {
       return Promise.resolve('direct promise');
     },
     expected: 'asyncReturningPromise(): Promise<string>;',
@@ -66,9 +69,9 @@ const asyncTestFunctions: Record<string, TestFunction> = {
     expected: 'asyncReturningNestedPromise(): Promise<string>;',
   },
 };
-//#endregion
+// #endregion
 
-//#region Class Test Cases
+// #region Class Test Cases
 class SimpleClass {
   property = 'value';
   method() {
@@ -78,25 +81,25 @@ class SimpleClass {
 
 class ComplexClass {
   private _value: number;
-  
+
   constructor(value: number) {
     this._value = value;
   }
-  
+
   get value() {
     return this._value;
   }
-  
+
   set value(newValue: number) {
     this._value = newValue;
   }
-  
-  calculate(multiplier: number) {
-    return this._value * multiplier;
-  }
-  
+
   static create(value: number) {
     return new ComplexClass(value);
+  }
+
+  calculate(multiplier: number) {
+    return this._value * multiplier;
   }
 }
 
@@ -123,12 +126,14 @@ const classTestFunctions: Record<string, TestFunction> = {
         value: 10,
         increment() {
           this.value++;
+
           return this.value;
         },
         decrement() {
           this.value--;
+
           return this.value;
-        }
+        },
       };
     },
     expected: 'returnClassWithMethods(): { value: number; increment(): number; decrement(): number; };',
@@ -140,33 +145,33 @@ const classTestFunctions: Record<string, TestFunction> = {
           name,
           greet() {
             return `Hello, ${name}!`;
-          }
+          },
         };
       };
     },
     expected: 'returnClassFactory(): (name: unknown) => { name: unknown; greet(): string; };',
   },
 };
-//#endregion
+// #endregion
 
-//#region Enum and Special Types Test Cases
+// #region Enum and Special Types Test Cases
 // Enum-like objects
 const StringEnum = {
   RED: 'red',
   GREEN: 'green',
-  BLUE: 'blue'
+  BLUE: 'blue',
 } as const;
 
 const NumberEnum = {
   ONE: 1,
   TWO: 2,
-  THREE: 3
+  THREE: 3,
 } as const;
 
 const MixedEnum = {
   NAME: 'name',
   ID: 1,
-  ACTIVE: true
+  ACTIVE: true,
 } as const;
 
 // Enums don't work so these will all return unknown
@@ -220,10 +225,10 @@ const enumTestFunctions: Record<string, TestFunction> = {
     expected: 'returnArrayBuffer(): ArrayBuffer;',
   },
 };
-//#endregion
+// #endregion
 
 export const advancedTestFunctions = {
   ...asyncTestFunctions,
   ...classTestFunctions,
-  ...enumTestFunctions
+  ...enumTestFunctions,
 };

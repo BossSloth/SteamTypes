@@ -1,4 +1,4 @@
-//#region Primitive Property Test Cases
+// #region Primitive Property Test Cases
 export const primitivePropertyTests = {
   // String properties
   emptyString: '',
@@ -33,9 +33,9 @@ line 3`,
   // Enum
   m_eEnumValue: 7,
 };
-//#endregion
+// #endregion
 
-//#region Object Property Test Cases
+// #region Object Property Test Cases
 export const objectPropertyTests = {
   // Empty object
   emptyObject: {},
@@ -52,34 +52,34 @@ export const objectPropertyTests = {
     'property.with.dots': 2,
     'property with spaces': 3,
     '123numericStart': 4,
-    '_underscore': 5,
-    '$dollar': 6
+    _underscore: 5,
+    $dollar: 6,
   },
 
   // Object with methods
   objectWithMethods: {
     data: 42,
-    method() { return this.data; }
+    method() { return this.data; },
   },
 
   // Object with getters/setters
   objectWithAccessors: {
     _value: 0,
     get value() { return this._value; },
-    set value(v) { this._value = v; }
+    set value(v) { this._value = v; },
   },
 
   sameStructureDifferentName: {
-    s_x: {k: 10},
-    s_y: {k: 15},
+    s_x: { k: 10 },
+    s_y: { k: 15 },
   },
 
   sameStructureSameName: {
     x: {
-      structure: {value: 'test'}
+      structure: { value: 'test' },
     },
     y: {
-      structure: {value: 'test'}
+      structure: { value: 'test' },
     },
   },
 
@@ -94,14 +94,14 @@ export const objectPropertyTests = {
   },
 
   funcWithDefault: function (x = 1, y = 'string') {
-    return x;
+    return x + y;
   },
 
   nativeCode: Math.random,
 };
-//#endregion
+// #endregion
 
-//#region Array Property Test Cases
+// #region Array Property Test Cases
 export const arrayPropertyTests = {
   // Empty array
   emptyArray: [],
@@ -124,13 +124,13 @@ export const arrayPropertyTests = {
   mixedObjectArray: [{ id: 1 }, { name: 'Item' }, { active: true }],
 
   // Sparse array
-  sparseArray: [,,,3,,,6]
+  sparseArray: [,,,3,,,6],
 };
-//#endregion
+// #endregion
 
 // Export all property test cases
 export const basicPropertyTests = {
   ...primitivePropertyTests,
   ...objectPropertyTests,
-  ...arrayPropertyTests
+  ...arrayPropertyTests,
 };

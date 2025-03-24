@@ -1,7 +1,7 @@
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 
-export interface AdvancedPropertyTypes {
+export interface AdvancedPropertyTests {
   datePropertyTests: DatePropertyTests;
 
   errorPropertyTests: ErrorPropertyTests;

@@ -1,11 +1,11 @@
-export interface BasicPropertyTypes {
-  complexFunc(): number;
+export interface BasicPropertyTests {
+  complexFunc(): 1 | 2;
 
   /**
    * @param x default: 1
    * @param y default: "string"
    */
-  funcWithDefault(x?: number, y?: string): number;
+  funcWithDefault(x?: number, y?: string): string;
 
   /**
    * @native
