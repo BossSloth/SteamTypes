@@ -143,6 +143,9 @@ export default tseslint.config(
       'no-else-return': 'off',
       'max-classes-per-file': 'off',
       '@typescript-eslint/class-methods-use-this': 'off',
+      'perfectionist/sort-interfaces': 'off',
+      '@stylistic/quote-props': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
   {

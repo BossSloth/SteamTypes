@@ -1,4 +1,6 @@
 import { MethodSignature } from 'ts-morph';
+import { currentTargetSourceFile } from './interface-comparator';
+import { isImportedType } from './shared';
 
 /**
  * Compares and corrects method types
@@ -25,6 +27,10 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   // Compare return types
   const targetReturnTypeNode = targetMethod.getReturnTypeNode();
   const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
+
+  if (isImportedType(currentTargetSourceFile, targetMethod.getReturnType())) {
+    return;
+  }
 
   // If source has a return type but target doesn't, update target
   if (sourceReturnTypeNode && !targetReturnTypeNode) {
@@ -73,7 +79,7 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
     }
 
     // Update question token
-    if (sourceParam.hasQuestionToken() !== targetParam.hasQuestionToken()) {
+    if (sourceParam.hasQuestionToken() && sourceParam.hasQuestionToken() !== targetParam.hasQuestionToken()) {
       targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
     }
 

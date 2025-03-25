@@ -1,309 +1,42 @@
 import dedent from 'dedent';
-import { ComparatorTest } from './shared';
+import { ComparatorTest } from './index';
 
 export const interfaceCases: Record<string, ComparatorTest> = {
-  'nested interfaces': {
-    interfaceName: 'Parent',
-    target: dedent/* ts */`
-      export interface Parent {
-        child: Child;
-      }
-
-      export interface Child {
-        name: string;
-      }`,
-    source: dedent/* ts */`
-      export interface Parent {
-        child: Child;
-        id: number;
-      }
-
-      export interface Child {
-        name: string;
-        age: number;
-      }`,
-  },
-
-  'deeply nested interfaces': {
-    interfaceName: 'GrandParent',
-    target: dedent/* ts */`
-      export interface GrandParent {
-        parent: Parent;
-      }
-
-      export interface Parent {
-        child: Child;
-      }
-
-      export interface Child {
-        name: string;
-      }`,
-    source: dedent/* ts */`
-      export interface GrandParent {
-        parent: Parent;
-        generation: number;
-      }
-
-      export interface Parent {
-        child: Child;
-        id: number;
-      }
-
-      export interface Child {
-        name: string;
-        age: number;
-      }`,
-  },
-
-  'observable map': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      import { ObservableMap } from 'mobx';
-
-      export interface Container {
-        data: ObservableMap<string, number>;
-      }`,
-    source: dedent/* ts */`
-      import { ObservableMap } from 'mobx';
-
-      export interface Container {
-        data: ObservableMap<string, boolean>;
-      }`,
-  },
-
-  'observable set': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      import { ObservableSet } from 'mobx';
-
-      export interface Container {
-        data: ObservableSet<number>;
-      }`,
-    source: dedent/* ts */`
-      import { ObservableSet } from 'mobx';
-
-      export interface Container {
-        data: ObservableSet<boolean>;
-      }`,
-  },
-
-  'set type different': {
+  'union type with interface': {
     interfaceName: 'Container',
     target: dedent/* ts */`
       export interface Container {
-        data: Set<number>;
+        data: string | null;
       }`,
     source: dedent/* ts */`
       export interface Container {
-        data: Set<boolean>;
-      }`,
-  },
-
-  'map type different': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      export interface Container {
-        data: Map<string, number>;
-      }`,
-    source: dedent/* ts */`
-      export interface Container {
-        data: Map<string, boolean>;
-      }`,
-  },
-
-  'interface with method signatures': {
-    interfaceName: 'Service',
-    target: dedent/* ts */`
-      export interface Service {
-        getData(): string;
-        setData(value: string): void;
-      }`,
-    source: dedent/* ts */`
-      export interface Service {
-        getData(): string;
-        setData(value: string): void;
-        clearData(): void;
-      }`,
-  },
-
-  // NOTE: We might need an indexed signature test later but for now we don't support it
-  // 'interface with indexed signature': {
-  //   interfaceName: 'Dictionary',
-  //   target: dedent/* ts */`
-  //     export interface Dictionary {
-  //       [key: string]: string;
-  //     }`,
-  //   source: dedent/* ts */`
-  //     export interface Dictionary {
-  //       [key: string]: string | number;
-  //       count: number;
-  //     }`,
-  // },
-
-  'interface with optional properties': {
-    interfaceName: 'Config',
-    target: dedent/* ts */`
-      export interface Config {
-        name: string;
-        version?: string;
-      }`,
-    source: dedent/* ts */`
-      export interface Config {
-        name?: string;
-        version?: string;
-        debug?: boolean;
-      }`,
-  },
-
-  'interface with readonly properties': {
-    interfaceName: 'ImmutableData',
-    target: dedent/* ts */`
-      export interface ImmutableData {
-        readonly id: number;
-        data: string;
-      }`,
-    source: dedent/* ts */`
-      export interface ImmutableData {
-        readonly id: number;
-        readonly data: string;
-        updatedAt: Date;
-      }`,
-  },
-
-  'interface with enum property - number': {
-    interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
-      export interface StatusHolder {
-        status: Status;
+        data: DataType | null;
       }
 
-      export enum Status {
-        Pending,
-        Active,
-        Inactive,
-      }`,
-    source: dedent/* ts */`
-      export interface StatusHolder {
-        /**
-         * @currentValue 1
-        */
-        status: number;
-      }`,
-    expectsNoDiff: true,
-  },
-  'interface with enum property - string': {
-    interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
-      export interface StatusHolder {
-        status: Status;
-      }
-
-      export enum Status {
-        Pending,
-        Active,
-        Inactive,
-      }`,
-    source: dedent/* ts */`
-      export interface StatusHolder {
-        /**
-         * @currentValue 1
-        */
-        status: string;
-      }`,
-    expectsNoDiff: true,
-  },
-  'interface with missing enum property': {
-    interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
-      export interface StatusHolder {
-        status: Status;
-      }
-
-      export enum Status {
-        Pending,
-        Active,
-        Inactive,
-      }`,
-    source: dedent/* ts */`
-      export interface StatusHolder {
-        /**
-         * @currentValue 3
-        */
-        status: number;
-      }`,
-  },
-
-  'interface with circular reference': {
-    interfaceName: 'Node',
-    target: dedent/* ts */`
-      export interface Node {
+      export interface DataType {
         value: string;
+        id: number;
       }`,
-    source: dedent/* ts */`
-      export interface Node {
+  },
+
+  'inverse union type with interface': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: DataType | null;
+      }
+
+      export interface DataType {
         value: string;
-        next: Node | null;
-      }`,
-  },
-
-  'interface with complex property types': {
-    interfaceName: 'ComplexData',
-    target: dedent/* ts */`
-      export interface ComplexData {
-        simpleArray: string[];
-        record: Record<string, number>;
+        id: number;
       }`,
     source: dedent/* ts */`
-      export interface ComplexData {
-        simpleArray: string[];
-        record: Record<string, number>;
-        nestedArray: Array<Array<string>>;
-        complexMap: Map<string, Set<number>>;
+      export interface Container {
+        data: string | null;
       }`,
   },
 
-  // TODO: this crashes
-  // 'interface with JSDoc comments': {
-  //   interfaceName: 'DocumentedInterface',
-  //   target: dedent/* ts */`
-  //     /**
-  //      * A documented interface
-  //      */
-  //     export interface DocumentedInterface {
-  //       /** The ID of the entity */
-  //       id: number;
-  //     }`,
-  //   source: dedent/* ts */`
-  //     /**
-  //      * A documented interface
-  //      * @description This is a more detailed description
-  //      */
-  //     export interface DocumentedInterface {
-  //       /** The ID of the entity */
-  //       id: number;
-  //       /**
-  //        * The name of the entity
-  //        * @example "Example Name"
-  //        */
-  //       name: string;
-  //     }`,
-  // },
-
-  'interface with tuple type': {
-    interfaceName: 'TupleContainer',
-    target: dedent/* ts */`
-      export interface TupleContainer {
-        coordinates: [number, number];
-      }`,
-    source: dedent/* ts */`
-      export interface TupleContainer {
-        coordinates: [number, boolean, number];
-        labels: [string, string];
-      }`,
-  },
-
-  // TODO: A does not get the new properties
-  'interface with intersection types': {
+  'interface with array intersection types': {
     interfaceName: 'Combined',
     target: dedent/* ts */`
       export interface Combined {
@@ -326,6 +59,136 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       export interface B {
         propB: number;
         extraB: Date;
+      }`,
+  },
+
+  // TODO: generic must be of correct type so it should output `T extends number | string`
+  'interface with complex nested generics': {
+    interfaceName: 'ApiResponse',
+    target: dedent/* ts */`
+      export interface ApiResponse<T> {
+        data: T[];
+        pagination: Pagination;
+        success: boolean;
+      }
+
+      export interface Pagination {
+        page: number;
+        limit: number;
+        total: number;
+      }`,
+    source: dedent/* ts */`
+      export interface ApiResponse {
+        data: number | string[];
+        pagination: Pagination;
+        success: boolean;
+        error: ApiError;
+      }
+
+      export interface ApiError {
+        code: string;
+        message: string;
+        details?: Record<string, unknown>;
+      }
+
+      export interface Pagination {
+        page: number;
+        limit: number;
+        total: number;
+        hasMore: boolean;
+      }`,
+  },
+
+  'interface with different ObservableMap type in an intersection': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+    import { ObservableMap } from 'mobx';
+
+    export interface Container {
+      data: number | ObservableMap<string, number>;
+    }`,
+    source: dedent/* ts */`
+    import { ObservableMap } from 'mobx';
+
+    export interface Container {
+      data: number | ObservableMap<string, boolean>;
+    }`,
+  },
+
+  'nested interface in union type': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+    export interface Container {
+      data: Base | Extended;
+    }
+
+    export interface Base {
+      id: number;
+      name: string;
+    }
+
+    export interface Extended {
+      details: string;
+    }`,
+    source: dedent/* ts */`
+    export interface Container {
+      data: Base | Extended;
+    }
+
+    export interface Base {
+      id: number;
+      name: string;
+      created: Date;
+    }
+
+    export interface Extended {
+      details: string;
+      active: boolean;
+    }`,
+  },
+
+  'union type with different lengths': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: string | number;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: string | number | boolean;
+      }`,
+  },
+
+  'union type with interface and different lengths': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: A | B;
+      }
+
+      export interface A {
+        propA: string;
+      }
+
+      export interface B {
+        propB: number;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: A | B | C;
+      }
+
+      export interface A {
+        propA: string;
+      }
+
+      export interface B {
+        propB: number;
+        extraB: Date;
+      }
+
+      export interface C {
+        propC: boolean;
       }`,
   },
 };

@@ -1,11 +1,153 @@
-import { EnumDeclaration, Node, PropertySignature, SyntaxKind, TypeNode } from 'ts-morph';
-import { currentSourceSourceFile, currentTargetSourceFile, interfaceQueue } from './interface-comparator';
-import { getJsDocTagValue } from './shared';
+/* eslint-disable @typescript-eslint/class-methods-use-this */
+import { EnumDeclaration, InterfaceDeclaration, ParenthesizedTypeNode, PropertySignature, SyntaxKind, Type, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { currentTargetSourceFile, interfaceQueue } from './interface-comparator';
+import { getJsDocTagValue, isImportedType } from './shared';
 
-const CustomJsDocTags = {
+export const CustomJsDocTags = {
   originalName: 'compareOriginalName',
   currentValue: 'currentValue',
 };
+
+type VisitorArgs = (targetTypeNode: TypeNode, sourceTypeNode: TypeNode) => void;
+
+/**
+ * Interface for type visitors that handle different kinds of TypeNodes
+ */
+interface TypeVisitor {
+  visit(...args: Parameters<VisitorArgs>): void;
+  visitTypeReference(...args: Parameters<VisitorArgs>): void;
+  visitUnionType(...args: Parameters<VisitorArgs>): void;
+  visitParenthesizedType(...args: Parameters<VisitorArgs>): void;
+}
+
+/**
+ * Visitor implementation for comparing and correcting types
+ */
+class TypeComparisonVisitor implements TypeVisitor {
+  constructor(
+    private readonly targetProp: PropertySignature,
+    private readonly sourceProp: PropertySignature,
+  ) {}
+
+  /**
+   * Entry point for visiting a type node
+   */
+  visit(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
+    // sourceTypeNode.forEachDescendant((descendant) => {
+    //   this.addMissingInterface(descendant.getType());
+    // });
+
+    if (sourceTypeNode.isKind(SyntaxKind.TypeReference)) {
+      this.visitTypeReference(targetTypeNode, sourceTypeNode);
+    } else if (targetTypeNode.isKind(SyntaxKind.UnionType) && sourceTypeNode.isKind(SyntaxKind.UnionType)) {
+      this.visitUnionType(targetTypeNode, sourceTypeNode);
+    } else if (targetTypeNode.isKind(SyntaxKind.ParenthesizedType) && sourceTypeNode.isKind(SyntaxKind.ParenthesizedType)) {
+      this.visitParenthesizedType(targetTypeNode, sourceTypeNode);
+    }
+    // Add more type handlers as needed
+  }
+
+  /**
+   * Handles type references (interfaces, classes, Sets, Maps, etc.)
+   */
+  visitTypeReference(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
+    if (isSet(targetTypeNode) && isSet(sourceTypeNode)) {
+      return;
+    }
+
+    // addMissingInterface(sourceTypeNode.getType());
+    handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
+  }
+
+  /**
+   * Handles union types (A | B)
+   */
+  visitUnionType(targetTypeNode: UnionTypeNode, sourceTypeNode: UnionTypeNode): void {
+    // Process each type in the union
+    for (let i = 0; i < sourceTypeNode.getTypeNodes().length; i++) {
+      const target = targetTypeNode.getTypeNodes()[i] as TypeNode | undefined;
+      const source = sourceTypeNode.getTypeNodes()[i];
+
+      if (target === undefined) {
+        addMissingInterface(source.getType());
+
+        return;
+      }
+
+      this.visit(target, source);
+    }
+
+    // Find and process interface references in union types
+    // const interfaces = targetTypeNode.getTypeNodes().filter(type => isInterfaceType(type));
+    // for (const interfaceNode of interfaces) {
+    //   this.visitTypeReference(interfaceNode, sourceTypeNode);
+    // }
+  }
+
+  /**
+   * Handles parenthesized types ((T))
+   */
+  visitParenthesizedType(targetTypeNode: ParenthesizedTypeNode, sourceTypeNode: ParenthesizedTypeNode): void {
+    // Unwrap and visit the inner type
+    this.visit(targetTypeNode.getTypeNode(), sourceTypeNode.getTypeNode());
+  }
+
+  /**
+   * Compare and process two union types
+   */
+
+  // private compareUnionTypes(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
+  //   if (!targetTypeNode.isKind(SyntaxKind.UnionType) || !sourceTypeNode.isKind(SyntaxKind.UnionType)) {
+  //     return;
+  //   }
+  //
+  //   const targetUnion = targetTypeNode.asKind(SyntaxKind.UnionType);
+  //   const sourceUnion = sourceTypeNode.asKind(SyntaxKind.UnionType);
+  //   if (!targetUnion || !sourceUnion) return;
+  //
+  //   const targetInterfaces = targetUnion.getTypeNodes().filter(type => isInterfaceType(type));
+  //   const sourceInterfaces = sourceUnion.getTypeNodes().filter(type => isInterfaceType(type));
+  //
+  //   for (let i = 0; i < Math.min(targetInterfaces.length, sourceInterfaces.length); i++) {
+  //     handleInterfaceTypeReferences(targetInterfaces[i].getType(), sourceInterfaces[i].getType());
+  //   }
+  // }
+}
+
+function isSet(typeNode: TypeNode): boolean {
+  return isOfInterfaceType('Set', typeNode);
+}
+
+function isOfInterfaceType(name: string, typeNode: TypeNode): boolean {
+  return typeNode.isKind(SyntaxKind.TypeReference) && typeNode.getFirstChildByKind(SyntaxKind.Identifier)?.getText() === name;
+}
+
+/**
+ * Adds a missing interface to the target file
+ */
+export function addMissingInterface(type: Type, currentIteration = 0): void {
+  // if (currentIteration > 10) {
+  //   return;
+  // }
+
+  const interfaceDeclaration = getInterfaceDeclaration(type);
+  if (!interfaceDeclaration) return;
+
+  const similarInterface = findSimilarInterface(interfaceDeclaration, currentTargetSourceFile.getInterfaces());
+  if (similarInterface) {
+    return;
+  }
+
+  // Recursively process referenced interfaces
+  interfaceDeclaration.forEachDescendant((child) => {
+    if (child.isKind(SyntaxKind.TypeReference)) {
+      addMissingInterface(child.getType(), currentIteration + 1);
+    }
+  });
+
+  // Add the interface to the target source file
+  currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+}
 
 /**
  * Compares and corrects property types
@@ -29,52 +171,43 @@ export function compareAndCorrectPropertyTypes(
   }
 
   // Check if the target type is imported
-  if (isImportedType(targetProp)) {
+  if (isImportedType(currentTargetSourceFile, targetProp.getType())) {
     return;
   }
 
+  // Handle enums first
   if (compareEnums(targetProp, sourceProp)) {
     return;
   }
 
-  // Handle interface references
-  if (isInterfaceType(targetTypeNode) && isInterfaceType(sourceTypeNode)) {
-    handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
+  // TODO: visitor might not be needed make sure to check the steam types with validate types
+  // // Create and use the visitor for type comparison
+  // const visitor = new TypeComparisonVisitor(targetProp, sourceProp);
+  //
+  // // Process source type to find and add missing interfaces
+  // visitor.visit(targetTypeNode, sourceTypeNode);
 
-    return;
-  }
+  // Special case for direct interface references
+  // if (isInterfaceType(targetTypeNode) && isInterfaceType(sourceTypeNode)) {
+  handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
 
-  // If sourcefile is missing the interface, add it
-  if (isInterfaceType(sourceTypeNode)) {
-    const sourceTypeName = getTypeReferenceName(sourceTypeNode);
-    if (sourceTypeName !== null && sourceTypeName.length > 0) {
-      const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
-      if (sourceTypeInterface && !currentTargetSourceFile.getInterface(sourceTypeName)) {
-        // Add the interface to the target source file
-        currentTargetSourceFile.addInterface(sourceTypeInterface.getStructure());
-      }
-    }
-  }
+  // return;
+  // }
+
+  // Special case for union types
+  // if (targetTypeNode.isKind(SyntaxKind.UnionType) && sourceTypeNode.isKind(SyntaxKind.UnionType)) {
+  //   visitor.compareUnionTypes(targetTypeNode, sourceTypeNode);
+  // }
 
   // Update the type if different
   updatePropertyTypeIfDifferent(targetProp, sourceProp);
 }
 
 /**
-   * Checks if a property type is imported
-   */
-function isImportedType(targetProp: PropertySignature): boolean {
-  const isImported = currentTargetSourceFile.getImportDeclarations().some(importDecl =>
-    importDecl.getNamedImports().some(importSpec => importSpec.getName() === targetProp.getType().getText()));
-
-  return isImported;
-}
-
-/**
-   * Compares two enum properties and updates the target property if different
-   *
-   * @returns true if the rest of the comparison should be skipped
-   */
+ * Compares two enum properties and updates the target property if different
+ *
+ * @returns true if the rest of the comparison should be skipped
+ */
 function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignature): boolean {
   // Check if the source property has a @currentValue JSDoc tag (indicating it's an enum)
   const currentStrValue = getJsDocTagValue(sourceProp, CustomJsDocTags.currentValue);
@@ -135,48 +268,163 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 }
 
 /**
-   * Handles interface type references by adding them to the processing queue
-   */
+ * Handles interface type references by adding them to the processing queue
+ */
 function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
-  // If both types are interface references, find the interfaces and
-  // add them to the queue for processing
-  const targetTypeName = getTypeReferenceName(targetTypeNode);
-  const sourceTypeName = getTypeReferenceName(sourceTypeNode);
+  // Extract all interface references from both types
+  const targetInterfaces = extractInterfaceReferences(targetTypeNode);
+  const sourceInterfaces = extractInterfaceReferences(sourceTypeNode);
 
-  if (targetTypeName !== null && sourceTypeName !== null) {
-    // Try to find the interfaces in their respective source files
-    const targetTypeInterface = currentTargetSourceFile.getInterface(targetTypeName);
-    const sourceTypeInterface = currentSourceSourceFile.getInterface(sourceTypeName);
+  // For each source interface, find a matching target interface and update it
+  for (const sourceInterface of sourceInterfaces) {
+    const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
+    if (!sourceInterfaceDeclaration) {
+      throw new Error(`Source interface ${sourceInterface.getTypeName().getText()} not found`);
+    }
+    const sourceInterfaceName = sourceInterface.getTypeName().getText();
 
-    // Check if targetInterface has a original jsdoc
-    const originalJsDoc = targetTypeInterface
-      ?.getJsDocs()
-      .find(doc => doc.getTags()[0]?.getTagName() === CustomJsDocTags.originalName);
-    if (originalJsDoc && originalJsDoc.getText() === sourceTypeName) {
-      sourceTypeInterface?.rename(targetTypeName);
+    // Try to find a matching interface by name first
+    const matchingTargetInterface = targetInterfaces.find(i => i.getTypeName().getText() === sourceInterfaceName);
+    let targetInterfaceDeclaration: InterfaceDeclaration | undefined;
+
+    // If no exact name match, try to find by structure similarity
+    if (!matchingTargetInterface) {
+      targetInterfaceDeclaration = findSimilarInterface(sourceInterfaceDeclaration, currentTargetSourceFile.getInterfaces());
+    } else {
+      targetInterfaceDeclaration = getInterfaceDeclaration(matchingTargetInterface);
     }
 
-    // If both interfaces are found, add them to the queue for processing
-    if (targetTypeInterface && sourceTypeInterface) {
+    if (targetInterfaceDeclaration) {
       interfaceQueue.push({
-        targetInterface: targetTypeInterface,
-        sourceInterface: sourceTypeInterface,
+        targetInterface: targetInterfaceDeclaration,
+        sourceInterface: sourceInterfaceDeclaration,
       });
+    } else {
+      // If no matching interface found, add the source interface to the target
+      addMissingInterface(sourceInterface.getType());
     }
   }
 }
 
 /**
-   * Updates a property's type if it's different from the source
-   */
+ * Extracts all interface references from a type, including those in arrays, unions, etc.
+ */
+function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
+  const interfaces = type.getDescendantsOfKind(SyntaxKind.TypeReference);
+
+  if (type.isKind(SyntaxKind.TypeReference)) {
+    interfaces.push(type);
+  }
+
+  return interfaces.filter(interf => (interf.getType().getSymbol()?.getDeclarations()
+    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true));
+}
+
+/**
+ * Finds a similar interface based on property structure
+ * Uses a similarity score to determine the best match
+ */
+function findSimilarInterface(sourceInterface: InterfaceDeclaration, targetInterfaces: InterfaceDeclaration[]): InterfaceDeclaration | undefined {
+  if (targetInterfaces.length === 0) return undefined;
+
+  let bestMatch: InterfaceDeclaration | undefined;
+  let highestScore = 0;
+
+  const sourceProperties = getInterfaceProperties(sourceInterface);
+
+  for (const targetInterface of targetInterfaces) {
+    const targetProperties = getInterfaceProperties(targetInterface);
+
+    // Calculate similarity score (0-1)
+    const score = calculateSimilarityScore(sourceProperties, targetProperties);
+
+    // If score is above threshold (e.g., 0.75 for 75% similarity)
+    if (score > 0.75 && score > highestScore) {
+      highestScore = score;
+      bestMatch = targetInterface;
+    }
+  }
+
+  return bestMatch;
+}
+
+/**
+ * Gets all properties of an interface type
+ */
+function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { name: string; type: string; }[] {
+  const properties: { name: string; type: string; }[] = [];
+
+  for (const property of interfaceDeclaration.getProperties()) {
+    const propertyType = property.getType();
+    properties.push({
+      name: property.getName(),
+      type: propertyType.getText(),
+    });
+  }
+
+  return properties;
+}
+
+/**
+ * Calculates a similarity score between two sets of properties
+ * Returns a value between 0 (no similarity) and 1 (identical)
+ */
+function calculateSimilarityScore(
+  sourceProps: { name: string; type: string; }[],
+  targetProps: { name: string; type: string; }[],
+): number {
+  if (sourceProps.length === 0 && targetProps.length === 0) return 1;
+  if (sourceProps.length === 0 || targetProps.length === 0) return 0;
+
+  // Count matching properties
+  let matchingProps = 0;
+
+  for (const sourceProp of sourceProps) {
+    const matchingTargetProp = targetProps.find(tp =>
+      tp.name === sourceProp.name && tp.type === sourceProp.type);
+
+    if (matchingTargetProp) {
+      matchingProps++;
+    }
+  }
+
+  // Calculate Jaccard similarity: intersection / union
+  const totalUniqueProps = new Set([
+    ...sourceProps.map(p => `${p.name}:${p.type}`),
+    ...targetProps.map(p => `${p.name}:${p.type}`),
+  ]).size;
+
+  return matchingProps / totalUniqueProps;
+}
+
+function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | undefined {
+  if (type instanceof TypeNode) {
+    type = type.getType();
+  }
+
+  const symbol = type.getSymbol();
+  if (!symbol) return undefined;
+
+  return symbol.getDeclarations().find(d => d.isKind(SyntaxKind.InterfaceDeclaration));
+}
+
+/**
+ * Updates a property's type if it's different from the source
+ */
 function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature): void {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
   if (!targetTypeNode || !sourceTypeNode) return;
 
-  const targetTypeText = targetTypeNode.getType().getText();
-  const sourceTypeText = sourceTypeNode.getType().getText();
+  if (sourceTypeNode.getType().isUndefined() && targetProp.hasQuestionToken()) {
+    return;
+  }
+
+  checkForAddedOrRemovedInterfaces(targetTypeNode, sourceTypeNode);
+
+  const targetTypeText = targetTypeNode.getText();
+  const sourceTypeText = sourceTypeNode.getText();
 
   if (targetTypeNode.isKind(SyntaxKind.UnionType)) {
     const targetTypes = targetTypeNode.getTypeNodes();
@@ -189,7 +437,7 @@ function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp
   } else if (targetTypeText !== sourceTypeText) {
     // Update the type if it's different
     // logger.debug(chalk.yellow(`Updating property type: ${targetProp.getName()} from ${targetTypeText} to ${sourceTypeText}`));
-    targetProp.setType(sourceTypeText);
+    targetProp.setType(sourceTypeText.replace(/import\(".+?\)\./, ''));
   }
 
   // Update optional status if different
@@ -203,26 +451,47 @@ function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp
   }
 }
 
-/**
-   * Gets the name of a type reference
-   * @param typeNode The type node to extract the name from
-   * @returns The name of the type reference or null if not a type reference
-   */
-function getTypeReferenceName(typeNode: TypeNode): string | null {
-  if (typeNode.getKind() === SyntaxKind.TypeReference) {
-    // Extract the name from the type reference
-    return typeNode.getText().split('<')[0].trim();
+function checkForAddedOrRemovedInterfaces(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
+  const targetTypes = targetTypeNode.getDescendantsOfKind(SyntaxKind.TypeReference);
+  const sourceTypes = sourceTypeNode.getDescendantsOfKind(SyntaxKind.TypeReference);
+
+  if (targetTypeNode.isKind(SyntaxKind.TypeReference)) {
+    targetTypes.push(targetTypeNode);
   }
 
-  return null;
+  if (sourceTypeNode.isKind(SyntaxKind.TypeReference)) {
+    sourceTypes.push(sourceTypeNode);
+  }
+
+  const addedTypes = sourceTypes.filter(type => !targetTypes.some(targetType => targetType.getText() === type.getText()));
+  const removedTypes = targetTypes.filter(type => !sourceTypes.some(sourceType => sourceType.getText() === type.getText()));
+
+  // TODO: this might not be needed anymore
+  for (const addedType of addedTypes) {
+    addMissingInterface(addedType.getType());
+  }
+
+  for (const removedType of removedTypes) {
+    const interfaceDeclaration = getInterfaceDeclaration(removedType);
+    if (interfaceDeclaration?.isKind(SyntaxKind.InterfaceDeclaration) === true) {
+      interfaceDeclaration.remove();
+    }
+  }
 }
 
-/**
-   * Checks if a node represents an interface type
-   * @param typeNode The type node to check
-   * @returns True if the node represents an interface type
-   */
-function isInterfaceType(typeNode: Node): boolean {
-  // Check if the type node is a type reference (like an interface name)
-  return typeNode.isKind(SyntaxKind.TypeReference);
-}
+// const validInterfaceNames = [
+//   'Set',
+//   'ObservableSet',
+//   'Map',
+//   'ObservableMap',
+// ];
+
+// /**
+//  * Checks if a node represents an interface type
+//  * @param typeNode The type node to check
+//  * @returns True if the node represents an interface type
+//  */
+// function isInterfaceType(typeNode: Node): boolean {
+//   // Check if the type node is a type reference (like an interface name)
+//   return typeNode.isKind(SyntaxKind.TypeReference) && !validInterfaceNames.some(name => isOfInterfaceType(name, typeNode));
+// }

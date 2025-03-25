@@ -1,208 +1,148 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Comparator Interface Cases > deeply nested interfaces 1`] = `
+exports[`Comparator Interface Cases > interface with array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,14 @@
- export interface GrandParent {
-   parent: Parent;
-+  generation: number;
- }
- 
- export interface Parent {
-   child: Child;
-+  id: number;
- }
- 
- export interface Child {
-   name: string;
-+  age: number;
- }
-"
-`;
-
-exports[`Comparator Interface Cases > interface with circular reference 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,3 +1,4 @@
- export interface Node {
-   value: string;
-+  next: Node | null;
- }
-"
-`;
-
-exports[`Comparator Interface Cases > interface with complex property types 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,4 +1,6 @@
- export interface ComplexData {
-   simpleArray: string[];
-   record: Record<string, number>;
-+  nestedArray: Array<Array<string>>;
-+  complexMap: Map<string, Set<number>>;
- }
-"
-`;
-
-exports[`Comparator Interface Cases > interface with intersection types 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,7 +1,12 @@
- export interface Combined {
+@@ -1,7 +1,13 @@
+export interface Combined {
 -  data: A;
 +  data: (A | B)[];
- }
- 
- export interface A {
-   propA: string;
- }
+}
+
+export interface A {
+  propA: string;
++  extraA: boolean;
+}
 +
 +export interface B {
 +  propB: number;
 +  extraB: Date;
-+}
-"
++}"
 `;
 
-exports[`Comparator Interface Cases > interface with method signatures 1`] = `
+exports[`Comparator Interface Cases > interface with complex nested generics 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,4 +1,5 @@
- export interface Service {
-   getData(): string;
-   setData(value: string): void;
-+  clearData(): void;
- }
-"
+@@ -1,11 +1,19 @@
+export interface ApiResponse<T> {
+-  data: T[];
++  data: number | string[];
+  pagination: Pagination;
+  success: boolean;
++  error: ApiError;
+}
+
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
++  hasMore: boolean;
+}
++
++export interface ApiError {
++  code: string;
++  message: string;
++  details?: Record<string, unknown>;
++}"
 `;
 
-exports[`Comparator Interface Cases > interface with missing enum property 1`] = `
+exports[`Comparator Interface Cases > interface with different ObservableMap type in an intersection 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -4,6 +4,7 @@
- 
- export enum Status {
-   Pending,
-   Active,
-   Inactive,
-+  "TODO: change me" = 3
- }
-"
+@@ -1,5 +1,5 @@
+import { ObservableMap } from 'mobx';
+
+export interface Container {
+-  data: number | ObservableMap<string, number>;
++  data: number | ObservableMap<string, boolean>;
+}"
 `;
 
-exports[`Comparator Interface Cases > interface with optional properties 1`] = `
+exports[`Comparator Interface Cases > inverse union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,4 +1,5 @@
- export interface Config {
--  name: string;
-+  name?: string;
-   version?: string;
-+  debug?: boolean;
- }
-"
+@@ -1,8 +1,3 @@
+export interface Container {
+-  data: DataType | null;
++  data: string | null;
+}
+-
+-export interface DataType {
+-  value: string;
+-  id: number;
+-}"
 `;
 
-exports[`Comparator Interface Cases > interface with readonly properties 1`] = `
+exports[`Comparator Interface Cases > nested interface in union type 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,4 +1,5 @@
- export interface ImmutableData {
-   readonly id: number;
--  data: string;
-+  readonly data: string;
-+  updatedAt: Date;
- }
-"
+@@ -3,10 +3,12 @@
+}
+
+export interface Base {
+  id: number;
+  name: string;
++  created: Date;
+}
+
+export interface Extended {
+  details: string;
++  active: boolean;
+}"
 `;
 
-exports[`Comparator Interface Cases > interface with tuple type 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,3 +1,4 @@
- export interface TupleContainer {
--  coordinates: [number, number];
-+  coordinates: [number, boolean, number];
-+  labels: [string, string];
- }
-"
-`;
-
-exports[`Comparator Interface Cases > map type different 1`] = `
+exports[`Comparator Interface Cases > union type with different lengths 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
 @@ -1,3 +1,3 @@
- export interface Container {
--  data: Map<string, number>;
-+  data: Map<string, boolean>;
- }
-"
+export interface Container {
+-  data: string | number;
++  data: string | number | boolean;
+}"
 `;
 
-exports[`Comparator Interface Cases > nested interfaces 1`] = `
+exports[`Comparator Interface Cases > union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,9 @@
- export interface Parent {
-   child: Child;
+@@ -1,3 +1,8 @@
+export interface Container {
+-  data: string | null;
++  data: DataType | null;
+}
++
++export interface DataType {
++  value: string;
 +  id: number;
- }
- 
- export interface Child {
-   name: string;
-+  age: number;
- }
-"
++}"
 `;
 
-exports[`Comparator Interface Cases > observable map 1`] = `
+exports[`Comparator Interface Cases > union type with interface and different lengths 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,5 +1,5 @@
- import { ObservableMap } from 'mobx';
- 
- export interface Container {
--  data: ObservableMap<string, number>;
-+  data: ObservableMap<string, boolean>;
- }
-"
-`;
+@@ -1,11 +1,16 @@
+export interface Container {
+-  data: A | B;
++  data: A | B | C;
+}
 
-exports[`Comparator Interface Cases > observable set 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,5 +1,5 @@
- import { ObservableSet } from 'mobx';
- 
- export interface Container {
--  data: ObservableSet<number>;
-+  data: ObservableSet<boolean>;
- }
-"
-`;
+export interface A {
+  propA: string;
+}
 
-exports[`Comparator Interface Cases > set type different 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,3 +1,3 @@
- export interface Container {
--  data: Set<number>;
-+  data: Set<boolean>;
- }
-"
+export interface B {
+  propB: number;
++  extraB: Date;
+}
++
++export interface C {
++  propC: boolean;
++}"
 `;

@@ -2,8 +2,7 @@ import chalk from 'chalk';
 import * as diff from 'diff';
 import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
-import { compareAndCorrectPropertyTypes } from './compare-properties';
-import { logger } from './shared';
+import { addMissingInterface, compareAndCorrectPropertyTypes } from './compare-properties';
 
 /**
  * Interface to represent a task in the processing queue
@@ -60,7 +59,6 @@ function processInterfaceQueue(): void {
       continue;
     }
 
-    logger.debug(chalk.cyan(`Processing interface: ${targetInterface.getName()}`));
     processedInterfaces.add(interfaceId);
 
     // Compare and correct properties
@@ -133,7 +131,7 @@ function compareAndCorrectMembers(
  * @param sourceProp The property to add
  * @param propName The name of the property to add
  */
-function addMissingMember(
+export function addMissingMember(
   targetInterface: InterfaceDeclaration,
   sourceProp: PropertySignature | MethodSignature,
   propName: string,
@@ -156,13 +154,18 @@ function addMissingMember(
       docs: filteredDocs,
     });
   } else {
+    const typeNode = sourceProp.getTypeNode();
+    if (!typeNode) return;
+
     targetInterface.addProperty({
       name: propName,
-      type: sourceProp.getTypeNode()?.getText(),
+      type: typeNode.getText(),
       hasQuestionToken: sourceProp.hasQuestionToken(),
       isReadonly: sourceProp.isReadonly(),
       docs: sourceProp.getJsDocs().map(doc => doc.getText()),
     });
+
+    addMissingInterface(typeNode.getType());
   }
 }
 
@@ -266,8 +269,8 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
     `b/${filePath}`,
     originalText,
     newText,
-    '',
-    '',
+    undefined,
+    undefined,
     { context: 5 },
   );
 

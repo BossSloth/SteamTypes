@@ -1,6 +1,7 @@
 import dedent from 'dedent';
+import { ComparatorTest } from '.';
 
-export const simpleCases = {
+export const simpleCases: Record<string, ComparatorTest> = {
   'simple add missing property': {
     interfaceName: 'SimpleInterface',
     target: dedent/* ts */`
@@ -89,23 +90,6 @@ export const simpleCases = {
     source: dedent/* ts */`
       export interface SimpleInterface {
         existingProp: Set<number>;
-      }`,
-  },
-
-  'union type with interface': { // TODO: doesn't work
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      export interface Container {
-        data: string | null;
-      }`,
-    source: dedent/* ts */`
-      export interface Container {
-        data: DataType | null;
-      }
-
-      export interface DataType {
-        value: string;
-        id: number;
       }`,
   },
 };

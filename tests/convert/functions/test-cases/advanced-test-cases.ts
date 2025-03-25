@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import Long from 'long';
 import { TestFunction } from './shared';
 

@@ -1,4 +1,3 @@
-import { testSuites } from '../test-cases';
 import { convertToTypescript } from './index';
 
 // class BigObject {
@@ -75,7 +74,6 @@ export function testConvert(): void {
     //   {events: [obj1]},
     //   {events: [obj2]},
     // ],
-    suites: testSuites[0].testObject,
     internal: Math.random,
   };
 

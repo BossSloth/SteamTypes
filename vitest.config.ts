@@ -7,6 +7,15 @@ export default defineConfig({
     include: ['./tests/**/*.test.ts'],
     coverage: {
       provider: 'v8',
+      exclude: [
+        'node_modules',
+        'dist',
+        'build',
+        'tests',
+        'src',
+        '*.config.*',
+        'scripts/convert-to-typescript/test.ts',
+      ],
     },
   },
 });

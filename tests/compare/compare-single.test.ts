@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest';
 import { runComparisonTest } from './shared';
-import { simpleCases } from './test-cases';
+import { interfaceCases } from './test-cases';
 
 describe('Comparator - Single debug', () => {
   it('single', () => {
-    runComparisonTest(simpleCases['simple set type mismatch']);
+    runComparisonTest(interfaceCases['interface with complex nested generics']);
   });
 });

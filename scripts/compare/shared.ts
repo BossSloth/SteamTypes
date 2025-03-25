@@ -1,4 +1,4 @@
-import { PropertySignature } from 'ts-morph';
+import { PropertySignature, SourceFile, Type } from 'ts-morph';
 import { Logger } from '../logger';
 
 export let logger: Logger;
@@ -23,4 +23,12 @@ export function getJsDocTagValue(prop: PropertySignature, tagName: string): stri
   }
 
   return undefined;
+}
+
+/**
+   * Checks if a property type is imported
+   */
+export function isImportedType(sourceFile: SourceFile, type: Type): boolean {
+  return sourceFile.getImportDeclarations().some(importDecl =>
+    importDecl.getNamedImports().some(importSpec => importSpec.getName() === type.getText()));
 }
