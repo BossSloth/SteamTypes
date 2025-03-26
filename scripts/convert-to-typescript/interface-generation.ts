@@ -111,7 +111,7 @@ function generatePropertyJsDoc(type: Type, propertyName: string, value: unknown)
 
   // If we got here we have a property that is likely an enum value
 
-  return ['this value is an enum', `@currentValue ${value}`];
+  return ['This value is an enum', `@currentValue ${value}`];
 }
 
 /**

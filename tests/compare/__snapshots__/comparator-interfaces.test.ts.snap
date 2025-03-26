@@ -1,18 +1,19 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Comparator Interface Cases > interface with array intersection types 1`] = `
+exports[`Comparator Interface Cases > array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,13 @@
+@@ -1,7 +1,14 @@
 export interface Combined {
 -  data: A;
 +  data: (A | B)[];
 }
 
 export interface A {
-  propA: string;
 +  extraA: boolean;
++
+  propA: string;
 }
 +
 +export interface B {
@@ -21,30 +22,104 @@ export interface A {
 +}"
 `;
 
+exports[`Comparator Interface Cases > external template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,10 @@
+export type HttpMethod = 'GET' | 'POST';
+export type ResourceType = 4 | 5;
+
+export interface RouteConfig {
+-  method: HttpMethod;
++  method: number;
++
+  path: string;
++
+  type: ResourceType;
+}"
+`;
+
 exports[`Comparator Interface Cases > interface with complex nested generics 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,19 @@
+@@ -1,11 +1,25 @@
 export interface ApiResponse<T> {
 -  data: T[];
 +  data: number | string[];
-  pagination: Pagination;
-  success: boolean;
++
 +  error: ApiError;
++
+  pagination: Pagination;
++
+  success: boolean;
 }
 
 export interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
+-  page: number;
 +  hasMore: boolean;
++
+  limit: number;
++
++  page: number;
++
+  total: number;
 }
 +
 +export interface ApiError {
 +  code: string;
 +  message: string;
 +  details?: Record<string, unknown>;
++}"
+`;
+
+exports[`Comparator Interface Cases > interface with complex nested structures 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,42 @@
+export interface AppConfig {
+  api: ApiConfig;
++
++  features: Record<string, boolean>;
++
+  ui: UiConfig;
+}
+
+export interface ApiConfig {
+  baseUrl: string;
++
++  endpoints: Record<string, EndpointConfig>;
++
++  headers: Record<string, string>;
++
+  timeout: number;
+}
+
+export interface UiConfig {
++  animations: boolean;
++
++  components: ComponentsConfig;
++
++  layout: 'vertical' | 'horizontal';
++
+  theme: string;
+}
++
++export interface ButtonConfig {
++  borderRadius: number;
++  fontSize: number;
++}
++
++export interface InputConfig {
++  borderRadius: number;
++  padding: number;
++}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++  input: InputConfig;
 +}"
 `;
 
@@ -61,38 +136,171 @@ export interface Container {
 }"
 `;
 
+exports[`Comparator Interface Cases > interface with indexed access types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,21 @@
+export interface User {
++  email: string;
++
+  id: number;
++
+  name: string;
++
+  settings: {
+    theme: string;
+    notifications: boolean;
++    language: string;
+  };
+}
+
+export interface UserProfile {
+-  user: User;
+  preferences: User['settings'];
++
++  theme: User['settings']['theme'];
++
++  user: User;
+}"
+`;
+
+exports[`Comparator Interface Cases > interface with intersection types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,26 @@
+export interface EnhancedUser {
+-  user: BaseUser & UserPermissions;
++  isAdmin: boolean;
++
++  user: BaseUser & UserPermissions & UserMetadata;
+}
+
+export interface BaseUser {
++  email: string;
++
+  id: number;
++
+  name: string;
+}
+
+export interface UserPermissions {
+-  canEdit: boolean;
++  canCreate: boolean;
++
+  canDelete: boolean;
++
++  canEdit: boolean;
+}
++
++export interface UserMetadata {
++  lastLogin: Date;
++  loginCount: number;
++}"
+`;
+
+exports[`Comparator Interface Cases > inverse array intersection types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,11 @@
+export interface Combined {
+-  data: (A | B)[];
++  data: A;
+}
+
+export interface A {
+  propA: string;
+-  extraA: boolean;
+}
+
+export interface B {
+  propB: number;
+  extraB: Date;"
+`;
+
 exports[`Comparator Interface Cases > inverse union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,8 +1,3 @@
+@@ -1,7 +1,7 @@
 export interface Container {
 -  data: DataType | null;
 +  data: string | null;
 }
--
--export interface DataType {
--  value: string;
--  id: number;
--}"
+
+export interface DataType {
+  value: string;
+  id: number;"
+`;
+
+exports[`Comparator Interface Cases > method with interface return type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,11 @@
+export interface UserService {
+-  getUserById(id: number): unknown;
++  createUser(email: string, name: string): User;
++
++  getUserById(id: number): User | null;
+}
++
++export interface User {
++  id: UserIdentifier;
++  email: string;
++  name: string;
++}"
+`;
+
+exports[`Comparator Interface Cases > mixed missing tuple types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface CoordinateSystem {
+-  point: [number, number];
++  point: (number | string)[];
+}"
 `;
 
 exports[`Comparator Interface Cases > nested interface in union type 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,10 +3,12 @@
+@@ -1,12 +1,17 @@
+export interface Container {
+  data: Base | Extended;
 }
 
 export interface Base {
-  id: number;
-  name: string;
 +  created: Date;
++
+  id: number;
++
+  name: string;
 }
 
 export interface Extended {
-  details: string;
 +  active: boolean;
++
+  details: string;
+}"
+`;
+
+exports[`Comparator Interface Cases > template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,7 @@
+export interface RouteConfig {
+-  method: 'GET' | 'POST';
++  method: number;
++
+  path: string;
++
+  type: 4 | 5;
 }"
 `;
 
@@ -127,7 +335,7 @@ exports[`Comparator Interface Cases > union type with interface and different le
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,16 @@
+@@ -1,11 +1,17 @@
 export interface Container {
 -  data: A | B;
 +  data: A | B | C;
@@ -138,8 +346,9 @@ export interface A {
 }
 
 export interface B {
-  propB: number;
 +  extraB: Date;
++
+  propB: number;
 }
 +
 +export interface C {

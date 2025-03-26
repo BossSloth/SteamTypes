@@ -36,7 +36,7 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  'interface with array intersection types': {
+  'array intersection types': {
     interfaceName: 'Combined',
     target: dedent/* ts */`
       export interface Combined {
@@ -59,6 +59,32 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       export interface B {
         propB: number;
         extraB: Date;
+      }`,
+  },
+
+  'inverse array intersection types': {
+    interfaceName: 'Combined',
+    target: dedent/* ts */`
+      export interface Combined {
+        data: (A | B)[];
+      }
+
+      export interface A {
+        propA: string;
+        extraA: boolean;
+      }
+
+      export interface B {
+        propB: number;
+        extraB: Date;
+      }`,
+    source: dedent/* ts */`
+      export interface Combined {
+        data: A;
+      }
+
+      export interface A {
+        propA: string;
       }`,
   },
 
@@ -189,6 +215,332 @@ export const interfaceCases: Record<string, ComparatorTest> = {
 
       export interface C {
         propC: boolean;
+      }`,
+  },
+
+  'interface with indexed access types': {
+    interfaceName: 'UserProfile',
+    target: dedent/* ts */`
+      export interface User {
+        id: number;
+        name: string;
+        settings: {
+          theme: string;
+          notifications: boolean;
+        };
+      }
+
+      export interface UserProfile {
+        user: User;
+        preferences: User['settings'];
+      }`,
+    source: dedent/* ts */`
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: {
+          theme: string;
+          notifications: boolean;
+          language: string;
+        };
+      }
+
+      export interface UserProfile {
+        user: User;
+        preferences: User['settings'];
+        theme: User['settings']['theme'];
+      }`,
+  },
+
+  'normal indexed access type': {
+    interfaceName: 'UserProfile',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface UserProfile {
+        preferences: User['email'];
+
+        theme: User['settings']['notifications'];
+
+        user: User;
+      }
+
+      export interface User {
+        email: string;
+
+        id: number;
+
+        name: string;
+
+        settings: {
+          theme: string;
+          notifications: boolean;
+          language: string;
+        };
+      }`,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        preferences: string;
+        theme: boolean;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: {
+          theme: string;
+          notifications: boolean;
+          language: string;
+        };
+      }`,
+  },
+
+  'external template literal types': {
+    interfaceName: 'RouteConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export type HttpMethod = 'GET' | 'POST';
+      export type ResourceType = 4 | 5;
+
+      export interface RouteConfig {
+        method: HttpMethod;
+
+        path: string;
+
+        type: ResourceType;
+      }`,
+    source: dedent/* ts */`
+      export interface RouteConfig {
+        method: string;
+
+        path: string;
+
+        type: number;
+      }`,
+  },
+
+  'template literal types': {
+    interfaceName: 'RouteConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface RouteConfig {
+        method: 'GET' | 'POST';
+
+        path: string;
+
+        type: 4 | 5;
+      }`,
+    source: dedent/* ts */`
+      export interface RouteConfig {
+        method: string;
+        path: string;
+        type: number;
+      }`,
+  },
+
+  'external template literal types with missing type': {
+    interfaceName: 'RouteConfig',
+    target: dedent/* ts */`
+      export type HttpMethod = 'GET' | 'POST';
+      export type ResourceType = 4 | 5;
+
+      export interface RouteConfig {
+        method: HttpMethod;
+        path: string;
+        type: ResourceType;
+      }`,
+    source: dedent/* ts */`
+      export interface RouteConfig {
+        method: number;
+        path: string;
+        type: number;
+      }`,
+  },
+
+  'template literal types with missing type': {
+    interfaceName: 'RouteConfig',
+    target: dedent/* ts */`
+      export interface RouteConfig {
+        method: 'GET' | 'POST';
+        path: string;
+        type: 4 | 5;
+      }`,
+    source: dedent/* ts */`
+      export interface RouteConfig {
+        method: number;
+        path: string;
+        type: number;
+      }`,
+  },
+
+  'tuple types': {
+    interfaceName: 'CoordinateSystem',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: [number, number];
+      }`,
+    source: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: number[];
+      }`,
+  },
+
+  'mixed tuple types': {
+    interfaceName: 'CoordinateSystem',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: [number, string];
+      }`,
+    source: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: (number | string)[];
+      }`,
+  },
+
+  'mixed missing tuple types': {
+    interfaceName: 'CoordinateSystem',
+    target: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: [number, number];
+      }`,
+    source: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: (number | string)[];
+      }`,
+  },
+
+  'tuple types with optional elements': {
+    interfaceName: 'ParameterConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface ParameterConfig {
+        options: [number, boolean, string, string];
+      }`,
+    source: dedent/* ts */`
+      export interface ParameterConfig {
+        options: (string | number | boolean)[];
+      }`,
+  },
+
+  'interface with intersection types': {
+    interfaceName: 'EnhancedUser',
+    target: dedent/* ts */`
+      export interface EnhancedUser {
+        user: BaseUser & UserPermissions;
+      }
+
+      export interface BaseUser {
+        id: number;
+        name: string;
+      }
+
+      export interface UserPermissions {
+        canEdit: boolean;
+        canDelete: boolean;
+      }`,
+    source: dedent/* ts */`
+      export interface EnhancedUser {
+        user: BaseUser & UserPermissions & UserMetadata;
+        isAdmin: boolean;
+      }
+
+      export interface BaseUser {
+        id: number;
+        name: string;
+        email: string;
+      }
+
+      export interface UserPermissions {
+        canEdit: boolean;
+        canDelete: boolean;
+        canCreate: boolean;
+      }
+
+      export interface UserMetadata {
+        lastLogin: Date;
+        loginCount: number;
+      }`,
+  },
+
+  'method with interface return type': {
+    interfaceName: 'UserService',
+    target: dedent/* ts */`
+      export interface UserService {
+        getUserById(id: number): unknown;
+      }`,
+    source: dedent/* ts */`
+      export interface UserService {
+        getUserById(id: number): User | null;
+        createUser(email: string, name: string): User;
+      }
+
+      export interface User {
+        id: UserIdentifier;
+        email: string;
+        name: string;
+      }`,
+  },
+
+  'interface with complex nested structures': {
+    interfaceName: 'AppConfig',
+    target: dedent/* ts */`
+      export interface AppConfig {
+        api: ApiConfig;
+        ui: UiConfig;
+      }
+
+      export interface ApiConfig {
+        baseUrl: string;
+        timeout: number;
+      }
+
+      export interface UiConfig {
+        theme: string;
+      }`,
+    source: dedent/* ts */`
+      export interface AppConfig {
+        api: ApiConfig;
+        ui: UiConfig;
+        features: Record<string, boolean>;
+      }
+
+      export interface ApiConfig {
+        baseUrl: string;
+        timeout: number;
+        headers: Record<string, string>;
+        endpoints: Record<string, EndpointConfig>;
+      }
+
+      export interface EndpointConfig {
+        method: string;
+        path: string;
+        requiresAuth: boolean;
+      }
+
+      export interface UiConfig {
+        theme: string;
+        layout: 'vertical' | 'horizontal';
+        animations: boolean;
+        components: ComponentsConfig;
+      }
+
+      export interface ComponentsConfig {
+        button: ButtonConfig;
+        input: InputConfig;
+      }
+
+      export interface ButtonConfig {
+        borderRadius: number;
+        fontSize: number;
+      }
+
+      export interface InputConfig {
+        borderRadius: number;
+        padding: number;
       }`,
   },
 };

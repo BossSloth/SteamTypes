@@ -1,4 +1,5 @@
-import { MethodSignature } from 'ts-morph';
+import { MethodSignature, SyntaxKind } from 'ts-morph';
+import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile } from './interface-comparator';
 import { isImportedType } from './shared';
 
@@ -36,9 +37,14 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   if (sourceReturnTypeNode && !targetReturnTypeNode) {
     targetMethod.setReturnType(sourceReturnTypeNode.getText());
   } else if (targetReturnTypeNode && sourceReturnTypeNode) {
+    handleInterfaceTypeReferences(targetReturnTypeNode, sourceReturnTypeNode);
     // Both have return types, check if they're different
-    const targetReturnTypeText = targetReturnTypeNode.getType().getText();
-    const sourceReturnTypeText = sourceReturnTypeNode.getType().getText();
+    let targetReturnTypeText = targetReturnTypeNode.getText();
+    if (targetReturnTypeNode.isKind(SyntaxKind.IndexedAccessType)) {
+      targetReturnTypeText = targetReturnTypeNode.getType().getText();
+    }
+
+    const sourceReturnTypeText = sourceReturnTypeNode.getText();
 
     if (!sourceReturnTypeText.includes('unknown') && targetReturnTypeText !== sourceReturnTypeText) {
       // Update the return type

@@ -4,20 +4,27 @@ exports[`Comparator - Single debug > single 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,19 @@
+@@ -1,11 +1,25 @@
 export interface ApiResponse<T> {
 -  data: T[];
 +  data: number | string[];
-  pagination: Pagination;
-  success: boolean;
++
 +  error: ApiError;
++
+  pagination: Pagination;
++
+  success: boolean;
 }
 
 export interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
+-  page: number;
 +  hasMore: boolean;
++
+  limit: number;
++
++  page: number;
++
+  total: number;
 }
 +
 +export interface ApiError {

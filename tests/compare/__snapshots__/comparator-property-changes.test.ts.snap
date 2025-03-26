@@ -1,0 +1,265 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Property Change Cases > interface with added nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,25 @@
+export interface AppConfiguration {
++  features: FeatureFlags;
++
++  settings: AppSettings;
++
+  version: string;
+-  settings: {
+-    theme: string;
+-    language: string;
+-  };
+}
++
++export interface NotificationSettings {
++  enabled: boolean;
++  sound: boolean;
++  desktop: boolean;
++}
++
++export interface AppSettings {
++  theme: string;
++  language: string;
++  notifications: NotificationSettings;
++}
++
++export interface FeatureFlags {
++  darkMode: boolean;
++  betaFeatures: boolean;
++  experimentalApi: boolean;
++}"
+`;
+
+exports[`Comparator Property Change Cases > interface with implied enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,16 @@
+export interface SteamStatus {
+-  m_eResult: number;
+  m_bRequireRestart: boolean;
++
++  /**
++   * This value is an enum
++   * @currentValue 0
++   */
++  m_eAppUpdateBytes: number;
++
++  m_eResult: EResult;
+}
++
++/** @generated */
++export enum EResult {
++  EResult = 1
++}"
+`;
+
+exports[`Comparator Property Change Cases > interface with modified nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,26 @@
+export interface ConnectionParams {
++  keepAlive: boolean;
++
++  proxy?: ProxySettings;
++
++  retries: number;
++
+  /**
+   * Timeout in milliseconds
+   */
+  timeout: number;
+-  retries: number;
+}
+
+export interface NetworkConfig {
+  baseUrl: string;
++
+  connection: ConnectionParams;
++
++  endpoints: Record<string, string>;
+}
++
++export interface ProxySettings {
++  host: string;
++  port: number;
++  auth?: string;
++}"
+`;
+
+exports[`Comparator Property Change Cases > interface with property changing from one interface to another 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,26 @@
+export interface ChatMessage {
+-  content: TextContent;
++  content: MessageContent;
++
+  id: string;
++
++  read: boolean;
++
+  sender: string;
++
+  timestamp: number;
+}
+
+export interface TextContent {
+  text: string;
+  format: 'plain' | 'markdown';
+}
++
++export interface TextData {
++  text: string;
++  format: 'plain' | 'markdown' | 'html';
++}
++
++export interface MessageContent {
++  type: 'text' | 'image' | 'file';
++  data: TextData;
++}"
+`;
+
+exports[`Comparator Property Change Cases > interface with property changing from optional to required 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,11 @@
+export interface UserAccount {
+-  email?: string;
++  email: string;
++
+  id: string;
++
+  name: string;
++
+  phone?: string;
++
++  verified: boolean;
+}"
+`;
+
+exports[`Comparator Property Change Cases > interface with property changing from required to optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,13 @@
+export interface ProductDetails {
+-  description: string;
++  description?: string;
++
++  discount?: number;
++
+  id: string;
++
++  inStock: boolean;
++
+  name: string;
++
+  price: number;
+}"
+`;
+
+exports[`Comparator Property Change Cases > property changes from array to specific interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,29 @@
+export interface LibraryContent {
+-  books: Book[];
+-  magazines: any[];
++  books: BookCollection;
++
++  magazines: MagazineCollection;
+}
+
+export interface Book {
+  title: string;
+  author: string;
++  isbn: string;
+}
++
++export interface BookCollection {
++  items: Book[];
++  count: number;
++  lastUpdated: Date;
++}
++
++export interface Magazine {
++  title: string;
++  issue: number;
++  publisher: string;
++}
++
++export interface MagazineCollection {
++  items: Magazine[];
++  count: number;
++  lastUpdated: Date;
++}"
+`;
+
+exports[`Comparator Property Change Cases > property type changes from interface to primitive 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,9 @@
+export interface GameState {
+-  player: PlayerStats;
+  gameMode: string;
++
++  player: string;
+}
+
+export interface PlayerStats {
+  score: number;
+  level: number;"
+`;
+
+exports[`Comparator Property Change Cases > property type changes from primitive to interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,11 @@
+export interface UserSettings {
+-  profile: string;
+  preferences: Record<string, boolean>;
++
++  profile: UserProfile;
+}
++
++export interface UserProfile {
++  displayName: string;
++  avatar: string;
++  bio: string;
++}"
+`;
+
+exports[`Comparator Property Change Cases > property with enum value changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,14 @@
+export interface StatusConfig {
+-  status: ConnectionStatus;
++  errorCode?: number;
++
+  message: string;
++
++  status: ConnectionStatus;
+}
+
+export enum ConnectionStatus {
+  CONNECTED = 1,
+  DISCONNECTED = 2,
+  PENDING = 3,
++  "TODO: change me" = 5
+}"
+`;

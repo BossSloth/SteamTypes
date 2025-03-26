@@ -1,8 +1,9 @@
 import chalk from 'chalk';
 import * as diff from 'diff';
-import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile } from 'ts-morph';
+import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
-import { addMissingInterface, compareAndCorrectPropertyTypes } from './compare-properties';
+import { compareAndCorrectPropertyTypes } from './compare-properties';
+import { addMissingInterface } from './handle-interfaces';
 
 /**
  * Interface to represent a task in the processing queue
@@ -17,6 +18,7 @@ export let interfaceQueue: InterfaceProcessingTask[] = [];
 let processedInterfaces = new Set<string>();
 export let currentTargetSourceFile: SourceFile;
 export let currentSourceSourceFile: SourceFile;
+export let currentStartingInterfaces: InterfaceDeclaration[] = [];
 
 /**
  * Compares two interfaces and corrects differences in the target interface
@@ -52,6 +54,12 @@ function processInterfaceQueue(): void {
   while (interfaceQueue.length > 0) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { targetInterface, sourceInterface } = interfaceQueue.shift()!;
+
+    // Check if interface still exists
+    if (targetInterface.wasForgotten()) {
+      continue;
+    }
+
     const interfaceId = `${targetInterface.getSourceFile().getFilePath()}:${targetInterface.getName()}`;
 
     // Skip if already processed
@@ -68,7 +76,7 @@ function processInterfaceQueue(): void {
     compareAndCorrectHeritageClause(targetInterface, sourceInterface);
 
     // Order members
-    // orderMembers(targetInterface);
+    orderMembers(targetInterface);
   }
 }
 
@@ -162,7 +170,7 @@ export function addMissingMember(
       type: typeNode.getText(),
       hasQuestionToken: sourceProp.hasQuestionToken(),
       isReadonly: sourceProp.isReadonly(),
-      docs: sourceProp.getJsDocs().map(doc => doc.getText()),
+      docs: sourceProp.getJsDocs().map(doc => doc.getStructure()),
     });
 
     addMissingInterface(typeNode.getType());
@@ -212,45 +220,48 @@ function compareAndCorrectHeritageClause(
   }
 }
 
-// function orderMembers(targetInterface: InterfaceDeclaration): void {
-//   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
-//   const newText = targetInterface.getFullText()
-//     .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
-//     .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
-//   targetInterface.replaceWithText(newText.trim());
+// TODO: This might be very slow sometimes have to check to make sure with validate-types
+function orderMembers(targetInterface: InterfaceDeclaration): void {
+  // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
+  const newText = targetInterface.getFullText()
+    .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
+    .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
+  targetInterface.replaceWithText(newText.trim());
 
-//   const members = targetInterface.getMembers();
-//   members.sort((a, b) => {
-//     // Method signatures should come before property signatures
-//     if (a instanceof MethodSignature && b instanceof PropertySignature) return 1;
-//     if (a instanceof PropertySignature && b instanceof MethodSignature) return -1;
+  const members = targetInterface.getMembers();
+  members.sort((a, b) => {
+    // Method signatures should come before property signatures
+    if (a.getKind() !== b.getKind()) {
+      return a.getKind() === SyntaxKind.MethodSignature ? 1 : -1;
+    }
 
-//     return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
-//   });
+    // Use propertyStringSorter for consistent and efficient string comparison
+    return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
+  });
 
-//   for (let i = members.length - 1; i >= 0; i--) {
-//     members[i].setOrder(members.length - 1 - i);
-//     let text = members[i].getFullText();
-//     // Make sure there is a newline between members
-//     if (i !== members.length - 1 && !text.startsWith('\n\n')) {
-//       text = text.replace(/^\n\n*/, '');
-//       members[i].replaceWithText(`\n${text}`);
-//     }
-//   }
+  for (let i = members.length - 1; i >= 0; i--) {
+    members[i].setOrder(members.length - 1 - i);
+    let text = members[i].getFullText();
+    // Make sure there is a newline between members
+    if (i !== members.length - 1 && !text.startsWith('\n\n')) {
+      text = text.replace(/^\n\n*/, '');
+      members[i].replaceWithText(`\n${text}`);
+    }
+  }
 
-//   // Replace all moved jsdoc back to single line comments
-//   const newText2 = targetInterface.getFullText()
-//     .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
-//     .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
-//   targetInterface.replaceWithText(newText2.trim());
+  // Replace all moved jsdoc back to single line comments
+  const newText2 = targetInterface.getFullText()
+    .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
+    .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
+  targetInterface.replaceWithText(newText2.trim());
 
-//   // targetInterface.getProperties().forEach(prop => {
-//   //   if (prop.getFullText().endsWith('\n')) {
-//   //     return;
-//   //   }
-//   //   prop.replaceWithText(prop.getFullText().replaceAll('\n', '') + '\n');
-//   // });
-// }
+  // targetInterface.getProperties().forEach(prop => {
+  //   if (prop.getFullText().endsWith('\n')) {
+  //     return;
+  //   }
+  //   prop.replaceWithText(prop.getFullText().replaceAll('\n', '') + '\n');
+  // });
+}
 
 /**
  * Generates a colored diff between original and new text
@@ -307,6 +318,7 @@ export function compareAndCorrectAllInterfaces(
   processedInterfaces = new Set<string>();
   currentTargetSourceFile = targetSourceFile;
   currentSourceSourceFile = sourceSourceFile;
+  currentStartingInterfaces = currentTargetSourceFile.getInterfaces();
 
   // Store the original text of the entire source file for diff generation
   const originalSourceText = targetSourceFile.getFullText();

@@ -29,7 +29,7 @@ export interface BasicPropertyTests {
   infinity: number;
 
   /**
-   * this value is an enum
+   * This value is an enum
    * @currentValue 7
    */
   m_eEnumValue: number;

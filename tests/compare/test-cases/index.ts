@@ -9,6 +9,7 @@ export interface ComparatorTest {
   target: string;
 }
 export * from './interface-test-cases';
+export * from './property-change-test-cases';
 export * from './simple-interface-test-cases';
 export * from './simple-test-cases';
 // Export all test cases for convenience

@@ -228,8 +228,39 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
       export interface StatusHolder {
         /**
          * @currentValue 3
-        */
+         */
         status: number;
+      }`,
+  },
+  'new enum property': {
+    interfaceName: 'StatusHolder',
+    target: dedent/* ts */`
+      export interface StatusHolder {
+        foo: string;
+      }`,
+    source: dedent/* ts */`
+      export interface StatusHolder {
+        foo: string;
+        /**
+         * this value is an enum
+         * @currentValue 7
+         */
+        status: number;
+      }`,
+  },
+  'implied enum property': {
+    interfaceName: 'StatusHolder',
+    target: dedent/* ts */`
+      export interface StatusHolder {
+        m_eStatus: number;
+      }`,
+    source: dedent/* ts */`
+      export interface StatusHolder {
+        /**
+         * this value is an enum
+         * @currentValue 7
+         */
+        m_eStatus: number;
       }`,
   },
 
