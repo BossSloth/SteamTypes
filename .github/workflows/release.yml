@@ -30,7 +30,7 @@ jobs:
         run: bun run build
 
       - name: Setup semantic-release
-        run: bun add -d semantic-release
+        run: bun add -d semantic-release @semantic-release/git @semantic-release/github
 
       - name: Release
         env:
