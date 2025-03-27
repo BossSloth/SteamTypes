@@ -13,6 +13,25 @@ bun add -d steam-types
 pnpm add -D steam-types
 ```
 
+### Usage
+To override the global SteamClient type that may be provided by other packages like `@steambrew/client`, create a file called `overrides.d.ts` in your project root with the following content:
+
+```typescript
+import { SteamClient } from 'steam-types';
+
+declare global {
+  let SteamClient: SteamClient;
+}
+```
+
+And add it to your `tsconfig.json` include:
+
+```json
+{
+  "include": ["overrides.d.ts", "src/**/*"]
+}
+```
+
 ## Project Structure
 
 This project consists of:
