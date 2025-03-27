@@ -1,6 +1,6 @@
 {
   "name": "steam-types",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
   "types": "dist/index.d.ts",
@@ -11,8 +11,6 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "watch": "tsc -w --project tsconfig.build.json",
-    "test-convert": "bun scripts/convert/test-convert.ts",
-    "test-convert-watch": "bun --watch scripts/convert/test-convert.ts",
     "convert": "bun $1 scripts/convert/convert-to-ts/test.ts",
     "build-convert-debug": "esbuild scripts/convert/convert-to-ts/test.ts --bundle --format=iife --platform=browser --minify-syntax --outfile=build/scripts/convert-to-ts.js",
     "build-convert": "bun build-convert-debug --minify-identifiers",
@@ -27,7 +25,8 @@
     "types",
     "typescript",
     "definitions",
-    "interface"
+    "interface",
+    "valve"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -48,6 +47,7 @@
     "eslint-plugin-perfectionist": "^4.10.1",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
+    "semantic-release": "^24.2.3",
     "ts-morph": "^25.0.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
@@ -60,5 +60,12 @@
     "@types/google-protobuf": "^3.15.12",
     "long": "^5.3.1",
     "mobx": "^6.13.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BossSloth/SteamTypes.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
