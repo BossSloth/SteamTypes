@@ -1,6 +1,6 @@
 {
   "name": "steam-types",
-  "version": "0.1.0",
+  "version": "1.0.0-main.1",
   "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
   "types": "dist/index.d.ts",
@@ -32,6 +32,8 @@
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@inquirer/prompts": "^7.4.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/chrome-remote-interface": "^0.31.14",
     "@types/diff": "^7.0.1",
@@ -47,6 +49,7 @@
     "eslint-plugin-perfectionist": "^4.10.1",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
+    "semantic-release": "^24.2.3",
     "ts-morph": "^25.0.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
