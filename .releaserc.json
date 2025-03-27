@@ -1,5 +1,6 @@
 {
   "branches": [
+    "dummy",
     {
       "name": "main",
       "prerelease": true
