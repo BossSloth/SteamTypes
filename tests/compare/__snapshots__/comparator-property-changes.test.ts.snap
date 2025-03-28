@@ -1,5 +1,111 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Property Change Cases > generic type parameter changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,25 +1,37 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataStore {
+-  cache: Set<string>;
++  cache: Set<number>;
++
+  items: Map<string, Item>;
+-  reactive: ObservableMap<string, ReactiveData>;
++
++  reactive: ObservableMap<number, ReactiveData>;
++
+  users: ObservableSet<UserData>;
+}
+
+export interface Item {
++  data: string;
++
+  id: string;
++
+  name: string;
++
++  type: 'text' | 'image' | 'file';
+}
+
+export interface UserData {
++  avatarUrl: string;
++
+  id: number;
++
+  name: string;
+-  email: string;
+}
+
+export interface ReactiveData {
+  id: number;
++
+  name: string;
++
+  tracking: boolean;
+}"
+`;
+
+exports[`Comparator Property Change Cases > generic type parameter changes with union types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,29 +1,51 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataCollection {
+-  cache: ObservableMap<string, BasicItem | ExtendedItem>;
++  cache: ObservableMap<string, BasicItem | ExtendedItem | SpecialItem>;
++
+  items: Set<ReactiveData | ExtendedItem>;
++
+  mappings: Map<string, UserData | ReactiveData>;
+}
+
+export interface BasicItem {
++  createdAt: Date;
++
+  id: string;
++
+  name: string;
+}
+
+export interface ExtendedItem {
+  description: string;
++
+  id: string;
++
++  isActive: boolean;
++
+  metadata: Record<string, unknown>;
++
+  name: string;
+}
+
+export interface UserData {
++  avatarUrl: string;
++
+  id: number;
++
+  name: string;
+}
+
+export interface ReactiveData {
+  id: number;
++
++  name: string;
++
+  tracking: boolean;
+}
++
++export interface SpecialItem {
++  id: string;
++  type: 'special';
++  priority: number;
++}"
+`;
+
 exports[`Comparator Property Change Cases > interface with added nested interfaces 1`] = `
 "===================================================================
 --- a/target.ts
@@ -65,6 +171,14 @@ exports[`Comparator Property Change Cases > interface with modified nested inter
 --- a/target.ts
 +++ b/target.ts
 @@ -1,12 +1,26 @@
+export interface NetworkConfig {
+  baseUrl: string;
++
+  connection: ConnectionParams;
++
++  endpoints: Record<string, string>;
+}
+
 export interface ConnectionParams {
 +  keepAlive: boolean;
 +
@@ -77,14 +191,6 @@ export interface ConnectionParams {
    */
   timeout: number;
 -  retries: number;
-}
-
-export interface NetworkConfig {
-  baseUrl: string;
-+
-  connection: ConnectionParams;
-+
-+  endpoints: Record<string, string>;
 }
 +
 +export interface ProxySettings {

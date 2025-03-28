@@ -1,4 +1,4 @@
-import { InterfaceDeclaration, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
+import { InterfaceDeclaration, MethodSignature, PropertySignature, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { currentStartingInterfaces, currentTargetSourceFile, interfaceQueue } from './interface-comparator';
 
 /**
@@ -29,6 +29,7 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
     }
 
     if (targetInterfaceDeclaration) {
+      sourceInterfaceDeclaration.rename(targetInterfaceDeclaration.getName());
       interfaceQueue.push({
         targetInterface: targetInterfaceDeclaration,
         sourceInterface: sourceInterfaceDeclaration,
@@ -81,8 +82,8 @@ function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceD
     // Calculate similarity score (0-1)
     const score = calculateSimilarityScore(sourceProperties, targetProperties);
 
-    // If score is above threshold (e.g., 0.75 for 75% similarity)
-    if (score > 0.75 && score > highestScore) {
+    // If score is above threshold (e.g., 0.65 for 65% similarity)
+    if (score >= 0.65 && score > highestScore) {
       highestScore = score;
       bestMatch = targetInterface;
     }
@@ -97,11 +98,15 @@ function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceD
 function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { name: string; type: string; }[] {
   const properties: { name: string; type: string; }[] = [];
 
-  for (const property of interfaceDeclaration.getProperties()) {
+  for (const property of interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[]) {
     const propertyType = property.getType();
+    const type = propertyType.getText().replace(/import\(".+?\)\./, '');
+    // if (property.getFlags() & TypeFlags.NonPrimitive) {
+    //   type = 'Interface';
+    // }
     properties.push({
       name: property.getName(),
-      type: propertyType.getText(),
+      type,
     });
   }
 
@@ -124,10 +129,11 @@ function calculateSimilarityScore(
 
   for (const sourceProp of sourceProps) {
     const matchingTargetProp = targetProps.find(tp =>
-      tp.name === sourceProp.name && tp.type === sourceProp.type);
+      tp.name === sourceProp.name && (tp.type === sourceProp.type || sourceProp.type.includes('unknown')));
 
     if (matchingTargetProp) {
       matchingProps++;
+      matchingTargetProp.type = sourceProp.type;
     }
   }
 

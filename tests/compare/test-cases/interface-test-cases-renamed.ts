@@ -1,50 +1,18 @@
 import dedent from 'dedent';
 import { ComparatorTest } from './index';
 
-export const interfaceCases: Record<string, ComparatorTest> = {
-  'union type with interface': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      export interface Container {
-        data: string | null;
-      }`,
-    source: dedent/* ts */`
-      export interface Container {
-        data: DataType | null;
-      }
-
-      export interface DataType {
-        value: string;
-        id: number;
-      }`,
-  },
-
-  'inverse union type with interface': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      export interface Container {
-        data: DataType | null;
-      }
-
-      export interface DataType {
-        value: string;
-        id: number;
-      }`,
-    source: dedent/* ts */`
-      export interface Container {
-        data: string | null;
-      }`,
-  },
-
+export const interfaceRenamedCases: Record<string, ComparatorTest> = {
   'array intersection types': {
     interfaceName: 'Combined',
     target: dedent/* ts */`
       export interface Combined {
-        data: A;
+        data: TypeA;
       }
 
-      export interface A {
+      export interface TypeA {
         propA: string;
+        barA: boolean;
+        fooA: number;
       }`,
     source: dedent/* ts */`
       export interface Combined {
@@ -54,6 +22,8 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       export interface A {
         propA: string;
         extraA: boolean;
+        barA: boolean;
+        fooA: number;
       }
 
       export interface B {
@@ -66,15 +36,17 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Combined',
     target: dedent/* ts */`
       export interface Combined {
-        data: (A | B)[];
+        data: (TypeA | TypeB)[];
       }
 
-      export interface A {
-        propA: string;
+      export interface TypeA {
         extraA: boolean;
+        barA: boolean;
+        fooA: number;
+        propA: string;
       }
 
-      export interface B {
+      export interface TypeB {
         propB: number;
         extraB: Date;
       }`,
@@ -85,20 +57,21 @@ export const interfaceCases: Record<string, ComparatorTest> = {
 
       export interface A {
         propA: string;
+        barA: boolean;
+        fooA: number;
       }`,
   },
 
-  // TODO: generic must be of correct type so it should output `T extends number | string`
   'interface with complex nested generics': {
     interfaceName: 'ApiResponse',
     target: dedent/* ts */`
       export interface ApiResponse<T> {
         data: T[];
-        pagination: Pagination;
+        pagination: PaginationInfo;
         success: boolean;
       }
 
-      export interface Pagination {
+      export interface PaginationInfo {
         page: number;
         limit: number;
         total: number;
@@ -125,37 +98,23 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  'interface with different ObservableMap type in an intersection': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      import { ObservableMap } from 'mobx';
-
-      export interface Container {
-        data: number | ObservableMap<string, number>;
-      }
-      `,
-    source: dedent/* ts */`
-      import { ObservableMap } from 'mobx';
-
-      export interface Container {
-        data: number | ObservableMap<string, boolean>;
-      }`,
-  },
-
   'nested interface in union type': {
     interfaceName: 'Container',
     target: dedent/* ts */`
       export interface Container {
-        data: Base | Extended;
+        data: BaseItem | ExtendedItem;
       }
 
-      export interface Base {
+      export interface BaseItem {
         id: number;
         name: string;
+        foo: boolean;
       }
 
-      export interface Extended {
+      export interface ExtendedItem {
         details: string;
+        bar: boolean;
+        extra: string;
       }`,
     source: dedent/* ts */`
       export interface Container {
@@ -166,23 +125,14 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         id: number;
         name: string;
         created: Date;
+        foo: boolean;
       }
 
       export interface Extended {
         details: string;
         active: boolean;
-      }`,
-  },
-
-  'union type with different lengths': {
-    interfaceName: 'Container',
-    target: dedent/* ts */`
-      export interface Container {
-        data: string | number;
-      }`,
-    source: dedent/* ts */`
-      export interface Container {
-        data: string | number | boolean;
+        extra: string;
+        bar: boolean;
       }`,
   },
 
@@ -190,17 +140,17 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Container',
     target: dedent/* ts */`
       export interface Container {
-        data: A | B;
+        data: TypeA | TypeB;
       }
 
-      export interface A {
+      export interface TypeA {
         propA: string;
       }
 
-      export interface B {
-        propB: number;
+      export interface TypeB {
         fooB: string;
         otherB: boolean;
+        propB: number;
       }`,
     source: dedent/* ts */`
       export interface Container {
@@ -212,10 +162,10 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
 
       export interface B {
-        propB: number;
         fooB: string;
         otherB: boolean;
         extraB: Date;
+        propB: number;
       }
 
       export interface C {
@@ -227,36 +177,44 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'UserProfile',
     target: dedent/* ts */`
       export interface UserProfile {
-        preferences: User['settings'];
-        user: User;
+        preferences: UserInfo['settings'];
+        user: UserInfo;
       }
 
-      export interface User {
+      export interface UserInfo {
+        foo: boolean;
         id: number;
         name: string;
-        settings: {
-          theme: string;
-          notifications: boolean;
-        };
+        number: number;
+        settings: Settings;
       }
+
+      export interface Settings {
+        notifications: boolean;
+        theme: string;
+      };
       `,
     source: dedent/* ts */`
       export interface UserProfile {
-        user: User;
         preferences: User['settings'];
+        user: User;
         theme: User['settings']['theme'];
       }
 
       export interface User {
         id: number;
         name: string;
+        foo: boolean;
+        number: number;
         email: string;
-        settings: {
-          theme: string;
-          notifications: boolean;
-          language: string;
-        };
+        settings: Settings;
       }
+
+      export interface Settings {
+        theme: string;
+        notifications: boolean;
+        language: string;
+      };
       `,
   },
 
@@ -265,14 +223,14 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent/* ts */`
       export interface UserProfile {
-        preferences: User['email'];
+        preferences: UserInfo['email'];
 
-        theme: User['settings']['notifications'];
+        theme: UserInfo['settings']['notifications'];
 
-        user: User;
+        user: UserInfo;
       }
 
-      export interface User {
+      export interface UserInfo {
         email: string;
 
         id: number;
@@ -308,15 +266,15 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'RouteConfig',
     expectsNoDiff: true,
     target: dedent/* ts */`
-      export type HttpMethod = 'GET' | 'POST';
-      export type ResourceType = 4 | 5;
+      export type HttpMethodType = 'GET' | 'POST';
+      export type ResourceTypeValue = 4 | 5;
 
       export interface RouteConfig {
-        method: HttpMethod;
+        method: HttpMethodType;
 
         path: string;
 
-        type: ResourceType;
+        type: ResourceTypeValue;
       }`,
     source: dedent/* ts */`
       export interface RouteConfig {
@@ -324,25 +282,6 @@ export const interfaceCases: Record<string, ComparatorTest> = {
 
         path: string;
 
-        type: number;
-      }`,
-  },
-
-  'template literal types': {
-    interfaceName: 'RouteConfig',
-    expectsNoDiff: true,
-    target: dedent/* ts */`
-      export interface RouteConfig {
-        method: 'GET' | 'POST';
-
-        path: string;
-
-        type: 4 | 5;
-      }`,
-    source: dedent/* ts */`
-      export interface RouteConfig {
-        method: string;
-        path: string;
         type: number;
       }`,
   },
@@ -350,86 +289,19 @@ export const interfaceCases: Record<string, ComparatorTest> = {
   'external template literal types with missing type': {
     interfaceName: 'RouteConfig',
     target: dedent/* ts */`
-      export type HttpMethod = 'GET' | 'POST';
-      export type ResourceType = 4 | 5;
+      export type HttpMethodType = 'GET' | 'POST';
+      export type ResourceTypeValue = 4 | 5;
 
       export interface RouteConfig {
-        method: HttpMethod;
+        method: HttpMethodType;
         path: string;
-        type: ResourceType;
-      }`,
-    source: dedent/* ts */`
-      export interface RouteConfig {
-        method: number;
-        path: string;
-        type: number;
-      }`,
-  },
-
-  'template literal types with missing type': {
-    interfaceName: 'RouteConfig',
-    target: dedent/* ts */`
-      export interface RouteConfig {
-        method: 'GET' | 'POST';
-        path: string;
-        type: 4 | 5;
+        type: ResourceTypeValue;
       }`,
     source: dedent/* ts */`
       export interface RouteConfig {
         method: number;
         path: string;
         type: number;
-      }`,
-  },
-
-  'tuple types': {
-    interfaceName: 'CoordinateSystem',
-    expectsNoDiff: true,
-    target: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: [number, number];
-      }`,
-    source: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: number[];
-      }`,
-  },
-
-  'mixed tuple types': {
-    interfaceName: 'CoordinateSystem',
-    expectsNoDiff: true,
-    target: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: [number, string];
-      }`,
-    source: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: (number | string)[];
-      }`,
-  },
-
-  'mixed missing tuple types': {
-    interfaceName: 'CoordinateSystem',
-    target: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: [number, number];
-      }`,
-    source: dedent/* ts */`
-      export interface CoordinateSystem {
-        point: (number | string)[];
-      }`,
-  },
-
-  'tuple types with optional elements': {
-    interfaceName: 'ParameterConfig',
-    expectsNoDiff: true,
-    target: dedent/* ts */`
-      export interface ParameterConfig {
-        options: [number, boolean, string, string];
-      }`,
-    source: dedent/* ts */`
-      export interface ParameterConfig {
-        options: (string | number | boolean)[];
       }`,
   },
 
@@ -437,17 +309,21 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'EnhancedUser',
     target: dedent/* ts */`
       export interface EnhancedUser {
-        user: BaseUser & UserPermissions;
+        user: BaseUserInfo & UserPermissionInfo;
       }
 
-      export interface BaseUser {
+      export interface BaseUserInfo {
+        email: string;
+        foo: boolean;
         id: number;
         name: string;
       }
 
-      export interface UserPermissions {
-        canEdit: boolean;
+      export interface UserPermissionInfo {
         canDelete: boolean;
+        canEdit: boolean;
+        canRead: boolean;
+        canUpdate: boolean;
       }`,
     source: dedent/* ts */`
       export interface EnhancedUser {
@@ -456,15 +332,19 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
 
       export interface BaseUser {
+        email: string;
+        foo: boolean;
         id: number;
         name: string;
-        email: string;
+        extraInfo: string;
       }
 
       export interface UserPermissions {
         canEdit: boolean;
         canDelete: boolean;
         canCreate: boolean;
+        canUpdate: boolean;
+        canRead: boolean;
       }
 
       export interface UserMetadata {
@@ -473,39 +353,22 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  'method with interface return type': {
-    interfaceName: 'UserService',
-    target: dedent/* ts */`
-      export interface UserService {
-        getUserById(id: number): unknown;
-      }`,
-    source: dedent/* ts */`
-      export interface UserService {
-        getUserById(id: number): User | null;
-        createUser(email: string, name: string): User;
-      }
-
-      export interface User {
-        id: UserIdentifier;
-        email: string;
-        name: string;
-      }`,
-  },
-
   'interface with complex nested structures': {
     interfaceName: 'AppConfig',
     target: dedent/* ts */`
       export interface AppConfig {
-        api: ApiConfig;
-        ui: UiConfig;
+        api: ApiSettings;
+        ui: UiSettings;
       }
 
-      export interface ApiConfig {
+      export interface ApiSettings {
         baseUrl: string;
         timeout: number;
+        isActive: boolean;
+        extraInfo: string;
       }
 
-      export interface UiConfig {
+      export interface UiSettings {
         theme: string;
       }`,
     source: dedent/* ts */`
@@ -520,6 +383,8 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         timeout: number;
         headers: Record<string, string>;
         endpoints: Record<string, EndpointConfig>;
+        extraInfo: string;
+        isActive: boolean;
       }
 
       export interface EndpointConfig {

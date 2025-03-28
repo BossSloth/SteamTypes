@@ -4,32 +4,34 @@ exports[`Comparator - Single debug > single 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,25 @@
-export interface ApiResponse<T> {
--  data: T[];
-+  data: number | string[];
+@@ -1,17 +1,29 @@
+export interface UserProfile {
+  preferences: UserInfo['settings'];
 +
-+  error: ApiError;
++  theme: UserInfo['settings']['theme'];
 +
-  pagination: Pagination;
-+
-  success: boolean;
+  user: UserInfo;
 }
 
-export interface Pagination {
--  page: number;
-+  hasMore: boolean;
+export interface UserInfo {
++  email: string;
 +
-  limit: number;
+  foo: boolean;
 +
-+  page: number;
+  id: number;
 +
-  total: number;
+  name: string;
++
+  number: number;
++
+  settings: Settings;
 }
+
+export interface Settings {
++  language: string;
 +
-+export interface ApiError {
-+  code: string;
-+  message: string;
-+  details?: Record<string, unknown>;
-+}"
+  notifications: boolean;
++
+  theme: string;
+};"
 `;

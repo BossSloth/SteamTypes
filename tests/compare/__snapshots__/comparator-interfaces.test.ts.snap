@@ -141,6 +141,14 @@ exports[`Comparator Interface Cases > interface with indexed access types 1`] = 
 --- a/target.ts
 +++ b/target.ts
 @@ -1,13 +1,21 @@
+export interface UserProfile {
+  preferences: User['settings'];
++
++  theme: User['settings']['theme'];
++
+  user: User;
+}
+
 export interface User {
 +  email: string;
 +
@@ -153,15 +161,6 @@ export interface User {
     notifications: boolean;
 +    language: string;
   };
-}
-
-export interface UserProfile {
--  user: User;
-  preferences: User['settings'];
-+
-+  theme: User['settings']['theme'];
-+
-+  user: User;
 }"
 `;
 
@@ -335,7 +334,7 @@ exports[`Comparator Interface Cases > union type with interface and different le
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,17 @@
+@@ -1,13 +1,21 @@
 export interface Container {
 -  data: A | B;
 +  data: A | B | C;
@@ -346,9 +345,14 @@ export interface A {
 }
 
 export interface B {
+-  propB: number;
 +  extraB: Date;
 +
-  propB: number;
+  fooB: string;
++
+  otherB: boolean;
++
++  propB: number;
 }
 +
 +export interface C {

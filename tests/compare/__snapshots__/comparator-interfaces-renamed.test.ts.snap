@@ -1,0 +1,299 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Interface Renamed Cases > array intersection types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,18 @@
+export interface Combined {
+-  data: TypeA;
++  data: (TypeA | B)[];
+}
+
+export interface TypeA {
+-  propA: string;
+  barA: boolean;
++
++  extraA: boolean;
++
+  fooA: number;
++
++  propA: string;
+}
++
++export interface B {
++  propB: number;
++  extraB: Date;
++}"
+`;
+
+exports[`Comparator Interface Renamed Cases > external template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,10 @@
+export type HttpMethodType = 'GET' | 'POST';
+export type ResourceTypeValue = 4 | 5;
+
+export interface RouteConfig {
+-  method: HttpMethodType;
++  method: number;
++
+  path: string;
++
+  type: ResourceTypeValue;
+}"
+`;
+
+exports[`Comparator Interface Renamed Cases > interface with complex nested generics 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,25 @@
+export interface ApiResponse<T> {
+-  data: T[];
++  data: number | string[];
++
++  error: ApiError;
++
+  pagination: PaginationInfo;
++
+  success: boolean;
+}
+
+export interface PaginationInfo {
+-  page: number;
++  hasMore: boolean;
++
+  limit: number;
++
++  page: number;
++
+  total: number;
+}
++
++export interface ApiError {
++  code: string;
++  message: string;
++  details?: Record<string, unknown>;
++}"
+`;
+
+exports[`Comparator Interface Renamed Cases > interface with complex nested structures 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,47 @@
+export interface AppConfig {
+  api: ApiSettings;
+-  ui: UiSettings;
++
++  features: Record<string, boolean>;
++
++  ui: UiConfig;
+}
+
+export interface ApiSettings {
+  baseUrl: string;
+-  timeout: number;
+-  isActive: boolean;
++
++  endpoints: Record<string, EndpointConfig>;
++
+  extraInfo: string;
++
++  headers: Record<string, string>;
++
++  isActive: boolean;
++
++  timeout: number;
+}
+
+export interface UiSettings {
+  theme: string;
+}
++
++export interface ButtonConfig {
++  borderRadius: number;
++  fontSize: number;
++}
++
++export interface InputConfig {
++  borderRadius: number;
++  padding: number;
++}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++  input: InputConfig;
++}
++
++export interface UiConfig {
++  theme: string;
++  layout: 'vertical' | 'horizontal';
++  animations: boolean;
++  components: ComponentsConfig;
++}"
+`;
+
+exports[`Comparator Interface Renamed Cases > interface with indexed access types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,17 +1,29 @@
+export interface UserProfile {
+  preferences: UserInfo['settings'];
++
++  theme: UserInfo['settings']['theme'];
++
+  user: UserInfo;
+}
+
+export interface UserInfo {
++  email: string;
++
+  foo: boolean;
++
+  id: number;
++
+  name: string;
++
+  number: number;
++
+  settings: Settings;
+}
+
+export interface Settings {
++  language: string;
++
+  notifications: boolean;
++
+  theme: string;
+};"
+`;
+
+exports[`Comparator Interface Renamed Cases > interface with intersection types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,17 +1,34 @@
+export interface EnhancedUser {
+-  user: BaseUserInfo & UserPermissionInfo;
++  isAdmin: boolean;
++
++  user: BaseUserInfo & UserPermissionInfo & UserMetadata;
+}
+
+export interface BaseUserInfo {
+  email: string;
++
++  extraInfo: string;
++
+  foo: boolean;
++
+  id: number;
++
+  name: string;
+}
+
+export interface UserPermissionInfo {
++  canCreate: boolean;
++
+  canDelete: boolean;
++
+  canEdit: boolean;
++
+  canRead: boolean;
++
+  canUpdate: boolean;
+}
++
++export interface UserMetadata {
++  lastLogin: Date;
++  loginCount: number;
++}"
+`;
+
+exports[`Comparator Interface Renamed Cases > inverse array intersection types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,14 @@
+export interface Combined {
+-  data: (TypeA | TypeB)[];
++  data: TypeA;
+}
+
+export interface TypeA {
+-  extraA: boolean;
+  barA: boolean;
++
+  fooA: number;
++
+  propA: string;
+}
+
+export interface TypeB {
+  propB: number;"
+`;
+
+exports[`Comparator Interface Renamed Cases > nested interface in union type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,23 @@
+export interface Container {
+  data: BaseItem | ExtendedItem;
+}
+
+export interface BaseItem {
++  created: Date;
++
++  foo: boolean;
++
+  id: number;
++
+  name: string;
+-  foo: boolean;
+}
+
+export interface ExtendedItem {
+-  details: string;
++  active: boolean;
++
+  bar: boolean;
++
++  details: string;
++
+  extra: string;
+}"
+`;
+
+exports[`Comparator Interface Renamed Cases > union type with interface and different lengths 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,21 @@
+export interface Container {
+-  data: TypeA | TypeB;
++  data: TypeA | TypeB | C;
+}
+
+export interface TypeA {
+  propA: string;
+}
+
+export interface TypeB {
++  extraB: Date;
++
+  fooB: string;
++
+  otherB: boolean;
++
+  propB: number;
+}
++
++export interface C {
++  propC: boolean;
++}"
+`;

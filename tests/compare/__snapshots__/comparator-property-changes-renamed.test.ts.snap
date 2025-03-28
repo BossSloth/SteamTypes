@@ -1,0 +1,250 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Property Renamed Change Cases > generic type parameter changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,29 +1,45 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataStore {
+-  cache: Set<string>;
++  cache: Set<number>;
++
+  items: Map<string, ItemData>;
+-  reactive: ObservableMap<string, ReactiveInfo>;
++
++  reactive: ObservableMap<number, ReactiveInfo>;
++
+  users: ObservableSet<UserInfo>;
+}
+
+export interface ItemData {
+-  id: string;
+-  name: string;
++  data: string;
++
+  extraInfo: string;
++
+  foo: string;
++
++  id: string;
++
++  name: string;
++
++  type: 'text' | 'image' | 'file';
+}
+
+export interface UserInfo {
++  avatarUrl: string;
++
++  fooUser: string;
++
+  id: number;
++
+  name: string;
+-  email: string;
++
+  otherInfo: string;
+-  fooUser: string;
+}
+
+export interface ReactiveInfo {
+  id: number;
++
+  name: string;
++
+  tracking: boolean;
+}"
+`;
+
+exports[`Comparator Property Renamed Change Cases > generic type parameter changes with union types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,31 +1,55 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataCollection {
+-  cache: ObservableMap<string, SimpleItem | DetailedItem>;
++  cache: ObservableMap<string, SimpleItem | DetailedItem | SpecialItem>;
++
+  items: Set<ReactiveInfo | DetailedItem>;
++
+  mappings: Map<string, UserInfo | ReactiveInfo>;
+}
+
+export interface SimpleItem {
+-  id: string;
++  createdAt: Date;
++
+  data: string;
++
++  id: string;
++
+  name: string;
+}
+
+export interface DetailedItem {
+  description: string;
++
+  id: string;
++
++  isActive: boolean;
++
+  metadata: Record<string, unknown>;
++
+  name: string;
+}
+
+export interface UserInfo {
++  avatarUrl: string;
++
+  id: number;
++
+  name: string;
+}
+
+export interface ReactiveInfo {
+  id: number;
++
++  name: string;
++
+  trackingFoo: boolean;
++
+  trackingReactive: boolean;
+}
++
++export interface SpecialItem {
++  id: string;
++  type: 'special';
++  priority: number;
++}"
+`;
+
+exports[`Comparator Property Renamed Change Cases > interface with modified nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,14 +1,30 @@
+export interface NetworkConfig {
+  baseUrl: string;
++
+  connection: ConnectionSettings;
++
++  endpoints: Record<string, string>;
+}
+
+export interface ConnectionSettings {
+  extraSettings: Record<string, unknown>;
++
+  foo: string;
++
++  keepAlive: boolean;
++
++  proxy?: ProxySettings;
++
+  retries: number;
++
+  /**
+   * Timeout in milliseconds
+   */
+  timeout: number;
+}
++
++export interface ProxySettings {
++  host: string;
++  port: number;
++  auth?: string;
++}"
+`;
+
+exports[`Comparator Property Renamed Change Cases > interface with property changing from one interface to another 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,26 @@
+export interface ChatMessage {
+-  content: TextData;
++  content: MessageContent;
++
+  id: string;
++
++  read: boolean;
++
+  sender: string;
++
+  timestamp: number;
+}
+
+export interface TextInformation {
+  text: string;
+  format: 'plain' | 'markdown';
+}
++
++export interface TextData {
++  text: string;
++  format: 'plain' | 'markdown' | 'html';
++}
++
++export interface MessageContent {
++  type: 'text' | 'image' | 'file';
++  data: TextData;
++}"
+`;
+
+exports[`Comparator Property Renamed Change Cases > property changes from array to specific interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,30 @@
+export interface LibraryContent {
+-  books: BookItem[];
+-  magazines: any[];
++  books: BookCollection;
++
++  magazines: MagazineCollection;
+}
+
+export interface BookItem {
+  title: string;
+  author: string;
+  publisher: string;
+  publishedDate: Date;
+}
++
++export interface BookCollection {
++  items: Book[];
++  count: number;
++  lastUpdated: Date;
++}
++
++export interface Magazine {
++  title: string;
++  issue: number;
++  publisher: string;
++}
++
++export interface MagazineCollection {
++  items: Magazine[];
++  count: number;
++  lastUpdated: Date;
++}"
+`;
+
+exports[`Comparator Property Renamed Change Cases > property type changes from interface to primitive 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,9 @@
+export interface GameState {
+-  player: PlayerInfo;
+  gameMode: string;
++
++  player: string;
+}
+
+export interface PlayerInfo {
+  score: number;
+  level: number;"
+`;

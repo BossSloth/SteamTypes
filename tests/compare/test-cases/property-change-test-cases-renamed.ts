@@ -1,36 +1,16 @@
 import dedent from 'dedent';
 import { ComparatorTest } from './index';
 
-export const propertyChangeCases: Record<string, ComparatorTest> = {
-  'property type changes from primitive to interface': {
-    interfaceName: 'UserSettings',
-    target: dedent/* ts */`
-      export interface UserSettings {
-        profile: string;
-        preferences: Record<string, boolean>;
-      }`,
-    source: dedent/* ts */`
-      export interface UserSettings {
-        profile: UserProfile;
-        preferences: Record<string, boolean>;
-      }
-
-      export interface UserProfile {
-        displayName: string;
-        avatar: string;
-        bio: string;
-      }`,
-  },
-
+export const propertyChangeRenamedCases: Record<string, ComparatorTest> = {
   'property type changes from interface to primitive': {
     interfaceName: 'GameState',
     target: dedent/* ts */`
       export interface GameState {
-        player: PlayerStats;
+        player: PlayerInfo;
         gameMode: string;
       }
 
-      export interface PlayerStats {
+      export interface PlayerInfo {
         score: number;
         level: number;
         achievements: string[];
@@ -46,13 +26,15 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
     interfaceName: 'LibraryContent',
     target: dedent/* ts */`
       export interface LibraryContent {
-        books: Book[];
+        books: BookItem[];
         magazines: any[];
       }
 
-      export interface Book {
+      export interface BookItem {
         title: string;
         author: string;
+        publisher: string;
+        publishedDate: Date;
       }`,
     source: dedent/* ts */`
       export interface LibraryContent {
@@ -64,6 +46,8 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         title: string;
         author: string;
         isbn: string;
+        publishedDate: Date;
+        publisher: string;
       }
 
       export interface Magazine {
@@ -85,102 +69,22 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  'property with enum value changes': {
-    interfaceName: 'StatusConfig',
-    target: dedent/* ts */`
-      export interface StatusConfig {
-        status: ConnectionStatus;
-        message: string;
-      }
-
-      export enum ConnectionStatus {
-        CONNECTED = 1,
-        DISCONNECTED = 2,
-        PENDING = 3,
-      }`,
-    source: dedent/* ts */`
-      export interface StatusConfig {
-        /**
-         * @currentValue 5
-         */
-        status: number;
-        message: string;
-        errorCode?: number;
-      }`,
-  },
-
-  'interface with implied enum property': {
-    interfaceName: 'SteamStatus',
-    target: dedent/* ts */`
-      export interface SteamStatus {
-        m_eResult: number;
-        m_bRequireRestart: boolean;
-      }`,
-    source: dedent/* ts */`
-      export interface SteamStatus {
-        /**
-         * @currentValue 1
-         */
-        m_eResult: number;
-        m_bRequireRestart: boolean;
-        /**
-         * This value is an enum
-         * @currentValue 0
-         */
-        m_eAppUpdateBytes: number;
-      }`,
-  },
-
-  'interface with added nested interfaces': {
-    interfaceName: 'AppConfiguration',
-    target: dedent/* ts */`
-      export interface AppConfiguration {
-        version: string;
-        settings: {
-          theme: string;
-          language: string;
-        };
-      }`,
-    source: dedent/* ts */`
-      export interface AppConfiguration {
-        version: string;
-        settings: AppSettings;
-        features: FeatureFlags;
-      }
-
-      export interface AppSettings {
-        theme: string;
-        language: string;
-        notifications: NotificationSettings;
-      }
-
-      export interface NotificationSettings {
-        enabled: boolean;
-        sound: boolean;
-        desktop: boolean;
-      }
-
-      export interface FeatureFlags {
-        darkMode: boolean;
-        betaFeatures: boolean;
-        experimentalApi: boolean;
-      }`,
-  },
-
   'interface with modified nested interfaces': {
     interfaceName: 'NetworkConfig',
     target: dedent/* ts */`
       export interface NetworkConfig {
         baseUrl: string;
-        connection: ConnectionParams;
+        connection: ConnectionSettings;
       }
 
-      export interface ConnectionParams {
+      export interface ConnectionSettings {
+        extraSettings: Record<string, unknown>;
+        foo: string;
+        retries: number;
         /**
          * Timeout in milliseconds
          */
         timeout: number;
-        retries: number;
       }
       `,
     source: dedent/* ts */`
@@ -191,10 +95,12 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }
 
       export interface ConnectionParams {
+        foo: string;
         timeout: number;
         retries: number;
         keepAlive: boolean;
         proxy?: ProxySettings;
+        extraSettings: Record<string, unknown>;
       }
 
       export interface ProxySettings {
@@ -205,56 +111,17 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       `,
   },
 
-  'interface with property changing from optional to required': {
-    interfaceName: 'UserAccount',
-    target: dedent/* ts */`
-      export interface UserAccount {
-        email?: string;
-        id: string;
-        name: string;
-        phone?: string;
-      }`,
-    source: dedent/* ts */`
-      export interface UserAccount {
-        email: string;
-        id: string;
-        name: string;
-        phone?: string;
-        verified: boolean;
-      }`,
-  },
-
-  'interface with property changing from required to optional': {
-    interfaceName: 'ProductDetails',
-    target: dedent/* ts */`
-      export interface ProductDetails {
-        description: string;
-        id: string;
-        name: string;
-        price: number;
-      }`,
-    source: dedent/* ts */`
-      export interface ProductDetails {
-        description?: string;
-        discount?: number;
-        id: string;
-        name: string;
-        price: number;
-        inStock: boolean;
-      }`,
-  },
-
   'interface with property changing from one interface to another': {
     interfaceName: 'ChatMessage',
     target: dedent/* ts */`
       export interface ChatMessage {
-        content: TextContent;
+        content: TextData;
         id: string;
         sender: string;
         timestamp: number;
       }
 
-      export interface TextContent {
+      export interface TextInformation {
         text: string;
         format: 'plain' | 'markdown';
       }`,
@@ -299,23 +166,27 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
 
       export interface DataStore {
         cache: Set<string>;
-        items: Map<string, Item>;
-        reactive: ObservableMap<string, ReactiveData>;
-        users: ObservableSet<UserData>;
+        items: Map<string, ItemData>;
+        reactive: ObservableMap<string, ReactiveInfo>;
+        users: ObservableSet<UserInfo>;
       }
 
-      export interface Item {
+      export interface ItemData {
         id: string;
         name: string;
+        extraInfo: string;
+        foo: string;
       }
 
-      export interface UserData {
+      export interface UserInfo {
         id: number;
         name: string;
         email: string;
+        otherInfo: string;
+        fooUser: string;
       }
 
-      export interface ReactiveData {
+      export interface ReactiveInfo {
         id: number;
         name: string;
         tracking: boolean;
@@ -336,12 +207,16 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         name: string;
         type: 'text' | 'image' | 'file';
         data: string;
+        extraInfo: string;
+        foo: string;
       }
 
       export interface UserData {
         id: number;
         name: string;
         avatarUrl: string;
+        otherInfo: string;
+        fooUser: string;
       }
 
       export interface ReactiveData {
@@ -358,31 +233,33 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       import { ObservableMap } from 'mobx';
 
       export interface DataCollection {
-        cache: ObservableMap<string, BasicItem | ExtendedItem>;
-        items: Set<ReactiveData | ExtendedItem>;
-        mappings: Map<string, UserData | ReactiveData>;
+        cache: ObservableMap<string, SimpleItem | DetailedItem>;
+        items: Set<ReactiveInfo | DetailedItem>;
+        mappings: Map<string, UserInfo | ReactiveInfo>;
       }
 
-      export interface BasicItem {
+      export interface SimpleItem {
         id: string;
+        data: string;
         name: string;
       }
 
-      export interface ExtendedItem {
+      export interface DetailedItem {
         description: string;
         id: string;
         metadata: Record<string, unknown>;
         name: string;
       }
 
-      export interface UserData {
+      export interface UserInfo {
         id: number;
         name: string;
       }
 
-      export interface ReactiveData {
+      export interface ReactiveInfo {
         id: number;
-        tracking: boolean;
+        trackingFoo: boolean;
+        trackingReactive: boolean;
       }
       `,
     source: dedent/* ts */`
@@ -398,13 +275,14 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         id: string;
         name: string;
         createdAt: Date;
+        data: string;
       }
 
       export interface ExtendedItem {
-        id: string;
-        name: string;
         description: string;
+        id: string;
         metadata: Record<string, unknown>;
+        name: string;
         isActive: boolean;
       }
 
@@ -423,7 +301,8 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       export interface ReactiveData {
         id: number;
         name: string;
-        tracking: boolean;
+        trackingReactive: boolean;
+        trackingFoo: boolean;
       }
       `,
   },
