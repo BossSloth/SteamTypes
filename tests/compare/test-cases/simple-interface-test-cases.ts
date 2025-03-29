@@ -172,6 +172,7 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
 
   'interface with enum property - number': {
     interfaceName: 'StatusHolder',
+    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface StatusHolder {
         status: Status;
@@ -189,10 +190,11 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         */
         status: number;
       }`,
-    expectsNoDiff: true,
   },
+
   'interface with enum property - string': {
     interfaceName: 'StatusHolder',
+    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface StatusHolder {
         status: GameType;
@@ -210,8 +212,8 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         */
         status: string;
       }`,
-    expectsNoDiff: true,
   },
+
   'interface with missing enum property': {
     interfaceName: 'StatusHolder',
     target: dedent/* ts */`
@@ -232,6 +234,7 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         status: number;
       }`,
   },
+
   'new enum property': {
     interfaceName: 'StatusHolder',
     target: dedent/* ts */`
@@ -248,6 +251,7 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         status: number;
       }`,
   },
+
   'implied enum property': {
     interfaceName: 'StatusHolder',
     target: dedent/* ts */`
@@ -259,6 +263,23 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         /**
          * this value is an enum
          * @currentValue 7
+         */
+        m_eStatus: number;
+      }`,
+  },
+
+  'implied enum property with multiple currentValues': {
+    interfaceName: 'StatusHolder',
+    target: dedent/* ts */`
+      export interface StatusHolder {
+        m_eStatus: number;
+      }`,
+    source: dedent/* ts */`
+      export interface StatusHolder {
+        /**
+         * this value is an enum
+         * @currentValue 7
+         * @currentValue 8
          */
         m_eStatus: number;
       }`,

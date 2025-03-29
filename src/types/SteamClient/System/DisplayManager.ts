@@ -15,5 +15,5 @@ export interface DisplayManager {
 
   SetGamescopeInternalResolution(width: number, height: number): unknown;
 
-  SetMode(base64: string): unknown; //
+  SetMode(base64: string): unknown;
 }

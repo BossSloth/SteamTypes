@@ -1,5 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Property Change Cases > flags enum with missing value 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -6,6 +6,8 @@
+
+export enum EStatusFlags {
+  CONNECTED = 1 << 0,
+  DISCONNECTED = 1 << 1,
+  PENDING = 1 << 2,
++  /** @generated bitfield value */
++  Flag_12 = 12
+}"
+`;
+
 exports[`Comparator Property Change Cases > generic type parameter changes 1`] = `
 "===================================================================
 --- a/target.ts
@@ -162,7 +177,7 @@ export interface SteamStatus {
 +
 +/** @generated */
 +export enum EResult {
-+  EResult = 1
++  EResult1 = 1
 +}"
 `;
 
@@ -347,7 +362,7 @@ export enum ConnectionStatus {
   CONNECTED = 1,
   DISCONNECTED = 2,
   PENDING = 3,
-+  "TODO: change me" = 5
++  "TODO: change me 5" = 5
 }"
 `;
 
@@ -368,7 +383,7 @@ export enum ConnectionStatus {
   CONNECTED = 1,
   DISCONNECTED = 2,
   PENDING = 3,
-+  "TODO: change me" = 5
++  "TODO: change me 5" = 5
 }"
 `;
 
@@ -385,11 +400,11 @@ export interface SteamStatus {
 +   */
 +  eAppUpdateBytes: number;
 +
-+  eResult: eResult;
++  eResult: EResult;
 }
 +
 +/** @generated */
-+export enum eResult {
-+  eResult = 1
++export enum EResult {
++  EResult1 = 1
 +}"
 `;

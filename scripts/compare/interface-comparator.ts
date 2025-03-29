@@ -223,7 +223,7 @@ function compareAndCorrectHeritageClause(
 function orderMembers(targetInterface: InterfaceDeclaration): void {
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
   const newText = targetInterface.getFullText()
-    .replace(/\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
+    .replace(/ {2}\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
     .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
   targetInterface.replaceWithText(newText.trim());
 
@@ -250,7 +250,7 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
 
   // Replace all moved jsdoc back to single line comments
   const newText2 = targetInterface.getFullText()
-    .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '// $1') // Single line comments
+    .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '  // $1') // Single line comments
     .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
   targetInterface.replaceWithText(newText2.trim());
 

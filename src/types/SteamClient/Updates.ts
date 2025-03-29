@@ -17,17 +17,18 @@ export interface Updates {
   RegisterForUpdateStateChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
   // 1 - Stable, 2 - Beta, 3 - Preview
-  SelectOSBranch(branch: number): unknown; // enum?
+  // Return maybe an enum?
+  SelectOSBranch(branch: number): unknown;
 }
 
 export interface OSBranch {
-  eBranch: EOSBranch; // 1 - Stable
+  eBranch: EOSBranch;
   sRawName: string;
 }
 
 export enum EOSBranch {
   Unknown,
-  Release,
+  Release, // 1 - Stable
   ReleaseCandidate,
   Beta,
   BetaCandidate,

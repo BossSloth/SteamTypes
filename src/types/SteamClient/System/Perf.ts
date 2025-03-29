@@ -14,7 +14,7 @@ export interface Perf {
    */
   RegisterForStateChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
-  UpdateSettings(base64: string): unknown; // serialize
+  UpdateSettings(base64: string): unknown;
 }
 
 /**

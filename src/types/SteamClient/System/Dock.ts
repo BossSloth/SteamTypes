@@ -11,7 +11,7 @@ export interface Dock {
    */
   RegisterForStateChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
-  UpdateFirmware(base64String: string): unknown; // serialize base64 string
+  UpdateFirmware(base64String: string): unknown;
 }
 
 /**

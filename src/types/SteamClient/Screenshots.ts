@@ -118,7 +118,8 @@ export interface Screenshot {
   ePrivacy: EUCMFilePrivacyState;
   hHandle: number;
   nAppID: number;
-  nCreated: number; // timestamp
+  /** Timestamp */
+  nCreated: number;
   nHeight: number;
   nWidth: number;
   strCaption: '';

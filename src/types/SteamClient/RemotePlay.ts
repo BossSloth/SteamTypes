@@ -246,7 +246,8 @@ export interface RemotePlayDevice {
   bCanSuspend: boolean;
   clientName: string;
   formFactor: number;
-  status: string; // "Connected", "Paired",
+  /** "Connected", "Paired"j */
+  status: string;
   unStreamingSessionID: number;
 }
 
@@ -263,8 +264,10 @@ export interface RemotePlaySettings {
   nAutomaticResolutionX: number;
   nAutomaticResolutionY: number;
   nDefaultAudioChannels: number;
-  RemotePlayClientConfig: unknown; // todo: document {}
-  RemotePlayServerConfig: unknown; // todo: document {}
+  // TODO: document {}
+  RemotePlayClientConfig: unknown;
+  // TODO: document {}
+  RemotePlayServerConfig: unknown;
   strStreamingClientName: string;
   unStreamingSessionID: number;
 }

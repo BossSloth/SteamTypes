@@ -233,6 +233,29 @@ const arrayTypeOptimizationTests = {
 };
 // #endregion
 
+// Test case where interface gets merged with an enum in it
+const interfaceWithEnumTest = {
+  dataObjects: [
+    {
+      eType: 1,
+      name: 'First',
+      status: 'active',
+      type: 'user',
+      permissions: ['read', 'write'],
+      role: 'admin',
+    },
+    {
+      eType: 2,
+      name: 'Second',
+      status: 'inactive',
+      type: 'user',
+      permissions: ['read'],
+      role: 'member',
+      extra: true,
+    },
+  ],
+};
+
 // Export all edge case property tests
 export const edgeCasePropertyTests = {
   circularReferenceTests,
@@ -241,4 +264,5 @@ export const edgeCasePropertyTests = {
   propertyNameEdgeCases,
   mixedComplexEdgeCases,
   arrayTypeOptimizationTests,
+  interfaceWithEnumTest,
 };

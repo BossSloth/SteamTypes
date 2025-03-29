@@ -128,7 +128,8 @@ export interface Apps {
    * @param appId The ID of the application.
    * @returns A Promise that resolves to a stringified object.
    */
-  GetCachedAppDetails(appId: number): Promise<string>; // todo: Parsing nightmare
+  // todo: Parsing nightmare
+  GetCachedAppDetails(appId: number): Promise<string>;
 
   /**
    * @returns a ProtoBuf message. If deserialized, returns {@link CMsgCloudPendingRemoteOperations}.
@@ -164,7 +165,8 @@ export interface Apps {
    */
   GetDownloadedWorkshopItems(appId: number): Promise<WorkshopItem[]>;
 
-  GetDurationControlInfo(appId: number): Promise<unknown>; // unknown - {"bApplicable": true} - overlay usage?
+  // TODO: unknown - {"bApplicable": true} - overlay usage?
+  GetDurationControlInfo(appId: number): Promise<unknown>;
 
   /**
    * Retrieves achievement information for a specific application for a given friend.
@@ -290,10 +292,12 @@ export interface Apps {
    */
   GetSubscribedWorkshopItems(appId: number): Promise<WorkshopItem[]>;
 
-  InstallFlatpakAppAndCreateShortcut(appName: string, appCommandLineOptions: string): Promise<unknown>; // returns {"appid":0,"strInstallOutput":""}
+  // Returns {"appid":0,"strInstallOutput":""}
+  InstallFlatpakAppAndCreateShortcut(appName: string, appCommandLineOptions: string): Promise<unknown>;
   JoinAppContentBeta(appId: number, name: string): unknown;
 
-  JoinAppContentBetaByPassword(appId: number, accessCode: unknown): Promise<unknown>; // unknown.strName
+  // unknown.strName
+  JoinAppContentBetaByPassword(appId: number, accessCode: unknown): Promise<unknown>;
 
   ListFlatpakApps(): Promise<unknown>;
 
@@ -327,9 +331,9 @@ export interface Apps {
    * Raises the window for a given application.
    * @param appId The ID of the application to raise the window of.
    * @returns A Promise that resolves to a number.
-   * @todo Returns a result enum? 1 if ok, 2 if not running
+   * @todo Returns a result enum? 1 if ok, 2 if not running - see ResumeGameInProgress
    */
-  RaiseWindowForGame(appId: number): Promise<number>; // ResumeGameInProgress
+  RaiseWindowForGame(appId: number): Promise<number>;
 
   /*
     "CMsgAchievementChange"
@@ -395,7 +399,8 @@ export interface Apps {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForGameActionShowUI(callback: () => void): Unregisterable; // todo: no idea what this callback is from
+  // TODO: no idea what this callback is from
+  RegisterForGameActionShowUI(callback: () => void): Unregisterable;
 
   /**
    * Registers a callback function to be called when a game action starts.
@@ -428,7 +433,13 @@ export interface Apps {
    */
   RegisterForLocalizationChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
-  RegisterForPrePurchasedAppChanges(callback: () => void): Unregisterable; // Unknown, did have it show up a few times, but not callback parameters
+  /**
+   * Registers a callback function to be called when a pre-purchased app changes.
+   * @param callback The callback function to be called.
+   * @returns An object that can be used to unregister the callback.
+   * @todo Unknown, did have it show up a few times, but not callback parameters
+   */
+  RegisterForPrePurchasedAppChanges(callback: () => void): Unregisterable;
 
   /**
    * @params unknown
@@ -544,7 +555,8 @@ export interface Apps {
    */
   SetCachedAppDetails(appId: number, details: string): Promise<void>;
 
-  SetControllerRumblePreference(appId: number, param1: number): unknown; // param1 - enum for preference
+  // param1 - enum for preference
+  SetControllerRumblePreference(appId: number, param1: number): unknown;
 
   /**
    * Sets the custom artwork for a given application.
@@ -732,7 +744,8 @@ export interface Apps {
    * Verifies the integrity of an app's files.
    * @param appId The ID of the app to verify.
    */
-  VerifyApp(appId: number): Promise<unknown>; // todo: returns {"nGameActionID":9}
+  // TODO: returns {"nGameActionID":9}
+  VerifyApp(appId: number): Promise<unknown>;
 }
 
 export enum ELibraryAssetType {
@@ -821,7 +834,8 @@ export interface GameAction {
   gameid: string;
   nGameActionID: number;
   nLaunchOption: number;
-  nSecondsRemaing: number; // fixme: not a typo, actually valve
+  /** @note Not a typo, actually valve, nice */
+  nSecondsRemaing: number;
   strActionName: AppAction;
   strNumDone: string;
   strNumTotal: string;
@@ -1343,7 +1357,8 @@ export interface NonSteamApp {
 
 export interface LogoPositionForApp {
   logoPosition: LogoPosition;
-  nVersion: number; // Usually 1
+  /** @note Usually 1 */
+  nVersion: number;
 }
 
 /**
@@ -1419,8 +1434,8 @@ export interface SteamAppOverview {
   appid: number;
   association: SteamAppOverviewAssociation[];
   canonicalAppType: number;
-
-  controller_support?: EAppControllerSupportLevel; // default none
+  /** Defaults to @see {EAppControllerSupportLevel.None} */
+  controller_support?: EAppControllerSupportLevel;
   display_name: string;
   gameid: string;
   gamepad_preferred?: boolean;
@@ -1464,7 +1479,8 @@ export interface SteamAppOverview {
   site_license_site_name?: string;
   size_on_disk?: number;
   sort_as: string;
-  steam_deck_compat_category: ESteamDeckCompatibilityCategory; // Default should be Unknown
+  /** Defaults to @see {ESteamDeckCompatibilityCategory.Unknown} */
+  steam_deck_compat_category: ESteamDeckCompatibilityCategory;
   store_category?: number[];
   store_tag?: number[];
   third_party_mod?: boolean;
@@ -1498,7 +1514,8 @@ export enum EAppType {
 
 export interface SteamAppOverviewAssociation {
   name: string;
-  type: EAppAssociationType; // Default should be Invalid
+  /** Defaults to @see {EAppAssociationType.Invalid} */
+  type: EAppAssociationType;
 }
 
 export enum EAppAssociationType {
@@ -1521,7 +1538,8 @@ export interface SteamAppOverviewClientData {
   client_name: string;
   clientid: string;
   cloud_status: EAppCloudStatus;
-  display_status: EDisplayStatus; // Default should be Invalid
+  /** Defaults to @see {EDisplayStatus.Invalid} */
+  display_status: EDisplayStatus;
   installed?: boolean;
   is_available_on_current_platform: boolean;
   is_invalid_os_type?: boolean;

@@ -26,19 +26,19 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'SteamClient/GameRecording', object: 'SteamClient.GameRecording', srcName: 'GameRecording' },
   { file: 'SteamClient/GameSessions', object: 'SteamClient.GameSessions', srcName: 'GameSessions' },
   { file: 'SteamClient/index', object: 'SteamClient', srcName: 'SteamClient' },
-  // { file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }, // TODO: problem
+  { file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' },
   { file: 'SteamClient/InstallFolder', object: 'SteamClient.InstallFolder', srcName: 'InstallFolder' },
   { file: 'SteamClient/Installs', object: 'SteamClient.Installs', srcName: 'Installs' },
   { file: 'SteamClient/Internal', object: 'SteamClient._internal', srcName: 'Internal' },
   { file: 'SteamClient/Messaging', object: 'SteamClient.Messaging', srcName: 'Messaging' },
   { file: 'SteamClient/Music', object: 'SteamClient.Music', srcName: 'Music' },
-  // { file: 'SteamClient/Notifications', object: 'SteamClient.Notifications', srcName: 'Notifications' }, // TODO: problem
+  { file: 'SteamClient/Notifications', object: 'SteamClient.Notifications', srcName: 'Notifications' },
   { file: 'SteamClient/OpenVR', object: 'SteamClient.OpenVR', srcName: 'OpenVR' },
   { file: 'SteamClient/Overlay', object: 'SteamClient.Overlay', srcName: 'Overlay' },
-  // { file: 'SteamClient/Parental', object: 'SteamClient.Parental', srcName: 'Parental' }, // TODO: problem
+  { file: 'SteamClient/Parental', object: 'SteamClient.Parental', srcName: 'Parental' },
   { file: 'SteamClient/RemotePlay', object: 'SteamClient.RemotePlay', srcName: 'RemotePlay' },
   { file: 'SteamClient/Screenshots', object: 'SteamClient.Screenshots', srcName: 'Screenshots' },
-  // { file: 'SteamClient/ServerBrowser', object: 'SteamClient.ServerBrowser', srcName: 'ServerBrowser' }, // TODO: big problems
+  { file: 'SteamClient/ServerBrowser', object: 'SteamClient.ServerBrowser', srcName: 'ServerBrowser' },
   { file: 'SteamClient/Settings', object: 'SteamClient.Settings', srcName: 'Settings' },
   { file: 'SteamClient/SharedConnection', object: 'SteamClient.SharedConnection', srcName: 'SharedConnection' },
   { file: 'SteamClient/Stats', object: 'SteamClient.Stats', srcName: 'Stats' },
@@ -47,7 +47,7 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'SteamClient/Streaming', object: 'SteamClient.Streaming', srcName: 'Streaming' },
   { file: 'SteamClient/UI', object: 'SteamClient.UI', srcName: 'UI' },
   { file: 'SteamClient/Updates', object: 'SteamClient.Updates', srcName: 'Updates' },
-  // { file: 'SteamClient/URL', object: 'SteamClient.URL', srcName: 'URL' }, //TODO: problem
+  { file: 'SteamClient/URL', object: 'SteamClient.URL', srcName: 'URL' },
   { file: 'SteamClient/User', object: 'SteamClient.User', srcName: 'User' },
   { file: 'SteamClient/WebChat', object: 'SteamClient.WebChat', srcName: 'WebChat' },
   { file: 'SteamClient/WebUITransport', object: 'SteamClient.WebUITransport', srcName: 'WebUITransport' },
@@ -59,4 +59,4 @@ export const interfaceMaps: InterfaceMap[] = [
 ];
 
 /** @public */
-export const testMaps: InterfaceMap[] = [{ file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }]; // TODO: problem
+export const testMaps: InterfaceMap[] = [{ file: 'SteamClient/URL', object: 'SteamClient.URL', srcName: 'URL' }];

@@ -1,7 +1,7 @@
-import { EnumDeclaration, PropertySignature, SyntaxKind, TypeNode, UnionTypeNode } from 'ts-morph';
+import { EnumDeclaration, EnumMember, PropertySignature, SyntaxKind, TypeNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile } from './interface-comparator';
-import { getJsDocTagValue, isImportedType } from './shared';
+import { getJsDocTagValues, isImportedType } from './shared';
 
 const CustomJsDocTags = {
   originalName: 'compareOriginalName',
@@ -52,25 +52,23 @@ export function compareAndCorrectPropertyTypes(
  */
 function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignature): boolean {
   // Check if the source property has a @currentValue JSDoc tag (indicating it's an enum)
-  const currentStrValue = getJsDocTagValue(sourceProp, CustomJsDocTags.currentValue);
-  const enumCurrentValue = currentStrValue !== undefined ? parseInt(currentStrValue) : undefined;
+  const currentStrValues = getJsDocTagValues(sourceProp, CustomJsDocTags.currentValue);
+  const enumCurrentValues = currentStrValues.length > 0 ? currentStrValues.map(value => parseInt(value)) : undefined;
 
   // If it's an enum in the source, preserve the type and copy the JSDoc
-  if (enumCurrentValue !== undefined) {
+  if (enumCurrentValues !== undefined) {
     if (!targetProp.getType().isEnum()) {
-      const enumName = sourceProp.getName().replace(/^m_e/, 'E');
+      const enumName = sourceProp.getName().replace(/^m_e|^e(?=[A-Z])/, 'E');
       // Check if the enum already exists in the target file
       const existingEnum = currentTargetSourceFile.getEnum(enumName);
       if (!existingEnum) {
         // Add new enum to target
         currentTargetSourceFile.addEnum({
           name: enumName,
-          members: [
-            {
-              name: enumName,
-              value: enumCurrentValue,
-            },
-          ],
+          members: enumCurrentValues.map(value => ({
+            name: `${enumName}${value}`,
+            value,
+          })),
           isExported: true,
           docs: ['@generated'],
         });
@@ -90,13 +88,19 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 
     const enumMembers = enumDeclaration.getMembers();
 
-    // Check if current value is in the enum
-    if (!enumMembers.some(member => member.getValue() === enumCurrentValue)) {
+    const validMaskNames = ['mask', 'flags'];
+
+    // Do special checks if enum is a bitfield/mask/flags
+    for (const enumCurrentValue of enumCurrentValues) {
+      if (validMaskNames.some(name => enumDeclaration.getName().toLowerCase().includes(name))) {
+        checkBitfield(enumDeclaration, enumCurrentValue, enumMembers);
+      } else if (!enumMembers.some(member => member.getValue() === enumCurrentValue)) {
       // Add new enum member
-      enumDeclaration.addMember({
-        name: 'TODO: change me',
-        value: enumCurrentValue,
-      });
+        enumDeclaration.addMember({
+          name: `TODO: change me ${enumCurrentValue}`,
+          value: enumCurrentValue,
+        });
+      }
     }
 
     return true;
@@ -107,6 +111,23 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
   }
 
   return false;
+}
+
+function checkBitfield(enumDeclaration: EnumDeclaration, enumCurrentValue: number, enumMembers: EnumMember[]): void {
+  // For bitfields/masks/flags, check if the value is a power of 2 or a combination of existing values
+  const existingValues = enumMembers.map(member => member.getValue() as number);
+  const allFlags = existingValues.reduce((acc, flag) => acc | flag, 0);
+  const isValueCovered = existingValues.includes(enumCurrentValue)
+    || (enumCurrentValue > 0 && (enumCurrentValue & allFlags) === enumCurrentValue);
+
+  if (!isValueCovered) {
+    // Add new flag enum member
+    enumDeclaration.addMember({
+      name: `Flag_${enumCurrentValue}`,
+      value: enumCurrentValue,
+      docs: ['@generated bitfield value'],
+    });
+  }
 }
 
 /**

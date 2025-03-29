@@ -13,16 +13,17 @@ export function setLogger(newLogger: Logger): void {
  * @param tagName The name of the tag to extract
  * @returns The value of the tag or undefined if not found
  */
-export function getJsDocTagValue(prop: PropertySignature, tagName: string): string | undefined {
+export function getJsDocTagValues(prop: PropertySignature, tagName: string): string[] {
+  const values: string[] = [];
   for (const doc of prop.getJsDocs()) {
     for (const tag of doc.getTags()) {
       if (tag.getTagName() === tagName) {
-        return tag.getCommentText();
+        values.push(tag.getCommentText() ?? '');
       }
     }
   }
 
-  return undefined;
+  return values;
 }
 
 /**

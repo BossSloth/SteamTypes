@@ -11,7 +11,7 @@ export interface UI {
   RegisterForOverlayGameWindowFocusChanged(callback: (appId: number, param1: number) => void): Unregisterable;
 
   // event.eKey, event.nControllerIndex
-  RegisterForSystemKeyEvents(callback: (event: unknown) => void): Unregisterable; // eKey
+  RegisterForSystemKeyEvents(callback: (event: unknown) => void): Unregisterable;
 }
 
 export interface FocusChangeEvent {

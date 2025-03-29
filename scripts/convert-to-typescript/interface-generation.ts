@@ -100,18 +100,17 @@ function processInterfaceProperties(obj: Record<string, unknown>, properties: st
 }
 
 function generatePropertyJsDoc(type: Type, propertyName: string, value: unknown): string[] | undefined {
-  if (!(
+  if (
     type instanceof PrimitiveType
     && type.kind === 'number'
     && typeof value === 'number'
     && propertyName.trim().match(/^e[A-Z]|^m_e[A-Z]/) !== null
-  )) {
-    return undefined;
+  ) {
+    // If we got here we have a property that is likely an enum value
+    return ['This value is an enum', `@currentValue ${value}`];
   }
 
-  // If we got here we have a property that is likely an enum value
-
-  return ['This value is an enum', `@currentValue ${value}`];
+  return undefined;
 }
 
 /**

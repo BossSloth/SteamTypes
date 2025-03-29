@@ -21,7 +21,7 @@ import { compareInterfaces } from './compare/interface-checker';
 import { Logger } from './logger';
 import { interfaceMaps } from './maps';
 
-const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'convert-to-typescript.js');
+const convertToTsFilePath = path.join(path.resolve(`${__dirname}/../`), 'build', 'scripts', 'convert-to-typescript.js');
 
 let logger: Logger;
 
@@ -185,6 +185,8 @@ async function run(options: ValidateTypesOptions): Promise<void> {
   // const interfaceContent = await extractInterfaces(maps);
   // extractTime = Date.now() - startExtractTime;
 
+  const rootDir = path.resolve(`${__dirname}/../`);
+
   // Create an array of promises for parallel execution
   const interfacePromises = maps.map(async (map) => {
     const interfaceContent = await extractInterface(
@@ -192,7 +194,7 @@ async function run(options: ValidateTypesOptions): Promise<void> {
       map.srcName,
     );
 
-    const filePath = `src/types/${map.file}.ts`;
+    const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
     // Check if the file exists
     if (!fs.existsSync(filePath)) {
       // Create the file
@@ -204,9 +206,9 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     // }
 
     return {
-      filePath: filePath.replaceAll('/', '_'),
+      filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
       result: compareInterfaces(
-        filePath,
+        `src/types/${map.file}.ts`,
         map.srcName,
         interfaceContent,
         options.verbose,

@@ -154,6 +154,7 @@ function mergeInterfaceGroup(
     // Collect all types for this property
     let types: Type[] = [];
     let functionInfo: FunctionInfo | undefined;
+    const jsDoc = new Set<string>();
 
     for (const property of propertyVersions) {
       types.push(property.type);
@@ -161,6 +162,9 @@ function mergeInterfaceGroup(
       // If any version has function info, use it
       if (property.functionInfo) {
         functionInfo = property.functionInfo;
+      }
+      if (property.jsDoc) {
+        property.jsDoc.forEach(jsDocLine => jsDoc.add(jsDocLine));
       }
     }
 
@@ -180,6 +184,11 @@ function mergeInterfaceGroup(
     // Add function info if present
     if (functionInfo) {
       mergedProperty.functionInfo = functionInfo;
+    }
+
+    // Add jsDoc if present
+    if (jsDoc.size > 0) {
+      mergedProperty.jsDoc = Array.from(jsDoc);
     }
 
     mergedInterface.properties.push(mergedProperty);

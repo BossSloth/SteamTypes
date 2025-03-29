@@ -47,6 +47,8 @@ export interface Input {
   // f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.DuplicateControllerConfigurationSourceMode(this.m_unControllerIndex, e))), this.SaveEditingConfiguration(e), this
   DuplicateControllerConfigurationSourceMode(controllerIndex: number, param1: unknown): unknown;
 
+  EnableControllerAnalogInputMessages(): unknown;
+
   EndControllerDeviceSupportFlow(): unknown;
 
   ExportCurrentControllerConfiguration(
@@ -79,7 +81,9 @@ export interface Input {
 
   GetTouchMenuIconsForApp(appId: number): Promise<unknown>;
 
-  GetXboxDriverInstallState(): Promise<unknown>; // "{"nResult":0}"
+  // "{nResult":0}"
+  GetXboxDriverInstallState(): Promise<unknown>;
+
   IdentifyController(controllerIndex: number): unknown;
 
   InitControllerSounds(): unknown;
@@ -98,6 +102,8 @@ export interface Input {
   PreviewControllerLEDColor(flHue: number, flSaturation: number, flBrightness: number): unknown;
 
   QueryControllerConfigsForApp(appId: number, controllerIndex: number, param2: boolean): unknown;
+
+  RegisterForActiveConfigLoadedMessages(): unknown;
 
   /**
    * @params unknown
@@ -169,7 +175,7 @@ export interface Input {
   // data.appId, data.ulConfigId
   RegisterForShowControllerLayoutPreviewMessages(callback: (data: unknown) => void): Unregisterable;
 
-  /*
+  /**
             onTouchMenuInput(e) {
             for (let t = 0; t < e.length; t++) {
                 const n = this.TouchMenuGetKey(e[t]), o = this.m_mapActiveTouchMenus.get(n);
@@ -184,7 +190,8 @@ export interface Input {
   // param0 - index?
   RegisterForUIVisualization(param0: unknown, param1: unknown, param2: unknown): Unregisterable;
 
-  RegisterForUnboundControllerListChanges(callback: (m_unboundControllerList: unknown) => void): Unregisterable; // param0 is an array
+  // param0 is an array
+  RegisterForUnboundControllerListChanges(callback: (m_unboundControllerList: unknown) => void): Unregisterable;
 
   /*
         OnDismissKeyboardMessage(e) {
@@ -239,39 +246,45 @@ export interface Input {
   SetControllerPersonalizationName(): unknown;
 
   // param0 - nLStickDeadzone, bSWAntiDrift, nRHapticStrength, flRPadPressureCurve
-  /*
-                SteamClient.Input.SetControllerPersonalizationSetting("nLStickDeadzone", e.nLStickDeadzone),
-                SteamClient.Input.SetControllerPersonalizationSetting("nRStickDeadzone", e.nRStickDeadzone),
-                SteamClient.Input.SetControllerPersonalizationSetting("bSWAntiDrift", e.bSWAntiDrift ? 1 : 0),
-                SteamClient.Input.SetControllerPersonalizationSetting("nLHapticStrength", e.nLHapticStrength),
-                SteamClient.Input.SetControllerPersonalizationSetting("nRHapticStrength", e.nRHapticStrength),
-                SteamClient.Input.SetControllerPersonalizationSetting("flLPadPressureCurve", 100 * e.flLPadPressureCurve),
-                SteamClient.Input.SetControllerPersonalizationSetting("flRPadPressureCurve", 100 * e.flRPadPressureCurve),
-                SteamClient.Input.SetControllerPersonalizationSetting("ePlayerSlotLEDSetting", e),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroSampleAngleOffsetX", e.nGyroSampleAngleOffsetX),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bMomentumEnabled", e.bMomentumEnabled ? 1 : 0),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nMomentumFrictionX", e.nMomentumFrictionX),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nMomentumFrictionY", e.nMomentumFrictionY),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nAccerationLevel", e.nAccerationLevel),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bInvertX", e.bInvertX ? 1 : 0),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bInvertY", e.bInvertY ? 1 : 0),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nRotationAngle", e.nRotationAngle),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nTriggerClamping", e.nTriggerClamping),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nTriggerClampingAmount", e.nTriggerClampingAmount),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroEnableButton", e.nGyroEnableButton),
-                SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroEnableButtonBehavior", e.nGyroEnableButtonBehavior),
-     */
+  /**
+   * @example
+   * ```ts
+   * SteamClient.Input.SetControllerPersonalizationSetting("nLStickDeadzone", e.nLStickDeadzone),
+   * SteamClient.Input.SetControllerPersonalizationSetting("nRStickDeadzone", e.nRStickDeadzone),
+   * SteamClient.Input.SetControllerPersonalizationSetting("bSWAntiDrift", e.bSWAntiDrift ? 1 : 0),
+   * SteamClient.Input.SetControllerPersonalizationSetting("nLHapticStrength", e.nLHapticStrength),
+   * SteamClient.Input.SetControllerPersonalizationSetting("nRHapticStrength", e.nRHapticStrength),
+   * SteamClient.Input.SetControllerPersonalizationSetting("flLPadPressureCurve", 100 * e.flLPadPressureCurve),
+   * SteamClient.Input.SetControllerPersonalizationSetting("flRPadPressureCurve", 100 * e.flRPadPressureCurve),
+   * SteamClient.Input.SetControllerPersonalizationSetting("ePlayerSlotLEDSetting", e),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroSampleAngleOffsetX", e.nGyroSampleAngleOffsetX),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bMomentumEnabled", e.bMomentumEnabled ? 1 : 0),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nMomentumFrictionX", e.nMomentumFrictionX),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nMomentumFrictionY", e.nMomentumFrictionY),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nAccerationLevel", e.nAccerationLevel),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bInvertX", e.bInvertX ? 1 : 0),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.bInvertY", e.bInvertY ? 1 : 0),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nRotationAngle", e.nRotationAngle),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nTriggerClamping", e.nTriggerClamping),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nTriggerClampingAmount", e.nTriggerClampingAmount),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroEnableButton", e.nGyroEnableButton),
+   * SteamClient.Input.SetControllerPersonalizationSetting("GyroPreferenceData.nGyroEnableButtonBehavior", e.nGyroEnableButtonBehavior),
+   * ```
+   */
   SetControllerPersonalizationSetting(param0: string, param1: number): unknown;
 
   // param0 - flGyroStationaryTolerance, flAccelerometerStationaryTolerance,
-  /*
-                    SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroNaturalSensitivity", e.flGyroNaturalSensitivity),
-                    SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroXYRatio", e.flGyroXYRatio),
-                    SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroSpeedDeadzone", e.flGyroSpeedDeadzone),
-                    SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroPrecisionSpeed", e.flGyroPrecisionSpeed),
-                SteamClient.Input.SetControllerPersonalizationSettingFloat("flGyroStationaryTolerance", e.flGyroStationaryTolerance),
-                SteamClient.Input.SetControllerPersonalizationSettingFloat("flAccelerometerStationaryTolerance", e.flAccelerometerStationaryTolerance),
-     */
+  /**
+   * @example
+   * ```ts
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroNaturalSensitivity", e.flGyroNaturalSensitivity),
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroXYRatio", e.flGyroXYRatio),
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroSpeedDeadzone", e.flGyroSpeedDeadzone),
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("GyroPreferenceData.flGyroPrecisionSpeed", e.flGyroPrecisionSpeed),
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("flGyroStationaryTolerance", e.flGyroStationaryTolerance),
+   * SteamClient.Input.SetControllerPersonalizationSettingFloat("flAccelerometerStationaryTolerance", e.flAccelerometerStationaryTolerance),
+   * ```
+   */
   SetControllerPersonalizationSettingFloat(param0: string, param1: number): unknown;
 
   SetControllerRumbleSetting(controllerIndex: number, rumblePreference: EControllerRumbleSetting): unknown;
@@ -282,24 +295,26 @@ export interface Input {
 
   SetDualSenseUpdateNotification(param0: boolean): unknown;
 
-  /*
-            SetEditingConfigurationValue(e, t, n, o) {
-            const a = new r.BinaryWriter;
-            n.serializeBinaryToWriter(n.fromObject(t), a);
-            const s = a.getResultBase64String();
-            f.Debug("SetEditingConfigurationValue serializeBinaryToWriter", (0, i.ZN)(t), s), this.EditingConfigurationWillUpdate(), this.m_updatingEditingConfigurationPromise = o(s).then((t => {
-                if (null == t) return f.Debug("SetEditingConfigurationValue returned nothing."), void (0, i.z)((() => this.UpdateEditingConfiguration(e, this.m_unControllerIndex, this.EditingConfiguration)));
-                const n = c.bE.deserializeBinary(t).toObject();
-                f.Debug("SetEditingConfigurationValue returned controller configuration.", n), this.UpdateEditingConfiguration(e, this.m_unControllerIndex, n), this.m_nEditNumber++, -1 == n.url.indexOf("autosave://") && this.SaveEditingConfiguration(e)
-            })).catch((e => {
-                f.Error("SetEditingConfigurationValue fail:", o, l.jt(e.result), e.message), this.m_bIsUpdatingActiveConfiguration = !1
-            }))
-        }
-
-        SetControllerActionSet(e, t) {
-            this.SetEditingConfigurationValue(e, t, c.X3, (e => SteamClient.Input.SetEditingControllerConfigurationActionSet(this.m_unControllerIndex, e)))
-        }
-     */
+  /**
+   * @example
+   * ```ts
+   * SetEditingConfigurationValue(e, t, n, o) {
+   *     const a = new r.BinaryWriter;
+   *     n.serializeBinaryToWriter(n.fromObject(t), a);
+   *     const s = a.getResultBase64String();
+   *     f.Debug("SetEditingConfigurationValue serializeBinaryToWriter", (0, i.ZN)(t), s), this.EditingConfigurationWillUpdate(), this.m_updatingEditingConfigurationPromise = o(s).then((t => {
+   *         if (null == t) return f.Debug("SetEditingConfigurationValue returned nothing."), void (0, i.z)((() => this.UpdateEditingConfiguration(e, this.m_unControllerIndex, this.EditingConfiguration)));
+   *            const n = c.bE.deserializeBinary(t).toObject();
+   *            f.Debug("SetEditingConfigurationValue returned controller configuration.", n), this.UpdateEditingConfiguration(e, this.m_unControllerIndex, n), this.m_nEditNumber++, -1 == n.url.indexOf("autosave://") && this.SaveEditingConfiguration(e)
+   *        })).catch((e => {
+   *            f.Error("SetEditingConfigurationValue fail:", o, l.jt(e.result), e.message), this.m_bIsUpdatingActiveConfiguration = !1
+   *        }))
+   *    }
+   *    SetControllerActionSet(e, t) {
+   *        this.SetEditingConfigurationValue(e, t, c.X3, (e => SteamClient.Input.SetEditingControllerConfigurationActionSet(this.m_unControllerIndex, e)))
+   *    }
+   * }
+   */
   SetEditingControllerConfigurationActionSet(controllerIndex: number, param1: unknown): unknown;
 
   // this.SetEditingConfigurationValue(e, t, c.io, (e => SteamClient.Input.SetEditingControllerConfigurationInputActivator(this.m_unControllerIndex, e)))
@@ -333,10 +348,12 @@ export interface Input {
 
   SetSteamControllerDonglePairingMode(bEnable: boolean, bSilent: boolean): unknown;
 
-  SetVirtualMenuKeySelected(unControllerIndex: number, unMenuIndex: number, m_controllerMenuActiveMenuItem: number): unknown; //
+  SetVirtualMenuKeySelected(unControllerIndex: number, unMenuIndex: number, m_controllerMenuActiveMenuItem: number): unknown;
+
   SetWebBrowserActionset(param0: boolean): unknown;
 
-  SetXboxDriverInstallState(param0: unknown): unknown; // state
+  // state
+  SetXboxDriverInstallState(param0: unknown): unknown;
 
   /**
    * Opens the Steam Input controller settings.
@@ -348,25 +365,28 @@ export interface Input {
 
   StartControllerDeviceSupportFlow(param0: unknown, param1: unknown, callback: (param2: unknown) => void): unknown;
 
-  /*
-    this.m_updatingEditingConfigurationPromise = SteamClient.Input.StartEditingControllerConfigurationForAppIDAndControllerIndex(e, t).then((n=>{
-                                const o = c.bE.deserializeBinary(n).toObject();
-                                f.Debug("Loaded controller config for appid", e, n, o),
-                                    (0,
-                                        i.z)((()=>this.UpdateEditingConfiguration(e, t, o)))
-                            }
-                        )).catch((n=>{
-                                f.Debug("Loading controller config for appid rejected", e, n),
-                                    (0,
-                                        i.z)((()=>this.UpdateEditingConfiguration(e, t, null)))
-                            }
-                        ))
-     */
+  /**
+   * this.m_updatingEditingConfigurationPromise = SteamClient.Input.StartEditingControllerConfigurationForAppIDAndControllerIndex(e, t).then((n=>{
+   *   const o = c.bE.deserializeBinary(n).toObject();
+   *   f.Debug("Loaded controller config for appid", e, n, o),
+   *   (0,
+   *       i.z)((()=>this.UpdateEditingConfiguration(e, t, o)))
+   *   }))
+   *   .catch((n=>{
+   *   f.Debug("Loading controller config for appid rejected", e, n),
+   *       (0,
+   *           i.z)((()=>this.UpdateEditingConfiguration(e, t, null)))
+   *   }))
+   */
   StartEditingControllerConfigurationForAppIDAndControllerIndex(m_appId: number, m_unControllerIndex: number): Promise<unknown>;
 
   StartGyroSWCalibration(callback: () => void): unknown;
 
+  StartUIVisualization(controllerIndex: number, modeId: number): unknown;
+
   StopEditingControllerConfiguration(controllerIndex: number): unknown;
+
+  StopUIVisualization(controllerIndex: number): unknown;
 
   /**
    * @params unknown
@@ -389,8 +409,6 @@ export interface Input {
   TriggerSimpleHapticEvent(controllerIndex: number, eHapticType: number, unIntensity: number, ndBGain: number, param4: number): unknown;
 
   UnregisterForControllerStateChanges(): void;
-
-  UnregisterForUIVisualization(controllerIndex: number): unknown;
 
   UploadChangesForCloudedControllerConfigs(): unknown;
 }
@@ -636,7 +654,8 @@ export interface ControllerInfo {
   unProductID: number;
   unUniqueID: number;
   unVendorID: number;
-  vecAltAccounts: unknown[]; // The type for this property might need to be more specific based on the actual data structure
+  // TODO: The type for this property might need to be more specific based on the actual data structure
+  vecAltAccounts: unknown[];
 }
 
 export enum EControllerType {

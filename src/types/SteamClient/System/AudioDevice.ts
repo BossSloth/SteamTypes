@@ -7,7 +7,8 @@ export interface AudioDevice {
    */
   RegisterForStateChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
 
-  UpdateSomething(param0: unknown): unknown; // e.UpdateSomething(t.serializeBase64String())
+  // e.UpdateSomething(t.serializeBase64String())
+  UpdateSomething(param0: unknown): unknown;
 }
 
 /**

@@ -64,7 +64,11 @@ export interface System {
    */
   OpenInSystemBrowser(url: string): void;
 
-  OpenLocalDirectoryInSystemExplorer(directory: string): void; // Opens local directory in system explorer
+  /**
+   * Opens a local directory in the system explorer.
+   * @param directory The directory to open.
+   */
+  OpenLocalDirectoryInSystemExplorer(directory: string): void;
 
   RebootToAlternateSystemPartition(): never;
 
@@ -74,7 +78,8 @@ export interface System {
 
   RegisterForBatteryStateChanges(callback: (batteryStateChange: BatteryStateChange) => void): Unregisterable;
 
-  RegisterForFormatStorageProgress(callback: () => void): Unregisterable; // {"flProgress":0,"rtEstimatedCompletionTime":0,"eStage":1}
+  // {"flProgress":0,"rtEstimatedCompletionTime":0,"eStage":1}
+  RegisterForFormatStorageProgress(callback: () => void): Unregisterable;
 
   RegisterForOnResumeFromSuspend(callback: () => void): Unregisterable;
 
@@ -141,8 +146,10 @@ export interface BatteryStateChange {
   bShutdownRequested: boolean;
   eACState: EACState;
   eBatteryState: EBatteryState;
-  flLevel: number; // Battery Percentage in floating point 0-1
-  nSecondsRemaining: number; // Appears to be charge time remaining or time remaining on battery
+  /** Battery Percentage in floating point 0-1 */
+  flLevel: number;
+  /** Appears to be charge time remaining or time remaining on battery */
+  nSecondsRemaining: number;
 }
 
 export enum EACState {

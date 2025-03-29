@@ -1,5 +1,6 @@
 export interface Device {
-  Connect(param0: unknown): unknown; // some base64 serialized string
+  // Returns some base64 serialized string
+  Connect(param0: unknown): unknown;
   Disconnect(deviceId: unknown): Promise<unknown>;
 
   WirelessNetwork: WirelessNetwork;

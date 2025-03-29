@@ -222,7 +222,7 @@ export interface ClientNotificationIncomingVoiceChat extends JsPbMessage {
   steamid(): number;
 }
 
-export interface ClientNotificationClaimSteamDeckRewards extends JsPbMessage {}
+export interface ClientNotificationClaimSteamDeckRewards extends JsPbMessage { }
 
 export interface ClientNotificationGiftReceived extends JsPbMessage {
   sender_name(): string;
@@ -233,7 +233,7 @@ export interface ClientNotificationItemAnnouncement extends JsPbMessage {
   new_item_count(): number;
 }
 
-export interface ClientNotificationHardwareSurveyPending extends JsPbMessage {}
+export interface ClientNotificationHardwareSurveyPending extends JsPbMessage { }
 
 export interface ClientNotificationLowDiskSpace extends JsPbMessage {
   folder_index(): number;
@@ -244,7 +244,7 @@ export interface ClientNotificationBatteryTemperature extends JsPbMessage {
   temperature(): number;
 }
 
-export interface ClientNotificationDockUnsupportedFirmware extends JsPbMessage {}
+export interface ClientNotificationDockUnsupportedFirmware extends JsPbMessage { }
 
 export interface ClientNotificationPeerContentUpload extends JsPbMessage {
   appid(): number;
@@ -255,7 +255,7 @@ export interface ClientNotificationCannotReadControllerGuideButton extends JsPbM
   controller_index(): number;
 }
 
-export interface ClientNotificationOverlaySplashScreen extends JsPbMessage {}
+export interface ClientNotificationOverlaySplashScreen extends JsPbMessage { }
 
 export interface ClientNotificationBroadcastAvailableToWatch extends JsPbMessage {
   broadcast_permission(): number;
@@ -269,9 +269,9 @@ export interface ClientNotificationTimedTrialRemaining extends JsPbMessage {
   played_seconds(): number;
 }
 
-export interface ClientNotificationLoginRefresh extends JsPbMessage {}
+export interface ClientNotificationLoginRefresh extends JsPbMessage { }
 
-export interface ClientNotificationTimerExpired extends JsPbMessage {}
+export interface ClientNotificationTimerExpired extends JsPbMessage { }
 
 export interface ClientNotificationSteamInputActionSetChanged extends JsPbMessage {
   action_set_name(): string;

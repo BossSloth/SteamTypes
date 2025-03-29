@@ -197,14 +197,11 @@ export interface AppDetails {
   deckDerivedProperties?: AppDeckDerivedProperties;
 
   /**
-   * @see {@link EAppOwnershipFlags}
+   * A bitmask of {@link EAppOwnershipFlags} that indicates the ownership flags for this app.
    */
   eAppOwnershipFlags: EAppOwnershipFlags;
 
-  /**
-   * @todo enum
-   */
-  eAppUpdateError: number;
+  eAppUpdateError: EAppUpdateError;
 
   eAutoUpdateValue: EAppAutoUpdateBehavior;
 
@@ -212,10 +209,7 @@ export interface AppDetails {
 
   eCloudStatus: EAppCloudStatus;
 
-  /**
-   * @todo enum
-   */
-  eCloudSync: number;
+  eCloudSync: ECloudSync;
 
   eControllerRumblePreference: EControllerRumbleSetting;
 
@@ -224,9 +218,9 @@ export interface AppDetails {
   eEnableThirdPartyControllerConfiguration: EThirdPartyControllerConfiguration;
 
   /**
-   * @see {@link ESteamInputController}
+   * A bitmask of {@link ESteamInputControllerMask} that indicates which controllers are supported by this app.
    */
-  eSteamInputControllerMask: number;
+  eSteamInputControllerMask: ESteamInputControllerMask;
 
   /**
    * Index of the install folder. -1 if not installed.
@@ -628,7 +622,8 @@ export enum EDisplayStatus {
 }
 
 // TODO: not the actual name
-export enum ESteamInputController {
+export enum ESteamInputControllerMask {
+  Unsupported = 0,
   PlayStation = 1 << 0,
   Xbox = 1 << 1,
   Generic = 1 << 2,
@@ -641,4 +636,16 @@ export enum ESteamDeckCompatibilityTestResult {
   Pass,
   Fail,
   FailMinor,
+}
+
+// TODO: fill enum
+export enum EAppUpdateError {
+  Unknown,
+  UnknownError,
+}
+
+// TODO: fill enum
+export enum ECloudSync {
+  Unknown = 0,
+  Valid = 2,
 }

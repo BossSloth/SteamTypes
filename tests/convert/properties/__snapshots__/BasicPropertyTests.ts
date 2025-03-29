@@ -18,6 +18,12 @@ export interface BasicPropertyTests {
 
   /**
    * This value is an enum
+   * @currentValue 0
+   */
+  eAppUpdateError: number;
+
+  /**
+   * This value is an enum
    * @currentValue 12
    */
   eDataType: number;

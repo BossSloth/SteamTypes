@@ -175,6 +175,55 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'flags enum': {
+    interfaceName: 'StatusConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface StatusConfig {
+        eStatusFlags: EStatusFlags;
+
+        message: string;
+      }
+
+      export enum EStatusFlags {
+        CONNECTED = 1 << 0,
+        DISCONNECTED = 1 << 1,
+        PENDING = 1 << 2,
+      }`,
+    source: dedent/* ts */`
+      export interface StatusConfig {
+        /**
+         * @currentValue 7
+         */
+        eStatusFlags: number;
+        message: string;
+      }`,
+  },
+
+  'flags enum with missing value': {
+    interfaceName: 'StatusConfig',
+    target: dedent/* ts */`
+      export interface StatusConfig {
+        eStatusFlags: EStatusFlags;
+
+        message: string;
+      }
+
+      export enum EStatusFlags {
+        CONNECTED = 1 << 0,
+        DISCONNECTED = 1 << 1,
+        PENDING = 1 << 2,
+      }`,
+    source: dedent/* ts */`
+      export interface StatusConfig {
+        /**
+         * @currentValue 12
+         */
+        eStatusFlags: number;
+        message: string;
+      }`,
+  },
+
   'interface with added nested interfaces': {
     interfaceName: 'AppConfiguration',
     target: dedent/* ts */`

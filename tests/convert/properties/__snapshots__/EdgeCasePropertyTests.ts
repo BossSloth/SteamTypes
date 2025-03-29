@@ -3,6 +3,8 @@ export interface EdgeCasePropertyTests {
 
   circularReferenceTests: CircularReferenceTests;
 
+  interfaceWithEnumTest: InterfaceWithEnumTest;
+
   mixedComplexEdgeCases: MixedComplexEdgeCases;
 
   propertyNameEdgeCases: PropertyNameEdgeCases;
@@ -28,6 +30,10 @@ export interface CircularReferenceTests {
   nestedCircularReference: NestedCircularReference;
 
   simpleCircularReference: SimpleCircularReference;
+}
+
+export interface InterfaceWithEnumTest {
+  dataObjects: DataObjects[];
 }
 
 export interface MixedComplexEdgeCases {
@@ -102,6 +108,27 @@ export interface SimpleCircularReference {
   name: string;
 
   self: SimpleCircularReference;
+}
+
+export interface DataObjects {
+  /**
+   * This value is an enum
+   * @currentValue 1
+   * @currentValue 2
+   */
+  eType: number;
+
+  extra?: boolean;
+
+  name: string;
+
+  permissions: string[];
+
+  role: string;
+
+  status: string;
+
+  type: string;
 }
 
 export interface ComplexMixedObject {
