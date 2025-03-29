@@ -131,6 +131,50 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'property with shorter enum value changes': {
+    interfaceName: 'StatusConfig',
+    target: dedent/* ts */`
+      export interface StatusConfig {
+        eStatus: ConnectionStatus;
+        message: string;
+      }
+
+      export enum ConnectionStatus {
+        CONNECTED = 1,
+        DISCONNECTED = 2,
+        PENDING = 3,
+      }`,
+    source: dedent/* ts */`
+      export interface StatusConfig {
+        /**
+         * @currentValue 5
+         */
+        eStatus: number;
+        message: string;
+        errorCode?: number;
+      }`,
+  },
+
+  'shorted implied enum property': {
+    interfaceName: 'SteamStatus',
+    target: dedent/* ts */`
+      export interface SteamStatus {
+        eResult: number;
+      }`,
+    source: dedent/* ts */`
+      export interface SteamStatus {
+        /**
+         * @currentValue 1
+         */
+        eResult: number;
+        /**
+         * This value is an enum
+         * @currentValue 0
+         */
+        eAppUpdateBytes: number;
+      }`,
+  },
+
   'interface with added nested interfaces': {
     interfaceName: 'AppConfiguration',
     target: dedent/* ts */`
@@ -207,11 +251,15 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
 
   'interface with property changing from optional to required': {
     interfaceName: 'UserAccount',
+    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface UserAccount {
         email?: string;
+
         id: string;
+
         name: string;
+
         phone?: string;
       }`,
     source: dedent/* ts */`
@@ -220,7 +268,6 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         id: string;
         name: string;
         phone?: string;
-        verified: boolean;
       }`,
   },
 
@@ -256,7 +303,7 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
 
       export interface TextContent {
         text: string;
-        format: 'plain' | 'markdown';
+        contentFormat: 'plain' | 'markdown';
       }`,
     source: dedent/* ts */`
       export interface ChatMessage {
@@ -427,5 +474,23 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+  'interface with nullable imported type': {
+    interfaceName: 'ImportedContainer',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { DataType } from './some-module';
 
+      export interface ImportedContainer {
+        data: DataType | null;
+      }`,
+    source: dedent/* ts */`
+      export interface ImportedContainer {
+        data: LocalType | null;
+      }
+
+      export interface LocalType {
+        id: string;
+        value: number;
+      }`,
+  },
 };

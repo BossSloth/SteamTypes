@@ -1,5 +1,6 @@
-import { InterfaceDeclaration, MethodSignature, PropertySignature, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
+import { InterfaceDeclaration, MethodSignature, PropertySignature, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { currentStartingInterfaces, currentTargetSourceFile, interfaceQueue } from './interface-comparator';
+import { isImportedType } from './shared';
 
 /**
  * Handles interface type references by adding them to the processing queue
@@ -7,13 +8,34 @@ import { currentStartingInterfaces, currentTargetSourceFile, interfaceQueue } fr
 export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
   // Extract all interface references from both types
   const targetInterfaces = extractInterfaceReferences(targetTypeNode);
-  const sourceInterfaces = extractInterfaceReferences(sourceTypeNode);
+  let sourceInterfaces = extractInterfaceReferences(sourceTypeNode);
+
+  // Rename and remove any imported interfaces
+  for (let i = 0; i < sourceInterfaces.length; i++) {
+    const sourceInterface = sourceInterfaces[i];
+    const targetInterface = targetInterfaces[i] as TypeReferenceNode | undefined;
+
+    if (targetInterface === undefined) {
+      continue;
+    }
+
+    if (isImportedType(currentTargetSourceFile, targetInterface.getType())) {
+      const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
+      if (!sourceInterfaceDeclaration) {
+        throw new Error(`Source interface ${sourceInterface.getTypeName().getText()} not found`);
+      }
+
+      sourceInterfaceDeclaration.rename(targetInterface.getText());
+      sourceInterfaceDeclaration.remove();
+    }
+  }
+  sourceInterfaces = extractInterfaceReferences(sourceTypeNode);
 
   // For each source interface, find a matching target interface and update it
   for (const sourceInterface of sourceInterfaces) {
     const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
     if (!sourceInterfaceDeclaration) {
-      throw new Error(`Source interface ${sourceInterface.getTypeName().getText()} not found`);
+      continue;
     }
     const sourceInterfaceName = sourceInterface.getTypeName().getText();
 
@@ -52,7 +74,7 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
   }
 
   return interfaces.filter(interf => (interf.getType().getSymbol()?.getDeclarations()
-    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true));
+    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf.getType()));
 }
 
 /**
@@ -100,10 +122,10 @@ function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { n
 
   for (const property of interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[]) {
     const propertyType = property.getType();
-    const type = propertyType.getText().replace(/import\(".+?\)\./, '');
-    // if (property.getFlags() & TypeFlags.NonPrimitive) {
-    //   type = 'Interface';
-    // }
+    let type = propertyType.getText().replace(/import\(".+?\)\./, '');
+    if (property.getType().getFlags() | TypeFlags.NonPrimitive) {
+      type = 'Interface';
+    }
     properties.push({
       name: property.getName(),
       type,

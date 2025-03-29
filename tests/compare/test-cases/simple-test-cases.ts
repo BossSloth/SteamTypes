@@ -92,4 +92,50 @@ export const simpleCases: Record<string, ComparatorTest> = {
         existingProp: Set<number>;
       }`,
   },
+  'string literal': {
+    interfaceName: 'SimpleInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: 'a';
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: string;
+      }`,
+  },
+  'number literal': {
+    interfaceName: 'SimpleInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: 1;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: number;
+      }`,
+  },
+  'mismatching literal string, number': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: 'a';
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: number;
+      }`,
+  },
+  'mismatching literal number, string': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: 5;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: string;
+      }`,
+  },
 };

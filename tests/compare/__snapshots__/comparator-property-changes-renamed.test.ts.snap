@@ -179,7 +179,7 @@ export interface ChatMessage {
 
 export interface TextInformation {
   text: string;
-  format: 'plain' | 'markdown';
+  informationFormat: 'plain' | 'markdown';
 }
 +
 +export interface TextData {

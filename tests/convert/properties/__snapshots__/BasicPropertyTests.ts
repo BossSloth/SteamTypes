@@ -16,6 +16,12 @@ export interface BasicPropertyTests {
 
   booleanArray: boolean[];
 
+  /**
+   * This value is an enum
+   * @currentValue 12
+   */
+  eDataType: number;
+
   emptyArray: unknown[];
 
   emptyObject: (object | unknown);

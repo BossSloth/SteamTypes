@@ -11,6 +11,7 @@
  *   bun validate-types.ts [options]
  */
 
+import ansiRegex from 'ansi-regex';
 import chalk from 'chalk';
 import ChromeRemoteInterface from 'chrome-remote-interface';
 import { Command } from 'commander';
@@ -20,7 +21,7 @@ import { compareInterfaces } from './compare/interface-checker';
 import { Logger } from './logger';
 import { interfaceMaps } from './maps';
 
-const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'convert-to-ts.js');
+const convertToTsFilePath = path.join(process.cwd(), 'build', 'scripts', 'convert-to-typescript.js');
 
 let logger: Logger;
 
@@ -157,8 +158,10 @@ interface ValidateTypesOptions {
   verbose: boolean;
   interactive: boolean;
   force: boolean;
+  diff?: boolean;
 }
 
+// eslint-disable-next-line max-lines-per-function
 async function run(options: ValidateTypesOptions): Promise<void> {
   const targetId = await getSharedJsContextTarget();
 
@@ -176,7 +179,7 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     maps = [map];
   }
 
-  const diffs: string[] = [];
+  const diffs: { filePath: string; result: string | null; }[] = [];
 
   // const startExtractTime = Date.now();
   // const interfaceContent = await extractInterfaces(maps);
@@ -200,24 +203,43 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
     // }
 
-    return compareInterfaces(
-      filePath,
-      map.srcName,
-      interfaceContent,
-      options.verbose,
-    );
+    return {
+      filePath: filePath.replaceAll('/', '_'),
+      result: compareInterfaces(
+        filePath,
+        map.srcName,
+        interfaceContent,
+        options.verbose,
+      ),
+    };
   });
 
   const results = await Promise.all(interfacePromises);
 
-  diffs.push(...results.filter(r => r !== null));
+  diffs.push(...results.filter(r => r.result !== null));
 
   if (diffs.length > 0) {
     logger.log('\n');
-    logger.log(diffs.join('\n\n'));
+    logger.log(diffs.map(d => d.result).join('\n\n'));
   }
 
   logger.log(chalk.blue(`Extract time: ${extractTime} ms`));
+
+  if (options.diff === false) {
+    return;
+  }
+
+  // Create the diffs directory if it doesn't exist
+  if (!fs.existsSync('diffs')) {
+    fs.mkdirSync('diffs');
+  }
+
+  for (const diff of diffs) {
+    if (diff.result !== null) {
+      // Write to file
+      fs.writeFileSync(`diffs/${diff.filePath}.diff`, diff.result.replace(ansiRegex(), ''), 'utf-8');
+    }
+  }
 }
 
 /**
@@ -236,6 +258,7 @@ async function main(): Promise<void> {
     .option('-v, --verbose', 'Enable verbose output', false)
     .option('-i, --interactive', 'Enable interactive mode', false)
     .option('-f, --force', 'Force reload the inject script', false)
+    .option('-d, --diff', 'Write diffs to file', false)
     .action(async (options: ValidateTypesOptions = { verbose: false, interactive: false, force: false }) => {
       logger = new Logger(options);
       // try {

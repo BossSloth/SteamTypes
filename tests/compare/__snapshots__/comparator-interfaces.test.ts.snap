@@ -40,6 +40,43 @@ export interface RouteConfig {
 }"
 `;
 
+exports[`Comparator Interface Cases > indexed access type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,23 +1,25 @@
+export interface UserProfile {
+-  preferences: User['email'];
++  preferences: string;
+
+-  theme: User['settings']['notifications'];
++  theme: boolean;
+
+  user: User;
+}
+
+export interface User {
+-  email: number;
++  email: string;
+
+  id: number;
+
+  name: string;
+
+  settings: Settings;
+}
+
+export interface Settings {
+-  theme: string;
+-  notifications: string;
+  language: string;
++
++  notifications: boolean;
++
++  theme: string;
+}"
+`;
+
 exports[`Comparator Interface Cases > interface with complex nested generics 1`] = `
 "===================================================================
 --- a/target.ts

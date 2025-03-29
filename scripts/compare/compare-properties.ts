@@ -244,68 +244,115 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 /**
  * Updates a property's type if it's different from the source
  */
-// eslint-disable-next-line max-lines-per-function
 function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature): void {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
   if (!targetTypeNode || !sourceTypeNode) return;
 
-  if (sourceTypeNode.getType().isUndefined() && targetProp.hasQuestionToken()) {
+  if (shouldSkipTypeUpdate(targetProp, sourceProp, targetTypeNode, sourceTypeNode)) {
     return;
   }
-  // If this is an alias type and the source is not skip if type matches
+
+  updateTypeIfNeeded(targetProp, targetTypeNode, sourceTypeNode);
+  updatePropertyModifiers(targetProp, sourceProp);
+}
+
+function shouldSkipTypeUpdate(
+  targetProp: PropertySignature,
+  sourceProp: PropertySignature,
+  targetTypeNode: TypeNode,
+  sourceTypeNode: TypeNode,
+): boolean {
+  // Skip undefined or never types
+  if ((sourceTypeNode.getType().isUndefined() && targetProp.hasQuestionToken()) || sourceTypeNode.getType().isNever()) {
+    return true;
+  }
+
+  // Skip if union type already has assignable type
   if (targetTypeNode.getType().isUnion() && !sourceProp.getType().isUnion()) {
     const aliasTypes = targetTypeNode.getType().getUnionTypes();
     const hasAssignableType = aliasTypes.some(type => type.isAssignableTo(sourceTypeNode.getType()));
     if (hasAssignableType) {
-      return;
+      return true;
     }
   }
 
-  // If this is an tuple type and the source is an array type check if the types are assignable
+  // Skip if tuple and array types are compatible
   if (targetTypeNode.isKind(SyntaxKind.TupleType) && sourceTypeNode.isKind(SyntaxKind.ArrayType)) {
-    const targetTypes = targetTypeNode.getType().getTupleElements();
-    const sourceTypes = sourceTypeNode.getChildAtIndex(0).getType().getUnionTypes();
-    let hasAssignableType = true;
-    if (sourceTypes.length > 0) {
-      for (const sourceType of sourceTypes) {
-        if (!targetTypes.some(type => sourceType.isAssignableTo(type))) {
-          hasAssignableType = false;
-        }
-      }
-    } else {
-      hasAssignableType = targetTypes.every(type => type.isAssignableTo(sourceTypeNode.getType()));
-    }
-    if (hasAssignableType) {
-      return;
+    return isTupleCompatibleWithArray(targetTypeNode, sourceTypeNode);
+  }
+
+  // Skip if source is an unknown array and target is an array
+  if (sourceTypeNode.isKind(SyntaxKind.ArrayType) && targetTypeNode.isKind(SyntaxKind.ArrayType)) {
+    const sourceElementType = sourceTypeNode.getElementTypeNode().getType();
+    if (sourceElementType.isUnknown()) {
+      return true;
     }
   }
 
+  // Skip if string or number literal
+  if (targetTypeNode.isKind(SyntaxKind.LiteralType) && (sourceTypeNode.isKind(SyntaxKind.StringKeyword) || sourceTypeNode.isKind(SyntaxKind.NumberKeyword))) {
+    // Check if the literal value is the same
+    const targetLiteralValue = targetTypeNode.getType().getBaseTypeOfLiteralType().getText();
+    const sourceLiteralValue = sourceTypeNode.getType().getBaseTypeOfLiteralType().getText();
+    if (targetLiteralValue === sourceLiteralValue) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isTupleCompatibleWithArray(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): boolean {
+  const targetTypes = targetTypeNode.getType().getTupleElements();
+  const sourceTypes = sourceTypeNode.getChildAtIndex(0).getType().getUnionTypes();
+
+  if (sourceTypes.length > 0) {
+    for (const sourceType of sourceTypes) {
+      if (!targetTypes.some(type => sourceType.isAssignableTo(type))) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return targetTypes.every(type => type.isAssignableTo(sourceTypeNode.getType()));
+}
+
+function updateTypeIfNeeded(
+  targetProp: PropertySignature,
+  targetTypeNode: TypeNode,
+  sourceTypeNode: TypeNode,
+): void {
   let targetTypeText = targetTypeNode.getText();
   const sourceTypeText = sourceTypeNode.getText();
 
-  // If target is indexed access type, update the text
+  // Handle indexed access type
   if (targetTypeNode.isKind(SyntaxKind.IndexedAccessType)) {
     targetTypeText = targetTypeNode.getType().getText();
   }
 
   if (targetTypeNode.isKind(SyntaxKind.UnionType)) {
-    const targetTypes = targetTypeNode.getTypeNodes();
-
-    // Check if source type appears in target types
-    if (!targetTypes.some(type => type.getText() === sourceTypeText)) {
-      // logger.debug(chalk.yellow(`Updating property type: ${targetProp.getName()} from ${targetTypeText} to ${sourceTypeText}`));
-      targetProp.setType(sourceTypeText);
-    }
+    updateUnionType(targetProp, targetTypeNode, sourceTypeText);
   } else if (targetTypeText !== sourceTypeText) {
-    // Update the type if it's different
-    // logger.debug(chalk.yellow(`Updating property type: ${targetProp.getName()} from ${targetTypeText} to ${sourceTypeText}`));
     targetProp.setType(sourceTypeText.replace(/import\(".+?\)\./, ''));
   }
+}
 
+function updateUnionType(targetProp: PropertySignature, targetTypeNode: TypeNode, sourceTypeText: string): void {
+  const targetTypes = (targetTypeNode as UnionTypeNode).getTypeNodes();
+
+  // Check if source type appears in target types
+  if (!targetTypes.some(type => type.getText() === sourceTypeText)) {
+    targetProp.setType(sourceTypeText);
+  }
+}
+
+function updatePropertyModifiers(targetProp: PropertySignature, sourceProp: PropertySignature): void {
   // Update optional status if different
-  if (targetProp.hasQuestionToken() !== sourceProp.hasQuestionToken()) {
+  if (!targetProp.hasQuestionToken() && sourceProp.hasQuestionToken()) {
     targetProp.setHasQuestionToken(sourceProp.hasQuestionToken());
   }
 

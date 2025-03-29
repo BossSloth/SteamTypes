@@ -104,7 +104,7 @@ function generatePropertyJsDoc(type: Type, propertyName: string, value: unknown)
     type instanceof PrimitiveType
     && type.kind === 'number'
     && typeof value === 'number'
-    && propertyName.startsWith('m_e')
+    && propertyName.trim().match(/^e[A-Z]|^m_e[A-Z]/) !== null
   )) {
     return undefined;
   }

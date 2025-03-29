@@ -304,6 +304,56 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  // TODO: maybe make it so the indexed access type is not removed by checking at the end if the type is the same
+  'indexed access type mismatch': {
+    interfaceName: 'UserProfile',
+    target: dedent/* ts */`
+      export interface UserProfile {
+        preferences: User['email'];
+
+        theme: User['settings']['notifications'];
+
+        user: User;
+      }
+
+      export interface User {
+        email: number;
+
+        id: number;
+
+        name: string;
+
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        preferences: string;
+        theme: boolean;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: boolean;
+        language: string;
+      }
+      `,
+  },
+
   'external template literal types': {
     interfaceName: 'RouteConfig',
     expectsNoDiff: true,
@@ -548,6 +598,36 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       export interface InputConfig {
         borderRadius: number;
         padding: number;
+      }`,
+  },
+  'array type to never type': {
+    interfaceName: 'DataContainer',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface DataContainer {
+        items: Item[];
+      }
+
+      export interface Item {
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface DataContainer {
+        items: never;
+      }`,
+  },
+  'array type to unknown array': {
+    interfaceName: 'DataCollection',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface DataCollection {
+        items: string[];
+      }
+      `,
+    source: dedent/* ts */`
+      export interface DataCollection {
+        items: unknown[];
       }`,
   },
 };

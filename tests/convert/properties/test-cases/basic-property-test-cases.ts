@@ -32,6 +32,8 @@ line 3`,
 
   // Enum
   m_eEnumValue: 7,
+
+  eDataType: 12,
 };
 // #endregion
 

@@ -123,7 +123,7 @@ export const propertyChangeRenamedCases: Record<string, ComparatorTest> = {
 
       export interface TextInformation {
         text: string;
-        format: 'plain' | 'markdown';
+        informationFormat: 'plain' | 'markdown';
       }`,
     source: dedent/* ts */`
       export interface ChatMessage {
