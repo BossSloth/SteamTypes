@@ -1,5 +1,5 @@
-import { AppDeckDerivedProperties, AppLanguage, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, EAppCloudStatus, EDisplayStatus, ESteamDeckCompatibilityTestResult } from '../Global/AppDetailsStore';
-import type { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from './Input';
+import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, EAppCloudStatus, EDisplayStatus, LogoPosition } from '../Global/AppDetailsStore';
+import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
 
@@ -273,9 +273,6 @@ export interface Apps {
    */
   GetSoundtrackDetails(appId: number): Promise<SoundtrackDetails>;
 
-  // [...appStore.m_mapStoreTagLocalization.keys()]
-  GetStoreTagLocalization(tags: number[]): Promise<StoreTagLocalization[]>;
-
   /**
    * Retrieves a list of subscribed workshop item details for a specific application.
    * @param appId The ID of the application to retrieve subscribed workshop item details for.
@@ -294,6 +291,7 @@ export interface Apps {
 
   // Returns {"appid":0,"strInstallOutput":""}
   InstallFlatpakAppAndCreateShortcut(appName: string, appCommandLineOptions: string): Promise<unknown>;
+
   JoinAppContentBeta(appId: number, name: string): unknown;
 
   // unknown.strName
@@ -335,19 +333,22 @@ export interface Apps {
    */
   RaiseWindowForGame(appId: number): Promise<number>;
 
-  /*
-    "CMsgAchievementChange"
-        OnAchievementChange(e) {
-            var t;
-            const n = l.on.deserializeBinary(e).toObject(),
-                o = null !== (t = null == n ? void 0 : n.appid) && void 0 !== t ? t : 0;
-            0 != o ? (this.m_mapMyAchievements.has(o) || this.m_mapInflightMyAchievementsRequests.has(o)) && this.LoadMyAchievements(o) : console.error("Received invalid appid in OnAchievementChange")
-        }
-
-        message CMsgAchievementChange {
-            optional uint32 appid = 1;
-        }
-     */
+  /**
+   * @example
+   * ```js
+   * "CMsgAchievementChange"
+   *     OnAchievementChange(e) {
+   *         var t;
+   *         const n = l.on.deserializeBinary(e).toObject(),
+   *             o = null !== (t = null == n ? void 0 : n.appid) && void 0 !== t ? t : 0;
+   *         0 != o ? (this.m_mapMyAchievements.has(o) || this.m_mapInflightMyAchievementsRequests.has(o)) && this.LoadMyAchievements(o) : console.error("Received invalid appid in OnAchievementChange")
+   *     }
+   *
+   *     message CMsgAchievementChange {
+   *         optional uint32 appid = 1;
+   *     }
+   * ```
+   */
   /**
    * Registers a callback function to be called when achievement changes occur.
    * @param callback The callback function to be called.
@@ -365,15 +366,17 @@ export interface Apps {
    */
   RegisterForAppDetails(appId: number, callback: (appDetails: AppDetails) => void): Unregisterable;
 
-  /*
-
-    message CAppOverview_Change {
-        repeated .CAppOverview app_overview = 1;
-        repeated uint32 removed_appid = 2;
-        optional bool full_update = 3;
-        optional bool update_complete = 4;
-    }
-     */
+  /**
+   * @example
+   * ```js
+   * message CAppOverview_Change {
+   *     repeated .CAppOverview app_overview = 1;
+   *     repeated uint32 removed_appid = 2;
+   *     optional bool full_update = 3;
+   *     optional bool update_complete = 4;
+   * }
+   * ```
+   */
   /**
    * If `data` is deserialized, returns {@link AppOverview_Change}.
    * @remarks This is not a mistake, it doesn't return anything.
@@ -428,12 +431,6 @@ export interface Apps {
   ): Unregisterable;
 
   /**
-   * @todo returns undefined (now)?
-   * @todo does not exist on Steam Version:  1718064497
-   */
-  RegisterForLocalizationChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
-
-  /**
    * Registers a callback function to be called when a pre-purchased app changes.
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
@@ -484,14 +481,17 @@ export interface Apps {
    */
   RunGame(appId: string, launchOptions: string, param2: number, launchSource: ELaunchSource): void;
 
-  /*
-      function u(e, t) {
-        return t instanceof Map || t instanceof Set ? Array.from(t) : t;
-      }
-      SteamClient.Apps.SaveAchievementProgressCache(
-        JSON.stringify(this.m_achievementProgress, u)
-      );
-    */
+  /**
+   * @example
+   * ```js
+   * function u(e, t) {
+   *   return t instanceof Map || t instanceof Set ? Array.from(t) : t;
+   * }
+   * SteamClient.Apps.SaveAchievementProgressCache(
+   *   JSON.stringify(this.m_achievementProgress, u)
+   * );
+   * ```
+   */
   SaveAchievementProgressCache(progress: string): unknown;
 
   /**
@@ -525,13 +525,6 @@ export interface Apps {
    * @param language The language to set, represented as a language (e.g., "english", "spanish", "tchinese", "schinese").
    */
   SetAppCurrentLanguage(appId: number, language: string): void;
-
-  /**
-   * Sets the blocked state for apps.
-   * @param appIds An array of app IDs to set the blocked state for.
-   * @param state The state to set (true for blocked, false for unblocked).
-   */
-  SetAppFamilyBlockedState(appIds: number[], state: boolean): void;
 
   /**
    * Sets launch options for a Steam application.
@@ -765,10 +758,28 @@ export interface AppAchievements {
   vecUnachieved: AppAchievement[];
 }
 
+/**
+ * @example
+ * ```json
+ * {
+ *     "strID": "ACH_ALPS",
+ *     "strName": "Je Suis Perdu!",
+ *     "strDescription": "You've had one heck of a ski holiday.",
+ *     "bAchieved": true,
+ *     "rtUnlocked": 1735426639,
+ *     "strImage": "https://cdn.steamstatic.com/steamcommunity/public/images/apps/427410/e91840161b6907cd389c801e7b83aa2841000f6b.jpg",
+ *     "bHidden": true,
+ *     "flMinProgress": 0,
+ *     "flCurrentProgress": 0,
+ *     "flMaxProgress": 0,
+ *     "flAchieved": 11.300000190734863
+ * }
+ * ```
+ */
 export interface AppAchievement {
   bAchieved: boolean;
   bHidden: boolean;
-  /** How many players have this achievement, in percentage. */
+  /** How many players have this achievement as a percentage. */
   flAchieved: number;
   flCurrentProgress: number;
   flMaxProgress: number;
@@ -1011,11 +1022,6 @@ export interface SoundtrackMetadata {
   artist: string;
 }
 
-export interface StoreTagLocalization {
-  string: string;
-  tag: number;
-}
-
 export interface WorkshopItemDetails {
   /**
    * Required items' IDs.
@@ -1147,171 +1153,6 @@ export enum EAppUpdateError {
   ParentalPlaytimeExceeded,
   Max,
 }
-
-export interface AppDetails {
-  achievements: AppAchievements;
-  /** Indicates whether the application is available on the store. */
-  bAvailableContentOnStore: boolean;
-  bCanMoveInstallFolder: boolean;
-  bCloudAvailable: boolean;
-  bCloudEnabledForAccount: boolean;
-  bCloudEnabledForApp: boolean;
-  bCloudSyncOnSuspendAvailable: boolean;
-  bCloudSyncOnSuspendEnabled: boolean;
-  /** Indicates whether the application has community market available. */
-  bCommunityMarketPresence: boolean;
-  bEnableAllowDesktopConfiguration: boolean;
-  bFreeRemovableLicense: boolean;
-  bHasAllLegacyCDKeys: boolean;
-  bHasAnyLocalContent: boolean;
-  bHasLockedPrivateBetas: boolean;
-  bIsExcludedFromSharing: boolean;
-  bIsSubscribedTo: boolean;
-  bIsThirdPartyUpdater: boolean;
-  bOverlayEnabled: boolean;
-  bOverrideInternalResolution: boolean;
-  bRequiresLegacyCDKey: boolean;
-  bShortcutIsVR: boolean;
-  bShowCDKeyInMenus: boolean;
-  bShowControllerConfig: boolean;
-  bSupportsCDKeyCopyToClipboard: boolean;
-  bVRGameTheatreEnabled: boolean;
-  bWorkshopVisible: boolean;
-  deckDerivedProperties?: AppDeckDerivedProperties;
-  /**
-   * @see {@link EAppOwnershipFlags}
-   */
-  eAppOwnershipFlags: number;
-  eAutoUpdateValue: EAppAutoUpdateBehavior;
-  eBackgroundDownloads: EAppAllowDownloadsWhileRunningBehavior;
-  eCloudStatus: EAppCloudStatus;
-  /**
-   * @todo enum
-   */
-  eCloudSync: number;
-  eControllerRumblePreference: EControllerRumbleSetting;
-  eDisplayStatus: EDisplayStatus;
-  eEnableThirdPartyControllerConfiguration: EThirdPartyControllerConfiguration;
-  /**
-   * @see {@link ESteamInputController}
-   */
-  eSteamInputControllerMask: number;
-  /**
-   * Index of the install folder. -1 if not installed.
-   */
-  iInstallFolder: number;
-  /** Disk space required for installation, in bytes. */
-  lDiskSpaceRequiredBytes: number;
-  /** Application disk space usage, in bytes. */
-  lDiskUsageBytes: number;
-  /** DLC disk space usage, in bytes. */
-  lDlcUsageBytes: number;
-  libraryAssets?: AppLibraryAssets;
-  nBuildID: number;
-  nCompatToolPriority: number;
-  /** Total play time, in minutes. */
-  nPlaytimeForever: number;
-  /** Screenshot count. */
-  nScreenshots: number;
-  rtLastTimePlayed: number;
-  rtLastUpdated: number;
-  rtPurchased: number;
-  selectedLanguage: AppLanguage;
-  strCloudBytesAvailable: string;
-  strCloudBytesUsed: string;
-  strCompatToolDisplayName: string;
-  strCompatToolName: string;
-  strDeveloperName: string;
-  strDeveloperURL: string;
-  strDisplayName: string;
-  strExternalSubscriptionURL: string;
-  strFlatpakAppID: string;
-  strHomepageURL: string;
-  strLaunchOptions: string;
-  strManualURL: string;
-  /** Steam64 ID. */
-  strOwnerSteamID: string;
-  strResolutionOverride: string;
-  strSelectedBeta: string;
-  strShortcutExe: string;
-  strShortcutLaunchOptions: string;
-  strShortcutStartDir: string;
-  strSteamDeckBlogURL: string;
-  unAppID: number;
-  unEntitledContentApp: number;
-  unTimedTrialSecondsAllowed: number;
-  unTimedTrialSecondsPlayed: number;
-  vecBetas: AppBeta[];
-  vecChildConfigApps: number[];
-  vecDeckCompatTestResults: DeckCompatTestResult[];
-  vecDLC: AppDLC[];
-  vecLanguages: AppLanguage[];
-  vecLegacyCDKeys: unknown[];
-  vecMusicAlbums: AppSoundtrack[];
-  /** windows | osx | linux */
-  vecPlatforms: string[];
-  vecScreenShots: Screenshot[];
-}
-
-export interface AppBeta {
-  /** Beta description. */
-  strDescription: string;
-  /** Beta name. */
-  strName: string;
-}
-
-export interface AppDLC {
-  /** Is the DLC availble on the store? */
-  bAvailableOnStore: boolean;
-  bEnabled: boolean;
-  /** Disk usage, in bytes. */
-  lDiskUsageBytes: number;
-  /** Purchase date. */
-  rtPurchaseDate: number;
-  rtStoreAssetModifyType: number;
-  /** Store header image filename. */
-  strHeaderFilename: string;
-  /** Display name. */
-  strName: string;
-  /** State (installed/notinstalled). */
-  strState: string;
-  /** App ID. */
-  unAppID: number;
-}
-
-export interface DeckCompatTestResult {
-  /** A localization string. */
-  test_loc_token: string;
-  test_result: ESteamDeckCompatibilityTestResult;
-}
-
-export interface AppSoundtrack {
-  /** Purchase date. */
-  rtPurchaseDate: number;
-  rtStoreAssetModifyType: number;
-  /** Display name. */
-  strName: string;
-  /** State (installed/notinstalled). */
-  strState: string;
-  /** App ID. */
-  unAppID: number;
-}
-
-export interface AppLibraryAssets {
-  logoPosition?: LogoPosition;
-  strCapsuleImage: string;
-  strHeroBlurImage: string;
-  strHeroImage: string;
-  strLogoImage: string;
-}
-
-export interface LogoPosition {
-  nHeightPct: number;
-  nWidthPct: number;
-  pinnedPosition: LogoPinPositions;
-}
-
-export type LogoPinPositions = 'BottomLeft' | 'UpperLeft' | 'CenterCenter' | 'UpperCenter' | 'BottomCenter';
 
 export enum ELaunchSource {
   None,

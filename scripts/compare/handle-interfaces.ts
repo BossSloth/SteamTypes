@@ -190,6 +190,12 @@ export function addMissingInterface(type: Type, currentIteration = 0): void {
   const interfaceDeclaration = getInterfaceDeclaration(type);
   if (!interfaceDeclaration) return;
 
+  const interfaceName = interfaceDeclaration.getName();
+  const existingInterface = currentTargetSourceFile.getInterface(interfaceName);
+  if (existingInterface) {
+    return;
+  }
+
   const similarInterface = findSimilarInterface(interfaceDeclaration);
   if (similarInterface) {
     return;

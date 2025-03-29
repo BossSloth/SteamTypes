@@ -108,7 +108,7 @@ export interface AppDetailsStore {
 export interface AppData {
   appDetailsSpotlight: null;
 
-  associationData: null;
+  associationData: (AssociationData | null);
 
   bLoadingAchievments: boolean;
 
@@ -118,13 +118,41 @@ export interface AppData {
 
   customImageInfoRtime: number;
 
-  descriptionsData: null;
+  descriptionsData: (DescriptionsData | null);
 
-  details: (AppDetails | null);
+  details: AppDetails;
 
-  hAppDetails: (Unregisterable | null);
+  hAppDetails: Unregisterable;
 
   listeners: never;
+}
+
+export interface AssociationData {
+  rgDevelopers: Association[];
+
+  rgFranchises: Association[];
+
+  rgPublishers: Association[];
+}
+
+export interface Association {
+  strName: string;
+
+  strURL: (null | string);
+}
+
+export interface DescriptionsData {
+  strFullDescription: string;
+
+  strSnippet: string;
+}
+
+export interface DlcLibraryAssets {
+  strCapsuleImage: string;
+
+  strHeaderImage: string;
+
+  strHeroImage: string;
 }
 
 export interface AppDetails {
@@ -227,13 +255,15 @@ export interface AppDetails {
    */
   iInstallFolder: number;
 
+  lDiskSpaceRequiredBytes?: number;
+
   /** Application disk space usage, in bytes. */
   lDiskUsageBytes: number;
 
   /** DLC disk space usage, in bytes. */
   lDlcUsageBytes: number;
 
-  libraryAssets: AppLibraryAssets;
+  libraryAssets?: (AppLibraryAssets | DlcLibraryAssets);
 
   nBuildID: number;
 
@@ -247,7 +277,7 @@ export interface AppDetails {
 
   rtLastTimePlayed: number;
 
-  rtLastUpdated: number;
+  rtLastUpdated?: number;
 
   rtPurchased: number;
 
@@ -343,7 +373,7 @@ export interface AppDeckDerivedProperties {
 
   primary_player_is_controller_slot_0: boolean;
 
-  requires_h264: boolean;
+  requires_h264?: boolean;
 
   requires_internet_for_setup: boolean;
 
@@ -370,6 +400,8 @@ export interface AppLibraryAssets {
   strHeroImage: string;
 
   strLogoImage: string;
+
+  strTimeLineMarker?: string;
 }
 
 export interface LogoPosition {
@@ -480,11 +512,15 @@ export interface AppBeta {
 export interface AppSoundtrack {
   /** Purchase date. */
   rtPurchaseDate: number;
-  rtStoreAssetModifyType: number;
+
+  rtStoreAssetModifyTime: number;
+
   /** Display name. */
   strName: string;
+
   /** State (installed/notinstalled). */
   strState: string;
+
   /** App ID. */
   unAppID: number;
 }
@@ -552,12 +588,26 @@ export enum EAppOwnershipFlags {
   TimedTrial = 1 << 21,
 }
 
+/**
+ * Is called Automatic Updates in Properties > Updates
+ */
 export enum EAppAutoUpdateBehavior {
-  Always, // (Always keep this game updated)
-  Launch, // (Only update this game when I launch it)
-  HighPriority, // (High priority)
+  /** Uses the global steam setting in Settings > Downloads */
+  UseGlobalSetting,
+  /** Only update this game when I launch it - Wait until I launch the game */
+  Launch,
+  /** High priority - Immediately download updates */
+  HighPriority,
+  /**
+   * Always update this game - Let Steam decide when to update
+   * @note This also seems to be the value on uninstalled games
+   */
+  Always,
 }
 
+/**
+ * Is called Background Downloads in Properties > Updates
+ */
 export enum EAppAllowDownloadsWhileRunningBehavior {
   UseGlobal,
   AlwaysAllow,
@@ -622,12 +672,16 @@ export enum EDisplayStatus {
 }
 
 // TODO: not the actual name
+// TODO: values are almost definitely wrong, find out the correct values
 export enum ESteamInputControllerMask {
   Unsupported = 0,
   PlayStation = 1 << 0,
   Xbox = 1 << 1,
   Generic = 1 << 2,
   NintendoSwitch = 1 << 3,
+  Unknown1 = 65532,
+  Unknown2 = 65533,
+  Unknown3 = 65535,
 }
 
 export enum ESteamDeckCompatibilityTestResult {
@@ -646,6 +700,9 @@ export enum EAppUpdateError {
 
 // TODO: fill enum
 export enum ECloudSync {
-  Unknown = 0,
+  Unavailable = 0,
   Valid = 2,
+  /** @note This doesn't mean this app has cloud sync enabled, just that it is revalidating */
+  PendingRevalidation = 3,
+  NotLocallyAvailable = 8,
 }

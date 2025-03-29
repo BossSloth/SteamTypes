@@ -8,7 +8,7 @@ export interface InterfaceMap {
 }
 
 export const interfaceMaps: InterfaceMap[] = [
-  // { object: 'SteamClient.Apps', file: 'SteamClient/Apps', srcName: 'Apps' }, //TODO: Apps doesn't work it crashes on some comment lines
+  { file: 'SteamClient/Apps', object: 'SteamClient.Apps', srcName: 'Apps' }, // TODO: Apps doesn't work it crashes on some comment lines
   { file: 'SteamClient/Auth', object: 'SteamClient.Auth', srcName: 'Auth' },
   { file: 'SteamClient/Auth', object: 'await SteamClient.Auth.GetRefreshInfo()', srcName: 'AuthRefreshInfo' },
   { file: 'SteamClient/Broadcast', object: 'SteamClient.Broadcast', srcName: 'Broadcast' },

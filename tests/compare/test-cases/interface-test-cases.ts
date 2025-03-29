@@ -630,4 +630,30 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         items: unknown[];
       }`,
   },
+  'missing interface multiple times': {
+    interfaceName: 'AppData',
+    target: dedent/* ts */`
+      export interface AppData {
+        appInfo: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface AppData {
+        appInfo: string;
+        associationData: AssociationData;
+      }
+
+      export interface AssociationData {
+        rgDevelopers: RgDevelopers[];
+        rgFranchises: RgDevelopers[];
+        rgPublishers: RgDevelopers[];
+      }
+
+      export interface RgDevelopers {
+        id: number;
+        name: string;
+      }
+      `,
+  },
+
 };

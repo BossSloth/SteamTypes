@@ -274,7 +274,7 @@ exports[`Comparator Property Change Cases > property changes from array to speci
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,9 +1,29 @@
+@@ -1,9 +1,28 @@
 export interface LibraryContent {
 -  books: Book[];
 -  magazines: any[];
@@ -286,7 +286,6 @@ export interface LibraryContent {
 export interface Book {
   title: string;
   author: string;
-+  isbn: string;
 }
 +
 +export interface BookCollection {

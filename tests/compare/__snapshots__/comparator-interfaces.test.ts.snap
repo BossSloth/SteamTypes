@@ -290,6 +290,29 @@ export interface UserService {
 +}"
 `;
 
+exports[`Comparator Interface Cases > missing interface multiple times 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,16 @@
+export interface AppData {
+  appInfo: string;
++
++  associationData: AssociationData;
+}
++
++export interface RgDevelopers {
++  id: number;
++  name: string;
++}
++
++export interface AssociationData {
++  rgDevelopers: RgDevelopers[];
++  rgFranchises: RgDevelopers[];
++  rgPublishers: RgDevelopers[];
++}"
+`;
+
 exports[`Comparator Interface Cases > mixed missing tuple types 1`] = `
 "===================================================================
 --- a/target.ts
