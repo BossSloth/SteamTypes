@@ -86,6 +86,7 @@ export default tseslint.config(
       '@typescript-eslint/prefer-enum-initializers': 'off',
       '@typescript-eslint/prefer-readonly-parameter-types': 'off',
       '@typescript-eslint/prefer-regexp-exec': 'off',
+      '@typescript-eslint/no-misused-promises': 'off', // disabled for performance reasons
       'capitalized-comments': 'off',
       'max-lines': 'off',
       'max-statements': 'off',
