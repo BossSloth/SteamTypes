@@ -1,3 +1,4 @@
+import { AppDeckDerivedProperties, AppLanguage, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, EAppCloudStatus, EDisplayStatus, ESteamDeckCompatibilityTestResult } from '../Global/AppDetailsStore';
 import type { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
@@ -1133,14 +1134,6 @@ export enum EAppUpdateError {
   Max,
 }
 
-// TODO: not the actual name
-export enum ESteamInputController {
-  PlayStation = 1 << 0,
-  Xbox = 1 << 1,
-  Generic = 1 << 2,
-  NintendoSwitch = 1 << 3,
-}
-
 export interface AppDetails {
   achievements: AppAchievements;
   /** Indicates whether the application is available on the store. */
@@ -1244,114 +1237,6 @@ export interface AppDetails {
   /** windows | osx | linux */
   vecPlatforms: string[];
   vecScreenShots: Screenshot[];
-}
-
-export interface AppDeckDerivedProperties {
-  gamescope_frame_limiter_not_supported?: boolean;
-  non_deck_display_glyphs: boolean;
-  primary_player_is_controller_slot_0: boolean;
-  requires_h264: boolean;
-  requires_internet_for_setup: boolean;
-  requires_internet_for_singleplayer: boolean;
-  requires_manual_keyboard_invoke: false;
-  requires_non_controller_launcher_nav: false;
-  small_text: boolean;
-  supported_input: number;
-}
-
-export enum EAppOwnershipFlags {
-  None,
-  Subscribed = 1 << 0,
-  Free = 1 << 1,
-  RegionRestricted = 1 << 2,
-  LowViolence = 1 << 3,
-  InvalidPlatform = 1 << 4,
-  Borrowed = 1 << 5,
-  FreeWeekend = 1 << 6,
-  Retail = 1 << 7,
-  Locked = 1 << 8,
-  Pending = 1 << 9,
-  Expired = 1 << 10,
-  Permanent = 1 << 11,
-  Recurring = 1 << 12,
-  Canceled = 1 << 13,
-  AutoGrant = 1 << 14,
-  PendingGift = 1 << 15,
-  RentalNotActivated = 1 << 16,
-  Rental = 1 << 17,
-  SiteLicense = 1 << 18,
-  LegacyFreeSub = 1 << 19,
-  InvalidOSType = 1 << 20,
-  TimedTrial = 1 << 21,
-}
-
-export enum EAppAutoUpdateBehavior {
-  Always, // (Always keep this game updated)
-  Launch, // (Only update this game when I launch it)
-  HighPriority, // (High priority)
-}
-
-export enum EAppAllowDownloadsWhileRunningBehavior {
-  UseGlobal,
-  AlwaysAllow,
-  NeverAllow,
-}
-
-export enum EDisplayStatus {
-  Invalid,
-  Launching,
-  Uninstalling,
-  Installing,
-  Running,
-  Validating,
-  Updating,
-  Downloading,
-  Synchronizing,
-  ReadyToInstall,
-  ReadyToPreload,
-  ReadyToLaunch,
-  RegionRestricted,
-  PresaleOnly,
-  InvalidPlatform,
-  // ty valve
-  PreloadComplete = 16,
-  BorrowerLocked,
-  UpdatePaused,
-  UpdateQueued,
-  UpdateRequired,
-  UpdateDisabled,
-  DownloadPaused,
-  DownloadQueued,
-  DownloadRequired,
-  DownloadDisabled,
-  LicensePending,
-  LicenseExpired,
-  AvailForFree,
-  AvailToBorrow,
-  AvailGuestPass,
-  Purchase,
-  Unavailable,
-  NotLaunchable,
-  CloudError,
-  CloudOutOfDate,
-  Terminating,
-  OwnerLocked,
-  DownloadFailed,
-  UpdateFailed,
-}
-
-export enum ESteamDeckCompatibilityTestResult {
-  Invalid,
-  NotApplicable,
-  Pass,
-  Fail,
-  FailMinor,
-}
-
-export interface AppLanguage {
-  strDisplayName: string;
-  /** A localization string for the language. */
-  strShortName: string;
 }
 
 export interface AppBeta {
@@ -1650,18 +1535,4 @@ export enum ESteamDeckCompatibilityCategory {
   Unsupported,
   Playable,
   Verified,
-}
-
-export enum EAppCloudStatus {
-  Invalid,
-  Disabled,
-  Unknown,
-  Synchronized,
-  Checking,
-  OutOfSync,
-  Uploading,
-  Downloading,
-  SyncFailed,
-  Conflict,
-  PendingElsewhere,
 }

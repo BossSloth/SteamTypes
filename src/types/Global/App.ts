@@ -1,3 +1,4 @@
+import { User } from '../SteamClient';
 import { ConnectionManager } from './ConnectionManager';
 
 export interface App {
@@ -11,7 +12,7 @@ export interface App {
 
   BHasCurrentUser(): boolean;
 
-  BIsFamilyGroupMember(e: unknown): boolean;
+  BIsFamilyGroupMember(accountid: unknown): boolean;
 
   BIsInFamilyGroup(): boolean;
 
@@ -42,28 +43,29 @@ export interface App {
   InitStage2(): Promise<void>;
 
   /**
-   * @native
+   * Is registered to {@link ConnectionManager.AddOnDisconnectCallback}
    */
-  OnCMDisconnect(): unknown;
+  OnCMDisconnect(...args: Parameters<Parameters<ConnectionManager['AddOnDisconnectCallback']>[0]>): void;
 
   /**
-   * @native
+   * Is registered to {@link ConnectionManager.AddOnLogonCallback}
    */
-  OnCMLogon(): unknown;
+  OnCMLogon(...args: Parameters<Parameters<ConnectionManager['AddOnLogonCallback']>[0]>): void;
 
   /**
-   * @native
+   * Is registered to {@link User.RegisterForCurrentUserChanges}
    */
-  OnCurrentUserChanges(): unknown;
+  OnCurrentUserChanges(...args: Parameters<Parameters<User['RegisterForCurrentUserChanges']>[0]>): void;
 
   /**
-   * @native
+   * Is registered to {@link User.RegisterForLoginStateChange}
    */
-  OnLoginStateChange(): unknown;
+  OnLoginStateChange(...args: Parameters<Parameters<User['RegisterForLoginStateChange']>[0]>): void;
 
   OptOutOfSurvey(): void;
 
-  PrefetchParentalSettingsForChildren(e: unknown): void;
+  // this.m_CurrentUser.rgFamilyGroupMembers.filter((e=>2 == e.role)).map((e=>e.accountid))
+  PrefetchParentalSettingsForChildren(accountid: unknown): void;
 
   SendSurvey(): void;
 

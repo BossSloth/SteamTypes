@@ -36,6 +36,7 @@ import { Storage } from './Storage';
 import { Streaming } from './Streaming';
 import { System } from './System';
 import { UI } from './UI';
+import { URL } from './URL';
 import { Updates } from './Updates';
 import { User } from './User';
 import { WebChat } from './WebChat';

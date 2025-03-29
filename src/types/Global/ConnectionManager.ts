@@ -1,9 +1,9 @@
 import Long from 'long';
 
 export interface ConnectionManager {
-  AddOnDisconnectCallback(e: unknown, t: unknown): unknown;
+  AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;
 
-  AddOnLogonCallback(e: unknown, t: unknown): unknown;
+  AddOnLogonCallback(callback: () => void, serverId?: number): unknown;
 
   BConnectedToServer(e: unknown): unknown;
 
@@ -121,7 +121,7 @@ export interface ConnectionManager {
 
   m_nWallClockDriftMS: number;
 
-  m_onConnect: Promise<unknown>;
+  m_onConnect?: Promise<unknown>;
 
   m_rtReconnectThrottleExpiration: number;
 
