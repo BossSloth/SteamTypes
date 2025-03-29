@@ -18,7 +18,7 @@ circularArray.push(circularArray);
 const nestedCircularArray: any[] = [1, 2, 3];
 nestedCircularArray.push({ nestedArray: nestedCircularArray });
 
-export const circularReferenceTests = {
+const circularReferenceTests = {
   // Simple circular reference
   simpleCircularReference: circularObj,
 
@@ -57,7 +57,7 @@ leafObj.leafMethod = function () {
   return 'leaf';
 };
 
-export const prototypeInheritanceTests = {
+const prototypeInheritanceTests = {
   // Simple inheritance
   simpleInheritance: derivedObj,
 
@@ -67,7 +67,7 @@ export const prototypeInheritanceTests = {
 // #endregion
 
 // #region Special Value Property Test Cases
-export const specialValueTests = {
+const specialValueTests = {
   // Special numeric values
   maxNumber: Number.MAX_VALUE,
 
@@ -97,7 +97,7 @@ export const specialValueTests = {
 // #endregion
 
 // #region Property Name Edge Cases
-export const propertyNameEdgeCases = {
+const propertyNameEdgeCases = {
   // Object with reserved keywords as property names
   reservedKeywords: {
     class: 'Class',
@@ -176,7 +176,7 @@ export const propertyNameEdgeCases = {
 // #endregion
 
 // #region Mixed Complex Edge Cases
-export const mixedComplexEdgeCases = {
+const mixedComplexEdgeCases = {
   // Object with mixed property types including functions
   complexMixedObject: {
     id: 1,
@@ -215,7 +215,7 @@ export const mixedComplexEdgeCases = {
 
 // #region Array Type Optimization Test Cases
 // Test cases for array type optimization in union types
-export const arrayTypeOptimizationTests = {
+const arrayTypeOptimizationTests = {
   // This should remain as (string[] | number[]) and not be merged to (string | number)[]
   unmergableArrays: [['a', 'b', 'c'], [1, 2, 3]],
 

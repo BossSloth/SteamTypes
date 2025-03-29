@@ -137,28 +137,6 @@ export enum EBrowserType {
   OpenVROverlay_Subview,
 }
 
-/**
- * @todo May be useful for ParentalSettings.feature ?
- */
-export enum EParentalFeature {
-  Invalid,
-  Store,
-  Community,
-  Profile,
-  Friends,
-  News,
-  Trading,
-  Settings,
-  Console,
-  Browser,
-  ParentalSetup,
-  Library,
-  Test,
-  SiteLicense,
-  KioskMode,
-  Max,
-}
-
 export enum ESteamRealm {
   Unknown,
   Global,
@@ -250,15 +228,15 @@ export interface Unregisterable {
   unregister(): void;
 }
 
-/**
- * ProtoBuf message class.
- */
-export interface JsPbMessageClass {
-  /**
-   * @todo Returns {@link JsPbMessage}, but not sure how to do it for the messages.
-   */
-  deserializeBinary(data: ArrayBuffer): unknown;
-}
+// /**
+//  * ProtoBuf message class.
+//  */
+// export interface JsPbMessageClass {
+//   /**
+//    * @todo Returns {@link JsPbMessage}, but not sure how to do it for the messages.
+//    */
+//   deserializeBinary(data: ArrayBuffer): unknown;
+// }
 
 /**
  * Deserialized ProtoBuf message.

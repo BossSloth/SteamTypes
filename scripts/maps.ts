@@ -58,4 +58,5 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
 ];
 
+/** @public */
 export const testMaps: InterfaceMap[] = [{ file: 'SteamClient/Input', object: 'SteamClient.Input', srcName: 'Input' }]; // TODO: problem

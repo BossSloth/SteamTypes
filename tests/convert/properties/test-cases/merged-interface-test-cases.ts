@@ -3,7 +3,7 @@ import { ObservableMap, ObservableSet } from 'mobx';
 // IMPORTANT objects must have at least 3/4 of the properties in common to be merged
 
 // #region Basic Merged Interface Test Cases
-export const basicMergedInterfaceTests = {
+const basicMergedInterfaceTests = {
   // Test case for arrays with objects that have the same base properties
   // but some have additional properties
   arrayWithExtraProperties: [
@@ -30,7 +30,7 @@ export const basicMergedInterfaceTests = {
 // #endregion
 
 // #region Complex Merged Interface Test Cases
-export const complexMergedInterfaceTests = {
+const complexMergedInterfaceTests = {
   // Test case for arrays with multiple levels of nesting
   deeplyNestedArray: [
     {
@@ -85,7 +85,7 @@ export const complexMergedInterfaceTests = {
 // #endregion
 
 // #region Edge Case Merged Interface Test Cases
-export const edgeCaseMergedInterfaceTests = {
+const edgeCaseMergedInterfaceTests = {
   // Test case for arrays with objects that have exactly the minimum
   // number of common properties (3)
   minimalCommonProperties: [
@@ -141,7 +141,7 @@ export const edgeCaseMergedInterfaceTests = {
 // #endregion
 
 // #region Generic Type Merged Interface Test Cases
-export const genericTypeMergedInterfaceTests = {
+const genericTypeMergedInterfaceTests = {
   // Test case for arrays with objects that use generic container types
   arrayWithGenericTypes: [
     {
@@ -214,7 +214,7 @@ export const genericTypeMergedInterfaceTests = {
 // #endregion
 
 // #region Array Type Merged Interface Test Cases
-export const arrayTypeMergedInterfaceTests = {
+const arrayTypeMergedInterfaceTests = {
   // Test case for arrays with objects that have array properties
   // with different item types
   arrayWithDifferentItemTypes: [
@@ -290,7 +290,7 @@ class TestClass {
   }
 }
 
-export const classBasedMergedInterfaceTests = {
+const classBasedMergedInterfaceTests = {
   // Test case for arrays with objects that are instances of different classes
   differentClassInstances: [
     new (class User {

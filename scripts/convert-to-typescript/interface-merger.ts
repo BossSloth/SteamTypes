@@ -10,7 +10,7 @@ const REQUIRED_OVERLAP = 3 / 4;
  * @param interface2 Second interface to compare
  * @returns True if interfaces should be merged
  */
-export function shouldMergeInterfaces(
+function shouldMergeInterfaces(
   interface1: TypeScriptInterface,
   interface2: TypeScriptInterface,
 ): boolean {
@@ -41,7 +41,7 @@ export function shouldMergeInterfaces(
  * @param interfaces Map of interfaces to analyze
  * @returns Array of interface groups that should be merged
  */
-export function findInterfaceGroups(interfaces: Map<string, TypeScriptInterface>): string[][] {
+function findInterfaceGroups(interfaces: Map<string, TypeScriptInterface>): string[][] {
   const interfaceArray = Array.from(interfaces.entries());
   const groups: string[][] = [];
   const processedInterfaces = new Set<string>();
@@ -96,7 +96,7 @@ export function findInterfaceGroups(interfaces: Map<string, TypeScriptInterface>
  * @returns The merged interface
  */
 // eslint-disable-next-line max-lines-per-function
-export function mergeInterfaceGroup(
+function mergeInterfaceGroup(
   interfaces: Map<string, TypeScriptInterface>,
   group: string[],
 ): TypeScriptInterface {

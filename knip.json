@@ -1,0 +1,9 @@
+{
+  "project": ["src/**", "tests/**", "scripts/**"],
+  "ignore":["tests/**/__snapshots__/**", "scripts/defaultChromeWindow.js", "src/types/SteamClient/Notifications.ts"],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "enum": true,
+    "type": true
+  }
+}

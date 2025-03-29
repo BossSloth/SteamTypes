@@ -2,7 +2,7 @@ import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 
 // #region Date and Time Property Test Cases
-export const datePropertyTests = {
+const datePropertyTests = {
   dateObject: new Date(),
 
   dateTimestamp: new Date().getTime(),
@@ -14,7 +14,7 @@ export const datePropertyTests = {
 // #endregion
 
 // #region Regular Expression Property Test Cases
-export const regexPropertyTests = {
+const regexPropertyTests = {
   simpleRegex: /test/,
 
   regexWithFlags: /test/gi,
@@ -24,7 +24,7 @@ export const regexPropertyTests = {
 // #endregion
 
 // #region Error Property Test Cases
-export const errorPropertyTests = {
+const errorPropertyTests = {
   basicError: new Error('Basic error'),
 
   typeError: new TypeError('Type error'),
@@ -44,7 +44,7 @@ weakSet.add({ ab: 5 });
 weakSet.add({ cd: 6 });
 
 // #region Map and Set Property Test Cases
-export const mapSetPropertyTests = {
+const mapSetPropertyTests = {
   maps: {
     emptyMap: new Map(),
 
@@ -96,7 +96,7 @@ export const mapSetPropertyTests = {
 // #endregion
 
 // #region Typed Array Property Test Cases
-export const typedArrayPropertyTests = {
+const typedArrayPropertyTests = {
   int8Array: new Int8Array([1, 2, 3]),
 
   uint8Array: new Uint8Array([1, 2, 3]),
@@ -141,7 +141,7 @@ class AdvancedClass {
 }
 
 // #region Special Type Property Test Cases
-export const specialTypePropertyTests = {
+const specialTypePropertyTests = {
   longInteger: Long.fromString('9223372036854775807'),
 
   promise: Promise.resolve(42),

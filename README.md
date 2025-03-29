@@ -61,6 +61,11 @@ collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDeta
 collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDetailsStore.GetAppDetails(item))
 ```
 
+Profile a script:
+```
+tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert-to-typescript/test.ts
+```
+
 ### Type Validation
 
 Run the type validation script to ensure definitions match the runtime objects:

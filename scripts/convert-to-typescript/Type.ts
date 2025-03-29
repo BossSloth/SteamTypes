@@ -247,8 +247,10 @@ export class ArrayType extends Type {
   }
 }
 
-export type SetName = 'Set' | 'ObservableSet';
-export type MapName = 'Map' | 'ObservableMap';
+type SetName = 'Set' | 'ObservableSet';
+
+type MapName = 'Map' | 'ObservableMap';
+
 export type GenericTypeName = MapName | SetName;
 
 export class GenericType extends Type {

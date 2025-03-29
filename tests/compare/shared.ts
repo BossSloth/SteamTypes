@@ -41,7 +41,7 @@ export function runComparisonTest(testValues: ComparatorTest): void {
  * @param sourceContent Content for the source file
  * @returns Object containing the created source files
  */
-export function createTestFiles(targetContent: string, sourceContent: string): { targetFile: SourceFile; sourceFile: SourceFile; } {
+function createTestFiles(targetContent: string, sourceContent: string): { targetFile: SourceFile; sourceFile: SourceFile; } {
   targetContent = `${targetContent}\n`;
   sourceContent = `${sourceContent}\n`;
 
@@ -58,7 +58,7 @@ export function createTestFiles(targetContent: string, sourceContent: string): {
  * @param interfaceName Name of the interface to compare
  * @returns The diff result
  */
-export function runComparison(targetFile: SourceFile, sourceFile: SourceFile, interfaceName: string): string | null {
+function runComparison(targetFile: SourceFile, sourceFile: SourceFile, interfaceName: string): string | null {
   return compareAndCorrectAllInterfaces(targetFile, sourceFile, interfaceName, 'target.ts');
 }
 
@@ -66,7 +66,7 @@ export function runComparison(targetFile: SourceFile, sourceFile: SourceFile, in
  * Asserts that the diff contains the expected changes
  * @param diff The diff result
  */
-export function assertDiff(diff: string | null): void {
+function assertDiff(diff: string | null): void {
   expect(diff, 'Diff should not be null').not.toBeNull();
 
   if (diff !== null) {

@@ -3,7 +3,7 @@ import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile } from './interface-comparator';
 import { getJsDocTagValue, isImportedType } from './shared';
 
-export const CustomJsDocTags = {
+const CustomJsDocTags = {
   originalName: 'compareOriginalName',
   currentValue: 'currentValue',
 };

@@ -1,5 +1,5 @@
 // #region Primitive Property Test Cases
-export const primitivePropertyTests = {
+const primitivePropertyTests = {
   // String properties
   emptyString: '',
   simpleString: 'hello world',
@@ -38,7 +38,7 @@ line 3`,
 // #endregion
 
 // #region Object Property Test Cases
-export const objectPropertyTests = {
+const objectPropertyTests = {
   // Empty object
   emptyObject: {},
 
@@ -104,7 +104,7 @@ export const objectPropertyTests = {
 // #endregion
 
 // #region Array Property Test Cases
-export const arrayPropertyTests = {
+const arrayPropertyTests = {
   // Empty array
   emptyArray: [],
 

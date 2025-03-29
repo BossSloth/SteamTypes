@@ -1,11 +1,13 @@
 import type { SteamClient } from '../types';
+import { App } from '../types/Global/App';
+import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 
 declare global {
-  let App: unknown;
+  let App: App;
   let appAchievementProgressCache: unknown;
   let appActivityStore: unknown;
   let appDetailsCache: unknown;
-  let appDetailsStore: unknown;
+  let appDetailsStore: AppDetailsStore;
   let appInfoStore: unknown;
   let appReviewStore: unknown;
   let appSpotlightStore: unknown;

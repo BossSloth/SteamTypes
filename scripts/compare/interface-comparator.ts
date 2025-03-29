@@ -17,7 +17,6 @@ interface InterfaceProcessingTask {
 export let interfaceQueue: InterfaceProcessingTask[] = [];
 let processedInterfaces = new Set<string>();
 export let currentTargetSourceFile: SourceFile;
-export let currentSourceSourceFile: SourceFile;
 export let currentStartingInterfaces: InterfaceDeclaration[] = [];
 
 /**
@@ -27,7 +26,7 @@ export let currentStartingInterfaces: InterfaceDeclaration[] = [];
  * @param interfaceName The name of the interface in the target file
  * @returns void - changes are applied directly to the target source file
  */
-export function compareAndCorrectInterfaces(
+function compareAndCorrectInterfaces(
   targetSourceFile: SourceFile,
   sourceSourceFile: SourceFile,
   interfaceName: string,
@@ -139,7 +138,7 @@ function compareAndCorrectMembers(
  * @param sourceProp The property to add
  * @param propName The name of the property to add
  */
-export function addMissingMember(
+function addMissingMember(
   targetInterface: InterfaceDeclaration,
   sourceProp: PropertySignature | MethodSignature,
   propName: string,
@@ -317,7 +316,6 @@ export function compareAndCorrectAllInterfaces(
   interfaceQueue = [];
   processedInterfaces = new Set<string>();
   currentTargetSourceFile = targetSourceFile;
-  currentSourceSourceFile = sourceSourceFile;
   currentStartingInterfaces = currentTargetSourceFile.getInterfaces();
 
   // Store the original text of the entire source file for diff generation
