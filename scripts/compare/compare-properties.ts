@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/class-methods-use-this */
-import { EnumDeclaration, ParenthesizedTypeNode, PropertySignature, SyntaxKind, TypeNode, UnionTypeNode } from 'ts-morph';
-import { addMissingInterface, handleInterfaceTypeReferences } from './handle-interfaces';
+import { EnumDeclaration, PropertySignature, SyntaxKind, TypeNode, UnionTypeNode } from 'ts-morph';
+import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile } from './interface-comparator';
 import { getJsDocTagValue, isImportedType } from './shared';
 
@@ -8,120 +7,6 @@ export const CustomJsDocTags = {
   originalName: 'compareOriginalName',
   currentValue: 'currentValue',
 };
-
-type VisitorArgs = (targetTypeNode: TypeNode, sourceTypeNode: TypeNode) => void;
-
-/**
- * Interface for type visitors that handle different kinds of TypeNodes
- */
-interface TypeVisitor {
-  visit(...args: Parameters<VisitorArgs>): void;
-  visitTypeReference(...args: Parameters<VisitorArgs>): void;
-  visitUnionType(...args: Parameters<VisitorArgs>): void;
-  visitParenthesizedType(...args: Parameters<VisitorArgs>): void;
-}
-
-/**
- * Visitor implementation for comparing and correcting types
- */
-class TypeComparisonVisitor implements TypeVisitor {
-  constructor(
-    private readonly targetProp: PropertySignature,
-    private readonly sourceProp: PropertySignature,
-  ) {}
-
-  /**
-   * Entry point for visiting a type node
-   */
-  visit(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
-    // sourceTypeNode.forEachDescendant((descendant) => {
-    //   this.addMissingInterface(descendant.getType());
-    // });
-
-    if (sourceTypeNode.isKind(SyntaxKind.TypeReference)) {
-      this.visitTypeReference(targetTypeNode, sourceTypeNode);
-    } else if (targetTypeNode.isKind(SyntaxKind.UnionType) && sourceTypeNode.isKind(SyntaxKind.UnionType)) {
-      this.visitUnionType(targetTypeNode, sourceTypeNode);
-    } else if (targetTypeNode.isKind(SyntaxKind.ParenthesizedType) && sourceTypeNode.isKind(SyntaxKind.ParenthesizedType)) {
-      this.visitParenthesizedType(targetTypeNode, sourceTypeNode);
-    }
-    // Add more type handlers as needed
-  }
-
-  /**
-   * Handles type references (interfaces, classes, Sets, Maps, etc.)
-   */
-  visitTypeReference(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
-    if (isSet(targetTypeNode) && isSet(sourceTypeNode)) {
-      return;
-    }
-
-    // addMissingInterface(sourceTypeNode.getType());
-    handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
-  }
-
-  /**
-   * Handles union types (A | B)
-   */
-  visitUnionType(targetTypeNode: UnionTypeNode, sourceTypeNode: UnionTypeNode): void {
-    // Process each type in the union
-    for (let i = 0; i < sourceTypeNode.getTypeNodes().length; i++) {
-      const target = targetTypeNode.getTypeNodes()[i] as TypeNode | undefined;
-      const source = sourceTypeNode.getTypeNodes()[i];
-
-      if (target === undefined) {
-        addMissingInterface(source.getType());
-
-        return;
-      }
-
-      this.visit(target, source);
-    }
-
-    // Find and process interface references in union types
-    // const interfaces = targetTypeNode.getTypeNodes().filter(type => isInterfaceType(type));
-    // for (const interfaceNode of interfaces) {
-    //   this.visitTypeReference(interfaceNode, sourceTypeNode);
-    // }
-  }
-
-  /**
-   * Handles parenthesized types ((T))
-   */
-  visitParenthesizedType(targetTypeNode: ParenthesizedTypeNode, sourceTypeNode: ParenthesizedTypeNode): void {
-    // Unwrap and visit the inner type
-    this.visit(targetTypeNode.getTypeNode(), sourceTypeNode.getTypeNode());
-  }
-
-  /**
-   * Compare and process two union types
-   */
-
-  // private compareUnionTypes(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
-  //   if (!targetTypeNode.isKind(SyntaxKind.UnionType) || !sourceTypeNode.isKind(SyntaxKind.UnionType)) {
-  //     return;
-  //   }
-  //
-  //   const targetUnion = targetTypeNode.asKind(SyntaxKind.UnionType);
-  //   const sourceUnion = sourceTypeNode.asKind(SyntaxKind.UnionType);
-  //   if (!targetUnion || !sourceUnion) return;
-  //
-  //   const targetInterfaces = targetUnion.getTypeNodes().filter(type => isInterfaceType(type));
-  //   const sourceInterfaces = sourceUnion.getTypeNodes().filter(type => isInterfaceType(type));
-  //
-  //   for (let i = 0; i < Math.min(targetInterfaces.length, sourceInterfaces.length); i++) {
-  //     handleInterfaceTypeReferences(targetInterfaces[i].getType(), sourceInterfaces[i].getType());
-  //   }
-  // }
-}
-
-function isSet(typeNode: TypeNode): boolean {
-  return isOfInterfaceType('Set', typeNode);
-}
-
-function isOfInterfaceType(name: string, typeNode: TypeNode): boolean {
-  return typeNode.isKind(SyntaxKind.TypeReference) && typeNode.getFirstChildByKind(SyntaxKind.Identifier)?.getText() === name;
-}
 
 /**
  * Compares and corrects property types
@@ -154,24 +39,7 @@ export function compareAndCorrectPropertyTypes(
     return;
   }
 
-  // TODO: visitor might not be needed make sure to check the steam types with validate types
-  // // Create and use the visitor for type comparison
-  // const visitor = new TypeComparisonVisitor(targetProp, sourceProp);
-  //
-  // // Process source type to find and add missing interfaces
-  // visitor.visit(targetTypeNode, sourceTypeNode);
-
-  // Special case for direct interface references
-  // if (isInterfaceType(targetTypeNode) && isInterfaceType(sourceTypeNode)) {
   handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
-
-  // return;
-  // }
-
-  // Special case for union types
-  // if (targetTypeNode.isKind(SyntaxKind.UnionType) && sourceTypeNode.isKind(SyntaxKind.UnionType)) {
-  //   visitor.compareUnionTypes(targetTypeNode, sourceTypeNode);
-  // }
 
   // Update the type if different
   updatePropertyTypeIfDifferent(targetProp, sourceProp);
@@ -361,49 +229,3 @@ function updatePropertyModifiers(targetProp: PropertySignature, sourceProp: Prop
     targetProp.setIsReadonly(sourceProp.isReadonly());
   }
 }
-
-// NOTE: we don't really want to remove interfaces as they might still be used in another file
-// function checkForAddedOrRemovedInterfaces(targetTypeNode: TypeNode, sourceTypeNode: TypeNode): void {
-//   const targetTypes = targetTypeNode.getDescendantsOfKind(SyntaxKind.TypeReference);
-//   const sourceTypes = sourceTypeNode.getDescendantsOfKind(SyntaxKind.TypeReference);
-
-//   if (targetTypeNode.isKind(SyntaxKind.TypeReference)) {
-//     targetTypes.push(targetTypeNode);
-//   }
-
-//   if (sourceTypeNode.isKind(SyntaxKind.TypeReference)) {
-//     sourceTypes.push(sourceTypeNode);
-//   }
-
-//   const addedTypes = sourceTypes.filter(type => !targetTypes.some(targetType => targetType.getText() === type.getText()));
-//   const removedTypes = targetTypes.filter(type => !sourceTypes.some(sourceType => sourceType.getText() === type.getText()));
-
-//   // TODO: this might not be needed anymore
-//   for (const addedType of addedTypes) {
-//     addMissingInterface(addedType.getType());
-//   }
-
-//   for (const removedType of removedTypes) {
-//     const interfaceDeclaration = getInterfaceDeclaration(removedType);
-//     if (interfaceDeclaration?.isKind(SyntaxKind.InterfaceDeclaration) === true) {
-//       interfaceDeclaration.remove();
-//     }
-//   }
-// }
-
-// const validInterfaceNames = [
-//   'Set',
-//   'ObservableSet',
-//   'Map',
-//   'ObservableMap',
-// ];
-
-// /**
-//  * Checks if a node represents an interface type
-//  * @param typeNode The type node to check
-//  * @returns True if the node represents an interface type
-//  */
-// function isInterfaceType(typeNode: Node): boolean {
-//   // Check if the type node is a type reference (like an interface name)
-//   return typeNode.isKind(SyntaxKind.TypeReference) && !validInterfaceNames.some(name => isOfInterfaceType(name, typeNode));
-// }
