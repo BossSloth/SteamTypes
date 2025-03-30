@@ -192,6 +192,7 @@ function isIterable(value: unknown): value is Iterable<unknown> {
 /**
  * Checks for non-generic object types and returns their TypeScript type
  */
+// eslint-disable-next-line complexity
 function getPrimitiveObjectTypes(obj: unknown): string | null {
   if (Long.isLong(obj)) {
     context.addImport('long', 'Long', true);
@@ -215,6 +216,22 @@ function getPrimitiveObjectTypes(obj: unknown): string | null {
   if (obj instanceof Uint32Array) return 'Uint32Array';
   if (obj instanceof Float32Array) return 'Float32Array';
   if (obj instanceof Float64Array) return 'Float64Array';
+  if (isWindowObject(obj)) return 'Window';
+  if (isHTMLElement(obj)) return obj.constructor.name;
 
   return null;
+}
+
+function isWindowObject(obj: unknown): obj is Window {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'window' in obj && obj.window === obj;
+}
+
+const ELEMENT_NODE = 1;
+
+function isHTMLElement(obj: unknown): obj is HTMLElement {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'nodeType' in obj && obj.nodeType === ELEMENT_NODE;
 }

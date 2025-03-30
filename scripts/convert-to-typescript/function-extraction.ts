@@ -107,11 +107,13 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
   let sourceCode = '';
   const functionInfos = new Map<string, FunctionInfo>();
   for (const [name, func] of funcs) {
-    const code = createSourceCode(name, func);
+    // Sanitize name
+    const sanitizedName = name.replace(/[^a-zA-Z0-9_]/g, '_');
+    const code = createSourceCode(sanitizedName, func);
     if (code !== null) {
       sourceCode += code;
     } else {
-      functionInfos.set(name, {
+      functionInfos.set(sanitizedName, {
         params: [],
         returnType: 'unknown',
         jsDoc: ['@native'],
@@ -155,7 +157,8 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
  * @returns The TypeScript source code or null for native functions
  */
 function createSourceCode(name: string, func: Function): string | null {
-  const funcStr = func.toString();
+  // Use prototype call to also support proxies
+  const funcStr = Function.prototype.toString.call(func);
 
   if (funcStr.includes('[native code]')) {
     return null;

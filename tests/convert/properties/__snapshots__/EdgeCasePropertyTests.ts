@@ -75,6 +75,8 @@ export interface SpecialValueTests {
 
   epsilonNumber: number;
 
+  htmlElement: HtmlElement;
+
   maxNumber: number;
 
   minNumber: number;
@@ -86,6 +88,8 @@ export interface SpecialValueTests {
   objectWithToStringAndOther: ObjectWithToStringAndOther;
 
   whitespaceString: string;
+
+  windowObject: WindowObject;
 }
 
 export interface NestedArrays {
@@ -249,8 +253,18 @@ export interface SimpleInheritance {
   ownProperty: string;
 }
 
+export interface HtmlElement {
+  m_element: HTMLDivElement;
+}
+
 export interface ObjectWithToStringAndOther {
   fooOther: string;
+}
+
+export interface WindowObject {
+  fooValue: string;
+
+  m_popup: Window;
 }
 
 export interface Level5 {

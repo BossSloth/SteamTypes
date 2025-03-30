@@ -67,6 +67,11 @@ const prototypeInheritanceTests = {
 // #endregion
 
 // #region Special Value Property Test Cases
+
+class HTMLDivElement {
+  nodeType = 1;
+}
+
 const specialValueTests = {
   // Special numeric values
   maxNumber: Number.MAX_VALUE,
@@ -93,7 +98,21 @@ const specialValueTests = {
   objectWithOnlyValueOf: {
     valueOf() { return 42; },
   },
+
+  windowObject: {
+    fooValue: 'bar',
+    m_popup: {
+      location: 'https://example.com',
+      isActive: true,
+    },
+  },
+
+  htmlElement: {
+    m_element: new HTMLDivElement(),
+  },
 };
+// @ts-expect-error we want window object
+specialValueTests.windowObject.m_popup.window = specialValueTests.windowObject.m_popup;
 // #endregion
 
 // #region Property Name Edge Cases

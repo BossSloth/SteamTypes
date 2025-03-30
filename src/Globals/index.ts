@@ -1,6 +1,7 @@
 import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
+import { PopupManager } from '../types/Global/PopupManager';
 
 declare global {
   let App: App;
@@ -45,7 +46,7 @@ declare global {
   let g_FriendsUIApp: unknown;
   let g_GRS: unknown;
   let g_PartnerEventStore: unknown;
-  let g_PopupManager: unknown;
+  let g_PopupManager: PopupManager;
   let gameReleaseStore: unknown;
   let installFolderStore: unknown;
   let lastScrollTime: unknown;

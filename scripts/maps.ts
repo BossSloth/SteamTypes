@@ -56,6 +56,7 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
+  { file: 'Global/PopupManager', object: 'window.g_PopupManager', srcName: 'PopupManager' },
 ];
 
 /** @public */

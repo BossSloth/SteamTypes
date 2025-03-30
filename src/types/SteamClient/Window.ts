@@ -1,3 +1,4 @@
+import { EWindowBringToFront } from '../Global/PopupManager';
 import { EUIComposition } from './shared';
 
 /**
@@ -188,12 +189,6 @@ export interface Window {
    * Toggles the window's maximized state.
    */
   ToggleMaximize(): void;
-}
-
-export enum EWindowBringToFront {
-  Invalid,
-  AndForceOS,
-  WithoutForcingOS,
 }
 
 export type WindowLocation = 'upper-left' | 'lower-left' | 'center-top' | 'center-bottom' | 'upper-right' | 'lower-right';

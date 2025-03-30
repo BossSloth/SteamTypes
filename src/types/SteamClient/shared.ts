@@ -1,3 +1,5 @@
+import { EBrowserType } from '../Global/PopupManager';
+
 export enum EResult {
   OK = 1,
   Fail,
@@ -110,31 +112,6 @@ export enum EResult {
   WGNetworkSendExceeded,
   AccountNotFriends,
   LimitedUserAccount,
-}
-
-export enum EBrowserType {
-  /**
-   * No window is created (like SharedJSContext).
-   */
-  OffScreen,
-  OpenVROverlay,
-  OpenVROverlay_Dashboard,
-  /**
-   * A normal window.
-   */
-  DirectHWND,
-  /**
-   * A borderless window.
-   */
-  DirectHWND_Borderless,
-  /**
-   * An initially hidden window.
-   * May be shown with {@link SteamClient.Window.ShowWindow}.
-   */
-  DirectHWND_Hidden,
-  ChildHWNDNative,
-  Offscreen_SteamUI = 12,
-  OpenVROverlay_Subview,
 }
 
 export enum ESteamRealm {
