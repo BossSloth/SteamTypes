@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import fs from 'fs';
+import path from 'path';
 import { IndentationText, Project, QuoteKind, SourceFile } from 'ts-morph';
 import { Logger } from '../logger';
 import { compareAndCorrectAllInterfaces } from './interface-comparator';
@@ -21,7 +22,7 @@ const project = new Project({
 
 // Function to parse TypeScript file and extract interface members
 function extractInterfaceMembers(filePath: string): SourceFile {
-  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  const fileContent = fs.readFileSync(`${path.resolve(`${__dirname}/../../`)}/${filePath}`, 'utf-8');
 
   return extractMembersFromString(fileContent);
 }

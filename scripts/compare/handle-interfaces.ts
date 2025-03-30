@@ -2,6 +2,8 @@ import { InterfaceDeclaration, MethodSignature, PropertySignature, SyntaxKind, T
 import { currentStartingInterfaces, currentTargetSourceFile, interfaceQueue } from './interface-comparator';
 import { isImportedType } from './shared';
 
+const REQUIRED_OVERLAP = 0.65;
+
 /**
  * Handles interface type references by adding them to the processing queue
  */
@@ -105,7 +107,7 @@ function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceD
     const score = calculateSimilarityScore(sourceProperties, targetProperties);
 
     // If score is above threshold (e.g., 0.65 for 65% similarity)
-    if (score >= 0.65 && score > highestScore) {
+    if (score >= REQUIRED_OVERLAP && score > highestScore) {
       highestScore = score;
       bestMatch = targetInterface;
     }

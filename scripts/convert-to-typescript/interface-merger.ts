@@ -2,7 +2,7 @@ import { updateTypeReferences } from './replace-duplicate-types';
 import { Type, UnionType } from './Type';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
 
-const REQUIRED_OVERLAP = 3 / 4;
+const REQUIRED_OVERLAP = 0.65;
 
 /**
  * Determines if two interfaces are similar enough to be merged
@@ -17,23 +17,21 @@ function shouldMergeInterfaces(
   // Get property names from both interfaces
   const props1 = interface1.properties.map(p => p.name);
   const props2 = interface2.properties.map(p => p.name);
-  const [smaller, larger] = props1.length < props2.length ? [props1, props2] : [props2, props1];
 
-  const minOverlap = Math.ceil(REQUIRED_OVERLAP * larger.length);
-  if (smaller.length < minOverlap) return false;
-  const maxFaults = smaller.length - minOverlap;
+  // Calculate Jaccard similarity: intersection / union
+  const prop2Set = new Set(props2);
 
-  const largerSet = new Set(larger);
-  let commonCount = 0;
-  let faultCount = 0;
+  const intersection = props1.filter(prop => prop2Set.has(prop)).length;
+  const union = new Set([...props1, ...props2]).size;
 
-  for (const prop of smaller) {
-    if (largerSet.has(prop)) {
-      if (++commonCount >= minOverlap) return true;
-    } else if (++faultCount > maxFaults) return false;
-  }
+  // No properties in either interface
+  if (union === 0) return true;
 
-  return false;
+  // Calculate similarity score
+  const similarityScore = intersection / union;
+
+  // Return true if similarity score is greater than or equal to required overlap
+  return similarityScore >= REQUIRED_OVERLAP;
 }
 
 /**

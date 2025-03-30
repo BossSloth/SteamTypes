@@ -55,10 +55,26 @@ The project includes scripts for:
 
 ### Useful Commands
 
-Fill the app details cache with the first 500 apps:
+Fill the app details store with all apps:
 ```javascript
-collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDetailsCache.FetchDataForApp(item))
-collectionStore.allAppsCollection.m_rgApps.slice(0, 500).forEach(item => appDetailsStore.GetAppDetails(item))
+async function fillAppDetailsStore() {
+  const apps = collectionStore.allAppsCollection.m_rgApps.filter(appId => appId);
+  const time = Date.now()
+
+  await Promise.all(apps.map(async (appId) => {
+    await appDetailsStore.RequestAppDetails(appId);
+
+    return Promise.all([
+      appDetailsStore.RequestAchievements(appId),
+      appDetailsStore.RequestAssociationData(appId),
+      appDetailsStore.RequestDescriptionsData(appId),
+      appDetailsStore.RequestCustomImageInfo({appid: appId, rt_custom_image_mtime: time}),
+      appDetailsStore.RequestAppDetailsSpotlight(appId)
+    ]);
+  }));
+}
+
+fillAppDetailsStore().then(() => console.log('All app details loaded'));
 ```
 
 map an app details value:

@@ -106,7 +106,7 @@ export interface AppDetailsStore {
 }
 
 export interface AppData {
-  appDetailsSpotlight: null;
+  appDetailsSpotlight: (AppDetailsSpotlight | null);
 
   associationData: (AssociationData | null);
 
@@ -114,7 +114,7 @@ export interface AppData {
 
   cRegistered: number;
 
-  customImageInfo?: null;
+  customImageInfo?: CustomImageInfo;
 
   customImageInfoRtime: number;
 
@@ -125,6 +125,30 @@ export interface AppData {
   hAppDetails: Unregisterable;
 
   listeners: never;
+}
+
+export interface AppDetailsSpotlight {
+  data: SpotlightData;
+
+  dtLoaded: Date;
+}
+
+export interface SpotlightData {
+  events: SpotlightEvent[];
+}
+
+export interface SpotlightEvent {
+  appid: number;
+
+  clan_announcementid: string;
+
+  clan_id: string;
+
+  event_time: number;
+
+  event_type: number;
+
+  rtime32_last_modified: number;
 }
 
 export interface AssociationData {
@@ -141,18 +165,16 @@ export interface Association {
   strURL: (null | string);
 }
 
+export interface CustomImageInfo {
+  logoPosition: LogoPosition;
+
+  nVersion: number;
+}
+
 export interface DescriptionsData {
   strFullDescription: string;
 
   strSnippet: string;
-}
-
-export interface DlcLibraryAssets {
-  strCapsuleImage: string;
-
-  strHeaderImage: string;
-
-  strHeroImage: string;
 }
 
 export interface AppDetails {
@@ -212,6 +234,8 @@ export interface AppDetails {
 
   bRequiresLegacyCDKey: boolean;
 
+  bShortcutIsVR?: boolean;
+
   bShowCDKeyInMenus: boolean;
 
   bShowControllerConfig: boolean;
@@ -263,7 +287,7 @@ export interface AppDetails {
   /** DLC disk space usage, in bytes. */
   lDlcUsageBytes: number;
 
-  libraryAssets?: (AppLibraryAssets | DlcLibraryAssets);
+  libraryAssets?: (AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets);
 
   nBuildID: number;
 
@@ -316,9 +340,15 @@ export interface AppDetails {
 
   strSelectedBeta: string;
 
+  strShortcutExe?: string;
+
+  strShortcutLaunchOptions?: string;
+
+  strShortcutStartDir?: string;
+
   strSteamDeckBlogURL: string;
 
-  strStoreHeaderImage: string;
+  strStoreHeaderImage?: string;
 
   unAppID: number;
 
@@ -342,7 +372,7 @@ export interface AppDetails {
 
   vecLanguages: AppLanguage[];
 
-  vecLegacyCDKeys: unknown[];
+  vecLegacyCDKeys: (LegacyCDKey[] | NamelessLegacyCDKeys[]);
 
   vecMusicAlbums: AppSoundtrack[];
 
@@ -357,7 +387,7 @@ export interface Achievements {
 
   nTotal: number;
 
-  vecAchievedHidden: VecAchievedHidden[];
+  vecAchievedHidden: VecHighlight[];
 
   vecHighlight: VecHighlight[];
 
@@ -391,15 +421,15 @@ export interface AppDeckDerivedProperties {
 export interface AppLibraryAssets {
   logoPosition?: LogoPosition;
 
-  strCapsuleImage: string;
+  strCapsuleImage?: string;
 
-  strHeaderImage: string;
+  strHeaderImage?: string;
 
-  strHeroBlurImage: string;
+  strHeroBlurImage?: string;
 
   strHeroImage: string;
 
-  strLogoImage: string;
+  strLogoImage?: string;
 
   strTimeLineMarker?: string;
 }
@@ -413,6 +443,21 @@ export interface LogoPosition {
 }
 
 export type LogoPinPositions = 'BottomLeft' | 'UpperLeft' | 'CenterCenter' | 'UpperCenter' | 'BottomCenter';
+
+/**
+ * This one is used on a lot of old games and are recognizable in the library by not having a custom logo
+ */
+export interface LegacyLibraryAssets {
+  strCapsuleImage?: string;
+
+  strHeaderImage: string;
+
+  strHeroImage: string;
+}
+
+export interface ToolLibraryAssets {
+  strHeaderImage: string;
+}
 
 export interface AppLanguage {
   strDisplayName: string;
@@ -448,27 +493,11 @@ export interface AppDLC {
   /** Display name. */
   strName: string;
 
-  /** State (installed/notinstalled). */
+  /** State (installed/not installed). */
   strState: string;
 
   /** App ID. */
   unAppID: number;
-}
-
-export interface VecAchievedHidden {
-  bAchieved: boolean;
-
-  flAchieved: number;
-
-  rtUnlocked: number;
-
-  strDescription: string;
-
-  strID: string;
-
-  strImage: string;
-
-  strName: string;
 }
 
 export interface VecHighlight {
@@ -479,11 +508,11 @@ export interface VecHighlight {
   /** How many players have this achievement, in percentage. */
   flAchieved: number;
 
-  flCurrentProgress: number;
+  flCurrentProgress?: number;
 
-  flMaxProgress: number;
+  flMaxProgress?: number;
 
-  flMinProgress: number;
+  flMinProgress?: number;
 
   /** When this achievement was unlocked. */
   rtUnlocked: number;
@@ -518,7 +547,7 @@ export interface AppSoundtrack {
   /** Display name. */
   strName: string;
 
-  /** State (installed/notinstalled). */
+  /** State (installed/not installed). */
   strState: string;
 
   /** App ID. */
@@ -552,6 +581,18 @@ export interface Screenshot {
   strUrl: string;
 
   ugcHandle: string;
+}
+
+export interface LegacyCDKey {
+  eResult: ELegacyCDKeyResult;
+
+  strKey: string;
+
+  strName: string;
+}
+
+export interface NamelessLegacyCDKeys {
+  eResult: ELegacyCDKeyResult;
 }
 
 export enum EUCMFilePrivacyState {
@@ -699,10 +740,18 @@ export enum EAppUpdateError {
 }
 
 // TODO: fill enum
+/** Cloud sync status, seems similar to {@link EAppCloudStatus} but with some differences */
 export enum ECloudSync {
   Unavailable = 0,
   Valid = 2,
   /** @note This doesn't mean this app has cloud sync enabled, just that it is revalidating */
   PendingRevalidation = 3,
+  OutOfSync = 4,
+  OutOfSync2 = 5,
   NotLocallyAvailable = 8,
+}
+
+export enum ELegacyCDKeyResult {
+  Unknown,
+  Success,
 }

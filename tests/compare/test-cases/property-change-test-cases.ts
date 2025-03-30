@@ -109,6 +109,56 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'property with enum stays same': {
+    interfaceName: 'StatusConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface StatusConfig {
+        message: string;
+
+        status: ConnectionStatus;
+      }
+
+      export enum ConnectionStatus {
+        CONNECTED = 1,
+        DISCONNECTED = 2,
+        PENDING = 3,
+      }`,
+    source: dedent/* ts */`
+      export interface StatusConfig {
+        /**
+         * @currentValue 2
+         */
+        status: number;
+        message: string;
+      }`,
+  },
+
+  'property with enum stays same different name': {
+    interfaceName: 'StatusConfig',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface StatusConfig {
+        eResult: StatusResultType;
+
+        message: string;
+      }
+
+      export enum StatusResultType {
+        CONNECTED = 1,
+        DISCONNECTED = 2,
+        PENDING = 3,
+      }`,
+    source: dedent/* ts */`
+      export interface StatusConfig {
+        /**
+         * @currentValue 2
+         */
+        eResult: number;
+        message: string;
+      }`,
+  },
+
   'interface with implied enum property': {
     interfaceName: 'SteamStatus',
     target: dedent/* ts */`

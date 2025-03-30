@@ -57,7 +57,7 @@ export interface EdgeCaseMergedInterfaceTests {
 
   insufficientCommonProperties: (InsufficientCommonProperties | InsufficientCommonProperties2)[];
 
-  minimalCommonProperties: MinimalCommonProperties[];
+  minimalCommonProperties: (InsufficientCommonProperties | InsufficientCommonProperties2)[];
 
   objectsWithFunctions: ObjectsWithFunctions[];
 
@@ -297,13 +297,19 @@ export interface InsufficientCommonProperties {
 
   prop2: string;
 
+  prop3?: string;
+
   shared1: boolean;
 
   shared2: number;
+
+  shared3?: string;
 }
 
 export interface InsufficientCommonProperties2 {
   prop1: string;
+
+  prop2?: string;
 
   prop3: string;
 
@@ -312,22 +318,8 @@ export interface InsufficientCommonProperties2 {
   shared1: boolean;
 
   shared2: number;
-}
 
-export interface MinimalCommonProperties {
-  prop1: string;
-
-  prop2: string;
-
-  prop3: string;
-
-  prop4?: string;
-
-  shared1: boolean;
-
-  shared2: number;
-
-  shared3: string;
+  shared3?: string;
 }
 
 export interface ObjectsWithFunctions {

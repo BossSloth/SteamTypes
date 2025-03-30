@@ -57,11 +57,11 @@ export interface PropertyNameEdgeCases {
 
   reservedKeywords: ReservedKeywords;
 
-  reservedKeywordsObject: ReservedKeywordsObject;
+  reservedKeywordsObject: ReservedKeywords;
 
   specialCharacterPropertyNames: SpecialCharacterPropertyNames;
 
-  specialCharacterPropertyNamesObject: SpecialCharacterPropertyNamesObject;
+  specialCharacterPropertyNamesObject: SpecialCharacterPropertyNames;
 }
 
 export interface PrototypeInheritanceTests {
@@ -200,65 +200,39 @@ export interface NumericPropertyNamesObject {
 }
 
 export interface ReservedKeywords {
-  class: string;
+  class: (Class | string);
 
-  foo: string;
+  foo?: string;
 
-  function: string;
+  function: (Function | string);
 
-  if: string;
+  if: (If | string);
 
-  other: number;
+  other?: number;
 
-  return: string;
+  return: (Return | string);
 
-  var: string;
-}
-
-export interface ReservedKeywordsObject {
-  class: Class;
-
-  function: Function;
-
-  if: If;
-
-  return: Return;
-
-  var: Var;
+  var: (string | Var);
 }
 
 export interface SpecialCharacterPropertyNames {
-  '#hashtag': string;
+  '#hashtag': (hashtag | string);
 
-  '%percent': string;
+  '#multiple_ #_'?: multiple__;
 
-  '*asterisk': string;
+  '%percent': (percent | string);
 
-  '@special': string;
+  '*asterisk': (asterisk | string);
 
-  '^caret': string;
+  '@special': (special | string);
 
-  'space between': string;
-}
+  '^caret': (caret | string);
 
-export interface SpecialCharacterPropertyNamesObject {
-  '#hashtag': hashtag;
+  'dashed-property'?: Dashedproperty;
 
-  '#multiple_ #_': multiple__;
+  'space between': (Spacebetween | string);
 
-  '%percent': percent;
-
-  '*asterisk': asterisk;
-
-  '@special': special;
-
-  '^caret': caret;
-
-  'dashed-property': Dashedproperty;
-
-  'space between': Spacebetween;
-
-  under_score: Under_score;
+  under_score?: Under_score;
 }
 
 export interface MultiLevelInheritance {

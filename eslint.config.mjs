@@ -4,6 +4,7 @@ import perfectionist from 'eslint-plugin-perfectionist';
 import { globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import customRules from './eslint-rules/index.mjs';
 
 export default tseslint.config(
   { files: ['**/*.{js,mjs,cjs,ts}'] },
@@ -20,7 +21,7 @@ export default tseslint.config(
       globals: globals.node,
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.mjs', '*.config.ts'],
+          allowDefaultProject: ['*.mjs', '*.config.ts', 'eslint-rules/*.mjs'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -43,6 +44,7 @@ export default tseslint.config(
     plugins: {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       perfectionist,
+      customRules,
     },
 
     rules: {
@@ -71,6 +73,7 @@ export default tseslint.config(
       '@typescript-eslint/prefer-literal-enum-member': ['error', { allowBitwiseExpressions: true }],
       'func-style': ['error', 'declaration'],
       'max-lines-per-function': ['error', { max: 50, skipBlankLines: true, skipComments: true }],
+      'customRules/min-enum-members': 'error',
 
       '@typescript-eslint/consistent-type-exports': 'off',
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -176,6 +179,18 @@ export default tseslint.config(
     rules: {
       'max-lines-per-function': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
+    },
+  },
+  {
+    files: ['eslint-rules/**'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   },
 );

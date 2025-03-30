@@ -19,8 +19,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "knip": "knip",
-    "lint": "knip && eslint",
-    "lint:fix": "knip --fix && eslint --fix",
+    "lint": "knip ; eslint",
+    "lint:fix": "knip --fix ; eslint --fix",
     "prepublishOnly": "bun run build"
   },
   "keywords": [
