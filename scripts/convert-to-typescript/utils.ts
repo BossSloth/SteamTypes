@@ -25,25 +25,6 @@ export function initContext(mainInterfaceName: string): void {
   context.functionsToProcess = new Map();
 }
 
-/**
- * Checks if two objects have the same structure
- * TODO: This is not performant at all, please optimize
- */
-export function deepSameStructure(obj1: unknown, obj2: unknown, depth = 0): boolean {
-  if (depth > 10) return false;
-  if (typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
-  if (!obj1 || !obj2) return obj1 === obj2;
-
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  if (keys1.length !== keys2.length) return false;
-
-  return keys1.every(key =>
-    keys2.includes(key)
-    && typeof obj1[key] === typeof obj2[key]
-    && (typeof obj1[key] !== 'object' || deepSameStructure(obj1[key], obj2[key], depth + 1)));
-}
-
 const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}]|^\d/u;
 /**
  * Formats a property name to handle special characters

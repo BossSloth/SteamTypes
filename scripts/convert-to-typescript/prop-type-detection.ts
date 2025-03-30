@@ -1,7 +1,7 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
 import { ArrayType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType, createMapType, createSetType } from './Type';
-import { context, deepSameStructure, formatInterfaceName } from './utils';
+import { context, formatInterfaceName } from './utils';
 
 /**
  * Gets the TypeScript type for a value
@@ -52,7 +52,7 @@ function getObjectType(value: Record<string, unknown>, path: string): Type {
     capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
   }
 
-  const [interfaceName, nameCounter] = generateInterfaceName(capitalizedName, value);
+  const [interfaceName, nameCounter] = generateInterfaceName(capitalizedName);
 
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
@@ -79,13 +79,11 @@ function getCircularReference(value: Record<string, unknown>, isValueIterable: b
 }
 
 // Generate a unique interface name for nested objects
-function generateInterfaceName(baseName: string, value: Record<string, unknown>): [string, number | undefined] {
+function generateInterfaceName(baseName: string): [string, number | undefined] {
   const formattedName = formatInterfaceName(baseName);
   let name = formattedName;
   let counter = 1;
   while (context.interfacesToProcess.has(name)) {
-    // If same name and structure use already generated interface
-    if (deepSameStructure(context.interfacesToProcess.get(name)?.[0], value)) return [name, counter === 1 ? undefined : counter];
     name = `${formattedName}${++counter}`;
   }
 
