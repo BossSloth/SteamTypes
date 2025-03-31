@@ -45,6 +45,58 @@ export interface RouteConfig {
 }"
 `;
 
+exports[`Comparator Interface Renamed Cases > indexed access interface type with mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface UserProfile {
+-  theme: UserData['info'];
++  theme: SettingsInfo;
+
+  user: UserData;
+}
+
+export interface UserData {"
+`;
+
+exports[`Comparator Interface Renamed Cases > indexed access type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,23 +1,25 @@
+export interface UserProfile {
+-  preferences: UserData['email'];
++  preferences: string;
+
+-  theme: UserData['settings']['notifications'];
++  theme: boolean;
+
+  user: UserData;
+}
+
+export interface UserData {
+-  email: number;
++  email: string;
+
+  id: number;
+
+  name: string;
+
+  settings: SettingsInfo;
+}
+
+export interface SettingsInfo {
+-  theme: string;
+-  notifications: string;
+  language: string;
++
++  notifications: boolean;
++
++  theme: string;
+}"
+`;
+
 exports[`Comparator Interface Renamed Cases > interface with complex nested generics 1`] = `
 "===================================================================
 --- a/target.ts
@@ -140,11 +192,11 @@ exports[`Comparator Interface Renamed Cases > interface with indexed access type
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,17 +1,29 @@
+@@ -1,18 +1,29 @@
 export interface UserProfile {
   preferences: UserInfo['settings'];
 +
-+  theme: UserInfo['settings']['theme'];
++  theme: string;
 +
   user: UserInfo;
 }
@@ -167,9 +219,9 @@ export interface Settings {
 +  language: string;
 +
   notifications: boolean;
-+
+
   theme: string;
-};"
+}"
 `;
 
 exports[`Comparator Interface Renamed Cases > interface with intersection types 1`] = `

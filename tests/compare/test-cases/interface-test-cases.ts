@@ -234,28 +234,33 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       export interface User {
         id: number;
         name: string;
-        settings: {
-          theme: string;
-          notifications: boolean;
-        };
+        settings: Settings;
+      }
+
+      export interface Settings {
+        notifications: boolean;
+
+        theme: string;
       }
       `,
     source: dedent/* ts */`
       export interface UserProfile {
         user: User;
-        preferences: User['settings'];
-        theme: User['settings']['theme'];
+        preferences: Settings;
+        theme: string;
       }
 
       export interface User {
         id: number;
         name: string;
         email: string;
-        settings: {
-          theme: string;
-          notifications: boolean;
-          language: string;
-        };
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: boolean;
+        language: string;
       }
       `,
   },
@@ -350,6 +355,121 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         theme: string;
         notifications: boolean;
         language: string;
+      }
+      `,
+  },
+
+  'indexed access interface type': {
+    interfaceName: 'UserProfile',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface UserProfile {
+        theme: User['settings'];
+
+        user: User;
+      }
+
+      export interface User {
+        email: string;
+
+        id: number;
+
+        name: string;
+
+        settings: Settings;
+      }
+
+      export interface Settings {
+        language: string;
+
+        notifications: string;
+
+        theme: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        theme: Settings;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+      `,
+  },
+
+  'indexed access interface type with mismatch': {
+    interfaceName: 'UserProfile',
+    target: dedent/* ts */`
+      export interface UserProfile {
+        theme: User['info'];
+
+        user: User;
+      }
+
+      export interface User {
+        email: string;
+
+        id: number;
+
+        info: Info;
+
+        name: string;
+
+        settings: Settings;
+
+      }
+
+      export interface Settings {
+        language: string;
+
+        notifications: string;
+
+        theme: string;
+      }
+
+      export interface Info {
+        bar: number;
+
+        foo: boolean;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        theme: Settings;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+        info: Info;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+
+      export interface Info {
+        name: string;
+        foo: boolean;
+        bar: number;
       }
       `,
   },

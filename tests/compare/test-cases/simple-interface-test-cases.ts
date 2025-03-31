@@ -354,4 +354,37 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
         labels: [string, string];
       }`,
   },
+
+  'interface with mismatched interface types': {
+    interfaceName: 'ServiceConfig',
+    target: dedent/* ts */`
+    export interface ServiceConfig {
+      userService: UserService;
+    }
+
+    export interface UserService {
+      getUserById(id: number): User;
+      createUser(name: string, email: string): User;
+
+      user: User;
+    }
+
+    export interface User {
+      id: number;
+      name: string;
+      email: string;
+    }`,
+    source: dedent/* ts */`
+    export interface ServiceConfig {
+      userService: UserService;
+    }
+
+    export interface UserService {
+      name: string;
+      email: string;
+      role: string;
+    }
+    `,
+  },
+
 };

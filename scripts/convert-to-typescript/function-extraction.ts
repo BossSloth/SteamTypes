@@ -158,7 +158,7 @@ export function massExtractFunctionInfo(funcs: Map<string, Function>, project: P
  */
 function createSourceCode(name: string, func: Function): string | null {
   // Use prototype call to also support proxies
-  const funcStr = Function.prototype.toString.call(func);
+  const funcStr = func.toString();
 
   if (funcStr.includes('[native code]')) {
     return null;

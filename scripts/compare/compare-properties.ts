@@ -216,12 +216,14 @@ function updateTypeIfNeeded(
   sourceTypeNode: TypeNode,
 ): void {
   let targetTypeText = targetTypeNode.getText();
-  const sourceTypeText = sourceTypeNode.getText();
+  const sourceTypeText = sourceTypeNode.getText().replace(/import\(".+?\)\./, '');
 
   // Handle indexed access type
   if (targetTypeNode.isKind(SyntaxKind.IndexedAccessType)) {
     targetTypeText = targetTypeNode.getType().getText();
   }
+
+  targetTypeText = targetTypeText.replace(/import\(".+?\)\./, '');
 
   if (targetTypeNode.isKind(SyntaxKind.UnionType)) {
     updateUnionType(targetProp, targetTypeNode, sourceTypeText);

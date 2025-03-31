@@ -86,15 +86,6 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
 function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceDeclaration | undefined {
   const targetInterfaces = currentStartingInterfaces.filter(i => !i.wasForgotten());
 
-  const sourceInterfaceName = sourceInterface.getName();
-  const matchingTargetInterface = targetInterfaces.find(i => i.getName() === sourceInterfaceName);
-
-  if (matchingTargetInterface) {
-    matchingTargetInterface.remove();
-
-    return undefined;
-  }
-
   let bestMatch: InterfaceDeclaration | undefined;
   let highestScore = 0;
 

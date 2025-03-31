@@ -205,15 +205,19 @@ async function run(options: ValidateTypesOptions): Promise<void> {
     //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
     // }
 
-    return {
-      filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
-      result: compareInterfaces(
-        `src/types/${map.file}.ts`,
-        map.srcName,
-        interfaceContent,
-        options.verbose,
-      ),
-    };
+    try {
+      return {
+        filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
+        result: compareInterfaces(
+          `src/types/${map.file}.ts`,
+          map.srcName,
+          interfaceContent,
+          options.verbose,
+        ),
+      };
+    } catch (error) {
+      throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
+    }
   });
 
   const results = await Promise.all(interfacePromises);

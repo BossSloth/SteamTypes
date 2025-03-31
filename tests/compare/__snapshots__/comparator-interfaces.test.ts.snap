@@ -40,6 +40,21 @@ export interface RouteConfig {
 }"
 `;
 
+exports[`Comparator Interface Cases > indexed access interface type with mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface UserProfile {
+-  theme: User['info'];
++  theme: Settings;
+
+  user: User;
+}
+
+export interface User {"
+`;
+
 exports[`Comparator Interface Cases > indexed access type mismatch 1`] = `
 "===================================================================
 --- a/target.ts
@@ -177,11 +192,11 @@ exports[`Comparator Interface Cases > interface with indexed access types 1`] = 
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,13 +1,21 @@
+@@ -1,16 +1,25 @@
 export interface UserProfile {
   preferences: User['settings'];
 +
-+  theme: User['settings']['theme'];
++  theme: string;
 +
   user: User;
 }
@@ -193,11 +208,15 @@ export interface User {
 +
   name: string;
 +
-  settings: {
-    theme: string;
-    notifications: boolean;
-+    language: string;
-  };
+  settings: Settings;
+}
+
+export interface Settings {
++  language: string;
++
+  notifications: boolean;
+
+  theme: string;
 }"
 `;
 

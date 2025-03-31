@@ -85,9 +85,6 @@ export interface DynamicCSSObserver {
   takeRecords(): unknown;
 }
 
-// const pop = {} as Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
-// const x = pop.DoCallback("")
-
 export interface Popup<
   paramsType extends PopupParameters | MainWindowPopupParameters = PopupParameters,
   callbacksType extends PopupCallback | MainWindowPopupCallback = PopupCallback,
@@ -125,6 +122,8 @@ export interface Popup<
    * Calls {@link SteamWindow.IsWindowMinimized} on the popup's window if it is not closed else returns `false`.
    */
   IsMinimized(): ReturnType<SteamWindow['IsWindowMinimized']>;
+
+  m_fnReadyToRender(): unknown;
 
   OnBeforeUnload(): void;
 

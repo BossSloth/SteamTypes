@@ -88,6 +88,31 @@ export interface Service {
 }"
 `;
 
+exports[`Comparator Simple Interface Cases > interface with mismatched interface types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,14 +1,15 @@
+export interface ServiceConfig {
+  userService: UserService;
+}
+
+export interface UserService {
+-  getUserById(id: number): User;
+-  createUser(name: string, email: string): User;
++  email: string;
+
+-  user: User;
++  name: string;
++
++  role: string;
+}
+
+export interface User {
+  id: number;
+  name: string;"
+`;
+
 exports[`Comparator Simple Interface Cases > interface with missing enum property 1`] = `
 "===================================================================
 --- a/target.ts

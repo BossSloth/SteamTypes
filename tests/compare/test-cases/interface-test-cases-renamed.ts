@@ -191,14 +191,15 @@ export const interfaceRenamedCases: Record<string, ComparatorTest> = {
 
       export interface Settings {
         notifications: boolean;
+
         theme: string;
-      };
+      }
       `,
     source: dedent/* ts */`
       export interface UserProfile {
-        preferences: User['settings'];
+        preferences: Settings;
         user: User;
-        theme: User['settings']['theme'];
+        theme: string;
       }
 
       export interface User {
@@ -214,7 +215,7 @@ export const interfaceRenamedCases: Record<string, ComparatorTest> = {
         theme: string;
         notifications: boolean;
         language: string;
-      };
+      }
       `,
   },
 
@@ -260,6 +261,170 @@ export const interfaceRenamedCases: Record<string, ComparatorTest> = {
           language: string;
         };
       }`,
+  },
+
+  // TODO: maybe make it so the indexed access type is not removed by checking at the end if the type is the same
+  'indexed access type mismatch': {
+    interfaceName: 'UserProfile',
+    target: dedent/* ts */`
+      export interface UserProfile {
+        preferences: UserData['email'];
+
+        theme: UserData['settings']['notifications'];
+
+        user: UserData;
+      }
+
+      export interface UserData {
+        email: number;
+
+        id: number;
+
+        name: string;
+
+        settings: SettingsInfo;
+      }
+
+      export interface SettingsInfo {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        preferences: string;
+        theme: boolean;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: boolean;
+        language: string;
+      }
+      `,
+  },
+
+  'indexed access interface type': {
+    interfaceName: 'UserProfile',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface UserProfile {
+        theme: UserData['settings'];
+
+        user: UserData;
+      }
+
+      export interface UserData {
+        email: string;
+
+        id: number;
+
+        name: string;
+
+        settings: SettingsInfo;
+      }
+
+      export interface SettingsInfo {
+        language: string;
+
+        notifications: string;
+
+        theme: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        theme: Settings;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+      `,
+  },
+
+  'indexed access interface type with mismatch': {
+    interfaceName: 'UserProfile',
+    target: dedent/* ts */`
+      export interface UserProfile {
+        theme: UserData['info'];
+
+        user: UserData;
+      }
+
+      export interface UserData {
+        email: string;
+
+        id: number;
+
+        info: InfoExtra;
+
+        name: string;
+
+        settings: SettingsInfo;
+      }
+
+      export interface SettingsInfo {
+        language: string;
+
+        notifications: string;
+
+        theme: string;
+      }
+
+      export interface InfoExtra {
+        bar: number;
+
+        foo: boolean;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserProfile {
+        user: User;
+        theme: Settings;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+        settings: Settings;
+        info: Info;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: string;
+        language: string;
+      }
+
+      export interface Info {
+        name: string;
+        foo: boolean;
+        bar: number;
+      }
+      `,
   },
 
   'external template literal types': {

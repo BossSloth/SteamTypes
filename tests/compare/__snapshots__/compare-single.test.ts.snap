@@ -4,11 +4,11 @@ exports[`Comparator - Single debug > single 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,17 +1,29 @@
+@@ -1,18 +1,29 @@
 export interface UserProfile {
   preferences: UserInfo['settings'];
 +
-+  theme: UserInfo['settings']['theme'];
++  theme: string;
 +
   user: UserInfo;
 }
@@ -31,7 +31,7 @@ export interface Settings {
 +  language: string;
 +
   notifications: boolean;
-+
+
   theme: string;
-};"
+}"
 `;
