@@ -805,4 +805,53 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       `,
   },
 
+  'map intersection type': {
+    interfaceName: 'Config',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Config {
+        map: ObservableMap<'Main', Popup<string>> & ObservableMap<string, Popup>;
+      }
+
+      export interface Popup<T extends (number | string) = number> {
+        id: T;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Config {
+        map: ObservableMap<string, Popup>;
+      }
+
+      export interface Popup {
+        id: (number | string);
+        name: string;
+      }`,
+  },
+
+  'map intersection type with mismatch': {
+    interfaceName: 'Config',
+    target: dedent/* ts */`
+      export interface Config {
+        map: ObservableMap<15, Popup<string>> & ObservableMap<string, Popup>;
+      }
+
+      export interface Popup<T extends (number | string) = number> {
+        id: T;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Config {
+        map: ObservableMap<string, Popup>;
+      }
+
+      export interface Popup {
+        id: (number | string);
+        name: string;
+      }`,
+  },
+
 };

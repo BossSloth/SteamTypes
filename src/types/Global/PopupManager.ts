@@ -86,8 +86,8 @@ export interface DynamicCSSObserver {
 }
 
 export interface Popup<
-  paramsType extends PopupParameters | MainWindowPopupParameters = PopupParameters,
-  callbacksType extends PopupCallback | MainWindowPopupCallback = PopupCallback,
+  paramsType extends (MainWindowPopupParameters | PopupParameters) = PopupParameters,
+  callbacksType extends (MainWindowPopupCallback | PopupCallback) = PopupCallback,
 > {
   BIsClosed(): Popup['m_popup']['closed'];
 
@@ -345,7 +345,7 @@ export interface RenderWhenReady {
 
 export type AllPopupParameters = PopupParameters | MainWindowPopupParameters;
 
-export interface MainWindowPopupParameters extends Omit<PopupParameters, 'window_opener_id'> {
+export interface MainWindowPopupParameters extends BasePopupParameters {
   bNoFocusOnShow: boolean;
 
   browserType: EBrowserType;
@@ -364,7 +364,11 @@ export interface MainWindowPopupParameters extends Omit<PopupParameters, 'window
   strUserAgent: string;
 }
 
-export interface PopupParameters {
+export interface PopupParameters extends BasePopupParameters {
+  window_opener_id: number;
+}
+
+export interface BasePopupParameters {
   availscreenheight?: number;
 
   availscreenwidth?: number;
@@ -391,8 +395,6 @@ export interface PopupParameters {
   replace_existing_popup: boolean;
 
   target_browser: BrowserInfo;
-
-  window_opener_id: number;
 }
 
 export interface Dimensions {

@@ -1,4 +1,4 @@
-import { ArrayTypeNode, Identifier, LiteralTypeNode, Node, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, Identifier, IntersectionTypeNode, LiteralTypeNode, Node, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 
 export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolean {
   if (getText(targetNode) === getText(sourceNode)) {
@@ -19,6 +19,8 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return handleTargetArray(targetNode, sourceNode);
   } else if (Node.isTupleTypeNode(targetNode)) {
     return handleTargetTuple(targetNode, sourceNode);
+  } else if (Node.isIntersectionTypeNode(targetNode)) {
+    return handleTargetIntersection(targetNode, sourceNode);
   }
 
   return false;
@@ -107,6 +109,33 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
 
     if (!isCompatible) {
       targetUnion.replaceWithText(getText(sourceNode));
+    }
+  }
+
+  return true;
+}
+
+function handleTargetIntersection(targetIntersection: IntersectionTypeNode, sourceNode: TypeNode): boolean {
+  const targetMembers = targetIntersection.getTypeNodes();
+
+  if (Node.isIntersectionTypeNode(sourceNode)) {
+    // Target=Intersection, Source=Intersection
+    // Example test case 'map intersection type'
+    const sourceMembers = sourceNode.getTypeNodes();
+
+    for (const sourceMember of sourceMembers) {
+      const hasMatch = targetMembers.some(targetMember => compareTypes(targetMember, sourceMember));
+
+      if (!hasMatch) {
+        targetIntersection.replaceWithText(getText(sourceNode));
+        break;
+      }
+    }
+  } else {
+    const isCompatible = targetMembers.every(targetMember => compareTypes(targetMember, sourceNode));
+
+    if (!isCompatible) {
+      targetIntersection.replaceWithText(getText(sourceNode));
     }
   }
 

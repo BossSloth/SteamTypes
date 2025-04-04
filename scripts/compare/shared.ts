@@ -1,5 +1,27 @@
-import { PropertySignature, SourceFile, Type } from 'ts-morph';
+import { Identifier, InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, Type } from 'ts-morph';
 import { Logger } from '../logger';
+
+/**
+ * Interface to represent a task in the processing queue
+ */
+interface InterfaceProcessingTask {
+  targetInterface: InterfaceDeclaration;
+  sourceInterface: InterfaceDeclaration;
+}
+
+// Global state for interface processing
+export let interfaceQueue: InterfaceProcessingTask[] = [];
+export let currentTargetSourceFile: SourceFile;
+export let currentStartingInterfaces: InterfaceDeclaration[] = [];
+
+export function initGlobalState(
+  _currentTargetSourceFile: SourceFile,
+  _currentStartingInterfaces: InterfaceDeclaration[],
+): void {
+  interfaceQueue = [];
+  currentTargetSourceFile = _currentTargetSourceFile;
+  currentStartingInterfaces = _currentStartingInterfaces;
+}
 
 export let logger: Logger;
 
@@ -32,4 +54,17 @@ export function getJsDocTagValues(prop: PropertySignature, tagName: string): str
 export function isImportedType(sourceFile: SourceFile, type: Type): boolean {
   return sourceFile.getImportDeclarations().some(importDecl =>
     importDecl.getNamedImports().some(importSpec => importSpec.getName() === type.getText()));
+}
+
+export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration): (PropertySignature | MethodSignature)[] {
+  const members = interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[];
+
+  interfaceDeclaration.getExtends().forEach((ext) => {
+    const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | undefined;
+    if (extendedInterface) {
+      members.push(...getInterfaceMembers(extendedInterface));
+    }
+  });
+
+  return members;
 }

@@ -1,6 +1,5 @@
-import { InterfaceDeclaration, MethodSignature, PropertySignature, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
-import { currentStartingInterfaces, currentTargetSourceFile, interfaceQueue } from './interface-comparator';
-import { isImportedType } from './shared';
+import { InterfaceDeclaration, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
+import { currentStartingInterfaces, currentTargetSourceFile, getInterfaceMembers, interfaceQueue, isImportedType } from './shared';
 
 const REQUIRED_OVERLAP = 0.65;
 
@@ -113,7 +112,7 @@ function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceD
 function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { name: string; type: string; }[] {
   const properties: { name: string; type: string; }[] = [];
 
-  for (const property of interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[]) {
+  for (const property of getInterfaceMembers(interfaceDeclaration)) {
     const propertyType = property.getType();
     let type = propertyType.getText().replace(/import\(".+?\)\./, '');
     if (property.getType().getFlags() | TypeFlags.NonPrimitive) {

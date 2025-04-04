@@ -8,6 +8,7 @@ export interface ComparatorTest {
   /** target to edit */
   target: string;
 }
+export * from './extended-interface-test-cases';
 export * from './generics-test-cases';
 export * from './interface-test-cases';
 export * from './interface-test-cases-renamed';

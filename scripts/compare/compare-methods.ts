@@ -1,7 +1,6 @@
 import { MethodSignature, SyntaxKind } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile } from './interface-comparator';
-import { isImportedType } from './shared';
+import { currentTargetSourceFile, isImportedType } from './shared';
 
 /**
  * Compares and corrects method types

@@ -1,7 +1,6 @@
 import { EnumDeclaration, EnumMember, PropertySignature, TypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile } from './interface-comparator';
-import { getJsDocTagValues, isImportedType } from './shared';
+import { currentTargetSourceFile, getJsDocTagValues, isImportedType } from './shared';
 import * as TypeComparator from './type-comparator';
 
 const CustomJsDocTags = {

@@ -1,0 +1,189 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Extended Interface Cases > extended interface added property - union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -6,14 +6,22 @@
+  email: string;
+
+  id: number;
+
+  name: string;
++
++  suffix: string;
+}
+
+-export interface Admin extends User {
++export interface Admin {
+  counter: number;
+
++  email: string;
++
++  id: number;
++
++  name: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface added property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -8,14 +8,22 @@
+  email: string;
+
+  id: number;
+
+  name: string;
++
++  suffix: string;
+}
+
+-export interface Admin extends User {
++export interface Admin {
+  counter: number;
+
++  email: string;
++
++  id: number;
++
++  name: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface both added property - union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -6,10 +6,12 @@
+  email: string;
+
+  id: number;
+
+  name: string;
++
++  suffix: string;
+}
+
+export interface Admin extends User {
+  counter: number;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface both added property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -8,10 +8,12 @@
+  email: string;
+
+  id: number;
+
+  name: string;
++
++  suffix: string;
+}
+
+export interface Admin extends User {
+  counter: number;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface both removed property - union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,10 @@
+export interface Config {
+  user: User | Admin;
+}
+
+export interface User {
+-  email: string;
+-
+  id: number;
+
+  name: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface both removed property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,12 +3,10 @@
+
+  user: User;
+}
+
+export interface User {
+-  email: string;
+-
+  id: number;
+
+  name: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface removed property - union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,19 +1,19 @@
+export interface Config {
+  user: User | Admin;
+}
+
+export interface User {
+-  email: string;
+-
+  id: number;
+
+  name: string;
+}
+
+export interface Admin extends User {
+  counter: number;
+
++  email: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface removed property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,19 +3,19 @@
+
+  user: User;
+}
+
+export interface User {
+-  email: string;
+-
+  id: number;
+
+  name: string;
+}
+
+export interface Admin extends User {
+  counter: number;
+
++  email: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;

@@ -290,6 +290,20 @@ export interface DataType {
   id: number;"
 `;
 
+exports[`Comparator Interface Cases > map intersection type with mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Config {
+-  map: ObservableMap<15, Popup<string>> & ObservableMap<string, Popup>;
++  map: ObservableMap<string, Popup<string>> & ObservableMap<string, Popup>;
+}
+
+export interface Popup<T extends (number | string) = number> {
+  id: T;"
+`;
+
 exports[`Comparator Interface Cases > method with interface return type 1`] = `
 "===================================================================
 --- a/target.ts

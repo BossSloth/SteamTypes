@@ -4,20 +4,9 @@ import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, S
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface } from './handle-interfaces';
+import { getInterfaceMembers, initGlobalState, interfaceQueue } from './shared';
 
-/**
- * Interface to represent a task in the processing queue
- */
-interface InterfaceProcessingTask {
-  targetInterface: InterfaceDeclaration;
-  sourceInterface: InterfaceDeclaration;
-}
-
-// Global state for interface processing
-export let interfaceQueue: InterfaceProcessingTask[] = [];
-let processedInterfaces = new Set<string>();
-export let currentTargetSourceFile: SourceFile;
-export let currentStartingInterfaces: InterfaceDeclaration[] = [];
+const processedInterfaces = new Set<string>();
 
 /**
  * Compares two interfaces and corrects differences in the target interface
@@ -40,7 +29,7 @@ function compareAndCorrectInterfaces(
   }
 
   // Initialize global state
-  interfaceQueue = [{ targetInterface, sourceInterface }];
+  interfaceQueue.push({ targetInterface, sourceInterface });
 
   // Process all interfaces in the queue
   processInterfaceQueue();
@@ -88,12 +77,15 @@ function compareAndCorrectMembers(
   targetInterface: InterfaceDeclaration,
   sourceInterface: InterfaceDeclaration,
 ): void {
-  const targetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
-  const sourceMembers = sourceInterface.getMembers() as (PropertySignature | MethodSignature)[];
+  const targetMembers = getInterfaceMembers(targetInterface);
+  const realTargetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
+  const sourceMembers = getInterfaceMembers(sourceInterface);
 
   // Create maps for easier lookup
   const targetMembersMap = new Map<string, PropertySignature | MethodSignature>();
   targetMembers.forEach(member => targetMembersMap.set(member.getName(), member));
+  const realTargetMembersMap = new Map<string, PropertySignature | MethodSignature>();
+  realTargetMembers.forEach(member => realTargetMembersMap.set(member.getName(), member));
 
   const sourceMembersMap = new Map<string, PropertySignature | MethodSignature>();
   sourceMembers.forEach(member => sourceMembersMap.set(member.getName(), member));
@@ -126,8 +118,14 @@ function compareAndCorrectMembers(
   // Check for extra properties in target that don't exist in source
   for (const [propName, targetProp] of targetMembersMap) {
     if (!sourceMembersMap.has(propName) && !targetProp.hasQuestionToken()) {
-      // Property exists in target but not in source, remove it
-      targetProp.remove();
+      if (realTargetMembersMap.has(propName)) {
+        // Property exists in target but not in source, remove it
+        targetProp.remove();
+      } else {
+        // Property is from an extended interface, remove extends and recompare
+        targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
+        compareAndCorrectMembers(targetInterface, sourceInterface);
+      }
     }
   }
 }
@@ -313,10 +311,8 @@ export function compareAndCorrectAllInterfaces(
   filePath: string,
 ): string | null {
   // Reset global state
-  interfaceQueue = [];
-  processedInterfaces = new Set<string>();
-  currentTargetSourceFile = targetSourceFile;
-  currentStartingInterfaces = currentTargetSourceFile.getInterfaces();
+  initGlobalState(targetSourceFile, targetSourceFile.getInterfaces());
+  processedInterfaces.clear();
 
   // Store the original text of the entire source file for diff generation
   const originalSourceText = targetSourceFile.getFullText();
