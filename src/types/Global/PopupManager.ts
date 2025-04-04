@@ -299,15 +299,20 @@ export interface RestoreDetail {
 
 export interface BrowserInfo {
   /**
-   * This value is an enum
-   * @currentValue 7
+   * The UI mode in use.
    */
-  m_eUIMode: number;
+  m_eUIMode: EUIMode;
 
   m_nBrowserID: number;
 
+  /**
+   * Game's app ID.
+   */
   m_unAppID: number;
 
+  /**
+   * If overlay, game's PID.
+   */
   m_unPID: number;
 }
 
@@ -456,4 +461,10 @@ export enum EWindowBringToFront {
   Invalid,
   AndForceOS,
   WithoutForcingOS,
+}
+
+export enum EUIMode {
+  Unknown = -1,
+  GamePad = 4,
+  Desktop = 7,
 }

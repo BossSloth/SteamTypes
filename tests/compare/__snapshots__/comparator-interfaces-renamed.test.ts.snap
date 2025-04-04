@@ -32,12 +32,12 @@ exports[`Comparator Interface Renamed Cases > external template literal types wi
 --- a/target.ts
 +++ b/target.ts
 @@ -1,8 +1,10 @@
-export type HttpMethodType = 'GET' | 'POST';
+-export type HttpMethodType = 'GET' | 'POST';
++export type HttpMethodType = number;
 export type ResourceTypeValue = 4 | 5;
 
 export interface RouteConfig {
--  method: HttpMethodType;
-+  method: number;
+  method: HttpMethodType;
 +
   path: string;
 +

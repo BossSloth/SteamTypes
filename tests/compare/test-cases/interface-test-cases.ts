@@ -142,6 +142,22 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'mismatching ObservableMap': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      import { ObservableMap } from 'mobx';
+
+      export interface Container {
+        data: ObservableMap<string, number>;
+      }`,
+    source: dedent/* ts */`
+      import { ObservableMap } from 'mobx';
+
+      export interface Container {
+        data: ObservableMap<string, boolean>;
+      }`,
+  },
+
   'nested interface in union type': {
     interfaceName: 'Container',
     target: dedent/* ts */`
@@ -600,6 +616,19 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     source: dedent/* ts */`
       export interface ParameterConfig {
         options: (string | number | boolean)[];
+      }`,
+  },
+
+  'simple tuple type': {
+    interfaceName: 'CoordinateSystem',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: [number, number];
+      }`,
+    source: dedent/* ts */`
+      export interface CoordinateSystem {
+        point: number[];
       }`,
   },
 

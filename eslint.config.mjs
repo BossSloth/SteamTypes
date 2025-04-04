@@ -36,7 +36,6 @@ export default tseslint.config(
     indent: 2,
     semi: true,
     quotes: 'single',
-    braceStyle: '1tbs',
     blockSpacing: true,
     commaDangle: 'always-multiline',
   }),
@@ -66,6 +65,7 @@ export default tseslint.config(
       '@stylistic/lines-around-comment': 'off',
       '@stylistic/multiline-comment-style': 'off',
       '@stylistic/object-property-newline': 'off',
+      '@stylistic/brace-style': 'off',
       // #endregion
 
       // #region Preferences
@@ -111,7 +111,7 @@ export default tseslint.config(
       // #endregion
 
       // #region Project specific
-      '@typescript-eslint/member-ordering': ['error', { interfaces: ['method', 'field'] }],
+      '@typescript-eslint/member-ordering': ['error', { interfaces: ['method', 'field'], classes: undefined }],
 
       '@typescript-eslint/no-unsafe-function-type': 'off',
       camelcase: 'off',

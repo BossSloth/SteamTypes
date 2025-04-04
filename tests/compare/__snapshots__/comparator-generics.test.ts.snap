@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Generics Cases > generic interface type in map mismatch - data 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface DataStore {
+-  data: Map<string, number>;
++  data: Map<string, UserData>;
+}
+
+export interface UserData<T extends number> {
+  email: string;"
+`;
+
+exports[`Comparator Generics Cases > generic interface type in map mismatch - id 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: Map<string, UserData<number>>;
+}
+
+-export interface UserData<T extends string> {
++export interface UserData<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;
+
+exports[`Comparator Generics Cases > simple generic mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: UserData<number>;
+}
+
+-export interface UserData<T extends string> {
++export interface UserData<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;

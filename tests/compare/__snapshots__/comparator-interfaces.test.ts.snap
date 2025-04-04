@@ -27,12 +27,12 @@ exports[`Comparator Interface Cases > external template literal types with missi
 --- a/target.ts
 +++ b/target.ts
 @@ -1,8 +1,10 @@
-export type HttpMethod = 'GET' | 'POST';
+-export type HttpMethod = 'GET' | 'POST';
++export type HttpMethod = number;
 export type ResourceType = 4 | 5;
 
 export interface RouteConfig {
--  method: HttpMethod;
-+  method: number;
+  method: HttpMethod;
 +
   path: string;
 +
@@ -307,6 +307,19 @@ export interface UserService {
 +  email: string;
 +  name: string;
 +}"
+`;
+
+exports[`Comparator Interface Cases > mismatching ObservableMap 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+import { ObservableMap } from 'mobx';
+
+export interface Container {
+-  data: ObservableMap<string, number>;
++  data: ObservableMap<string, boolean>;
+}"
 `;
 
 exports[`Comparator Interface Cases > missing interface multiple times 1`] = `
