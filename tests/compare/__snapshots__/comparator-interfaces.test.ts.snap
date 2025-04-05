@@ -1,5 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Interface Cases > 2 level recursive interface missing interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,13 @@
+export interface TreeNode {
+-  value: id;
++  children: Node[];
++
+  foo: string;
++
++  value: string;
+}
++
++export interface Node {
++  value: string;
++  children: Node[];
++  parent: TreeNode;
++}"
+`;
+
 exports[`Comparator Interface Cases > array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
@@ -130,7 +151,7 @@ exports[`Comparator Interface Cases > interface with complex nested structures 1
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,13 +1,42 @@
+@@ -1,13 +1,48 @@
 export interface AppConfig {
   api: ApiConfig;
 +
@@ -159,6 +180,17 @@ export interface UiConfig {
   theme: string;
 }
 +
++export interface EndpointConfig {
++  method: string;
++  path: string;
++  requiresAuth: boolean;
++}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++  input: InputConfig;
++}
++
 +export interface ButtonConfig {
 +  borderRadius: number;
 +  fontSize: number;
@@ -167,11 +199,6 @@ export interface UiConfig {
 +export interface InputConfig {
 +  borderRadius: number;
 +  padding: number;
-+}
-+
-+export interface ComponentsConfig {
-+  button: ButtonConfig;
-+  input: InputConfig;
 +}"
 `;
 
@@ -347,15 +374,15 @@ export interface AppData {
 +  associationData: AssociationData;
 }
 +
-+export interface RgDevelopers {
-+  id: number;
-+  name: string;
-+}
-+
 +export interface AssociationData {
 +  rgDevelopers: RgDevelopers[];
 +  rgFranchises: RgDevelopers[];
 +  rgPublishers: RgDevelopers[];
++}
++
++export interface RgDevelopers {
++  id: number;
++  name: string;
 +}"
 `;
 
@@ -391,6 +418,21 @@ export interface Extended {
 +  active: boolean;
 +
   details: string;
+}"
+`;
+
+exports[`Comparator Interface Cases > recursive interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,7 @@
+export interface Node {
+-  value: string;
+  children: Node[];
++
++  parent: Node | null;
++
++  value: string;
 }"
 `;
 

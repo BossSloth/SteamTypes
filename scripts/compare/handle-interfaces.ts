@@ -59,7 +59,7 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
       });
     } else {
       // If no matching interface found, add the source interface to the target
-      addMissingInterface(sourceInterface.getType());
+      addMissingInterface(sourceInterface);
     }
   }
 }
@@ -174,32 +174,38 @@ function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | 
 /**
  * Adds a missing interface to the target file
  */
-export function addMissingInterface(type: Type, currentIteration = 0): void {
+export function addMissingInterface(type: TypeNode, currentIteration = 0): void {
   // if (currentIteration > 10) {
   //   return;
   // }
 
-  const interfaceDeclaration = getInterfaceDeclaration(type);
-  if (!interfaceDeclaration) return;
-
-  const interfaceName = interfaceDeclaration.getName();
-  const existingInterface = currentTargetSourceFile.getInterface(interfaceName);
-  if (existingInterface) {
-    return;
+  const typeReferences = type.getDescendantsOfKind(SyntaxKind.TypeReference);
+  if (type.isKind(SyntaxKind.TypeReference)) {
+    typeReferences.push(type);
   }
+  for (const typeReference of typeReferences) {
+    const interfaceDeclaration = getInterfaceDeclaration(typeReference);
+    if (!interfaceDeclaration) return;
 
-  const similarInterface = findSimilarInterface(interfaceDeclaration);
-  if (similarInterface) {
-    return;
-  }
-
-  // Recursively process referenced interfaces
-  interfaceDeclaration.forEachDescendant((child) => {
-    if (child.isKind(SyntaxKind.TypeReference)) {
-      addMissingInterface(child.getType(), currentIteration + 1);
+    const interfaceName = interfaceDeclaration.getName();
+    const existingInterface = currentTargetSourceFile.getInterface(interfaceName);
+    if (existingInterface) {
+      return;
     }
-  });
 
-  // Add the interface to the target source file
-  currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+    const similarInterface = findSimilarInterface(interfaceDeclaration);
+    if (similarInterface) {
+      return;
+    }
+
+    // Add the interface to the target source file
+    currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+
+    // Recursively process referenced interfaces
+    interfaceDeclaration.forEachDescendant((child) => {
+      if (child.isKind(SyntaxKind.TypeReference)) {
+        addMissingInterface(child, currentIteration + 1);
+      }
+    });
+  }
 }

@@ -176,7 +176,7 @@ function addMissingMember(
       docs: sourceProp.getJsDocs().map(doc => doc.getStructure()),
     });
 
-    addMissingInterface(typeNode.getType());
+    addMissingInterface(typeNode);
   }
 }
 

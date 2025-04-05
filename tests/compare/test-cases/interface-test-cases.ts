@@ -854,4 +854,75 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'recursive interface': {
+    interfaceName: 'Node',
+    target: dedent/* ts */`
+      export interface Node {
+        value: string;
+        children: Node[];
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Node {
+        value: string;
+        children: Node[];
+        parent: Node | null;
+      }`,
+  },
+
+  '2 level recursive interface': {
+    interfaceName: 'TreeNode',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface TreeNode {
+        children: Node[];
+
+        value: string;
+      }
+
+      export interface Node {
+        children: Node[];
+
+        parent: TreeNode;
+
+        value: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface TreeNode {
+        value: string;
+        children: Node[];
+      }
+
+      export interface Node {
+        value: string;
+        children: Node[];
+        parent: TreeNode;
+      }
+      `,
+  },
+
+  '2 level recursive interface missing interface': {
+    interfaceName: 'TreeNode',
+    target: dedent/* ts */`
+      export interface TreeNode {
+        value: id;
+        foo: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface TreeNode {
+        value: string;
+        children: Node[];
+        foo: string;
+      }
+
+      export interface Node {
+        value: string;
+        children: Node[];
+        parent: TreeNode;
+      }
+      `,
+  },
+
 };

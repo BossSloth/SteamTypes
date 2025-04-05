@@ -182,14 +182,14 @@ export interface TextInformation {
   informationFormat: 'plain' | 'markdown';
 }
 +
-+export interface TextData {
-+  text: string;
-+  format: 'plain' | 'markdown' | 'html';
-+}
-+
 +export interface MessageContent {
 +  type: 'text' | 'image' | 'file';
 +  data: TextData;
++}
++
++export interface TextData {
++  text: string;
++  format: 'plain' | 'markdown' | 'html';
 +}"
 `;
 
@@ -219,16 +219,16 @@ export interface BookItem {
 +  lastUpdated: Date;
 +}
 +
-+export interface Magazine {
-+  title: string;
-+  issue: number;
-+  publisher: string;
-+}
-+
 +export interface MagazineCollection {
 +  items: Magazine[];
 +  count: number;
 +  lastUpdated: Date;
++}
++
++export interface Magazine {
++  title: string;
++  issue: number;
++  publisher: string;
 +}"
 `;
 

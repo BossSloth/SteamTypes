@@ -135,7 +135,7 @@ exports[`Comparator Interface Renamed Cases > interface with complex nested stru
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,15 +1,47 @@
+@@ -1,15 +1,53 @@
 export interface AppConfig {
   api: ApiSettings;
 -  ui: UiSettings;
@@ -165,6 +165,18 @@ export interface UiSettings {
   theme: string;
 }
 +
++export interface UiConfig {
++  theme: string;
++  layout: 'vertical' | 'horizontal';
++  animations: boolean;
++  components: ComponentsConfig;
++}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++  input: InputConfig;
++}
++
 +export interface ButtonConfig {
 +  borderRadius: number;
 +  fontSize: number;
@@ -175,16 +187,10 @@ export interface UiSettings {
 +  padding: number;
 +}
 +
-+export interface ComponentsConfig {
-+  button: ButtonConfig;
-+  input: InputConfig;
-+}
-+
-+export interface UiConfig {
-+  theme: string;
-+  layout: 'vertical' | 'horizontal';
-+  animations: boolean;
-+  components: ComponentsConfig;
++export interface EndpointConfig {
++  method: string;
++  path: string;
++  requiresAuth: boolean;
 +}"
 `;
 

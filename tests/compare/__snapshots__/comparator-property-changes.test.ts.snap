@@ -138,16 +138,16 @@ export interface AppConfiguration {
 -  };
 }
 +
-+export interface NotificationSettings {
-+  enabled: boolean;
-+  sound: boolean;
-+  desktop: boolean;
-+}
-+
 +export interface AppSettings {
 +  theme: string;
 +  language: string;
 +  notifications: NotificationSettings;
++}
++
++export interface NotificationSettings {
++  enabled: boolean;
++  sound: boolean;
++  desktop: boolean;
 +}
 +
 +export interface FeatureFlags {
@@ -238,14 +238,14 @@ export interface TextContent {
   contentFormat: 'plain' | 'markdown';
 }
 +
-+export interface TextData {
-+  text: string;
-+  format: 'plain' | 'markdown' | 'html';
-+}
-+
 +export interface MessageContent {
 +  type: 'text' | 'image' | 'file';
 +  data: TextData;
++}
++
++export interface TextData {
++  text: string;
++  format: 'plain' | 'markdown' | 'html';
 +}"
 `;
 
@@ -294,16 +294,16 @@ export interface Book {
 +  lastUpdated: Date;
 +}
 +
-+export interface Magazine {
-+  title: string;
-+  issue: number;
-+  publisher: string;
-+}
-+
 +export interface MagazineCollection {
 +  items: Magazine[];
 +  count: number;
 +  lastUpdated: Date;
++}
++
++export interface Magazine {
++  title: string;
++  issue: number;
++  publisher: string;
 +}"
 `;
 
