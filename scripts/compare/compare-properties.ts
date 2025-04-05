@@ -12,11 +12,15 @@ const CustomJsDocTags = {
  * Compares and corrects property types
  * @param targetProp The property to be edited
  * @param sourceProp The property to compare against
+ * @param isFromExtendedInterface Whether the property is from an extended interface
+ *
+ * @returns true if the property is from an extended interface and needs to be changed
  */
 export function compareAndCorrectPropertyTypes(
   targetProp: PropertySignature,
   sourceProp: PropertySignature,
-): void {
+  isFromExtendedInterface: boolean,
+): boolean {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
@@ -26,23 +30,23 @@ export function compareAndCorrectPropertyTypes(
       targetProp.setType(sourceTypeNode.getText());
     }
 
-    return;
+    return false;
   }
 
   // Check if the target type is imported
   if (isImportedType(currentTargetSourceFile, targetProp.getType())) {
-    return;
+    return false;
   }
 
   // Handle enums first
   if (compareEnums(targetProp, sourceProp)) {
-    return;
+    return false;
   }
 
   handleInterfaceTypeReferences(targetTypeNode, sourceTypeNode);
 
   // Update the type if different
-  updatePropertyTypeIfDifferent(targetProp, sourceProp);
+  return updatePropertyTypeIfDifferent(targetProp, sourceProp, isFromExtendedInterface);
 }
 
 /**
@@ -133,25 +137,33 @@ function checkBitfield(enumDeclaration: EnumDeclaration, enumCurrentValue: numbe
 /**
  * Updates a property's type if it's different from the source
  */
-function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature): void {
+function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature, isFromExtendedInterface: boolean): boolean {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
-  if (!targetTypeNode || !sourceTypeNode) return;
+  if (!targetTypeNode || !sourceTypeNode) return false;
 
-  updateTypeIfNeeded(targetProp, targetTypeNode, sourceTypeNode);
+  const needsExtendUpdate = updateTypeIfNeeded(targetProp, targetTypeNode, sourceTypeNode, isFromExtendedInterface);
   updatePropertyModifiers(targetProp, sourceProp);
+
+  return needsExtendUpdate;
 }
 
 function updateTypeIfNeeded(
   targetProp: PropertySignature,
   targetTypeNode: TypeNode,
   sourceTypeNode: TypeNode,
-): void {
+  isFromExtendedInterface: boolean,
+): boolean {
   const typesAreEqual = TypeComparator.compareTypes(targetTypeNode, sourceTypeNode);
   if (!typesAreEqual) {
+    if (isFromExtendedInterface) {
+      return true;
+    }
     targetProp.setType(TypeComparator.getText(sourceTypeNode));
   }
+
+  return false;
 }
 
 function updatePropertyModifiers(targetProp: PropertySignature, sourceProp: PropertySignature): void {

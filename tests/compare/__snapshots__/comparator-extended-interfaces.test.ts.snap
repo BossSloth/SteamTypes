@@ -187,3 +187,67 @@ export interface Admin extends User {
   role: string;
 }"
 `;
+
+exports[`Comparator Extended Interface Cases > extended interface type mismatch - union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,17 +3,23 @@
+}
+
+export interface User {
+  email: string;
+
+-  id: number;
++  id: string;
+
+  name: string;
+}
+
+-export interface Admin extends User {
++export interface Admin {
+  counter: number;
+
++  email: string;
++
++  id: number;
++
++  name: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -5,17 +5,23 @@
+}
+
+export interface User {
+  email: string;
+
+-  id: number;
++  id: string;
+
+  name: string;
+}
+
+-export interface Admin extends User {
++export interface Admin {
+  counter: number;
+
++  email: string;
++
++  id: number;
++
++  name: string;
++
+  permissions: string[];
+
+  role: string;
+}"
+`;

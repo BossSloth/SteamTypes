@@ -243,52 +243,51 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       `,
   },
 
-  // TODO: doesn't work
-  // 'extended interface type mismatch': {
-  //   interfaceName: 'Config',
-  //   target: dedent/* ts */`
-  //     export interface Config {
-  //       admin: Admin;
+  'extended interface type mismatch': {
+    interfaceName: 'Config',
+    target: dedent/* ts */`
+      export interface Config {
+        admin: Admin;
 
-  //       user: User;
-  //     }
+        user: User;
+      }
 
-  //     export interface User {
-  //       email: string;
+      export interface User {
+        email: string;
 
-  //       id: number;
+        id: number;
 
-  //       name: string;
-  //     }
+        name: string;
+      }
 
-  //     export interface Admin extends User {
-  //       counter: number;
+      export interface Admin extends User {
+        counter: number;
 
-  //       permissions: string[];
+        permissions: string[];
 
-  //       role: string;
-  //     }
-  //     `,
-  //   source: dedent/* ts */`
-  //     export interface Config {
-  //       user: User;
-  //       admin: Admin;
-  //     }
+        role: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Config {
+        user: User;
+        admin: Admin;
+      }
 
-  //     export interface User {
-  //       id: string;
-  //       name: string;
-  //       email: string;
-  //     }
+      export interface User {
+        id: string;
+        name: string;
+        email: string;
+      }
 
-  //     export interface Admin {
-  //       id: number;
-  //       name: string;
-  //       email: string;
-  //       role: string;
-  //       permissions: string[];
-  //       counter: number;
-  //     }
-  //     `,
-  // },
+      export interface Admin {
+        id: number;
+        name: string;
+        email: string;
+        role: string;
+        permissions: string[];
+        counter: number;
+      }
+      `,
+  },
 };

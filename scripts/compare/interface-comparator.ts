@@ -73,7 +73,7 @@ function processInterfaceQueue(): void {
  * @param targetInterface The interface to be edited
  * @param sourceInterface The interface to use as the source of truth
  */
-function compareAndCorrectMembers(
+export function compareAndCorrectMembers(
   targetInterface: InterfaceDeclaration,
   sourceInterface: InterfaceDeclaration,
 ): void {
@@ -109,7 +109,13 @@ function compareAndCorrectMembers(
 
     // Property exists in both, check for type differences
     if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
-      compareAndCorrectPropertyTypes(targetProp, sourceProp);
+      const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
+      const needsExtendUpdate = compareAndCorrectPropertyTypes(targetProp, sourceProp, isFromExtendedInterface);
+      if (needsExtendUpdate) {
+        // Property is from an extended interface and doesn't match, remove extends and recompare
+        targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
+        compareAndCorrectMembers(targetInterface, sourceInterface);
+      }
     } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
       compareAndCorrectMethodTypes(targetProp, sourceProp);
     }
