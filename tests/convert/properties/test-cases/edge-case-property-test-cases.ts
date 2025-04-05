@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // #region Circular Reference Property Test Cases
 // Create objects with circular references
 const circularObj: any = { name: 'circular' };
@@ -109,6 +110,27 @@ const specialValueTests = {
 
   htmlElement: {
     m_element: new HTMLDivElement(),
+  },
+
+  styleSheet: {
+    cssRules: [],
+    type: 'text/css',
+  },
+
+  computedValue: {
+    isMobXComputedValue: true,
+    get: () => 42,
+  },
+
+  mutationObserver: {
+    disconnect: () => {},
+    observe: () => {},
+  },
+
+  reactRoot: {
+    render: () => {},
+    unmount: () => {},
+    _internalRoot: {},
   },
 };
 // @ts-expect-error we want window object

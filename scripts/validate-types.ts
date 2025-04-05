@@ -162,7 +162,7 @@ interface ValidateTypesOptions {
 }
 
 // eslint-disable-next-line max-lines-per-function
-async function run(options: ValidateTypesOptions): Promise<void> {
+async function run(options: ValidateTypesOptions, filter?: string): Promise<void> {
   const targetId = await getSharedJsContextTarget();
 
   await injectConvertToTypescriptJs(targetId, options.force);
@@ -180,6 +180,11 @@ async function run(options: ValidateTypesOptions): Promise<void> {
   }
 
   const diffs: { filePath: string; result: string | null; }[] = [];
+
+  if (filter !== undefined) {
+    maps = maps.filter(map => map.file.includes(filter));
+  }
+  logger.log(chalk.blue(`Comparing ${maps.length} maps`));
 
   // const startExtractTime = Date.now();
   // const interfaceContent = await extractInterfaces(maps);
@@ -265,14 +270,15 @@ async function main(): Promise<void> {
     .option('-i, --interactive', 'Enable interactive mode', false)
     .option('-f, --force', 'Force reload the inject script', false)
     .option('-d, --diff', 'Write diffs to file', false)
-    .action(async (options: ValidateTypesOptions = { verbose: false, interactive: false, force: false }) => {
+    .argument('[filter]', 'Only validate interfaces that match the file filter. Example: "SteamClient/Apps"')
+    .action(async (filter?: string, options: ValidateTypesOptions = { verbose: false, interactive: false, force: false }) => {
       logger = new Logger(options);
       // try {
       logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
 
       const startTime = performance.now();
       try {
-        await run(options);
+        await run(options, filter);
       } finally {
         sharedJsClient.close();
       }

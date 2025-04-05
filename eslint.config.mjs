@@ -93,6 +93,7 @@ export default tseslint.config(
       'capitalized-comments': 'off',
       'max-lines': 'off',
       'max-statements': 'off',
+      'new-cap': 'off',
       'no-bitwise': 'off',
       'no-continue': 'off',
       'no-inline-comments': 'off',

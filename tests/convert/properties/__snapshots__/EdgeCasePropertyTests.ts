@@ -1,3 +1,6 @@
+import { ComputedValue } from 'mobx/dist/internal';
+import { Root as ReactRoot } from 'react-dom/client';
+
 export interface EdgeCasePropertyTests {
   arrayTypeOptimizationTests: ArrayTypeOptimizationTests;
 
@@ -71,6 +74,8 @@ export interface PrototypeInheritanceTests {
 }
 
 export interface SpecialValueTests {
+  computedValue: ComputedValue<number>;
+
   emptyString: string;
 
   epsilonNumber: number;
@@ -81,11 +86,17 @@ export interface SpecialValueTests {
 
   minNumber: number;
 
+  mutationObserver: MutationObserver;
+
   objectWithOnlyToString: (object | unknown);
 
   objectWithOnlyValueOf: (object | unknown);
 
   objectWithToStringAndOther: ObjectWithToStringAndOther;
+
+  reactRoot: ReactRoot;
+
+  styleSheet: CSSStyleSheet;
 
   whitespaceString: string;
 

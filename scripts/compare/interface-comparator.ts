@@ -73,7 +73,7 @@ function processInterfaceQueue(): void {
  * @param targetInterface The interface to be edited
  * @param sourceInterface The interface to use as the source of truth
  */
-export function compareAndCorrectMembers(
+function compareAndCorrectMembers(
   targetInterface: InterfaceDeclaration,
   sourceInterface: InterfaceDeclaration,
 ): void {
@@ -150,7 +150,7 @@ function addMissingMember(
   // Property missing in target, add it
   if (sourceProp instanceof MethodSignature) {
     // Filter out @native jsdoc
-    const docs = sourceProp.getJsDocs().map(doc => (doc.getTags()[0]?.getTagName() === 'native' ? '' : doc.getInnerText()));
+    const docs = sourceProp.getJsDocs().map(doc => doc.getInnerText());
     const filteredDocs = docs.filter(doc => doc !== '');
 
     targetInterface.addMethod({
@@ -236,6 +236,11 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
     // Method signatures should come before property signatures
     if (a.getKind() !== b.getKind()) {
       return a.getKind() === SyntaxKind.MethodSignature ? 1 : -1;
+    }
+
+    // Put method implementations above overloads
+    if (a instanceof MethodSignature && b instanceof MethodSignature && a.getName() === b.getName()) {
+      return -1;
     }
 
     // Use propertyStringSorter for consistent and efficient string comparison

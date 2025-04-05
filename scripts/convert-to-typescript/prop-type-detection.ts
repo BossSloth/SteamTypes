@@ -1,5 +1,7 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
+import { ComputedValue } from 'mobx/dist/internal';
+import { Root as ReactRoot } from 'react-dom/client';
 import { ArrayType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType, createMapType, createSetType } from './Type';
 import { context, formatInterfaceName } from './utils';
 
@@ -218,6 +220,14 @@ function getPrimitiveObjectTypes(obj: unknown): string | null {
   if (obj instanceof Float64Array) return 'Float64Array';
   if (isWindowObject(obj)) return 'Window';
   if (isHTMLElement(obj)) return obj.constructor.name;
+  if (isCssStyleSheet(obj)) return 'CSSStyleSheet';
+  if (isComputedValue(obj)) return getComputedValueType(obj);
+  if (isMutationObserver(obj)) return 'MutationObserver';
+  if (isReactRoot(obj)) {
+    context.addImport('react-dom/client', 'Root as ReactRoot');
+
+    return 'ReactRoot';
+  }
 
   return null;
 }
@@ -234,4 +244,34 @@ function isHTMLElement(obj: unknown): obj is HTMLElement {
   if (obj === null || typeof obj !== 'object') return false;
 
   return 'nodeType' in obj && obj.nodeType === ELEMENT_NODE;
+}
+
+function isCssStyleSheet(obj: unknown): obj is CSSStyleSheet {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'cssRules' in obj && 'type' in obj && obj.type === 'text/css';
+}
+
+function isComputedValue(obj: unknown): obj is ComputedValue<unknown> {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'isMobXComputedValue' in obj && obj.isMobXComputedValue === true;
+}
+
+function getComputedValueType(obj: ComputedValue<unknown>): string {
+  context.addImport('mobx/dist/internal', 'ComputedValue');
+
+  return `ComputedValue<${typeof obj.get()}>`;
+}
+
+function isMutationObserver(obj: unknown): obj is MutationObserver {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'disconnect' in obj && 'observe' in obj;
+}
+
+function isReactRoot(obj: unknown): obj is ReactRoot {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
 }

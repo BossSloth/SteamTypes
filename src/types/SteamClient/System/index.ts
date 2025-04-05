@@ -1,13 +1,7 @@
 import { JsPbMessage, OperationResponse, Unregisterable } from '../shared';
-import { Audio } from './Audio';
-import { AudioDevice } from './AudioDevice';
-import { Bluetooth } from './Bluetooth';
 import { Devkit } from './Devkit';
 import { Display } from './Display';
-import { DisplayManager } from './DisplayManager';
-import { Dock } from './Dock';
 import { Network } from './Network';
-import { Perf } from './Perf';
 import { Report } from './Report';
 import { UI } from './UI';
 
@@ -16,12 +10,14 @@ export interface System {
    * @returns a boolean indicating whether the operation succeeded.
    */
   CopyFile(target: string, destination: string): Promise<boolean>;
+
   /**
    * Copies specified files to clipboard.
    * Does not throw if not found.
    * @param paths File paths to copy.
    */
   CopyFilesToClipboard(paths: string[]): void;
+
   /**
    * Creates a temporary folder.
    * @param path The folder to create.
@@ -37,8 +33,11 @@ export interface System {
   FormatStorage(force: boolean): unknown;
 
   GetOSType(): Promise<EOSType>;
+
   GetSystemInfo(): Promise<SystemInfo>;
+
   IsDeckFactoryImage(): Promise<boolean>;
+
   IsSteamInTournamentMode(): Promise<boolean>;
 
   /**
@@ -89,6 +88,7 @@ export interface System {
    * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link MsgSystemManagerSettings}.
    */
   RegisterForSettingsChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
+
   /**
    * Restarts the system.
    */
@@ -110,31 +110,19 @@ export interface System {
    */
   SwitchToDesktop(): unknown;
 
+  UpdateSettings(base64: string): unknown;
+
   VideoRecordingDriverCheck(): unknown;
-
-  Audio: Audio;
-
-  AudioDevice: AudioDevice;
-
-  Bluetooth: Bluetooth;
 
   Devkit: Devkit;
 
   Display: Display;
 
-  DisplayManager: DisplayManager;
-
-  Dock: Dock;
-
   Network: Network;
-
-  Perf: Perf;
 
   Report: Report;
 
   UI: UI;
-
-  UpdateSettings: unknown;
 }
 
 export interface AirplaneModeChange {
@@ -295,25 +283,45 @@ export enum EOSType {
 
 export interface SystemInfo {
   bIsUnsupportedPrototypeHardware: boolean;
+
   nCPUHz: number;
+
   nCPULogicalCores: number;
+
   nCPUPhysicalCores: number;
+
   nSteamVersion: number;
+
   nSystemRAMSizeMB: number;
+
   nVideoRAMSizeMB: number;
+
   sBIOSVersion: string;
+
   sCPUName: string;
+
   sCPUVendor: string;
+
   sHostname: string;
+
   sKernelVersion: string;
+
   sOSBuildId: string;
+
   sOSCodename: string;
+
   sOSName: string;
+
   sOSVariantId: string;
+
   sOSVersionId: string;
+
   sSteamAPI: string;
+
   sSteamBuildDate: string;
+
   sVideoCardName: string;
+
   sVideoDriverVersion: string;
 }
 

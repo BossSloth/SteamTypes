@@ -1,4 +1,4 @@
-import { Identifier, InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, Type } from 'ts-morph';
+import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type } from 'ts-morph';
 import { Logger } from '../logger';
 
 /**
@@ -49,9 +49,9 @@ export function getJsDocTagValues(prop: PropertySignature, tagName: string): str
 }
 
 /**
-   * Checks if a property type is imported
-   */
-export function isImportedType(sourceFile: SourceFile, type: Type): boolean {
+ * Checks if a property type is imported
+ */
+export function isImportedType(sourceFile: SourceFile, type: Node | Type): boolean {
   return sourceFile.getImportDeclarations().some(importDecl =>
     importDecl.getNamedImports().some(importSpec => importSpec.getName() === type.getText()));
 }
@@ -60,8 +60,8 @@ export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration):
   const members = interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[];
 
   interfaceDeclaration.getExtends().forEach((ext) => {
-    const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | undefined;
-    if (extendedInterface) {
+    const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
+    if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
       members.push(...getInterfaceMembers(extendedInterface));
     }
   });

@@ -2,28 +2,54 @@ import { ObservableMap } from 'mobx';
 import { Window as SteamWindow } from '../SteamClient/Window';
 
 export interface PopupManager {
-  AddPopupCreatedCallback(e: unknown): void;
+  /**
+   * Adds a callback to be called when a popup is created.
+   * @param callback The callback to add
+   */
+  AddPopupCreatedCallback(callback: PopupCallback_t): void;
 
-  AddShutdownCallback(e: unknown): void;
+  /**
+   * Adds a callback to be called when Steam is shutting down.
+   * @param callback The callback to add
+   */
+  AddShutdownCallback(callback: PopupCallback_t): void;
 
-  AddTrackedPopup(e: unknown): void;
+  /**
+   * Adds a popup to be tracked.
+   * @param popup The popup to add
+   */
+  AddTrackedPopup(popup: Popup): void;
 
+  /**
+   * @returns `true` if any of the context menus are focused
+   */
   BAnyMenuHasFocus(): boolean;
 
+  /**
+   * @returns `true` if any of the popups are focused
+   */
   BAnyPopupHasFocus(): boolean;
 
-  BShuttingDown(): unknown;
+  /**
+   * @returns `true` if the Steam is about to shut down
+   */
+  BShuttingDown(): PopupManager['m_bShuttingDown'];
 
+  /**
+   * Clears saved restore details from {@link m_mapRestoreDetails}
+   */
   ClearSavedDimensionStore(): void;
 
-  ClosePopupsOwnedByBrowser(e: unknown): void;
+  ClosePopupsOwnedByBrowser(browserInfo: BrowserInfo): void;
 
   /**
    * @native
    */
   DebouncedSaveSavedDimensionStore(): unknown;
 
-  GetExistingPopup(e: unknown): unknown;
+  GetExistingPopup(name: string): Popup;
+
+  GetExistingPopup(name: 'SP Desktop_uid0'): Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
 
   GetLocalStorageKey(): string;
 
@@ -49,40 +75,25 @@ export interface PopupManager {
 
   m_bShuttingDown: boolean;
 
-  m_DynamicCSSObserver: DynamicCSSObserver;
+  m_DynamicCSSObserver: MutationObserver;
 
   m_mapPopups: ObservableMap<'SP Desktop_uid0', Popup<MainWindowPopupParameters, MainWindowPopupCallback>> & ObservableMap<string, Popup>;
 
   m_mapRestoreDetails: Map<string, RestoreDetail>;
 
-  m_rgPopupCreatedCallbacks: unknown[];
+  m_rgPopupCreatedCallbacks: PopupCallback_t[];
 
-  m_rgShutdownCallbacks: unknown[];
+  m_rgShutdownCallbacks: PopupCallback_t[];
 
   m_unCurrentAccountID: number;
 }
+
+export type PopupCallback_t = (popup?: Popup) => void;
 
 export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
   hTimer: undefined;
 
   nPending: number;
-}
-
-export interface DynamicCSSObserver {
-  /**
-   * @native
-   */
-  disconnect(): unknown;
-
-  /**
-   * @native
-   */
-  observe(): unknown;
-
-  /**
-   * @native
-   */
-  takeRecords(): unknown;
 }
 
 export interface Popup<

@@ -1,4 +1,5 @@
 export interface InterfaceMap {
+  condition?(): boolean;
   /** Path to the file relative to src/types */
   file: string;
   /** The SharedJs object so like `SteamClient.Apps` */
@@ -8,7 +9,8 @@ export interface InterfaceMap {
 }
 
 export const interfaceMaps: InterfaceMap[] = [
-  { file: 'SteamClient/Apps', object: 'SteamClient.Apps', srcName: 'Apps' }, // TODO: Apps doesn't work it crashes on some comment lines
+  // #region SteamClient
+  { file: 'SteamClient/Apps', object: 'SteamClient.Apps', srcName: 'Apps' },
   { file: 'SteamClient/Auth', object: 'SteamClient.Auth', srcName: 'Auth' },
   { file: 'SteamClient/Auth', object: 'await SteamClient.Auth.GetRefreshInfo()', srcName: 'AuthRefreshInfo' },
   { file: 'SteamClient/Broadcast', object: 'SteamClient.Broadcast', srcName: 'Broadcast' },
@@ -52,11 +54,23 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'SteamClient/WebChat', object: 'SteamClient.WebChat', srcName: 'WebChat' },
   { file: 'SteamClient/WebUITransport', object: 'SteamClient.WebUITransport', srcName: 'WebUITransport' },
   { file: 'SteamClient/Window', object: 'SteamClient.Window', srcName: 'Window' },
+  { file: 'SteamClient/BrowserView/index', object: 'SteamClient.BrowserView', srcName: 'BrowserView' },
+  { file: 'SteamClient/BrowserView/BrowserViewPopup', object: 'SteamClient.BrowserView.Create()', srcName: 'BrowserViewPopup' },
+  { file: 'SteamClient/System/index', object: 'SteamClient.System', srcName: 'System' },
+  { file: 'SteamClient/System/index', object: 'await SteamClient.System.GetSystemInfo()', srcName: 'SystemInfo' },
+  { file: 'SteamClient/System/Devkit', object: 'SteamClient.System.Devkit', srcName: 'Devkit' },
+  { file: 'SteamClient/System/Display', object: 'SteamClient.System.Display', srcName: 'Display' },
+  { file: 'SteamClient/System/Report', object: 'SteamClient.System.Report', srcName: 'Report' },
+  { file: 'SteamClient/System/UI', object: 'SteamClient.System.UI', srcName: 'UI' },
+  // #endregion
+  // #region Global
   { file: 'Global/App', object: 'window.App', srcName: 'App' },
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
+  // NOTE: have the friend list open
   { file: 'Global/PopupManager', object: 'window.g_PopupManager', srcName: 'PopupManager' },
+  // #endregion
 ];
 
 /** @public */

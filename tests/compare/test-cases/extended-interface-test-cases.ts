@@ -290,4 +290,45 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+
+  'extended interface with import': {
+    interfaceName: 'Config',
+    target: dedent/* ts */`
+      import { BaseUser } from './types';
+
+      export interface Config {
+        admin: Admin;
+        user: User;
+      }
+
+      export interface User extends BaseUser {
+        email: string;
+      }
+
+      export interface Admin extends User {
+        permissions: string[];
+        role: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Config {
+        user: User;
+        admin: Admin;
+      }
+
+      export interface User {
+        id: number;
+        name: string;
+        email: string;
+      }
+
+      export interface Admin {
+        id: number;
+        name: string;
+        email: string;
+        role: string;
+        permissions: string[];
+      }
+      `,
+  },
 };
