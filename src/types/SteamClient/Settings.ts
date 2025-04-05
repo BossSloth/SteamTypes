@@ -83,8 +83,6 @@ export interface Settings {
 
   RenderHotkey(event: KeyCaptureEvent): Promise<string>;
 
-  RequestDeviceAuthInfo(): void;
-
   SelectClientBeta(nBetaID: unknown): unknown;
 
   /**

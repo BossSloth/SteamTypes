@@ -307,7 +307,7 @@ export interface m_ErrorReportingStore {
 
   m_rgErrorQueue: unknown[];
 
-  m_sendTimer: number | null;
+  m_sendTimer: null;
 
   m_strProduct: string;
 
