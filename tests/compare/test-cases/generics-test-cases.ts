@@ -172,4 +172,72 @@ export const genericsCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+
+  'indexed access generic type no default':
+  {
+    interfaceName: 'DataStore',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface DataStore {
+        data: UserData<number>;
+      }
+
+      export interface UserData<T extends string | number> {
+        email: string;
+
+        id: T;
+
+        info: UserData<T>['id'];
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface DataStore {
+        data: UserData;
+      }
+
+      export interface UserData {
+        id: string | number;
+        info: string | number;
+        name: string;
+        email: string;
+      }
+      `,
+  },
+
+  // NOTE: if there is a default value on the generic type
+  // and you use a indexed access type on the generic type, you need to define the <T>
+  'indexed access generic type with default':
+  {
+    interfaceName: 'DataStore',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface DataStore {
+        data: UserData<number>;
+      }
+
+      export interface UserData<T extends string | number = number> {
+        email: string;
+
+        id: T;
+
+        info: UserData<T>['id'];
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface DataStore {
+        data: UserData;
+      }
+
+      export interface UserData {
+        id: string | number;
+        info: string | number;
+        name: string;
+        email: string;
+      }
+      `,
+  },
 };

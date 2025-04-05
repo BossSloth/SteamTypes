@@ -277,7 +277,7 @@ export interface Popup<
    */
   m_strTitle: string;
 
-  params: Popup['m_rgParams'];
+  params: Popup<paramsType, callbacksType>['m_rgParams'];
 
   /**
    * Value of `m_popup.document.body.firstElementChild`

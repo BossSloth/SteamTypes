@@ -1,4 +1,4 @@
-import { ArrayTypeNode, Identifier, IntersectionTypeNode, LiteralTypeNode, Node, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 
 export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolean {
   if (getText(targetNode) === getText(sourceNode)) {
@@ -21,6 +21,8 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return handleTargetTuple(targetNode, sourceNode);
   } else if (Node.isIntersectionTypeNode(targetNode)) {
     return handleTargetIntersection(targetNode, sourceNode);
+  } else if (Node.isIndexedAccessTypeNode(targetNode)) {
+    return handleTargetIndexedAccess(targetNode, sourceNode);
   }
 
   return false;
@@ -182,6 +184,21 @@ function handleTargetTuple(targetTuple: TupleTypeNode, sourceNode: TypeNode): bo
     }
 
     return targetElements.every(targetElement => targetElement.getType().isAssignableTo(sourceNode.getType()));
+  }
+
+  return false;
+}
+
+function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, sourceNode: TypeNode): boolean {
+  const targetType = targetIndexedAccess.getType();
+  if (targetType.isTypeParameter()) {
+    const typeParameterDeclaration = targetType.getSymbol()?.getDeclarations()[0];
+    if (Node.isTypeParameterDeclaration(typeParameterDeclaration)) {
+      const constraint = typeParameterDeclaration.getConstraint();
+      if (constraint) {
+        return compareTypes(constraint, sourceNode);
+      }
+    }
   }
 
   return false;
