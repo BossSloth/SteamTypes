@@ -12,6 +12,7 @@ export * from './extended-interface-test-cases';
 export * from './generics-test-cases';
 export * from './interface-test-cases';
 export * from './interface-test-cases-renamed';
+export * from './methods-test-cases';
 export * from './property-change-test-cases';
 export * from './property-change-test-cases-renamed';
 export * from './simple-interface-test-cases';

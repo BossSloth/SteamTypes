@@ -325,7 +325,7 @@ export interface MainWindowPopupCallback extends PopupCallback {
 }
 
 export interface PopupCallback {
-  updateParamsBeforeShow?(params: AllPopupParameters): AllPopupParameters;
+  updateParamsBeforeShow(): AllPopupParameters;
 }
 
 export interface RenderWhenReady {

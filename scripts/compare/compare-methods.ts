@@ -1,4 +1,4 @@
-import { MethodSignature, SyntaxKind } from 'ts-morph';
+import { MethodSignature, Node, SyntaxKind } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile, isImportedType } from './shared';
 
@@ -57,6 +57,12 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
   const targetParams = targetMethod.getParameters();
   const sourceParams = sourceMethod.getParameters();
 
+  if (targetParams[0]?.isRestParameter() && Node.isTypeReference(targetParams[0]?.getTypeNode())) {
+    // If we are using a reference type as a array deconstruction rest type skip
+    // Example test case: 'external type accessed arguments'
+    return;
+  }
+
   // Different number of parameters - replace all
   if (targetParams.length !== sourceParams.length) {
     // Remove all existing parameters
@@ -84,12 +90,12 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
     }
 
     // Update question token
-    if (sourceParam.hasQuestionToken() && sourceParam.hasQuestionToken() !== targetParam.hasQuestionToken()) {
+    if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
       targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
     }
 
     // Update rest parameter
-    if (sourceParam.isRestParameter() !== targetParam.isRestParameter()) {
+    if (sourceParam.isRestParameter() && !targetParam.isRestParameter()) {
       targetParam.setIsRestParameter(sourceParam.isRestParameter());
     }
   }
