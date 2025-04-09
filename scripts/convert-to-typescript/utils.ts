@@ -1,3 +1,4 @@
+import { convertToTypescript } from './converter';
 import { ConversionContext, defaultProtoProps } from './types';
 
 export const context: ConversionContext = {
@@ -14,6 +15,7 @@ export const context: ConversionContext = {
   processedObjectPaths: new Map(),
   mainInterfaceName: '',
   functionsToProcess: new Map(),
+  interfaceNameCounter: new Map(),
 };
 
 export function initContext(mainInterfaceName: string): void {
@@ -23,9 +25,10 @@ export function initContext(mainInterfaceName: string): void {
   context.processedObjectPaths = new Map();
   context.mainInterfaceName = mainInterfaceName;
   context.functionsToProcess = new Map();
+  context.interfaceNameCounter = new Map();
 }
 
-const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}]|^\d/u;
+const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d/u;
 /**
  * Formats a property name to handle special characters
  */
@@ -57,12 +60,36 @@ export function formatInterfaceName(interfaceName: string): string {
  * This also includes all functions
  */
 export function getProperties(obj: unknown): string[] {
+  if (obj === null || typeof obj !== 'object' || obj[Symbol.toStringTag] !== undefined) return ['values'];
+
   const properties = new Set<string>();
-  let currentObj = obj;
+  let currentObj: object | null = obj;
 
   do {
-    Object.getOwnPropertyNames(currentObj).map(item => properties.add(item));
-  } while ((currentObj = Object.getPrototypeOf(currentObj)) !== null);
+    const ownProps = Object.getOwnPropertyNames(currentObj);
+    ownProps.forEach((propName) => {
+      if (!defaultProtoProps.has(propName)) {
+        properties.add(propName);
+      }
+    });
+  } while ((currentObj = Object.getPrototypeOf(currentObj) as object | null) !== null);
 
-  return [...properties.keys()].filter(item => !defaultProtoProps.includes(item));
+  return [...properties];
 }
+
+globalThis.checkConversionTime = function checkConversionTime(obj: Record<string, unknown>): void {
+  const properties = getProperties(obj);
+  const times: { property: string; time: number; }[] = [];
+  for (const property of properties) {
+    const start = performance.now();
+    convertToTypescript({ [property]: obj[property] }, 'Test');
+    const end = performance.now();
+    const time = end - start;
+    if (time > 1) {
+      times.push({ property, time });
+    }
+  }
+  console.log(times.sort((a, b) => b.time - a.time).map(item => `${item.property}: ${item.time}ms`).join('\n'));
+  console.log('Total properties:', properties.length);
+  console.log('Total time:', times.reduce((acc, curr) => acc + curr.time, 0));
+};

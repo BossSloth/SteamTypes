@@ -19,10 +19,8 @@ function shouldMergeInterfaces(
   const props2 = interface2.properties.map(p => p.name);
 
   // Calculate Jaccard similarity: intersection / union
-  const prop2Set = new Set(props2);
-
-  const intersection = props1.filter(prop => prop2Set.has(prop)).length;
-  const union = new Set([...props1, ...props2]).size;
+  const intersection = props1.filter(prop => props2.includes(prop)).length;
+  const union = props1.length + props2.length - intersection;
 
   // No properties in either interface
   if (union === 0) return true;

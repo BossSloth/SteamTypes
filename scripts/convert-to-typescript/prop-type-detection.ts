@@ -83,13 +83,16 @@ function getCircularReference(value: Record<string, unknown>, isValueIterable: b
 // Generate a unique interface name for nested objects
 function generateInterfaceName(baseName: string): [string, number | undefined] {
   const formattedName = formatInterfaceName(baseName);
-  let name = formattedName;
-  let counter = 1;
-  while (context.interfacesToProcess.has(name)) {
-    name = `${formattedName}${++counter}`;
-  }
+  let counter = context.interfaceNameCounter.get(formattedName) ?? 0;
 
-  return [name, counter === 1 ? undefined : counter];
+  counter++;
+  context.interfaceNameCounter.set(formattedName, counter);
+  if (counter === 1) {
+    return [formattedName, undefined];
+  }
+  const name = `${formattedName}${counter}`;
+
+  return [name, counter];
 }
 
 /**

@@ -68,7 +68,8 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
-  // NOTE: have the friend list open
+  // NOTE: have the friend list open after todo is fixed
+  // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug
   { file: 'Global/PopupManager', object: 'window.g_PopupManager', srcName: 'PopupManager' },
   // #endregion
 ];

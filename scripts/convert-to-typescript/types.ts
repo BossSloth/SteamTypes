@@ -48,6 +48,7 @@ export interface ConversionContext {
   addImport(moduleName: string, type: string, defaultImport?: boolean): void;
 
   interfacesToProcess: Map<string, [Record<string, unknown>, number | undefined]>; // Key: interface name, Value: object interface is based on
+  interfaceNameCounter: Map<string, number>;
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
   imports: Map<string, { types: Set<string>; defaultImport?: boolean; }>; // Key: module name, Value: Set of imported types
   processedObjectPaths: Map<unknown, string>;
@@ -58,7 +59,7 @@ export interface ConversionContext {
 /**
  * Default prototype properties to exclude
  */
-export const defaultProtoProps = [
+export const defaultProtoProps = new Set([
   'constructor',
   '__defineGetter__',
   '__defineSetter__',
@@ -71,7 +72,7 @@ export const defaultProtoProps = [
   'valueOf',
   '__proto__',
   'toLocaleString',
-];
+]);
 
 export const defaultJsProtoBufProps = [
   'clone',

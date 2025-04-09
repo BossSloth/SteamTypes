@@ -27,7 +27,7 @@ function extractParams(initializer: FunctionExpression | ArrowFunction): MappedP
       isOptional = false;
     }
 
-    paramType.replaceAll('any[];', 'unknown[];');
+    paramType = paramType.replaceAll('any[];', 'unknown[];');
 
     switch (paramType) {
       case '{}':
@@ -39,7 +39,8 @@ function extractParams(initializer: FunctionExpression | ArrowFunction): MappedP
       case 'never[]':
         paramType = 'unknown[]';
         break;
-      default: break;
+      default:
+        break;
     }
 
     return {
@@ -77,7 +78,8 @@ function extractReturnType(initializer: FunctionExpression | ArrowFunction): str
     case '{}':
       returnType = 'object | unknown';
       break;
-    default: break;
+    default:
+      break;
   }
 
   return returnType;
@@ -103,51 +105,199 @@ function generateJsDoc(params: MappedParam[]): string[] | undefined {
   return jsDoc;
 }
 
+const functionInfoCache = new Map<Function, FunctionInfo>();
+
+/**
+ * Extracts information from JavaScript functions and converts them to TypeScript function info
+ * @param funcs Map of function names to functions
+ * @param project TS project for analysis
+ * @returns Map of function names to function information
+ */
 export function massExtractFunctionInfo(funcs: Map<string, Function>, project: Project): Map<string, FunctionInfo> {
-  let sourceCode = '';
+  const sourceCodeBuilder = { code: '' };
   const functionInfos = new Map<string, FunctionInfo>();
+  const functionsToProcess = new Map<string, Function>(); // Functions not found in cache
+  const nameMap = new Map<string, string>(); // Map sanitized name back to original name/key
+
+  // Process each function
   for (const [name, func] of funcs) {
-    // Sanitize name
-    const sanitizedName = name.replace(/[^a-zA-Z0-9_]/g, '_');
-    const code = createSourceCode(sanitizedName, func);
-    if (code !== null) {
-      sourceCode += code;
-    } else {
-      functionInfos.set(sanitizedName, {
-        params: [],
-        returnType: 'unknown',
-        jsDoc: ['@native'],
-      });
+    // Skip if function is in cache
+    if (processCachedFunction(name, func, functionInfos)) {
+      continue;
     }
+
+    // Prepare function for analysis
+    prepareFunction(name, func, sourceCodeBuilder, functionsToProcess, nameMap, functionInfos);
   }
 
-  if (sourceCode === '') {
+  // If no source code was generated, return early
+  if (sourceCodeBuilder.code === '') {
     return functionInfos;
   }
 
+  // Analyze the generated source code
+  analyzeSourceFile(sourceCodeBuilder.code, project, functionsToProcess, nameMap, functionInfos);
+
+  return functionInfos;
+}
+
+/**
+ * Processes cached function information
+ * @param name Original function name
+ * @param func Function to process
+ * @param functionInfos Map to store function information
+ * @returns Whether the function was found in cache
+ */
+function processCachedFunction(
+  name: string,
+  func: Function,
+  functionInfos: Map<string, FunctionInfo>,
+): boolean {
+  const cachedFunctionInfo = functionInfoCache.get(func);
+  if (cachedFunctionInfo) {
+    functionInfos.set(name, cachedFunctionInfo);
+
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Prepares function for analysis by creating source code
+ * @param name Original function name
+ * @param func Function to analyze
+ * @param sourceCodeBuilder StringBuilder for accumulating source code
+ * @param functionsToProcess Map of functions to process
+ * @param nameMap Map of sanitized names to original names
+ * @param functionInfos Map to store function information
+ * @returns Whether the function was prepared successfully
+*/
+function prepareFunction(
+  name: string,
+  func: Function,
+  sourceCodeBuilder: { code: string; },
+  functionsToProcess: Map<string, Function>,
+  nameMap: Map<string, string>,
+  functionInfos: Map<string, FunctionInfo>,
+): boolean {
+  // Sanitize name
+  const sanitizedName = name.replace(/[^a-zA-Z0-9_]/g, '_');
+  const code = createSourceCode(sanitizedName, func);
+
+  if (code === null) {
+    processNativeFunction(sanitizedName, functionInfos);
+
+    return false;
+  }
+
+  sourceCodeBuilder.code += code;
+  functionsToProcess.set(`_${sanitizedName}`, func);
+  nameMap.set(`_${sanitizedName}`, name);
+
+  return true;
+}
+
+/**
+ * Processes native functions that cannot be analyzed
+ * @param sanitizedName Sanitized function name
+ * @param functionInfos Map to store function information
+ */
+function processNativeFunction(
+  sanitizedName: string,
+  functionInfos: Map<string, FunctionInfo>,
+): void {
+  functionInfos.set(sanitizedName, {
+    params: [],
+    returnType: 'unknown',
+    jsDoc: ['@native'],
+  });
+}
+
+/**
+ * Creates and analyzes a source file from generated code
+ * @param sourceCode Combined source code
+ * @param project TS project
+ * @param functionsToProcess Map of functions to process
+ * @param nameMap Map of sanitized names to original names
+ * @param functionInfos Map to store function information
+ */
+function analyzeSourceFile(
+  sourceCode: string,
+  project: Project,
+  functionsToProcess: Map<string, Function>,
+  nameMap: Map<string, string>,
+  functionInfos: Map<string, FunctionInfo>,
+): void {
   const sourceFile = project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, sourceCode);
+
+  // Check for diagnostics if enabled
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (enableDiagnostics) {
     const diagnostics = project.getPreEmitDiagnostics();
     if (diagnostics.length > 0) {
-      throw new Error(`❌ Error: diagnostics found: ${project.formatDiagnosticsWithColorAndContext(diagnostics)}`);
+      throw new Error(`Error: diagnostics found: ${project.formatDiagnosticsWithColorAndContext(diagnostics)}`);
     }
   }
 
+  // Process all variable declarations
   const variableDeclarations = sourceFile.getVariableDeclarations();
+
   for (const variableDeclaration of variableDeclarations) {
-    const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
-      ?? variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
-
-    const mappedParams = extractParams(initializer);
-    const returnType = extractReturnType(initializer);
-    const jsDoc = generateJsDoc(mappedParams);
-
-    functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), { params: mappedParams, returnType, jsDoc });
+    processVariableDeclaration(variableDeclaration, nameMap, functionsToProcess, functionInfos);
   }
-  project.removeSourceFile(sourceFile);
 
-  return functionInfos;
+  // Clean up
+  project.removeSourceFile(sourceFile);
+}
+
+/**
+ * Processes a single variable declaration
+ * @param variableDeclaration Variable declaration to process
+ * @param nameMap Map of sanitized names to original names
+ * @param functionsToProcess Map of functions to process
+ * @param functionInfos Map to store function information
+ */
+function processVariableDeclaration(
+  variableDeclaration: import('ts-morph').VariableDeclaration,
+  nameMap: Map<string, string>,
+  functionsToProcess: Map<string, Function>,
+  functionInfos: Map<string, FunctionInfo>,
+): void {
+  const sanitizedName = variableDeclaration.getName(); // This is the temporary name
+  const originalFuncName = nameMap.get(sanitizedName);
+  const originalFunc = functionsToProcess.get(sanitizedName);
+
+  if (originalFuncName === undefined || originalFunc === undefined) {
+    console.warn(`Could not find original mapping for ${sanitizedName}`);
+
+    return;
+  }
+
+  extractAndStoreFunctionInfo(variableDeclaration, originalFunc, functionInfos);
+}
+
+/**
+ * Extracts and stores function information
+ * @param variableDeclaration Variable declaration to extract from
+ * @param originalFunc Original function
+ * @param functionInfos Map to store function information
+ */
+function extractAndStoreFunctionInfo(
+  variableDeclaration: import('ts-morph').VariableDeclaration,
+  originalFunc: Function,
+  functionInfos: Map<string, FunctionInfo>,
+): void {
+  const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
+    ?? variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
+
+  const mappedParams = extractParams(initializer);
+  const returnType = extractReturnType(initializer);
+  const jsDoc = generateJsDoc(mappedParams);
+
+  const functionInfo: FunctionInfo = { params: mappedParams, returnType, jsDoc };
+  functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), functionInfo);
+  functionInfoCache.set(originalFunc, functionInfo);
 }
 
 /**
