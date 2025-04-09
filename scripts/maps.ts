@@ -67,6 +67,7 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/App', object: 'window.App', srcName: 'App' },
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
+  { file: 'Global/Shared', object: 'window.App.CMInterface.m_steamid', srcName: 'SteamId' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
   // NOTE: have the friend list open after todo is fixed
   // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug

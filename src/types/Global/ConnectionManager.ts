@@ -1,4 +1,4 @@
-import Long from 'long';
+import { SteamId } from './Shared';
 
 export interface ConnectionManager {
   AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;
@@ -135,7 +135,7 @@ export interface ConnectionManager {
 
   m_setServiceMethodHandlers: Set<string>;
 
-  m_steamid: m_steamid;
+  m_steamid: SteamId;
 
   m_strIPCountry: string;
 
@@ -151,7 +151,7 @@ export interface ConnectionManager {
 
   rtReconnectThrottleStart: number;
 
-  steamid: m_steamid;
+  steamid: SteamId;
 }
 
 export interface ClientServersAvailableHandler {
@@ -225,38 +225,6 @@ export interface m_ServiceTransport {
   SendMsg(e: unknown, t: unknown, n: unknown): unknown;
 
   SendNotification(e: unknown, t: unknown): unknown;
-}
-
-export interface m_steamid {
-  BIsClanAccount(): boolean;
-
-  BIsIndividualAccount(): boolean;
-
-  BIsValid(): boolean;
-
-  ConvertTo64BitString(): unknown;
-
-  GetAccountID(): unknown;
-
-  GetAccountType(): number;
-
-  GetInstance(): number;
-
-  GetUniverse(): number;
-
-  Render(): string;
-
-  SetAccountID(e: unknown): void;
-
-  SetAccountType(e: unknown): void;
-
-  SetFromComponents(e: unknown, t: unknown, n: unknown, i: unknown): void;
-
-  SetInstance(e: unknown): void;
-
-  SetUniverse(e: unknown): void;
-
-  m_ulSteamID: Long;
 }
 
 export interface m_ClientConnectionCallbacks {

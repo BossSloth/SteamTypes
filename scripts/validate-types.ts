@@ -1,6 +1,5 @@
 #!/usr/bin/env bun
 /* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable new-cap */
 /**
  * Validate Types Script
  *

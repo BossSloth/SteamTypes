@@ -1,5 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { Window as SteamWindow } from '../SteamClient/Window';
+import { SteamId } from './Shared';
 
 export interface PopupManager {
   /**
@@ -47,27 +48,55 @@ export interface PopupManager {
    */
   DebouncedSaveSavedDimensionStore(): unknown;
 
+  /**
+   * @param name The name of the popup
+   * @returns The popup with the given name
+   */
   GetExistingPopup(name: string): Popup;
 
-  GetExistingPopup(name: 'SP Desktop_uid0'): Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
+  GetExistingPopup(name: 'SP Desktop_uid0'): MainWindowPopup;
 
+  /**
+   * @returns the key used for usage in localStorage. Saved on a per-account basis.
+   */
   GetLocalStorageKey(): string;
 
-  GetPopupForWindow(e: unknown): unknown;
+  /**
+   * @param window The window to get the popup for
+   * @returns The popup for the given window
+   */
+  GetPopupForWindow(window: Window): unknown;
 
-  GetPopups(): unknown;
+  /**
+   * literally returns {@link m_mapPopups}.values()
+   * @returns All tracked popups as a MapIterator
+   */
+  GetPopups(): MapIterator<Popup>;
 
-  GetRestoreDetails(e: unknown): unknown;
+  /**
+   * @param windowName The name of the window to get the restore details for
+   * @returns The restore details for the given window
+   */
+  GetRestoreDetails(windowName: string): RestoreDetail['strRestoreDetails'];
 
+  /**
+   * Loads saved restore details from localStorage.
+   */
   LoadSavedDimensionStore(): void;
 
-  RemoveTrackedPopup(e: unknown): void;
+  /**
+   * @param popup The popup to remove
+   */
+  RemoveTrackedPopup(popup: Popup): void;
 
+  /**
+   * Saves saved restore details to localStorage.
+   */
   SaveSavedDimensionStore(): void;
 
-  SetCurrentLoggedInAccountID(e: unknown): void;
+  SetCurrentLoggedInAccountID(accountId: ReturnType<SteamId['GetAccountID']>): void;
 
-  SetRestoreDetails(e: unknown, t: unknown, n: unknown): void;
+  SetRestoreDetails(popupName: string, restoreDetails: RestoreDetail['strRestoreDetails'], expires: RestoreDetail['bExpires']): void;
 
   DebouncedSaveSavedDimensionStore_DebounceProperties: DebouncedSaveSavedDimensionStore_DebounceProperties;
 
@@ -77,7 +106,7 @@ export interface PopupManager {
 
   m_DynamicCSSObserver: MutationObserver;
 
-  m_mapPopups: ObservableMap<'SP Desktop_uid0', Popup<MainWindowPopupParameters, MainWindowPopupCallback>> & ObservableMap<string, Popup>;
+  m_mapPopups: ObservableMap<'SP Desktop_uid0', MainWindowPopup> & ObservableMap<string, Popup>;
 
   m_mapRestoreDetails: Map<string, RestoreDetail>;
 
@@ -85,7 +114,7 @@ export interface PopupManager {
 
   m_rgShutdownCallbacks: PopupCallback_t[];
 
-  m_unCurrentAccountID: number;
+  m_unCurrentAccountID: ReturnType<SteamId['GetAccountID']>;
 }
 
 export type PopupCallback_t = (popup?: Popup) => void;
@@ -95,6 +124,8 @@ export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
 
   nPending: number;
 }
+
+export type MainWindowPopup = Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
 
 export interface Popup<
   paramsType extends (MainWindowPopupParameters | PopupParameters) = PopupParameters,
