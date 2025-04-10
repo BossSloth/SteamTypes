@@ -285,19 +285,18 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  // NOTE: We currently don't support circular references but we might need to add support later
-  // 'interface with circular reference': {
-  //   interfaceName: 'Node',
-  //   target: dedent/* ts */`
-  //     export interface Node {
-  //       value: string;
-  //     }`,
-  //   source: dedent/* ts */`
-  //     export interface Node {
-  //       value: string;
-  //       next: Node | null;
-  //     }`,
-  // },
+  'interface with circular reference': {
+    interfaceName: 'Node',
+    target: dedent/* ts */`
+      export interface Node {
+        value: string;
+      }`,
+    source: dedent/* ts */`
+      export interface Node {
+        value: string;
+        next: Node | null;
+      }`,
+  },
 
   'interface with complex property types': {
     interfaceName: 'ComplexData',
@@ -315,32 +314,31 @@ export const simpleInterfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  // TODO: this crashes
-  // 'interface with JSDoc comments': {
-  //   interfaceName: 'DocumentedInterface',
-  //   target: dedent/* ts */`
-  //     /**
-  //      * A documented interface
-  //      */
-  //     export interface DocumentedInterface {
-  //       /** The ID of the entity */
-  //       id: number;
-  //     }`,
-  //   source: dedent/* ts */`
-  //     /**
-  //      * A documented interface
-  //      * @description This is a more detailed description
-  //      */
-  //     export interface DocumentedInterface {
-  //       /** The ID of the entity */
-  //       id: number;
-  //       /**
-  //        * The name of the entity
-  //        * @example "Example Name"
-  //        */
-  //       name: string;
-  //     }`,
-  // },
+  'interface with JSDoc comments': {
+    interfaceName: 'DocumentedInterface',
+    target: dedent/* ts */`
+      /**
+       * A documented interface
+       */
+      export interface DocumentedInterface {
+        /** The ID of the entity */
+        id: number;
+      }`,
+    source: dedent/* ts */`
+      /**
+       * A documented interface
+       * @description This is a more detailed description
+       */
+      export interface DocumentedInterface {
+        /** The ID of the entity */
+        id: number;
+        /**
+         * The name of the entity
+         * @example "Example Name"
+         */
+        name: string;
+      }`,
+  },
 
   'interface with tuple type': {
     interfaceName: 'TupleContainer',

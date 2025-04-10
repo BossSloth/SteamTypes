@@ -4,7 +4,7 @@ exports[`Comparator Interface Cases > 2 level recursive interface missing interf
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,4 +1,13 @@
+@@ -1,4 +1,15 @@
 export interface TreeNode {
 -  value: id;
 +  children: Node[];
@@ -15,9 +15,11 @@ export interface TreeNode {
 }
 +
 +export interface Node {
-+  value: string;
 +  children: Node[];
++
 +  parent: TreeNode;
++
++  value: string;
 +}"
 `;
 
@@ -25,7 +27,7 @@ exports[`Comparator Interface Cases > array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,14 @@
+@@ -1,7 +1,15 @@
 export interface Combined {
 -  data: A;
 +  data: (A | B)[];
@@ -38,8 +40,9 @@ export interface A {
 }
 +
 +export interface B {
-+  propB: number;
 +  extraB: Date;
++
++  propB: number;
 +}"
 `;
 
@@ -80,7 +83,7 @@ exports[`Comparator Interface Cases > indexed access type mismatch 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,23 +1,25 @@
+@@ -1,15 +1,15 @@
 export interface UserProfile {
 -  preferences: User['email'];
 +  preferences: string;
@@ -99,17 +102,16 @@ export interface User {
 
   name: string;
 
-  settings: Settings;
+@@ -17,9 +17,9 @@
 }
 
 export interface Settings {
--  theme: string;
--  notifications: string;
   language: string;
-+
+
+-  notifications: string;
 +  notifications: boolean;
-+
-+  theme: string;
+
+  theme: string;
 }"
 `;
 
@@ -117,7 +119,7 @@ exports[`Comparator Interface Cases > interface with complex nested generics 1`]
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,25 @@
+@@ -1,11 +1,27 @@
 export interface ApiResponse<T> {
 -  data: T[];
 +  data: number | string[];
@@ -142,8 +144,10 @@ export interface Pagination {
 +
 +export interface ApiError {
 +  code: string;
-+  message: string;
++
 +  details?: Record<string, unknown>;
++
++  message: string;
 +}"
 `;
 
@@ -151,7 +155,7 @@ exports[`Comparator Interface Cases > interface with complex nested structures 1
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,13 +1,48 @@
+@@ -1,13 +1,53 @@
 export interface AppConfig {
   api: ApiConfig;
 +
@@ -182,22 +186,27 @@ export interface UiConfig {
 +
 +export interface EndpointConfig {
 +  method: string;
++
 +  path: string;
++
 +  requiresAuth: boolean;
 +}
 +
 +export interface ComponentsConfig {
 +  button: ButtonConfig;
++
 +  input: InputConfig;
 +}
 +
 +export interface ButtonConfig {
 +  borderRadius: number;
++
 +  fontSize: number;
 +}
 +
 +export interface InputConfig {
 +  borderRadius: number;
++
 +  padding: number;
 +}"
 `;
@@ -251,7 +260,7 @@ exports[`Comparator Interface Cases > interface with intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,13 +1,26 @@
+@@ -1,13 +1,27 @@
 export interface EnhancedUser {
 -  user: BaseUser & UserPermissions;
 +  isAdmin: boolean;
@@ -278,6 +287,7 @@ export interface UserPermissions {
 +
 +export interface UserMetadata {
 +  lastLogin: Date;
++
 +  loginCount: number;
 +}"
 `;
@@ -286,7 +296,7 @@ exports[`Comparator Interface Cases > inverse array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,12 +1,11 @@
+@@ -1,13 +1,13 @@
 export interface Combined {
 -  data: (A | B)[];
 +  data: A;
@@ -299,14 +309,16 @@ export interface A {
 
 export interface B {
   propB: number;
-  extraB: Date;"
++
+  extraB: Date;
+}"
 `;
 
 exports[`Comparator Interface Cases > inverse union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,7 @@
+@@ -1,8 +1,9 @@
 export interface Container {
 -  data: DataType | null;
 +  data: string | null;
@@ -314,7 +326,9 @@ export interface Container {
 
 export interface DataType {
   value: string;
-  id: number;"
++
+  id: number;
+}"
 `;
 
 exports[`Comparator Interface Cases > map intersection type with mismatch 1`] = `
@@ -335,7 +349,7 @@ exports[`Comparator Interface Cases > method with interface return type 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,3 +1,11 @@
+@@ -1,3 +1,13 @@
 export interface UserService {
 -  getUserById(id: number): unknown;
 +  createUser(email: string, name: string): User;
@@ -344,8 +358,10 @@ export interface UserService {
 }
 +
 +export interface User {
-+  id: UserIdentifier;
 +  email: string;
++
++  id: UserIdentifier;
++
 +  name: string;
 +}"
 `;
@@ -367,7 +383,7 @@ exports[`Comparator Interface Cases > missing interface multiple times 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,3 +1,16 @@
+@@ -1,3 +1,19 @@
 export interface AppData {
   appInfo: string;
 +
@@ -376,12 +392,15 @@ export interface AppData {
 +
 +export interface AssociationData {
 +  rgDevelopers: RgDevelopers[];
++
 +  rgFranchises: RgDevelopers[];
++
 +  rgPublishers: RgDevelopers[];
 +}
 +
 +export interface RgDevelopers {
 +  id: number;
++
 +  name: string;
 +}"
 `;
@@ -466,15 +485,16 @@ exports[`Comparator Interface Cases > union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,3 +1,8 @@
+@@ -1,3 +1,9 @@
 export interface Container {
 -  data: string | null;
 +  data: DataType | null;
 }
 +
 +export interface DataType {
-+  value: string;
 +  id: number;
++
++  value: string;
 +}"
 `;
 

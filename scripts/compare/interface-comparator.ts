@@ -58,13 +58,15 @@ function processInterfaceQueue(): void {
     processedInterfaces.add(interfaceId);
 
     // Compare and correct properties
-    compareAndCorrectMembers(targetInterface, sourceInterface);
+    const propertiesChanged = compareAndCorrectMembers(targetInterface, sourceInterface);
 
     // Compare and correct heritage clauses (extends)
     compareAndCorrectHeritageClause(targetInterface, sourceInterface);
 
-    // Order members
-    orderMembers(targetInterface);
+    if (propertiesChanged) {
+      // Order members
+      orderMembers(targetInterface);
+    }
   }
 }
 
@@ -72,11 +74,13 @@ function processInterfaceQueue(): void {
  * Compares and corrects properties between two interfaces
  * @param targetInterface The interface to be edited
  * @param sourceInterface The interface to use as the source of truth
+ *
+ * @returns true if properties were added or removed
  */
 function compareAndCorrectMembers(
   targetInterface: InterfaceDeclaration,
   sourceInterface: InterfaceDeclaration,
-): void {
+): boolean {
   const targetMembers = getInterfaceMembers(targetInterface);
   const realTargetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
   const sourceMembers = getInterfaceMembers(sourceInterface);
@@ -90,6 +94,8 @@ function compareAndCorrectMembers(
   const sourceMembersMap = new Map<string, PropertySignature | MethodSignature>();
   sourceMembers.forEach(member => sourceMembersMap.set(member.getName(), member));
 
+  let changed = false;
+
   // Check for missing properties in target and add them
   for (const [propName, sourceProp] of sourceMembersMap) {
     let targetProp = targetMembersMap.get(propName);
@@ -99,10 +105,12 @@ function compareAndCorrectMembers(
       // Property kind mismatch, remove the property
       targetProp.remove();
       targetProp = undefined;
+      changed = true;
     }
 
     if (!targetProp) {
       addMissingMember(targetInterface, sourceProp, propName);
+      changed = true;
 
       continue;
     }
@@ -114,7 +122,7 @@ function compareAndCorrectMembers(
       if (needsExtendUpdate) {
         // Property is from an extended interface and doesn't match, remove extends and recompare
         targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
-        compareAndCorrectMembers(targetInterface, sourceInterface);
+        changed = compareAndCorrectMembers(targetInterface, sourceInterface);
       }
     } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
       compareAndCorrectMethodTypes(targetProp, sourceProp);
@@ -127,13 +135,16 @@ function compareAndCorrectMembers(
       if (realTargetMembersMap.has(propName)) {
         // Property exists in target but not in source, remove it
         targetProp.remove();
+        changed = true;
       } else {
         // Property is from an extended interface, remove extends and recompare
         targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
-        compareAndCorrectMembers(targetInterface, sourceInterface);
+        changed = compareAndCorrectMembers(targetInterface, sourceInterface);
       }
     }
   }
+
+  return changed;
 }
 
 /**
@@ -224,7 +235,7 @@ function compareAndCorrectHeritageClause(
 }
 
 // TODO: This might be very slow sometimes have to check to make sure with validate-types
-function orderMembers(targetInterface: InterfaceDeclaration): void {
+export function orderMembers(targetInterface: InterfaceDeclaration): void {
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
   const newText = targetInterface.getFullText()
     .replace(/ {2}\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
@@ -249,12 +260,6 @@ function orderMembers(targetInterface: InterfaceDeclaration): void {
 
   for (let i = members.length - 1; i >= 0; i--) {
     members[i].setOrder(members.length - 1 - i);
-    let text = members[i].getFullText();
-    // Make sure there is a newline between members
-    if (i !== members.length - 1 && !text.startsWith('\n\n')) {
-      text = text.replace(/^\n\n*/, '');
-      members[i].replaceWithText(`\n${text}`);
-    }
   }
 
   // Replace all moved jsdoc back to single line comments
@@ -339,6 +344,8 @@ export function compareAndCorrectAllInterfaces(
 
   const newSourceText = targetSourceFile.getFullText();
 
+  const formattedSourceText = newSourceText.replace(/^(?!import).+:.+;(?!\n\n)(?!\n})$/gm, '$&\n');
+
   // Generate a diff of the entire source file
-  return generateDiff(originalSourceText, newSourceText, filePath);
+  return generateDiff(originalSourceText, formattedSourceText, filePath);
 }

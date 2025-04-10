@@ -300,12 +300,17 @@ export const interfaceCases: Record<string, ComparatorTest> = {
 
         name: string;
 
-        settings: {
-          theme: string;
-          notifications: boolean;
-          language: string;
-        };
-      }`,
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+
+        notifications: boolean;
+
+        language: string;
+      }
+      `,
     source: dedent/* ts */`
       export interface UserProfile {
         user: User;
@@ -317,12 +322,15 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         id: number;
         name: string;
         email: string;
-        settings: {
-          theme: string;
-          notifications: boolean;
-          language: string;
-        };
-      }`,
+        settings: Settings;
+      }
+
+      export interface Settings {
+        theme: string;
+        notifications: boolean;
+        language: string;
+      }
+      `,
   },
 
   // TODO: maybe make it so the indexed access type is not removed by checking at the end if the type is the same
@@ -348,9 +356,11 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
 
       export interface Settings {
-        theme: string;
-        notifications: string;
         language: string;
+
+        notifications: string;
+
+        theme: string;
       }
       `,
     source: dedent/* ts */`

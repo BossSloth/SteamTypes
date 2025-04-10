@@ -256,7 +256,7 @@ exports[`Comparator Extended Interface Cases > extended interface with import - 
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,14 +1,17 @@
+@@ -1,15 +1,19 @@
 import { BaseUser } from './types';
 
 export interface Config {
@@ -275,7 +275,9 @@ export interface User extends BaseUser {
 
 export interface Admin extends User {
   permissions: string[];
-  role: string;"
++
+  role: string;
+}"
 `;
 
 exports[`Comparator Extended Interface Cases > extended interface with import 1`] = `

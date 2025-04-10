@@ -183,12 +183,12 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       }
 
       export interface Admin {
+        counter: number;
+        email: string;
         id: number;
         name: string;
-        email: string;
-        role: string;
         permissions: string[];
-        counter: number;
+        role: string;
       }
       `,
   },
@@ -331,4 +331,51 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+
+  // 'extended array type extra': {
+  //   interfaceName: 'Config',
+  //   expectsNoDiff: true,
+  //   target: dedent/* ts */`
+  //     export interface Config {
+  //       achievements: (Achievement | ComplexAchievement)[];
+  //     }
+
+  //     export interface BaseAchievement {
+  //       bAchieved: boolean;
+  //       bHidden: boolean;
+  //       flAchieved: number;
+  //       strID: string;
+  //       strImage: string;
+  //       strName: string;
+  //     }
+
+  //     export interface Achievement extends BaseAchievement {
+  //       rtUnlocked: number;
+  //       strDescription: string;
+  //     }
+
+  //     export interface ComplexAchievement extends BaseAchievement {
+  //       foo: string;
+  //       bar: boolean;
+  //     }
+  //     `,
+  //   source: dedent/* ts */`
+  //     export interface Config {
+  //       achievements: Achievement[];
+  //     }
+
+  //     export interface Achievement {
+  //       bAchieved: boolean;
+  //       bHidden: boolean;
+  //       flAchieved: number;
+  //       strID: string;
+  //       strImage: string;
+  //       strName: string;
+  //       rtUnlocked?: number;
+  //       strDescription?: string;
+  //       foo?: string;
+  //       bar?: boolean;
+  //     }
+  //     `,
+  // },
 };

@@ -1,4 +1,5 @@
 import { InterfaceDeclaration, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
+import { orderMembers } from './interface-comparator';
 import { currentStartingInterfaces, currentTargetSourceFile, getInterfaceMembers, interfaceQueue, isImportedType } from './shared';
 
 const REQUIRED_OVERLAP = 0.65;
@@ -183,6 +184,7 @@ export function addMissingInterface(type: TypeNode, currentIteration = 0): void 
   if (type.isKind(SyntaxKind.TypeReference)) {
     typeReferences.push(type);
   }
+
   for (const typeReference of typeReferences) {
     const interfaceDeclaration = getInterfaceDeclaration(typeReference);
     if (!interfaceDeclaration) return;
@@ -199,7 +201,8 @@ export function addMissingInterface(type: TypeNode, currentIteration = 0): void 
     }
 
     // Add the interface to the target source file
-    currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+    const newInterface = currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+    orderMembers(newInterface);
 
     // Recursively process referenced interfaces
     interfaceDeclaration.forEachDescendant((child) => {
