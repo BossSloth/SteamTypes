@@ -362,6 +362,41 @@ const classBasedMergedInterfaceTests = {
   ],
 };
 
+class BaseInfo {
+  id = 0;
+  name = '';
+  email = '';
+  bAchieved = false;
+  bHidden = false;
+  flAchieved = 0;
+
+  process() {
+    return 15;
+  }
+
+  async asyncProcess() {
+    return 15;
+  }
+
+  loop() {
+    return [1, 2, 3];
+  }
+}
+
+class Achievement extends BaseInfo {
+  rtUnlocked = 0;
+  strDescription = '';
+}
+
+class ComplexAchievement extends BaseInfo {
+  foo = '';
+  bar = false;
+}
+
+const multipleClassArray = {
+  multipleData: [new Achievement(), new ComplexAchievement(), new Achievement()],
+};
+
 // Export all merged interface test cases
 export const mergedInterfaceTests = {
   basicMergedInterfaceTests,
@@ -370,4 +405,5 @@ export const mergedInterfaceTests = {
   genericTypeMergedInterfaceTests,
   arrayTypeMergedInterfaceTests,
   classBasedMergedInterfaceTests,
+  multipleClassArray,
 };

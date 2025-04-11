@@ -14,6 +14,10 @@ function shouldMergeInterfaces(
   interface1: TypeScriptInterface,
   interface2: TypeScriptInterface,
 ): boolean {
+  if (interface1.constructorString !== interface2.constructorString) {
+    return false;
+  }
+
   // Get property names from both interfaces
   const props1 = interface1.properties.map(p => p.name);
   const props2 = interface2.properties.map(p => p.name);

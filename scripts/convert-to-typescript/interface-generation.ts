@@ -1,8 +1,8 @@
 import { Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
-import { PrimitiveType, Type, UnionType } from './Type';
-import { defaultJsProtoBufProps, InterfaceProperty, TypeScriptInterface } from './types';
+import { InterfaceType, PrimitiveType, Type, UnionType } from './Type';
+import { defaultJsProtoBufProps, InterfaceProperty, InterfaceToProcess, TypeScriptInterface } from './types';
 import { context, formatPropertyName, getProperties } from './utils';
 
 let order = 0;
@@ -11,15 +11,14 @@ let order = 0;
  * Creates or updates an interface definition object
  */
 export function createInterfaceDefinition(
-  obj: Record<string, unknown>,
   interfaceName: string,
-  nameCounter: number | undefined,
+  interfaceToProcess: InterfaceToProcess,
   project: Project,
 ): TypeScriptInterface {
   let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
 
   if (interfaceDefinition) {
-    console.error(`❌ Error: duplicate interface name?: ${interfaceName}`, obj);
+    console.error(`❌ Error: duplicate interface name?: ${interfaceName}`, interfaceToProcess.obj);
 
     return interfaceDefinition;
   }
@@ -29,11 +28,12 @@ export function createInterfaceDefinition(
     name: interfaceName,
     properties: [],
     order: order++,
-    nameCounter,
+    nameCounter: interfaceToProcess.nameCounter,
+    constructorString: interfaceToProcess.constructorString,
   };
 
   // Get all properties
-  let properties = getProperties(obj);
+  let properties = getProperties(interfaceToProcess.obj);
 
   // Check if object is a protobuf message
   if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
@@ -45,7 +45,7 @@ export function createInterfaceDefinition(
   properties = properties.sort(propertyStringSorter);
 
   // Process all properties
-  processInterfaceProperties(obj, properties, interfaceName, interfaceDefinition);
+  processInterfaceProperties(interfaceToProcess.obj, properties, interfaceName, interfaceDefinition);
 
   // Get parameter information and return type using ts-morph in one big call
   // This is still the biggest performance hit because of ts-morph being slow
@@ -79,6 +79,17 @@ function processInterfaceProperties(obj: Record<string, unknown>, properties: st
       }
       context.functionsToProcess.get(interfaceName)?.set(formattedName, value);
     } else {
+      if (key === 'CMInterface' || key === 'm_CMInterface') {
+        const interfaceProperty: InterfaceProperty = {
+          name: formattedName,
+          type: new InterfaceType('ConnectionManager'),
+        };
+        context.addImport('./ConnectionManager', 'ConnectionManager');
+        interfaceDefinition.properties.push(interfaceProperty);
+
+        continue;
+      }
+
       let type: Type;
       if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
         type = new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
@@ -172,13 +183,15 @@ function processProperties(sortedProperties: InterfaceProperty[]): [string[], st
         return paramStr;
       }).join(', ');
 
+      const optionalMarker = property.optional ?? false ? '?' : '';
+
       if (property.functionInfo.jsDoc) {
         functions.push(`  /**
 ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
    */
-  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
+  ${property.name}${optionalMarker}(${paramsList}): ${property.functionInfo.returnType};`);
       } else {
-        functions.push(`  ${property.name}(${paramsList}): ${property.functionInfo.returnType};`);
+        functions.push(`  ${property.name}${optionalMarker}(${paramsList}): ${property.functionInfo.returnType};`);
       }
     } else {
       const optionalMarker = property.optional ?? false ? '?' : '';

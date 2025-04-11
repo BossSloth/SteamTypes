@@ -15,23 +15,9 @@ export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceN
   initContext(mainInterfaceName);
 
   // Add the main interface
-  context.interfacesToProcess.set(mainInterfaceName, [obj, undefined]);
+  context.interfacesToProcess.set(mainInterfaceName, { obj, nameCounter: undefined });
 
-  // Process all interfaces
-  // We need to iterate in a loop because new interfaces might be added during processing
-  let processedCount = 0;
-
-  while (processedCount < context.interfacesToProcess.size) {
-    const entries = Array.from(context.interfacesToProcess.entries());
-
-    for (let i = processedCount; i < entries.length; i++) {
-      const [name, [objValue, nameCounter]] = entries[i];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      createInterfaceDefinition(objValue, name, nameCounter, globalThis.tsProject);
-    }
-
-    processedCount = entries.length;
-  }
+  const processedCount = processInterfaces();
 
   // Merge similar interfaces
   const mergedInterfaces = mergeInterfaces(context.interfaceDefinitions);
@@ -85,4 +71,28 @@ export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceN
   initContext(mainInterfaceName);
 
   return result;
+}
+
+function processInterfaces(): number {
+  // Process all interfaces
+  // We need to iterate in a loop because new interfaces might be added during processing
+  let processedCount = 0;
+
+  while (processedCount < context.interfacesToProcess.size) {
+    const entries = Array.from(context.interfacesToProcess.entries());
+
+    for (let i = processedCount; i < entries.length; i++) {
+      const [name, interfaceToProcess] = entries[i];
+      createInterfaceDefinition(
+        name,
+        interfaceToProcess,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        globalThis.tsProject,
+      );
+    }
+
+    processedCount = entries.length;
+  }
+
+  return processedCount;
 }

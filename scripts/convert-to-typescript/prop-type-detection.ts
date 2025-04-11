@@ -3,12 +3,13 @@ import { isObservableMap, isObservableSet } from 'mobx';
 import { ComputedValue } from 'mobx/dist/internal';
 import { Root as ReactRoot } from 'react-dom/client';
 import { ArrayType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType, createMapType, createSetType } from './Type';
+import { InterfaceToProcess } from './types';
 import { context, formatInterfaceName } from './utils';
 
 /**
  * Gets the TypeScript type for a value
  */
-export function getType(value: unknown, path: string): Type {
+export function getType(value: unknown, path: string, storeClassName = false): Type {
   if (value === null) return new PrimitiveType('null');
 
   const type = typeof value;
@@ -21,13 +22,13 @@ export function getType(value: unknown, path: string): Type {
     case 'bigint': return new PrimitiveType('bigint');
     case 'symbol': return new PrimitiveType('symbol');
     case 'function': return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
-    case 'object': return getObjectType(value as Record<string, unknown>, path);
+    case 'object': return getObjectType(value as Record<string, unknown>, path, storeClassName);
     default:
       return new PrimitiveType('unknown');
   }
 }
 
-function getObjectType(value: Record<string, unknown>, path: string): Type {
+function getObjectType(value: Record<string, unknown>, path: string, storeClassName = false): Type {
   const isValueIterable = isIterable(value);
   const circularReference = getCircularReference(value, isValueIterable);
 
@@ -59,8 +60,16 @@ function getObjectType(value: Record<string, unknown>, path: string): Type {
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
 
+  const constructorString = value.constructor.toString();
+  const isClass = (/^class\s/).test(constructorString);
+
+  const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter };
+  if (storeClassName && isClass) {
+    interfaceToProcess.constructorString = constructorString;
+  }
+
   // Add to interfaces map
-  context.interfacesToProcess.set(interfaceName, [value, nameCounter]);
+  context.interfacesToProcess.set(interfaceName, interfaceToProcess);
 
   return new InterfaceType(interfaceName);
 }
@@ -147,7 +156,7 @@ function getArrayTypes(items: unknown[], path: string): Type {
   const typeStrings = new Set<string>();
 
   for (const item of items) {
-    const itemType = getType(item, path);
+    const itemType = getType(item, path, true);
     const typeString = itemType.toString();
     if (!typeStrings.has(typeString)) {
       typeStrings.add(typeString);

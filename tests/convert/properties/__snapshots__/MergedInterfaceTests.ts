@@ -12,6 +12,8 @@ export interface MergedInterfaceTests {
   edgeCaseMergedInterfaceTests: EdgeCaseMergedInterfaceTests;
 
   genericTypeMergedInterfaceTests: GenericTypeMergedInterfaceTests;
+
+  multipleClassArray: MultipleClassArray;
 }
 
 export interface ArrayTypeMergedInterfaceTests {
@@ -33,7 +35,7 @@ export interface BasicMergedInterfaceTests {
 }
 
 export interface ClassBasedMergedInterfaceTests {
-  differentClassInstances: DifferentClassInstances[];
+  differentClassInstances: (DifferentClassInstances | DifferentClassInstances2)[];
 
   mergedClassInstances: MergedClassInstances[];
 
@@ -70,6 +72,10 @@ export interface GenericTypeMergedInterfaceTests {
   arrayWithObservableCollections: ArrayWithObservableCollections[];
 
   nestedGenericTypes: NestedGenericTypes[];
+}
+
+export interface MultipleClassArray {
+  multipleData: (MultipleData | MultipleData2)[];
 }
 
 export interface ArrayWithArraysOfObjects {
@@ -179,7 +185,19 @@ export interface DifferentClassInstances {
 
   name: string;
 
-  role?: string;
+  status: string;
+}
+
+export interface DifferentClassInstances2 {
+  createdAt: Date;
+
+  email: string;
+
+  id: number;
+
+  name: string;
+
+  role: string;
 
   status: string;
 }
@@ -325,7 +343,7 @@ export interface InsufficientCommonProperties2 {
 export interface ObjectsWithFunctions {
   calculate(a: unknown, b: unknown): unknown;
 
-  format(value: unknown): string;
+  format?(value: unknown): string;
 
   id8: number;
 
@@ -400,6 +418,54 @@ export interface NestedGenericTypes {
   status: string;
 
   type: string;
+}
+
+export interface MultipleData {
+  asyncProcess(): Promise<number>;
+
+  loop(): number[];
+
+  process(): number;
+
+  bAchieved: boolean;
+
+  bHidden: boolean;
+
+  email: string;
+
+  flAchieved: number;
+
+  id: number;
+
+  name: string;
+
+  rtUnlocked: number;
+
+  strDescription: string;
+}
+
+export interface MultipleData2 {
+  asyncProcess(): Promise<number>;
+
+  loop(): number[];
+
+  process(): number;
+
+  bAchieved: boolean;
+
+  bar: boolean;
+
+  bHidden: boolean;
+
+  email: string;
+
+  flAchieved: number;
+
+  foo: string;
+
+  id: number;
+
+  name: string;
 }
 
 export interface Children {

@@ -39,6 +39,13 @@ export interface TypeScriptInterface {
   properties: InterfaceProperty[];
   order: number;
   extends?: string;
+  constructorString?: string;
+}
+
+export interface InterfaceToProcess {
+  obj: Record<string, unknown>;
+  nameCounter?: number;
+  constructorString?: string;
 }
 
 /**
@@ -47,7 +54,7 @@ export interface TypeScriptInterface {
 export interface ConversionContext {
   addImport(moduleName: string, type: string, defaultImport?: boolean): void;
 
-  interfacesToProcess: Map<string, [Record<string, unknown>, number | undefined]>; // Key: interface name, Value: object interface is based on
+  interfacesToProcess: Map<string, InterfaceToProcess>; // Key: interface name, Value: object interface is based on
   interfaceNameCounter: Map<string, number>;
   interfaceDefinitions: Map<string, TypeScriptInterface>; // Key: interface name, Value: interface definition
   imports: Map<string, { types: Set<string>; defaultImport?: boolean; }>; // Key: module name, Value: Set of imported types
