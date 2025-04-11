@@ -114,7 +114,10 @@ export interface PopupManager {
 
   m_rgShutdownCallbacks: PopupCallback_t[];
 
-  m_unCurrentAccountID: ReturnType<SteamId['GetAccountID']>;
+  /**
+   * The current logged in account ID same as {@link SteamId.GetAccountID}
+   */
+  m_unCurrentAccountID: number;
 }
 
 export type PopupCallback_t = (popup?: Popup) => void;

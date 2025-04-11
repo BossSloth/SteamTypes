@@ -18,7 +18,7 @@ import fs from 'fs';
 import path from 'path';
 import { compareInterfaces } from './compare/interface-checker';
 import { Logger } from './logger';
-import { interfaceMaps } from './maps';
+import { InterfaceMap, interfaceMaps } from './maps';
 
 const convertToTsFilePath = path.join(path.resolve(`${__dirname}/../`), 'build', 'scripts', 'convert-to-typescript.js');
 
@@ -100,26 +100,35 @@ let extractTime = 0;
 /**
  * Extracts TypeScript interface from a Steam client object
  */
-async function extractInterface(
-  objectPath: string,
-  interfaceName: string,
-): Promise<string> {
+async function extractInterface(map: InterfaceMap): Promise<string> {
   logger.debug('\n');
-  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(objectPath)} as ${chalk.bold(interfaceName)}...`));
+  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.object)} as ${chalk.bold(map.srcName)}...`));
 
   // Execute the conversion function
-  logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(objectPath)} to TypeScript interface...`));
+  logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(map.object)} to TypeScript interface...`));
 
   const startTime = Date.now();
 
+  if (map.initFunction !== undefined) {
+    const initResponse = await sharedJsClient.Runtime.evaluate({
+      expression: map.initFunction,
+      returnByValue: true,
+      awaitPromise: true,
+    });
+
+    if (initResponse.exceptionDetails) {
+      throw new Error(`Failed to initialize object: ${JSON.stringify(initResponse.exceptionDetails.exception, null, 2)}`);
+    }
+  }
+
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `async function evalConvert() { const result = window.convertToTypescript(${objectPath}, '${interfaceName}'); return result; } evalConvert()`,
+    expression: `async function evalConvert() { const result = window.convertToTypescript(${map.object}, '${map.srcName}'); return result; } evalConvert()`,
     returnByValue: true,
     awaitPromise: true,
   });
 
   if (response.exceptionDetails) {
-    throw new Error(`Failed to convert object: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
+    throw new Error(`Failed to convert object ${map.object}: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
   }
 
   const interfaceContent = response.result.value as string;
@@ -193,16 +202,13 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
 
   // Create an array of promises for parallel execution
   const interfacePromises = maps.map(async (map) => {
-    const interfaceContent = await extractInterface(
-      map.object,
-      map.srcName,
-    );
+    const interfaceContent = await extractInterface(map);
 
     const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
     // Check if the file exists
     if (!fs.existsSync(filePath)) {
       // Create the file
-      fs.writeFileSync(filePath, await extractInterface(map.object, map.srcName));
+      fs.writeFileSync(filePath, await extractInterface(map));
     }
 
     // if (options.interactive && (result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
@@ -238,6 +244,8 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   if (options.diff === false) {
     return;
   }
+
+  fs.rmdirSync('diffs', { recursive: true });
 
   // Create the diffs directory if it doesn't exist
   if (!fs.existsSync('diffs')) {

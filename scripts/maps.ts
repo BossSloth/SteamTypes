@@ -6,6 +6,9 @@ export interface InterfaceMap {
   object: string;
   /** Name of the interface in the source file */
   srcName: string;
+
+  /** The function to call before we start processing the interface */
+  initFunction?: string;
 }
 
 export const interfaceMaps: InterfaceMap[] = [
@@ -67,8 +70,10 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/App', object: 'window.App', srcName: 'App' },
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
-  { file: 'Global/Shared', object: 'window.App.CMInterface.m_steamid', srcName: 'SteamId' },
+  { file: 'Global/Shared', object: 'window.App.cm.m_steamid', srcName: 'SteamId' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
+  { file: 'Global/AppAchievementProgressCache', object: 'window.appAchievementProgressCache', srcName: 'AppAchievementProgressCache', initFunction: 'window.appAchievementProgressCache.RequestCacheUpdate()' },
+  // { file: 'Global/AppActivityStore', object: 'window.appActivityStore', srcName: 'AppActivityStore' },
   // NOTE: have the friend list open after todo is fixed
   // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug
   { file: 'Global/PopupManager', object: 'window.g_PopupManager', srcName: 'PopupManager' },

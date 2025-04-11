@@ -1,11 +1,13 @@
-import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, PropertySignature, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 
 export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolean {
   if (getText(targetNode) === getText(sourceNode)) {
     return true;
   }
 
-  if (sourceNode.getType().isUnknown() || sourceNode.getType().isNever()) {
+  const targetProperty = targetNode.getParent() as PropertySignature | undefined;
+
+  if (sourceNode.getType().isUnknown() || sourceNode.getType().isNever() || (sourceNode.getType().isUnknown() && targetProperty?.hasQuestionToken() === true)) {
     return true;
   }
 

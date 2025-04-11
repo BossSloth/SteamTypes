@@ -114,7 +114,7 @@ export interface AppData {
 
   cRegistered: number;
 
-  customImageInfo?: CustomImageInfo;
+  customImageInfo?: (CustomImageInfo | null);
 
   customImageInfoRtime: number;
 
@@ -387,11 +387,11 @@ export interface Achievements {
 
   nTotal: number;
 
-  vecAchievedHidden: VecHighlight[];
+  vecAchievedHidden: Achievement[];
 
-  vecHighlight: VecHighlight[];
+  vecHighlight: Achievement[];
 
-  vecUnachieved: VecHighlight[];
+  vecUnachieved: Achievement[];
 }
 
 export interface AppDeckDerivedProperties {
@@ -500,7 +500,7 @@ export interface AppDLC {
   unAppID: number;
 }
 
-export interface VecHighlight {
+export interface Achievement {
   bAchieved: boolean;
 
   bHidden?: boolean;

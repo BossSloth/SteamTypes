@@ -64,7 +64,9 @@ export interface App {
 
   OptOutOfSurvey(): void;
 
-  // this.m_CurrentUser.rgFamilyGroupMembers.filter((e=>2 == e.role)).map((e=>e.accountid))
+  /**
+   * @example this.m_CurrentUser.rgFamilyGroupMembers.filter((e=>2 == e.role)).map((e=>e.accountid))
+   */
   PrefetchParentalSettingsForChildren(accountid: unknown): void;
 
   SendSurvey(): void;

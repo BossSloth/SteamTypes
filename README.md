@@ -69,7 +69,8 @@ async function fillAppDetailsStore() {
       appDetailsStore.RequestAssociationData(appId),
       appDetailsStore.RequestDescriptionsData(appId),
       appDetailsStore.RequestCustomImageInfo({appid: appId, rt_custom_image_mtime: time}),
-      appDetailsStore.RequestAppDetailsSpotlight(appId)
+      appDetailsStore.RequestAppDetailsSpotlight(appId),
+      appActivityStore.RestoreActivity(appId),
     ]);
   }));
 }

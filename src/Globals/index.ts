@@ -1,11 +1,12 @@
 import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
+import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 import { PopupManager } from '../types/Global/PopupManager';
 
 declare global {
   let App: App;
-  let appAchievementProgressCache: unknown;
+  let appAchievementProgressCache: AppAchievementProgressCache;
   let appActivityStore: unknown;
   let appDetailsCache: unknown;
   let appDetailsStore: AppDetailsStore;
