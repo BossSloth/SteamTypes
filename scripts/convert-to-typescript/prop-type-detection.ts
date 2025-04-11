@@ -2,8 +2,8 @@ import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
 import { ComputedValue } from 'mobx/dist/internal';
 import { Root as ReactRoot } from 'react-dom/client';
-import { ArrayType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType, createMapType, createSetType } from './Type';
-import { InterfaceToProcess } from './types';
+import { ArrayType, createMapType, createSetType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType } from './Type';
+import { defaultProtoProps, InterfaceToProcess } from './types';
 import { context, formatInterfaceName } from './utils';
 
 /**
@@ -47,6 +47,8 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
     return new PrimitiveType('unknown');
   }
 
+  if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
+
   const lastPathSegment = path.split('.').pop() ?? '';
   let capitalizedName: string;
   if (lastPathSegment.charAt(1) === '_') {
@@ -60,12 +62,14 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
 
-  const constructorString = value.constructor.toString();
-  const isClass = (/^class\s/).test(constructorString);
-
   const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter };
-  if (storeClassName && isClass) {
-    interfaceToProcess.constructorString = constructorString;
+  if (storeClassName) {
+    const constructorString = value.constructor.toString();
+    const isClass = (/^class\s/).test(constructorString);
+
+    if (isClass) {
+      interfaceToProcess.constructorString = constructorString;
+    }
   }
 
   // Add to interfaces map
@@ -207,9 +211,9 @@ function isIterable(value: unknown): value is Iterable<unknown> {
  * Checks for non-generic object types and returns their TypeScript type
  */
 // eslint-disable-next-line complexity
-function getPrimitiveObjectTypes(obj: unknown): string | null {
+export function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null {
   if (Long.isLong(obj)) {
-    context.addImport('long', 'Long', true);
+    if (addImport) context.addImport('long', 'Long', true);
 
     return 'Long';
   }
@@ -233,10 +237,10 @@ function getPrimitiveObjectTypes(obj: unknown): string | null {
   if (isWindowObject(obj)) return 'Window';
   if (isHTMLElement(obj)) return obj.constructor.name;
   if (isCssStyleSheet(obj)) return 'CSSStyleSheet';
-  if (isComputedValue(obj)) return getComputedValueType(obj);
+  if (isComputedValue(obj)) return getComputedValueType(obj, addImport);
   if (isMutationObserver(obj)) return 'MutationObserver';
   if (isReactRoot(obj)) {
-    context.addImport('react-dom/client', 'Root as ReactRoot');
+    if (addImport) context.addImport('react-dom/client', 'Root as ReactRoot');
 
     return 'ReactRoot';
   }
@@ -270,8 +274,8 @@ function isComputedValue(obj: unknown): obj is ComputedValue<unknown> {
   return 'isMobXComputedValue' in obj && obj.isMobXComputedValue === true;
 }
 
-function getComputedValueType(obj: ComputedValue<unknown>): string {
-  context.addImport('mobx/dist/internal', 'ComputedValue');
+function getComputedValueType(obj: ComputedValue<unknown>, addImport = true): string {
+  if (addImport) context.addImport('mobx/dist/internal', 'ComputedValue');
 
   return `ComputedValue<${typeof obj.get()}>`;
 }

@@ -1,7 +1,7 @@
 import { Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
-import { InterfaceType, PrimitiveType, Type, UnionType } from './Type';
+import { InterfaceType, PrimitiveType, Type } from './Type';
 import { defaultJsProtoBufProps, InterfaceProperty, InterfaceToProcess, TypeScriptInterface } from './types';
 import { context, formatPropertyName, getProperties } from './utils';
 
@@ -14,13 +14,14 @@ export function createInterfaceDefinition(
   interfaceName: string,
   interfaceToProcess: InterfaceToProcess,
   project: Project,
-): TypeScriptInterface {
+  depth = 0,
+): void {
   let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
 
   if (interfaceDefinition) {
     console.error(`❌ Error: duplicate interface name?: ${interfaceName}`, interfaceToProcess.obj);
 
-    return interfaceDefinition;
+    return;
   }
 
   // Create a new interface definition
@@ -33,7 +34,7 @@ export function createInterfaceDefinition(
   };
 
   // Get all properties
-  let properties = getProperties(interfaceToProcess.obj);
+  let properties = getProperties(interfaceToProcess.obj, depth);
 
   // Check if object is a protobuf message
   if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
@@ -63,8 +64,6 @@ export function createInterfaceDefinition(
   }
 
   context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
-
-  return interfaceDefinition;
 }
 
 function processInterfaceProperties(obj: Record<string, unknown>, properties: string[], interfaceName: string, interfaceDefinition: TypeScriptInterface): void {
@@ -90,12 +89,7 @@ function processInterfaceProperties(obj: Record<string, unknown>, properties: st
         continue;
       }
 
-      let type: Type;
-      if (typeof value === 'object' && value !== null && getProperties(value).length === 0) {
-        type = new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
-      } else {
-        type = getType(value, propertyPath);
-      }
+      const type = getType(value, propertyPath);
 
       const jsDoc = generatePropertyJsDoc(type, key, value);
 

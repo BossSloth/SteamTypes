@@ -7,7 +7,7 @@ export interface ObjectArraysTests {
 
   mixedArray: (MixedArray | MixedArray2 | MixedArray3)[];
 
-  mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | MixedEmptiness3)[];
+  mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | object | unknown)[];
 
   mixedNestedArray: (MixedNestedArray | MixedNestedArray2)[];
 
@@ -39,13 +39,10 @@ export interface MixedArray3 {
 }
 
 export interface MixedEmptiness {
-}
-
-export interface MixedEmptiness2 {
   proper: string;
 }
 
-export interface MixedEmptiness3 {
+export interface MixedEmptiness2 {
   otherProp: number;
 }
 

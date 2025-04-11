@@ -59,11 +59,16 @@ export function formatInterfaceName(interfaceName: string): string {
  * and returns them as an array, excluding default prototype properties.
  * This also includes all functions
  */
-export function getProperties(obj: unknown): string[] {
-  if (obj === null || typeof obj !== 'object' || obj[Symbol.toStringTag] !== undefined) return ['values'];
+export function getProperties(obj: unknown, depth = 0): string[] {
+  if (obj === null || typeof obj !== 'object') return [];
+  if (obj[Symbol.toStringTag] !== undefined) return ['values'];
 
   const properties = new Set<string>();
   let currentObj: object | null = obj;
+
+  // for (let i = 0; i < depth; i++) {
+  //   currentObj = Object.getPrototypeOf(currentObj) as object | null;
+  // }
 
   do {
     const ownProps = Object.getOwnPropertyNames(currentObj);

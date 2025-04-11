@@ -131,6 +131,8 @@ export class UnionType extends Type {
       }
     }
 
+    const validGroups = [...arrayGroups.values()].filter(group => group.length > 0 && group[0].valueType instanceof UnionType);
+
     // Second pass: assign simple array types to appropriate groups
     for (const arrayType of arrayTypes) {
       if (arrayType.valueType instanceof UnionType) {
@@ -141,19 +143,15 @@ export class UnionType extends Type {
       let assigned = false;
 
       // Try to find a group where this element type is part of the union
-      for (const [, group] of arrayGroups.entries()) {
-        if (group.length === 0) continue;
+      for (const group of validGroups) {
+        const firstGroupType = group[0].valueType as UnionType;
+        const unionElementStrings = firstGroupType.types.map(t => t.toString());
 
-        const firstGroupType = group[0];
-        if (firstGroupType.valueType instanceof UnionType) {
-          const unionElementStrings = firstGroupType.valueType.types.map(t => t.toString());
-
-          // If this element type is in the union, add it to the group
-          if (unionElementStrings.includes(elementTypeString)) {
-            group.push(arrayType);
-            assigned = true;
-            break;
-          }
+        // If this element type is in the union, add it to the group
+        if (unionElementStrings.includes(elementTypeString)) {
+          group.push(arrayType);
+          assigned = true;
+          break;
         }
       }
 
