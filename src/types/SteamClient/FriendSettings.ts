@@ -32,6 +32,7 @@ export enum EChatFlashMode {
 
 export interface FriendSettingsFeatureObject {
   bEnabled: boolean;
+
   feature: FriendSettingsFeature;
 }
 
@@ -49,31 +50,58 @@ export type FriendSettingsEnabledFeatures<T> = Record<FriendSettingsFeature, T>;
 
 export interface FriendSettingsChange {
   b24HourClock: VDFBoolean;
+
   bAlwaysNewChatWindow: VDFBoolean;
+
   bAnimatedAvatars: VDFBoolean;
+
   bCategorizeInGameFriendsByGame: VDFBoolean;
+
   bCompactFriendsList: VDFBoolean;
+
   bCompactQuickAccess: VDFBoolean;
+
   bDisableEmbedInlining: VDFBoolean;
+
   bDisableRoomEffects: VDFBoolean;
+
   bDisableSpellcheck: VDFBoolean;
+
   bDoNotDisturbMode: VDFBoolean;
+
   bForceAlphabeticFriendSorting: VDFBoolean;
+
   bHideCategorizedFriends: VDFBoolean;
+
   bHideOfflineFriendsInTagGroups: VDFBoolean;
+
   bNotifications_EventsAndAnnouncements: VDFBoolean;
+
   bNotifications_ShowChatRoomNotification: VDFBoolean;
+
   bNotifications_ShowIngame: VDFBoolean;
+
   bNotifications_ShowMessage: VDFBoolean;
+
   bNotifications_ShowOnline: VDFBoolean;
+
   bRememberOpenChats: VDFBoolean;
+
   bSignIntoFriends: VDFBoolean;
+
   bSounds_EventsAndAnnouncements: VDFBoolean;
+
   bSounds_PlayChatRoomNotification: VDFBoolean;
+
   bSounds_PlayIngame: VDFBoolean;
+
   bSounds_PlayMessage: VDFBoolean;
+
   bSounds_PlayOnline: VDFBoolean;
+
   featuresEnabled: FriendSettingsEnabledFeatures<VDFBoolean>;
+
   nChatFlashMode: EChatFlashMode;
+
   nChatFontSize: number;
 }

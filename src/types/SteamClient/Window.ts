@@ -200,25 +200,38 @@ export type WindowIcon = 'steam' | 'messages' | 'voice';
  */
 export interface MonitorDimensions {
   flHorizontalScale: number;
+
   flVerticalScale: number;
+
   nFullHeight: number;
+
   nFullLeft: number;
+
   nFullTop: number;
+
   nFullWidth: number;
+
   nUsableHeight: number;
+
   nUsableLeft: number;
+
   nUsableTop: number;
+
   nUsableWidth: number;
 }
 
 export interface WindowDetails {
   bGPUEnabled: boolean;
+
   bUnderlaySupported: boolean;
 }
 
 export interface WindowDimensions {
   height: number;
+
   width: number;
+
   x: number;
+
   y: number;
 }

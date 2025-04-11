@@ -532,8 +532,11 @@ export enum EHIDKeyboardKey {
 
 export interface ControllerAnalogInputMessage {
   nA: number;
+
   nC: number;
+
   x: number;
+
   y: number;
 }
 
@@ -542,12 +545,15 @@ export interface ControllerCommandMessage {
    * @todo enum
    */
   eAction: number;
+
   nControllerIndex: number;
 }
 
 export interface ControllerConfigCloudStateChange {
   bSyncConflict: boolean;
+
   bSyncDone: boolean;
+
   bSyncError: boolean;
 }
 
@@ -561,25 +567,42 @@ export interface ControllerConfigInfoMessageQuery extends ControllerConfigInfoMe
 
 export interface ControllerConfigInfoMessageList extends ControllerConfigInfoMessage {
   accountID: number;
+
   bOfficial: boolean;
+
   bProgenitorOfficial: boolean;
+
   bProgenitorRecommended: boolean;
+
   bRecommended: boolean;
+
   bSelected: boolean;
+
   bUsesGamepad: boolean;
+
   bUsesKeyboard: boolean;
+
   bUsesMouse: boolean;
+
   bUsesSIAPI: boolean;
+
   Description: string;
+
   /**
    * @todo unconfirmed
    */
   eExportType: EControllerConfigExportType;
+
   nControllerType: number;
+
   playtime: string;
+
   publishedFileID: string;
+
   timeUpdated: string;
+
   Title: string;
+
   URL: string;
 }
 
@@ -609,51 +632,89 @@ export enum EThirdPartyControllerConfiguration {
 
 export interface ControllerInputMessage {
   bS: boolean;
+
   nA: number;
+
   nC: number;
 }
 
 export interface ActiveAccount {
   strActiveAccountID: string;
+
   strAvatarHash: string;
+
   strName: string;
 }
 
 export interface ControllerInfo {
   ActiveAccount: ActiveAccount | undefined;
+
   bHaptics: boolean;
+
   bNintendoLayout: boolean;
+
   bRemoteDevice: boolean;
+
   bSWAntiDrift: boolean;
+
   bUseReversedLayout: boolean;
+
   bWireless: boolean;
+
   eControllerType: EControllerType;
+
   eRumblePreference: EControllerRumbleSetting;
+
   flAccelerometerStationaryTolerance: number;
+
   flGyroStationaryTolerance: number;
+
   flLEDBrightness: number;
+
   flLEDSaturation: number;
+
   flLPadPressureCurve: number;
+
   flRPadPressureCurve: number;
+
   nControllerIndex: number;
+
   nLEDColorB: number;
+
   nLEDColorG: number;
+
   nLEDColorR: number;
+
   nLHapticStrength: number;
+
   nLStickDeadzone: number;
+
   nRHapticStrength: number;
+
   nRStickDeadzone: number;
+
   nTurnOffSound: number;
+
   nTurnOnSound: number;
+
   nXInputIndex: number;
+
   strChipID: string;
+
   strFirmwareBuildTime: string;
+
   strName: string;
+
   strSerialNumber: string;
+
   unCapabilities: number;
+
   unProductID: number;
+
   unUniqueID: number;
+
   unVendorID: number;
+
   // TODO: The type for this property might need to be more specific based on the actual data structure
   vecAltAccounts: unknown[];
 }
@@ -691,45 +752,85 @@ export enum EControllerType {
 
 export interface ControllerStateChange {
   flAccelerometerNoiseLength: number;
+
   flGravityVectorX: number;
+
   flGravityVectorY: number;
+
   flGravityVectorZ: number;
+
   flGyroCalibrationProgress: number;
+
   flGyroNoiseLength: number;
+
   flHardwareGyroDegreesPerSecondPitch: number;
+
   flHardwareGyroDegreesPerSecondRoll: number;
+
   flHardwareGyroDegreesPerSecondYaw: number;
+
   flHardwareQuatW: number;
+
   flHardwareQuatX: number;
+
   flHardwareQuatY: number;
+
   flHardwareQuatZ: number;
+
   flSoftwareGyroDegreesPerSecondPitch: number;
+
   flSoftwareGyroDegreesPerSecondRoll: number;
+
   flSoftwareGyroDegreesPerSecondYaw: number;
+
   flSoftwareQuatW: number;
+
   flSoftwareQuatX: number;
+
   flSoftwareQuatY: number;
+
   flSoftwareQuatZ: number;
+
   flTrustedGravityVectorX: number;
+
   flTrustedGravityVectorY: number;
+
   flTrustedGravityVectorZ: number;
+
   sBatteryLevel: number;
+
   sCenterPadX: number;
+
   sCenterPadY: number;
+
   sLeftPadX: number;
+
   sLeftPadY: number;
+
   sLeftStickX: number;
+
   sLeftStickY: number;
+
   sPressureBumperLeft: number;
+
   sPressureBumperRight: number;
+
   sPressurePadLeft: number;
+
   sPressurePadRight: number;
+
   sRightPadX: number;
+
   sRightPadY: number;
+
   sRightStickX: number;
+
   sRightStickY: number;
+
   sTriggerL: number;
+
   sTriggerR: number;
+
   /**
    * Bitmask representing pressed buttons.
    * - Bit 0: R2
@@ -762,6 +863,7 @@ export interface ControllerStateChange {
    * - Bit 30-31: Unknown (@todo Please provide more details if known)
    */
   ulButtons: number;
+
   /**
    * Bitmask representing pressed upper buttons.
    * - Bit 0-8: Unknown (@todo Please provide more details if known)
@@ -774,28 +876,42 @@ export interface ControllerStateChange {
    * - Bit 18: Quick Access Menu
    */
   ulUpperButtons: number;
+
   unControllerIndex: number;
+
   unHardwareUpdateInMicrosec: number;
+
   unPacketNum: number;
 }
 
 export interface GameKeyboardMessage {
   m_bOpen: boolean;
+
   m_dwOverlayPID: number;
+
   m_dwPID: number;
+
   /** @todo enum */
   m_eInputMode: number;
+
   /** @todo enum */
   m_eLineInputMode: number;
+
   m_hPipe: number;
+
   m_pchDescription: string;
+
   m_pchExistingText: string;
+
   m_unCharMax: number;
+
   nAppID: number;
 }
 
 export interface TouchMenuMessage {
   appID: number;
+
   bHasVirtualMenus: boolean;
+
   unControllerIndex: number;
 }

@@ -200,44 +200,62 @@ export interface ServerBrowser {
 export interface ServerBrowserServer {
   /** The ID of the game. */
   appid: number;
+
   /** The server IP. */
   ip: string;
+
   /** Last time played as a UNIX timestamp. */
   lastPlayed: number;
+
   /** The server port. */
   port: number;
+
   queryPort: number;
 }
 
 export interface ServerBrowserServerFull extends ServerBrowserServer {
   /** Do not refresh if had unsuccessful response? */
   bDoNotRefresh: boolean;
+
   /** Found the server? */
   bHadSuccessfulResponse: boolean;
+
   /** How many bot players there currently are. */
   botPlayers: number;
+
   /** Has password? */
   bPassword: boolean;
+
   /** Is VAC secured? */
   bSecure: boolean;
+
   /** The server's game name/description. */
   gameDesc: string;
+
   /** The game folder. */
   gameDir: string;
+
   /** Server tags, separated by a comma. */
   gameTags: string;
+
   /** Current server map. */
   map: string;
+
   /** Max players on the server. */
   maxPlayers: number;
+
   /** The server name. */
   name: string;
+
   /** The latency to the server. */
   ping: number;
+
   /** How many players there currently are. */
   players: number;
+
   /** The server's game version it is running on. */
   serverVersion: number;
+
   steamID: string;
 }
 
@@ -258,42 +276,57 @@ export type ServerBrowserTab = 'internet' | 'favorites' | 'history' | 'lan' | 'f
 export interface ServerBrowserGame {
   /** The ID of the game. */
   appid: number;
+
   /** The game folder. */
   gamedir: string;
+
   /** The ID of the game. */
   gameid: string;
+
   /** The game's name. */
   name: string;
 }
 
 export interface ServerBrowserPreferences {
   filters: ServerBrowserTabFilters;
+
   GameList: string;
 }
 
 export interface ServerBrowserTabFilters {
   favorites: ServerBrowserGameFilter;
+
   friends: ServerBrowserGameFilter;
+
   history: ServerBrowserGameFilter;
+
   internet: ServerBrowserGameFilter;
+
   lan: ServerBrowserGameFilter;
 }
 
 export interface ServerBrowserGameFilter {
   /** The ID of the game */
   appid: number;
+
   /** The game folder */
   game: string;
+
   /** Map filter */
   map: string;
+
   /** Has users playing */
   NoEmpty: boolean;
+
   /** Server not full */
   NoFull: boolean;
+
   /** Is not password protected */
   NoPassword: boolean;
+
   /** Latency */
   ping: EServerBrowserGameFilterPing;
+
   /** Anti-cheat */
   Secure: EServerBrowserGameFilterAntiCheat;
 }
@@ -314,37 +347,48 @@ export enum EServerBrowserGameFilterPing {
 
 export interface ServerBrowserFavoritesAndHistory {
   favorites: ServerBrowserServer[];
+
   history: ServerBrowserServer[];
 }
 
 export interface ServerBrowserFriendServer {
   /** The ID of the game. */
   appid: number;
+
   /** Non-Steam server? */
   bNonSteamServer: boolean;
+
   /** The ID of the game. */
   gameid: string;
+
   gameText: string;
+
   steamIDLobby: string;
 }
 
 export interface ServerBrowserDialog {
   dialogID: number;
+
   ip: number;
+
   port: number;
+
   queryPort: number;
 }
 
 export interface ServerBrowserPlayerRefreshStatus {
   bRefreshComplete: boolean;
+
   bSuccess: boolean;
 }
 
 export interface ServerBrowserPlayer extends ServerBrowserPlayerRefreshStatus {
   /** Player name. */
   playerName: string;
+
   /** Player score. */
   score: number;
+
   /** Time played on the server. */
   timePlayed: number;
 }

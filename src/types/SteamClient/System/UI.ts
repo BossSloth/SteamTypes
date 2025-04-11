@@ -16,18 +16,24 @@ export interface UI {
 
 export interface FocusChangeEvent {
   focusedApp: FocusedApp;
+
   rgFocusable: FocusedApp[];
 }
 
 export interface FocusedApp {
   appid: number;
+
   pid: number;
+
   strExeName: string;
+
   windowid: number;
 }
 
 export interface GameWindowInfo {
   bCanClose: boolean;
+
   strTitle: string;
+
   windowid: number;
 }

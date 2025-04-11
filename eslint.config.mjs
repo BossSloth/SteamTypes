@@ -164,12 +164,6 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/types/SteamClient/**'],
-    rules: {
-      '@typescript-eslint/member-ordering': 'off', // TODO: remove this when member-ordering is fixed in all SteamClient files
-    },
-  },
-  {
     files: ['scripts/**'],
     rules: {
       'perfectionist/sort-interfaces': 'off',

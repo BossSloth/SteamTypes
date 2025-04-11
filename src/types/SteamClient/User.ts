@@ -90,6 +90,7 @@ export interface User {
 
   RequestSupportSystemReport(reportId: string): Promise<{
     bSuccess: boolean;
+
   }>;
 
   ResumeSuspendedGames(param0: boolean): unknown;
@@ -140,17 +141,22 @@ export interface ConnectionAttempt {
 
 export interface LoginUser {
   accountName: string;
+
   avatarUrl: string;
+
   personaName: string;
+
   rememberPassword: boolean;
 }
 
 export interface SurveyEntry {
   strName: string;
+
   vecArgs: string[];
 }
 
 export interface SurveySection {
   strSectionName: string;
+
   vecEntries: SurveyEntry[];
 }

@@ -50,17 +50,22 @@ export interface Friends {
 
 export interface CoplayData {
   currentUsers: CoplayUser[];
+
   recentUsers: CoplayUser[];
 }
 
 export interface CoplayUser {
   accountid: number;
+
   appid: number;
+
   rtTimePlayed: number;
 }
 
 export interface VoiceChatStatus {
   bMicMuted: boolean;
+
   bOutputMuted: boolean;
+
   bVoiceChatActive: boolean;
 }

@@ -249,8 +249,11 @@ interface BrowserViewEventMap {
 
 export interface BrowserViewBounds {
   height: number;
+
   width: number;
+
   x: number;
+
   y: number;
 }
 
@@ -312,6 +315,7 @@ export interface BrowserViewContextMenu {
 
 export interface BrowserViewContextMenuCustomCommand {
   id: number;
+
   label: string;
 }
 
@@ -352,6 +356,7 @@ export enum EWindowStackingOrder {
 
 export interface BrowserViewHistory {
   entries: BrowserViewHistoryEntry[];
+
   index: number;
 }
 
@@ -361,10 +366,16 @@ export interface BrowserViewHistoryEntry {
 
 export interface BrowserViewPageSecurity {
   bHasCertError: boolean;
+
   bIsEVCert: boolean;
+
   bIsSecure: boolean;
+
   certExpiry: number;
+
   certName: string;
+
   issuerName: string;
+
   nCertBits: number;
 }

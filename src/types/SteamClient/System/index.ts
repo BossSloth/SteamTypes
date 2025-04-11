@@ -131,11 +131,16 @@ export interface AirplaneModeChange {
 
 export interface BatteryStateChange {
   bHasBattery: boolean;
+
   bShutdownRequested: boolean;
+
   eACState: EACState;
+
   eBatteryState: EBatteryState;
+
   /** Battery Percentage in floating point 0-1 */
   flLevel: number;
+
   /** Appears to be charge time remaining or time remaining on battery */
   nSecondsRemaining: number;
 }
@@ -157,6 +162,7 @@ export enum EBatteryState {
 export interface FileDialog {
   /** Whether to choose a directory instead. */
   bChooseDirectory?: boolean;
+
   /**
    * Array of file filters.
    * @example
@@ -176,8 +182,10 @@ export interface FileDialog {
    * ```
    */
   rgFilters?: FileDialogFilter[];
+
   /** Initially selected file. */
   strInitialFile?: string;
+
   /** Window title. */
   strTitle?: string;
 }
@@ -185,11 +193,13 @@ export interface FileDialog {
 export interface FileDialogFilter {
   /** Whether to use this filter by default. */
   bUseAsDefault?: boolean;
+
   /**
    * File patterns.
    * @example [ "*.application", "*.exe", "*.sh", "*.AppImage" ]
    */
   rFilePatterns: string[];
+
   /** A localization string for the file type. */
   strFileTypeName: string;
 }

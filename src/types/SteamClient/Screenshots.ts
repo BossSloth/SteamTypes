@@ -114,27 +114,40 @@ export interface Screenshots {
 
 export interface Screenshot {
   bSpoilers: boolean;
+
   bUploaded: boolean;
+
   ePrivacy: EUCMFilePrivacyState;
+
   hHandle: number;
+
   nAppID: number;
+
   /** Timestamp */
   nCreated: number;
+
   nHeight: number;
+
   nWidth: number;
+
   strCaption: '';
+
   strGameID: string;
+
   strUrl: string;
+
   ugcHandle: string;
 }
 
 export interface ScreenshotToDelete {
   gameID: string;
+
   rgHandles: number[];
 }
 
 export interface ScreenshotDeletionResponse {
   bSuccess: boolean;
+
   rgFailedRequestIndices: number[];
 }
 

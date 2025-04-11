@@ -126,9 +126,13 @@ export enum EComputerActiveState {
 
 export interface FriendChatDialog {
   browserid: number;
+
   btakefocus: string;
+
   command: string;
+
   pid: number;
+
   steamid: string;
 }
 
@@ -139,10 +143,13 @@ export interface FriendChatDialogData {
 export interface PushToTalkInfo {
   /** Indicates whether push-to-talk is enabled. */
   bEnabled: boolean;
+
   /** Indicates whether push-to-mute is in use instead. */
   bPushToMute: boolean;
+
   /** Push-to-talk hotkey name. */
   strKeyName: string;
+
   /**
    * Push-to-talk hotkey.
    * @todo enum? this is not EHIDKeyboardKey

@@ -70,13 +70,21 @@ export enum ENotificationPosition {
 
 export interface OverlayBrowserInfo {
   appID: number;
+
   eBrowserType: EBrowserType;
+
   eUIMode: EUIMode;
+
   flDisplayScale?: number;
+
   gameID: string;
+
   nBrowserID: number;
+
   nScreenHeight: number;
+
   nScreenWidth: number;
+
   /**
    * The PID of the overlay process.
    */
@@ -85,6 +93,8 @@ export interface OverlayBrowserInfo {
 
 export interface OverlayBrowserProtocols {
   bAdded: boolean;
+
   strScheme: string;
+
   unAppID: number;
 }

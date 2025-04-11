@@ -84,30 +84,48 @@ export interface Installs {
 
 export interface InstallInfo {
   bCanChangeInstallFolder: boolean;
+
   bDesktopShortcut: boolean;
+
   bIsBackupInstall: boolean;
+
   bPeerContentServerAvailable: boolean;
+
   bPeerContentServerOnline: boolean;
+
   bSystemMenuShortcut: boolean;
+
   currentAppID: number;
+
   eAppError: EAppUpdateError;
+
   eInstallState: EInstallMgrState;
+
   errorDetail: string;
+
   /**
    * Index of the install folder. -1 if not installed.
    */
   iInstallFolder: number;
+
   iUnmountedFolder: number;
+
   nCurrentDisk: number;
+
   nDiskSpaceAvailable: number;
+
   nDiskSpaceRequired: number;
+
   nTotalDisks: number;
+
   rgAppIDs: InstallInfoApps[];
+
   strPeerContentServer: string;
 }
 
 export interface InstallInfoApps {
   lDiskSpaceRequiredBytes: number;
+
   nAppID: number;
 }
 

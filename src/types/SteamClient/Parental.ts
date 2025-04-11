@@ -35,19 +35,23 @@ export interface ParentalSettings {
    * Indicates whether all apps are allowed.
    */
   allowallapps: boolean;
+
   /**
    * Base list (type not specified but an object).
    * @todo Determine the type of this property.
    */
   baselist: unknown | undefined;
+
   /**
    * Custom list of allowed applications.
    */
   customlist: AppList;
+
   /**
    * Indicates whether parental settings are enabled.
    */
   enabled: boolean;
+
   /**
    * Bitmask representing enabled features.
    * - Bit 0: Unknown (@todo Please provide more details if known)
@@ -59,10 +63,12 @@ export interface ParentalSettings {
    * - Bit 12: Library content - 0: Only games I choose, 1: All games
    */
   features: number;
+
   /**
    * Indicates whether parental settings are locked.
    */
   locked: boolean;
+
   /**
    * Email for recovery (if applicable).
    */

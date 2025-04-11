@@ -244,31 +244,50 @@ export enum EClientUsedInputType {
 
 export interface RemotePlayDevice {
   bCanSuspend: boolean;
+
   clientName: string;
+
   formFactor: number;
+
   /** "Connected", "Paired"j */
   status: string;
+
   unStreamingSessionID: number;
 }
 
 export interface RemotePlaySettings {
   bDefaultEncodeAMD: boolean;
+
   bDefaultEncodeIntel: boolean;
+
   bDefaultEncodeNVIDIA: boolean;
+
   bRemotePlayClientConfigEnabled: boolean;
+
   bRemotePlayEnabled: boolean;
+
   bRemotePlayServerConfigAvailable: boolean;
+
   bRemotePlayServerConfigEnabled: boolean;
+
   bRemotePlaySupported: boolean;
+
   eRemotePlayP2PScope: EStreamP2PScope;
+
   nAutomaticResolutionX: number;
+
   nAutomaticResolutionY: number;
+
   nDefaultAudioChannels: number;
+
   // TODO: document {}
   RemotePlayClientConfig: unknown;
+
   // TODO: document {}
   RemotePlayServerConfig: unknown;
+
   strStreamingClientName: string;
+
   unStreamingSessionID: number;
 }
 

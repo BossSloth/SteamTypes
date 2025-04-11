@@ -44,14 +44,24 @@ export interface Broadcast {
 
 export interface BroadcastStatus {
   bBroadcastCapable: boolean;
+
   bIsBroadcasting: boolean;
+
   bIsRecordingDesktop: boolean;
+
   bMicrophoneActive: boolean;
+
   bMicrophoneEnabled: boolean;
+
   broadcastid: string;
+
   eBroadcastReady: EResult;
+
   nCurrentFPS: number;
+
   nRequests: number;
+
   nUploadKbps: number;
+
   nViewers: number;
 }

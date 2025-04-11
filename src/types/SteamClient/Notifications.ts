@@ -133,12 +133,15 @@ export interface ClientNotificationCloudSyncConflict extends JsPbMessage {
 
 export interface ClientNotificationScreenshot extends JsPbMessage {
   description(): string;
+
   local_url(): string;
+
   screenshot_handle(): string;
 }
 
 export interface ClientNotificationDownloadCompleted extends JsPbMessage {
   appid(): number;
+
   dlc_appid(): number;
 }
 
@@ -152,6 +155,7 @@ export interface ClientNotificationFriendInviteRollup extends JsPbMessage {
 
 export interface ClientNotificationFriendInGame extends JsPbMessage {
   game_name(): string;
+
   steamid(): number;
 }
 
@@ -161,15 +165,25 @@ export interface ClientNotificationFriendOnline extends JsPbMessage {
 
 export interface ClientNotificationAchievement extends JsPbMessage {
   achieved(): boolean;
+
   achievement_id(): string;
+
   appid(): number;
+
   current_progress(): number;
+
   description(): string;
+
   global_achieved_pct(): number;
+
   image_url(): string;
+
   max_progress(): number;
+
   min_progress(): number;
+
   name(): string;
+
   rtime_unlocked(): number;
 }
 
@@ -183,34 +197,51 @@ export interface ClientNotificationSystemUpdate extends JsPbMessage {
 
 export interface ClientNotificationFriendMessage extends JsPbMessage {
   body(): string;
+
   icon(): string;
+
   notificationid(): number;
+
   response_steamurl(): string;
+
   steamid(): string;
+
   tag(): string;
+
   title(): string;
 }
 
 export interface ClientNotificationGroupChatMessage extends JsPbMessage {
   body(): string;
+
   chat_group_id(): string;
+
   chat_id(): string;
+
   icon(): string;
+
   notificationid(): number;
+
   rawbody(): string;
+
   steamid_sender(): string;
+
   tag(): string;
+
   title(): string;
 }
 
 export interface ClientNotificationFamilySharingDeviceAuthorizationChanged extends JsPbMessage {
   accountid_owner(): number;
+
   authorized(): boolean;
 }
 
 export interface ClientNotificationFamilySharingStopPlaying extends JsPbMessage {
   accountid_owner(): number;
+
   appid(): number;
+
   seconds_remaining(): number;
 }
 
@@ -230,6 +261,7 @@ export interface ClientNotificationGiftReceived extends JsPbMessage {
 
 export interface ClientNotificationItemAnnouncement extends JsPbMessage {
   new_backpack_items(): boolean;
+
   new_item_count(): number;
 }
 
@@ -241,6 +273,7 @@ export interface ClientNotificationLowDiskSpace extends JsPbMessage {
 
 export interface ClientNotificationBatteryTemperature extends JsPbMessage {
   notification_type(): string;
+
   temperature(): number;
 }
 
@@ -248,6 +281,7 @@ export interface ClientNotificationDockUnsupportedFirmware extends JsPbMessage {
 
 export interface ClientNotificationPeerContentUpload extends JsPbMessage {
   appid(): number;
+
   peer_name(): string;
 }
 
@@ -263,9 +297,13 @@ export interface ClientNotificationBroadcastAvailableToWatch extends JsPbMessage
 
 export interface ClientNotificationTimedTrialRemaining extends JsPbMessage {
   allowed_seconds(): number;
+
   appid(): number;
+
   icon(): string;
+
   offline(): boolean;
+
   played_seconds(): number;
 }
 
@@ -275,32 +313,39 @@ export interface ClientNotificationTimerExpired extends JsPbMessage { }
 
 export interface ClientNotificationSteamInputActionSetChanged extends JsPbMessage {
   action_set_name(): string;
+
   controller_index(): number;
 }
 
 export interface ClientNotificationRemoteClientConnection extends JsPbMessage {
   connected(): boolean;
+
   machine(): string;
 }
 
 export interface ClientNotificationRemoteClientStartStream extends JsPbMessage {
   game_name(): string;
+
   machine(): string;
 }
 
 export interface ClientNotificationStreamingClientConnection extends JsPbMessage {
   connected(): boolean;
+
   hostname(): string;
+
   machine(): string;
 }
 
 export interface ClientNotificationPlaytimeWarning extends JsPbMessage {
   playtime_remaining(): number;
+
   type(): string;
 }
 
 export interface ClientNotificationGameRecordingError extends JsPbMessage {
   error_type(): EGameRecordingErrorType;
+
   game_id(): number;
 }
 
@@ -310,7 +355,9 @@ export interface ClientNotificationGameRecordingStart extends JsPbMessage {
 
 export interface ClientNotificationGameRecordingStop extends JsPbMessage {
   clip_id(): string;
+
   duration_secs(): number;
+
   game_id(): number;
 }
 
@@ -320,6 +367,8 @@ export interface ClientNotificationGameRecordingUserMarkerAdded extends JsPbMess
 
 export interface CClientNotificationGameRecordingInstantClip extends JsPbMessage {
   clip_id(): string;
+
   duration_secs(): number;
+
   game_id(): number;
 }

@@ -67,6 +67,7 @@ export enum EWindowType {
 
 export interface OSEndOfLifeInfo {
   bOSWillBeUnsupported: boolean;
+
   osType: EOSType;
 }
 
@@ -76,12 +77,20 @@ export interface OSEndOfLifeInfo {
  */
 export interface SteamWindow {
   appid: number;
+
   hwndParent: number;
+
   nBrowserID: number;
+
   strAppName: string;
+
   unID: number;
+
   unPID: number;
+
   windowType: EWindowType;
+
   x: number;
+
   y: number;
 }

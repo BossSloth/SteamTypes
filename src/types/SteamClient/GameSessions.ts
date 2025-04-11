@@ -30,23 +30,29 @@ export interface GameSessions {
 
 export interface AchievementNotification {
   achievement: AppAchievements;
+
   nCurrentProgress: number;
+
   nMaxProgress: number;
+
   unAppID: number;
 }
 
-/**
- * @prop unAppID is not properly set by Steam for non-steam game shortcuts, so it defaults to 0 for them
- */
 export interface AppLifetimeNotification {
   bRunning: boolean;
+
   nInstanceID: number;
+
+  /** This is not properly set by Steam for non-steam game shortcuts, so it defaults to 0 for them */
   unAppID: number;
 }
 
 export interface ScreenshotNotification {
   details: Screenshot;
+
   hScreenshot: number;
+
   strOperation: 'deleted' | 'written';
+
   unAppID: number;
 }

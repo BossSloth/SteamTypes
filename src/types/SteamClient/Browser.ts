@@ -66,7 +66,9 @@ export interface Browser {
 
 export interface TouchGesture {
   eTouchGesture: ETouchGesture;
+
   x: number;
+
   y: number;
 }
 

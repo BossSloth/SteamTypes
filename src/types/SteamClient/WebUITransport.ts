@@ -15,7 +15,10 @@ export interface WebUITransport {
 
 export interface TransportInfo {
   authKeyClientdll: string;
+
   authKeySteamUI: string;
+
   portClientdll: number;
+
   portSteamUI: number;
 }

@@ -36,15 +36,21 @@ export interface SharedConnection {
 export interface LogonInfo {
   /** `true` if logged on, `false` otherwise. */
   bLoggedOn: boolean;
+
   eUniverse: ESteamRealm;
+
   /** Account username. Empty if not logged on. */
   strAccountName: string;
+
   /** URL for community content. */
   strCommunityImagesURL: string;
+
   /** Account nickname. Empty if not logged on. */
   strPersonaName: string;
+
   /** Steam64 ID. */
   strSteamid: string;
+
   /** Country code. */
   strUserCountry: string;
 }

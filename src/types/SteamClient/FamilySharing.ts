@@ -11,11 +11,15 @@ export interface FamilySharing {
 
 export interface Lender {
   appid: number;
+
   bPreferred: boolean;
+
   numDlc: number;
+
   /**
    * A Steam64 ID.
    */
   steamid: string;
+
   vecDLC: unknown[];
 }

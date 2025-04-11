@@ -166,6 +166,7 @@ export interface SteamURL {
    * @todo enum?
    */
   feature: number;
+
   url: string;
 }
 

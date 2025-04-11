@@ -344,7 +344,7 @@ export function compareAndCorrectAllInterfaces(
 
   const newSourceText = targetSourceFile.getFullText();
 
-  const formattedSourceText = newSourceText.replace(/^(?!import).+:.+;(?!\n\n)(?!\n})$/gm, '$&\n');
+  const formattedSourceText = newSourceText.replace(/^(?!import).+[^\s]:.+;(?!\n\n)(?!\n\s*})$/gm, '$&\n');
 
   // Generate a diff of the entire source file
   return generateDiff(originalSourceText, formattedSourceText, filePath);

@@ -137,11 +137,17 @@ export interface Settings {
 
 export interface AccountSettings {
   bEmailValidated: boolean;
+
   bHasAnyVACBans: boolean;
+
   bHasTwoFactor: boolean;
+
   bSaveAccountCredentials: boolean;
+
   eSteamGuardState: ESteamGuardState;
+
   rtSteamGuardEnableTime: number;
+
   strEmail: string;
 }
 
@@ -158,14 +164,19 @@ export enum ESteamGuardState {
 
 export interface KeyCaptureEvent {
   alt_key: boolean;
+
   ctrl_key: boolean;
+
   display_name: string;
+
   meta_key: boolean;
+
   shift_key: boolean;
 }
 
 export interface Language {
   language: ELanguage;
+
   strShortName: string;
 }
 
@@ -205,59 +216,93 @@ export enum ELanguage {
 }
 export interface RegisteredSteamDeck {
   bIgnoreRegistrationPrompt: boolean;
+
   bRegistered: boolean;
+
   strSerialNumber: string;
+
   strSteamID: string;
 }
 
 export interface TimeZone {
   regionsLocalizationToken: string;
+
   timezoneID: string;
+
   timezoneLocalizationToken: string;
+
   utcOffset: number;
 }
 
 interface Region {
   nRegionID: number;
+
   strRegionName: string;
 }
 
 interface Hour {
   nHour: number;
+
   strDisplay: string;
 }
 
 interface AvailableClientBeta {
   nBetaID: number;
+
   strName: string;
 }
 
 interface SteamSettings {
   bChangeBetaEnabled: boolean;
+
   bCompatEnabled: boolean;
+
   bCompatEnabledForOtherTitles: boolean;
+
   bDisplayIsExternal: boolean;
+
   bDisplayIsUsingAutoScale: boolean;
+
   bEnableSoftProcessKill: boolean;
+
   bIsInClientBeta: boolean;
+
   bIsInDesktopUIBeta: boolean;
+
   bIsSteamSideload: boolean;
+
   bIsValveEmail: boolean;
+
   bUnderscanEnabled: boolean;
+
   eClientBetaState: EClientBetaState;
+
   flAutoDisplayScaleFactor: number;
+
   flCurrentDisplayScaleFactor: number;
+
   flCurrentUnderscanLevel: number;
+
   flMaxDisplayScaleFactor: number;
+
   flMinDisplayScaleFactor: number;
+
   nAvailableBetas: number;
+
   nSelectedBetaID: number;
+
   strCompatTool: string;
+
   strDisplayName: string;
+
   strSelectedBetaName: string;
+
   vecAvailableClientBetas: AvailableClientBeta[];
+
   vecNightModeScheduledHours: Hour[];
+
   vecValidAutoUpdateRestrictHours: Hour[];
+
   vecValidDownloadRegions: Region[];
 }
 
@@ -289,6 +334,7 @@ export interface MsgMonitorInfo extends JsPbMessage {
  */
 export interface Monitor {
   monitor_device_name: string;
+
   monitor_display_name: string;
 }
 
@@ -331,6 +377,7 @@ export interface MsgClientSettings extends JsPbMessage {
   cloud_enabled(): boolean;
 
   controller_combine_nintendo_joycons(): boolean;
+
   controller_enable_chord(): boolean;
 
   controller_generic_support(): boolean;
@@ -338,6 +385,7 @@ export interface MsgClientSettings extends JsPbMessage {
   controller_guide_button_focus_steam(): boolean;
 
   controller_poll_rate(): boolean;
+
   controller_power_off_timeout(): number;
 
   controller_ps_support(): number;
@@ -417,18 +465,31 @@ export interface MsgClientSettings extends JsPbMessage {
   g_max_fps(): number;
 
   game_notes_enable_spellcheck(): boolean;
+
   gamerecording_automatic_gain_control(): boolean;
+
   gamerecording_export_codec(): EExportCodec;
+
   gamerecording_export_directory(): number;
+
   gamerecording_export_limit_bitrate(): number;
+
   gamerecording_export_limit_frame_rate(): number;
+
   gamerecording_export_limit_height(): number;
+
   gamerecording_export_limit_size_mb(): number;
+
   gamerecording_export_limit_type(): EGRExportLimitType;
+
   gamerecording_export_limit_width(): number;
+
   gamerecording_force_mic_mono(): boolean;
+
   gamerecording_hotkey_ic(): CMsgHotkey;
+
   gamerecording_ic_seconds(): number;
+
   gamerecording_video_bitrate(): string;
 
   gamerecording_video_maxheight(): number;
@@ -456,6 +517,7 @@ export interface MsgClientSettings extends JsPbMessage {
   gamescope_use_game_refresh_rate_in_steam(): boolean;
 
   gamestream_enable_video_h265(): boolean;
+
   gamestream_hardware_video_encode(): boolean;
 
   hdr_compat_testing(): boolean;
@@ -633,10 +695,15 @@ export interface MsgClientSettings extends JsPbMessage {
 
 export interface CMsgHotkey extends JsPbMessage {
   alt_key(): boolean;
+
   ctrl_key(): boolean;
+
   display_name(): string;
+
   key_code(): number;
+
   meta_key(): boolean;
+
   shift_key(): boolean;
 }
 

@@ -18,13 +18,20 @@ export interface ClientNotifications {
 
 export interface SteamNotificationOptions {
   body: string;
+
   chatroomgroupid?: number;
+
   chatroomid?: number;
+
   icon?: string;
+
   state: string;
+
   /** A Steam64 ID. */
   steamid: string;
+
   tag?: string;
+
   title?: string;
 }
 

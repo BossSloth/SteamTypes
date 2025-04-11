@@ -76,11 +76,17 @@ export interface Music {
 
 export interface MusicTrack {
   bShuffle: boolean;
+
   ePlaybackStatus: EAudioPlayback;
+
   eRepeatStatus: EMusicPlayingRepeatStatus;
+
   nActiveTrack: number;
+
   nLengthInMsec: number;
+
   nVolume: number;
+
   uSoundtrackAppId: number;
 }
 

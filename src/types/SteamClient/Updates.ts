@@ -23,6 +23,7 @@ export interface Updates {
 
 export interface OSBranch {
   eBranch: EOSBranch;
+
   sRawName: string;
 }
 
@@ -55,21 +56,29 @@ export interface MsgSystemUpdateState extends JsPbMessage {
 
 export interface UpdateApplyResult {
   eresult: EResult;
+
   requires_client_restart: boolean;
+
   requires_system_restart: boolean;
+
   type: EUpdaterType;
 }
 
 export interface UpdateCheckResult {
   available: boolean;
+
   eresult: EResult;
+
   rtime_checked: number;
+
   type: EUpdaterType;
 }
 
 export interface UpdateProgress {
   rtime_estimated_completion: number | undefined;
+
   stage_progress: number | undefined;
+
   stage_size_bytes: number | undefined;
 }
 

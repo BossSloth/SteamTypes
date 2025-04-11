@@ -39,5 +39,6 @@ export interface Internal {
 
 export interface DisplayScaleFactors {
   flDeviceScale: number;
+
   flForceDeviceScale: number;
 }
