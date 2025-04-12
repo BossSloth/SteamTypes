@@ -14,7 +14,6 @@ export function createInterfaceDefinition(
   interfaceName: string,
   interfaceToProcess: InterfaceToProcess,
   project: Project,
-  depth = 0,
 ): void {
   let interfaceDefinition = context.interfaceDefinitions.get(interfaceName);
 
@@ -34,7 +33,7 @@ export function createInterfaceDefinition(
   };
 
   // Get all properties
-  let properties = getProperties(interfaceToProcess.obj, depth);
+  let properties = getProperties(interfaceToProcess.obj);
 
   // Check if object is a protobuf message
   if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
