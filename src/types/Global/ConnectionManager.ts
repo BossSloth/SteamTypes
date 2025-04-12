@@ -273,7 +273,7 @@ export interface m_ErrorReportingStore {
 
   m_pauseTimer: number;
 
-  m_rgErrorQueue: unknown[];
+  m_rgErrorQueue: m_rgErrorQueue[];
 
   m_sendTimer: null;
 
@@ -294,4 +294,12 @@ export interface m_mapCallbacks {
   invoke(n: unknown, r: unknown): void;
 
   msgClass(): unknown;
+}
+
+export interface m_rgErrorQueue {
+  identifier: string;
+
+  identifierHash: string;
+
+  message: ((number | string)[] | string)[];
 }

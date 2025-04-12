@@ -1,5 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { Apps } from '../SteamClient';
+import { SteamAppOverview } from '../SteamClient/Apps';
 import { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from '../SteamClient/Input';
 import { Unregisterable } from '../SteamClient/shared';
 import { ConnectionManager } from './ConnectionManager';
@@ -10,99 +11,306 @@ export interface AppDetailsStore {
    */
   AppDetailsChanged(...args: Parameters<Parameters<Apps['RegisterForAppDetails']>[1]>): void;
 
-  BAchievementIsHiddenAndAchieved(e: unknown, t: unknown): boolean;
+  /**
+   * Checks if the achievement is in the {@link Achievements.vecAchievedHidden} array
+   * @param appId The ID of the application.
+   * @param achievementName The name of the achievement. {@link Achievement.strName}
+   */
+  BAchievementIsHiddenAndAchieved(appId: number, achievementName: string): boolean;
 
-  BHasMarketPresence(e: unknown): unknown;
+  /**
+   * Checks if the application has a market presence
+   *
+   * Which indicates whether the application has community market available.
+   *
+   * @param appDetails The application details.
+   * @returns Boolean {@link AppDetails.bCommunityMarketPresence}
+   */
+  BHasMarketPresence(appDetails: AppDetails): boolean;
 
-  BHasRecentlyLaunched(e: unknown): unknown;
+  /**
+   * @returns true if the appId is in the {@link AppDetailsStore.m_mapRecentlyLaunchedApps} map
+   */
+  BHasRecentlyLaunched(appId: number): boolean;
 
-  BIsWorkshopVisible(e: unknown): unknown;
+  /**
+   * Checks if the application has a workshop presence
+   *
+   * Which indicates whether the application has community workshop available.
+   *
+   * @param appDetails The application details.
+   * @returns Boolean {@link AppDetails.bWorkshopVisible}
+   */
+  BIsWorkshopVisible(appDetails: AppDetails): boolean;
 
-  ClearCustomLogoPosition(e: unknown): unknown;
+  /**
+   * Clears the saved custom logo position
+   *
+   * This is the same as clicking Reset logo position in the library
+   *
+   * @param appOverview Seems to be a {@link SteamAppOverview} object but only the appid and rt_custom_image_mtime are used
+   */
+  ClearCustomLogoPosition(appOverview: {
+    appid: number;
+
+    rt_custom_image_mtime: number;
+  }): Promise<void>;
 
   CMInterface(): ConnectionManager;
 
-  GetAchievements(e: unknown): unknown;
-
   /**
-   * @native
+   * Gets the achievements for a specific appId.
+   *
+   * @param appId The ID of the application.
    */
-  GetAjaxLibraryAppDetails(): unknown;
+  GetAchievements(appId: number): Achievements;
+
+  GetAjaxLibraryAppDetails(appId: number): Promise<AjaxLibraryAppDetails>;
 
   GetAppData(appId: number): AppData;
 
-  GetAppDetails(e: unknown): unknown;
+  /**
+   * Gets the details for a specific application.
+   *
+   * Similar to doing {@link GetAppData()}.details
+   *
+   * @param appId The ID of the application.
+   * @returns The application details or null if not found or not loaded yet.
+   */
+  GetAppDetails(appId: number): AppDetails | null;
 
-  GetAppDetailsSpotlight(e: unknown): unknown;
+  /**
+   * Gets the spotlight details for a specific application.
+   *
+   * Also calls {@link RequestAppDetailsSpotlight} to load the details if not already loaded but still returns null on first call.
+   *
+   * @param appId The ID of the application.
+   * @returns The spotlight details or null if not found or not loaded yet.
+   */
+  GetAppDetailsSpotlight(appId: number): SpotlightData | null;
 
-  GetAssociations(e: unknown): unknown;
+  /**
+   * Gets the associations for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @returns The associations or null if not found or not loaded yet.
+   */
+  GetAssociations(appId: number): AssociationData | null;
 
-  GetCustomLogoPosition(e: unknown): unknown;
+  /**
+   * Gets the custom logo position for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @returns The custom logo position or null if not loaded yet or undefined if this app has no custom logo.
+   */
+  GetCustomLogoPosition(appId: number): LogoPosition | null | undefined;
 
-  GetDescriptions(e: unknown): unknown;
+  /**
+   * Gets the descriptions for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @returns The descriptions or null if not found or not loaded yet.
+   */
+  GetDescriptions(appId: number): DescriptionsData | null;
 
-  GetHeaderImages(e: unknown): unknown[];
+  /**
+   * Gets the header images for a specific application.
+   *
+   * @param appOverview The application overview.
+   * @returns An array of paths to header images or an empty array if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetHeaderImages(appOverview: SteamAppOverview): ReturnType<AppDetailsStore['GetHeaderImagesForAppId']>;
 
-  GetHeaderImagesForAppId(e: unknown, t: unknown, r: unknown): never[];
+  /**
+   * Gets the header images for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @param localCacheVersion The version of the local cache gotten from {@link SteamAppOverview.local_cache_version}. This will be used in the first two relative paths.
+   * @param storeAssetTime The time of the store asset gotten from {@link SteamAppOverview.rt_store_asset_mtime}. This will be used in the last absolute URL.
+   * @returns An array of paths to header images or an empty array if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetHeaderImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
+    /** This is a relative path that can be appended to https://steamloopback.host */
+    relativeLibraryHeader: string,
+    /** This is a relative path that can be appended to https://steamloopback.host */
+    legacyHeader: string,
+    /** This is an absolute URL to shared.steamstatic.com */
+    libraryHeader: string,
+  ];
 
-  GetHeroBlurImages(e: unknown): unknown[];
+  GetHeroBlurImages(appOverview: SteamAppOverview): ReturnType<AppDetailsStore['GetHeroBlurImagesForAppId']>;
 
-  GetHeroBlurImagesForAppId(e: unknown, t: unknown, r: unknown): never[];
+  /**
+   * Gets the hero blur images for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @param localCacheVersion The version of the local cache gotten from {@link SteamAppOverview.local_cache_version}. This will be used in the first two relative paths.
+   * @param storeAssetTime The time of the store asset gotten from {@link SteamAppOverview.rt_store_asset_mtime}. This will be used in the last absolute URL.
+   * @returns An array of paths to hero blur images or an empty array if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetHeroBlurImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
+    /** This is a relative path that can be appended to https://steamloopback.host */
+    relativeLibraryHeroBlur: string,
+    /** This is a relative path that can be appended to https://steamloopback.host */
+    legacyHeroBlur: string,
+    /** This is an absolute URL to shared.steamstatic.com */
+    libraryHeroBlur: string,
+  ];
 
-  GetHeroImages(e: unknown): { rgHeroImages: unknown[]; bHasHeroImage: unknown; appid: unknown; };
+  /**
+   * Gets the hero images for a specific application.
+   *
+   * @param appOverview The application overview.
+   * @returns An object containing the hero images or an empty object if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetHeroImages(appOverview: SteamAppOverview): {
+    rgHeroImages: [
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      relativeLibraryHero: string,
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      legacyHero: string,
+      /** This is an absolute URL to shared.steamstatic.com */
+      libraryHero: string,
+    ];
 
-  GetHeroImagesForAppId(e: unknown, t: unknown, r: unknown): { rgHeroImages: unknown[]; bHasHeroImage: boolean; };
+    bHasHeroImage: boolean;
 
-  GetLogoImages(e: unknown): { rgLogoImages: unknown[]; logoPosition: unknown; };
+    appid: number;
+  };
 
-  GetLogoImagesForAppId(e: unknown, t: unknown, r: unknown): { rgLogoImages: unknown[]; logoPosition: null; };
+  /**
+   * Gets the hero images for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @param localCacheVersion The version of the local cache gotten from {@link SteamAppOverview.local_cache_version}. This will be used in the first two relative paths.
+   * @param storeAssetTime The time of the store asset gotten from {@link SteamAppOverview.rt_store_asset_mtime}. This will be used in the last absolute URL.
+   * @returns An object containing the hero images or an empty object if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetHeroImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
+    rgHeroImages: [
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      relativeLibraryHero: string,
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      legacyHero: string,
+      /** This is an absolute URL to shared.steamstatic.com */
+      libraryHero: string,
+    ];
+    bHasHeroImage: boolean;
+  };
+
+  /**
+   * Gets the logo images for a specific application.
+   *
+   * @param appOverview The application overview.
+   * @returns An object containing the logo images or an empty object if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetLogoImages(appOverview: SteamAppOverview): {
+    rgLogoImages: [
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      relativeLibraryLogo: string,
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      legacyLogo: string,
+      /** This is an absolute URL to shared.steamstatic.com */
+      libraryLogo: string,
+    ];
+    logoPosition: LogoPosition;
+  };
+
+  /**
+   * Gets the logo images for a specific application.
+   *
+   * @param appId The ID of the application.
+   * @param localCacheVersion The version of the local cache gotten from {@link SteamAppOverview.local_cache_version}. This will be used in the first two relative paths.
+   * @param storeAssetTime The time of the store asset gotten from {@link SteamAppOverview.rt_store_asset_mtime}. This will be used in the last absolute URL.
+   * @returns An object containing the logo images or an empty object if not found or not loaded yet.
+   *
+   * The first two are relative paths that can be appended to https://steamloopback.host
+   * The last one is an absolute URL to shared.steamstatic.com
+   */
+  GetLogoImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
+    rgLogoImages: [
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      relativeLibraryLogo: string,
+      /** This is a relative path that can be appended to https://steamloopback.host */
+      legacyLogo: string,
+      /** This is an absolute URL to shared.steamstatic.com */
+      libraryLogo: string,
+    ];
+    logoPosition: LogoPosition;
+  };
 
   Init(cm: ConnectionManager): void;
 
-  MarkAppAsRecentlyLaunched(e: unknown): void;
+  /**
+   * Marks an application as recently launched and adds it to the recently launched apps set.
+   *
+   * @param appId The ID of the application to mark as recently launched.
+   */
+  MarkAppAsRecentlyLaunched(appId: number): void;
 
+  /**
+   * Registers a callback function to be called when application data changes.
+   * @param appId The ID of the application to register the callback for.
+   * @param callback The callback function to be called.
+   * @returns An object that can be used to unregister the callback.
+   */
   RegisterForAppData(appId: number, callback: (appData: AppData) => void): Unregisterable;
 
-  /**
-   * @native
-   */
-  RequestAchievements(): unknown;
+  RequestAchievements(appId: number): Promise<void>;
 
-  RequestAppDetails(e: unknown): Promise<unknown>;
+  RequestAppDetails(appId: number): Promise<AppDetails>;
 
-  RequestAppDetailsSpotlight(e: unknown): Promise<undefined>;
+  RequestAppDetailsSpotlight(appId: number): Promise<undefined>;
 
-  /**
-   * @native
-   */
-  RequestAssociationData(): unknown;
+  RequestAssociationData(appId: number): Promise<void>;
 
-  RequestCustomImageInfo(e: unknown): Promise<void>;
+  RequestCustomImageInfo(appId: number): Promise<void>;
+
+  RequestDescriptionsData(appId: number): Promise<void>;
 
   /**
-   * @native
+   * Calls SteamClient.{@link Apps.SetCustomLogoPositionForApp}
+   * @param appOverview
+   * @param logoPosition
    */
-  RequestDescriptionsData(): unknown;
+  SaveCustomLogoPosition(appOverview: { appid: number; rt_custom_image_mtime?: number; }, logoPosition: LogoPosition): Promise<void>;
 
-  SaveCustomLogoPosition(e: unknown, t: unknown): Promise<unknown>;
-
-  /**
-   * @native
-   */
-  SetAjaxLibraryAppDetails(): unknown;
+  SetAjaxLibraryAppDetails(appId: number, appData: AppData, ajaxLibraryAppDetails: AjaxLibraryAppDetails): void;
 
   UnregisterForAppData(appData: AppData, callback: (appData: AppData) => void): void;
 
-  ValidateCustomImageInfo(e: unknown): boolean;
+  /**
+   * Validates a custom image info object.
+   * @param customImageInfo The custom image info object to validate.
+   * @returns True if the custom image info is valid, false otherwise.
+   */
+  ValidateCustomImageInfo(customImageInfo: CustomImageInfo): boolean;
 
   m_CMInterface: ConnectionManager;
 
   m_mapAppData: ObservableMap<number, AppData>;
 
-  // TODO: doesn't seem to get filled with any data
-  m_mapRecentlyLaunchedApps: ObservableMap<unknown, unknown>;
+  m_mapRecentlyLaunchedApps: ObservableMap<number, boolean>;
 
-  m_setDetailsInProgress: Set<unknown>;
+  m_setDetailsInProgress: Set<number>;
 }
 
 export interface AppData {
@@ -116,7 +324,7 @@ export interface AppData {
 
   customImageInfo?: (CustomImageInfo | null);
 
-  customImageInfoRtime: number;
+  customImageInfoRtime?: number;
 
   descriptionsData: (DescriptionsData | null);
 
@@ -244,6 +452,9 @@ export interface AppDetails {
 
   bSupportsCDKeyCopyToClipboard: boolean;
 
+  /**
+   * Indicates whether the application has the community workshop available.
+   */
   bWorkshopVisible: boolean;
 
   deckDerivedProperties?: AppDeckDerivedProperties;
@@ -593,6 +804,14 @@ export interface LegacyCDKey {
 
 export interface NamelessLegacyCDKeys {
   eResult: ELegacyCDKeyResult;
+}
+
+export interface AjaxLibraryAppDetails extends Omit<AssociationData, 'rgFranchises'>, DescriptionsData {
+  appid: string;
+
+  name: string;
+
+  status: number;
 }
 
 export enum EUCMFilePrivacyState {

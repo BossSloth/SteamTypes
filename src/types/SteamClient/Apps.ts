@@ -567,7 +567,7 @@ export interface Apps {
   /**
    * Sets a custom logo position for a specific app.
    * @param appId The ID of the application.
-   * @param details The details of the custom logo position, expected to be a stringified {@link LogoPositionForApp} object.
+   * @param details The details of the custom logo position, expected to be a JSON stringified {@link LogoPositionForApp} object.
    * @returns A Promise that resolves when the custom logo position is successfully set.
    */
   SetCustomLogoPositionForApp(appId: number, details: string): Promise<void>;

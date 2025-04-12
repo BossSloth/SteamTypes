@@ -28,6 +28,10 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   const targetReturnTypeNode = targetMethod.getReturnTypeNode();
   const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
 
+  if (sourceReturnTypeNode?.getType().isNever() === true || (Node.isArrayTypeNode(sourceReturnTypeNode) && sourceReturnTypeNode.getElementTypeNode().getType().isNever())) {
+    return;
+  }
+
   if (isImportedType(currentTargetSourceFile, targetMethod.getReturnType())) {
     return;
   }
