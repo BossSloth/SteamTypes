@@ -136,11 +136,20 @@ export interface AppDetailsStore {
    * The last one is an absolute URL to shared.steamstatic.com
    */
   GetHeaderImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
-    /** This is a relative path that can be appended to https://steamloopback.host */
+    /**
+     * This is a relative path that can be appended to https://steamloopback.host
+     * @example "/assets/427520/header.jpg?c=${localCacheVersion}"
+     */
     relativeLibraryHeader: string,
-    /** This is a relative path that can be appended to https://steamloopback.host */
+    /**
+     * This is a relative path that can be appended to https://steamloopback.host
+     * @example "/assets/427520_header.jpg?c=${localCacheVersion}"
+     */
     legacyHeader: string,
-    /** This is an absolute URL to shared.steamstatic.com */
+    /**
+     * This is an absolute URL to shared.steamstatic.com
+     * @example "https://shared.steamstatic.com/store_item_assets/steam/apps/427520/header.jpg?t=${storeAssetTime}"
+     */
     libraryHeader: string,
   ];
 
@@ -158,11 +167,20 @@ export interface AppDetailsStore {
    * The last one is an absolute URL to shared.steamstatic.com
    */
   GetHeroBlurImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
-    /** This is a relative path that can be appended to https://steamloopback.host */
+    /**
+     * This is a relative path that can be appended to https://steamloopback.host
+     * @example "/assets/427520/library_hero_blur.jpg?c=${localCacheVersion}"
+     */
     relativeLibraryHeroBlur: string,
-    /** This is a relative path that can be appended to https://steamloopback.host */
+    /**
+     * This is a relative path that can be appended to https://steamloopback.host
+     * @example "/assets/427520_library_hero_blur.jpg?c=${localCacheVersion}"
+     */
     legacyHeroBlur: string,
-    /** This is an absolute URL to shared.steamstatic.com */
+    /**
+     * This is an absolute URL to shared.steamstatic.com
+     * @example "https://shared.steamstatic.com/store_item_assets/steam/apps/427520/library_hero_blur.jpg?t=${storeAssetTime}"
+     */
     libraryHeroBlur: string,
   ];
 
@@ -177,11 +195,20 @@ export interface AppDetailsStore {
    */
   GetHeroImages(appOverview: SteamAppOverview): {
     rgHeroImages: [
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520/library_hero.jpg?c=${localCacheVersion}"
+       */
       relativeLibraryHero: string,
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520_library_hero.jpg?c=${localCacheVersion}"
+       */
       legacyHero: string,
-      /** This is an absolute URL to shared.steamstatic.com */
+      /**
+       * This is an absolute URL to shared.steamstatic.com
+       * @example "https://shared.steamstatic.com/store_item_assets/steam/apps/427520/library_hero.jpg?t=${storeAssetTime}"
+       */
       libraryHero: string,
     ];
 
@@ -203,11 +230,20 @@ export interface AppDetailsStore {
    */
   GetHeroImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
     rgHeroImages: [
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520/library_hero.jpg?c=${localCacheVersion}"
+       */
       relativeLibraryHero: string,
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520_library_hero.jpg?c=${localCacheVersion}"
+       */
       legacyHero: string,
-      /** This is an absolute URL to shared.steamstatic.com */
+      /**
+       * This is an absolute URL to shared.steamstatic.com
+       * @example "https://shared.steamstatic.com/store_item_assets/steam/apps/427520/library_hero.jpg?t=${storeAssetTime}"
+       */
       libraryHero: string,
     ];
     bHasHeroImage: boolean;
@@ -222,17 +258,7 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetLogoImages(appOverview: SteamAppOverview): {
-    rgLogoImages: [
-      /** This is a relative path that can be appended to https://steamloopback.host */
-      relativeLibraryLogo: string,
-      /** This is a relative path that can be appended to https://steamloopback.host */
-      legacyLogo: string,
-      /** This is an absolute URL to shared.steamstatic.com */
-      libraryLogo: string,
-    ];
-    logoPosition: LogoPosition;
-  };
+  GetLogoImages(appOverview: SteamAppOverview): ReturnType<AppDetailsStore['GetLogoImagesForAppId']>;
 
   /**
    * Gets the logo images for a specific application.
@@ -247,11 +273,20 @@ export interface AppDetailsStore {
    */
   GetLogoImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
     rgLogoImages: [
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520/logo.png?c=${localCacheVersion}"
+       */
       relativeLibraryLogo: string,
-      /** This is a relative path that can be appended to https://steamloopback.host */
+      /**
+       * This is a relative path that can be appended to https://steamloopback.host
+       * @example "/assets/427520_logo.png?c=${localCacheVersion}"
+       */
       legacyLogo: string,
-      /** This is an absolute URL to shared.steamstatic.com */
+      /**
+       * This is an absolute URL to shared.steamstatic.com
+       * @example "https://shared.steamstatic.com/store_item_assets/steam/apps/427520/logo.png?t=${storeAssetTime}"
+       */
       libraryLogo: string,
     ];
     logoPosition: LogoPosition;
