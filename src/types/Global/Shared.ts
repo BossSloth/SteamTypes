@@ -1,3 +1,5 @@
+import Long from 'long';
+
 export interface SteamId {
   BIsClanAccount(): boolean;
 

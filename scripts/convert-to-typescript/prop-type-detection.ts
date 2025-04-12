@@ -211,7 +211,7 @@ function isIterable(value: unknown): value is Iterable<unknown> {
  * Checks for non-generic object types and returns their TypeScript type
  */
 // eslint-disable-next-line complexity
-export function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null {
+function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null {
   if (Long.isLong(obj)) {
     if (addImport) context.addImport('long', 'Long', true);
 

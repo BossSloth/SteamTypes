@@ -1,3 +1,4 @@
+import Long from 'long';
 import { ObservableMap } from 'mobx';
 import { GameSessions } from '../SteamClient';
 import { JsPbMessage } from '../SteamClient/shared';
