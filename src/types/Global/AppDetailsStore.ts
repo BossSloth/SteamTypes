@@ -633,7 +633,7 @@ export interface Achievements {
 
   nTotal: number;
 
-  vecAchievedHidden: Achievement[];
+  vecAchievedHidden: HiddenAchievement[];
 
   vecHighlight: Achievement[];
 
@@ -754,11 +754,11 @@ export interface Achievement {
   /** How many players have this achievement, in percentage. */
   flAchieved: number;
 
-  flCurrentProgress?: number;
+  flCurrentProgress: number;
 
-  flMaxProgress?: number;
+  flMaxProgress: number;
 
-  flMinProgress?: number;
+  flMinProgress: number;
 
   /** When this achievement was unlocked. */
   rtUnlocked: number;
@@ -773,6 +773,22 @@ export interface Achievement {
   strImage: string;
 
   /** Achievement name. */
+  strName: string;
+}
+
+export interface HiddenAchievement {
+  bAchieved: boolean;
+
+  flAchieved: number;
+
+  rtUnlocked: number;
+
+  strDescription: string;
+
+  strID: string;
+
+  strImage: string;
+
   strName: string;
 }
 

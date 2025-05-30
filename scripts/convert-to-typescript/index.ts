@@ -1,5 +1,6 @@
 import { Project, ScriptTarget } from 'ts-morph';
 import { convertToTypescript } from './converter';
+import './fill-app-data';
 
 // Initialize the global project
 globalThis.tsProject = new Project({

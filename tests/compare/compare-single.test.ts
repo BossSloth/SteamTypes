@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest';
 import { runComparisonTest } from './shared';
-import { interfaceRenamedCases } from './test-cases';
+import { interfaceRenamedCases, mergedInterfaceCases } from './test-cases';
 
 describe('Comparator - Single debug', () => {
   it('single', () => {
-    runComparisonTest(interfaceRenamedCases['interface with indexed access types']);
+    runComparisonTest(mergedInterfaceCases['basic merge']);
   });
 });

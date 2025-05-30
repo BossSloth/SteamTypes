@@ -52,9 +52,9 @@ export interface PopupManager {
    * @param name The name of the popup
    * @returns The popup with the given name
    */
-  GetExistingPopup(name: string): Popup;
+  GetExistingPopup(name: string): BasicPopup | undefined;
 
-  GetExistingPopup(name: 'SP Desktop_uid0'): MainWindowPopup;
+  GetExistingPopup(name: typeof MAIN_WINDOW_NAME): MainWindowPopup | undefined;
 
   /**
    * @returns the key used for usage in localStorage. Saved on a per-account basis.
@@ -106,7 +106,7 @@ export interface PopupManager {
 
   m_DynamicCSSObserver: MutationObserver;
 
-  m_mapPopups: ObservableMap<'SP Desktop_uid0', MainWindowPopup> & ObservableMap<string, Popup>;
+  m_mapPopups: ObservableMap<typeof MAIN_WINDOW_NAME, MainWindowPopup> & ObservableMap<string, Popup>;
 
   m_mapRestoreDetails: Map<string, RestoreDetail>;
 
@@ -120,6 +120,9 @@ export interface PopupManager {
   m_unCurrentAccountID: number;
 }
 
+// eslint-disable-next-line no-useless-assignment
+const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
+
 export type PopupCallback_t = (popup?: Popup) => void;
 
 export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
@@ -129,10 +132,11 @@ export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
 }
 
 export type MainWindowPopup = Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
+export type BasicPopup = Popup<PopupParameters, PopupCallback>;
 
 export interface Popup<
-  paramsType extends (MainWindowPopupParameters | PopupParameters) = PopupParameters,
-  callbacksType extends (MainWindowPopupCallback | PopupCallback) = PopupCallback,
+  paramsType extends (MainWindowPopupParameters | PopupParameters) = (MainWindowPopupParameters | PopupParameters),
+  callbacksType extends (MainWindowPopupCallback | PopupCallback) = (MainWindowPopupCallback | PopupCallback),
 > {
   BIsClosed(): Popup['m_popup']['closed'];
 

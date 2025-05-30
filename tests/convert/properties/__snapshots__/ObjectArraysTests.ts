@@ -7,7 +7,7 @@ export interface ObjectArraysTests {
 
   mixedArray: (MixedArray | MixedArray2 | MixedArray3)[];
 
-  mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | object | unknown)[];
+  mixedEmptiness: (MixedEmptiness | MixedEmptiness2 | object)[];
 
   mixedNestedArray: (MixedNestedArray | MixedNestedArray2)[];
 

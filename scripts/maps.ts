@@ -77,6 +77,9 @@ export const interfaceMaps: InterfaceMap[] = [
   // NOTE: have the friend list open after todo is fixed
   // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug
   { file: 'Global/PopupManager', object: 'window.g_PopupManager', srcName: 'PopupManager' },
+  // { file: 'Global/StoreItemCache', object: 'window.StoreItemCache', srcName: 'StoreItemCache' },
+  // { file: 'Global/SteamUIStore', object: 'window.SteamUIStore', srcName: 'SteamUIStore' },
+  // { file: 'Global/MainWindowBrowserManager', object: 'window.MainWindowBrowserManager', srcName: 'MainWindowBrowserManager' },
   // #endregion
 ];
 

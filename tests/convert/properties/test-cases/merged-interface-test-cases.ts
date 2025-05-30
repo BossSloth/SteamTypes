@@ -23,8 +23,8 @@ const basicMergedInterfaceTests = {
   // Test case for arrays with objects that have nested objects
   // with varying properties
   arrayWithNestedObjects: [
-    { id3: 1, name: 'Basic', status: 'active', createdAt: new Date(), details: { name: 'Basic' } },
-    { id3: 2, name: 'Advanced', status: 'active', createdAt: new Date(), details: { name: 'Advanced', features: ['A', 'B'] } },
+    { id3: 1, name: 'Basic', status: 'active', createdAt: new Date(), details: { names: 'Basic' } },
+    { id3: 2, name: 'Advanced', status: 'active', createdAt: new Date(), details: { names: 'Advanced', features: ['A', 'B'] } },
   ],
 };
 // #endregion
@@ -260,6 +260,13 @@ const arrayTypeMergedInterfaceTests = {
       ],
       settings: { darkMode: true },
     },
+  ],
+
+  appInfo: [
+    { developers: [{ name: 'foo' }] },
+    { developers: [{ name: 'bar' }] },
+    { developers: [{ name: 'baz', creator_clan_account_id: 1 }] },
+    { developers: [{ name: 'baz', creator_clan_account_id: 1 }, { name: 'baz' }, { name: 'baz' }] },
   ],
 };
 // #endregion

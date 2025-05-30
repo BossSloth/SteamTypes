@@ -162,14 +162,14 @@ function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): bo
     return false;
   }
 
-  const targetElementType = targetArray.getElementTypeNode().getType();
-  const sourceElementType = sourceNode.getElementTypeNode().getType();
+  const targetElementType = targetArray.getElementTypeNode();
+  const sourceElementType = sourceNode.getElementTypeNode();
 
-  if (sourceElementType.isUnknown()) {
+  if (sourceElementType.getType().isUnknown()) {
     return true;
   }
 
-  return targetElementType.isAssignableTo(sourceElementType) && sourceElementType.isAssignableTo(targetElementType);
+  return compareTypes(targetElementType, sourceElementType);
 }
 
 function handleTargetTuple(targetTuple: TupleTypeNode, sourceNode: TypeNode): boolean {

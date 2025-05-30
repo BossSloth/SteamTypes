@@ -9,12 +9,12 @@ export interface Browser {
 
   CloseDevTools(): void;
 
-  GetBrowserID(): Promise<number>;
+  GetBrowserID(): number;
 
   GetSpellingSuggestions(word: string): string[];
 
   // 16-bit unsigned integer?
-  GetSteamBrowserID(): Promise<number>;
+  GetSteamBrowserID(): number;
 
   /**
    * Hides the mouse cursor until input.

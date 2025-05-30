@@ -55,27 +55,9 @@ The project includes scripts for:
 
 ### Useful Commands
 
-Fill the app details store with all apps:
+Fill a lot of data:
 ```javascript
-async function fillAppDetailsStore() {
-  const apps = collectionStore.allAppsCollection.m_rgApps.filter(appId => appId);
-  const time = Date.now()
-
-  await Promise.all(apps.map(async (appId) => {
-    await appDetailsStore.RequestAppDetails(appId);
-
-    return Promise.all([
-      appDetailsStore.RequestAchievements(appId),
-      appDetailsStore.RequestAssociationData(appId),
-      appDetailsStore.RequestDescriptionsData(appId),
-      appDetailsStore.RequestCustomImageInfo({appid: appId, rt_custom_image_mtime: time}),
-      appDetailsStore.RequestAppDetailsSpotlight(appId),
-      appActivityStore.RestoreActivity(appId),
-    ]);
-  }));
-}
-
-fillAppDetailsStore().then(() => console.log('All app details loaded'));
+fillAppData();
 ```
 
 map an app details value:

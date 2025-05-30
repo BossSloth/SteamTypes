@@ -47,7 +47,7 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
     return new PrimitiveType('unknown');
   }
 
-  if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new UnionType([new PrimitiveType('object'), new PrimitiveType('unknown')]);
+  if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
 
   const lastPathSegment = path.split('.').pop() ?? '';
   let capitalizedName: string;

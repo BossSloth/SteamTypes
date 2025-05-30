@@ -17,6 +17,8 @@ export interface MergedInterfaceTests {
 }
 
 export interface ArrayTypeMergedInterfaceTests {
+  appInfo: AppInfo[];
+
   arrayWithArraysOfObjects: ArrayWithArraysOfObjects[];
 
   arrayWithDifferentItemTypes: ArrayWithDifferentItemTypes[];
@@ -76,6 +78,10 @@ export interface GenericTypeMergedInterfaceTests {
 
 export interface MultipleClassArray {
   multipleData: (MultipleData | MultipleData2)[];
+}
+
+export interface AppInfo {
+  developers: (Developers | Developers2)[];
 }
 
 export interface ArrayWithArraysOfObjects {
@@ -468,6 +474,16 @@ export interface MultipleData2 {
   name: string;
 }
 
+export interface Developers {
+  name: string;
+}
+
+export interface Developers2 {
+  creator_clan_account_id: number;
+
+  name: string;
+}
+
 export interface Children {
   active?: boolean;
 
@@ -483,13 +499,13 @@ export interface Settings {
 }
 
 export interface Details {
-  name: string;
+  names: string;
 }
 
 export interface Details2 {
   features: string[];
 
-  name: string;
+  names: string;
 }
 
 export interface TestDetails {

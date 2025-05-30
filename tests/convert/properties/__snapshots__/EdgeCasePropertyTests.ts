@@ -88,9 +88,9 @@ export interface SpecialValueTests {
 
   mutationObserver: MutationObserver;
 
-  objectWithOnlyToString: (object | unknown);
+  objectWithOnlyToString: object;
 
-  objectWithOnlyValueOf: (object | unknown);
+  objectWithOnlyValueOf: object;
 
   objectWithToStringAndOther: ObjectWithToStringAndOther;
 

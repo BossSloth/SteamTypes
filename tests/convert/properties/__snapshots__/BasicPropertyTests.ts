@@ -24,7 +24,7 @@ export interface BasicPropertyTests {
 
   emptyArray: unknown[];
 
-  emptyObject: (object | unknown);
+  emptyObject: object;
 
   emptyString: string;
 
