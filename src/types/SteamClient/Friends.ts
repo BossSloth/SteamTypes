@@ -5,13 +5,6 @@ import { Unregisterable } from './shared';
  */
 export interface Friends {
   /**
-   * Adds a user to the friend list.
-   * @param steamId The Steam ID of the user to add as a friend.
-   * @returns A Promise that resolves to true if the friend was added successfully, false otherwise.
-   */
-  AddFriend(steamId: string): Promise<boolean>;
-
-  /**
    * @returns a list of players you recently played with.
    */
   GetCoplayData(): Promise<CoplayData>;
@@ -37,13 +30,6 @@ export interface Friends {
   RegisterForMultiplayerSessionShareURLChanged(param0: unknown, param1: unknown): Unregisterable;
 
   RegisterForVoiceChatStatus(callback: (status: VoiceChatStatus) => void): Unregisterable;
-
-  /**
-   * Removes a user from the friend list.
-   * @param steamId The Steam ID of the user to remove from the friend list.
-   * @returns A Promise that resolves to true if the friend was removed successfully, false otherwise.
-   */
-  RemoveFriend(steamId: string): Promise<boolean>;
 
   ShowRemotePlayTogetherUI(): void;
 }

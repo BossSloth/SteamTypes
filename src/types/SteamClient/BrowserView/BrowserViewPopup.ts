@@ -9,6 +9,9 @@ export interface BrowserViewPopup {
    */
   AddGlass(enabled: boolean, useBackgroundColor: boolean, blur: boolean): void;
 
+  /** @native */
+  AddHeader(): unknown;
+
   /**
    * Indicates whether you can go backward in history or not.
    * @returns true if you can go backward in history, false otherwise.

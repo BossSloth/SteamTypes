@@ -294,6 +294,12 @@ export enum EOSType {
 export interface SystemInfo {
   bIsUnsupportedPrototypeHardware: boolean;
 
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eHardwareVariant: number;
+
   nCPUHz: number;
 
   nCPULogicalCores: number;
