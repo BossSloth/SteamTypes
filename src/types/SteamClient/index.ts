@@ -176,6 +176,7 @@ export {
   System,
   UI,
   Updates,
+  URL,
   User,
   WebChat,
   WebUITransport,

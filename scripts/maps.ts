@@ -80,6 +80,7 @@ export const interfaceMaps: InterfaceMap[] = [
   // { file: 'Global/StoreItemCache', object: 'window.StoreItemCache', srcName: 'StoreItemCache' },
   // { file: 'Global/SteamUIStore', object: 'window.SteamUIStore', srcName: 'SteamUIStore' },
   // { file: 'Global/MainWindowBrowserManager', object: 'window.MainWindowBrowserManager', srcName: 'MainWindowBrowserManager' },
+  { file: 'Global/UrlStore', object: 'window.urlStore', srcName: 'UrlStore' },
   // #endregion
 ];
 

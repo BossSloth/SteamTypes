@@ -190,7 +190,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   const diffs: { filePath: string; result: string | null; }[] = [];
 
   if (filter !== undefined) {
-    maps = maps.filter(map => map.file.includes(filter));
+    maps = maps.filter(map => map.file.toLowerCase().includes(filter.toLowerCase()));
   }
   logger.log(chalk.blue(`Comparing ${maps.length} maps`));
 

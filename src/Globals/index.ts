@@ -3,6 +3,7 @@ import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 import { PopupManager } from '../types/Global/PopupManager';
+import { UrlStore } from '../types/Global/UrlStore';
 
 declare global {
   let App: App;
@@ -196,7 +197,7 @@ declare global {
     uiBroadcastWatchStore: unknown;
     uiStore: unknown;
     UpdateStore: unknown;
-    urlStore: unknown;
+    urlStore: UrlStore;
     userProfileStore: unknown;
     vrAudioSettingsStore: unknown;
     webpackChunksteamui: unknown;
