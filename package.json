@@ -1,6 +1,6 @@
 {
   "name": "steam-types",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
   "types": "dist/index.d.ts",
