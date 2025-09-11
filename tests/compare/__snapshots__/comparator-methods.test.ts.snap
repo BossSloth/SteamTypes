@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Methods Cases > argument added to existing method 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface PopupManager {
+-   GetHeaderImages(appOverview: { appid: number }): string
++  GetHeaderImages(appOverview: { appid: number }, t: unknown): string
+}"
+`;
+
+exports[`Comparator Methods Cases > argument removed from existing method 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface PopupManager {
+-   GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
++  GetHeaderImages(appOverview: { appid: number }): string
+}"
+`;

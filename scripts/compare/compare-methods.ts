@@ -1,4 +1,4 @@
-import { MethodSignature, Node, SyntaxKind } from 'ts-morph';
+import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { currentTargetSourceFile, isImportedType } from './shared';
 
@@ -67,40 +67,45 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
     return;
   }
 
-  // Different number of parameters - replace all
-  if (targetParams.length !== sourceParams.length) {
-    // Remove all existing parameters
-    targetParams.forEach((param) => {
-      param.remove();
-    });
+  for (let i = 0; i < Math.max(sourceParams.length, targetParams.length); i++) {
+    const sourceParam = sourceParams[i];
+    const targetParam = targetParams[i];
 
-    // Add all parameters from source
-    targetMethod.addParameters(sourceParams.map(param => param.getStructure()));
+    compareParameter(targetMethod, targetParam, sourceParam);
+  }
+}
+
+function compareParameter(targetMethod: MethodSignature, targetParam?: ParameterDeclaration, sourceParam?: ParameterDeclaration): void {
+  const sourceTypeNode = sourceParam?.getTypeNode();
+  const targetTypeNode = targetParam?.getTypeNode();
+
+  if (targetParam === undefined && sourceParam !== undefined) {
+    targetMethod.addParameter(sourceParam.getStructure());
 
     return;
   }
 
-  // Same number of parameters - update by index
-  for (let i = 0; i < sourceParams.length; i++) {
-    const sourceParam = sourceParams[i];
-    const targetParam = targetParams[i];
+  if (targetParam !== undefined && sourceParam === undefined) {
+    targetParam.remove();
 
-    // Update type if needed
-    const sourceTypeNode = sourceParam.getTypeNode();
-    const targetTypeNode = targetParam.getTypeNode();
+    return;
+  }
 
-    if (sourceTypeNode && sourceTypeNode.getText() !== 'unknown' && (!targetTypeNode || targetTypeNode.getText() !== sourceTypeNode.getText())) {
-      targetParam.setType(sourceTypeNode.getText());
-    }
+  if (sourceParam === undefined || targetParam === undefined) {
+    return;
+  }
 
-    // Update question token
-    if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
-      targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
-    }
+  if (sourceTypeNode && sourceTypeNode.getText() !== 'unknown' && targetTypeNode && targetTypeNode.getText() !== sourceTypeNode.getText()) {
+    targetParam.setType(sourceTypeNode.getText());
+  }
 
-    // Update rest parameter
-    if (sourceParam.isRestParameter() && !targetParam.isRestParameter()) {
-      targetParam.setIsRestParameter(sourceParam.isRestParameter());
-    }
+  // Update question token
+  if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
+    targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
+  }
+
+  // Update rest parameter
+  if (sourceParam.isRestParameter() && !targetParam.isRestParameter()) {
+    targetParam.setIsRestParameter(sourceParam.isRestParameter());
   }
 }

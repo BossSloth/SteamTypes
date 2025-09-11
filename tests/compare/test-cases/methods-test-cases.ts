@@ -18,5 +18,31 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
+  'argument added to existing method': {
+    interfaceName: 'PopupManager',
+    target: dedent/* ts */`
+    export interface PopupManager {
+       GetHeaderImages(appOverview: { appid: number }): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface PopupManager {
+       GetHeaderImages(e: unknown, t: unknown): string
+    }
+  `,
+  },
+  'argument removed from existing method': {
+    interfaceName: 'PopupManager',
+    target: dedent/* ts */`
+    export interface PopupManager {
+       GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface PopupManager {
+       GetHeaderImages(e: unknown): string
+    }
+  `,
+  },
 
 };
