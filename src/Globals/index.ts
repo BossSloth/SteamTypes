@@ -94,7 +94,7 @@ declare global {
   let uiBroadcastWatchStore: unknown;
   let uiStore: unknown;
   let UpdateStore: unknown;
-  let urlStore: unknown;
+  let urlStore: UrlStore;
   let userProfileStore: unknown;
   let vrAudioSettingsStore: unknown;
   let webpackChunksteamui: unknown;

@@ -333,7 +333,7 @@ export interface Apps {
    * @returns A Promise that resolves to a number.
    * @todo Returns a result enum? 1 if ok, 2 if not running - see ResumeGameInProgress
    */
-  RaiseWindowForGame(appId: number): Promise<number>;
+  RaiseWindowForGame(appId: string): Promise<number>;
 
   /**
    * @example
