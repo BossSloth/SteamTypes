@@ -50,14 +50,8 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
   if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
 
   const lastPathSegment = path.split('.').pop() ?? '';
-  let capitalizedName: string;
-  if (lastPathSegment.charAt(1) === '_') {
-    capitalizedName = lastPathSegment;
-  } else {
-    capitalizedName = lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
-  }
 
-  const [interfaceName, nameCounter] = generateInterfaceName(capitalizedName);
+  const [interfaceName, nameCounter] = generateInterfaceName(lastPathSegment);
 
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
@@ -94,8 +88,19 @@ function getCircularReference(value: Record<string, unknown>, isValueIterable: b
 }
 
 // Generate a unique interface name for nested objects
-function generateInterfaceName(baseName: string): [string, number | undefined] {
-  const formattedName = formatInterfaceName(baseName);
+function generateInterfaceName(pathSegment: string): [string, number | undefined] {
+  if (pathSegment.startsWith('m_')) {
+    pathSegment = pathSegment.slice(2);
+  }
+
+  let capitalizedName: string;
+  if (pathSegment.charAt(1) === '_') {
+    capitalizedName = pathSegment;
+  } else {
+    capitalizedName = pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1);
+  }
+
+  const formattedName = formatInterfaceName(capitalizedName);
   let counter = context.interfaceNameCounter.get(formattedName) ?? 0;
 
   counter++;
@@ -243,6 +248,14 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
     if (addImport) context.addImport('react-dom/client', 'Root as ReactRoot');
 
     return 'ReactRoot';
+  }
+  // @ts-expect-error App is not defined
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (typeof App !== 'undefined' && obj === App?.m_cm) {
+    // import { ConnectionManager } from './ConnectionManager';
+    if (addImport) context.addImport('./ConnectionManager', 'ConnectionManager');
+
+    return 'ConnectionManager';
   }
 
   return null;

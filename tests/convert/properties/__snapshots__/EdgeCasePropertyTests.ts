@@ -52,7 +52,7 @@ export interface PropertyNameEdgeCases {
 
   emojiPropertyNamesObject: EmojiPropertyNamesObject;
 
-  m_startWithUnderscore: m_startWithUnderscore;
+  m_startWithUnderscore: StartWithUnderscore;
 
   numericPropertyNames: NumericPropertyNames;
 
@@ -190,7 +190,7 @@ export interface EmojiPropertyNamesObject {
   '🚀': InvalidName3;
 }
 
-export interface m_startWithUnderscore {
+export interface StartWithUnderscore {
   a: number;
 }
 
