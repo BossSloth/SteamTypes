@@ -295,10 +295,11 @@ export interface SystemInfo {
   bIsUnsupportedPrototypeHardware: boolean;
 
   /**
-   * This value is an enum
-   * @currentValue 0
+   * This is usually set to the {@link GamingDeviceType.StandardPC} enum value.
    */
-  eHardwareVariant: number;
+  eGamingDeviceType: GamingDeviceType;
+
+  eHardwareVariant_DoNotUse: number;
 
   nCPUHz: number;
 
@@ -400,4 +401,16 @@ export interface MsgSystemManagerSettings extends JsPbMessage {
   is_fan_control_available(): boolean;
 
   is_wifi_powersave_enabled(): boolean;
+}
+
+export enum GamingDeviceType {
+  Unknown,
+  StandardPC,
+  Console = 256,
+  PS3 = 272,
+  Steambox = 288,
+  Tesla = 320,
+  Handheld = 512,
+  Phone = 528,
+  SteamDeck = 544,
 }

@@ -216,11 +216,6 @@ export interface Apps {
   GetLaunchOptionsForApp(appId: number): Promise<LaunchOption[]>;
 
   /**
-   * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link LibraryBootstrapData}.
-   */
-  GetLibraryBootstrapData(): Promise<ArrayBuffer>;
-
-  /**
    * Retrieves achievement information for the authenticated user in a specific Steam application.
    * @param appId The ID of the application to retrieve achievement information for.
    * @returns A Promise that resolves to an AppAchievementResponse object containing the achievement information for the authenticated user in the specified application.
@@ -638,6 +633,13 @@ export interface Apps {
    * @param shortcutName The name to be displayed for the application shortcut.
    */
   SetShortcutName(appId: number, shortcutName: string): void;
+
+  /**
+   * Sets the sort_as name for a non-Steam application shortcut.
+   * @param appId The ID of the application to set the sort_as name for.
+   * @param sortAs The sort_as name to be used for the application shortcut.
+   */
+  SetShortcutSortAs(appId: number, sortAs: string): void;
 
   /**
    * Sets the starting directory for a non-Steam application shortcut.

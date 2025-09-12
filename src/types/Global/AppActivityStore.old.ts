@@ -2,7 +2,7 @@ import Long from 'long';
 import { ObservableMap } from 'mobx';
 import { GameSessions } from '../SteamClient';
 import { JsPbMessage } from '../SteamClient/shared';
-import { Achievement } from './AppDetailsStore';
+import { AchievementData } from './AppDetailsStore';
 import { ConnectionManager } from './ConnectionManager';
 
 export interface AppActivityStoreOld {
@@ -129,7 +129,7 @@ export interface m_mapAppActivity {
 
   latest_user_news_time: number;
 
-  m_AchievementMap: Map<number, Map<string, Achievement>>;
+  m_AchievementMap: Map<number, Map<string, AchievementData>>;
 
   m_bNoMoreHistoryAvailable: boolean;
 
@@ -241,7 +241,7 @@ export interface Events2 {
 
   SetActiveCommentThread(e: unknown): void;
 
-  achievements?: (Achievements15[] | Achievement[]);
+  achievements?: (Achievements15[] | AchievementData[]);
 
   activeThread: number;
 

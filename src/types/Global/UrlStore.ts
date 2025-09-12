@@ -20,12 +20,12 @@ export interface UrlStore {
 
   BuildSteamURL(baseUrl: string, ...params: string[]): string;
 
-  BuildStoreAppDlcURL(appId: number, context: string): string;
+  BuildStoreAppDlcURL(appId: number, context?: string | null): string;
 
   /**
    * https://store.steampowered.com/app/{appId}/{query}
    */
-  BuildStoreAppURL(appId: number, context: string): string;
+  BuildStoreAppURL(appId: number, context?: string | null): string;
 
   /**
    * https://shared.steamstatic.com/store_item_assets/steam/apps/{baseUrl}/{path}

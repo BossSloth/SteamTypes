@@ -14,7 +14,7 @@ export interface AppDetailsStore {
   /**
    * Checks if the achievement is in the {@link Achievements.vecAchievedHidden} array
    * @param appId The ID of the application.
-   * @param achievementName The name of the achievement. {@link Achievement.strName}
+   * @param achievementName The name of the achievement. {@link AchievementData.strName}
    */
   BAchievementIsHiddenAndAchieved(appId: number, achievementName: string): boolean;
 
@@ -122,7 +122,7 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetHeaderImages(appOverview: SteamAppOverview): ReturnType<AppDetailsStore['GetHeaderImagesForAppId']>;
+  GetHeaderImages(appOverview: SteamAppOverview, prefer2x?: boolean): ReturnType<AppDetailsStore['GetHeaderImagesForAppId']>;
 
   /**
    * Gets the header images for a specific application.
@@ -135,7 +135,7 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetHeaderImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
+  GetHeaderImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number, prefer2x?: boolean): [
     /**
      * This is a relative path that can be appended to https://steamloopback.host
      * @example "/assets/427520/header.jpg?c=${localCacheVersion}"
@@ -289,7 +289,7 @@ export interface AppDetailsStore {
        */
       libraryLogo: string,
     ];
-    logoPosition: LogoPosition;
+    logoPosition: LogoPosition | null;
   };
 
   Init(cm: ConnectionManager): void;
@@ -349,6 +349,11 @@ export interface AppDetailsStore {
 }
 
 export interface AppData {
+  /**
+   * @returns True if the the passed param is equal to {@link AppData.customImageInfoRtime}
+   */
+  BHasCurrentCustomImageInfo(customImageInfoRtime: number): boolean;
+
   appDetailsSpotlight: (AppDetailsSpotlight | null);
 
   associationData: (AssociationData | null);
@@ -533,9 +538,11 @@ export interface AppDetails {
   /** DLC disk space usage, in bytes. */
   lDlcUsageBytes: number;
 
-  libraryAssets?: (AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets);
+  libraryAssets?: (AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets | DedicatedServerLibraryAssets);
 
   nBuildID: number;
+
+  nCloudProgressPercent: number;
 
   nCompatToolPriority: number;
 
@@ -626,6 +633,8 @@ export interface AppDetails {
   vecPlatforms: string[];
 
   vecScreenShots: Screenshot[];
+
+  vecSteamOSCompatTestResults: DeckCompatTestResult[];
 }
 
 export interface Achievements {
@@ -633,11 +642,11 @@ export interface Achievements {
 
   nTotal: number;
 
-  vecAchievedHidden: HiddenAchievement[];
+  vecAchievedHidden: AchievementData[];
 
-  vecHighlight: Achievement[];
+  vecHighlight: PlayerAchievement[];
 
-  vecUnachieved: Achievement[];
+  vecUnachieved: PlayerAchievement[];
 }
 
 export interface AppDeckDerivedProperties {
@@ -671,6 +680,8 @@ export interface AppLibraryAssets {
 
   strHeaderImage?: string;
 
+  strHeaderImage_2x?: string;
+
   strHeroBlurImage?: string;
 
   strHeroImage: string;
@@ -703,6 +714,19 @@ export interface LegacyLibraryAssets {
 
 export interface ToolLibraryAssets {
   strHeaderImage: string;
+}
+
+/**
+ * This specific interface structure is in my library only used for "SCP: CB Multiplayer Dedicated Server" (1801280). Don't know why this one doesn't line up with AppLibraryAssets
+ */
+export interface DedicatedServerLibraryAssets {
+  strHeaderImage: string;
+
+  strHeroBlurImage: string;
+
+  strHeroImage: string;
+
+  strLogoImage: string;
 }
 
 export interface AppLanguage {
@@ -746,19 +770,11 @@ export interface AppDLC {
   unAppID: number;
 }
 
-export interface Achievement {
+export interface AchievementData {
   bAchieved: boolean;
-
-  bHidden?: boolean;
 
   /** How many players have this achievement, in percentage. */
   flAchieved: number;
-
-  flCurrentProgress: number;
-
-  flMaxProgress: number;
-
-  flMinProgress: number;
 
   /** When this achievement was unlocked. */
   rtUnlocked: number;
@@ -776,20 +792,14 @@ export interface Achievement {
   strName: string;
 }
 
-export interface HiddenAchievement {
-  bAchieved: boolean;
+export interface PlayerAchievement extends AchievementData {
+  bHidden?: boolean;
 
-  flAchieved: number;
+  flCurrentProgress: number;
 
-  rtUnlocked: number;
+  flMaxProgress: number;
 
-  strDescription: string;
-
-  strID: string;
-
-  strImage: string;
-
-  strName: string;
+  flMinProgress: number;
 }
 
 export interface AppBeta {

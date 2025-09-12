@@ -22,11 +22,10 @@ export interface App {
 
   BMustShowSupportAlertDialog(): CurrentUser['bSupportPopupMessage'];
 
-  BSupportAlertDialogActive(): App['m_bSupportAlertModalActive'];
-
   BWasEverLoggedIn(): boolean;
 
-  CloseSupportAlertsModal(): void;
+  /** @param namespace default: {@link ENamespace.Library} */
+  GetCloudStorage(namespace?: ENamespace): unknown;
 
   GetCloudStorageForLibrary(): CloudStorage;
 
@@ -75,6 +74,8 @@ export interface App {
 
   WaitForServicesInitialized(): Promise<boolean>;
 
+  bHaveShownSupportAlertModal: boolean;
+
   cm: ConnectionManager;
 
   LoginState: ELoginState;
@@ -87,17 +88,15 @@ export interface App {
 
   m_bStartedStage2: boolean;
 
-  m_bSupportAlertModalActive: boolean;
-
   m_bWasEverLoggedIn: boolean;
-
-  m_cloudStorage: CloudStorage;
 
   m_cm: ConnectionManager;
 
   m_CurrentUser: CurrentUser;
 
   m_eLoginState: ELoginState;
+
+  m_mapCloudStorage: Map<number, CloudStorage>;
 }
 
 export interface CloudStorage {
@@ -189,4 +188,5 @@ export enum ELoginState {
 export enum ENamespace {
   Invalid,
   Library,
+  Unknown3 = 3,
 }

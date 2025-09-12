@@ -8,6 +8,8 @@ export interface User {
 
   CancelMicrotxn(txnId: unknown): unknown;
 
+  CancelRefreshLogin(): void;
+
   /**
    * Tries to cancel Steam shutdown.
    * @remarks Used in the "Shutting down" dialog.
@@ -123,6 +125,8 @@ export interface User {
 
   // is param0 offline mode?
   StartOffline(param0: boolean): unknown;
+
+  StartRefreshLogin(): void;
 
   /**
    * Restarts the Steam client.

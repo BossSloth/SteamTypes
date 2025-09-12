@@ -163,6 +163,8 @@ export interface RemotePlay {
 
   RegisterForSettingsChanges(callback: (remotePlaySettings: RemotePlaySettings) => void): Unregisterable;
 
+  RegisterForVRStreamingInvitation(callback: (clientId: string, arg2: unknown) => void): Unregisterable;
+
   SetClientStreamingBitrate(bitrate: number): void;
 
   SetClientStreamingQuality(quality: number): void;

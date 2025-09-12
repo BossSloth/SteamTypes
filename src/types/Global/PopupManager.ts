@@ -10,6 +10,12 @@ export interface PopupManager {
   AddPopupCreatedCallback(callback: PopupCallback_t): void;
 
   /**
+   * Adds a callback to be called just before a popup is destroyed.
+   * @param callback The callback to add
+   */
+  AddPopupDestroyedCallback(callback: PopupCallback_t): void;
+
+  /**
    * Adds a callback to be called when Steam is shutting down.
    * @param callback The callback to add
    */
@@ -110,7 +116,9 @@ export interface PopupManager {
 
   m_mapRestoreDetails: Map<string, RestoreDetail>;
 
-  m_rgPopupCreatedCallbacks: PopupCallback_t[];
+  m_rgPopupCreatedCallbacks: PopupCallbacks;
+
+  m_rgPopupDestroyedCallbacks: PopupCallbacks;
 
   m_rgShutdownCallbacks: PopupCallback_t[];
 
@@ -122,8 +130,6 @@ export interface PopupManager {
 
 // eslint-disable-next-line no-useless-assignment
 const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
-
-export type PopupCallback_t = (popup?: Popup) => void;
 
 export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
   hTimer: undefined;
@@ -397,6 +403,8 @@ export type AllPopupParameters = PopupParameters | MainWindowPopupParameters;
 export interface MainWindowPopupParameters extends BasePopupParameters {
   bNoFocusOnShow: boolean;
 
+  body_role: undefined;
+
   browserType: EBrowserType;
 
   minHeight: number;
@@ -455,6 +463,31 @@ export interface Dimensions {
 
   width: number;
 }
+
+export interface PopupCallbacks {
+  /**
+   * Removes all registered callbacks in {@link m_vecCallbacks}.
+   */
+  ClearAllCallbacks(): void;
+
+  /**
+   * @returns the number of registered callbacks in {@link m_vecCallbacks}.
+   */
+  CountRegistered(): number;
+
+  /**
+   * Calls all registered callbacks with the given arguments.
+   *
+   * @param args The arguments to pass to the callbacks.
+   */
+  Dispatch(...args: unknown[]): void;
+
+  Register(callback: PopupCallback_t): { Unregister: () => void; };
+
+  m_vecCallbacks: PopupCallback_t[];
+}
+
+export type PopupCallback_t = (popup?: Popup) => void;
 
 export enum EBrowserType {
   /**

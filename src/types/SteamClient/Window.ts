@@ -126,9 +126,11 @@ export interface Window {
    */
   RestoreWindowSizeAndPosition(details: string): void;
 
-  SetAutoDisplayScale(value: boolean): void;
-
   SetComposition(mode: EUIComposition, appIdCompositionQueue: number[], windowId: number): void;
+
+  SetGamepadUIAutoDisplayScale(value: boolean): void;
+
+  SetGamepadUIManualDisplayScaleFactor(displayScaleFactor: number): void;
 
   /**
    * Makes the window hide, but not close on pressing the close button.
@@ -137,8 +139,6 @@ export interface Window {
   SetHideOnClose(value: boolean): void;
 
   SetKeyFocus(value: boolean): void;
-
-  SetManualDisplayScaleFactor(displayScaleFactor: number): void;
 
   /**
    * Sets the window's max size.
