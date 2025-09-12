@@ -1,4 +1,4 @@
-import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type } from 'ts-morph';
+import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode } from 'ts-morph';
 import { Logger } from '../logger';
 
 /**
@@ -56,15 +56,17 @@ export function isImportedType(sourceFile: SourceFile, type: Node | Type): boole
     importDecl.getNamedImports().some(importSpec => importSpec.getName() === type.getText()));
 }
 
-export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration): (PropertySignature | MethodSignature)[] {
+export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration | TypeLiteralNode): (PropertySignature | MethodSignature)[] {
   const members = interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[];
 
-  interfaceDeclaration.getExtends().forEach((ext) => {
-    const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
-    if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
-      members.push(...getInterfaceMembers(extendedInterface));
-    }
-  });
+  if (interfaceDeclaration instanceof InterfaceDeclaration) {
+    interfaceDeclaration.getExtends().forEach((ext) => {
+      const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
+      if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
+        members.push(...getInterfaceMembers(extendedInterface));
+      }
+    });
+  }
 
   return members;
 }

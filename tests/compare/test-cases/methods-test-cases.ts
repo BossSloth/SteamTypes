@@ -22,12 +22,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'PopupManager',
     target: dedent/* ts */`
     export interface PopupManager {
-       GetHeaderImages(appOverview: { appid: number }): string
+      GetHeaderImages(appOverview: { appid: number }): string
     }
   `,
     source: dedent/* ts */`
     export interface PopupManager {
-       GetHeaderImages(e: unknown, t: unknown): string
+      GetHeaderImages(e: unknown, t: unknown): string
     }
   `,
   },
@@ -35,14 +35,54 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'PopupManager',
     target: dedent/* ts */`
     export interface PopupManager {
-       GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
+      GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
     }
   `,
     source: dedent/* ts */`
     export interface PopupManager {
-       GetHeaderImages(e: unknown): string
+      GetHeaderImages(e: unknown): string
     }
   `,
   },
-
+  'argument is typed array': {
+    interfaceName: 'PopupManager',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(options: string[]): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(e: unknown[]): string
+    }
+  `,
+  },
+  'argument becomes optional': {
+    interfaceName: 'PopupManager',
+    target: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(options: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(e?: unknown): string
+    }
+  `,
+  },
+  'argument has default null but is also string': {
+    interfaceName: 'PopupManager',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(options?: string | null): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface PopupManager {
+      GetOptions(e?: null): string
+    }
+  `,
+  },
 };

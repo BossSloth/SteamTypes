@@ -592,4 +592,31 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         value: number;
       }`,
   },
+  'generic type with typeof string': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
+
+      export interface Container {
+        data: Map<typeof MAIN_WINDOW_NAME, string>;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: Map<string, string>;
+      }`,
+  },
+  'generic type with typeof string mismatch': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
+
+      export interface Container {
+        data: Map<typeof MAIN_WINDOW_NAME, string>;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: Map<number, string>;
+      }`,
+  },
 };

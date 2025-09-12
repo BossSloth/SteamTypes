@@ -1,6 +1,5 @@
-import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
-import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile, isImportedType } from './shared';
+import { MethodSignature, Node, ParameterDeclaration } from 'ts-morph';
+import { compareTypes } from './type-comparator';
 
 /**
  * Compares and corrects method types
@@ -28,32 +27,39 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   const targetReturnTypeNode = targetMethod.getReturnTypeNode();
   const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
 
-  if (sourceReturnTypeNode?.getType().isNever() === true || (Node.isArrayTypeNode(sourceReturnTypeNode) && sourceReturnTypeNode.getElementTypeNode().getType().isNever())) {
-    return;
+  const typesAreEqual = targetReturnTypeNode !== undefined && sourceReturnTypeNode !== undefined
+    && compareTypes(targetReturnTypeNode, sourceReturnTypeNode);
+
+  if (!typesAreEqual) {
+    targetMethod.setReturnType(sourceReturnTypeNode?.getText() ?? '');
   }
 
-  if (isImportedType(currentTargetSourceFile, targetMethod.getReturnType())) {
-    return;
-  }
+  // if (sourceReturnTypeNode?.getType().isNever() === true || (Node.isArrayTypeNode(sourceReturnTypeNode) && sourceReturnTypeNode.getElementTypeNode().getType().isNever())) {
+  //   return;
+  // }
 
-  // If source has a return type but target doesn't, update target
-  if (sourceReturnTypeNode && !targetReturnTypeNode) {
-    targetMethod.setReturnType(sourceReturnTypeNode.getText());
-  } else if (targetReturnTypeNode && sourceReturnTypeNode) {
-    handleInterfaceTypeReferences(targetReturnTypeNode, sourceReturnTypeNode);
-    // Both have return types, check if they're different
-    let targetReturnTypeText = targetReturnTypeNode.getText();
-    if (targetReturnTypeNode.isKind(SyntaxKind.IndexedAccessType)) {
-      targetReturnTypeText = targetReturnTypeNode.getType().getText();
-    }
+  // if (isImportedType(currentTargetSourceFile, targetMethod.getReturnType())) {
+  //   return;
+  // }
 
-    const sourceReturnTypeText = sourceReturnTypeNode.getText();
+  // // If source has a return type but target doesn't, update target
+  // if (sourceReturnTypeNode && !targetReturnTypeNode) {
+  //   targetMethod.setReturnType(sourceReturnTypeNode.getText());
+  // } else if (targetReturnTypeNode && sourceReturnTypeNode) {
+  //   handleInterfaceTypeReferences(targetReturnTypeNode, sourceReturnTypeNode);
+  //   // Both have return types, check if they're different
+  //   let targetReturnTypeText = targetReturnTypeNode.getText();
+  //   if (targetReturnTypeNode.isKind(SyntaxKind.IndexedAccessType)) {
+  //     targetReturnTypeText = targetReturnTypeNode.getType().getText();
+  //   }
 
-    if (!sourceReturnTypeText.includes('unknown') && targetReturnTypeText !== sourceReturnTypeText) {
-      // Update the return type
-      targetMethod.setReturnType(sourceReturnTypeText);
-    }
-  }
+  //   const sourceReturnTypeText = sourceReturnTypeNode.getText();
+
+  //   if (!sourceReturnTypeText.includes('unknown') && targetReturnTypeText !== sourceReturnTypeText) {
+  //     // Update the return type
+  //     targetMethod.setReturnType(sourceReturnTypeText);
+  //   }
+  // }
 }
 
 function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
@@ -95,10 +101,6 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
     return;
   }
 
-  if (sourceTypeNode && sourceTypeNode.getText() !== 'unknown' && targetTypeNode && targetTypeNode.getText() !== sourceTypeNode.getText()) {
-    targetParam.setType(sourceTypeNode.getText());
-  }
-
   // Update question token
   if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
     targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
@@ -107,5 +109,11 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
   // Update rest parameter
   if (sourceParam.isRestParameter() && !targetParam.isRestParameter()) {
     targetParam.setIsRestParameter(sourceParam.isRestParameter());
+  }
+
+  const typesAreEqual = sourceTypeNode !== undefined && targetTypeNode !== undefined
+    && compareTypes(targetTypeNode, sourceTypeNode);
+  if (!typesAreEqual) {
+    targetParam.setType(sourceTypeNode?.getText() ?? '');
   }
 }

@@ -1,13 +1,22 @@
-import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, PropertySignature, TupleTypeNode, TypeNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { handleInterfaceTypeReferences } from './handle-interfaces';
+import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
+import { currentTargetSourceFile, isImportedType } from './shared';
 
+/**
+ * Compares two types and returns true if they are equal
+ * @param targetNode The target type node
+ * @param sourceNode The source type node
+ * @returns true if the types are equal
+ */
 export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolean {
   if (getText(targetNode) === getText(sourceNode)) {
     return true;
   }
 
-  const targetProperty = targetNode.getParent() as PropertySignature | undefined;
-
-  if (sourceNode.getType().isUnknown() || sourceNode.getType().isNever() || (sourceNode.getType().isUnknown() && targetProperty?.hasQuestionToken() === true)) {
+  if (isUnknownTypeNode(sourceNode)
+    || isImportedType(currentTargetSourceFile, targetNode)
+  ) {
     return true;
   }
 
@@ -25,12 +34,38 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return handleTargetIntersection(targetNode, sourceNode);
   } else if (Node.isIndexedAccessTypeNode(targetNode)) {
     return handleTargetIndexedAccess(targetNode, sourceNode);
+  } else if (Node.isTypeQuery(targetNode)) {
+    return handleTargetTypeQuery(targetNode, sourceNode);
+  } else if (Node.isTypeLiteral(targetNode)) {
+    return handleTargetTypeLiteral(targetNode, sourceNode);
+  }
+
+  if (Node.isUnionTypeNode(sourceNode)) {
+    return handleSourceUnion(targetNode, sourceNode);
+  }
+
+  if (Node.isTypeReference(sourceNode)) {
+    handleInterfaceTypeReferences(targetNode, sourceNode);
+  }
+
+  return false;
+}
+
+function isUnknownTypeNode(typeNode: TypeNode): boolean {
+  const type = typeNode.getType();
+
+  if (type.isUnknown() || type.isNever()) {
+    return true;
   }
 
   return false;
 }
 
 function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourceNode: TypeNode): boolean {
+  if (targetTypeReference.getTypeName().getText() === 'ReturnType') {
+    return handleIndexedReturnType(targetTypeReference, sourceNode);
+  }
+
   const targetDefinitionNode = (targetTypeReference.getTypeName() as Identifier).getDefinitionNodes()[0];
   if (Node.isTypeAliasDeclaration(targetDefinitionNode)) {
     // If the target is a type alias, check the type node
@@ -92,6 +127,19 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
   return false;
 }
 
+function handleIndexedReturnType(targetTypeReference: TypeReferenceNode, sourceNode: TypeNode): boolean {
+  const indexAccessedType = targetTypeReference.getTypeArguments()[0].asKindOrThrow(ts.SyntaxKind.IndexedAccessType).getType();
+  const referencedMethod = indexAccessedType.getSymbol()?.getDeclarations()[0].asKindOrThrow(ts.SyntaxKind.MethodSignature);
+
+  const returnTypeNode = referencedMethod?.getReturnTypeNode();
+  if (!returnTypeNode) {
+    return false;
+  }
+  // Example test case 'indexed access interface type with mismatch'
+
+  return compareTypes(returnTypeNode, sourceNode);
+}
+
 function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): boolean {
   const targetMembers = targetUnion.getTypeNodes();
 
@@ -109,11 +157,24 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
       }
     }
   } else {
-    const isCompatible = targetMembers.every(targetMember => compareTypes(targetMember, sourceNode));
+    // Consider compatible if ANY member of the target union matches the source type
+    // This avoids mutating unions like `string | null` to `null` when `null` is already a member.
+    // Example test case 'argument has default null but is also string'
+    const hasMatch = targetMembers.some(targetMember => compareTypes(targetMember, sourceNode));
 
-    if (!isCompatible) {
+    if (!hasMatch) {
       targetUnion.replaceWithText(getText(sourceNode));
     }
+  }
+
+  return true;
+}
+
+function handleSourceUnion(targetNode: TypeNode, sourceUnion: UnionTypeNode): boolean {
+  const isCompatible = sourceUnion.getTypeNodes().every(sourceMember => compareTypes(targetNode, sourceMember));
+
+  if (!isCompatible) {
+    targetNode.replaceWithText(getText(sourceUnion));
   }
 
   return true;
@@ -165,10 +226,6 @@ function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): bo
   const targetElementType = targetArray.getElementTypeNode();
   const sourceElementType = sourceNode.getElementTypeNode();
 
-  if (sourceElementType.getType().isUnknown()) {
-    return true;
-  }
-
   return compareTypes(targetElementType, sourceElementType);
 }
 
@@ -200,6 +257,34 @@ function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, s
       if (constraint) {
         return compareTypes(constraint, sourceNode);
       }
+    }
+  }
+
+  return false;
+}
+
+function handleTargetTypeLiteral(targetLiteral: TypeLiteralNode, sourceNode: TypeNode): boolean {
+  if (!Node.isTypeLiteral(sourceNode)) {
+    return false;
+  }
+
+  const propertiesChanged = compareAndCorrectMembers(targetLiteral, sourceNode);
+  if (propertiesChanged) {
+    orderMembers(targetLiteral);
+  }
+
+  return true;
+}
+
+function handleTargetTypeQuery(targetTypeQuery: TypeQueryNode, sourceNode: TypeNode): boolean {
+  const targetDeclaration = targetTypeQuery.getExprName().getSymbol()?.getDeclarations()[0];
+  if (Node.isVariableDeclaration(targetDeclaration)) {
+    const targetInitializer = targetDeclaration.getInitializer();
+    // Example test case 'typeof literal string'
+    if (Node.isLiteralExpression(targetInitializer)) {
+      const baseType = targetInitializer.getType().getBaseTypeOfLiteralType();
+
+      return baseType.getText() === getText(sourceNode);
     }
   }
 

@@ -22,6 +22,59 @@ export interface SimpleInterface {
 }"
 `;
 
+exports[`Comparator Simple Cases > mismatching typeof literal number 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const num = 'a';
+
+export interface SimpleInterface {
+-  existingProp: typeof num;
++  existingProp: number;
+}"
+`;
+
+exports[`Comparator Simple Cases > mismatching typeof literal string 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const text = 'a';
+
+export interface SimpleInterface {
+-  existingProp: typeof text;
++  existingProp: number;
+}"
+`;
+
+exports[`Comparator Simple Cases > object type added member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,7 @@
+export interface SimpleInterface {
+  existingProp: {
+    prop1: string;
++
++    prop2: unknown;
+  };
+}"
+`;
+
+exports[`Comparator Simple Cases > object type removed member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,5 @@
+export interface SimpleInterface {
+  existingProp: {
+    prop1: string;
+-    prop2: unknown;
+  };
+}"
+`;
+
 exports[`Comparator Simple Cases > simple add missing property 1`] = `
 "===================================================================
 --- a/target.ts

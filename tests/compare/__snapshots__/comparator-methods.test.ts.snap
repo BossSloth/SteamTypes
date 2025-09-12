@@ -6,8 +6,19 @@ exports[`Comparator Methods Cases > argument added to existing method 1`] = `
 +++ b/target.ts
 @@ -1,3 +1,3 @@
 export interface PopupManager {
--   GetHeaderImages(appOverview: { appid: number }): string
+-  GetHeaderImages(appOverview: { appid: number }): string
 +  GetHeaderImages(appOverview: { appid: number }, t: unknown): string
+}"
+`;
+
+exports[`Comparator Methods Cases > argument becomes optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface PopupManager {
+-  GetOptions(options: string): string
++  GetOptions(options?: string): string
 }"
 `;
 
@@ -17,7 +28,7 @@ exports[`Comparator Methods Cases > argument removed from existing method 1`] = 
 +++ b/target.ts
 @@ -1,3 +1,3 @@
 export interface PopupManager {
--   GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
+-  GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
 +  GetHeaderImages(appOverview: { appid: number }): string
 }"
 `;

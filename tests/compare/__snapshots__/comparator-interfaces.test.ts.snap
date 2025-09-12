@@ -345,27 +345,6 @@ export interface Popup<T extends (number | string) = number> {
   id: T;"
 `;
 
-exports[`Comparator Interface Cases > method with interface return type 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,3 +1,13 @@
-export interface UserService {
--  getUserById(id: number): unknown;
-+  createUser(email: string, name: string): User;
-+
-+  getUserById(id: number): User | null;
-}
-+
-+export interface User {
-+  email: string;
-+
-+  id: UserIdentifier;
-+
-+  name: string;
-+}"
-`;
-
 exports[`Comparator Interface Cases > mismatching ObservableMap 1`] = `
 "===================================================================
 --- a/target.ts

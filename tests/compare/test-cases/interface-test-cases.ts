@@ -682,25 +682,6 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  'method with interface return type': {
-    interfaceName: 'UserService',
-    target: dedent/* ts */`
-      export interface UserService {
-        getUserById(id: number): unknown;
-      }`,
-    source: dedent/* ts */`
-      export interface UserService {
-        getUserById(id: number): User | null;
-        createUser(email: string, name: string): User;
-      }
-
-      export interface User {
-        id: UserIdentifier;
-        email: string;
-        name: string;
-      }`,
-  },
-
   'interface with complex nested structures': {
     interfaceName: 'AppConfig',
     target: dedent/* ts */`

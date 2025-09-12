@@ -138,4 +138,109 @@ export const simpleCases: Record<string, ComparatorTest> = {
         existingProp: string;
       }`,
   },
+  'typeof literal string': {
+    interfaceName: 'SimpleInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      const text = 'a';
+
+      export interface SimpleInterface {
+        existingProp: typeof text;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: string;
+      }`,
+  },
+  'mismatching typeof literal string': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      const text = 'a';
+
+      export interface SimpleInterface {
+        existingProp: typeof text;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: number;
+      }`,
+  },
+  'typeof literal number': {
+    interfaceName: 'SimpleInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      const num = 5;
+
+      export interface SimpleInterface {
+        existingProp: typeof num;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: number;
+      }`,
+  },
+  'mismatching typeof literal number': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      const num = 'a';
+
+      export interface SimpleInterface {
+        existingProp: typeof num;
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: number;
+      }`,
+  },
+  'simple object type': {
+    interfaceName: 'SimpleInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+
+          prop2: number;
+        };
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+          prop2: unknown;
+        };
+      }`,
+  },
+  'object type removed member': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+          prop2: unknown;
+        };
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+        };
+      }`,
+  },
+  'object type added member': {
+    interfaceName: 'SimpleInterface',
+    target: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+        };
+      }`,
+    source: dedent/* ts */`
+      export interface SimpleInterface {
+        existingProp: {
+          prop1: string;
+          prop2: unknown;
+        };
+      }`,
+  },
 };

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import * as diff from 'diff';
-import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind } from 'ts-morph';
+import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface } from './handle-interfaces';
@@ -77,9 +77,9 @@ function processInterfaceQueue(): void {
  *
  * @returns true if properties were added or removed
  */
-function compareAndCorrectMembers(
-  targetInterface: InterfaceDeclaration,
-  sourceInterface: InterfaceDeclaration,
+export function compareAndCorrectMembers(
+  targetInterface: InterfaceDeclaration | TypeLiteralNode,
+  sourceInterface: InterfaceDeclaration | TypeLiteralNode,
 ): boolean {
   const targetMembers = getInterfaceMembers(targetInterface);
   const realTargetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
@@ -119,7 +119,7 @@ function compareAndCorrectMembers(
     if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
       const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
       const needsExtendUpdate = compareAndCorrectPropertyTypes(targetProp, sourceProp, isFromExtendedInterface);
-      if (needsExtendUpdate) {
+      if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration) {
         // Property is from an extended interface and doesn't match, remove extends and recompare
         targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
         changed = compareAndCorrectMembers(targetInterface, sourceInterface);
@@ -136,7 +136,7 @@ function compareAndCorrectMembers(
         // Property exists in target but not in source, remove it
         targetProp.remove();
         changed = true;
-      } else {
+      } else if (targetInterface instanceof InterfaceDeclaration) {
         // Property is from an extended interface, remove extends and recompare
         targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
         changed = compareAndCorrectMembers(targetInterface, sourceInterface);
@@ -154,7 +154,7 @@ function compareAndCorrectMembers(
  * @param propName The name of the property to add
  */
 function addMissingMember(
-  targetInterface: InterfaceDeclaration,
+  targetInterface: TypeElementMemberedNode,
   sourceProp: PropertySignature | MethodSignature,
   propName: string,
 ): void {
@@ -235,7 +235,7 @@ function compareAndCorrectHeritageClause(
 }
 
 // TODO: This might be very slow sometimes have to check to make sure with validate-types
-export function orderMembers(targetInterface: InterfaceDeclaration): void {
+export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteralNode): void {
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
   const newText = targetInterface.getFullText()
     .replace(/ {2}\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments

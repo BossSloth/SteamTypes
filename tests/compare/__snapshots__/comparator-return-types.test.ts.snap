@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Return Types Cases > method with interface return type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,13 @@
+export interface UserService {
+-  getUserById(id: number): unknown;
++  createUser(email: string, name: string): User;
++
++  getUserById(id: number): User | null;
+}
++
++export interface User {
++  email: string;
++
++  id: UserIdentifier;
++
++  name: string;
++}"
+`;
+
+exports[`Comparator Return Types Cases > return type mismatch source array 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Foo {
+-  bar(): unknown;
++  bar(): unknown[];
+}"
+`;
+
+exports[`Comparator Return Types Cases > return type with wrong ReturnType, source is known 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): ReturnType<Foo['bar2']>;
++  bar(): string[];
+
+  bar2(): number[];
+}"
+`;

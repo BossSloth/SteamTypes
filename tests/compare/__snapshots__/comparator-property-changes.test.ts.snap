@@ -123,6 +123,19 @@ export interface ReactiveData {
 +}"
 `;
 
+exports[`Comparator Property Change Cases > generic type with typeof string mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
+
+export interface Container {
+-  data: Map<typeof MAIN_WINDOW_NAME, string>;
++  data: Map<number, string>;
+}"
+`;
+
 exports[`Comparator Property Change Cases > interface with added nested interfaces 1`] = `
 "===================================================================
 --- a/target.ts
