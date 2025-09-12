@@ -1,3 +1,8 @@
+/**
+ * Explanation:
+ * This rule enforces that TypeScript enums have at least two members.
+ * This is to prevent enums from being optimized away by bun making them unable to be compared as an enum.
+ */
 /** @type {import('eslint').Rule.RuleModule} */
 export default {
   meta: {
@@ -8,7 +13,7 @@ export default {
     },
     schema: [],
     messages: {
-      tooFewMembers: "Enum '{{enumName}}' must have at least two members. Found {{memberCount}}.\nThis can cause issues with the comparison script.",
+      tooFewMembers: "Enum '{{enumName}}' must have at least two members. Found {{memberCount}}.\nThis can cause issues with the comparison script due to it being optimized away.",
     },
   },
   create(context) {
