@@ -1,4 +1,4 @@
-import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode } from 'ts-morph';
+import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
 import { Logger } from '../logger';
 
 /**
@@ -51,9 +51,11 @@ export function getJsDocTagValues(prop: PropertySignature, tagName: string): str
 /**
  * Checks if a property type is imported
  */
-export function isImportedType(sourceFile: SourceFile, type: Node | Type): boolean {
+export function isImportedType(sourceFile: SourceFile, type: Node | Type | TypeNode): boolean {
+  const text = getIdentifierName(type);
+
   return sourceFile.getImportDeclarations().some(importDecl =>
-    importDecl.getNamedImports().some(importSpec => importSpec.getName() === type.getText()));
+    importDecl.getNamedImports().some(importSpec => importSpec.getName() === text));
 }
 
 export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration | TypeLiteralNode): (PropertySignature | MethodSignature)[] {
@@ -69,4 +71,20 @@ export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration |
   }
 
   return members;
+}
+
+export function getIdentifierName(node: Node | Type | TypeNode): string {
+  let text = node.getText();
+
+  if (node instanceof TypeNode && Node.isTypeReference(node)) {
+    text = node.getTypeName().getText();
+  }
+  if (node instanceof Type) {
+    const aliasName = node.getAliasSymbol()?.getName();
+    if (aliasName !== undefined) {
+      text = aliasName;
+    }
+  }
+
+  return text;
 }

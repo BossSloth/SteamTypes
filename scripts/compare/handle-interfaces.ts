@@ -1,6 +1,6 @@
 import { InterfaceDeclaration, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { orderMembers } from './interface-comparator';
-import { currentStartingInterfaces, currentTargetSourceFile, getInterfaceMembers, interfaceQueue, isImportedType } from './shared';
+import { currentStartingInterfaces, currentTargetSourceFile, getIdentifierName, getInterfaceMembers, interfaceQueue, isImportedType } from './shared';
 
 const REQUIRED_OVERLAP = 0.65;
 
@@ -21,13 +21,13 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
       continue;
     }
 
-    if (isImportedType(currentTargetSourceFile, targetInterface.getType())) {
+    if (isImportedType(currentTargetSourceFile, targetInterface.getType()) && !isImportedType(sourceInterface.getSourceFile(), sourceInterface.getType())) {
       const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
       if (!sourceInterfaceDeclaration) {
         throw new Error(`Source interface ${sourceInterface.getTypeName().getText()} not found`);
       }
 
-      sourceInterfaceDeclaration.rename(targetInterface.getText());
+      sourceInterfaceDeclaration.rename(getIdentifierName(targetInterface));
       sourceInterfaceDeclaration.remove();
     }
   }
@@ -69,14 +69,16 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
  * Extracts all interface references from a type, including those in arrays, unions, etc.
  */
 function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
-  const interfaces = type.getDescendantsOfKind(SyntaxKind.TypeReference);
+  const interfaces: TypeReferenceNode[] = [];
 
   if (type.isKind(SyntaxKind.TypeReference)) {
     interfaces.push(type);
   }
 
+  interfaces.push(...type.getDescendantsOfKind(SyntaxKind.TypeReference));
+
   return interfaces.filter(interf => (interf.getType().getSymbol()?.getDeclarations()
-    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf.getType()));
+    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf));
 }
 
 /**

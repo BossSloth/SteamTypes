@@ -67,7 +67,21 @@ export function createInterfaceDefinition(
 
 function processInterfaceProperties(obj: Record<string, unknown>, properties: string[], interfaceName: string, interfaceDefinition: TypeScriptInterface): void {
   for (const key of properties) {
-    const value = obj[key];
+    let value: unknown;
+    try {
+      value = obj[key];
+    }
+    catch (e) {
+      console.error(`❌ Error: failed to get property ${key} from ${interfaceName}`, e);
+
+      const interfaceProperty: InterfaceProperty = {
+        name: key,
+        type: new PrimitiveType('unknown'),
+      };
+      interfaceDefinition.properties.push(interfaceProperty);
+
+      continue;
+    }
     const propertyPath = `${interfaceName}.${key}`;
     const formattedName = formatPropertyName(key);
 

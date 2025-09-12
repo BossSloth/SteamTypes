@@ -1,6 +1,6 @@
 import { EnumDeclaration, EnumMember, PropertySignature, TypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile, getJsDocTagValues, isImportedType } from './shared';
+import { currentTargetSourceFile, getJsDocTagValues } from './shared';
 import * as TypeComparator from './type-comparator';
 
 const CustomJsDocTags = {
@@ -30,11 +30,6 @@ export function compareAndCorrectPropertyTypes(
       targetProp.setType(sourceTypeNode.getText());
     }
 
-    return false;
-  }
-
-  // Check if the target type is imported
-  if (isImportedType(currentTargetSourceFile, targetProp.getType())) {
     return false;
   }
 

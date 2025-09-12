@@ -240,4 +240,25 @@ export const genericsCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+  'imported generic type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { Callbacks } from './types';
+
+      export interface Foo {
+        bar: Callbacks<(arg: string) => void>;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: Callbacks;
+      }
+
+      export interface Callbacks {
+        Clear(): void
+        Add(): void
+      }
+      `,
+  },
 };

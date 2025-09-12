@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
@@ -14,9 +15,7 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return true;
   }
 
-  if (isUnknownTypeNode(sourceNode)
-    || isImportedType(currentTargetSourceFile, targetNode)
-  ) {
+  if (isUnknownTypeNode(sourceNode)) {
     return true;
   }
 
@@ -122,6 +121,10 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
 
       return true;
     }
+  }
+
+  if (isImportedType(currentTargetSourceFile, targetTypeReference)) {
+    return true;
   }
 
   return false;
