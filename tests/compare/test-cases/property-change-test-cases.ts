@@ -619,4 +619,27 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         data: Map<number, string>;
       }`,
   },
+  'multiple imported interface renamed': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { DataType } from './some-module';
+
+      export interface Foo {
+        data: DataType;
+
+        otherValue: DataType;
+      }`,
+    source: dedent/* ts */`
+      export interface Foo {
+        data: LocalType;
+
+        otherValue: LocalType;
+      }
+
+      export interface LocalType {
+        id: string;
+        value: number;
+      }`,
+  },
 };

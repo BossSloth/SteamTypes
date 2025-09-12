@@ -24,7 +24,8 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
     if (isImportedType(currentTargetSourceFile, targetInterface.getType()) && !isImportedType(sourceInterface.getSourceFile(), sourceInterface.getType())) {
       const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
       if (!sourceInterfaceDeclaration) {
-        throw new Error(`Source interface ${sourceInterface.getTypeName().getText()} not found`);
+        // We get here if the interface was for example already renamed and now doesn't exist anymore, so we can ignore this
+        continue;
       }
 
       sourceInterfaceDeclaration.rename(getIdentifierName(targetInterface));
