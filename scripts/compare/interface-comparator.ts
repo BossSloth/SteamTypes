@@ -4,7 +4,7 @@ import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, S
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface } from './handle-interfaces';
-import { getInterfaceMembers, initGlobalState, interfaceQueue } from './shared';
+import { getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
 
 const processedInterfaces = new Set<string>();
 
@@ -33,6 +33,8 @@ function compareAndCorrectInterfaces(
 
   // Process all interfaces in the queue
   processInterfaceQueue();
+
+  removeUnusedInterfaces(targetSourceFile, targetInterface);
 }
 
 /**
@@ -230,6 +232,39 @@ function compareAndCorrectHeritageClause(
         targetInterface: targetExtInterface,
         sourceInterface: sourceExtInterface,
       });
+    }
+  }
+}
+
+function removeUnusedInterfaces(targetSourceFile: SourceFile, rootInterface: InterfaceDeclaration): void {
+  const targetInterfaces = targetSourceFile.getInterfaces().slice(1);
+  const typeReferences = targetSourceFile.getDescendantsOfKind(SyntaxKind.TypeReference);
+  const expressionWithTypeArguments = targetSourceFile.getDescendantsOfKind(SyntaxKind.ExpressionWithTypeArguments);
+  const typeAliases = targetSourceFile.getDescendantsOfKind(SyntaxKind.TypeAliasDeclaration);
+
+  for (const targetInterface of targetInterfaces) {
+    if (targetInterface === rootInterface) {
+      continue;
+    }
+
+    const hasTypeAliasWithName = typeAliases.some(dec => !dec.wasForgotten() && dec.getName() === targetInterface.getName());
+
+    const doesNotHaveJsDocExportTag = getJsDocTagValues(targetInterface, 'exported').length === 0;
+    const hasTypeReferenceWithName = typeReferences.some(dec => !dec.wasForgotten() && dec.getTypeName().getText() === targetInterface.getName());
+    const hasExpressionWithTypeArgumentsWithName = expressionWithTypeArguments.some(dec => !dec.wasForgotten() && dec.getExpression().getText() === targetInterface.getName());
+    const hasJsDocLink = targetSourceFile.getText().includes(`@link ${targetInterface.getName()}`);
+    const extendsJsPbMessage = targetInterface.getExtends().some(ext => ext.getExpression().getText() === 'JsPbMessage');
+
+    if (
+      hasTypeAliasWithName
+      || (
+        doesNotHaveJsDocExportTag
+        && !hasTypeReferenceWithName
+        && !hasExpressionWithTypeArgumentsWithName
+        && !hasJsDocLink
+        && !extendsJsPbMessage
+      )) {
+      targetInterface.remove();
     }
   }
 }

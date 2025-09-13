@@ -296,7 +296,7 @@ exports[`Comparator Interface Cases > inverse array intersection types 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,13 +1,13 @@
+@@ -1,13 +1,7 @@
 export interface Combined {
 -  data: (A | B)[];
 +  data: A;
@@ -306,29 +306,27 @@ export interface A {
   propA: string;
 -  extraA: boolean;
 }
-
-export interface B {
-  propB: number;
-+
-  extraB: Date;
-}"
+-
+-export interface B {
+-  propB: number;
+-  extraB: Date;
+-}"
 `;
 
 exports[`Comparator Interface Cases > inverse union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,8 +1,9 @@
+@@ -1,8 +1,3 @@
 export interface Container {
 -  data: DataType | null;
 +  data: string | null;
 }
-
-export interface DataType {
-  value: string;
-+
-  id: number;
-}"
+-
+-export interface DataType {
+-  value: string;
+-  id: number;
+-}"
 `;
 
 exports[`Comparator Interface Cases > map intersection type with mismatch 1`] = `

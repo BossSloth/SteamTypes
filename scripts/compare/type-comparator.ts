@@ -80,7 +80,9 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     // Example test case 'simple generic'
     const constraint = targetDefinitionNode.getConstraint();
     if (!constraint) {
-      return false;
+      // Constraint is not set, we can assume it is any and matches
+      // Example test case 'simple generic with any type'
+      return true;
     }
     const matches = compareTypes(constraint, sourceNode);
     if (!matches) {

@@ -116,6 +116,27 @@ export const genericsCases: Record<string, ComparatorTest> = {
       `,
   },
 
+  'simple generic with any type': {
+    interfaceName: 'UserData',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface UserData<T> {
+        email: string;
+
+        id: T;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface UserData {
+        id: number | string | boolean;
+        name: string;
+        email: string;
+      }
+      `,
+  },
+
   'simple generic mismatch': {
     interfaceName: 'DataStore',
     target: dedent/* ts */`
@@ -260,5 +281,114 @@ export const genericsCases: Record<string, ComparatorTest> = {
         Add(): void
       }
       `,
+  },
+  'MappedObservable': {
+    interfaceName: 'MappedObservable',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      /**
+       * @exported
+       */
+      export interface MappedObservable<TSource, TMapped> {
+        m_fnMap(value: TSource): TMapped;
+
+        Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void; };
+
+        UpdateMappedValue(): void;
+
+        m_bMappedValueStale: boolean;
+
+        m_mappedSubscribableValue: ObservableValue<TMapped>;
+
+        m_originalSubscribableValue: ObservableValue<TSource>;
+
+        Value: TMapped;
+      }
+
+      export interface ObservableValue<T> {
+        m_fnEquals?(value1: T, value2: T): boolean;
+
+        Set(value: T): void;
+
+        Subscribe(callback: (value: T) => void): { Unsubscribe: () => void; };
+
+        m_callbacks: Callbacks<(value: T) => void>;
+
+        m_currentValue: T;
+
+        SubscriberCount: number;
+
+        Value: T;
+      }
+
+      export interface Callbacks<T extends (...args: any) => unknown = () => void> {
+        ClearAllCallbacks(): void;
+
+        CountRegistered(): number;
+
+        Dispatch(...args: Parameters<T>): void;
+
+        Register(callback: T): { Unregister: () => void; };
+
+        m_vecCallbacks: T[];
+      }
+      `,
+    source: dedent/* ts */`
+      export interface MappedObservable {
+        m_fnMap(e: unknown): boolean;
+
+        Subscribe(e: unknown): unknown;
+
+        UpdateMappedValue(): void;
+
+        m_bMappedValueStale: boolean;
+
+        m_mappedSubscribableValue: MappedSubscribableValue;
+
+        m_originalSubscribableValue: MappedSubscribableValue;
+
+        Value: boolean;
+      }
+
+      export interface MappedSubscribableValue {
+        m_fnEquals?(e: unknown, t: unknown): boolean;
+
+        Set(e: unknown): void;
+
+        Subscribe(e: unknown): { Unsubscribe: unknown; };
+
+        m_callbacks: Callbacks;
+
+        m_currentValue: (boolean | CurrentValue);
+
+        SubscriberCount: number;
+
+        Value: (boolean | CurrentValue);
+      }
+
+      export interface Callbacks {
+        ClearAllCallbacks(): void;
+
+        CountRegistered(): unknown;
+
+        Dispatch(...e: unknown[]): void;
+
+        Register(e: unknown): { Unregister: () => void; };
+
+        m_vecCallbacks: never;
+      }
+
+      export interface CurrentValue {
+        /**
+         * This value is an enum
+         * @currentValue 3
+         */
+        eActivationSourceType: number;
+
+        nActiveGamepadIndex: number;
+
+        nLastActiveGamepadIndex: number;
+      }
+    `,
   },
 };

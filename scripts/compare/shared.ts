@@ -1,4 +1,4 @@
-import { Identifier, ImportSpecifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
+import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
 import { Logger } from '../logger';
 
 /**
@@ -35,7 +35,7 @@ export function setLogger(newLogger: Logger): void {
  * @param tagName The name of the tag to extract
  * @returns The value of the tag or undefined if not found
  */
-export function getJsDocTagValues(prop: PropertySignature, tagName: string): string[] {
+export function getJsDocTagValues(prop: JSDocableNode, tagName: string): string[] {
   const values: string[] = [];
   for (const doc of prop.getJsDocs()) {
     for (const tag of doc.getTags()) {

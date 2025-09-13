@@ -916,4 +916,55 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       `,
   },
 
+  'does not delete extended extra JsPbMessage': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+      }
+
+      export interface OtherMessage extends JsPbMessage {
+        data(): string;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+      }
+    `,
+  },
+
+  'does not delete interface that is only extended': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+
+        info: InfoData;
+      }
+
+      export interface BaseInfo {
+        id: number;
+      }
+
+      export interface InfoData extends BaseInfo {
+        name: string;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+
+        info: InfoData;
+      }
+
+      export interface InfoData {
+        id: number;
+        name: string;
+      }
+    `,
+  },
+
 };

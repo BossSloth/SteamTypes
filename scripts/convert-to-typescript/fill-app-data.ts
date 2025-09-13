@@ -60,5 +60,3 @@ function fillWrapper(): void {
 }
 
 globalThis.fillAppData = fillWrapper;
-
-export default fillWrapper;

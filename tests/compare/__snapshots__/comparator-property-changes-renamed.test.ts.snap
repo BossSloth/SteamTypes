@@ -167,7 +167,7 @@ exports[`Comparator Property Renamed Change Cases > interface with property chan
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,29 @@
+@@ -1,11 +1,23 @@
 export interface ChatMessage {
 -  content: TextData;
 +  content: MessageContent;
@@ -181,12 +181,7 @@ export interface ChatMessage {
   timestamp: number;
 }
 
-export interface TextInformation {
-  text: string;
-+
-  informationFormat: 'plain' | 'markdown';
-}
-+
+-export interface TextInformation {
 +export interface MessageContent {
 +  data: TextData;
 +
@@ -196,15 +191,16 @@ export interface TextInformation {
 +export interface TextData {
 +  format: 'plain' | 'markdown' | 'html';
 +
-+  text: string;
-+}"
+  text: string;
+-  informationFormat: 'plain' | 'markdown';
+}"
 `;
 
 exports[`Comparator Property Renamed Change Cases > property changes from array to specific interface 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,39 @@
+@@ -1,11 +1,29 @@
 export interface LibraryContent {
 -  books: BookItem[];
 -  magazines: any[];
@@ -213,16 +209,9 @@ export interface LibraryContent {
 +  magazines: MagazineCollection;
 }
 
-export interface BookItem {
-  title: string;
-+
-  author: string;
-+
-  publisher: string;
-+
-  publishedDate: Date;
-}
-+
+-export interface BookItem {
+-  title: string;
+-  author: string;
 +export interface BookCollection {
 +  count: number;
 +
@@ -242,29 +231,28 @@ export interface BookItem {
 +export interface Magazine {
 +  issue: number;
 +
-+  publisher: string;
+  publisher: string;
+-  publishedDate: Date;
 +
 +  title: string;
-+}"
+}"
 `;
 
 exports[`Comparator Property Renamed Change Cases > property type changes from interface to primitive 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,10 +1,13 @@
+@@ -1,10 +1,5 @@
 export interface GameState {
 -  player: PlayerInfo;
 +  player: string;
 +
   gameMode: string;
 }
-
-export interface PlayerInfo {
-  score: number;
-+
-  level: number;
-+
-  achievements: string[];
-}"
+-
+-export interface PlayerInfo {
+-  score: number;
+-  level: number;
+-  achievements: string[];
+-}"
 `;

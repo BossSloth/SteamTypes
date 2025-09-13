@@ -137,7 +137,7 @@ exports[`Comparator Interface Renamed Cases > interface with complex nested stru
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,15 +1,61 @@
+@@ -1,15 +1,57 @@
 export interface AppConfig {
   api: ApiSettings;
 -  ui: UiSettings;
@@ -163,10 +163,7 @@ export interface ApiSettings {
 +  timeout: number;
 }
 
-export interface UiSettings {
-  theme: string;
-}
-+
+-export interface UiSettings {
 +export interface UiConfig {
 +  animations: boolean;
 +
@@ -174,8 +171,8 @@ export interface UiSettings {
 +
 +  layout: 'vertical' | 'horizontal';
 +
-+  theme: string;
-+}
+  theme: string;
+}
 +
 +export interface ComponentsConfig {
 +  button: ButtonConfig;
@@ -287,7 +284,7 @@ exports[`Comparator Interface Renamed Cases > inverse array intersection types 1
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,15 +1,17 @@
+@@ -1,15 +1,11 @@
 export interface Combined {
 -  data: (TypeA | TypeB)[];
 +  data: TypeA;
@@ -301,12 +298,11 @@ export interface TypeA {
 +
   propA: string;
 }
-
-export interface TypeB {
-  propB: number;
-+
-  extraB: Date;
-}"
+-
+-export interface TypeB {
+-  propB: number;
+-  extraB: Date;
+-}"
 `;
 
 exports[`Comparator Interface Renamed Cases > nested interface in union type 1`] = `

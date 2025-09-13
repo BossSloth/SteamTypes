@@ -242,7 +242,7 @@ exports[`Comparator Property Change Cases > interface with property changing fro
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,29 @@
+@@ -1,11 +1,23 @@
 export interface ChatMessage {
 -  content: TextContent;
 +  content: MessageContent;
@@ -256,12 +256,7 @@ export interface ChatMessage {
   timestamp: number;
 }
 
-export interface TextContent {
-  text: string;
-+
-  contentFormat: 'plain' | 'markdown';
-}
-+
+-export interface TextContent {
 +export interface MessageContent {
 +  data: TextData;
 +
@@ -271,8 +266,9 @@ export interface TextContent {
 +export interface TextData {
 +  format: 'plain' | 'markdown' | 'html';
 +
-+  text: string;
-+}"
+  text: string;
+-  contentFormat: 'plain' | 'markdown';
+}"
 `;
 
 exports[`Comparator Property Change Cases > interface with property changing from required to optional 1`] = `
@@ -344,21 +340,19 @@ exports[`Comparator Property Change Cases > property type changes from interface
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,10 +1,13 @@
+@@ -1,10 +1,5 @@
 export interface GameState {
 -  player: PlayerStats;
 +  player: string;
 +
   gameMode: string;
 }
-
-export interface PlayerStats {
-  score: number;
-+
-  level: number;
-+
-  achievements: string[];
-}"
+-
+-export interface PlayerStats {
+-  score: number;
+-  level: number;
+-  achievements: string[];
+-}"
 `;
 
 exports[`Comparator Property Change Cases > property type changes from primitive to interface 1`] = `

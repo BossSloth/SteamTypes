@@ -308,7 +308,10 @@ function extractAndStoreFunctionInfo(
  */
 function createSourceCode(name: string, func: Function): string | null {
   // Use prototype call to also support proxies
-  const funcStr = func.toString();
+  let funcStr = func.toString();
+
+  // Make sure "param => param" functions are converted to "(param) => param"
+  funcStr = funcStr.replace(/(\w+)\s*=>/g, '($1) =>');
 
   if (funcStr.includes('[native code]')) {
     return null;
