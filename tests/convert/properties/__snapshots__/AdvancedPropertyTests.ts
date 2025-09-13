@@ -1,3 +1,4 @@
+import { ObservableValue } from './shared';
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 
@@ -7,6 +8,8 @@ export interface AdvancedPropertyTests {
   errorPropertyTests: ErrorPropertyTests;
 
   mapSetPropertyTests: MapSetPropertyTests;
+
+  observableValueTests: ObservableValueTests;
 
   regexPropertyTests: RegexPropertyTests;
 
@@ -39,6 +42,16 @@ export interface MapSetPropertyTests {
   maps: Maps;
 
   sets: Sets;
+}
+
+export interface ObservableValueTests {
+  booleanValue: ObservableValue<boolean>;
+
+  numberValue: ObservableValue<number>;
+
+  objectValue: ObservableValue<ObjectValue>;
+
+  stringValue: ObservableValue<string>;
 }
 
 export interface RegexPropertyTests {
@@ -139,6 +152,12 @@ export interface Sets {
   stringSet: Set<string>;
 
   weakSet: WeakSet<object>;
+}
+
+export interface ObjectValue {
+  foo: string;
+
+  otherInfo: number;
 }
 
 export interface AdvancedClassInstance {

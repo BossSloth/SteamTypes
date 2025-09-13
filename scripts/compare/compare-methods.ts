@@ -1,4 +1,4 @@
-import { MethodSignature, Node, ParameterDeclaration } from 'ts-morph';
+import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
 import { compareTypes } from './type-comparator';
 
 /**
@@ -73,6 +73,15 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
     return;
   }
 
+  // If sourceParams is just '...e: unknown[]' skip type check
+  if (sourceParams.length === 1
+    && sourceParams[0].isRestParameter()) {
+    const sourceTypeNode = sourceParams[0].getTypeNode();
+    if (sourceTypeNode?.isKind(SyntaxKind.ArrayType) === true && sourceTypeNode.getElementTypeNode().isKind(SyntaxKind.UnknownKeyword)) {
+      return;
+    }
+  }
+
   for (let i = 0; i < Math.max(sourceParams.length, targetParams.length); i++) {
     const sourceParam = sourceParams[i];
     const targetParam = targetParams[i];
@@ -104,11 +113,6 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
   // Update question token
   if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
     targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
-  }
-
-  // Update rest parameter
-  if (sourceParam.isRestParameter() && !targetParam.isRestParameter()) {
-    targetParam.setIsRestParameter(sourceParam.isRestParameter());
   }
 
   const typesAreEqual = sourceTypeNode !== undefined && targetTypeNode !== undefined

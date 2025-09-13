@@ -41,6 +41,9 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
   const primitiveObjectType = getPrimitiveObjectTypes(value);
   if (primitiveObjectType !== null) return new PrimitiveType(primitiveObjectType);
 
+  const genericObjectType = getGenericObjectTypes(value, path);
+  if (genericObjectType !== null) return genericObjectType;
+
   if (!path) {
     console.error('❌ Error: path is undefined?', path, value);
 
@@ -303,4 +306,26 @@ function isReactRoot(obj: unknown): obj is ReactRoot {
   if (obj === null || typeof obj !== 'object') return false;
 
   return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
+}
+
+function getGenericObjectTypes(obj: unknown, path: string): Type | null {
+  if (isSteamObservableValue(obj)) {
+    const mainType = getType(obj.m_currentValue, path);
+
+    context.addImport('./shared', 'ObservableValue');
+
+    return new GenericType('ObservableValue', [mainType]);
+  }
+
+  return null;
+}
+
+function isSteamObservableValue(obj: unknown): obj is { m_currentValue: unknown; } {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'Set' in obj
+    && 'Subscribe' in obj
+    && 'm_currentValue' in obj
+    && 'SubscriberCount' in obj
+    && 'Value' in obj;
 }

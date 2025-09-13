@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Comparator Methods Cases > argument added to existing method 1`] = `
+exports[`Comparator Methods Cases > parameter added to existing method 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
@@ -11,7 +11,7 @@ export interface PopupManager {
 }"
 `;
 
-exports[`Comparator Methods Cases > argument becomes optional 1`] = `
+exports[`Comparator Methods Cases > parameter becomes optional 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
@@ -22,7 +22,7 @@ export interface PopupManager {
 }"
 `;
 
-exports[`Comparator Methods Cases > argument mismatch typed as enum 1`] = `
+exports[`Comparator Methods Cases > parameter mismatch typed as enum 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
@@ -37,7 +37,7 @@ export enum EOptions {
   Option2,"
 `;
 
-exports[`Comparator Methods Cases > argument removed from existing method 1`] = `
+exports[`Comparator Methods Cases > parameter removed from existing method 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts

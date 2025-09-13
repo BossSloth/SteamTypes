@@ -152,9 +152,9 @@ const propertyNameEdgeCases = {
 
   // Object with numeric property names
   numericPropertyNames: {
-    0: 'zero',
+    '0Other': 'zero',
     1: 'one',
-    2: 'two',
+    '2Other': 'two',
   },
 
   // Object with special characters in property names
@@ -189,8 +189,8 @@ const propertyNameEdgeCases = {
   numericPropertyNamesObject: {
     3: { index0: 0, value: 'zero' },
     4: { index1: 1, value: 'one' },
-    5: { index2: 2, value: 'two' },
-    6543: { index3: 3, value: 'other' },
+    '5Other': { index2: 2, value: 'two' },
+    '6543Other': { index3: 3, value: 'other' },
     Other3: { index4: 4, value: 'other' },
   },
 

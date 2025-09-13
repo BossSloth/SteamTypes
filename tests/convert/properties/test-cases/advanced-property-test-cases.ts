@@ -165,6 +165,40 @@ const specialTypePropertyTests = {
 };
 // #endregion
 
+class ObservableValue {
+  m_currentValue;
+  constructor(value) {
+    this.m_currentValue = value;
+  }
+
+  get Value() {
+    return this.m_currentValue;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get SubscriberCount() {
+    return 0;
+  }
+
+  Set(value) {
+    this.m_currentValue = value;
+  }
+
+  Subscribe() {
+    return null;
+  }
+}
+
+const observableValueTests = {
+  stringValue: new ObservableValue('test'),
+
+  numberValue: new ObservableValue(42),
+
+  booleanValue: new ObservableValue(true),
+
+  objectValue: new ObservableValue({ foo: 'bar', otherInfo: 15 }),
+};
+
 // Export all advanced property test cases
 export const advancedPropertyTests = {
   datePropertyTests,
@@ -173,4 +207,5 @@ export const advancedPropertyTests = {
   mapSetPropertyTests,
   typedArrayPropertyTests,
   specialTypePropertyTests,
+  observableValueTests,
 };

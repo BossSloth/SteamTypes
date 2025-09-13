@@ -73,7 +73,6 @@ export default tseslint.config(
       '@typescript-eslint/prefer-literal-enum-member': ['error', { allowBitwiseExpressions: true }],
       'func-style': ['error', 'declaration'],
       'max-lines-per-function': ['error', { max: 50, skipBlankLines: true, skipComments: true }],
-      'customRules/min-enum-members': 'error',
 
       '@typescript-eslint/consistent-type-exports': 'off',
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -113,6 +112,14 @@ export default tseslint.config(
 
       // #region Project specific
       '@typescript-eslint/member-ordering': ['error', { interfaces: ['method', 'field'], classes: undefined }],
+      'customRules/min-enum-members': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "TSIndexedAccessType[objectType.type='TSThisType']",
+          message: "Don't use indexed-access on `this` in types (this['...']). This breaks the comparator.",
+        },
+      ],
 
       '@typescript-eslint/no-unsafe-function-type': 'off',
       camelcase: 'off',

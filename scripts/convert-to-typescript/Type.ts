@@ -249,7 +249,7 @@ type SetName = 'Set' | 'ObservableSet';
 
 type MapName = 'Map' | 'ObservableMap';
 
-export type GenericTypeName = MapName | SetName;
+export type GenericTypeName = MapName | SetName | 'ObservableValue';
 
 export class GenericType extends Type {
   public readonly kind: string = 'generic';

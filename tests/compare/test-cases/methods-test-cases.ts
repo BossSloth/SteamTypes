@@ -2,7 +2,7 @@ import dedent from 'dedent';
 import { ComparatorTest } from './index';
 
 export const methodsCases: Record<string, ComparatorTest> = {
-  'external type accessed arguments': {
+  'external type accessed parameters': {
     interfaceName: 'EventHandler',
     expectsNoDiff: true,
     target: dedent/* ts */`
@@ -18,7 +18,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument added to existing method': {
+  'parameter added to existing method': {
     interfaceName: 'PopupManager',
     target: dedent/* ts */`
     export interface PopupManager {
@@ -31,7 +31,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument removed from existing method': {
+  'parameter removed from existing method': {
     interfaceName: 'PopupManager',
     target: dedent/* ts */`
     export interface PopupManager {
@@ -44,7 +44,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument is typed array': {
+  'parameter is typed array': {
     interfaceName: 'PopupManager',
     expectsNoDiff: true,
     target: dedent/* ts */`
@@ -58,7 +58,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument becomes optional': {
+  'parameter becomes optional': {
     interfaceName: 'PopupManager',
     target: dedent/* ts */`
     export interface PopupManager {
@@ -71,7 +71,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument has default null but is also string': {
+  'parameter has default null but is also string': {
     interfaceName: 'PopupManager',
     expectsNoDiff: true,
     target: dedent/* ts */`
@@ -85,7 +85,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument typed as enum number': {
+  'parameter typed as enum number': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
     target: dedent/* ts */`
@@ -104,7 +104,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument typed as enum string': {
+  'parameter typed as enum string': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
     target: dedent/* ts */`
@@ -123,7 +123,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
-  'argument mismatch typed as enum': {
+  'parameter mismatch typed as enum': {
     interfaceName: 'Foo',
     target: dedent/* ts */`
     export interface Foo {
@@ -138,6 +138,51 @@ export const methodsCases: Record<string, ComparatorTest> = {
     source: dedent/* ts */`
     export interface Foo {
       GetOptions(e: string): string
+    }
+  `,
+  },
+
+  'parameter is generated spread in source, but target is just array': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: string[]): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(...e: unknown[]): string
+    }
+  `,
+  },
+
+  'parameter is generated spread in source, but target is just a type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(...e: unknown[]): string
+    }
+  `,
+  },
+
+  'parameter is generated spread in source, but target has multiple parameters': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: number, otherInfo: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(...e: unknown[]): string
     }
   `,
   },

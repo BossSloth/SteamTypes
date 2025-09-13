@@ -195,21 +195,21 @@ export interface StartWithUnderscore {
 }
 
 export interface NumericPropertyNames {
-  '0': string;
+  '0Other': string;
 
-  '1': string;
+  1: string;
 
-  '2': string;
+  '2Other': string;
 }
 
 export interface NumericPropertyNamesObject {
-  '3': InvalidName4;
+  3: InvalidName4;
 
-  '4': InvalidName5;
+  4: InvalidName5;
 
-  '5': InvalidName6;
+  '5Other': Other;
 
-  '6543': InvalidName7;
+  '6543Other': Other2;
 
   Other3: Other3;
 }
@@ -326,13 +326,13 @@ export interface InvalidName5 {
   value: string;
 }
 
-export interface InvalidName6 {
+export interface Other {
   index2: number;
 
   value: string;
 }
 
-export interface InvalidName7 {
+export interface Other2 {
   index3: number;
 
   value: string;
