@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { ArrayTypeNode, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, EnumDeclaration, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
 import { currentTargetSourceFile, isImportedType } from './shared';
@@ -90,6 +90,10 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     }
 
     return true;
+  } else if (Node.isEnumDeclaration(targetDefinitionNode)) {
+    const enumType = getMainEnumType(targetDefinitionNode);
+
+    return enumType === getText(sourceNode);
   }
 
   if (Node.isTypeReference(sourceNode)) {
@@ -130,6 +134,18 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
   }
 
   return false;
+}
+
+function getMainEnumType(enumNode: EnumDeclaration): 'number' | 'string'
+{
+  const members = enumNode.getMembers();
+  const firstMember = members[0];
+
+  if (typeof firstMember.getValue() === 'string') {
+    return 'string';
+  }
+
+  return 'number';
 }
 
 function handleIndexedReturnType(targetTypeReference: TypeReferenceNode, sourceNode: TypeNode): boolean {

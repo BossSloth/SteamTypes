@@ -965,6 +965,28 @@ export const interfaceCases: Record<string, ComparatorTest> = {
         name: string;
       }
     `,
+
+  },
+  'imported renamed enum': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { EControllerStatus } from './enums';
+
+      export interface Foo {
+        bar: string;
+
+        EControllerPreference: EControllerStatus;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+
+        /** @currentValue 0 */
+        EControllerPreference: number;
+      }
+    `,
   },
 
 };

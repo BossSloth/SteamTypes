@@ -85,4 +85,60 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
+  'argument typed as enum number': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: EOptions): string
+    }
+
+    export enum EOptions {
+      Option1,
+      Option2,
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(e: number): string
+    }
+  `,
+  },
+  'argument typed as enum string': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: EOptions): string
+    }
+
+    export enum EOptions {
+      Option1 = 'Option1',
+      Option2 = 'Option2',
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(e: string): string
+    }
+  `,
+  },
+  'argument mismatch typed as enum': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: EOptions): string
+    }
+
+    export enum EOptions {
+      Option1,
+      Option2,
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(e: string): string
+    }
+  `,
+  },
 };

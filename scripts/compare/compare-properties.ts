@@ -1,6 +1,6 @@
 import { EnumDeclaration, EnumMember, PropertySignature, TypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile, getJsDocTagValues } from './shared';
+import { currentTargetSourceFile, getJsDocTagValues, isImportedType } from './shared';
 import * as TypeComparator from './type-comparator';
 
 const CustomJsDocTags = {
@@ -56,6 +56,10 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 
   // If it's an enum in the source, preserve the type and copy the JSDoc
   if (enumCurrentValues !== undefined) {
+    if (isImportedType(currentTargetSourceFile, targetProp.getType())) {
+      return true;
+    }
+
     if (!targetProp.getType().isEnum()) {
       const enumName = sourceProp.getName().replace(/^m_e|^e(?=[A-Z])/, 'E');
       // Check if the enum already exists in the target file

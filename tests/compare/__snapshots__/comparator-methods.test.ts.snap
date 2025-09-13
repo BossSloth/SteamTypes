@@ -22,6 +22,21 @@ export interface PopupManager {
 }"
 `;
 
+exports[`Comparator Methods Cases > argument mismatch typed as enum 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Foo {
+-  GetOptions(options: EOptions): string
++  GetOptions(options: string): string
+}
+
+export enum EOptions {
+  Option1,
+  Option2,"
+`;
+
 exports[`Comparator Methods Cases > argument removed from existing method 1`] = `
 "===================================================================
 --- a/target.ts
