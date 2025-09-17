@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import * as diff from 'diff';
+import { createTwoFilesPatch } from 'diff';
 import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
@@ -323,7 +323,7 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
     return null;
   }
 
-  const diffResult = diff.createTwoFilesPatch(
+  const diffResult = createTwoFilesPatch(
     `a/${filePath}`,
     `b/${filePath}`,
     originalText,
