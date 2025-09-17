@@ -114,9 +114,13 @@ export interface NestedArrays2 {
 }
 
 export interface BoundClass {
+  asyncFunction(a: unknown, b: unknown): Promise<string>;
+
   foo(): string;
 
   method(): string;
+
+  withParams(a: unknown, b: unknown): string;
 
   property: number;
 }

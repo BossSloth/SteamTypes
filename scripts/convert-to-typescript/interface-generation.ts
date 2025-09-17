@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { ClassDeclaration, Project, SyntaxKind } from 'ts-morph';
+import { ClassDeclaration, Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
 import { InterfaceType, PrimitiveType, Type } from './Type';
@@ -291,11 +291,21 @@ function handleNativeFunction(classObj: Record<string, unknown>, functionObj: Fu
     return functionObj;
   }
 
-  let functionBlock = functionDeclaration.getFirstChildByKindOrThrow(SyntaxKind.Block).getText();
-  functionBlock = functionBlock.trim().slice(1, -1);
+  // let functionBlock = functionDeclaration.getFirstChildByKindOrThrow(SyntaxKind.Block).getText();
+  // functionBlock = functionBlock.trim().slice(1, -1);
 
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
-  const functionInstance = new Function(functionBlock);
+  // We need to call eval indirectly because of this https://esbuild.github.io/content-types/#direct-eval
+  // eslint-disable-next-line no-eval
+  const scopedEval = eval;
+  let functionText = functionDeclaration.getText();
+  let functionInstance: Function;
+  if (functionText.startsWith('async ')) {
+    functionText = functionText.slice('async '.length);
+    functionInstance = scopedEval(`(async function ${functionText})`) as Function;
+  } else {
+    functionInstance = scopedEval(`(function ${functionText})`) as Function;
+  }
+
   cachedFunctionDeclarations.set(functionCacheKey, functionInstance);
 
   return functionInstance;

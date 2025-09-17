@@ -307,9 +307,19 @@ class BoundClass {
   foo() {
     return 'SteamUI';
   }
+
+  withParams(a, b) {
+    return `${a} ${b}`;
+  }
+
+  async asyncFunction(a, b) {
+    return `${a} ${b}`;
+  }
 }
 
 BoundClass.prototype.method = BoundClass.prototype.method.bind({});
+BoundClass.prototype.withParams = BoundClass.prototype.withParams.bind({});
+BoundClass.prototype.asyncFunction = BoundClass.prototype.asyncFunction.bind({});
 
 const boundClassTest = {
   boundClass: new BoundClass(),
