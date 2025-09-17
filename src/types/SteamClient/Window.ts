@@ -77,9 +77,9 @@ export interface Window {
    * Moves the window to given coordinates.
    * @param x Window X position.
    * @param y Window Y position.
-   * @param dpi Screen DPI.
+   * @param applyBrowserScaleOrDPIValue Apply browser scale or DPI value.
    */
-  MoveTo(x: number, y: number, dpi?: number): void;
+  MoveTo(x: number, y: number, applyBrowserScaleOrDPIValue: boolean | number): void;
 
   /**
    * Moves the window to a given location.
@@ -107,7 +107,7 @@ export interface Window {
   PositionWindowRelative(details: string, x: number, y: number, width: number, height: number): void;
 
   /**
-   * @returns true if yje naun [tpcess od about to shut down.]
+   * @returns true if the steam client is about to shut down.
    */
   ProcessShuttingDown(): Promise<boolean>;
 

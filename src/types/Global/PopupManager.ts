@@ -1,6 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { Window as SteamWindow } from '../SteamClient/Window';
-import { SteamId } from './Shared';
+import { Callbacks, SteamId } from './shared';
 
 export interface PopupManager {
   /**
@@ -464,28 +464,7 @@ export interface Dimensions {
   width: number;
 }
 
-export interface PopupCallbacks {
-  /**
-   * Removes all registered callbacks in {@link m_vecCallbacks}.
-   */
-  ClearAllCallbacks(): void;
-
-  /**
-   * @returns the number of registered callbacks in {@link m_vecCallbacks}.
-   */
-  CountRegistered(): number;
-
-  /**
-   * Calls all registered callbacks with the given arguments.
-   *
-   * @param args The arguments to pass to the callbacks.
-   */
-  Dispatch(...args: unknown[]): void;
-
-  Register(callback: PopupCallback_t): { Unregister: () => void; };
-
-  m_vecCallbacks: PopupCallback_t[];
-}
+export type PopupCallbacks = Callbacks<PopupCallback_t>;
 
 export type PopupCallback_t = (popup?: Popup) => void;
 

@@ -281,6 +281,15 @@ function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, s
     }
   }
 
+  const targetNode = targetIndexedAccess.getObjectTypeNode().getType().getSymbol()
+    ?.getDeclarations()[0];
+  if (Node.isInterfaceDeclaration(targetNode)) {
+    const referencedProperty = targetNode.getMembers().find(member => Node.isPropertySignature(member) && member.getName() === targetIndexedAccess.getIndexTypeNode().getType().getLiteralValue());
+    if (Node.isPropertySignature(referencedProperty)) {
+      return compareTypes(referencedProperty.getTypeNodeOrThrow(), sourceNode);
+    }
+  }
+
   return false;
 }
 

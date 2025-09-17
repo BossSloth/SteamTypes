@@ -770,6 +770,20 @@ export interface AppDLC {
   unAppID: number;
 }
 
+/**
+ * @example
+ * ```json
+ * {
+ *     "strID": "ACH_ALPS",
+ *     "strName": "Je Suis Perdu!",
+ *     "strDescription": "You've had one heck of a ski holiday.",
+ *     "bAchieved": true,
+ *     "rtUnlocked": 1735426639,
+ *     "strImage": "https://cdn.steamstatic.com/steamcommunity/public/images/apps/427410/e91840161b6907cd389c801e7b83aa2841000f6b.jpg",
+ *     "flAchieved": 11.300000190734863
+ * }
+ * ```
+ */
 export interface AchievementData {
   bAchieved: boolean;
 
@@ -792,6 +806,24 @@ export interface AchievementData {
   strName: string;
 }
 
+/**
+ * @example
+ * ```json
+ * {
+ *     "strID": "ACH_ALPS",
+ *     "strName": "Je Suis Perdu!",
+ *     "strDescription": "You've had one heck of a ski holiday.",
+ *     "bAchieved": true,
+ *     "rtUnlocked": 1735426639,
+ *     "strImage": "https://cdn.steamstatic.com/steamcommunity/public/images/apps/427410/e91840161b6907cd389c801e7b83aa2841000f6b.jpg",
+ *     "bHidden": true,
+ *     "flMinProgress": 0,
+ *     "flCurrentProgress": 0,
+ *     "flMaxProgress": 0,
+ *     "flAchieved": 11.300000190734863
+ * }
+ * ```
+ */
 export interface PlayerAchievement extends AchievementData {
   bHidden?: boolean;
 

@@ -59,7 +59,7 @@ export interface App {
   /**
    * Is registered to {@link User.RegisterForLoginStateChange}
    */
-  OnLoginStateChange(...args: Parameters<Parameters<User['RegisterForLoginStateChange']>[0]>): void;
+  OnLoginStateChange(...args: Parameters<Parameters<User['RegisterForLoginStateChange']>[0]>): Promise<void>;
 
   OptOutOfSurvey(): void;
 

@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AppAchievementProgressCache } from '../Global/AppAchievementProgressCache';
-import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, EAppCloudStatus, EDisplayStatus, LogoPosition } from '../Global/AppDetailsStore';
+import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from '../Global/AppDetailsStore';
+import { SteamAppOverview } from '../Global/SteamUIStore';
 import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
@@ -100,9 +101,9 @@ export interface Apps {
    * @param appId The ID of the application.
    * @param start The start of the time range as a Unix timestamp.
    * @param end The end of the time range as a Unix timestamp.
-   * @returns A Promise that resolves to an array of AppAchievement objects.
+   * @returns A Promise that resolves to an array of {@link PlayerAchievement} objects.
    */
-  GetAchievementsInTimeRange(appId: number, start: number, end: number): Promise<AppAchievement[]>;
+  GetAchievementsInTimeRange(appId: number, start: number, end: number): Promise<PlayerAchievement[]>;
 
   /**
    * Retrieves a list of active game actions, such as launching an application.
@@ -755,66 +756,6 @@ export enum ELibraryAssetType {
   HeroBlur,
 }
 
-export interface AppAchievements {
-  nAchieved: number;
-
-  nTotal: number;
-
-  vecAchievedHidden: AppAchievement[];
-
-  vecHighlight: AppAchievement[];
-
-  vecUnachieved: AppAchievement[];
-}
-
-/**
- * @example
- * ```json
- * {
- *     "strID": "ACH_ALPS",
- *     "strName": "Je Suis Perdu!",
- *     "strDescription": "You've had one heck of a ski holiday.",
- *     "bAchieved": true,
- *     "rtUnlocked": 1735426639,
- *     "strImage": "https://cdn.steamstatic.com/steamcommunity/public/images/apps/427410/e91840161b6907cd389c801e7b83aa2841000f6b.jpg",
- *     "bHidden": true,
- *     "flMinProgress": 0,
- *     "flCurrentProgress": 0,
- *     "flMaxProgress": 0,
- *     "flAchieved": 11.300000190734863
- * }
- * ```
- */
-export interface AppAchievement {
-  bAchieved: boolean;
-
-  bHidden: boolean;
-
-  /** How many players have this achievement as a percentage. */
-  flAchieved: number;
-
-  flCurrentProgress: number;
-
-  flMaxProgress: number;
-
-  flMinProgress: number;
-
-  /** When this achievement was unlocked. */
-  rtUnlocked: number;
-
-  /** Achievement description. */
-  strDescription: string;
-
-  /** Achievement ID. */
-  strID: string;
-
-  /** Achievement icon. */
-  strImage: string;
-
-  /** Achievement name. */
-  strName: string;
-}
-
 export type AppAction = 'LaunchApp' | 'VerifyApp';
 
 export type LaunchAppTask =
@@ -946,7 +887,7 @@ export interface WorkshopItem {
 }
 
 export interface AppAchievementData {
-  rgAchievements: AppAchievement[];
+  rgAchievements: PlayerAchievement[];
 }
 
 export interface AppAchievementResponse {
@@ -1277,25 +1218,6 @@ export interface LogoPositionForApp {
 }
 
 /**
- * CLibraryBootstrapData
- */
-export interface LibraryBootstrapData extends JsPbMessage {
-  add_app_data(param0: unknown, param1: unknown): unknown;
-
-  app_data(): AppBootstrapData[];
-
-  set_app_data(param0: unknown): unknown;
-}
-
-export interface AppBootstrapData {
-  appid: number;
-
-  hidden: boolean;
-
-  user_tag: string[];
-}
-
-/**
  * CAppOverview_Change
  */
 export interface AppOverview_Change extends JsPbMessage {
@@ -1344,202 +1266,4 @@ export interface CCloud_PendingRemoteOperation {
 
 export interface CMsgCloudPendingRemoteOperations extends JsPbMessage {
   operations: CCloud_PendingRemoteOperation[];
-}
-
-// Appears to be all optional fields :disaster:
-export interface SteamAppOverview {
-  /*
-   * Possible bitmask values, but I haven't spotted unknown of them being masked in the app_type field.
-   * Should be safe as an enum.
-   */
-  app_type: EAppType;
-
-  appid: number;
-
-  association: SteamAppOverviewAssociation[];
-
-  canonicalAppType: number;
-
-  /** Defaults to @see {EAppControllerSupportLevel.None} */
-  controller_support?: EAppControllerSupportLevel;
-
-  display_name: string;
-
-  gameid: string;
-
-  gamepad_preferred?: boolean;
-
-  header_filename?: string;
-
-  icon_data?: string;
-
-  icon_data_format?: string;
-
-  icon_hash: string;
-
-  library_capsule_filename?: string;
-
-  library_id?: string;
-
-  local_cache_version?: number;
-
-  local_per_client_data: SteamAppOverviewClientData;
-
-  mastersub_appid?: number;
-
-  mastersub_includedwith_logo?: string;
-
-  metacritic_score: number;
-
-  minutes_playtime_forever: number;
-
-  minutes_playtime_last_two_weeks: number;
-
-  most_available_clientid: string;
-
-  most_available_per_client_data: SteamAppOverviewClientData;
-
-  mru_index: number | undefined;
-
-  optional_parent_app_id?: number;
-
-  owner_account_id?: number;
-
-  per_client_data: SteamAppOverviewClientData[];
-
-  ps4_controller_support?: EAppControllerSupportLevel;
-
-  ps5_controller_support?: EAppControllerSupportLevel;
-
-  review_percentage_with_bombs: number;
-
-  review_percentage_without_bombs: number;
-
-  review_score_with_bombs: number;
-
-  review_score_without_bombs: number;
-
-  rt_custom_image_mtime?: number;
-
-  rt_last_time_locally_played?: number;
-
-  rt_last_time_played: number;
-
-  rt_last_time_played_or_installed: number;
-
-  rt_original_release_date: number;
-
-  rt_purchased_time: number;
-
-  rt_recent_activity_time: number;
-
-  rt_steam_release_date: number;
-
-  rt_store_asset_mtime: number;
-
-  selected_clientid?: string;
-
-  selected_per_client_data: SteamAppOverviewClientData;
-
-  shortcut_override_appid?: number;
-
-  site_license_site_name?: string;
-
-  size_on_disk?: number;
-
-  sort_as: string;
-
-  /** Defaults to @see {ESteamDeckCompatibilityCategory.Unknown} */
-  steam_deck_compat_category: ESteamDeckCompatibilityCategory;
-
-  store_category?: number[];
-
-  store_tag?: number[];
-
-  third_party_mod?: boolean;
-
-  visible_in_game_list: boolean;
-
-  vr_only?: boolean;
-
-  vr_supported?: boolean;
-}
-
-export enum EAppType {
-  DepotOnly = -2147483648,
-  Invalid = 0,
-  Game = 1 << 0,
-  Application = 1 << 1,
-  Tool = 1 << 2,
-  Demo = 1 << 3,
-  Deprecated = 1 << 4,
-  DLC = 1 << 5,
-  Guide = 1 << 6,
-  Driver = 1 << 7,
-  Config = 1 << 8,
-  Hardware = 1 << 9,
-  Franchise = 1 << 10,
-  Video = 1 << 11,
-  Plugin = 1 << 12,
-  MusicAlbum = 1 << 13,
-  Series = 1 << 14,
-  Comic = 1 << 15,
-  Beta = 1 << 16,
-  Shortcut = 1073741824,
-}
-
-export interface SteamAppOverviewAssociation {
-  name: string;
-
-  /** Defaults to @see {EAppAssociationType.Invalid} */
-  type: EAppAssociationType;
-}
-
-export enum EAppAssociationType {
-  Invalid,
-  Publisher,
-  Developer,
-  Franchise,
-}
-
-export enum EAppControllerSupportLevel {
-  None,
-  Partial,
-  Full,
-}
-
-export interface SteamAppOverviewClientData {
-  active_beta?: string;
-
-  bytes_downloaded: string;
-
-  bytes_total: string;
-
-  client_name: string;
-
-  clientid: string;
-
-  cloud_status: EAppCloudStatus;
-
-  /** Defaults to @see {EDisplayStatus.Invalid} */
-  display_status: EDisplayStatus;
-
-  installed?: boolean;
-
-  is_available_on_current_platform: boolean;
-
-  is_invalid_os_type?: boolean;
-
-  playtime_left?: number;
-
-  status_percentage: number;
-
-  streaming_to_local_client?: boolean;
-}
-
-export enum ESteamDeckCompatibilityCategory {
-  Unknown,
-  Unsupported,
-  Playable,
-  Verified,
 }

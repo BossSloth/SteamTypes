@@ -20,6 +20,7 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'SteamClient/Browser', object: 'SteamClient.Browser', srcName: 'Browser' },
   { file: 'SteamClient/ClientNotifications', object: 'SteamClient.ClientNotifications', srcName: 'ClientNotifications' },
   { file: 'SteamClient/Cloud', object: 'SteamClient.Cloud', srcName: 'Cloud' },
+  { file: 'SteamClient/CloudStorage', object: 'SteamClient.CloudStorage', srcName: 'CloudStorage' },
   { file: 'SteamClient/CommunityItems', object: 'SteamClient.CommunityItems', srcName: 'CommunityItems' },
   { file: 'SteamClient/Console', object: 'SteamClient.Console', srcName: 'Console' },
   { file: 'SteamClient/Customization', object: 'SteamClient.Customization', srcName: 'Customization' },
@@ -70,7 +71,7 @@ export const interfaceMaps: InterfaceMap[] = [
   { file: 'Global/App', object: 'window.App', srcName: 'App' },
   { file: 'Global/ConnectionManager', object: 'window.App.cm', srcName: 'ConnectionManager' },
   { file: 'Global/ConnectionManager', object: 'window.appAchievementProgressCache.CMInterface', srcName: 'ConnectionManager' },
-  { file: 'Global/Shared', object: 'window.App.cm.m_steamid', srcName: 'SteamId' },
+  { file: 'Global/shared/steamid', object: 'window.App.cm.m_steamid', srcName: 'SteamId' },
   { file: 'Global/AppDetailsStore', object: 'window.appDetailsStore', srcName: 'AppDetailsStore' },
   { file: 'Global/AppAchievementProgressCache', object: 'window.appAchievementProgressCache', srcName: 'AppAchievementProgressCache', initFunction: 'window.appAchievementProgressCache.RequestCacheUpdate()' },
   // { file: 'Global/AppActivityStore', object: 'window.appActivityStore', srcName: 'AppActivityStore' },
@@ -81,6 +82,20 @@ export const interfaceMaps: InterfaceMap[] = [
   // { file: 'Global/SteamUIStore', object: 'window.SteamUIStore', srcName: 'SteamUIStore' },
   // { file: 'Global/MainWindowBrowserManager', object: 'window.MainWindowBrowserManager', srcName: 'MainWindowBrowserManager' },
   { file: 'Global/UrlStore', object: 'window.urlStore', srcName: 'UrlStore' },
+
+  { file: 'Global/SteamUIStore/index', object: 'window.SteamUIStore', srcName: 'SteamUIStore' },
+  { file: 'Global/SteamUIStore/TextFilterStore', object: 'window.SteamUIStore.TextFilterStore', srcName: 'TextFilterStore' },
+
+  { file: 'Global/SteamUIStore/GamepadUIAudioStore', object: 'window.SteamUIStore.m_GamepadUIAudioStore', srcName: 'GamepadUIAudioStore' },
+  { file: 'Global/SteamUIStore/GamepadUIAudioStore', object: 'window.SteamUIStore.GamepadUIAudio.PlayAudioURL("/sounds/test")', srcName: 'SteamAudioPlaybackObj' },
+
+  { file: 'Global/SteamUIStore/WindowStore', object: 'window.SteamUIStore.WindowStore', srcName: 'WindowStore' },
+  { file: 'Global/SteamUIStore/SteamWindowNavigator', object: 'window.SteamUIStore.WindowStore.MainWindowInstance.Navigator', srcName: 'SteamWindowNavigator' },
+  { file: 'Global/SteamUIStore/GamepadNavigationManager', object: 'window.SteamUIStore.m_GamepadNavigationManager', srcName: 'GamepadNavigationManager' },
+
+  { file: 'Global/shared/Interfaces', object: 'window.g_PopupManager.m_rgPopupCreatedCallbacks', srcName: 'Callbacks' },
+  { file: 'Global/shared/Interfaces', object: 'window.SteamUIStore.m_GamepadUIAudioStore.m_currentlyFocusedAppid.m_callbacks', srcName: 'Callbacks' },
+  { file: 'Global/shared/Interfaces', object: 'window.SteamUIStore.m_GamepadNavigationManager.NavigationSourceSupportsFocus', srcName: 'MappedObservable' },
   // #endregion
 ];
 

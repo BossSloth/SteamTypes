@@ -299,7 +299,8 @@ export interface SystemInfo {
    */
   eGamingDeviceType: GamingDeviceType;
 
-  eHardwareVariant_DoNotUse: number;
+  /** @deprecated Use {@link eGamingDeviceType} instead. */
+  eHardwareVariant_DoNotUse: GamingDeviceType;
 
   nCPUHz: number;
 

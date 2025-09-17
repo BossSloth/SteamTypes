@@ -1,4 +1,4 @@
-import { EBrowserType } from '../Global/PopupManager';
+import { EBrowserType, EUIMode } from '../Global/PopupManager';
 
 export enum EResult {
   OK = 1,
@@ -143,12 +143,6 @@ export enum EUIComposition {
    * events to the Gamescope foreground app (game) instead of Steam.
    */
   OverlayKeyboard,
-}
-
-export enum EUIMode {
-  Unknown = -1,
-  GamePad = 4,
-  Desktop = 7,
 }
 
 export interface BrowserContext {

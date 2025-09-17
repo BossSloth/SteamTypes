@@ -1,4 +1,4 @@
-import { SteamId } from './Shared';
+import { Callbacks, SteamId } from './shared';
 
 export interface ConnectionManager {
   AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;
@@ -155,7 +155,7 @@ export interface ConnectionManager {
 }
 
 export interface ClientServersAvailableHandler {
-  invoke(): unknown;
+  invoke(e: unknown): void;
 
   unregister(): void;
 }
@@ -169,7 +169,7 @@ export interface m_callbacksOnConnect {
 
   m_bRunOnce: boolean;
 
-  m_ClientConnectionCallbacks: m_ClientConnectionCallbacks;
+  m_ClientConnectionCallbacks: Callbacks;
 
   m_mapServerTypeCallbacks: never;
 }
@@ -209,11 +209,11 @@ export interface m_messageHandlers {
 
   m_mapServiceMethodHandlers: Map<string, m_mapCallbacks[]>;
 
-  m_rgRegisteredEMsgs: unknown/* circular reference to emsg_list */;
+  m_rgRegisteredEMsgs: number[];
 
   m_rgRegisteredServiceMethodHandlers: string[];
 
-  servicemethod_list: unknown/* circular reference to m_rgRegisteredServiceMethodHandlers */;
+  servicemethod_list: string[];
 }
 
 export interface m_ServiceTransport {
@@ -225,18 +225,6 @@ export interface m_ServiceTransport {
   SendMsg(e: unknown, t: unknown, n: unknown): unknown;
 
   SendNotification(e: unknown, t: unknown): unknown;
-}
-
-export interface m_ClientConnectionCallbacks {
-  ClearAllCallbacks(): void;
-
-  CountRegistered(): unknown;
-
-  Dispatch(...e: unknown[]): void;
-
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: never;
 }
 
 export interface m_ErrorReportingStore {

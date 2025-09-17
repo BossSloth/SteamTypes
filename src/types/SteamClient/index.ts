@@ -5,6 +5,7 @@ import { Browser } from './Browser';
 import { BrowserView } from './BrowserView';
 import { ClientNotifications } from './ClientNotifications';
 import { Cloud } from './Cloud';
+import { CloudStorage } from './CloudStorage';
 import { CommunityItems } from './CommunityItems';
 import { Console } from './Console';
 import { Customization } from './Customization';
@@ -59,6 +60,8 @@ export interface SteamClient {
   ClientNotifications: ClientNotifications;
 
   Cloud: Cloud;
+
+  CloudStorage: CloudStorage;
 
   CommunityItems: CommunityItems;
 
@@ -145,6 +148,7 @@ export {
   BrowserView,
   ClientNotifications,
   Cloud,
+  CloudStorage,
   CommunityItems,
   Console,
   Customization,

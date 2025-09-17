@@ -3,6 +3,7 @@ import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 import { PopupManager } from '../types/Global/PopupManager';
+import { SteamUIStore } from '../types/Global/SteamUIStore';
 import { UrlStore } from '../types/Global/UrlStore';
 
 declare global {
@@ -83,7 +84,7 @@ declare global {
   let steam_client_components: unknown;
   let steamAjaxRequest: unknown;
   let SteamClient: SteamClient;
-  let SteamUIStore: unknown;
+  let SteamUIStore: SteamUIStore;
   let StoreItemCache: unknown;
   let subscriberAgreementStore: unknown;
   let SuspendResumeStore: unknown;

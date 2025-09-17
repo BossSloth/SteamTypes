@@ -1,3 +1,5 @@
+import { Callbacks } from './shared';
+
 export interface MainWindowBrowserManager {
   /**
    * @native
@@ -357,7 +359,7 @@ export interface m_tabbedBrowserStore {
 
   active_web_requestid: number;
 
-  m_cbWebPageRequestsChanged: m_cbWebPageRequestsChanged;
+  m_cbWebPageRequestsChanged: Callbacks;
 
   m_nActiveWebpageRequestID: number;
 
@@ -376,18 +378,6 @@ export interface State {
   bExternal: boolean;
 
   strURL: string;
-}
-
-export interface m_cbWebPageRequestsChanged {
-  ClearAllCallbacks(): void;
-
-  CountRegistered(): unknown;
-
-  Dispatch(...e: unknown[]): void;
-
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: unknown[];
 }
 
 export interface m_rgWebPageRequests {

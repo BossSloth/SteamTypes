@@ -989,4 +989,30 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     `,
   },
 
+  'indexed access on external generic type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { Callbacks } from './types';
+
+      export interface Foo {
+        bar: Callbacks<(arg: string) => void>;
+
+        preferences: Foo['bar'];
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: ElementChanged;
+
+        preferences: ElementChanged;
+      }
+
+      export interface ElementChanged {
+        ref: unknown;
+
+        foo: boolean;
+      }
+    `,
+  },
 };

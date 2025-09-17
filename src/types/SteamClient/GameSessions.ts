@@ -1,4 +1,4 @@
-import { AppAchievements } from './Apps';
+import { Achievements } from '../Global/AppDetailsStore';
 import { Screenshot } from './Screenshots';
 import { Unregisterable } from './shared';
 
@@ -29,7 +29,7 @@ export interface GameSessions {
 }
 
 export interface AchievementNotification {
-  achievement: AppAchievements;
+  achievement: Achievements;
 
   nCurrentProgress: number;
 

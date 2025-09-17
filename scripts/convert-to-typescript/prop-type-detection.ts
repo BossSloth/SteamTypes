@@ -80,9 +80,9 @@ function getCircularReference(value: Record<string, unknown>, isValueIterable: b
   if (circularPath !== undefined) {
     // Return the interface name that this circular reference points to
 
-    if (isValueIterable) {
-      return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
-    }
+    // if (isValueIterable) {
+    //   return new PrimitiveType(`unknown/* circular reference to ${circularPath} */`);
+    // }
 
     return new InterfaceType(circularPath);
   }
@@ -121,7 +121,8 @@ function generateInterfaceName(pathSegment: string): [string, number | undefined
  */
 function getIterableType(value: Iterable<unknown>, path: string): ArrayType | GenericType {
   // Register this iterable as being processed to detect circular references
-  context.processedObjectPaths.set(value, path.split('.').pop() ?? 'Item');
+  // context.processedObjectPaths.set(value, path.split('.').pop() ?? 'Item');
+  // TODO: somehow figure out a better way to detect circular references in nested arrays
 
   const array = Array.from(value);
 

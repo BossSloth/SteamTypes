@@ -1,4 +1,6 @@
-import { EUIMode, Unregisterable } from './shared';
+import { EUIMode } from '../Global/PopupManager';
+import { DesiredSteamWindow } from '../Global/SteamUIStore/WindowStore';
+import { Unregisterable } from './shared';
 import { EOSType } from './System';
 
 export interface UI {
@@ -6,7 +8,7 @@ export interface UI {
 
   ExitBigPictureMode(): void;
 
-  GetDesiredSteamUIWindows(): Promise<SteamWindow[]>;
+  GetDesiredSteamUIWindows(): Promise<DesiredSteamWindow[]>;
 
   /**
    * Gets information about whether your OS will be unsupported in the future or not.
@@ -53,44 +55,8 @@ export interface UI {
   SetUIMode(mode: EUIMode): void;
 }
 
-export enum EWindowType {
-  MainGamepadUI,
-  OverlayGamepadUI,
-  Keyboard,
-  ControllerConfigurator,
-  VR,
-  MainDesktopUI,
-  DesktopLogin,
-  OverlayDesktopUI,
-  SteamChinaReviewLauncher,
-}
-
 export interface OSEndOfLifeInfo {
   bOSWillBeUnsupported: boolean;
 
   osType: EOSType;
-}
-
-/**
- * The following might have more correct information:
- * https://github.com/SteamDatabase/SteamTracking/blob/master/Protobufs/webuimessages_sharedjscontext.proto
- */
-export interface SteamWindow {
-  appid: number;
-
-  hwndParent: number;
-
-  nBrowserID: number;
-
-  strAppName: string;
-
-  unID: number;
-
-  unPID: number;
-
-  windowType: EWindowType;
-
-  x: number;
-
-  y: number;
 }
