@@ -1,4 +1,4 @@
-import { ArrowFunction, FunctionExpression, Project, TypeFormatFlags, ts } from 'ts-morph';
+import { ArrowFunction, FunctionExpression, MethodDeclaration, ParameteredNode, Project, TypeFormatFlags, VariableDeclaration, ts } from 'ts-morph';
 import { FunctionInfo, MappedParam } from './types';
 
 // Type format flags for consistent output
@@ -7,103 +7,6 @@ const typeFormatFlags
       | TypeFormatFlags.UseFullyQualifiedType;
 
 const enableDiagnostics = false;
-
-/**
- * Extracts parameter information from a function
- */
-function extractParams(initializer: FunctionExpression | ArrowFunction): MappedParam[] {
-  const parameters = initializer.getParameters();
-
-  return parameters.map((param) => {
-    let paramName = param.getName();
-    let paramType = param.getType().getText(undefined, typeFormatFlags);
-    let isOptional = param.isOptional();
-    let defaultValue = param.getInitializer()?.getText();
-    // Remove newlines and trim spaces
-    defaultValue = defaultValue?.replace(/\s+/g, ' ');
-
-    if (param.isRestParameter()) {
-      paramName = `...${paramName}`;
-      isOptional = false;
-    }
-
-    paramType = paramType.replaceAll('any[];', 'unknown[];');
-
-    switch (paramType) {
-      case '{}':
-      case 'any':
-        paramType = 'unknown';
-        break;
-      case 'any[]':
-      case '[]':
-      case 'never[]':
-        paramType = 'unknown[]';
-        break;
-      default:
-        break;
-    }
-
-    return {
-      name: paramName,
-      type: paramType || 'unknown',
-      optional: isOptional,
-      defaultValue,
-    };
-  });
-}
-
-/**
- * Extracts return type from a function
- */
-function extractReturnType(initializer: FunctionExpression | ArrowFunction): string {
-  let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
-
-  // Always add spaces between types
-  returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');
-
-  returnType = returnType
-    .replaceAll('any[];', 'unknown[];')
-    .replaceAll('<any>', '<unknown>')
-    .replaceAll('<any, any>', '<unknown, unknown>')
-    .replaceAll(': any', ': unknown')
-    .replaceAll('never[];', 'unknown[];');
-
-  switch (returnType) {
-    case 'any':
-      returnType = 'unknown';
-      break;
-    case 'any[]':
-      returnType = 'unknown[]';
-      break;
-    case '{}':
-      returnType = 'object | unknown';
-      break;
-    default:
-      break;
-  }
-
-  return returnType;
-}
-
-/**
- * Generates JSDoc for a function
- */
-function generateJsDoc(params: MappedParam[]): string[] | undefined {
-  const jsDoc: string[] = [];
-
-  // Add parameters
-  for (const param of params) {
-    if (param.defaultValue !== undefined) {
-      jsDoc.push(`@param ${param.name} default: ${param.defaultValue}`);
-    }
-  }
-
-  if (jsDoc.length === 0) {
-    return undefined;
-  }
-
-  return jsDoc;
-}
 
 const functionInfoCache = new Map<Function, FunctionInfo>();
 
@@ -259,7 +162,7 @@ function analyzeSourceFile(
  * @param functionInfos Map to store function information
  */
 function processVariableDeclaration(
-  variableDeclaration: import('ts-morph').VariableDeclaration,
+  variableDeclaration: VariableDeclaration,
   nameMap: Map<string, string>,
   functionsToProcess: Map<string, Function>,
   functionInfos: Map<string, FunctionInfo>,
@@ -277,6 +180,8 @@ function processVariableDeclaration(
   extractAndStoreFunctionInfo(variableDeclaration, originalFunc, functionInfos);
 }
 
+export type Extractable = FunctionExpression | ArrowFunction | MethodDeclaration;
+
 /**
  * Extracts and stores function information
  * @param variableDeclaration Variable declaration to extract from
@@ -284,7 +189,7 @@ function processVariableDeclaration(
  * @param functionInfos Map to store function information
  */
 function extractAndStoreFunctionInfo(
-  variableDeclaration: import('ts-morph').VariableDeclaration,
+  variableDeclaration: VariableDeclaration,
   originalFunc: Function,
   functionInfos: Map<string, FunctionInfo>,
 ): void {
@@ -298,6 +203,103 @@ function extractAndStoreFunctionInfo(
   const functionInfo: FunctionInfo = { params: mappedParams, returnType, jsDoc };
   functionInfos.set(variableDeclaration.getName().replace(/^_/, ''), functionInfo);
   functionInfoCache.set(originalFunc, functionInfo);
+}
+
+/**
+ * Extracts parameter information from a function
+ */
+function extractParams(initializer: ParameteredNode): MappedParam[] {
+  const parameters = initializer.getParameters();
+
+  return parameters.map((param) => {
+    let paramName = param.getName();
+    let paramType = param.getType().getText(undefined, typeFormatFlags);
+    let isOptional = param.isOptional();
+    let defaultValue = param.getInitializer()?.getText();
+    // Remove newlines and trim spaces
+    defaultValue = defaultValue?.replace(/\s+/g, ' ');
+
+    if (param.isRestParameter()) {
+      paramName = `...${paramName}`;
+      isOptional = false;
+    }
+
+    paramType = paramType.replaceAll('any[];', 'unknown[];');
+
+    switch (paramType) {
+      case '{}':
+      case 'any':
+        paramType = 'unknown';
+        break;
+      case 'any[]':
+      case '[]':
+      case 'never[]':
+        paramType = 'unknown[]';
+        break;
+      default:
+        break;
+    }
+
+    return {
+      name: paramName,
+      type: paramType || 'unknown',
+      optional: isOptional,
+      defaultValue,
+    };
+  });
+}
+
+/**
+ * Extracts return type from a function
+ */
+function extractReturnType(initializer: FunctionExpression | ArrowFunction): string {
+  let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
+
+  // Always add spaces between types
+  returnType = returnType.replace(/(?!\s)\|(?!\s)/g, ' | ');
+
+  returnType = returnType
+    .replaceAll('any[];', 'unknown[];')
+    .replaceAll('<any>', '<unknown>')
+    .replaceAll('<any, any>', '<unknown, unknown>')
+    .replaceAll(': any', ': unknown')
+    .replaceAll('never[];', 'unknown[];');
+
+  switch (returnType) {
+    case 'any':
+      returnType = 'unknown';
+      break;
+    case 'any[]':
+      returnType = 'unknown[]';
+      break;
+    case '{}':
+      returnType = 'object | unknown';
+      break;
+    default:
+      break;
+  }
+
+  return returnType;
+}
+
+/**
+ * Generates JSDoc for a function
+ */
+function generateJsDoc(params: MappedParam[]): string[] | undefined {
+  const jsDoc: string[] = [];
+
+  // Add parameters
+  for (const param of params) {
+    if (param.defaultValue !== undefined) {
+      jsDoc.push(`@param ${param.name} default: ${param.defaultValue}`);
+    }
+  }
+
+  if (jsDoc.length === 0) {
+    return undefined;
+  }
+
+  return jsDoc;
 }
 
 /**

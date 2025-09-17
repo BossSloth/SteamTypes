@@ -1,4 +1,5 @@
-import { Project } from 'ts-morph';
+/* eslint-disable max-lines-per-function */
+import { ClassDeclaration, Project, SyntaxKind } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
 import { InterfaceType, PrimitiveType, Type } from './Type';
@@ -45,7 +46,7 @@ export function createInterfaceDefinition(
   properties = properties.sort(propertyStringSorter);
 
   // Process all properties
-  processInterfaceProperties(interfaceToProcess.obj, properties, interfaceName, interfaceDefinition);
+  processInterfaceProperties(interfaceToProcess.obj, properties, interfaceName, interfaceDefinition, project);
 
   // Get parameter information and return type using ts-morph in one big call
   // This is still the biggest performance hit because of ts-morph being slow
@@ -65,7 +66,13 @@ export function createInterfaceDefinition(
   context.interfaceDefinitions.set(interfaceName, interfaceDefinition);
 }
 
-function processInterfaceProperties(obj: Record<string, unknown>, properties: string[], interfaceName: string, interfaceDefinition: TypeScriptInterface): void {
+function processInterfaceProperties(
+  obj: Record<string, unknown>,
+  properties: string[],
+  interfaceName: string,
+  interfaceDefinition: TypeScriptInterface,
+  project: Project,
+): void {
   for (const key of properties) {
     let value: unknown;
     try {
@@ -86,10 +93,14 @@ function processInterfaceProperties(obj: Record<string, unknown>, properties: st
     const formattedName = formatPropertyName(key);
 
     if (typeof value === 'function') {
+      if (isBoundFunction(value, obj)) {
+        value = handleNativeFunction(obj, value, key, project);
+      }
+
       if (!context.functionsToProcess.has(interfaceName)) {
         context.functionsToProcess.set(interfaceName, new Map());
       }
-      context.functionsToProcess.get(interfaceName)?.set(formattedName, value);
+      context.functionsToProcess.get(interfaceName)?.set(formattedName, value as Function);
     } else {
       if (key === 'CMInterface' || key === 'm_CMInterface') {
         const interfaceProperty: InterfaceProperty = {
@@ -246,4 +257,50 @@ function propertyStringSorter(a: string, b: string): number {
   }
 
   return (lenA - i) - (lenB - j);
+}
+
+const cachedClassDeclarations = new Map<string, ClassDeclaration>();
+const cachedFunctionDeclarations = new Map<string, Function>();
+
+// TODO: this is unoptimized it is better to just give the function declaration directly to processVariableDeclaration as it should also support function declarations
+function handleNativeFunction(classObj: Record<string, unknown>, functionObj: Function, functionName: string, project: Project): Function {
+  if (functionName.startsWith('m_fn')) {
+    // Common pattern Steam uses on variable functions
+    return functionObj;
+  }
+
+  const functionCacheKey = `${classObj.constructor.toString()}.${functionName}`;
+  const cachedFunction = cachedFunctionDeclarations.get(functionCacheKey);
+  if (cachedFunction) {
+    return cachedFunction;
+  }
+
+  const classString = classObj.constructor.toString();
+  let classDeclaration: ClassDeclaration | undefined = cachedClassDeclarations.get(classString);
+  if (!classDeclaration) {
+    const sourceFile = project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, classString);
+
+    classDeclaration = sourceFile.getClasses()[0];
+    cachedClassDeclarations.set(classString, classDeclaration);
+  }
+
+  const functionDeclaration = classDeclaration.getMethod(functionName);
+  if (!functionDeclaration) {
+    console.error(`Function ${functionName} not found in class ${classDeclaration.getName()}`);
+
+    return functionObj;
+  }
+
+  let functionBlock = functionDeclaration.getFirstChildByKindOrThrow(SyntaxKind.Block).getText();
+  functionBlock = functionBlock.trim().slice(1, -1);
+
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+  const functionInstance = new Function(functionBlock);
+  cachedFunctionDeclarations.set(functionCacheKey, functionInstance);
+
+  return functionInstance;
+}
+
+function isBoundFunction(functionObj: Function, classObj: Record<string, unknown>): boolean {
+  return functionObj.name.startsWith('bound ') && classObj.constructor.name !== 'Object';
 }

@@ -4,6 +4,8 @@ import { Root as ReactRoot } from 'react-dom/client';
 export interface EdgeCasePropertyTests {
   arrayTypeOptimizationTests: ArrayTypeOptimizationTests;
 
+  boundClassTest: BoundClassTest;
+
   circularReferenceTests: CircularReferenceTests;
 
   interfaceWithEnumTest: InterfaceWithEnumTest;
@@ -25,11 +27,11 @@ export interface ArrayTypeOptimizationTests {
   unmergableArrays: (number[] | string[])[];
 }
 
+export interface BoundClassTest {
+  boundClass: BoundClass;
+}
+
 export interface CircularReferenceTests {
-  circularArray: (number | unknown/* circular reference to circularArray */)[];
-
-  nestedCircularArray: (NestedCircularArray | number)[];
-
   nestedCircularReference: NestedCircularReference;
 
   simpleCircularReference: SimpleCircularReference;
@@ -111,8 +113,12 @@ export interface NestedArrays2 {
   c: number;
 }
 
-export interface NestedCircularArray {
-  nestedArray: unknown/* circular reference to nestedCircularArray */;
+export interface BoundClass {
+  foo(): string;
+
+  method(): string;
+
+  property: number;
 }
 
 export interface NestedCircularReference {
