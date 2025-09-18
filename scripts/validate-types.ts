@@ -107,10 +107,10 @@ let extractTime = 0;
  */
 async function extractInterface(map: InterfaceMap): Promise<string> {
   logger.debug('\n');
-  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.object)} as ${chalk.bold(map.srcName)}...`));
+  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.objectExpression)} as ${chalk.bold(map.interfaceName)}...`));
 
   // Execute the conversion function
-  logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(map.object)} to TypeScript interface...`));
+  logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(map.objectExpression)} to TypeScript interface...`));
 
   const startTime = Date.now();
 
@@ -127,13 +127,13 @@ async function extractInterface(map: InterfaceMap): Promise<string> {
   }
 
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `async function evalConvert() { const result = window.convertToTypescript(${map.object}, '${map.srcName}'); return result; } evalConvert()`,
+    expression: `async function evalConvert() { const result = window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}'); return result; } evalConvert()`,
     returnByValue: true,
     awaitPromise: true,
   });
 
   if (response.exceptionDetails) {
-    throw new Error(`Failed to convert object ${map.object}: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
+    throw new Error(`Failed to convert object ${map.objectExpression}: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
   }
 
   const interfaceContent = response.result.value as string;
@@ -225,7 +225,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
         filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
         result: compareInterfaces(
           `src/types/${map.file}.ts`,
-          map.srcName,
+          map.interfaceName,
           interfaceContent,
           options.verbose,
         ),
