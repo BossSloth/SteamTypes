@@ -3,8 +3,8 @@ import { FunctionInfo, MappedParam } from './types';
 
 // Type format flags for consistent output
 const typeFormatFlags
-    = TypeFormatFlags.UseSingleQuotesForStringLiteralType
-      | TypeFormatFlags.UseFullyQualifiedType;
+  = TypeFormatFlags.UseSingleQuotesForStringLiteralType
+    | TypeFormatFlags.UseFullyQualifiedType;
 
 const enableDiagnostics = false;
 

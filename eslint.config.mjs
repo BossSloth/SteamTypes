@@ -1,12 +1,12 @@
 import pluginJs from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import perfectionist from 'eslint-plugin-perfectionist';
-import { globalIgnores } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import customRules from './eslint-rules/index.mjs';
 
-export default tseslint.config(
+export default defineConfig(
   { files: ['**/*.{js,mjs,cjs,ts}'] },
   globalIgnores([
     'build/*',
@@ -41,7 +41,7 @@ export default tseslint.config(
   }),
   {
     plugins: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      '@stylistic': stylistic,
       perfectionist,
       customRules,
     },

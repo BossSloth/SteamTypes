@@ -66,12 +66,12 @@ export interface AudioPlaybackManager {
   /**
    * @param t default: 1
    */
-  PlayAudioURL(e: unknown, t?: number): unknown;
+  PlayAudioURL(e: unknown, t?: number): SteamAudioPlaybackObj;
 
   /**
    * @param t default: 0
    */
-  PlayAudioURLWithRepeats(e: unknown, t?: number): unknown;
+  PlayAudioURLWithRepeats(e: unknown, t?: number): SteamAudioPlaybackObj;
 
   PlaybackFinished(e: unknown): void;
 
@@ -142,8 +142,8 @@ export interface SteamAudioPlaybackObj {
  * fs.readdirSync(`${os.homedir()}/.steam/steamui/sounds`).map((e) => `'${e}'`).join('|');
  * ```
  */
-type NavAudioFile_t =
-  | 'bumper_end.wav'
+type NavAudioFile_t
+= | 'bumper_end.wav'
   | 'camera1.wav'
   | 'confirmation_negative.wav'
   | 'confirmation_positive.wav'

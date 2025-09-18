@@ -758,8 +758,8 @@ export enum ELibraryAssetType {
 
 export type AppAction = 'LaunchApp' | 'VerifyApp';
 
-export type LaunchAppTask =
-  | 'None'
+export type LaunchAppTask
+= | 'None'
   | 'Completed'
   | 'Cancelled'
   | 'Failed'

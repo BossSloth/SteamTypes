@@ -36,8 +36,8 @@ export interface FriendSettingsFeatureObject {
   feature: FriendSettingsFeature;
 }
 
-export type FriendSettingsFeature =
-  | 'DoNotDisturb'
+export type FriendSettingsFeature
+= | 'DoNotDisturb'
   | 'FriendsFilter'
   | 'LoaderWindowSynchronization'
   | 'NewVoiceHotKeyState'
