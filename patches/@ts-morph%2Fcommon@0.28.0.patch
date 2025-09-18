@@ -1,0 +1,24 @@
+diff --git a/package.json b/package.json
+index 4a60879af2e24cf2000c45f8c6f842a1a60b5b2a..6ed054c4f69a5fcf54d9ed2069bed0a890583d65 100644
+--- a/package.json
++++ b/package.json
+@@ -42,8 +42,11 @@
+   },
+   "browser": {
+     "fs": false,
++    "node:fs": false,
+     "fs/promises": false,
++    "node:fs/promises": false,
+     "os": false,
++    "node:os": false,
+     "fs.realpath": false,
+     "mkdirp": false,
+     "dir-glob": false,
+@@ -53,6 +56,7 @@
+     "glob-parent": false,
+     "glob": false,
+     "path": false,
++    "node:path": false,
+     "crypto": false,
+     "buffer": false,
+     "@microsoft/typescript-etw": false,

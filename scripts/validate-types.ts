@@ -90,9 +90,14 @@ async function injectConvertToTypescriptJs(targetId: string, force = false): Pro
   }
 
   // Inject the content of inject.js into the context of the target
-  await sharedJsClient.Runtime.evaluate({
+  const injectResult = await sharedJsClient.Runtime.evaluate({
     expression: fs.readFileSync(convertToTsFilePath, 'utf8'),
   });
+
+  if (injectResult.exceptionDetails) {
+    console.error(injectResult);
+    throw new Error(`Failed to inject conversion script: ${JSON.stringify(injectResult.exceptionDetails.exception?.description, null, 2)}`);
+  }
 }
 
 let extractTime = 0;
