@@ -36,7 +36,7 @@
     "@semantic-release/git": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.3.1",
     "@types/chrome-remote-interface": "^0.31.14",
-    "@types/node": "^22.18.5",
+    "@types/node": "^24.5.2",
     "@vitest/coverage-v8": "^3.2.4",
     "ansi-regex": "^6.2.2",
     "chalk": "^5.6.2",
