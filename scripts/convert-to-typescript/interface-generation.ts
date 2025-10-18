@@ -234,7 +234,7 @@ function propertySorter(a: InterfaceProperty, b: InterfaceProperty): number {
 const singleQuote = "'".charCodeAt(0);
 const space = ' '.charCodeAt(0);
 
-function propertyStringSorter(a: string, b: string): number {
+export function propertyStringSorter(a: string, b: string): number {
   a = a.toLowerCase();
   b = b.toLowerCase();
   let i = 0;

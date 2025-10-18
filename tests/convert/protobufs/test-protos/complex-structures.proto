@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+// Test enum that gets referenced
+enum EGameState {
+  k_EGameState_Invalid = 0;
+  k_EGameState_Lobby = 1;
+  k_EGameState_Playing = 2;
+  k_EGameState_Finished = 3;
+}
+
+// Test message with mixed field types
+message GameSession {
+  string session_id = 1;
+  repeated string player_ids = 2;
+  EGameState state = 3;
+  int64 start_time = 4;
+  optional int64 end_time = 5;
+
+  message PlayerStats {
+    string player_id = 1;
+    int32 score = 2;
+    repeated string achievements = 3;
+  }
+
+  repeated .GameSession.PlayerStats player_stats = 6;
+}
+
+// Test message with various array types
+message DataCollection {
+  repeated int32 integers = 1;
+  repeated string strings = 2;
+  repeated bytes byte_arrays = 3;
+  repeated bool booleans = 4;
+
+  message DataPoint {
+    double x = 1;
+    double y = 2;
+  }
+
+  repeated .DataCollection.DataPoint points = 5;
+}
+
+// Test empty message
+message EmptyMessage {
+}

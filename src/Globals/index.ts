@@ -81,7 +81,6 @@ declare global {
   let SetVoiceForceReconnectingStatus: unknown;
   let SetVoiceLogDetails: unknown;
   let showcaseStore: unknown;
-  let steam_client_components: unknown;
   let steamAjaxRequest: unknown;
   let SteamClient: SteamClient;
   let SteamUIStore: SteamUIStore;

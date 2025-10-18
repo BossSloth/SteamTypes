@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+// Test enum with E prefix (should be removed)
+enum EStatus {
+  k_EStatus_Unknown = 0;
+  k_EStatus_Active = 1;
+  k_EStatus_Inactive = 2;
+  k_EStatus_Pending = 3;
+}
+
+// Test enum without E prefix
+enum Priority {
+  PRIORITY_UNSPECIFIED = 0;
+  PRIORITY_LOW = 1;
+  PRIORITY_MEDIUM = 2;
+  PRIORITY_HIGH = 3;
+}
+
+// Test message that references enums
+message TaskInfo {
+  string name = 1;
+  EStatus status = 2;
+  Priority priority = 3;
+}

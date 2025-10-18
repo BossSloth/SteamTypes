@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+// Test message with nested message
+message OuterMessage {
+  string outer_field = 1;
+
+  message InnerMessage {
+    string inner_field = 1;
+    int32 value = 2;
+  }
+
+  .OuterMessage.InnerMessage inner = 2;
+  repeated .OuterMessage.InnerMessage inner_list = 3;
+}
+
+// Test message with nested enum
+message Container {
+  string name = 1;
+
+  enum ContainerType {
+    CONTAINER_TYPE_UNSPECIFIED = 0;
+    CONTAINER_TYPE_BOX = 1;
+    CONTAINER_TYPE_CRATE = 2;
+  }
+
+  .Container.ContainerType type = 2;
+}
+
+// Test message referencing another message
+message Address {
+  string street = 1;
+  string city = 2;
+  string country = 3;
+}
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+  Address address = 3;
+}
