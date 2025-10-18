@@ -261,6 +261,11 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
 
     return 'ConnectionManager';
   }
+  if (isSimpleProtobufMessage(obj)) {
+    if (addImport) context.addImport('../shared/protobuf', 'SimpleJsPbMessage');
+
+    return `SimpleJsPbMessage<${obj.getClassName()}>`;
+  }
 
   return null;
 }
@@ -307,6 +312,12 @@ function isReactRoot(obj: unknown): obj is ReactRoot {
   if (obj === null || typeof obj !== 'object') return false;
 
   return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
+}
+
+function isSimpleProtobufMessage(obj: unknown): obj is { getClassName(): string; } {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'toObject' in obj && 'serializeBinary' in obj && 'serializeBase64String' in obj && 'getClassName' in obj;
 }
 
 function getGenericObjectTypes(obj: unknown, path: string): Type | null {

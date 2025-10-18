@@ -1,5 +1,6 @@
 {
   "name": "steam-types",
+  "type": "module",
   "version": "0.1.4",
   "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
@@ -8,6 +9,14 @@
     "dist",
     "src"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "types": "./dist/*"
+    }
+  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "watch": "tsc -w --project tsconfig.build.json",

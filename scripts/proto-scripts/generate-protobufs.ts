@@ -12,8 +12,10 @@ const ROOT_DIR = path.resolve(`${__dirname}/../../`);
 const PROTO_DIR = join(ROOT_DIR, 'scripts', 'Protobufs');
 const OUTPUT_DIR = join(ROOT_DIR, 'src', 'types', 'Protobufs', 'steam');
 
-const PROTO_FILE = join(PROTO_DIR, 'steam', 'webuimessages_gamerecording.proto');
-const OUTPUT_TS = join(OUTPUT_DIR, 'webuimessages_gamerecording.d.ts');
+const protobufFiles = [
+  'steam\\webuimessages_gamerecording.proto',
+  'steam\\steammessages_base.proto',
+];
 
 const filteredFilePaths = [
   'steam\\steammessages_base.proto',
@@ -32,9 +34,9 @@ const TYPE_MAP: Record<string, string> = {
   sint32: 'number',
   sint64: 'number',
   fixed32: 'number',
-  fixed64: 'number',
+  fixed64: 'string',
   sfixed32: 'number',
-  sfixed64: 'number',
+  sfixed64: 'string',
   double: 'number',
   float: 'number',
 };
@@ -104,10 +106,6 @@ function generateEnumDefinition(enumType: protobuf.Enum): string {
 
 function generateInterfaceDefinition(messageType: protobuf.Type): string {
   const fields = messageType.fieldsArray;
-
-  if (fields.length === 0) {
-    return '';
-  }
 
   const lines: string[] = [];
   lines.push(`export interface ${messageType.name} {`);
@@ -190,34 +188,43 @@ function generateTypeScriptDefinitions(): void {
   }
 
   try {
-    // Load proto file
-    const root = new protobuf.Root();
-    root.resolvePath = (origin: string, target: string): string => {
-      if (path.isAbsolute(target)) {
-        return target;
-      }
-      const relativePath = path.join(path.dirname(origin), target);
-      if (existsSync(relativePath)) {
-        return relativePath;
-      }
-
-      return path.join(PROTO_DIR, target);
-    };
-
-    root.loadSync(PROTO_FILE, {
-      keepCase: true,
-    });
-
     console.log('🔍 Generating TypeScript definitions...');
-
     // Generate TypeScript definitions
-    const tsDefinitions = generateTypeScriptFromReflection(root, filteredFilePaths);
+    for (const protoFile of protobufFiles) {
+      const protoPath = join(PROTO_DIR, protoFile);
 
-    // Write to file
-    writeFileSync(OUTPUT_TS, tsDefinitions, 'utf-8');
+      const root = new protobuf.Root();
+      root.resolvePath = (origin: string, target: string): string => {
+        if (path.isAbsolute(target)) {
+          return target;
+        }
+        const relativePath = path.join(path.dirname(origin), target);
+        if (existsSync(relativePath)) {
+          return relativePath;
+        }
+
+        return path.join(PROTO_DIR, target);
+      };
+
+      root.loadSync(protoPath, {
+        keepCase: true,
+      });
+      const tsDefinitions = generateTypeScriptFromReflection(root, filteredFilePaths.filter(filePath => filePath !== protoFile));
+
+      const outputFileName = protoFile.split('\\').pop()?.replace('.proto', '.d.ts');
+
+      if (outputFileName === undefined) {
+        throw new Error(`Failed to generate output file name for ${protoFile}`);
+      }
+
+      const outputFilePath = join(OUTPUT_DIR, outputFileName);
+
+      // Write to file
+      writeFileSync(outputFilePath, tsDefinitions, 'utf-8');
+      console.log(`📦 Output: ${outputFilePath}`);
+    }
 
     console.log('✅ TypeScript definitions generated successfully!');
-    console.log(`📦 Output: ${OUTPUT_TS}`);
   } catch (error) {
     console.error('❌ Failed to generate TypeScript definitions:', error);
     throw error;

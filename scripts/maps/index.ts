@@ -1,4 +1,5 @@
 import { GlobalMaps } from './Global';
+import { ModulesMaps } from './Modules';
 import { SharedMaps } from './Shared';
 import { SteamClientMaps } from './SteamClient';
 import { SteamUIStoreMaps } from './SteamUIStore';
@@ -39,4 +40,5 @@ export const interfaceMaps: InterfaceMap[] = [
   ...SharedMaps,
   ...SteamClientMaps,
   ...SteamUIStoreMaps,
+  ...ModulesMaps,
 ];

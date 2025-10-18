@@ -3,7 +3,7 @@ import { ClassDeclaration, Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
 import { InterfaceType, PrimitiveType, Type } from './Type';
-import { defaultJsProtoBufProps, InterfaceProperty, InterfaceToProcess, TypeScriptInterface } from './types';
+import { InterfaceProperty, InterfaceToProcess, TypeScriptInterface } from './types';
 import { context, formatPropertyName, getProperties } from './utils';
 
 let order = 0;
@@ -37,11 +37,11 @@ export function createInterfaceDefinition(
   let properties = getProperties(interfaceToProcess.obj);
 
   // Check if object is a protobuf message
-  if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
-    properties = properties.filter(item => !defaultJsProtoBufProps.includes(item));
-    interfaceDefinition.extends = 'JsPbMessage';
-    context.addImport('google-protobuf', 'Message as JsPbMessage');
-  }
+  // if (properties.includes('toObject') && properties.includes('serializeBinary') && properties.includes('getClassName')) {
+  //   properties = properties.filter(item => !defaultJsProtoBufProps.includes(item));
+  //   interfaceDefinition.extends = 'JsPbMessage';
+  //   context.addImport('google-protobuf', 'Message as JsPbMessage');
+  // }
 
   properties = properties.sort(propertyStringSorter);
 
@@ -93,6 +93,16 @@ function processInterfaceProperties(
     const formattedName = formatPropertyName(key);
 
     if (typeof value === 'function') {
+      if (isClassFunction(value)) {
+        interfaceDefinition.properties.push({
+          name: formattedName,
+          type: new PrimitiveType('unknown'),
+          jsDoc: ['This is a class function'],
+        });
+
+        continue;
+      }
+
       if (isBoundFunction(value, obj)) {
         value = handleNativeFunction(obj, value, key, project);
       }
@@ -313,4 +323,8 @@ function handleNativeFunction(classObj: Record<string, unknown>, functionObj: Fu
 
 function isBoundFunction(functionObj: Function, classObj: Record<string, unknown>): boolean {
   return functionObj.name.startsWith('bound ') && classObj.constructor.name !== 'Object';
+}
+
+function isClassFunction(functionObj: Function): boolean {
+  return 'toString' in functionObj && functionObj.toString().trim().startsWith('class ');
 }
