@@ -135,6 +135,12 @@ class AdvancedClass {
     return this.method();
   }
 
+  returnsClass() {
+    return new class DClass { method() {
+      return 'test';
+    } }();
+  }
+
   async asyncMethod() {
     return 15;
   }

@@ -279,6 +279,10 @@ function extractReturnType(initializer: FunctionExpression | ArrowFunction): str
       break;
   }
 
+  if (initializer.getReturnType().isClass()) {
+    returnType = 'unknown';
+  }
+
   return returnType;
 }
 

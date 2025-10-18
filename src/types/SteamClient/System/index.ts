@@ -80,10 +80,6 @@ export interface System {
   // {"flProgress":0,"rtEstimatedCompletionTime":0,"eStage":1}
   RegisterForFormatStorageProgress(callback: () => void): Unregisterable;
 
-  RegisterForOnResumeFromSuspend(callback: () => void): Unregisterable;
-
-  RegisterForOnSuspendRequest(callback: () => void): Unregisterable;
-
   /**
    * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link MsgSystemManagerSettings}.
    */

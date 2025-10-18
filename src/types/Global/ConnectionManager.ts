@@ -237,6 +237,8 @@ export interface m_ErrorReportingStore {
 
   m_fnGetReportingInterval(): number;
 
+  m_fnGetReportTags(): never[];
+
   PauseReporting(): void;
 
   PauseReportingForDuration(e: unknown): void;
@@ -281,7 +283,10 @@ export interface m_ErrorReportingStore {
 export interface m_mapCallbacks {
   invoke(n: unknown, r: unknown): void;
 
-  msgClass(): unknown;
+  /**
+   * This is a class function
+   */
+  msgClass: unknown;
 }
 
 export interface m_rgErrorQueue {

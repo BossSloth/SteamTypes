@@ -373,6 +373,8 @@ export interface ButtonRepeatHandler {
 export interface From {
   AddChild(e: unknown): void;
 
+  AdjustRectForLastMovementOnTangentAxis(e: unknown, t: unknown): unknown;
+
   AdvanceIndex(e: unknown, t: unknown): unknown;
 
   BChildTakeFocus(e: unknown, t: unknown): unknown;
@@ -412,9 +414,15 @@ export interface From {
 
   FindClosestChildInNextAxiallyAlignedSet(e: unknown, t: unknown, n: unknown, r: unknown, i: unknown, o: unknown): unknown;
 
+  FindClosestFocusableNodeToRect(e: unknown, t: unknown): unknown;
+
+  FindClosetChildInDirection(e: unknown, t: unknown, n: unknown, r: unknown): unknown;
+
   FindFocusableDescendant(e: unknown, t: unknown): unknown;
 
   FindFocusableNode(e: unknown, t: unknown): unknown;
+
+  FindNextFocusableChildGeometric(e: unknown, t: unknown): unknown;
 
   FindNextFocusableChildInDirection(e: unknown, t: unknown, n: unknown): unknown;
 
@@ -453,12 +461,12 @@ export interface From {
   /**
    * @native
    */
-  OnDOMBlur(): unknown;
+  OnDOMBlur(e: unknown): void;
 
   /**
    * @native
    */
-  OnDOMFocus(): unknown;
+  OnDOMFocus(e: unknown): undefined;
 
   OnFocusedDecendantRemoved(e: unknown): void;
 
@@ -467,11 +475,11 @@ export interface From {
   /**
    * @native
    */
-  OnNavigationEvent(): unknown;
+  OnNavigationEvent(e: unknown): boolean;
 
   OnUnmount(): void;
 
-  PropagateRetainFocusParentToChildren(e: unknown): void;
+  PropagateFocusableIfEmptyAncestorToDescendants(e: unknown): void;
 
   RegisterDOMEvents(): void;
 
@@ -483,13 +491,13 @@ export interface From {
 
   SetDOMFocusAndScroll(e: unknown, t: unknown): void;
 
+  SetFocusableIfEmptyAncestor(e: unknown): void;
+
   SetFocusWithin(e: unknown): void;
 
   SetHasFocus(e: unknown): void;
 
   SetProperties(e: unknown): void;
-
-  SetRetainFocusParent(e: unknown): void;
 
   UnregisterDOMEvents(): void;
 
@@ -499,10 +507,6 @@ export interface From {
 
   Element: HTMLDivElement;
 
-  FocusCallbackList: UnhandledButtonEventsCallbacks;
-
-  FocusWithinCallbackList: UnhandledButtonEventsCallbacks;
-
   m_ActionDescriptionsChangedCallbackList: UnhandledButtonEventsCallbacks;
 
   m_ActiveChild?: never;
@@ -511,19 +515,17 @@ export interface From {
 
   m_bChildrenSorted: boolean;
 
-  m_bFocused: boolean;
-
-  m_bFocusWithin: boolean;
-
   m_bMounted: boolean;
 
   m_element: HTMLDivElement;
 
-  m_FocusCallbackList: UnhandledButtonEventsCallbacks;
+  m_FocusableIfEmptyAncestor: null;
+
+  m_Focused: ObservableValue<boolean>;
 
   m_FocusRing: (FocusRing | null);
 
-  m_FocusWithinCallbackList: UnhandledButtonEventsCallbacks;
+  m_FocusWithin: ObservableValue<boolean>;
 
   m_iLastActiveChildIndex: number;
 
@@ -532,8 +534,6 @@ export interface From {
   m_Parent: (From | null);
 
   m_Properties: Properties;
-
-  m_RetainFocusParent: null;
 
   m_rgChildren: never;
 
@@ -546,6 +546,10 @@ export interface From {
   NavKey?: never;
 
   Parent: (From | null);
+
+  SubscribableFocusWithin: ObservableValue<boolean>;
+
+  SubscribableHasFocus: ObservableValue<boolean>;
 
   Tree: Tree;
 }
@@ -585,7 +589,7 @@ export interface Properties {
 
   autoFocus?: boolean;
 
-  childFocusDisabled?: never;
+  childFocusDisabled?: boolean;
 
   disableNavSounds?: never;
 
@@ -594,6 +598,8 @@ export interface Properties {
   fnScrollIntoViewHandler?: never;
 
   focusable?: boolean;
+
+  focusableIfEmpty?: boolean;
 
   focusableIfNoChildren?: never;
 
@@ -752,7 +758,7 @@ export interface Tree {
 
   m_ParentNavTree: undefined;
 
-  m_rgChildNavTrees: unknown/* circular reference to ChildTrees */;
+  m_rgChildNavTrees: unknown[]/* circular reference to ChildTrees */;
 
   m_Root: From;
 
@@ -778,7 +784,9 @@ export interface Tree {
 }
 
 export interface ActionDescriptionMap {
-  1: string;
+  3: string;
+
+  4: string;
 }
 
 export interface DeferredFocus {

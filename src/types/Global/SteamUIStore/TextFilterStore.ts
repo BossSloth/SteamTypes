@@ -1,5 +1,6 @@
-import type { Message as JsPbMessage } from 'google-protobuf';
 import { ObservableMap } from 'mobx';
+import { CPlayer_TextFilterWords } from '../../Protobufs/steam/steammessages_player.steamclient';
+import { SimpleJsPbMessage } from '../../shared/protobuf';
 
 export interface TextFilterStore {
   BHasFilter(): boolean;
@@ -102,7 +103,7 @@ export interface TextFilterStore {
 
   m_TextFilterPreferences: TextFilterPreferences;
 
-  m_TextFilterWords: TextFilterWords;
+  m_TextFilterWords: SimpleJsPbMessage<CPlayer_TextFilterWords>;
 
   m_Transport: null;
 
@@ -121,24 +122,6 @@ export interface TextFilterPreferences {
   bIgnoreFriends: number;
 
   eTextFilterSetting: ChatFilterType;
-}
-
-export interface TextFilterWords extends JsPbMessage {
-  add_text_filter_custom_banned_words(t: unknown, n: unknown): void;
-
-  add_text_filter_custom_clean_words(t: unknown, n: unknown): void;
-
-  set_text_filter_custom_banned_words(n: unknown): unknown;
-
-  set_text_filter_custom_clean_words(n: unknown): unknown;
-
-  set_text_filter_words_revision(n: unknown): unknown;
-
-  text_filter_custom_banned_words(): unknown;
-
-  text_filter_custom_clean_words(): unknown;
-
-  text_filter_words_revision(): unknown;
 }
 
 export interface WebUIServiceTransport {
@@ -364,6 +347,8 @@ export interface ErrorReportingStore {
 
   m_fnGetReportingInterval(): number;
 
+  m_fnGetReportTags(): never[];
+
   PauseReporting(): void;
 
   PauseReportingForDuration(e: unknown): void;
@@ -408,7 +393,10 @@ export interface ErrorReportingStore {
 export interface MapServiceMethodHandlers {
   invoke(n: unknown, r: unknown): void;
 
-  msgClass(): unknown;
+  /**
+   * This is a class function
+   */
+  msgClass: unknown;
 }
 
 export interface Log {

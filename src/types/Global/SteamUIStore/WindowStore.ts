@@ -39,6 +39,8 @@ export interface WindowStore {
 
   DEBUG_DumpDesiredSteamUIWindows(): Promise<unknown>;
 
+  DEBUG_SuppressVRGamepadUI(e: unknown): Promise<void>;
+
   /**
    * @param e default: !0
    */
@@ -100,6 +102,8 @@ export interface WindowStore {
   GamepadUIMainWindowInstance: undefined;
 
   GamepadUIVRWindowInstance: undefined;
+
+  m_bSuppressVRGamepadUIOverlays: boolean;
 
   m_mapAppOverlayPosition: Map<unknown, unknown>;
 
@@ -253,6 +257,8 @@ export interface WindowInstance {
 
   SetStoreBrowserGlass(e: unknown): void;
 
+  SetVRDashboardBarWindow(e: unknown): void;
+
   ActionDescriptionStore: ActionDescriptionStore;
 
   BrowserWindow: Window;
@@ -313,9 +319,15 @@ export interface WindowInstance {
 
   m_params: Params;
 
+  m_setVRDashboardBarPopups: Set<unknown>;
+
   m_StoreBrowser: undefined;
 
   m_VirtualKeyboardManager: VirtualKeyboardManager;
+
+  m_VRDashboardBarWindow: undefined;
+
+  m_VRFrameStore: undefined;
 
   m_VRPooledPopupStore: undefined;
 
@@ -336,6 +348,12 @@ export interface WindowInstance {
   RunningApps: unknown[];
 
   VirtualKeyboardManager: VirtualKeyboardManager;
+
+  VRDashboardBarPopups: Set<unknown>;
+
+  VRDashboardBarWindow: undefined;
+
+  VRFrameStore: undefined;
 
   VRPooledPopupStore: undefined;
 
@@ -510,7 +528,7 @@ export interface HeaderStore {
 
   OnSideMenuOpen(): void;
 
-  OnSystemResumeFromSuspend(): void;
+  OnSystemResumeFromSuspend(): number;
 
   SetCurrentBrowserAndBackstack(e: unknown, t: unknown, r: unknown): void;
 
@@ -604,9 +622,11 @@ export interface MenuStore {
 
   Init(): never[];
 
+  IsAnySideMenuVisible(): boolean;
+
   IsSideMenuInteractable(): boolean;
 
-  IsSideMenuVisible(): boolean;
+  IsSideMenuVisible(e: unknown): boolean;
 
   OnMenuDeactivated(e: unknown): void;
 
@@ -798,7 +818,7 @@ export interface Entries {
 
   search: string;
 
-  state?: (null | object | State | State2);
+  state?: (null | object | State | State2 | State3);
 }
 
 export interface MainMenuStore {
@@ -868,15 +888,13 @@ export interface BrowserInfo {
 }
 
 export interface State {
-  bExternal: boolean;
+  AppDetailsActivitySectionDays_HistoryValue: number;
 
-  strURL: string;
+  strCollectionId?: string;
 }
 
 export interface State2 {
-  AppDetailsActivitySectionDays_HistoryValue: number;
-
-  strCollectionId: undefined;
+  strCollectionId: string;
 }
 
 export interface ActiveElementProps {
@@ -957,4 +975,10 @@ export enum EGamingDeviceType {
 /** @generated */
 export enum ESelectedNavEntry {
   ESelectedNavEntry1 = 1,
+}
+
+export interface State3 {
+  bExternal: boolean;
+
+  strURL: string;
 }

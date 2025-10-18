@@ -150,9 +150,11 @@ export interface SteamUIStore {
 
   PreserveNavigation(): void;
 
-  RemotePlaySessionStarted(e: unknown, t: unknown, r: unknown): void;
+  RegisterMainWindow(e: unknown): () => void;
 
-  RemotePlaySessionStopped(e: unknown, t: unknown): void;
+  RemotePlaySessionStarted(e: unknown, t: unknown, r: unknown, n: unknown): void;
+
+  RemotePlaySessionStopped(e: unknown, t: unknown, r: unknown): void;
 
   RemotePlayTogetherClientStarted(e: unknown): void;
 
@@ -242,11 +244,15 @@ export interface SteamUIStore {
 
   m_mainInstanceUIMode: EUIMode;
 
+  m_MainWindowVisible: ObservableValue<boolean>;
+
   m_navigationSource: NavigationSource;
 
   m_nResumeStreamingInputTimeoutHandle: null;
 
   m_runningAppIDs: number[];
+
+  m_setVisibleMainWindows: never;
 
   m_shutdownState: ShutdownState;
 
@@ -263,6 +269,8 @@ export interface SteamUIStore {
   MainRunningApp?: SteamAppOverview;
 
   MainRunningAppID?: number;
+
+  MainWindowVisible: ObservableValue<boolean>;
 
   MostRecentlyActiveController?: never;
 

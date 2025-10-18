@@ -15,6 +15,7 @@ const OUTPUT_DIR = join(ROOT_DIR, 'src', 'types', 'Protobufs', 'steam');
 const protobufFiles = [
   'steam\\webuimessages_gamerecording.proto',
   'steam\\steammessages_base.proto',
+  'steam\\steammessages_player.steamclient.proto',
 ];
 
 const filteredFilePaths = [

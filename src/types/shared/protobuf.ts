@@ -3,6 +3,7 @@ import { CMsgProtoBufHeader } from '../Protobufs/steam/steammessages_base';
 
 /**
  * To get the deserialized object call {@link ProtobufNotification.Body()}.toObject()
+ * @todo: Find way to add this to the compare maps to check for new types
  */
 export interface ProtobufNotification<T> {
   BIsValid(): boolean;

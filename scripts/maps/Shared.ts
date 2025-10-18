@@ -1,10 +1,10 @@
 /* eslint-disable @stylistic/quotes */
-import { GMap, InterfaceMap } from '.';
+import { IMap, InterfaceMap } from '.';
 
 export const SharedMaps: InterfaceMap[] = [
-  GMap('shared/Interfaces', 'Callbacks', /* ts */`window.g_PopupManager.m_rgPopupCreatedCallbacks`),
-  GMap('shared/Interfaces', 'Callbacks', /* ts */`window.SteamUIStore.m_GamepadUIAudioStore.m_currentlyFocusedAppid.m_callbacks`),
-  GMap('shared/Interfaces', 'MappedObservable', /* ts */`window.SteamUIStore.m_GamepadNavigationManager.NavigationSourceSupportsFocus`),
+  IMap('shared/Interfaces', 'Callbacks', /* ts */`window.g_PopupManager.m_rgPopupCreatedCallbacks`),
+  IMap('shared/Interfaces', 'Callbacks', /* ts */`window.SteamUIStore.m_GamepadUIAudioStore.m_currentlyFocusedAppid.m_callbacks`),
+  IMap('shared/Interfaces', 'MappedObservable', /* ts */`window.SteamUIStore.m_GamepadNavigationManager.NavigationSourceSupportsFocus`),
 
-  GMap('shared/steamid', 'SteamId', /* ts */`window.App.cm.m_steamid`),
+  IMap('shared/steamid', 'SteamId', /* ts */`window.App.cm.m_steamid`),
 ];

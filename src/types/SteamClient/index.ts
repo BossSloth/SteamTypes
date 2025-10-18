@@ -7,6 +7,7 @@ import { ClientNotifications } from './ClientNotifications';
 import { Cloud } from './Cloud';
 import { CloudStorage } from './CloudStorage';
 import { CommunityItems } from './CommunityItems';
+import { Compat } from './Compat';
 import { Console } from './Console';
 import { Customization } from './Customization';
 import { Downloads } from './Downloads';
@@ -64,6 +65,8 @@ export interface SteamClient {
   CloudStorage: CloudStorage;
 
   CommunityItems: CommunityItems;
+
+  Compat: Compat;
 
   Console: Console;
 
@@ -150,6 +153,7 @@ export {
   Cloud,
   CloudStorage,
   CommunityItems,
+  Compat,
   Console,
   Customization,
   Downloads,

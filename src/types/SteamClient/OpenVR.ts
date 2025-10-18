@@ -28,6 +28,9 @@ export interface OpenVR {
 
   RegisterForVRSceneAppChange(callback: (param0: number) => void): Unregisterable;
 
+  /** @native */
+  RegisterForVRTrackedDevices(): unknown;
+
   SetOverlayInteractionAffordance(): unknown;
 
   StartVR(): unknown;

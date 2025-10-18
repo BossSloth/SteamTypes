@@ -10,8 +10,6 @@ export interface Input {
 
   CalibrateControllerTrackpads(controllerIndex: unknown): unknown;
 
-  CancelGyroSWCalibration(): unknown;
-
   ClearSelectedConfigForApp(appId: number, controllerIndex: number): unknown;
 
   /**
@@ -153,13 +151,6 @@ export interface Input {
   RegisterForControllerInputMessages(callback: (controllerInputMessages: ControllerInputMessage[]) => void): Unregisterable;
 
   RegisterForControllerListChanges(callback: (controllerListChanges: ControllerInfo[]) => void): Unregisterable;
-
-  /**
-   * Registers a callback for changes in the controller state (buttons presses, triggers presses, joystick changes etc...).
-   * @param callback The callback function for controller state changes.
-   * @returns An object that can be used to unregister the callback.
-   */
-  RegisterForControllerStateChanges(callback: (controllerStateChanges: ControllerStateChange[]) => void): Unregisterable;
 
   RegisterForDualSenseUpdateNotification(callback: (m_strDualSenseUpdateProduct: string) => void): Unregisterable;
 
@@ -380,8 +371,6 @@ export interface Input {
    */
   StartEditingControllerConfigurationForAppIDAndControllerIndex(m_appId: number, m_unControllerIndex: number): Promise<unknown>;
 
-  StartGyroSWCalibration(callback: () => void): unknown;
-
   StartUIVisualization(controllerIndex: number, modeId: number): unknown;
 
   StopEditingControllerConfiguration(controllerIndex: number): unknown;
@@ -407,8 +396,6 @@ export interface Input {
   TriggerHapticPulse(controllerIndex: number, eHapticType: number, param2: number): unknown;
 
   TriggerSimpleHapticEvent(controllerIndex: number, eHapticType: number, unIntensity: number, ndBGain: number, param4: number): unknown;
-
-  UnregisterForControllerStateChanges(): void;
 
   UploadChangesForCloudedControllerConfigs(): unknown;
 }
@@ -748,140 +735,6 @@ export enum EControllerType {
   PS5EdgeController,
   GenericKeyboard = 400,
   GenericMouse = 800,
-}
-
-export interface ControllerStateChange {
-  flAccelerometerNoiseLength: number;
-
-  flGravityVectorX: number;
-
-  flGravityVectorY: number;
-
-  flGravityVectorZ: number;
-
-  flGyroCalibrationProgress: number;
-
-  flGyroNoiseLength: number;
-
-  flHardwareGyroDegreesPerSecondPitch: number;
-
-  flHardwareGyroDegreesPerSecondRoll: number;
-
-  flHardwareGyroDegreesPerSecondYaw: number;
-
-  flHardwareQuatW: number;
-
-  flHardwareQuatX: number;
-
-  flHardwareQuatY: number;
-
-  flHardwareQuatZ: number;
-
-  flSoftwareGyroDegreesPerSecondPitch: number;
-
-  flSoftwareGyroDegreesPerSecondRoll: number;
-
-  flSoftwareGyroDegreesPerSecondYaw: number;
-
-  flSoftwareQuatW: number;
-
-  flSoftwareQuatX: number;
-
-  flSoftwareQuatY: number;
-
-  flSoftwareQuatZ: number;
-
-  flTrustedGravityVectorX: number;
-
-  flTrustedGravityVectorY: number;
-
-  flTrustedGravityVectorZ: number;
-
-  sBatteryLevel: number;
-
-  sCenterPadX: number;
-
-  sCenterPadY: number;
-
-  sLeftPadX: number;
-
-  sLeftPadY: number;
-
-  sLeftStickX: number;
-
-  sLeftStickY: number;
-
-  sPressureBumperLeft: number;
-
-  sPressureBumperRight: number;
-
-  sPressurePadLeft: number;
-
-  sPressurePadRight: number;
-
-  sRightPadX: number;
-
-  sRightPadY: number;
-
-  sRightStickX: number;
-
-  sRightStickY: number;
-
-  sTriggerL: number;
-
-  sTriggerR: number;
-
-  /**
-   * Bitmask representing pressed buttons.
-   * - Bit 0: R2
-   * - Bit 1: L2
-   * - Bit 2: R1
-   * - Bit 3: L1
-   * - Bit 4: Y
-   * - Bit 5: B
-   * - Bit 6: X
-   * - Bit 7: A
-   * - Bit 8: D-Pad Up
-   * - Bit 9: D-Pad Right
-   * - Bit 10: D-Pad Left
-   * - Bit 11: D-Pad Down
-   * - Bit 12: Select
-   * - Bit 13: Steam/Home
-   * - Bit 14: Start
-   * - Bit 15: L5
-   * - Bit 16: R5
-   * - Bit 17: Left Touchpad Click
-   * - Bit 18: Right Touchpad Click
-   * - Bit 19: Left Touchpad Touch
-   * - Bit 20: Right Touchpad Touch
-   * - Bit 21: Unknown (@todo Please provide more details if known)
-   * - Bit 22: L3
-   * - Bit 23-25: Unknown (@todo Please provide more details if known)
-   * - Bit 26: R3
-   * - Bit 27-28: Unknown (@todo Please provide more details if known)
-   * - Bit 29: Mute (Dualsense)
-   * - Bit 30-31: Unknown (@todo Please provide more details if known)
-   */
-  ulButtons: number;
-
-  /**
-   * Bitmask representing pressed upper buttons.
-   * - Bit 0-8: Unknown (@todo Please provide more details if known)
-   * - Bit 9: L4
-   * - Bit 10: R4
-   * - Bit 11-13: Unknown (@todo Please provide more details if known)
-   * - Bit 14: Left Joystick Touch
-   * - Bit 15: Right Joystick Touch
-   * - Bit 16-17: Unknown (@todo Please provide more details if known)
-   * - Bit 18: Quick Access Menu
-   */
-  ulUpperButtons: number;
-
-  unControllerIndex: number;
-
-  unHardwareUpdateInMicrosec: number;
-
-  unPacketNum: number;
 }
 
 export interface GameKeyboardMessage {

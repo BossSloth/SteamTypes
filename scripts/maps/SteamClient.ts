@@ -8,6 +8,7 @@ export const SteamClientMaps: InterfaceMap[] = [
   IMap('SteamClient/Broadcast', 'Broadcast', /* ts */`SteamClient.Broadcast`),
   IMap('SteamClient/Browser', 'Browser', /* ts */`SteamClient.Browser`),
   IMap('SteamClient/ClientNotifications', 'ClientNotifications', /* ts */`SteamClient.ClientNotifications`),
+  IMap('SteamClient/Compat', 'Compat', /* ts */`SteamClient.Compat`),
   IMap('SteamClient/Cloud', 'Cloud', /* ts */`SteamClient.Cloud`),
   IMap('SteamClient/CloudStorage', 'CloudStorage', /* ts */`SteamClient.CloudStorage`),
   IMap('SteamClient/CommunityItems', 'CommunityItems', /* ts */`SteamClient.CommunityItems`),

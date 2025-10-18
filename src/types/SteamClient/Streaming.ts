@@ -35,9 +35,10 @@ export interface Streaming {
    */
   RegisterForStreamingLaunchComplete(callback: (code: EResult, result: string) => void): Unregisterable;
 
-  RegisterForStreamingShowEula(callback: (appId: number) => void): Unregisterable;
+  /** @native */
+  RegisterForStreamingPrelaunchCheck(callback: (...args: unknown[]) => unknown): Unregisterable;
 
-  RegisterForStreamingShowIntro(callback: (appId: number, param: string) => void): Unregisterable;
+  RegisterForStreamingShowEula(callback: (appId: number) => void): Unregisterable;
 
   /**
    * Registers a callback function to be called when the streaming client receives launch options from the host.
@@ -45,6 +46,9 @@ export interface Streaming {
    * @returns An object that can be used to unregister the callback.
    */
   RegisterForStreamingShowLaunchOptions(callback: (appId: number, launchOptions: LaunchOption[]) => void): Unregisterable;
+
+  /** @native */
+  RegisterForStreamingStillDownloading(callback: (...args: unknown[]) => unknown): Unregisterable;
 
   // existing game running on another streaming capable device
   StreamingContinueStreamGame(): void;

@@ -80,23 +80,3 @@ export const defaultProtoProps = new Set([
   '__proto__',
   'toLocaleString',
 ]);
-
-export const defaultJsProtoBufProps = [
-  'clone',
-  'cloneMessage',
-  'getClassName',
-  'getExtension',
-  'setExtension',
-  'getJsPbMessageId',
-  'serializeBase64String',
-  'serializeBinary',
-  'syncMapFields_',
-  'toObject',
-  'toArray',
-  'array',
-  'arrayIndexOffset_',
-  'convertedPrimitiveFields_',
-  'messageId_',
-  'pivot_',
-  'wrappers_',
-];

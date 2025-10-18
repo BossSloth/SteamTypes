@@ -191,8 +191,7 @@ interface NavigatorRouterState<T> {
   state: T;
 }
 
-type SettingsSection_t
-= | 'Accessibility'
+type SettingsSection_t = 'Accessibility'
   | 'Account'
   | 'Audio'
   | 'Bluetooth'

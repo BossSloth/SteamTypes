@@ -14,24 +14,13 @@ export interface RemotePlay {
 
   BRemotePlayTogetherGuestOnPhoneOrTablet(steam64Id: string, guestId: number): Promise<boolean>;
 
-  BRemotePlayTogetherGuestSupported(): Promise<boolean>;
-
   CancelInviteAndSession(steam64Id: string): unknown;
-
-  CancelInviteAndSessionWithGuestID(steam64Id: string, guestId: number): unknown;
 
   CancelRemoteClientPairing(): void;
 
   CloseGroup(): Promise<number>;
 
-  /**
-   * @params unknown
-   */
-  CreateGroup(): unknown;
-
   CreateInviteAndSession(steam64Id: string, param1: unknown): unknown;
-
-  CreateInviteAndSessionWithGuestID(steam64Id: string, guestId: number, param2: unknown): unknown;
 
   GetClientID(): Promise<string>;
 
@@ -49,6 +38,9 @@ export interface RemotePlay {
   GetPerUserInputSettings(steam64Id: string): unknown;
 
   GetPerUserInputSettingsWithGuestID(steam64Id: string, guestId: number): unknown;
+
+  /** @native */
+  GetRemotePlayTogetherGroupIDForOverlayPID(): unknown;
 
   IdentifyController(nControllerIndex: number): unknown;
 

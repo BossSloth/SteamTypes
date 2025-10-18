@@ -67,13 +67,16 @@ export interface SpecialTypePropertyTests {
 
   asyncFunction(): Promise<string>;
 
-  class(): unknown;
-
   function(): number;
 
   generatorFunction(): Generator<1 | 2, void, unknown>;
 
   advancedClassInstance: AdvancedClassInstance;
+
+  /**
+   * This is a class function
+   */
+  class: unknown;
 
   classInstance: ClassInstance;
 
@@ -168,6 +171,8 @@ export interface AdvancedClassInstance {
   method(): number;
 
   otherMethod(): unknown;
+
+  returnsClass(): unknown;
 
   property: string;
 }

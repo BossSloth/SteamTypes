@@ -26,6 +26,9 @@ export interface DataPoint {
   y?: number;
 }
 
+export interface EmptyMessage {
+}
+
 export enum GameState {
   Invalid = 0,
   Lobby = 1,

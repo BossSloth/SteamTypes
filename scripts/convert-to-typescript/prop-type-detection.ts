@@ -75,7 +75,8 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
   return new InterfaceType(interfaceName);
 }
 
-function getCircularReference(value: Record<string, unknown>, isValueIterable: boolean): Type | null {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getCircularReference(value: Record<string, unknown>, _isValueIterable: boolean): Type | null {
   const circularPath = context.processedObjectPaths.get(value);
   if (circularPath !== undefined) {
     // Return the interface name that this circular reference points to

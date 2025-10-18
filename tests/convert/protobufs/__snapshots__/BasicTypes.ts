@@ -3,12 +3,12 @@ export interface BasicTypes {
   bytes_field?: Uint8Array;
   double_field?: number;
   fixed32_field?: number;
-  fixed64_field?: number;
+  fixed64_field?: string;
   float_field?: number;
   int32_field?: number;
   int64_field?: number;
   sfixed32_field?: number;
-  sfixed64_field?: number;
+  sfixed64_field?: string;
   sint32_field?: number;
   sint64_field?: number;
   string_field?: string;

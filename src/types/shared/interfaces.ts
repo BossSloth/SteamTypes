@@ -107,6 +107,9 @@ export interface ReducedValue<TInput, TOutput> {
  * @exported
  */
 export interface MappedObservable<TSource, TMapped> {
+  /** @native */
+  GetValue(): unknown;
+
   /**
    * The mapping function applied to the source value.
    * Whenever the source changes, this is used to compute the mapped value.
@@ -119,6 +122,9 @@ export interface MappedObservable<TSource, TMapped> {
    * @returns An object with an `Unsubscribe` method to remove the subscription.
    */
   Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void; };
+
+  /** @native */
+  SyncStore(): unknown;
 
   /**
    * Forces recomputation of the mapped value from the original source.
