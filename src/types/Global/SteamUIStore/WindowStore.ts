@@ -2,8 +2,8 @@
 import { ObservableMap } from 'mobx';
 import { ObservableValue } from 'mobx/dist/internal';
 import { SteamUIStore } from '.';
+import { Callbacks, ReducedValue } from '../../shared';
 import { EUIMode } from '../PopupManager';
-import { Callbacks, ReducedValue } from '../shared';
 import { SteamWindowNavigator } from './SteamWindowNavigator';
 
 export interface WindowStore {

@@ -1,6 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { Window as SteamWindow } from '../SteamClient/Window';
-import { Callbacks, SteamId } from './shared';
+import { Callbacks, SteamId } from '../shared';
 
 export interface PopupManager {
   /**

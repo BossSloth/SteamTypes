@@ -1,4 +1,4 @@
-import { Callbacks } from './shared';
+import { Callbacks } from '../shared';
 
 export interface MainWindowBrowserManager {
   /**
