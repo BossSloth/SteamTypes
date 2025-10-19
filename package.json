@@ -62,7 +62,7 @@
     "knip": "^5.63.1",
     "protobufjs": "^7.5.4",
     "semantic-release": "^24.2.8",
-    "ts-morph": "27.0.0",
+    "ts-morph": "27.0.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.0",
     "vitest": "^3.2.4"
@@ -79,8 +79,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "patchedDependencies": {
-    "@ts-morph/common@0.28.0": "patches/@ts-morph%2Fcommon@0.28.0.patch"
   }
 }
