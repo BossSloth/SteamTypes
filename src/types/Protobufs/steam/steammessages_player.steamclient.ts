@@ -1,4 +1,4 @@
-import { UserContentDescriptorPreferences } from './steammessages_base';
+import { BanContentCheckResult, UserContentDescriptorPreferences } from './steammessages_base';
 
 export interface CPlayer_GetRecentPlaytimeSessionsForChild_Request {
   steamid?: number;
@@ -849,17 +849,6 @@ export enum TextFilterSetting {
   TextFilterSettingEnabled = 1,
   TextFilterSettingEnabledAllowProfanity = 2,
   TextFilterSettingDisabled = 3,
-}
-
-export enum BanContentCheckResult {
-  NotScanned = 0,
-  Reset = 1,
-  NeedsChecking = 2,
-  VeryUnlikely = 5,
-  Unlikely = 30,
-  Possible = 50,
-  Likely = 75,
-  VeryLikely = 100,
 }
 
 export enum ProfileCustomizationType {
