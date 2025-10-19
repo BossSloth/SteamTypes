@@ -818,6 +818,9 @@ export interface Entries {
 
   search: string;
 
+  /**
+   * @ignore property typing cause it is based on where you navigated and unreliable
+   */
   state?: (null | object | State | State2 | State3);
 }
 

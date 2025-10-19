@@ -253,7 +253,7 @@ export interface SteamUIStore {
 
   m_runningAppIDs: number[];
 
-  m_setVisibleMainWindows: never;
+  m_setVisibleMainWindows: Set<Window>;
 
   m_shutdownState: ShutdownState;
 

@@ -65,7 +65,9 @@ export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration |
     interfaceDeclaration.getExtends().forEach((ext) => {
       const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
       if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
-        members.push(...getInterfaceMembers(extendedInterface));
+        // Get extended members and remove duplicates
+        const extendedMembers = getInterfaceMembers(extendedInterface).filter(member => !members.some(m => m.getName() === member.getName()));
+        members.push(...extendedMembers);
       }
     });
   }

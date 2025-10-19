@@ -6,6 +6,7 @@ import * as TypeComparator from './type-comparator';
 const CustomJsDocTags = {
   originalName: 'compareOriginalName',
   currentValue: 'currentValue',
+  ignore: 'ignore',
 };
 
 /**
@@ -23,6 +24,12 @@ export function compareAndCorrectPropertyTypes(
 ): boolean {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
+
+  const ignore = getJsDocTagValues(targetProp, CustomJsDocTags.ignore);
+
+  if (ignore.length > 0) {
+    return false;
+  }
 
   // Handle case where one of the types is missing
   if (!targetTypeNode || !sourceTypeNode) {

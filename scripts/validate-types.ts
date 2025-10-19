@@ -17,6 +17,7 @@ import { Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
 import { compareInterfaces } from './compare/interface-checker';
+import { __dirname } from './dirname';
 import { Logger } from './logger';
 import { InterfaceMap, interfaceMaps } from './maps';
 
@@ -351,7 +352,4 @@ async function main(): Promise<void> {
   await program.parseAsync();
 }
 
-// Run the main function if this script is executed directly
-if (require.main === module) {
-  main();
-}
+main();

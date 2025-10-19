@@ -52,7 +52,7 @@ export interface PopupManager {
   /**
    * @native
    */
-  DebouncedSaveSavedDimensionStore(): unknown;
+  DebouncedSaveSavedDimensionStore(): void;
 
   /**
    * @param name The name of the popup
@@ -380,7 +380,7 @@ export interface MainWindowPopupCallback extends PopupCallback {
 }
 
 export interface PopupCallback {
-  updateParamsBeforeShow(): AllPopupParameters;
+  updateParamsBeforeShow(t: unknown): AllPopupParameters;
 }
 
 export interface RenderWhenReady {
@@ -389,7 +389,7 @@ export interface RenderWhenReady {
   /**
    * @native
    */
-  OnLinkLoad(): unknown;
+  OnLinkLoad(e: unknown): void;
 
   SetTarget(e: unknown): void;
 
@@ -411,9 +411,6 @@ export interface MainWindowPopupParameters extends BasePopupParameters {
 
   minWidth: number;
 
-  /**
-   * Value of `m_popup.document.body.firstElementChild.className`
-   */
   popup_class: string;
 
   strRestoreDetails: string;
@@ -422,14 +419,14 @@ export interface MainWindowPopupParameters extends BasePopupParameters {
 }
 
 export interface PopupParameters extends BasePopupParameters {
-  window_opener_id: number;
-}
-
-export interface BasePopupParameters {
   availscreenheight?: number;
 
   availscreenwidth?: number;
 
+  window_opener_id: number;
+}
+
+export interface BasePopupParameters {
   /**
    * Value of `SteamClient.Window.SetHideOnClose`
    */
@@ -438,7 +435,7 @@ export interface BasePopupParameters {
   /**
    * Value of `m_popup.document.body.className`
    */
-  body_class: Popup['m_popup']['document']['body']['className'];
+  body_class: string;
 
   dimensions: Dimensions;
 
@@ -447,7 +444,12 @@ export interface BasePopupParameters {
   /**
    * Value of `m_popup.document.documentElement.className`
    */
-  html_class: Popup['m_popup']['document']['documentElement']['className'];
+  html_class: string;
+
+  /**
+   * Value of `m_popup.document.body.firstElementChild.className`
+   */
+  popup_class?: string;
 
   replace_existing_popup: boolean;
 
