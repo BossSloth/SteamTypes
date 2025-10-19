@@ -1,1 +1,1 @@
-export * from './GameRecordingService';
+export * from './GameRecordingRequestHandlers';
