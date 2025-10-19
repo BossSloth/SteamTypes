@@ -1,0 +1,30 @@
+diff --git a/build/globals/index.d.ts b/build/globals/index.d.ts
+index c749319b4d070f0a6bd6d80448b6f49ce107d537..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/build/globals/index.d.ts
++++ b/build/globals/index.d.ts
+@@ -1,2 +0,0 @@
+-export * from './SteamClient';
+-export * from './stores';
+diff --git a/build/globals/index.js b/build/globals/index.js
+index c749319b4d070f0a6bd6d80448b6f49ce107d537..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
+--- a/build/globals/index.js
++++ b/build/globals/index.js
+@@ -1,2 +0,0 @@
+-export * from './SteamClient';
+-export * from './stores';
+diff --git a/build/utils/index.d.ts b/build/utils/index.d.ts
+index d9eff69d5f8e9ddeb65e2dfcc90497d7025d428b..71f3b62e87bcbe4251e33acb256549c84da75be5 100644
+--- a/build/utils/index.d.ts
++++ b/build/utils/index.d.ts
+@@ -1,10 +1,9 @@
+ export * from './patcher';
+-export * from './react/react';
+ export * from './react/fc';
++export * from './react/react';
+ export * from './react/treepatcher';
+ export * from './static-classes';
+ declare global {
+-    var FocusNavController: any;
+     var GamepadNavTree: any;
+ }
+ export declare function joinClassNames(...classes: string[]): string;

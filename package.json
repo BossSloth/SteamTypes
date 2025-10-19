@@ -81,5 +81,12 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "optionalDependencies": {
+    "@steambrew/client": "^5.8.0"
+  },
+  "patchedDependencies": {
+    "@steambrew/client@5.8.0": "patches/@steambrew%2Fclient@5.8.0.patch"
+  },
+  "sideEffects": false
 }
