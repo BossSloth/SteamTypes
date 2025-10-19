@@ -77,7 +77,7 @@ import {
 } from '../Protobufs/steam/webuimessages_gamerecording';
 import { ProtobufNotification } from '../shared/protobuf';
 
-export interface GameRecordingRequestHandlers {
+export interface GameRecordingRequestHandler {
   CleanupBackgroundRecordings(request?: CGameRecording_CleanupBackgroundRecordings_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_CleanupBackgroundRecordings_Response>>;
 
   DeleteClip(request?: CGameRecording_DeleteClip_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_DeleteClip_Response>>;
@@ -172,93 +172,93 @@ export interface GameRecordingRequestHandlers {
 
   SaveClip(request?: CGameRecording_SaveClip_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_SaveClip_Response>>;
 
-  SendMsgCleanupBackgroundRecordings(...args: Parameters<GameRecordingRequestHandlers['CleanupBackgroundRecordings']>): ReturnType<GameRecordingRequestHandlers['CleanupBackgroundRecordings']>;
+  SendMsgCleanupBackgroundRecordings(...args: Parameters<GameRecordingRequestHandler['CleanupBackgroundRecordings']>): ReturnType<GameRecordingRequestHandler['CleanupBackgroundRecordings']>;
 
-  SendMsgDeleteClip(...args: Parameters<GameRecordingRequestHandlers['DeleteClip']>): ReturnType<GameRecordingRequestHandlers['DeleteClip']>;
+  SendMsgDeleteClip(...args: Parameters<GameRecordingRequestHandler['DeleteClip']>): ReturnType<GameRecordingRequestHandler['DeleteClip']>;
 
-  SendMsgDeletePerGameSettings(...args: Parameters<GameRecordingRequestHandlers['DeletePerGameSettings']>): ReturnType<GameRecordingRequestHandlers['DeletePerGameSettings']>;
+  SendMsgDeletePerGameSettings(...args: Parameters<GameRecordingRequestHandler['DeletePerGameSettings']>): ReturnType<GameRecordingRequestHandler['DeletePerGameSettings']>;
 
-  SendMsgExportClip(...args: Parameters<GameRecordingRequestHandlers['ExportClip']>): ReturnType<GameRecordingRequestHandlers['ExportClip']>;
+  SendMsgExportClip(...args: Parameters<GameRecordingRequestHandler['ExportClip']>): ReturnType<GameRecordingRequestHandler['ExportClip']>;
 
-  SendMsgExportClipPreview(...args: Parameters<GameRecordingRequestHandlers['ExportClipPreview']>): ReturnType<GameRecordingRequestHandlers['ExportClipPreview']>;
+  SendMsgExportClipPreview(...args: Parameters<GameRecordingRequestHandler['ExportClipPreview']>): ReturnType<GameRecordingRequestHandler['ExportClipPreview']>;
 
-  SendMsgGetAndTrimPostGameHighlights(...args: Parameters<GameRecordingRequestHandlers['GetAndTrimPostGameHighlights']>): ReturnType<GameRecordingRequestHandlers['GetAndTrimPostGameHighlights']>;
+  SendMsgGetAndTrimPostGameHighlights(...args: Parameters<GameRecordingRequestHandler['GetAndTrimPostGameHighlights']>): ReturnType<GameRecordingRequestHandler['GetAndTrimPostGameHighlights']>;
 
-  SendMsgGetAppsWithBackgroundVideo(...args: Parameters<GameRecordingRequestHandlers['GetAppsWithBackgroundVideo']>): ReturnType<GameRecordingRequestHandlers['GetAppsWithBackgroundVideo']>;
+  SendMsgGetAppsWithBackgroundVideo(...args: Parameters<GameRecordingRequestHandler['GetAppsWithBackgroundVideo']>): ReturnType<GameRecordingRequestHandler['GetAppsWithBackgroundVideo']>;
 
-  SendMsgGetAvailableDiskSpace(...args: Parameters<GameRecordingRequestHandlers['GetAvailableDiskSpace']>): ReturnType<GameRecordingRequestHandlers['GetAvailableDiskSpace']>;
+  SendMsgGetAvailableDiskSpace(...args: Parameters<GameRecordingRequestHandler['GetAvailableDiskSpace']>): ReturnType<GameRecordingRequestHandler['GetAvailableDiskSpace']>;
 
-  SendMsgGetBackgroundRecordingFileSize(...args: Parameters<GameRecordingRequestHandlers['GetBackgroundRecordingFileSize']>): ReturnType<GameRecordingRequestHandlers['GetBackgroundRecordingFileSize']>;
+  SendMsgGetBackgroundRecordingFileSize(...args: Parameters<GameRecordingRequestHandler['GetBackgroundRecordingFileSize']>): ReturnType<GameRecordingRequestHandler['GetBackgroundRecordingFileSize']>;
 
-  SendMsgGetClips(...args: Parameters<GameRecordingRequestHandlers['GetClips']>): ReturnType<GameRecordingRequestHandlers['GetClips']>;
+  SendMsgGetClips(...args: Parameters<GameRecordingRequestHandler['GetClips']>): ReturnType<GameRecordingRequestHandler['GetClips']>;
 
-  SendMsgGetEnoughDiskSpace(...args: Parameters<GameRecordingRequestHandlers['GetEnoughDiskSpace']>): ReturnType<GameRecordingRequestHandlers['GetEnoughDiskSpace']>;
+  SendMsgGetEnoughDiskSpace(...args: Parameters<GameRecordingRequestHandler['GetEnoughDiskSpace']>): ReturnType<GameRecordingRequestHandler['GetEnoughDiskSpace']>;
 
-  SendMsgGetPerGameSettings(...args: Parameters<GameRecordingRequestHandlers['GetPerGameSettings']>): ReturnType<GameRecordingRequestHandlers['GetPerGameSettings']>;
+  SendMsgGetPerGameSettings(...args: Parameters<GameRecordingRequestHandler['GetPerGameSettings']>): ReturnType<GameRecordingRequestHandler['GetPerGameSettings']>;
 
-  SendMsgGetPlatformCapabilities(...args: Parameters<GameRecordingRequestHandlers['GetPlatformCapabilities']>): ReturnType<GameRecordingRequestHandlers['GetPlatformCapabilities']>;
+  SendMsgGetPlatformCapabilities(...args: Parameters<GameRecordingRequestHandler['GetPlatformCapabilities']>): ReturnType<GameRecordingRequestHandler['GetPlatformCapabilities']>;
 
-  SendMsgGetTags(...args: Parameters<GameRecordingRequestHandlers['GetTags']>): ReturnType<GameRecordingRequestHandlers['GetTags']>;
+  SendMsgGetTags(...args: Parameters<GameRecordingRequestHandler['GetTags']>): ReturnType<GameRecordingRequestHandler['GetTags']>;
 
-  SendMsgGetThumbnails(...args: Parameters<GameRecordingRequestHandlers['GetThumbnails']>): ReturnType<GameRecordingRequestHandlers['GetThumbnails']>;
+  SendMsgGetThumbnails(...args: Parameters<GameRecordingRequestHandler['GetThumbnails']>): ReturnType<GameRecordingRequestHandler['GetThumbnails']>;
 
-  SendMsgGetTimelinesForApp(...args: Parameters<GameRecordingRequestHandlers['GetTimelinesForApp']>): ReturnType<GameRecordingRequestHandlers['GetTimelinesForApp']>;
+  SendMsgGetTimelinesForApp(...args: Parameters<GameRecordingRequestHandler['GetTimelinesForApp']>): ReturnType<GameRecordingRequestHandler['GetTimelinesForApp']>;
 
-  SendMsgGetTimelinesForClip(...args: Parameters<GameRecordingRequestHandlers['GetTimelinesForClip']>): ReturnType<GameRecordingRequestHandlers['GetTimelinesForClip']>;
+  SendMsgGetTimelinesForClip(...args: Parameters<GameRecordingRequestHandler['GetTimelinesForClip']>): ReturnType<GameRecordingRequestHandler['GetTimelinesForClip']>;
 
-  SendMsgGetTotalDiskSpaceUsage(...args: Parameters<GameRecordingRequestHandlers['GetTotalDiskSpaceUsage']>): ReturnType<GameRecordingRequestHandlers['GetTotalDiskSpaceUsage']>;
+  SendMsgGetTotalDiskSpaceUsage(...args: Parameters<GameRecordingRequestHandler['GetTotalDiskSpaceUsage']>): ReturnType<GameRecordingRequestHandler['GetTotalDiskSpaceUsage']>;
 
-  SendMsgManuallyDeleteRecordingsForApps(...args: Parameters<GameRecordingRequestHandlers['ManuallyDeleteRecordingsForApps']>): ReturnType<GameRecordingRequestHandlers['ManuallyDeleteRecordingsForApps']>;
+  SendMsgManuallyDeleteRecordingsForApps(...args: Parameters<GameRecordingRequestHandler['ManuallyDeleteRecordingsForApps']>): ReturnType<GameRecordingRequestHandler['ManuallyDeleteRecordingsForApps']>;
 
-  SendMsgNotifyClipCreated(...args: Parameters<GameRecordingRequestHandlers['NotifyClipCreated']>): ReturnType<GameRecordingRequestHandlers['NotifyClipCreated']>;
+  SendMsgNotifyClipCreated(...args: Parameters<GameRecordingRequestHandler['NotifyClipCreated']>): ReturnType<GameRecordingRequestHandler['NotifyClipCreated']>;
 
-  SendMsgNotifyClipDeleted(...args: Parameters<GameRecordingRequestHandlers['NotifyClipDeleted']>): ReturnType<GameRecordingRequestHandlers['NotifyClipDeleted']>;
+  SendMsgNotifyClipDeleted(...args: Parameters<GameRecordingRequestHandler['NotifyClipDeleted']>): ReturnType<GameRecordingRequestHandler['NotifyClipDeleted']>;
 
-  SendMsgNotifyExportProgress(...args: Parameters<GameRecordingRequestHandlers['NotifyExportProgress']>): ReturnType<GameRecordingRequestHandlers['NotifyExportProgress']>;
+  SendMsgNotifyExportProgress(...args: Parameters<GameRecordingRequestHandler['NotifyExportProgress']>): ReturnType<GameRecordingRequestHandler['NotifyExportProgress']>;
 
-  SendMsgNotifyLowDiskSpace(...args: Parameters<GameRecordingRequestHandlers['NotifyLowDiskSpace']>): ReturnType<GameRecordingRequestHandlers['NotifyLowDiskSpace']>;
+  SendMsgNotifyLowDiskSpace(...args: Parameters<GameRecordingRequestHandler['NotifyLowDiskSpace']>): ReturnType<GameRecordingRequestHandler['NotifyLowDiskSpace']>;
 
-  SendMsgNotifyOpenOverlayToGamePhase(...args: Parameters<GameRecordingRequestHandlers['NotifyOpenOverlayToGamePhase']>): ReturnType<GameRecordingRequestHandlers['NotifyOpenOverlayToGamePhase']>;
+  SendMsgNotifyOpenOverlayToGamePhase(...args: Parameters<GameRecordingRequestHandler['NotifyOpenOverlayToGamePhase']>): ReturnType<GameRecordingRequestHandler['NotifyOpenOverlayToGamePhase']>;
 
-  SendMsgNotifyOpenOverlayToTimelineEvent(...args: Parameters<GameRecordingRequestHandlers['NotifyOpenOverlayToTimelineEvent']>): ReturnType<GameRecordingRequestHandlers['NotifyOpenOverlayToTimelineEvent']>;
+  SendMsgNotifyOpenOverlayToTimelineEvent(...args: Parameters<GameRecordingRequestHandler['NotifyOpenOverlayToTimelineEvent']>): ReturnType<GameRecordingRequestHandler['NotifyOpenOverlayToTimelineEvent']>;
 
-  SendMsgNotifyPhaseListChanged(...args: Parameters<GameRecordingRequestHandlers['NotifyPhaseListChanged']>): ReturnType<GameRecordingRequestHandlers['NotifyPhaseListChanged']>;
+  SendMsgNotifyPhaseListChanged(...args: Parameters<GameRecordingRequestHandler['NotifyPhaseListChanged']>): ReturnType<GameRecordingRequestHandler['NotifyPhaseListChanged']>;
 
-  SendMsgNotifyPostGameHighlightsChanged(...args: Parameters<GameRecordingRequestHandlers['NotifyPostGameHighlightsChanged']>): ReturnType<GameRecordingRequestHandlers['NotifyPostGameHighlightsChanged']>;
+  SendMsgNotifyPostGameHighlightsChanged(...args: Parameters<GameRecordingRequestHandler['NotifyPostGameHighlightsChanged']>): ReturnType<GameRecordingRequestHandler['NotifyPostGameHighlightsChanged']>;
 
-  SendMsgNotifyRecordingSessionChanged(...args: Parameters<GameRecordingRequestHandlers['NotifyRecordingSessionChanged']>): ReturnType<GameRecordingRequestHandlers['NotifyRecordingSessionChanged']>;
+  SendMsgNotifyRecordingSessionChanged(...args: Parameters<GameRecordingRequestHandler['NotifyRecordingSessionChanged']>): ReturnType<GameRecordingRequestHandler['NotifyRecordingSessionChanged']>;
 
-  SendMsgNotifyTimelineChanged(...args: Parameters<GameRecordingRequestHandlers['NotifyTimelineChanged']>): ReturnType<GameRecordingRequestHandlers['NotifyTimelineChanged']>;
+  SendMsgNotifyTimelineChanged(...args: Parameters<GameRecordingRequestHandler['NotifyTimelineChanged']>): ReturnType<GameRecordingRequestHandler['NotifyTimelineChanged']>;
 
-  SendMsgNotifyTimelineEntryChanged(...args: Parameters<GameRecordingRequestHandlers['NotifyTimelineEntryChanged']>): ReturnType<GameRecordingRequestHandlers['NotifyTimelineEntryChanged']>;
+  SendMsgNotifyTimelineEntryChanged(...args: Parameters<GameRecordingRequestHandler['NotifyTimelineEntryChanged']>): ReturnType<GameRecordingRequestHandler['NotifyTimelineEntryChanged']>;
 
-  SendMsgNotifyTimelineEntryRemoved(...args: Parameters<GameRecordingRequestHandlers['NotifyTimelineEntryRemoved']>): ReturnType<GameRecordingRequestHandlers['NotifyTimelineEntryRemoved']>;
+  SendMsgNotifyTimelineEntryRemoved(...args: Parameters<GameRecordingRequestHandler['NotifyTimelineEntryRemoved']>): ReturnType<GameRecordingRequestHandler['NotifyTimelineEntryRemoved']>;
 
-  SendMsgNotifyUploadProgress(...args: Parameters<GameRecordingRequestHandlers['NotifyUploadProgress']>): ReturnType<GameRecordingRequestHandlers['NotifyUploadProgress']>;
+  SendMsgNotifyUploadProgress(...args: Parameters<GameRecordingRequestHandler['NotifyUploadProgress']>): ReturnType<GameRecordingRequestHandler['NotifyUploadProgress']>;
 
-  SendMsgQueryPhases(...args: Parameters<GameRecordingRequestHandlers['QueryPhases']>): ReturnType<GameRecordingRequestHandlers['QueryPhases']>;
+  SendMsgQueryPhases(...args: Parameters<GameRecordingRequestHandler['QueryPhases']>): ReturnType<GameRecordingRequestHandler['QueryPhases']>;
 
-  SendMsgSaveClip(...args: Parameters<GameRecordingRequestHandlers['SaveClip']>): ReturnType<GameRecordingRequestHandlers['SaveClip']>;
+  SendMsgSaveClip(...args: Parameters<GameRecordingRequestHandler['SaveClip']>): ReturnType<GameRecordingRequestHandler['SaveClip']>;
 
-  SendMsgSetPerGameSettings(...args: Parameters<GameRecordingRequestHandlers['SetPerGameSettings']>): ReturnType<GameRecordingRequestHandlers['SetPerGameSettings']>;
+  SendMsgSetPerGameSettings(...args: Parameters<GameRecordingRequestHandler['SetPerGameSettings']>): ReturnType<GameRecordingRequestHandler['SetPerGameSettings']>;
 
-  SendMsgStartRecording(...args: Parameters<GameRecordingRequestHandlers['StartRecording']>): ReturnType<GameRecordingRequestHandlers['StartRecording']>;
+  SendMsgStartRecording(...args: Parameters<GameRecordingRequestHandler['StartRecording']>): ReturnType<GameRecordingRequestHandler['StartRecording']>;
 
-  SendMsgStopRecording(...args: Parameters<GameRecordingRequestHandlers['StopRecording']>): ReturnType<GameRecordingRequestHandlers['StopRecording']>;
+  SendMsgStopRecording(...args: Parameters<GameRecordingRequestHandler['StopRecording']>): ReturnType<GameRecordingRequestHandler['StopRecording']>;
 
-  SendMsgSwitchBackgroundRecordingGame(...args: Parameters<GameRecordingRequestHandlers['SwitchBackgroundRecordingGame']>): ReturnType<GameRecordingRequestHandlers['SwitchBackgroundRecordingGame']>;
+  SendMsgSwitchBackgroundRecordingGame(...args: Parameters<GameRecordingRequestHandler['SwitchBackgroundRecordingGame']>): ReturnType<GameRecordingRequestHandler['SwitchBackgroundRecordingGame']>;
 
-  SendMsgTakeScreenshot(...args: Parameters<GameRecordingRequestHandlers['TakeScreenshot']>): ReturnType<GameRecordingRequestHandlers['TakeScreenshot']>;
+  SendMsgTakeScreenshot(...args: Parameters<GameRecordingRequestHandler['TakeScreenshot']>): ReturnType<GameRecordingRequestHandler['TakeScreenshot']>;
 
-  SendMsgUploadClipToSteam(...args: Parameters<GameRecordingRequestHandlers['UploadClipToSteam']>): ReturnType<GameRecordingRequestHandlers['UploadClipToSteam']>;
+  SendMsgUploadClipToSteam(...args: Parameters<GameRecordingRequestHandler['UploadClipToSteam']>): ReturnType<GameRecordingRequestHandler['UploadClipToSteam']>;
 
-  SendMsgUserAddTimelineEntry(...args: Parameters<GameRecordingRequestHandlers['UserAddTimelineEntry']>): ReturnType<GameRecordingRequestHandlers['UserAddTimelineEntry']>;
+  SendMsgUserAddTimelineEntry(...args: Parameters<GameRecordingRequestHandler['UserAddTimelineEntry']>): ReturnType<GameRecordingRequestHandler['UserAddTimelineEntry']>;
 
-  SendMsgUserRemoveTimelineEntry(...args: Parameters<GameRecordingRequestHandlers['UserRemoveTimelineEntry']>): ReturnType<GameRecordingRequestHandlers['UserRemoveTimelineEntry']>;
+  SendMsgUserRemoveTimelineEntry(...args: Parameters<GameRecordingRequestHandler['UserRemoveTimelineEntry']>): ReturnType<GameRecordingRequestHandler['UserRemoveTimelineEntry']>;
 
-  SendMsgUserUpdateTimelineEntry(...args: Parameters<GameRecordingRequestHandlers['UserUpdateTimelineEntry']>): ReturnType<GameRecordingRequestHandlers['UserUpdateTimelineEntry']>;
+  SendMsgUserUpdateTimelineEntry(...args: Parameters<GameRecordingRequestHandler['UserUpdateTimelineEntry']>): ReturnType<GameRecordingRequestHandler['UserUpdateTimelineEntry']>;
 
-  SendMsgZipClip(...args: Parameters<GameRecordingRequestHandlers['ZipClip']>): ReturnType<GameRecordingRequestHandlers['ZipClip']>;
+  SendMsgZipClip(...args: Parameters<GameRecordingRequestHandler['ZipClip']>): ReturnType<GameRecordingRequestHandler['ZipClip']>;
 
   SetPerGameSettings(request?: CGameRecording_SetPerGameSettings_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_SetPerGameSettings_Response>>;
 
