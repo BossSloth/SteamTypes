@@ -1,3 +1,5 @@
+import { UserContentDescriptorPreferences } from './steammessages_base';
+
 export interface CPlayer_GetRecentPlaytimeSessionsForChild_Request {
   steamid?: number;
 }

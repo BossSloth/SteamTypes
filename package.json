@@ -4,6 +4,7 @@
   "version": "0.1.4",
   "author": "BossSloth",
   "description": "TypeScript type definitions for the Steam client",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -11,7 +12,8 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./*": {
       "types": "./dist/*"

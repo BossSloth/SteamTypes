@@ -212,7 +212,7 @@ function generateTypeScriptDefinitions(): void {
       });
       const tsDefinitions = generateTypeScriptFromReflection(root, filteredFilePaths.filter(filePath => filePath !== protoFile));
 
-      const outputFileName = protoFile.split('\\').pop()?.replace('.proto', '.d.ts');
+      const outputFileName = protoFile.split('\\').pop()?.replace('.proto', '.ts');
 
       if (outputFileName === undefined) {
         throw new Error(`Failed to generate output file name for ${protoFile}`);

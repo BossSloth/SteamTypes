@@ -100,6 +100,42 @@ async function injectConvertToTypescriptJs(targetId: string, force = false): Pro
   }
 }
 
+const systemInformationFilePath = path.join(path.resolve(`${__dirname}/../`), 'src', 'types', 'system-information.ts');
+
+async function getSystemInformation(): Promise<void> {
+  logger.debug(chalk.blue('🔄 Getting system information...'));
+
+  const response = await sharedJsClient.Runtime.evaluate({
+    expression: 'SteamClient.System.GetSystemInfo()',
+    returnByValue: true,
+    awaitPromise: true,
+  });
+
+  if (response.exceptionDetails) {
+    throw new Error(`Failed to get system information: ${JSON.stringify(response.exceptionDetails.exception?.description, null, 2)}`);
+  }
+
+  const value = response.result.value as object;
+
+  // Only keep the properties we need
+  const properties = [
+    'sOSName',
+    'nSteamVersion',
+    'sSteamBuildDate',
+    'sSteamAPI',
+  ];
+
+  const filteredValue = Object.fromEntries(Object.entries(value).filter(([key]) => properties.includes(key)));
+
+  let systemInformation = JSON.stringify(filteredValue, null, 2);
+  logger.debug(chalk.green('✅ Successfully got system information'));
+
+  systemInformation = systemInformation.replace(/"/g, '\'').replace(/'(\w+)':/g, '$1:').replace(/\n}$/gm, ',\n}');
+  systemInformation += ';\n';
+
+  fs.writeFileSync(systemInformationFilePath, `export const systemInformation = ${systemInformation}`);
+}
+
 let extractTime = 0;
 
 /**
@@ -179,6 +215,8 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   const targetId = await getSharedJsContextTarget();
 
   await injectConvertToTypescriptJs(targetId, options.force);
+
+  await getSystemInformation();
 
   let maps = interfaceMaps;
 
