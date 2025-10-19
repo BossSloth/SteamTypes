@@ -15,8 +15,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./Global/*": {
+      "types": "./dist/Types/Global/*.d.ts",
+      "default": "./dist/Types/Global/*.js"
+    },
     "./*": {
-      "types": "./dist/*"
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
     }
   },
   "scripts": {
