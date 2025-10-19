@@ -136,14 +136,14 @@ type ProtoAdders<T> = {
   [K in keyof T as Exclude<T[K], undefined> extends unknown[]
     ? `add_${string & K}`
     : never]: (
-    value: AddMethodParam<ArrayElement<Exclude<T[K], undefined>>>
+    value: AddMethodParam<ArrayElement<Exclude<T[K], undefined>>>,
   ) => void;
 };
 
 /**
  * Protobuf interface with getters, setters, and add methods for array properties
  * @note You probably don't want to use most of the properties here and
- * instead use the {@link ProtobufInterface.toObject} method to convert the protobuf message to a plain object
+ * instead use the {@link ProtobufInterface.toObject()} method to convert the protobuf message to a plain object
  */
 type ProtobufInterface<T> = ProtoGetters<T> & ProtoSetters<T> & ProtoAdders<T> & SimpleJsPbMessage<T>;
 
