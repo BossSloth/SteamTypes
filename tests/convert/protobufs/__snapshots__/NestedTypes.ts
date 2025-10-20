@@ -1,10 +1,10 @@
 export interface OuterMessage {
-  inner?: InnerMessage;
-  inner_list?: InnerMessage[];
+  inner?: OuterMessage_InnerMessage;
+  inner_list?: OuterMessage_InnerMessage[];
   outer_field?: string;
 }
 
-export interface InnerMessage {
+export interface OuterMessage_InnerMessage {
   inner_field?: string;
   value?: number;
 }

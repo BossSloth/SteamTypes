@@ -46,6 +46,7 @@ let referencedTypes = new Set<string>();
 let replacedNames = new Map<string, string>();
 let importedTypes = new Map<string, Set<string>>();
 let typeSourceFiles = new Map<string, string>();
+let typeNameMap = new Map<string, string>(); // Maps original type names to their prefixed names
 
 function convertProtoTypeToTS(field: protobuf.Field): string {
   let tsType: string;
@@ -102,11 +103,8 @@ function getImportPathForType(typeName: string, filePathFilters: string[]): stri
 }
 
 function generateEnumDefinition(enumType: protobuf.Enum): string {
-  let enumName = enumType.name;
-  if (enumType.name.startsWith('E')) {
-    enumName = enumType.name.slice(1);
-    replacedNames.set(enumType.name, enumName);
-  }
+  // Get the normalized name (already tracked in mapAllTypesToFiles)
+  const enumName = replacedNames.get(enumType.name) ?? enumType.name;
 
   const lines: string[] = [];
   lines.push(`export enum ${enumName} {`);
@@ -129,11 +127,19 @@ function generateEnumDefinition(enumType: protobuf.Enum): string {
   return lines.join('\n');
 }
 
-function generateInterfaceDefinition(messageType: protobuf.Type): string {
+function generateInterfaceDefinition(messageType: protobuf.Type, parentName?: string): string {
   const fields = messageType.fieldsArray;
 
+  // Generate the interface name with parent prefix if nested
+  const interfaceName = parentName !== undefined && parentName !== '' ? `${parentName}_${messageType.name}` : messageType.name;
+
+  // Track the mapping from original name to prefixed name
+  if (parentName !== undefined && parentName !== '') {
+    typeNameMap.set(messageType.name, interfaceName);
+  }
+
   const lines: string[] = [];
-  lines.push(`export interface ${messageType.name} {`);
+  lines.push(`export interface ${interfaceName} {`);
 
   fields.sort(propertySorter);
 
@@ -174,6 +180,11 @@ function mapAllTypesToFiles(ns: protobuf.Namespace): void {
     if (filename !== null) {
       typeSourceFiles.set(enumType.name, filename);
     }
+    // Track enum renames (E prefix removal)
+    if (enumType.name.startsWith('E')) {
+      const normalizedName = enumType.name.slice(1);
+      replacedNames.set(enumType.name, normalizedName);
+    }
   }
 }
 
@@ -182,22 +193,14 @@ function collectImportsAndReplaceNames(filePathFilters: string[]): void {
   for (const typeName of referencedTypes) {
     const importPath = getImportPathForType(typeName, filePathFilters);
     if (importPath !== null) {
+      // Check if this type has been renamed (e.g., enum with E prefix removed)
+      const finalTypeName = replacedNames.get(typeName) ?? typeName;
+
       const existingTypes = importedTypes.get(importPath);
       if (existingTypes === undefined) {
-        importedTypes.set(importPath, new Set([typeName]));
+        importedTypes.set(importPath, new Set([finalTypeName]));
       } else {
-        existingTypes.add(typeName);
-      }
-    }
-  }
-
-  // Apply name replacements
-  for (const [key, value] of replacedNames) {
-    // Also update imported types
-    for (const [, types] of importedTypes) {
-      if (types.has(key)) {
-        types.delete(key);
-        types.add(value);
+        existingTypes.add(finalTypeName);
       }
     }
   }
@@ -214,21 +217,22 @@ function generateImportStatements(): string[] {
   return importStatements;
 }
 
-function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], output: string[]): void {
+function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], output: string[], parentName?: string): void {
   // Process messages (convert to interfaces)
   for (const messageType of ns.nestedArray.filter((n): n is protobuf.Type => n instanceof protobuf.Type)) {
     if (filePathFilters.some(filePath => messageType.filename?.includes(filePath) === true)) {
       continue;
     }
-    const interfaceDefinition = generateInterfaceDefinition(messageType);
+    const interfaceDefinition = generateInterfaceDefinition(messageType, parentName);
     if (interfaceDefinition) {
       output.push(interfaceDefinition);
       output.push(''); // Empty line
     }
 
-    // Process nested types
+    // Process nested types with current message as parent
     if (messageType.nested) {
-      processNamespace(messageType, filePathFilters, output);
+      const nestedParentName = parentName !== undefined ? `${parentName}_${messageType.name}` : messageType.name;
+      processNamespace(messageType, filePathFilters, output, nestedParentName);
     }
   }
 
@@ -247,18 +251,6 @@ function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], out
     // Skip if this enum should be imported from another file
     const importPath = getImportPathForType(enumType.name, filePathFilters);
     if (importPath !== null) {
-      // Normalize the enum name (remove 'E' prefix if present)
-      let normalizedName = enumType.name;
-      if (enumType.name.startsWith('E')) {
-        normalizedName = enumType.name.slice(1);
-      }
-
-      const existingTypes = importedTypes.get(importPath);
-      if (existingTypes === undefined) {
-        importedTypes.set(importPath, new Set([normalizedName]));
-      } else {
-        existingTypes.add(normalizedName);
-      }
       continue;
     }
 
@@ -273,6 +265,7 @@ function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: 
   replacedNames = new Map<string, string>();
   importedTypes = new Map<string, Set<string>>();
   typeSourceFiles = new Map<string, string>();
+  typeNameMap = new Map<string, string>();
 
   const output: string[] = [];
 
@@ -284,10 +277,19 @@ function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: 
   // Collect imports and apply name replacements
   collectImportsAndReplaceNames(filePathFilters);
 
-  // Apply name replacements to output
+  // Apply name replacements to output (for enum renames only)
   for (const [key, value] of replacedNames) {
     for (let i = 0; i < output.length; i++) {
       output[i] = output[i].replaceAll(key, value);
+    }
+  }
+
+  // Apply type name mappings for nested types
+  for (const [originalName, prefixedName] of typeNameMap) {
+    for (let i = 0; i < output.length; i++) {
+      // Use word boundaries to avoid partial replacements
+      const regex = new RegExp(`\\b${originalName}\\b`, 'g');
+      output[i] = output[i].replace(regex, prefixedName);
     }
   }
 

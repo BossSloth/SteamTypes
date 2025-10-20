@@ -2,10 +2,10 @@ export interface CGameRecording_GetAppsWithBackgroundVideo_Request {
 }
 
 export interface CGameRecording_GetAppsWithBackgroundVideo_Response {
-  apps?: App[];
+  apps?: CGameRecording_GetAppsWithBackgroundVideo_Response_App[];
 }
 
-export interface App {
+export interface CGameRecording_GetAppsWithBackgroundVideo_Response_App {
   file_size?: number;
   game_id?: number;
   is_active?: boolean;
@@ -38,24 +38,24 @@ export interface CGameRecording_QueryPhases_Request {
   filter_gameid?: number;
   filter_phase_id?: string;
   filter_search_string?: string;
-  filter_tags?: Tag[];
+  filter_tags?: CGameRecordingPhase_Tag[];
   page?: number;
 }
 
-export interface Tag {
+export interface CGameRecording_QueryPhases_Request_Tag {
   group?: string;
   name?: string;
 }
 
 export interface CGameRecording_QueryPhases_Response {
-  phases?: Phase[];
+  phases?: CGameRecording_QueryPhases_Response_Phase[];
   total_count?: number;
 }
 
-export interface Phase {
+export interface CGameRecording_QueryPhases_Response_Phase {
   active?: boolean;
   attributes?: CPhaseAttribute[];
-  background_recording?: BackgroundRecording;
+  background_recording?: CGameRecording_QueryPhases_Response_Phase_BackgroundRecording;
   clip_ids?: string[];
   contained_tags?: CTimelineTag[];
   date_recorded?: number;
@@ -69,7 +69,7 @@ export interface Phase {
   type?: PhaseResultType;
 }
 
-export interface BackgroundRecording {
+export interface CGameRecording_QueryPhases_Response_Phase_BackgroundRecording {
   duration_ms?: number;
   offset?: number;
   timeline_id?: string;
@@ -187,16 +187,16 @@ export interface CGameRecording_ClipSummary {
 }
 
 export interface CGameRecording_SaveClip_Request {
-  end?: Position;
+  end?: CGameRecording_SaveClip_Request_Position;
   force_thumbnail?: boolean;
   game_id?: number;
   name?: string;
   src_clip_id?: string;
-  start?: Position;
+  start?: CGameRecording_SaveClip_Request_Position;
   temporary?: boolean;
 }
 
-export interface Position {
+export interface CGameRecording_SaveClip_Request_Position {
   offset_ms?: number;
   timeline_id?: string;
 }
@@ -345,10 +345,10 @@ export interface CGameRecording_GetThumbnails_Request {
 }
 
 export interface CGameRecording_GetThumbnails_Response {
-  thumbnails?: Thumbnail[];
+  thumbnails?: CGameRecording_GetThumbnails_Response_Thumbnail[];
 }
 
-export interface Thumbnail {
+export interface CGameRecording_GetThumbnails_Response_Thumbnail {
   height?: number;
   image_data?: Uint8Array;
   width?: number;
@@ -480,12 +480,12 @@ export interface CGameRecordingTimelineMetadata {
   duration_ms?: number;
   game_id?: number;
   phases?: CGameRecordingPhase[];
-  recordings?: Recording[];
+  recordings?: CGameRecordingTimelineMetadata_Recording[];
   significant_events?: CGameRecordingTimelineEvent[];
   timeline_id?: string;
 }
 
-export interface Recording {
+export interface CGameRecordingTimelineMetadata_Recording {
   cdn_manifest_url?: string;
   delete_on_cleanup?: boolean;
   duration_ms?: number;
@@ -518,11 +518,11 @@ export interface CGameRecordingTimelineEvent {
 
 export interface CGameRecordingTag {
   game_id?: number;
-  references?: Timeline[];
+  references?: CGameRecordingTag_Timeline[];
   tag?: CTimelineTag;
 }
 
-export interface Timeline {
+export interface CGameRecordingTag_Timeline {
   clip_id?: string;
   offset_ms?: number;
   timeline_id?: string;
@@ -538,13 +538,13 @@ export interface CGameRecordingTagInstance {
 export interface CGameRecordingPhase {
   attributes?: CPhaseAttribute[];
   background_timeline_offset?: number;
-  contained_tags?: Tag[];
+  contained_tags?: CGameRecordingPhase_Tag[];
   duration_ms?: number;
   phase_id?: string;
-  tags?: Tag[];
+  tags?: CGameRecordingPhase_Tag[];
 }
 
-export interface Tag {
+export interface CGameRecordingPhase_Tag {
   group?: string;
   name?: string;
 }
@@ -571,7 +571,7 @@ export enum TimelineEntryType {
   UserMarker = 5,
   Screenshot = 6,
   Error = 7,
-  Tag = 8,
+  CGameRecordingPhase_Tag = 8,
   GamePhase = 9,
 }
 
@@ -616,7 +616,7 @@ export enum GameRecordingType {
   Unknown = 0,
   NotRecording = 1,
   ManualRecording = 2,
-  BackgroundRecording = 3,
+  CGameRecording_QueryPhases_Response_Phase_BackgroundRecording = 3,
   Clip = 4,
 }
 

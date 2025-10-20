@@ -58,11 +58,11 @@ export enum SessionDisposition {
 }
 
 export interface CMsgKubeRPCPacket {
-  hdr?: Hdr;
+  hdr?: CMsgKubeRPCPacket_Hdr;
   payload?: Uint8Array;
 }
 
-export interface Hdr {
+export interface CMsgKubeRPCPacket_Hdr {
   eresult?: number;
   error_message?: string;
   jobid_source?: string;
@@ -263,10 +263,10 @@ export interface CMsgKeyValueSet {
 }
 
 export interface UserContentDescriptorPreferences {
-  content_descriptors_to_exclude?: ContentDescriptor[];
+  content_descriptors_to_exclude?: UserContentDescriptorPreferences_ContentDescriptor[];
 }
 
-export interface ContentDescriptor {
+export interface UserContentDescriptorPreferences_ContentDescriptor {
   content_descriptorid?: number;
   timestamp_added?: number;
 }

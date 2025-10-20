@@ -5,10 +5,10 @@ export interface CPlayer_GetRecentPlaytimeSessionsForChild_Request {
 }
 
 export interface CPlayer_GetRecentPlaytimeSessionsForChild_Response {
-  sessions?: PlaytimeSession[];
+  sessions?: CPlayer_GetRecentPlaytimeSessionsForChild_Response_PlaytimeSession[];
 }
 
-export interface PlaytimeSession {
+export interface CPlayer_GetRecentPlaytimeSessionsForChild_Response_PlaytimeSession {
   appid?: number;
   device_type?: number;
   disconnected?: boolean;
@@ -21,15 +21,15 @@ export interface CPlayer_GetPlayerLinkDetails_Request {
 }
 
 export interface CPlayer_GetPlayerLinkDetails_Response {
-  accounts?: PlayerLinkDetails[];
+  accounts?: CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails[];
 }
 
-export interface PlayerLinkDetails {
-  private_data?: AccountPrivateData;
-  public_data?: AccountPublicData;
+export interface CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails {
+  private_data?: CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails_AccountPrivateData;
+  public_data?: CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails_AccountPublicData;
 }
 
-export interface AccountPublicData {
+export interface CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails_AccountPublicData {
   account_flags?: number;
   ban_expires_time?: number;
   content_country_restricted?: boolean;
@@ -42,7 +42,7 @@ export interface AccountPublicData {
   visibility_state?: number;
 }
 
-export interface AccountPrivateData {
+export interface CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails_AccountPrivateData {
   account_name?: string;
   broadcast_session_id?: string;
   game_device_name?: string;
@@ -92,10 +92,10 @@ export interface CPlayer_GetOwnedGames_Request {
 
 export interface CPlayer_GetOwnedGames_Response {
   game_count?: number;
-  games?: Game[];
+  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
 }
 
-export interface Game {
+export interface CPlayer_GetOwnedGames_Response_Game {
   appid?: number;
   capsule_filename?: string;
   content_descriptorids?: number[];
@@ -132,21 +132,21 @@ export interface CPlayer_GetFriendsGameplayInfo_Request {
 }
 
 export interface CPlayer_GetFriendsGameplayInfo_Response {
-  in_game?: FriendsGameplayInfo[];
-  in_wishlist?: FriendsGameplayInfo[];
-  owns?: FriendsGameplayInfo[];
-  played_ever?: FriendsGameplayInfo[];
-  played_recently?: FriendsGameplayInfo[];
-  your_info?: OwnGameplayInfo;
+  in_game?: CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo[];
+  in_wishlist?: CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo[];
+  owns?: CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo[];
+  played_ever?: CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo[];
+  played_recently?: CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo[];
+  your_info?: CPlayer_GetFriendsGameplayInfo_Response_OwnGameplayInfo;
 }
 
-export interface FriendsGameplayInfo {
+export interface CPlayer_GetFriendsGameplayInfo_Response_FriendsGameplayInfo {
   minutes_played?: number;
   minutes_played_forever?: number;
   steamid?: string;
 }
 
-export interface OwnGameplayInfo {
+export interface CPlayer_GetFriendsGameplayInfo_Response_OwnGameplayInfo {
   in_wishlist?: boolean;
   minutes_played?: number;
   minutes_played_forever?: number;
@@ -159,11 +159,11 @@ export interface CPlayer_GetGameBadgeLevels_Request {
 }
 
 export interface CPlayer_GetGameBadgeLevels_Response {
-  badges?: Badge[];
+  badges?: CPlayer_GetGameBadgeLevels_Response_Badge[];
   player_level?: number;
 }
 
-export interface Badge {
+export interface CPlayer_GetGameBadgeLevels_Response_Badge {
   border_color?: number;
   level?: number;
   series?: number;
@@ -189,11 +189,11 @@ export interface ProfileItem {
   movie_webm?: string;
   movie_webm_small?: string;
   name?: string;
-  profile_colors?: ProfileColor[];
+  profile_colors?: ProfileItem_ProfileColor[];
   tiled?: boolean;
 }
 
-export interface ProfileColor {
+export interface ProfileItem_ProfileColor {
   color?: string;
   style_name?: string;
 }
@@ -314,10 +314,10 @@ export interface CPlayer_GetEmoticonList_Request {
 }
 
 export interface CPlayer_GetEmoticonList_Response {
-  emoticons?: Emoticon[];
+  emoticons?: CPlayer_GetEmoticonList_Response_Emoticon[];
 }
 
-export interface Emoticon {
+export interface CPlayer_GetEmoticonList_Response_Emoticon {
   appid?: number;
   count?: number;
   name?: string;
@@ -332,10 +332,10 @@ export interface CPlayer_GetCommunityBadgeProgress_Request {
 }
 
 export interface CPlayer_GetCommunityBadgeProgress_Response {
-  quests?: Quest[];
+  quests?: CPlayer_GetCommunityBadgeProgress_Response_Quest[];
 }
 
-export interface Quest {
+export interface CPlayer_GetCommunityBadgeProgress_Response_Quest {
   completed?: boolean;
   questid?: number;
 }
@@ -348,10 +348,10 @@ export interface CPlayer_GetTopAchievementsForGames_Request {
 }
 
 export interface CPlayer_GetTopAchievementsForGames_Response {
-  games?: Game[];
+  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
 }
 
-export interface Achievement {
+export interface CPlayer_GetTopAchievementsForGames_Response_Achievement {
   bit?: number;
   desc?: string;
   hidden?: boolean;
@@ -362,8 +362,8 @@ export interface Achievement {
   statid?: number;
 }
 
-export interface Game {
-  achievements?: Achievement[];
+export interface CPlayer_GetTopAchievementsForGames_Response_Game {
+  achievements?: CPlayer_GetGameAchievements_Response_Achievement[];
   appid?: number;
   total_achievements?: number;
 }
@@ -376,10 +376,10 @@ export interface CPlayer_GetAchievementsProgress_Request {
 }
 
 export interface CPlayer_GetAchievementsProgress_Response {
-  achievement_progress?: AchievementProgress[];
+  achievement_progress?: CPlayer_GetAchievementsProgress_Response_AchievementProgress[];
 }
 
-export interface AchievementProgress {
+export interface CPlayer_GetAchievementsProgress_Response_AchievementProgress {
   all_unlocked?: boolean;
   appid?: number;
   cache_time?: number;
@@ -395,10 +395,10 @@ export interface CPlayer_GetGameAchievements_Request {
 }
 
 export interface CPlayer_GetGameAchievements_Response {
-  achievements?: Achievement[];
+  achievements?: CPlayer_GetGameAchievements_Response_Achievement[];
 }
 
-export interface Achievement {
+export interface CPlayer_GetGameAchievements_Response_Achievement {
   hidden?: boolean;
   icon?: string;
   icon_gray?: string;
@@ -476,11 +476,11 @@ export interface CPlayer_GetProfileCustomization_Response {
   customizations?: ProfileCustomization[];
   profile_preferences?: ProfilePreferences;
   profile_theme?: ProfileTheme;
-  purchased_customizations?: PurchasedCustomization[];
+  purchased_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization[];
   slots_available?: number;
 }
 
-export interface PurchasedCustomization {
+export interface CPlayer_GetProfileCustomization_Response_PurchasedCustomization {
   customization_type?: ProfileCustomizationType;
   level?: number;
   purchaseid?: number;
@@ -491,10 +491,10 @@ export interface CPlayer_GetPurchasedProfileCustomizations_Request {
 }
 
 export interface CPlayer_GetPurchasedProfileCustomizations_Response {
-  purchased_customizations?: PurchasedCustomization[];
+  purchased_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization[];
 }
 
-export interface PurchasedCustomization {
+export interface CPlayer_GetPurchasedProfileCustomizations_Response_PurchasedCustomization {
   customization_type?: ProfileCustomizationType;
   purchaseid?: number;
 }
@@ -504,16 +504,16 @@ export interface CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Request {
 }
 
 export interface CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response {
-  purchased_customizations?: PurchasedCustomization[];
-  upgraded_customizations?: UpgradedCustomization[];
+  purchased_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization[];
+  upgraded_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_UpgradedCustomization[];
 }
 
-export interface PurchasedCustomization {
+export interface CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization {
   count?: number;
   customization_type?: ProfileCustomizationType;
 }
 
-export interface UpgradedCustomization {
+export interface CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_UpgradedCustomization {
   customization_type?: ProfileCustomizationType;
   level?: number;
 }
@@ -572,10 +572,10 @@ export interface CPlayer_GetLastPlayedTimes_Request {
 }
 
 export interface CPlayer_GetLastPlayedTimes_Response {
-  games?: Game[];
+  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
 }
 
-export interface Game {
+export interface CPlayer_GetLastPlayedTimes_Response_Game {
   appid?: number;
   first_deck_playtime?: number;
   first_linux_playtime?: number;
@@ -617,10 +617,10 @@ export interface CPlayer_GetNicknameList_Request {
 }
 
 export interface CPlayer_GetNicknameList_Response {
-  nicknames?: PlayerNickname[];
+  nicknames?: CPlayer_GetNicknameList_Response_PlayerNickname[];
 }
 
-export interface PlayerNickname {
+export interface CPlayer_GetNicknameList_Response_PlayerNickname {
   accountid?: number;
   nickname?: string;
 }
@@ -766,10 +766,10 @@ export interface CPlayer_GetDurationControl_Response {
 }
 
 export interface CPlayer_RecordDisconnectedPlaytime_Request {
-  play_sessions?: PlayHistory[];
+  play_sessions?: CPlayer_RecordDisconnectedPlaytime_Request_PlayHistory[];
 }
 
-export interface PlayHistory {
+export interface CPlayer_RecordDisconnectedPlaytime_Request_PlayHistory {
   appid?: number;
   offline?: boolean;
   owner?: number;
@@ -781,7 +781,7 @@ export interface CPlayer_RecordDisconnectedPlaytime_Response {
 }
 
 export interface CPlayer_LastPlayedTimes_Notification {
-  games?: Game[];
+  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
 }
 
 export interface CPlayer_FriendNicknameChanged_Notification {
@@ -881,10 +881,10 @@ export enum ProfileCustomizationType {
 
 export enum CommunityItemClass {
   Invalid = 0,
-  Badge = 1,
+  CPlayer_GetGameBadgeLevels_Response_Badge = 1,
   GameCard = 2,
   ProfileBackground = 3,
-  Emoticon = 4,
+  CPlayer_GetEmoticonList_Response_Emoticon = 4,
   BoosterPack = 5,
   Consumable = 6,
   GameGoo = 7,
