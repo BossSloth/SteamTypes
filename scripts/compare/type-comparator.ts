@@ -169,8 +169,9 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
     // Example test case 'union type with interface and different lengths'
     const sourceMembers = sourceNode.getTypeNodes();
 
-    for (const sourceMember of sourceMembers) {
-      const hasMatch = targetMembers.some(targetMember => compareTypes(targetMember, sourceMember));
+    for (const [index, sourceMember] of sourceMembers.entries()) {
+      const targetMember = targetMembers.at(index);
+      const hasMatch = targetMember ? compareTypes(targetMember, sourceMember) : false;
 
       if (!hasMatch) {
         targetUnion.replaceWithText(getText(sourceNode));

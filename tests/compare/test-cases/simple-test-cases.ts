@@ -243,4 +243,39 @@ export const simpleCases: Record<string, ComparatorTest> = {
         };
       }`,
   },
+  'union literal type with unknown': {
+    interfaceName: 'FooInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary: string, result: number } | { summary?: undefined, result: number };
+      }`,
+    source: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary: unknown, result: number } | { summary?: unknown, result: number };
+      }`,
+  },
+  'union literal type with unknown wrong optional': {
+    interfaceName: 'FooInterface',
+    target: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary: string, result: number } | { summary?: undefined, result: number };
+      }`,
+    source: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary?: unknown, result: number } | { summary?: unknown, result: number };
+      }`,
+  },
+  'union literal type with unknown and extra string': {
+    interfaceName: 'FooInterface',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary: string, result: number } | { summary?: undefined, result: number } | string;
+      }`,
+    source: dedent/* ts */`
+      export interface FooInterface {
+        foo: { summary: unknown, result: number } | { summary?: unknown, result: number } | string;
+      }`,
+  },
 };

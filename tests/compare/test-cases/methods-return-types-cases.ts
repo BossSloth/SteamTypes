@@ -133,4 +133,18 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'conditional return type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Promise<{ clipSummary: string; result: number; } | { result: number; clipSummary?: undefined; }>;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): Promise<{ clipSummary: unknown; result: number; } | { result: unknown; clipSummary?: undefined; }>;
+      }
+    `,
+  },
 };

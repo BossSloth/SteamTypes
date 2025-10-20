@@ -163,3 +163,14 @@ export interface SimpleInterface {
 +  existingProp: number | string;
 }"
 `;
+
+exports[`Comparator Simple Cases > union literal type with unknown wrong optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface FooInterface {
+-  foo: { summary: string, result: number } | { summary?: undefined, result: number };
++  foo: { summary?: string, result: number } | { summary?: undefined, result: number };
+}"
+`;
