@@ -1,16 +1,20 @@
 export interface OuterMessage {
   inner?: OuterMessage_InnerMessage;
+
   inner_list?: OuterMessage_InnerMessage[];
+
   outer_field?: string;
 }
 
 export interface OuterMessage_InnerMessage {
   inner_field?: string;
+
   value?: number;
 }
 
 export interface Container {
   name?: string;
+
   type?: ContainerType;
 }
 
@@ -22,12 +26,16 @@ export enum ContainerType {
 
 export interface Address {
   city?: string;
+
   country?: string;
+
   street?: string;
 }
 
 export interface Person {
   address?: Address;
+
   age?: number;
+
   name?: string;
 }

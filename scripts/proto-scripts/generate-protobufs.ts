@@ -2,7 +2,7 @@
  * Generate TypeScript interfaces from protobuf using protobufjs AST
  */
 
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
 import protobuf, { NamespaceBase } from 'protobufjs';
 import { propertyStringSorter } from '../convert-to-typescript/interface-generation';
@@ -14,6 +14,7 @@ const OUTPUT_DIR = join(ROOT_DIR, 'src', 'types', 'Protobufs', 'steam');
 
 const protobufFiles = [
   'steam\\webuimessages_gamerecording.proto',
+  'steam\\webuimessages_gamerecordingfiles.proto',
   'steam\\steammessages_base.proto',
   'steam\\steammessages_player.steamclient.proto',
 ];
@@ -47,6 +48,7 @@ let replacedNames = new Map<string, string>();
 let importedTypes = new Map<string, Set<string>>();
 let typeSourceFiles = new Map<string, string>();
 let typeNameMap = new Map<string, string>(); // Maps original type names to their prefixed names
+let existingComments = new Map<string, Map<string, string>>(); // Maps interface/enum names to field comments
 
 function convertProtoTypeToTS(field: protobuf.Field): string {
   let tsType: string;
@@ -143,11 +145,26 @@ function generateInterfaceDefinition(messageType: protobuf.Type, parentName?: st
 
   fields.sort(propertySorter);
 
+  // Get existing comments for this interface
+  const interfaceComments = existingComments.get(interfaceName);
+
   // Generate fields
   for (const field of fields) {
     const tsType = convertProtoTypeToTS(field);
     const optional = field.optional || !field.required ? '?' : '';
+
+    // Add existing comment if available
+    const comment = interfaceComments?.get(field.name);
+    if (comment !== undefined) {
+      lines.push(comment);
+    }
+
     lines.push(`  ${field.name}${optional}: ${tsType};`);
+
+    // Add empty line after field if not last field
+    if (field !== fields[fields.length - 1]) {
+      lines.push('');
+    }
   }
 
   lines.push('}');
@@ -259,13 +276,71 @@ function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], out
   }
 }
 
-function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: string[]): string {
+function parseExistingComments(filePath: string): void {
+  if (!existsSync(filePath)) {
+    return;
+  }
+
+  const content = readFileSync(filePath, 'utf-8');
+  const lines = content.split('\n');
+
+  let currentInterface: string | null = null;
+  let currentComment: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Detect interface/enum declaration
+    const interfaceMatch = trimmed.match(/^export\s+(?:interface|enum)\s+(\w+)/);
+    if (interfaceMatch !== null) {
+      currentInterface = interfaceMatch[1];
+      if (!existingComments.has(currentInterface)) {
+        existingComments.set(currentInterface, new Map());
+      }
+      currentComment = [];
+      continue;
+    }
+
+    // Collect JSDoc comments
+    if (trimmed.startsWith('/**') || trimmed.startsWith('*') || trimmed.startsWith('*/')) {
+      currentComment.push(line);
+      continue;
+    }
+
+    // Detect field with preceding comment
+    if (currentInterface !== null && currentComment.length > 0) {
+      const fieldMatch = trimmed.match(/^(\w+)\??:/);
+      if (fieldMatch !== null) {
+        const fieldName = fieldMatch[1];
+        const interfaceMap = existingComments.get(currentInterface);
+        if (interfaceMap !== undefined) {
+          interfaceMap.set(fieldName, currentComment.join('\n'));
+        }
+        currentComment = [];
+        continue;
+      }
+    }
+
+    // Reset comment if we hit a non-comment, non-field line
+    if (!trimmed.startsWith('//') && trimmed !== '' && !trimmed.match(/^\w+\??:/)) {
+      currentComment = [];
+    }
+  }
+}
+
+function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: string[], existingFilePath?: string): string {
   // Reset global state for each conversion
   referencedTypes = new Set<string>();
   replacedNames = new Map<string, string>();
   importedTypes = new Map<string, Set<string>>();
   typeSourceFiles = new Map<string, string>();
   typeNameMap = new Map<string, string>();
+  existingComments = new Map<string, Map<string, string>>();
+
+  // Parse existing comments if file exists
+  if (existingFilePath !== undefined) {
+    parseExistingComments(existingFilePath);
+  }
 
   const output: string[] = [];
 
@@ -331,18 +406,18 @@ function generateTypeScriptDefinitions(): void {
       root.loadSync(protoPath, {
         keepCase: true,
       });
-      const tsDefinitions = generateTypeScriptFromReflection(
-        root,
-        filteredFilePaths.filter(filePath => filePath !== protoFile),
-      );
 
       const outputFileName = protoFile.split('\\').pop()?.replace('.proto', '.ts');
-
       if (outputFileName === undefined) {
         throw new Error(`Failed to generate output file name for ${protoFile}`);
       }
-
       const outputFilePath = join(OUTPUT_DIR, outputFileName);
+
+      const tsDefinitions = generateTypeScriptFromReflection(
+        root,
+        filteredFilePaths.filter(filePath => filePath !== protoFile),
+        outputFilePath,
+      );
 
       // Write to file
       writeFileSync(outputFilePath, tsDefinitions, 'utf-8');

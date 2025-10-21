@@ -1,6 +1,8 @@
 export interface TaskInfo {
   name?: string;
+
   priority?: Priority;
+
   status?: Status;
 }
 
