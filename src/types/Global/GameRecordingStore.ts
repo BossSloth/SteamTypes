@@ -361,6 +361,9 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   LoadTimelinesForTestGame(e: unknown, t: unknown): void;
 
+  /** Function that builds URLs for loading timeline data */
+  m_fnTimelineURLBuilder?(timelineId: string): string;
+
   /** If timeline is active, converts absolute offset to relative-to-end offset */
   MakeRelativeToTimelineEndIfActive(timelineId: string, offsetMS: number): number;
 
@@ -385,9 +388,6 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   /** Clip ID if this loader is for a specific clip */
   m_clipID: string | undefined;
-
-  /** Function that builds URLs for loading timeline data */
-  m_fnTimelineURLBuilder: ((timelineId: string) => string) | undefined;
 
   /** Game ID for the recordings */
   m_gameID: string;

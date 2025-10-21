@@ -44,3 +44,18 @@ export interface Foo {
   bar2(): number[];
 }"
 `;
+
+exports[`Comparator Return Types Cases > type literal and interface return type different 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -4,6 +4,8 @@
+
+export interface Bar {
+  age: number;
+
+  height: number;
++
++  name: string;
+}"
+`;

@@ -147,4 +147,73 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'void undefined return type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): void;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): undefined;
+      }
+    `,
+  },
+  'promise void undefined return type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Promise<void>;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): Promise<undefined>;
+      }
+    `,
+  },
+  'type literal and interface return type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Bar;
+      }
+
+      export interface Bar {
+        age: number;
+
+        name: string;
+
+        height: number;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): { name: string, age: number, height: number };
+      }
+    `,
+  },
+  'type literal and interface return type different': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Bar;
+      }
+
+      export interface Bar {
+        age: number;
+
+        height: number;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): { name: string, age: number, height: number };
+      }
+    `,
+  },
 };

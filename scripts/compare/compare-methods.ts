@@ -1,4 +1,5 @@
 import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
+import { updatePropertyModifiers } from './shared';
 import { compareTypes } from './type-comparator';
 
 /**
@@ -7,10 +8,7 @@ import { compareTypes } from './type-comparator';
  * @param sourceMethod The method to use as the source of truth
  */
 export function compareAndCorrectMethodTypes(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
-  // Check if the method has a question token (optional method)
-  if (sourceMethod.hasQuestionToken() !== targetMethod.hasQuestionToken()) {
-    targetMethod.setHasQuestionToken(sourceMethod.hasQuestionToken());
-  }
+  updatePropertyModifiers(targetMethod, sourceMethod);
 
   // If it has the @native jsDoc don't compare
   if (sourceMethod.getJsDocs().some(doc => doc.getTags().some(tag => tag.getTagName() === 'native'))) {
@@ -110,10 +108,7 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
     return;
   }
 
-  // Update question token
-  if (sourceParam.hasQuestionToken() && !targetParam.hasQuestionToken()) {
-    targetParam.setHasQuestionToken(sourceParam.hasQuestionToken());
-  }
+  updatePropertyModifiers(targetParam, sourceParam);
 
   const typesAreEqual = sourceTypeNode !== undefined && targetTypeNode !== undefined
     && compareTypes(targetTypeNode, sourceTypeNode);

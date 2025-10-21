@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import { ArrayTypeNode, EnumDeclaration, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
@@ -37,6 +38,8 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return handleTargetTypeQuery(targetNode, sourceNode);
   } else if (Node.isTypeLiteral(targetNode)) {
     return handleTargetTypeLiteral(targetNode, sourceNode);
+  } else if (targetNode.isKind(ts.SyntaxKind.VoidKeyword) && Node.isUndefinedKeyword(sourceNode)) {
+    return true;
   }
 
   if (Node.isUnionTypeNode(sourceNode)) {
@@ -130,6 +133,17 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
   }
 
   if (isImportedType(currentTargetSourceFile, targetTypeReference)) {
+    return true;
+  }
+
+  if (Node.isTypeLiteral(sourceNode) && Node.isInterfaceDeclaration(targetDefinitionNode)) {
+    // Target=TypeReference, Source=TypeLiteral
+    // Example test case 'type literal and interface return type'
+    const propertiesChanged = compareAndCorrectMembers(targetDefinitionNode, sourceNode);
+    if (propertiesChanged) {
+      orderMembers(targetDefinitionNode);
+    }
+
     return true;
   }
 

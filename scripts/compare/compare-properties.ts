@@ -1,6 +1,6 @@
 import { EnumDeclaration, EnumMember, PropertySignature, TypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
-import { currentTargetSourceFile, getJsDocTagValues, isImportedType } from './shared';
+import { currentTargetSourceFile, getJsDocTagValues, isImportedType, updatePropertyModifiers } from './shared';
 import * as TypeComparator from './type-comparator';
 
 const CustomJsDocTags = {
@@ -170,16 +170,4 @@ function updateTypeIfNeeded(
   }
 
   return false;
-}
-
-function updatePropertyModifiers(targetProp: PropertySignature, sourceProp: PropertySignature): void {
-  // Update optional status if different
-  if (!targetProp.hasQuestionToken() && sourceProp.hasQuestionToken()) {
-    targetProp.setHasQuestionToken(sourceProp.hasQuestionToken());
-  }
-
-  // Update readonly status if different
-  if (targetProp.isReadonly() !== sourceProp.isReadonly()) {
-    targetProp.setIsReadonly(sourceProp.isReadonly());
-  }
 }

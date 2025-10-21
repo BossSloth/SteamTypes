@@ -186,4 +186,31 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
+  'target optional method': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions?(options: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: string): string
+    }
+  `,
+  },
+  'source optional method': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+    export interface Foo {
+      GetOptions(options: string): string
+    }
+  `,
+    source: dedent/* ts */`
+    export interface Foo {
+      GetOptions?(options: string): string
+    }
+  `,
+  },
 };

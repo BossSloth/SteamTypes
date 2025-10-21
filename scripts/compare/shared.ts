@@ -1,4 +1,4 @@
-import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
+import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, QuestionTokenableNode, ReadonlyableNode, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
 import { Logger } from '../logger';
 
 /**
@@ -89,4 +89,20 @@ export function getIdentifierName(node: Node | Type | TypeNode): string {
   }
 
   return text;
+}
+
+export function updatePropertyModifiers(target: QuestionTokenableNode | ReadonlyableNode, source: QuestionTokenableNode | ReadonlyableNode): void {
+  if ('hasQuestionToken' in target && 'hasQuestionToken' in source) {
+    // Update optional status if different
+    if (!target.hasQuestionToken() && source.hasQuestionToken()) {
+      target.setHasQuestionToken(source.hasQuestionToken());
+    }
+  }
+
+  if ('isReadonly' in target && 'isReadonly' in source) {
+    // Update readonly status if different
+    if (target.isReadonly() !== source.isReadonly()) {
+      target.setIsReadonly(source.isReadonly());
+    }
+  }
 }
