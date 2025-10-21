@@ -9,7 +9,7 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */`window.appAchievementProgressCache`, 'window.appAchievementProgressCache.RequestCacheUpdate()'),
   GMap('PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
   GMap('UrlStore', 'UrlStore', /* ts */`window.urlStore`),
-  GMap('GameRecordingService', 'GameRecordingService', /* ts */`window.g_GRS`),
+  GMap('GameRecordingStore', 'GameRecordingStore', /* ts */`window.g_GRS`),
 
   // { file: 'Global/AppActivityStore', object: 'window.appActivityStore', srcName: 'AppActivityStore' },
   // NOTE: have the friend list open after todo is fixed

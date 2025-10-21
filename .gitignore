@@ -6,3 +6,4 @@ tsconfig.tsbuildinfo
 .profiler/
 coverage/
 diffs/
+chunk~*.js

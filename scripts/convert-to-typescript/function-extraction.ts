@@ -263,7 +263,8 @@ function extractReturnType(initializer: FunctionExpression | ArrowFunction): str
     .replaceAll('<any>', '<unknown>')
     .replaceAll('<any, any>', '<unknown, unknown>')
     .replaceAll(': any', ': unknown')
-    .replaceAll('never[];', 'unknown[];');
+    .replaceAll('never[];', 'unknown[];')
+    .replaceAll('=> any', '=> unknown');
 
   switch (returnType) {
     case 'any':

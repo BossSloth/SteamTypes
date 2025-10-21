@@ -129,6 +129,10 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
     func: () => ({ a: 1, b: 'string', c: Math.random }),
     expected: 'returnComplexObject(): { a: number; b: string; c: () => number; };',
   },
+  returnCallback: {
+    func: x => () => { return x; },
+    expected: 'returnCallback(x: unknown): () => unknown;',
+  },
   // #endregion
 
   // #region Parameters
