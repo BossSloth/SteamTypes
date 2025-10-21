@@ -145,7 +145,7 @@ type ProtoAdders<T> = {
  * @note You probably don't want to use most of the properties here and
  * instead use the {@link ProtobufInterface.toObject()} method to convert the protobuf message to a plain object
  */
-type ProtobufInterface<T> = ProtoGetters<T> & ProtoSetters<T> & ProtoAdders<T> & SimpleJsPbMessage<T>;
+export type ProtobufInterface<T> = ProtoGetters<T> & ProtoSetters<T> & ProtoAdders<T> & SimpleJsPbMessage<T>;
 
 export interface SimpleJsPbMessage<T> {
   clone(): this;
