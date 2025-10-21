@@ -1,3 +1,4 @@
+/* eslint-disable no-unassigned-vars */
 import { TestFunction } from './shared';
 
 // #region Map Test Functions
@@ -98,6 +99,13 @@ const iterableTestFunctions: Record<string, TestFunction> = {
       yield 3;
     },
     expected: 'simpleGenerator(): Generator<1 | 2 | 3, void, unknown>;',
+  },
+  unknownGenerator: {
+    func: function* unknownGenerator() {
+      let i;
+      yield i;
+    },
+    expected: 'unknownGenerator(): Generator<unknown, void, unknown>;',
   },
   generatorWithReturn: {
     func: function* generatorWithReturn() {

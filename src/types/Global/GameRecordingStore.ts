@@ -302,11 +302,11 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   GetGlobalTimelineEndMS(): unknown;
 
-  GetIteratorEntriesWithin(e: unknown, t: unknown): Generator<any, void, unknown>;
+  GetIteratorEntriesWithin(e: unknown, t: unknown): Generator<unknown, void, unknown>;
 
   GetIteratorGameMode(e: unknown): unknown;
 
-  GetIteratorGameModesWithin(e: unknown, t: unknown): Generator<any, void, unknown>;
+  GetIteratorGameModesWithin(e: unknown, t: unknown): Generator<unknown, void, unknown>;
 
   GetIteratorTimelineState(e: unknown): unknown;
 

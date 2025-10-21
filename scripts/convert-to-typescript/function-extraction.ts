@@ -270,7 +270,8 @@ function extractReturnType(initializer: FunctionExpression | ArrowFunction): str
     .replaceAll('<any, any>', '<unknown, unknown>')
     .replaceAll(': any', ': unknown')
     .replaceAll('never[];', 'unknown[];')
-    .replaceAll('=> any', '=> unknown');
+    .replaceAll('=> any', '=> unknown')
+    .replaceAll('Generator<any', 'Generator<unknown');
 
   switch (returnType) {
     case 'any':
