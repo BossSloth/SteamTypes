@@ -161,6 +161,14 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
    */
   defaultParameters(a: unknown, b?: number, c?: string): string;`,
   },
+  middleDefaultParameters: {
+    func: (a, b = 10, c?) => a + b + c,
+    expected: dedent/* ts */`
+  /**
+   * @param b default: 10
+   */
+  middleDefaultParameters(a: unknown, b?: number, c?: unknown): unknown;`,
+  },
   complexDefaultParameters: {
     func: (a = {}, b = [], c = () => {}) => typeof c,
     expected: dedent/* ts */`

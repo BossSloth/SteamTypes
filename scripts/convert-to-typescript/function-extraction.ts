@@ -211,10 +211,12 @@ function extractAndStoreFunctionInfo(
 function extractParams(initializer: ParameteredNode): MappedParam[] {
   const parameters = initializer.getParameters();
 
+  let foundOptional = false;
+
   return parameters.map((param) => {
     let paramName = param.getName();
     let paramType = param.getType().getText(undefined, typeFormatFlags);
-    let isOptional = param.isOptional();
+    let isOptional = param.isOptional() || foundOptional;
     let defaultValue = param.getInitializer()?.getText();
     // Remove newlines and trim spaces
     defaultValue = defaultValue?.replace(/\s+/g, ' ');
@@ -238,6 +240,10 @@ function extractParams(initializer: ParameteredNode): MappedParam[] {
         break;
       default:
         break;
+    }
+
+    if (isOptional) {
+      foundOptional = true;
     }
 
     return {

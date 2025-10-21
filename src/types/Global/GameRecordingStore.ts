@@ -525,7 +525,7 @@ export interface RgListeners {
   CanModeAddMarker(): boolean;
 
   /** @param t default: 0 */
-  ChangePlaybackRecording(e: unknown, t?: number, r: unknown): undefined;
+  ChangePlaybackRecording(e: unknown, t?: number, r?: unknown): undefined;
 
   ClearPlaybackStop(): void;
 
@@ -1127,7 +1127,7 @@ export interface RgTimelineOffsets {
 
   nDurationMS: number;
 
-  phaseOffsets: never;
+  phaseOffsets: unknown[];
 
   recordingOffsets: RecordingOffsets[];
 
@@ -1196,12 +1196,14 @@ export interface RgListeners2 {
   m_maskBounds: number[];
 }
 
-/** @generated */
 export enum EPlayerError {
-  EPlayerError0 = 0,
+  None = 0,
+  DownloadFailed = 1,
+  PlaybackError = 2,
+  MediaTypeError = 3,
 }
 
-/** @generated */
 export enum ESeekType {
-  ESeekType0 = 0,
+  Absolute = 0,
+  FromAvailableStart = 1,
 }
