@@ -90,9 +90,9 @@ export interface CMsgProtoBufHeader {
   wg_token?: string;
 }
 
-export enum SessionDisposition {
-  SessionDispositionNormal = 0,
-  SessionDispositionDisconnect = 1,
+export enum CMsgProtoBufHeader_SessionDisposition {
+  ESessionDispositionNormal = 0,
+  ESessionDispositionDisconnect = 1,
 }
 
 export interface CMsgKubeRPCPacket {

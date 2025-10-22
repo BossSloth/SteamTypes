@@ -107,9 +107,11 @@ function getImportPathForType(typeName: string): string | null {
   return null;
 }
 
-function generateEnumDefinition(enumType: protobuf.Enum): string {
-  // Get the normalized name (already tracked in mapAllTypesToFiles)
-  const enumName = replacedNames.get(enumType.name) ?? enumType.name;
+function generateEnumDefinition(enumType: protobuf.Enum, parentName?: string): string {
+  // Generate the enum name with parent prefix if nested
+  const baseEnumName = parentName !== undefined && parentName !== '' ? `${parentName}_${enumType.name}` : enumType.name;
+  // Get the normalized name (already tracked in mapAllTypesToFiles with E prefix removal)
+  const enumName = replacedNames.get(baseEnumName) ?? baseEnumName;
 
   const lines: string[] = [];
   lines.push(`export enum ${enumName} {`);
@@ -203,13 +205,20 @@ function mapAllTypesToFiles(ns: protobuf.Namespace, parentName?: string): void {
 
   for (const enumType of ns.nestedArray.filter((n): n is protobuf.Enum => n instanceof protobuf.Enum)) {
     const { filename } = enumType;
+    // Use prefixed name for nested enums to avoid collisions
+    const fullEnumName = parentName !== undefined && parentName !== '' ? `${parentName}_${enumType.name}` : enumType.name;
     if (filename !== null) {
-      typeSourceFiles.set(enumType.name, filename);
+      typeSourceFiles.set(fullEnumName, filename);
+      // Also store the base name if it's not a nested enum
+      if (parentName === undefined || parentName === '') {
+        typeSourceFiles.set(enumType.name, filename);
+      }
     }
-    // Track enum renames (E prefix removal)
+    // Track enum renames (E prefix removal) - use the full name for nested enums
     if (enumType.name.startsWith('E')) {
       const normalizedName = enumType.name.slice(1);
-      replacedNames.set(enumType.name, normalizedName);
+      const fullNormalizedName = parentName !== undefined && parentName !== '' ? `${parentName}_${normalizedName}` : normalizedName;
+      replacedNames.set(fullEnumName, fullNormalizedName);
     }
   }
 }
@@ -272,13 +281,15 @@ function processNamespace(ns: protobuf.Namespace, output: string[], parentName?:
 
   // Process enums
   for (const enumType of ns.nestedArray.filter((n): n is protobuf.Enum => n instanceof protobuf.Enum)) {
+    // Generate the full enum name with parent prefix if nested
+    const fullEnumName = parentName !== undefined && parentName !== '' ? `${parentName}_${enumType.name}` : enumType.name;
     // Skip if this enum should be imported from another file
-    const importPath = getImportPathForType(enumType.name);
+    const importPath = getImportPathForType(fullEnumName);
     if (importPath !== null) {
       continue;
     }
 
-    output.push(generateEnumDefinition(enumType));
+    output.push(generateEnumDefinition(enumType, parentName));
     output.push(''); // Empty line
   }
 }

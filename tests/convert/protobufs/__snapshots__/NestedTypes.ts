@@ -18,7 +18,7 @@ export interface Container {
   type?: Container_ContainerType;
 }
 
-export enum ContainerType {
+export enum Container_ContainerType {
   CONTAINER_TYPE_UNSPECIFIED = 0,
   CONTAINER_TYPE_BOX = 1,
   CONTAINER_TYPE_CRATE = 2,
