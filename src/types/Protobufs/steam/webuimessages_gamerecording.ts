@@ -1,5 +1,5 @@
 import { ExportCodec, GameRecordingType } from './enums';
-import { CGameRecordingTimelineEvent, CGameRecordingTimelineMetadata, CPhaseAttribute, CTimelineTag, Tag } from './webuimessages_gamerecordingfiles';
+import { CGameRecordingTimelineEvent, CGameRecordingTimelineMetadata, CPhaseAttribute, CTimelineTag } from './webuimessages_gamerecordingfiles';
 
 export interface CGameRecording_GetAppsWithBackgroundVideo_Request {
 }

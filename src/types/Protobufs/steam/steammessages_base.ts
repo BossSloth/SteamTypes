@@ -65,7 +65,7 @@ export interface CMsgProtoBufHeader {
 
   seq_num?: number;
 
-  session_disposition?: SessionDisposition;
+  session_disposition?: CMsgProtoBufHeader_SessionDisposition;
 
   steamid?: string;
 

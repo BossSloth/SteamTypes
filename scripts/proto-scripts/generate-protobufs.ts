@@ -67,7 +67,16 @@ function convertProtoTypeToTS(field: protobuf.Field): string {
         type = type.get(name) as NamespaceBase;
       }
 
-      tsType = type.name;
+      // For nested types, construct the full prefixed name
+      // by building the parent chain
+      const parentChain: string[] = [];
+      let current = type.parent;
+      while (current !== null && current !== field.root && current instanceof protobuf.Type) {
+        parentChain.unshift(current.name);
+        current = current.parent;
+      }
+
+      tsType = parentChain.length > 0 ? `${parentChain.join('_')}_${type.name}` : type.name;
     }
     referencedTypes.add(tsType);
   }
@@ -170,20 +179,26 @@ function propertySorter(a: protobuf.Field, b: protobuf.Field): number {
   return propertyStringSorter(a.name, b.name);
 }
 
-function mapAllTypesToFiles(ns: protobuf.Namespace): void {
+function mapAllTypesToFiles(ns: protobuf.Namespace, parentName?: string): void {
   for (const messageType of ns.nestedArray.filter((n): n is protobuf.Type => n instanceof protobuf.Type)) {
     const { filename } = messageType;
+    // Use prefixed name for nested types to avoid collisions
+    const fullName = parentName !== undefined && parentName !== '' ? `${parentName}_${messageType.name}` : messageType.name;
     if (filename !== null) {
-      typeSourceFiles.set(messageType.name, filename);
+      typeSourceFiles.set(fullName, filename);
+      // Also store the base name if it's not a nested type
+      if (parentName === undefined || parentName === '') {
+        typeSourceFiles.set(messageType.name, filename);
+      }
     }
     if (messageType.nested !== undefined) {
-      mapAllTypesToFiles(messageType);
+      mapAllTypesToFiles(messageType, fullName);
     }
   }
 
   for (const nestedNs of ns.nestedArray.filter((n): n is protobuf.Namespace =>
     n instanceof protobuf.Namespace && !(n instanceof protobuf.Type) && !(n instanceof protobuf.Enum))) {
-    mapAllTypesToFiles(nestedNs);
+    mapAllTypesToFiles(nestedNs, parentName);
   }
 
   for (const enumType of ns.nestedArray.filter((n): n is protobuf.Enum => n instanceof protobuf.Enum)) {

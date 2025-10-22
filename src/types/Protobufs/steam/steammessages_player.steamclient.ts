@@ -137,7 +137,7 @@ export interface CPlayer_GetOwnedGames_Request {
 export interface CPlayer_GetOwnedGames_Response {
   game_count?: number;
 
-  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
+  games?: CPlayer_GetOwnedGames_Response_Game[];
 }
 
 export interface CPlayer_GetOwnedGames_Response_Game {
@@ -472,7 +472,7 @@ export interface CPlayer_GetTopAchievementsForGames_Request {
 }
 
 export interface CPlayer_GetTopAchievementsForGames_Response {
-  games?: CPlayer_GetLastPlayedTimes_Response_Game[];
+  games?: CPlayer_GetTopAchievementsForGames_Response_Game[];
 }
 
 export interface CPlayer_GetTopAchievementsForGames_Response_Achievement {
@@ -494,7 +494,7 @@ export interface CPlayer_GetTopAchievementsForGames_Response_Achievement {
 }
 
 export interface CPlayer_GetTopAchievementsForGames_Response_Game {
-  achievements?: CPlayer_GetGameAchievements_Response_Achievement[];
+  achievements?: CPlayer_GetTopAchievementsForGames_Response_Achievement[];
 
   appid?: number;
 
@@ -657,7 +657,7 @@ export interface CPlayer_GetProfileCustomization_Response {
 
   profile_theme?: ProfileTheme;
 
-  purchased_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization[];
+  purchased_customizations?: CPlayer_GetProfileCustomization_Response_PurchasedCustomization[];
 
   slots_available?: number;
 }
@@ -675,7 +675,7 @@ export interface CPlayer_GetPurchasedProfileCustomizations_Request {
 }
 
 export interface CPlayer_GetPurchasedProfileCustomizations_Response {
-  purchased_customizations?: CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_PurchasedCustomization[];
+  purchased_customizations?: CPlayer_GetPurchasedProfileCustomizations_Response_PurchasedCustomization[];
 }
 
 export interface CPlayer_GetPurchasedProfileCustomizations_Response_PurchasedCustomization {

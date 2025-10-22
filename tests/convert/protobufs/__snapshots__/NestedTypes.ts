@@ -15,7 +15,7 @@ export interface OuterMessage_InnerMessage {
 export interface Container {
   name?: string;
 
-  type?: ContainerType;
+  type?: Container_ContainerType;
 }
 
 export enum ContainerType {
