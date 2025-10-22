@@ -2,6 +2,7 @@ import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
+import { GameRecordingStore } from '../types/Global/GameRecordingStore';
 import { PopupManager } from '../types/Global/PopupManager';
 import { SteamUIStore } from '../types/Global/SteamUIStore';
 import { UrlStore } from '../types/Global/UrlStore';
@@ -47,7 +48,7 @@ declare global {
   let g_EventCalendarMap: unknown;
   let g_EventCalendarTrackingStore: unknown;
   let g_FriendsUIApp: unknown;
-  let g_GRS: unknown;
+  let g_GRS: GameRecordingStore;
   let g_PartnerEventStore: unknown;
   let g_PopupManager: PopupManager;
   let gameReleaseStore: unknown;
