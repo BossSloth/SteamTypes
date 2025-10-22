@@ -62,44 +62,44 @@ export enum ContentCheckProvider {
 }
 
 export enum ProfileCustomizationType {
-  ProfileCustomizationTypeInvalid = 0,
-  ProfileCustomizationTypeRareAchievementShowcase = 1,
-  ProfileCustomizationTypeGameCollector = 2,
-  ProfileCustomizationTypeItemShowcase = 3,
-  ProfileCustomizationTypeTradeShowcase = 4,
-  ProfileCustomizationTypeBadges = 5,
-  ProfileCustomizationTypeFavoriteGame = 6,
-  ProfileCustomizationTypeScreenshotShowcase = 7,
-  ProfileCustomizationTypeCustomText = 8,
-  ProfileCustomizationTypeFavoriteGroup = 9,
-  ProfileCustomizationTypeRecommendation = 10,
-  ProfileCustomizationTypeWorkshopItem = 11,
-  ProfileCustomizationTypeMyWorkshop = 12,
-  ProfileCustomizationTypeArtworkShowcase = 13,
-  ProfileCustomizationTypeVideoShowcase = 14,
-  ProfileCustomizationTypeGuides = 15,
-  ProfileCustomizationTypeMyGuides = 16,
-  ProfileCustomizationTypeAchievements = 17,
-  ProfileCustomizationTypeGreenlight = 18,
-  ProfileCustomizationTypeMyGreenlight = 19,
-  ProfileCustomizationTypeSalien = 20,
-  ProfileCustomizationTypeLoyaltyRewardReactions = 21,
-  ProfileCustomizationTypeSingleArtworkShowcase = 22,
-  ProfileCustomizationTypeAchievementsCompletionist = 23,
-  ProfileCustomizationTypeReplay = 24,
+  Invalid = 0,
+  RareAchievementShowcase = 1,
+  GameCollector = 2,
+  ItemShowcase = 3,
+  TradeShowcase = 4,
+  Badges = 5,
+  FavoriteGame = 6,
+  ScreenshotShowcase = 7,
+  CustomText = 8,
+  FavoriteGroup = 9,
+  Recommendation = 10,
+  WorkshopItem = 11,
+  MyWorkshop = 12,
+  ArtworkShowcase = 13,
+  VideoShowcase = 14,
+  Guides = 15,
+  MyGuides = 16,
+  Achievements = 17,
+  Greenlight = 18,
+  MyGreenlight = 19,
+  Salien = 20,
+  LoyaltyRewardReactions = 21,
+  SingleArtworkShowcase = 22,
+  AchievementsCompletionist = 23,
+  Replay = 24,
 }
 
 export enum PublishedFileStorageSystem {
-  PublishedFileStorageSystemInvalid = 0,
-  PublishedFileStorageSystemLegacyCloud = 1,
-  PublishedFileStorageSystemDepot = 2,
-  PublishedFileStorageSystemUGCCloud = 3,
+  Invalid = 0,
+  LegacyCloud = 1,
+  Depot = 2,
+  UGCCloud = 3,
 }
 
 export enum CloudStoragePersistState {
-  CloudStoragePersistStatePersisted = 0,
-  CloudStoragePersistStateForgotten = 1,
-  CloudStoragePersistStateDeleted = 2,
+  Persisted = 0,
+  Forgotten = 1,
+  Deleted = 2,
 }
 
 export enum SDCardFormatStage {
@@ -472,20 +472,20 @@ export enum ProvideDeckFeedbackPreference {
 }
 
 export enum TouchGesture {
-  TouchGestureNone = 0,
-  TouchGestureTouch = 1,
-  TouchGestureTap = 2,
-  TouchGestureDoubleTap = 3,
-  TouchGestureShortPress = 4,
-  TouchGestureLongPress = 5,
-  TouchGestureLongTap = 6,
-  TouchGestureTwoFingerTap = 7,
-  TouchGestureTapCancelled = 8,
-  TouchGesturePinchBegin = 9,
-  TouchGesturePinchUpdate = 10,
-  TouchGesturePinchEnd = 11,
-  TouchGestureFlingStart = 12,
-  TouchGestureFlingCancelled = 13,
+  None = 0,
+  Touch = 1,
+  Tap = 2,
+  DoubleTap = 3,
+  ShortPress = 4,
+  LongPress = 5,
+  LongTap = 6,
+  TwoFingerTap = 7,
+  TapCancelled = 8,
+  PinchBegin = 9,
+  PinchUpdate = 10,
+  PinchEnd = 11,
+  FlingStart = 12,
+  FlingCancelled = 13,
 }
 
 export enum SessionPersistence {
@@ -514,36 +514,36 @@ export enum ForumType {
 }
 
 export enum CommentThreadType {
-  CommentThreadTypeInvalid = 0,
-  CommentThreadTypeScreenshot_Deprecated = 1,
-  CommentThreadTypeWorkshopAccount_Developer = 2,
-  CommentThreadTypeWorkshopAccount_Public = 3,
-  CommentThreadTypePublishedFile_Developer = 4,
-  CommentThreadTypePublishedFile_Public = 5,
-  CommentThreadTypeTest = 6,
-  CommentThreadTypeForumTopic = 7,
-  CommentThreadTypeRecommendation = 8,
-  CommentThreadTypeVideo_Deprecated = 9,
-  CommentThreadTypeProfile = 10,
-  CommentThreadTypeNewsPost = 11,
-  CommentThreadTypeClan = 12,
-  CommentThreadTypeClanAnnouncement = 13,
-  CommentThreadTypeClanEvent = 14,
-  CommentThreadTypeUserStatusPublished = 15,
-  CommentThreadTypeUserReceivedNewGame = 16,
-  CommentThreadTypePublishedFile_Announcement = 17,
-  CommentThreadTypeModeratorMessage = 18,
-  CommentThreadTypeClanCuratedApp = 19,
-  CommentThreadTypeQAndASession = 20,
-  CommentThreadTypeMax = 21,
+  Invalid = 0,
+  Screenshot_Deprecated = 1,
+  WorkshopAccount_Developer = 2,
+  WorkshopAccount_Public = 3,
+  PublishedFile_Developer = 4,
+  PublishedFile_Public = 5,
+  Test = 6,
+  ForumTopic = 7,
+  Recommendation = 8,
+  Video_Deprecated = 9,
+  Profile = 10,
+  NewsPost = 11,
+  Clan = 12,
+  ClanAnnouncement = 13,
+  ClanEvent = 14,
+  UserStatusPublished = 15,
+  UserReceivedNewGame = 16,
+  PublishedFile_Announcement = 17,
+  ModeratorMessage = 18,
+  ClanCuratedApp = 19,
+  QAndASession = 20,
+  Max = 21,
 }
 
 export enum BroadcastPermission {
-  BroadcastPermissionDisabled = 0,
-  BroadcastPermissionFriendsApprove = 1,
-  BroadcastPermissionFriendsAllowed = 2,
-  BroadcastPermissionPublic = 3,
-  BroadcastPermissionSubscribers = 4,
+  Disabled = 0,
+  FriendsApprove = 1,
+  FriendsAllowed = 2,
+  Public = 3,
+  Subscribers = 4,
 }
 
 export enum BroadcastEncoderSetting {
@@ -552,9 +552,9 @@ export enum BroadcastEncoderSetting {
 }
 
 export enum CloudGamingPlatform {
-  CloudGamingPlatformNone = 0,
-  CloudGamingPlatformValve = 1,
-  CloudGamingPlatformNVIDIA = 2,
+  None = 0,
+  Valve = 1,
+  NVIDIA = 2,
 }
 
 export enum CompromiseDetectionType {
@@ -569,16 +569,16 @@ export enum CompromiseDetectionType {
 }
 
 export enum AsyncGameSessionUserState {
-  AsyncGameSessionUserStateUnknown = -1,
-  AsyncGameSessionUserStateWaitingForOthers = 0,
-  AsyncGameSessionUserStateReadyForAction = 1,
-  AsyncGameSessionUserStateDone = 2,
+  Unknown = -1,
+  WaitingForOthers = 0,
+  ReadyForAction = 1,
+  Done = 2,
 }
 
 export enum AsyncGameSessionUserVisibility {
-  AsyncGameSessionUserVisibilityEnvelopeAndSessionList = 0,
-  AsyncGameSessionUserVisibilitySessionListOnly = 1,
-  AsyncGameSessionUserVisibilityDismissed = 2,
+  EnvelopeAndSessionList = 0,
+  SessionListOnly = 1,
+  Dismissed = 2,
 }
 
 export enum GameRecordingType {

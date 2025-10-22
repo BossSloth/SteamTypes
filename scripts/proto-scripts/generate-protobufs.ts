@@ -14,6 +14,7 @@ const PROTOBUF_FILES = [
   'steam\\steammessages_base.proto',
   'steam\\steammessages_player.steamclient.proto',
   'steam\\enums.proto',
+  'steam\\steammessages_appoverview.proto',
 ];
 
 const TYPE_MAP: Record<string, string> = {
@@ -117,7 +118,7 @@ function normalizeEnumValueName(valueName: string, enumTypeName: string): string
     normalized = normalized.slice(2);
   }
   if (normalized.includes(enumTypeName)) {
-    normalized = normalized.replace(`${enumTypeName}_`, '');
+    normalized = normalized.replace(`${enumTypeName}_`, '').replace(new RegExp(`^${enumTypeName}`), '');
   }
 
   return normalized;

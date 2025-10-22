@@ -1058,12 +1058,12 @@ export interface CPlayer_PrivacySettingsChanged_Notification {
 }
 
 export enum ProfileCustomizationStyle {
-  ProfileCustomizationStyleDefault = 0,
-  ProfileCustomizationStyleSelected = 1,
-  ProfileCustomizationStyleRarest = 2,
-  ProfileCustomizationStyleMostRecent = 3,
-  ProfileCustomizationStyleRandom = 4,
-  ProfileCustomizationStyleHighestRated = 5,
+  Default = 0,
+  Selected = 1,
+  Rarest = 2,
+  MostRecent = 3,
+  Random = 4,
+  HighestRated = 5,
 }
 
 export enum AgreementType {
@@ -1073,14 +1073,14 @@ export enum AgreementType {
 }
 
 export enum NotificationSetting {
-  NotificationSettingNotifyUseDefault = 0,
-  NotificationSettingAlways = 1,
-  NotificationSettingNever = 2,
+  NotifyUseDefault = 0,
+  Always = 1,
+  Never = 2,
 }
 
 export enum TextFilterSetting {
-  TextFilterSettingSteamLabOptedOut = 0,
-  TextFilterSettingEnabled = 1,
-  TextFilterSettingEnabledAllowProfanity = 2,
-  TextFilterSettingDisabled = 3,
+  SteamLabOptedOut = 0,
+  Enabled = 1,
+  EnabledAllowProfanity = 2,
+  Disabled = 3,
 }

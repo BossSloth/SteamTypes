@@ -108,7 +108,7 @@ export async function updateGlobals(
   logger: Logger,
 ): Promise<void> {
   const startTime = performance.now();
-  logger.log(chalk.bold.blue('\n🔄 Updating Globals File...\n'));
+  logger.log(chalk.blue('\n🔄 Updating Globals File...\n'));
 
   // Get actual window properties from Steam
   const { steamProperties } = await getWindowProperties(sharedJsClient, logger);

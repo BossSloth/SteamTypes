@@ -91,8 +91,8 @@ export interface CMsgProtoBufHeader {
 }
 
 export enum CMsgProtoBufHeader_SessionDisposition {
-  ESessionDispositionNormal = 0,
-  ESessionDispositionDisconnect = 1,
+  Normal = 0,
+  Disconnect = 1,
 }
 
 export interface CMsgKubeRPCPacket {
