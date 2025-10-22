@@ -38,8 +38,7 @@ export interface DataCollection_DataPoint {
   y?: number;
 }
 
-export interface EmptyMessage {
-}
+export interface EmptyMessage { }
 
 export enum GameState {
   Invalid = 0,
