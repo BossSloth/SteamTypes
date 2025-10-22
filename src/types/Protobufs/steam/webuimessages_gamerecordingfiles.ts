@@ -1,3 +1,5 @@
+import { GameRecordingType } from './enums';
+
 export interface CGameRecordingFile {
   postgame_events?: CGameRecordingPostGameSummary[];
 
@@ -180,15 +182,4 @@ export interface CPhaseAttribute {
   priority?: number;
 
   value?: string;
-}
-
-export interface WebUINoResponse {
-}
-
-export enum GameRecordingType {
-  Unknown = 0,
-  NotRecording = 1,
-  ManualRecording = 2,
-  BackgroundRecording = 3,
-  Clip = 4,
 }

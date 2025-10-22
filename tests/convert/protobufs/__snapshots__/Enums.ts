@@ -4,6 +4,12 @@ export interface TaskInfo {
   priority?: Priority;
 
   status?: Status;
+
+  timeline_entry_type?: TimelineEntryType;
+}
+
+export interface TaskInfo_Tag {
+  name?: string;
 }
 
 export enum Status {
@@ -18,4 +24,17 @@ export enum Priority {
   PRIORITY_LOW = 1,
   PRIORITY_MEDIUM = 2,
   PRIORITY_HIGH = 3,
+}
+
+export enum TimelineEntryType {
+  Invalid = 0,
+  GameMode = 1,
+  Event = 2,
+  StateDescription = 3,
+  Achievement = 4,
+  UserMarker = 5,
+  Screenshot = 6,
+  Error = 7,
+  Tag = 8,
+  GamePhase = 9,
 }

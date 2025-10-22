@@ -18,11 +18,7 @@ const protobufFiles = [
   'steam\\steammessages_gamerecording_objects.proto',
   'steam\\steammessages_base.proto',
   'steam\\steammessages_player.steamclient.proto',
-];
-
-const filteredFilePaths = [
-  'steam\\steammessages_base.proto',
-  'google\\protobuf',
+  'steam\\enums.proto',
 ];
 
 // Type mapping from proto to TypeScript
@@ -50,6 +46,7 @@ let importedTypes = new Map<string, Set<string>>();
 let typeSourceFiles = new Map<string, string>();
 let typeNameMap = new Map<string, string>(); // Maps original type names to their prefixed names
 let existingComments = new Map<string, Map<string, string>>(); // Maps interface/enum names to field comments
+let currentProtoFile: string;
 
 function convertProtoTypeToTS(field: protobuf.Field): string {
   let tsType: string;
@@ -83,21 +80,17 @@ function convertProtoTypeToTS(field: protobuf.Field): string {
   return tsType;
 }
 
-function getImportPathForType(typeName: string, filePathFilters: string[]): string | null {
+function getImportPathForType(typeName: string): string | null {
   const sourceFile = typeSourceFiles.get(typeName);
   if (sourceFile === undefined) {
     return null;
   }
 
-  // Check if this type is from a filtered file (external dependency)
-  for (const filterPath of filePathFilters) {
-    if (sourceFile.includes(filterPath)) {
-      // Extract the base filename from the filter path
-      const baseFileName = filterPath.split('\\').pop()?.replace('.proto', '');
-      if (baseFileName === undefined) {
-        continue;
-      }
-
+  // Check if this type is from a different proto file that's being processed
+  if (!sourceFile.includes(currentProtoFile)) {
+    // Extract the base filename from the source file
+    const baseFileName = sourceFile.split('\\').pop()?.replace('.proto', '');
+    if (baseFileName !== undefined) {
       return `./${baseFileName}`;
     }
   }
@@ -206,10 +199,10 @@ function mapAllTypesToFiles(ns: protobuf.Namespace): void {
   }
 }
 
-function collectImportsAndReplaceNames(filePathFilters: string[]): void {
+function collectImportsAndReplaceNames(): void {
   // Track imported types during generation
   for (const typeName of referencedTypes) {
-    const importPath = getImportPathForType(typeName, filePathFilters);
+    const importPath = getImportPathForType(typeName);
     if (importPath !== null) {
       // Check if this type has been renamed (e.g., enum with E prefix removed)
       const finalTypeName = replacedNames.get(typeName) ?? typeName;
@@ -235,12 +228,14 @@ function generateImportStatements(): string[] {
   return importStatements;
 }
 
-function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], output: string[], parentName?: string): void {
+function processNamespace(ns: protobuf.Namespace, output: string[], parentName?: string): void {
   // Process messages (convert to interfaces)
   for (const messageType of ns.nestedArray.filter((n): n is protobuf.Type => n instanceof protobuf.Type)) {
-    if (filePathFilters.some(filePath => messageType.filename?.includes(filePath) === true)) {
+    // Skip messages that come from imported files (not the current proto file being processed)
+    if (messageType.filename !== null && !messageType.filename.includes(currentProtoFile)) {
       continue;
     }
+
     const interfaceDefinition = generateInterfaceDefinition(messageType, parentName);
     if (interfaceDefinition) {
       output.push(interfaceDefinition);
@@ -250,24 +245,20 @@ function processNamespace(ns: protobuf.Namespace, filePathFilters: string[], out
     // Process nested types with current message as parent
     if (messageType.nested) {
       const nestedParentName = parentName !== undefined ? `${parentName}_${messageType.name}` : messageType.name;
-      processNamespace(messageType, filePathFilters, output, nestedParentName);
+      processNamespace(messageType, output, nestedParentName);
     }
   }
 
   // Process nested namespaces
   for (const nestedNs of ns.nestedArray.filter((n): n is protobuf.Namespace =>
     n instanceof protobuf.Namespace && !(n instanceof protobuf.Type) && !(n instanceof protobuf.Enum))) {
-    processNamespace(nestedNs, filePathFilters, output);
+    processNamespace(nestedNs, output);
   }
 
   // Process enums
   for (const enumType of ns.nestedArray.filter((n): n is protobuf.Enum => n instanceof protobuf.Enum)) {
-    if (!referencedTypes.has(enumType.name)) {
-      continue;
-    }
-
     // Skip if this enum should be imported from another file
-    const importPath = getImportPathForType(enumType.name, filePathFilters);
+    const importPath = getImportPathForType(enumType.name);
     if (importPath !== null) {
       continue;
     }
@@ -329,7 +320,7 @@ function parseExistingComments(filePath: string): void {
   }
 }
 
-function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: string[], existingFilePath?: string): string {
+function generateTypeScriptFromReflection(root: protobuf.Root, _currentProtoFile: string, existingFilePath?: string): string {
   // Reset global state for each conversion
   referencedTypes = new Set<string>();
   replacedNames = new Map<string, string>();
@@ -337,6 +328,7 @@ function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: 
   typeSourceFiles = new Map<string, string>();
   typeNameMap = new Map<string, string>();
   existingComments = new Map<string, Map<string, string>>();
+  currentProtoFile = _currentProtoFile;
 
   // Parse existing comments if file exists
   if (existingFilePath !== undefined) {
@@ -348,10 +340,10 @@ function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: 
   // First pass: Map all types to their source files
   mapAllTypesToFiles(root);
 
-  processNamespace(root, filePathFilters, output);
+  processNamespace(root, output);
 
   // Collect imports and apply name replacements
-  collectImportsAndReplaceNames(filePathFilters);
+  collectImportsAndReplaceNames();
 
   // Apply name replacements to output (for enum renames only)
   for (const [key, value] of replacedNames) {
@@ -364,7 +356,7 @@ function generateTypeScriptFromReflection(root: protobuf.Root, filePathFilters: 
   for (const [originalName, prefixedName] of typeNameMap) {
     for (let i = 0; i < output.length; i++) {
       // Use word boundaries to avoid partial replacements
-      const regex = new RegExp(`\\b${originalName}\\b`, 'g');
+      const regex = new RegExp(`\\b${originalName}\\b(?! = )`, 'g');
       output[i] = output[i].replace(regex, prefixedName);
     }
   }
@@ -416,7 +408,7 @@ function generateTypeScriptDefinitions(): void {
 
       const tsDefinitions = generateTypeScriptFromReflection(
         root,
-        filteredFilePaths.filter(filePath => filePath !== protoFile),
+        protoFile,
         outputFilePath,
       );
 

@@ -496,3 +496,10 @@ export enum ProtoClanEventType {
   EClanInGameEventGeneral = 35,
   EClanCreatorHome = 36,
 }
+
+export enum PartnerEventNotificationType {
+  EEventStart = 0,
+  EEventBroadcastStart = 1,
+  EEventMatchStart = 2,
+  EEventPartnerMaxType = 3,
+}

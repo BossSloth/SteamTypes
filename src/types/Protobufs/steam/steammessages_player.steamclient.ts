@@ -1,3 +1,4 @@
+import { CommunityItemClass, NewSteamAnnouncementState, ProfileCustomizationType } from './enums';
 import { BanContentCheckResult, UserContentDescriptorPreferences } from './steammessages_base';
 
 export interface CPlayer_GetRecentPlaytimeSessionsForChild_Request {
@@ -1081,9 +1082,6 @@ export interface CPlayer_PrivacySettingsChanged_Notification {
   privacy_settings?: CPrivacySettings;
 }
 
-export interface NoResponse {
-}
-
 export enum ProfileCustomizationStyle {
   ProfileCustomizationStyleDefault = 0,
   ProfileCustomizationStyleSelected = 1,
@@ -1110,60 +1108,4 @@ export enum TextFilterSetting {
   TextFilterSettingEnabled = 1,
   TextFilterSettingEnabledAllowProfanity = 2,
   TextFilterSettingDisabled = 3,
-}
-
-export enum ProfileCustomizationType {
-  ProfileCustomizationTypeInvalid = 0,
-  ProfileCustomizationTypeRareAchievementShowcase = 1,
-  ProfileCustomizationTypeGameCollector = 2,
-  ProfileCustomizationTypeItemShowcase = 3,
-  ProfileCustomizationTypeTradeShowcase = 4,
-  ProfileCustomizationTypeBadges = 5,
-  ProfileCustomizationTypeFavoriteGame = 6,
-  ProfileCustomizationTypeScreenshotShowcase = 7,
-  ProfileCustomizationTypeCustomText = 8,
-  ProfileCustomizationTypeFavoriteGroup = 9,
-  ProfileCustomizationTypeRecommendation = 10,
-  ProfileCustomizationTypeWorkshopItem = 11,
-  ProfileCustomizationTypeMyWorkshop = 12,
-  ProfileCustomizationTypeArtworkShowcase = 13,
-  ProfileCustomizationTypeVideoShowcase = 14,
-  ProfileCustomizationTypeGuides = 15,
-  ProfileCustomizationTypeMyGuides = 16,
-  ProfileCustomizationTypeAchievements = 17,
-  ProfileCustomizationTypeGreenlight = 18,
-  ProfileCustomizationTypeMyGreenlight = 19,
-  ProfileCustomizationTypeSalien = 20,
-  ProfileCustomizationTypeLoyaltyRewardReactions = 21,
-  ProfileCustomizationTypeSingleArtworkShowcase = 22,
-  ProfileCustomizationTypeAchievementsCompletionist = 23,
-  ProfileCustomizationTypeReplay = 24,
-}
-
-export enum CommunityItemClass {
-  Invalid = 0,
-  CPlayer_GetGameBadgeLevels_Response_Badge = 1,
-  GameCard = 2,
-  ProfileBackground = 3,
-  CPlayer_GetEmoticonList_Response_Emoticon = 4,
-  BoosterPack = 5,
-  Consumable = 6,
-  GameGoo = 7,
-  ProfileModifier = 8,
-  Scene = 9,
-  SalienItem = 10,
-  Sticker = 11,
-  ChatEffect = 12,
-  MiniProfileBackground = 13,
-  AvatarFrame = 14,
-  AnimatedAvatar = 15,
-  SteamDeckKeyboardSkin = 16,
-  SteamDeckStartupMovie = 17,
-}
-
-export enum NewSteamAnnouncementState {
-  Invalid = 0,
-  AllRead = 1,
-  NewAnnouncement = 2,
-  FeaturedAnnouncement = 3,
 }

@@ -31,7 +31,7 @@ function loadTestProtoAndGenerate(protoFileName: string): string {
   });
 
   // Generate TypeScript definitions
-  return generateTypeScriptFromReflection(root, []);
+  return generateTypeScriptFromReflection(root, [], protoFilePath);
 }
 
 /**

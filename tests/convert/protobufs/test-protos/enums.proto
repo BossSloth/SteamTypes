@@ -16,9 +16,27 @@ enum Priority {
   PRIORITY_HIGH = 3;
 }
 
+enum ETimelineEntryType {
+	k_ETimelineEntryType_Invalid = 0;
+	k_ETimelineEntryType_GameMode = 1;
+	k_ETimelineEntryType_Event = 2;
+	k_ETimelineEntryType_StateDescription = 3;
+	k_ETimelineEntryType_Achievement = 4;
+	k_ETimelineEntryType_UserMarker = 5;
+	k_ETimelineEntryType_Screenshot = 6;
+	k_ETimelineEntryType_Error = 7;
+	k_ETimelineEntryType_Tag = 8;
+	k_ETimelineEntryType_GamePhase = 9;
+}
+
 // Test message that references enums
 message TaskInfo {
+  message Tag {
+    string name = 1;
+  }
+
   string name = 1;
   EStatus status = 2;
   Priority priority = 3;
+  ETimelineEntryType timeline_entry_type = 4;
 }
