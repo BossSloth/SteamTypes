@@ -20,6 +20,7 @@ import { compareInterfaces } from './compare/interface-checker';
 import { __dirname } from './dirname';
 import { Logger } from './logger';
 import { InterfaceMap, interfaceMaps } from './maps';
+import { updateGlobals } from './update-globals';
 
 const convertToTsFilePath = path.join(path.resolve(`${__dirname}/../`), 'build', 'scripts', 'convert-to-typescript.js');
 
@@ -164,7 +165,7 @@ async function extractInterface(map: InterfaceMap): Promise<string> {
   }
 
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `async function evalConvert() { const result = window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}'); return result; } evalConvert()`,
+    expression: `window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}')`,
     returnByValue: true,
     awaitPromise: true,
   });
@@ -218,6 +219,8 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   await injectConvertToTypescriptJs(targetId, options.force);
 
   await getSystemInformation();
+
+  await updateGlobals(sharedJsClient, logger);
 
   let maps = interfaceMaps;
 

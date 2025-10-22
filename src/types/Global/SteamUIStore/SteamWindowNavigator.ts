@@ -1,4 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { GameRecordingStore } from '../../Global/GameRecordingStore';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { Screenshot } from '../../SteamClient/Screenshots';
 
 /**
@@ -125,7 +127,7 @@ export interface Media {
   /**
    * Opens a clip recording.
    *
-   * The `id` key is a clip ID, see {@link CGameRecordingStore} methods on how to get one. //TODO: add type
+   * The `id` key is a clip ID, see {@link GameRecordingStore} methods on how to get one.
    */
   Clip(
     state: NavigatorRouterState<{

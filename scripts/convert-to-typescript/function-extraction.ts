@@ -180,8 +180,6 @@ function processVariableDeclaration(
   extractAndStoreFunctionInfo(variableDeclaration, originalFunc, functionInfos);
 }
 
-export type Extractable = FunctionExpression | ArrowFunction | MethodDeclaration;
-
 /**
  * Extracts and stores function information
  * @param variableDeclaration Variable declaration to extract from
@@ -255,10 +253,12 @@ function extractParams(initializer: ParameteredNode): MappedParam[] {
   });
 }
 
+export type Extractable = FunctionExpression | ArrowFunction | MethodDeclaration;
+
 /**
  * Extracts return type from a function
  */
-function extractReturnType(initializer: FunctionExpression | ArrowFunction): string {
+function extractReturnType(initializer: Extractable): string {
   let returnType = initializer.getReturnType().getText(undefined, typeFormatFlags);
 
   // Always add spaces between types

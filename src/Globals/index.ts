@@ -28,7 +28,6 @@ declare global {
   let collectionStore: unknown;
   let communityStore: unknown;
   let consoleStore: unknown;
-  let CURRENT_IPC_CALL_COUNT: unknown;
   let DebugLogDisable: unknown;
   let DebugLogDisableAll: unknown;
   let DebugLogDisableBacktrace: unknown;
@@ -100,16 +99,8 @@ declare global {
   let vrAudioSettingsStore: unknown;
   let webpackChunksteamui: unknown;
   let workshopStore: unknown;
-  let __FriendsUIBrowserContext: unknown;
-  let __mobxGlobals: unknown;
-  let __mobxInstanceCount: unknown;
-  let __THREE__: unknown;
 
   interface Window {
-    __FriendsUIBrowserContext: unknown;
-    __mobxGlobals: unknown;
-    __mobxInstanceCount: unknown;
-    __THREE__: unknown;
     App: App;
     appAchievementProgressCache: AppAchievementProgressCache;
     appActivityStore: unknown;
@@ -130,7 +121,6 @@ declare global {
     collectionStore: unknown;
     communityStore: unknown;
     consoleStore: unknown;
-    CURRENT_IPC_CALL_COUNT: unknown;
     DebugLogDisable: unknown;
     DebugLogDisableAll: unknown;
     DebugLogDisableBacktrace: unknown;
@@ -150,7 +140,7 @@ declare global {
     g_EventCalendarMap: unknown;
     g_EventCalendarTrackingStore: unknown;
     g_FriendsUIApp: unknown;
-    g_GRS: unknown;
+    g_GRS: GameRecordingStore;
     g_PartnerEventStore: unknown;
     g_PopupManager: PopupManager;
     gameReleaseStore: unknown;
@@ -184,10 +174,9 @@ declare global {
     SetVoiceForceReconnectingStatus: unknown;
     SetVoiceLogDetails: unknown;
     showcaseStore: unknown;
-    steam_client_components: unknown;
     steamAjaxRequest: unknown;
     SteamClient: SteamClient;
-    SteamUIStore: unknown;
+    SteamUIStore: SteamUIStore;
     StoreItemCache: unknown;
     subscriberAgreementStore: unknown;
     SuspendResumeStore: unknown;
