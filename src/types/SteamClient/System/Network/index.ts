@@ -1,4 +1,4 @@
-import { JsPbMessage, OperationResponse, Unregisterable } from '../../shared';
+import { JsPbMessage, OperationResponse, Unregisterable } from 'SteamClient/shared';
 import { Device } from './Device';
 
 export interface Network {

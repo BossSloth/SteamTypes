@@ -1,6 +1,6 @@
-import { ObservableValue } from './shared';
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
+import { ObservableValue } from './shared';
 
 export interface AdvancedPropertyTests {
   datePropertyTests: DatePropertyTests;

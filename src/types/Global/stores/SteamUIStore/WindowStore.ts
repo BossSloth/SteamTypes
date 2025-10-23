@@ -1,9 +1,9 @@
 /* eslint-disable customRules/min-enum-members */
+import { EUIMode } from 'Global/PopupManager';
 import { ObservableMap } from 'mobx';
 import { ObservableValue } from 'mobx/dist/internal';
 import { Callbacks, ReducedValue } from 'shared';
 import { SteamUIStore } from '.';
-import { EUIMode } from '../../PopupManager';
 import { SteamWindowNavigator } from './SteamWindowNavigator';
 
 export interface WindowStore {

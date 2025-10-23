@@ -195,42 +195,6 @@ export interface ClientNotificationSystemUpdate extends JsPbMessage {
   type(): ESystemUpdateNotificationType;
 }
 
-export interface ClientNotificationFriendMessage extends JsPbMessage {
-  body(): string;
-
-  icon(): string;
-
-  notificationid(): number;
-
-  response_steamurl(): string;
-
-  steamid(): string;
-
-  tag(): string;
-
-  title(): string;
-}
-
-export interface ClientNotificationGroupChatMessage extends JsPbMessage {
-  body(): string;
-
-  chat_group_id(): string;
-
-  chat_id(): string;
-
-  icon(): string;
-
-  notificationid(): number;
-
-  rawbody(): string;
-
-  steamid_sender(): string;
-
-  tag(): string;
-
-  title(): string;
-}
-
 export interface ClientNotificationFamilySharingDeviceAuthorizationChanged extends JsPbMessage {
   accountid_owner(): number;
 

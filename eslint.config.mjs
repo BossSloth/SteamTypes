@@ -1,5 +1,6 @@
 import pluginJs from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
 import perfectionist from 'eslint-plugin-perfectionist';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
@@ -11,6 +12,8 @@ export default defineConfig(
   globalIgnores([
     'build/*',
     'dist/*',
+    'coverage/*',
+    'node_modules/*',
     '**/*.js',
     'scripts/convert/test-output/*',
     'scripts/convert/test-cases/functions/*',
@@ -29,6 +32,7 @@ export default defineConfig(
   },
 
   pluginJs.configs.all,
+  // eslint-disable-next-line import/no-named-as-default-member
   ...tseslint.configs.all,
   stylistic.configs.all,
   stylistic.configs['disable-legacy'],
@@ -39,6 +43,20 @@ export default defineConfig(
     blockSpacing: true,
     commaDangle: 'always-multiline',
   }),
+  importPlugin.flatConfigs.recommended,
+  importPlugin.flatConfigs.typescript,
+  {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: ['./tsconfig.json', 'src/*/tsconfig.json'],
+          noWarnOnMultipleProjects: true,
+        },
+        node: true,
+      },
+    },
+  },
   {
     plugins: {
       '@stylistic': stylistic,
@@ -125,6 +143,7 @@ export default defineConfig(
       camelcase: 'off',
       'id-length': 'off',
       'no-console': 'off',
+      'customRules/no-deep-relative-imports': ['error', { maxDepth: 1 }],
       // #endregion
     },
   },
@@ -158,6 +177,7 @@ export default defineConfig(
       'perfectionist/sort-interfaces': 'off',
       '@stylistic/quote-props': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
+      'import/no-unresolved': 'off',
     },
   },
   {
@@ -193,6 +213,12 @@ export default defineConfig(
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
+  },
+  {
+    files: ['tests/**'],
+    rules: {
+      'customRules/no-deep-relative-imports': 'off',
     },
   },
 );
