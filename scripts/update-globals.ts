@@ -61,7 +61,7 @@ async function getWindowProperties(
 function extractDeclaredProperties(fileContent: string): Map<string, string> {
   const properties = new Map<string, string>();
 
-  const matches = fileContent.matchAll(/let\s+(\w+): (\w+)/g);
+  const matches = fileContent.matchAll(/let\s+(\w+): (.+);/g);
 
   for (const match of matches) {
     properties.set(match[1], match[2]);

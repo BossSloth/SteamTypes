@@ -147,7 +147,7 @@ type ProtoAdders<T> = {
  */
 export type ProtobufInterface<T> = ProtoGetters<T> & ProtoSetters<T> & ProtoAdders<T> & SimpleJsPbMessage<T>;
 
-export interface SimpleJsPbMessage<T> {
+interface SimpleJsPbMessage<T> {
   clone(): this;
 
   cloneMessage(): this;
@@ -169,16 +169,49 @@ export interface SimpleJsPbMessage<T> {
 
   toArray(): SimpleJsPbMessage<T>['array'];
 
-  toObject(e?: boolean): T;
+  toObject(includeInstance?: boolean): T;
 
   array: InterfaceToTuple<T>;
 
   arrayIndexOffset_: number;
 
+  constructor: ProtobufClass<T>;
+
   /**
    * SimpleJsPbMessage[] of all nested objects in this message
    */
   wrappers_: SimpleJsPbMessage<unknown>[];
+}
+
+/**
+ * Represents a protobuf message class with it's static methods
+ * @example deserializing a protobuf message
+ * ```typescript
+ * const message = MyProto.deserializeBinary(buffer);
+ * ```
+ * @example creating a `ProtobufInterface<{foo_bar: string}>`
+ * ```typescript
+ * const message = MyProto.fromObject({foo_bar: 'baz'});
+ * ```
+ */
+export interface ProtobufClass<T> {
+  new (): ProtobufInterface<T>;
+
+  /**
+   * Deserializes a protobuf message from binary data
+   */
+  deserializeBinary(data: ArrayBuffer): ProtobufInterface<T>;
+
+  /**
+   * Creates a new instance from a plain object
+   */
+  fromObject(obj: T): ProtobufInterface<T>;
+
+  toObject(includeInstance: boolean, message: ProtobufClass<T>): T;
+
+  sm_m: unknown;
+
+  sm_mbf: unknown;
 }
 
 type InterfaceToTuple<T> = T extends object

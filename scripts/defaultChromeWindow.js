@@ -277,6 +277,7 @@ const unwantedWindowProperties = [
   "evalConvert",
   "fillAppData",
   "checkConversionTime",
+  "webpackChunksteamui",
 ];
 
 const windowProperties = [...defaultChromeWindowProperties, ...millenniumWindowProperties, ...unwantedWindowProperties];

@@ -368,6 +368,8 @@ export interface SteamAppOverview {
 
   BIsNewToLibrary(): unknown;
 
+  BIsNonVRGame(): boolean;
+
   BIsOwned(): unknown;
 
   BIsOwnedByAnotherUser(): unknown;

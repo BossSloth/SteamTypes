@@ -1,6 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { CPlayer_TextFilterWords } from '../../Protobufs/steam/steammessages_player.steamclient';
-import { SimpleJsPbMessage } from '../../shared/protobuf';
+import { ProtobufInterface } from '../../shared/protobuf';
 
 export interface TextFilterStore {
   BHasFilter(): boolean;
@@ -103,7 +103,7 @@ export interface TextFilterStore {
 
   m_TextFilterPreferences: TextFilterPreferences;
 
-  m_TextFilterWords: SimpleJsPbMessage<CPlayer_TextFilterWords>;
+  m_TextFilterWords: ProtobufInterface<CPlayer_TextFilterWords>;
 
   m_Transport: null;
 

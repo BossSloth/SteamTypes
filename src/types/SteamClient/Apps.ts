@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AppAchievementProgressCache } from '../Global/AppAchievementProgressCache';
 import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from '../Global/AppDetailsStore';
-import { SteamAppOverview } from '../Global/SteamUIStore';
 import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { CAppOverview_Change_Protobuf } from '../../Modules/Protobufs';
 
 /**
  * Represents various functions related to Steam applications.
@@ -376,7 +377,7 @@ export interface Apps {
    * ```
    */
   /**
-   * If `data` is deserialized, returns {@link AppOverview_Change}.
+   * data can be deserialized with {@link CAppOverview_Change_Protobuf}.
    * @remarks This is not a mistake, it doesn't return anything.
    */
   RegisterForAppOverviewChanges(callback: (data: ArrayBuffer) => void): void;
@@ -1214,31 +1215,6 @@ export interface LogoPositionForApp {
 
   /** @note Usually 1 */
   nVersion: number;
-}
-
-/**
- * CAppOverview_Change
- */
-export interface AppOverview_Change extends JsPbMessage {
-  add_app_overview(param0: unknown, param1: unknown): unknown;
-
-  add_removed_appid(param0: unknown, param1: unknown): unknown;
-
-  app_overview(): SteamAppOverview[];
-
-  full_update(): boolean;
-
-  removed_appid(): number[];
-
-  set_app_overview(param0: unknown): unknown;
-
-  set_full_update(param0: unknown): unknown;
-
-  set_removed_appid(param0: unknown): unknown;
-
-  set_update_complete(param0: unknown): unknown;
-
-  update_complete(): boolean;
 }
 
 export enum ECloudPendingRemoteOperation {

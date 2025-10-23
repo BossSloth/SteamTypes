@@ -107,7 +107,7 @@ export interface WindowStore {
 
   m_mapAppOverlayPosition: Map<unknown, unknown>;
 
-  m_mapAppWindows: ObservableMap<unknown, unknown>;
+  m_mapAppWindows: ObservableMap<number, MapAppWindows>;
 
   m_mapDesiredWindowInstances: ObservableMap<number, WindowInstance>;
 
@@ -119,7 +119,7 @@ export interface WindowStore {
 
   m_simulatedVRGamepadUIOnDesktopInstance: undefined;
 
-  MainRunningAppWindowIDs: undefined;
+  MainRunningAppWindowIDs: unknown[];
 
   MainWindowInstance: WindowInstance;
 
@@ -984,4 +984,12 @@ export interface State3 {
   bExternal: boolean;
 
   strURL: string;
+}
+
+export interface MapAppWindows {
+  appid: number;
+
+  focusedWindowID: number;
+
+  windowids: unknown[];
 }

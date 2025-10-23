@@ -1,7 +1,9 @@
+/* eslint-disable perfectionist/sort-interfaces */
 import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
+import { ConnectionManager } from '../types/Global/ConnectionManager';
 import { GameRecordingStore } from '../types/Global/GameRecordingStore';
 import { PopupManager } from '../types/Global/PopupManager';
 import { SteamUIStore } from '../types/Global/SteamUIStore';
@@ -24,20 +26,20 @@ declare global {
   let cloudStorage: unknown;
   let cloudStorageInternalState: unknown;
   let CLSTAMP: unknown;
-  let cm: unknown;
+  let cm: ConnectionManager;
   let collectionStore: unknown;
   let communityStore: unknown;
   let consoleStore: unknown;
-  let DebugLogDisable: unknown;
-  let DebugLogDisableAll: unknown;
-  let DebugLogDisableBacktrace: unknown;
-  let DebugLogEnable: unknown;
-  let DebugLogEnableAll: unknown;
-  let DebugLogEnableBacktrace: unknown;
-  let DebugLogNames: unknown;
+  let DebugLogDisable: (name: string) => void;
+  let DebugLogDisableAll: () => Promise<void>;
+  let DebugLogDisableBacktrace: () => Promise<void>;
+  let DebugLogEnable: (name: string) => void;
+  let DebugLogEnableAll: () => Promise<void>;
+  let DebugLogEnableBacktrace: () => Promise<void>;
+  let DebugLogNames: () => string[];
   let downloadsStore: unknown;
   let dragStore: unknown;
-  let EnableSteamConsole: unknown;
+  let EnableSteamConsole: (enable: boolean) => void;
   let FocusedAppWindowStore: unknown;
   let FocusNavController: unknown;
   let friendStore: unknown;
@@ -97,7 +99,6 @@ declare global {
   let urlStore: UrlStore;
   let userProfileStore: unknown;
   let vrAudioSettingsStore: unknown;
-  let webpackChunksteamui: unknown;
   let workshopStore: unknown;
 
   interface Window {
@@ -117,20 +118,20 @@ declare global {
     cloudStorage: unknown;
     cloudStorageInternalState: unknown;
     CLSTAMP: unknown;
-    cm: unknown;
+    cm: ConnectionManager;
     collectionStore: unknown;
     communityStore: unknown;
     consoleStore: unknown;
-    DebugLogDisable: unknown;
-    DebugLogDisableAll: unknown;
-    DebugLogDisableBacktrace: unknown;
-    DebugLogEnable: unknown;
-    DebugLogEnableAll: unknown;
-    DebugLogEnableBacktrace: unknown;
-    DebugLogNames: unknown;
+    DebugLogDisable: (name: string) => void;
+    DebugLogDisableAll: () => Promise<void>;
+    DebugLogDisableBacktrace: () => Promise<void>;
+    DebugLogEnable: (name: string) => void;
+    DebugLogEnableAll: () => Promise<void>;
+    DebugLogEnableBacktrace: () => Promise<void>;
+    DebugLogNames: () => string[];
     downloadsStore: unknown;
     dragStore: unknown;
-    EnableSteamConsole: unknown;
+    EnableSteamConsole: (enable: boolean) => void;
     FocusedAppWindowStore: unknown;
     FocusNavController: unknown;
     friendStore: unknown;
@@ -190,7 +191,6 @@ declare global {
     urlStore: UrlStore;
     userProfileStore: unknown;
     vrAudioSettingsStore: unknown;
-    webpackChunksteamui: unknown;
     workshopStore: unknown;
   }
 }
