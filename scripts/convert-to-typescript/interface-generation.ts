@@ -117,7 +117,7 @@ function processInterfaceProperties(
           name: formattedName,
           type: new InterfaceType('ConnectionManager'),
         };
-        context.addImport('./ConnectionManager', 'ConnectionManager');
+        context.addImport('./managers/ConnectionManager', 'ConnectionManager');
         interfaceDefinition.properties.push(interfaceProperty);
 
         continue;

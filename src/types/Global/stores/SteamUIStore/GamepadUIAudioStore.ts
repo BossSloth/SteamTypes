@@ -1,4 +1,4 @@
-import { EUIMode } from 'Global/PopupManager';
+import { EUIMode } from 'Global/managers/PopupManager';
 import { ESteamUISound, ObservableValue, Unsubscribable } from 'shared';
 import { FocusNavigationContext } from './GamepadNavigationManager';
 

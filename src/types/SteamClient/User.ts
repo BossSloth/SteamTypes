@@ -1,4 +1,4 @@
-import { CurrentUser, ELoginState } from '../Global/App';
+import { CurrentUser, ELoginState } from 'Global/App';
 import { OperationResponse, Unregisterable } from './shared';
 
 export interface User {

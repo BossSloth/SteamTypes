@@ -2,7 +2,7 @@ import Long from 'long';
 import { ObservableMap } from 'mobx';
 import { GameSessions } from 'SteamClient';
 import { JsPbMessage } from 'SteamClient/shared';
-import { ConnectionManager } from '../ConnectionManager';
+import { ConnectionManager } from '../managers/ConnectionManager';
 import { AchievementData } from './AppDetailsStore';
 
 export interface AppActivityStoreOld {

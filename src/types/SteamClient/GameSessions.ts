@@ -1,4 +1,4 @@
-import { Achievements } from '../Global/stores/AppDetailsStore';
+import { Achievements } from 'Global/stores/AppDetailsStore';
 import { Screenshot } from './Screenshots';
 import { Unregisterable } from './shared';
 

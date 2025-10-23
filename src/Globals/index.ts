@@ -2,8 +2,8 @@
 import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
-import { ConnectionManager } from '../types/Global/ConnectionManager';
-import { PopupManager } from '../types/Global/PopupManager';
+import { ConnectionManager } from '../types/Global/managers/ConnectionManager';
+import { PopupManager } from '../types/Global/managers/PopupManager';
 import { AppDetailsStore } from '../types/Global/stores/AppDetailsStore';
 import { ConsoleStore } from '../types/Global/stores/ConsoleStore';
 import { GameRecordingStore } from '../types/Global/stores/GameRecordingStore';

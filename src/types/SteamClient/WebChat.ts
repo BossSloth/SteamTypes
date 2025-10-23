@@ -1,4 +1,4 @@
-import { EUIMode } from '../Global/PopupManager';
+import { EUIMode } from 'Global/managers/PopupManager';
 import { OverlayBrowserInfo } from './Overlay';
 import { Unregisterable } from './shared';
 

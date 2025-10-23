@@ -257,8 +257,8 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
   // @ts-expect-error App is not defined
 
   if (typeof window.cm !== 'undefined' && obj === window.cm) {
-    // import { ConnectionManager } from './ConnectionManager';
-    if (addImport) context.addImport('./ConnectionManager', 'ConnectionManager');
+    // import { ConnectionManager } from './managers/ConnectionManager';
+    if (addImport) context.addImport('./managers/ConnectionManager', 'ConnectionManager');
 
     return 'ConnectionManager';
   }

@@ -1,3 +1,4 @@
+import { ProtobufNotification } from 'shared/protobuf';
 import {
   CGameRecording_CleanupBackgroundRecordings_Request,
   CGameRecording_CleanupBackgroundRecordings_Response,
@@ -75,7 +76,6 @@ import {
   CGameRecording_ZipClip_Request,
   CGameRecording_ZipClip_Response,
 } from '../Protobufs/steam/webuimessages_gamerecording';
-import { ProtobufNotification } from '../shared/protobuf';
 
 export interface GameRecordingRequestHandler {
   CleanupBackgroundRecordings(request?: CGameRecording_CleanupBackgroundRecordings_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_CleanupBackgroundRecordings_Response>>;

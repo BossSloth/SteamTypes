@@ -1,4 +1,4 @@
-import { ConnectionManager } from 'Global/ConnectionManager';
+import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableValue } from 'shared';
 
 export interface SearchStore {

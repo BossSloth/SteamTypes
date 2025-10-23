@@ -4,9 +4,11 @@ import { GMap, InterfaceMap } from '.';
 export const GlobalMaps: InterfaceMap[] = [
   GMap('App', 'App', /* ts */`window.App`),
   GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */`window.appAchievementProgressCache`, 'window.appAchievementProgressCache.RequestCacheUpdate()'),
-  GMap('ConnectionManager', 'ConnectionManager', /* ts */`window.cm`),
-  GMap('ConnectionManager', 'ConnectionManager', /* ts */`window.App.cm`),
-  GMap('PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
+
+  // Managers
+  GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.cm`),
+  GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.App.cm`),
+  GMap('managers/PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
 
   // Stores
   GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),

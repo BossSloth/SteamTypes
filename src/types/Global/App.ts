@@ -1,5 +1,5 @@
 import { User } from '../SteamClient';
-import { ConnectionManager } from './ConnectionManager';
+import { ConnectionManager } from './managers/ConnectionManager';
 
 export interface App {
   BFinishedInitStageOne(): boolean;

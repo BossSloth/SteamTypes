@@ -1,4 +1,4 @@
-import { ConnectionManager } from 'Global/ConnectionManager';
+import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { SteamAppOverview } from 'Global/stores/SteamUIStore';
 import { ObservableMap } from 'mobx';
 import { Apps } from 'SteamClient';

@@ -1,7 +1,7 @@
 import { ObservableMap } from 'mobx';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Apps, GameSessions } from '../SteamClient';
-import { ConnectionManager } from './ConnectionManager';
+import { ConnectionManager } from './managers/ConnectionManager';
 
 export interface AppAchievementProgressCache {
   /**

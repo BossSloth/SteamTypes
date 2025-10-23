@@ -1,4 +1,4 @@
-import { EBrowserType, EUIMode } from '../Global/PopupManager';
+import { EBrowserType, EUIMode } from 'Global/managers/PopupManager';
 
 export enum EResult {
   OK = 1,

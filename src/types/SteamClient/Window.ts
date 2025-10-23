@@ -1,4 +1,4 @@
-import { EWindowBringToFront } from '../Global/PopupManager';
+import { EWindowBringToFront } from 'Global/managers/PopupManager';
 import { EUIComposition } from './shared';
 
 /**

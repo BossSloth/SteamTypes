@@ -1,4 +1,4 @@
-import { SteamWebURL, URLFeature } from '../Global/stores/UrlStore';
+import { SteamWebURL, URLFeature } from 'Global/stores/UrlStore';
 import { Unregisterable } from './shared';
 
 export interface URL {

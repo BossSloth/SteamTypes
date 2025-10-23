@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AppAchievementProgressCache } from '../Global/AppAchievementProgressCache';
-import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from '../Global/stores/AppDetailsStore';
+import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
+import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from 'Global/stores/AppDetailsStore';
 import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
