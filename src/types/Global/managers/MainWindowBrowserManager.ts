@@ -1,129 +1,262 @@
+import { Action, History, Location } from 'history';
 import { Callbacks } from 'shared';
+import { BrowserViewEventMap, BrowserViewPopup } from 'SteamClient/BrowserView/BrowserViewPopup';
 
 export interface MainWindowBrowserManager {
   /**
-   * @native
+   * Activates a specific tab in the main window browser
+   * @param tabName - The tab name to activate
    */
-  ActivateTab(): unknown;
+  ActivateTab(tabName: SteamBrowserTabType): void;
 
+  /**
+   * Checks if the manager is currently waiting for a history callback
+   * @returns True if waiting for a history change within the timeout window
+   */
   BIsWaitingForHistoryCallback(): boolean;
 
-  GetLastActiveTab(): unknown;
-
-  GetTabForURL(e: unknown): 'store' | 'me' | 'community' | 'ignore' | 'maintain';
-
-  LoadURL(e: unknown): void;
+  /**
+   * Gets the last active tab name
+   * @returns The name of the last active tab
+   */
+  GetLastActiveTab(): string;
 
   /**
-   * @native
+   * Determines which tab a URL belongs to
+   * @param url A Steam store/community URL
+   * @returns a browser tab responsible for provided URL or `ignore` or `maintain`.
    */
-  OnFinishedRequest(): unknown;
-
-  OnHistoryChanged(e: unknown): void;
+  GetTabForURL(url: string): SteamBrowserTabType | 'ignore' | 'maintain';
 
   /**
-   * @native
+   * Loads a URL in the browser
+   * @param url - The URL to load
    */
-  OnNewTab(): unknown;
+  LoadURL(url: string): void;
 
   /**
-   * @native
+   * Called when a request finishes loading
+   * Is registered to {@link BrowserViewPopup.on}('finished-request')
    */
-  OnPageSecurity(): unknown;
+  OnFinishedRequest(...args: Parameters<BrowserViewEventMap['finished-request']>): void;
 
   /**
-   * @native
+   * Called when browser history changes
+   * Is registered to {@link BrowserViewPopup.on}('history-changed')
    */
-  OnSetTitle(): unknown;
+  OnHistoryChanged(...args: Parameters<BrowserViewEventMap['history-changed']>): void;
 
   /**
-   * @native
+   * Called when a new tab is requested
+   * Is registered to {@link BrowserViewPopup.on}('new-tab')
    */
-  OnStartLoad(): unknown;
+  OnNewTab(...args: Parameters<BrowserViewEventMap['new-tab']>): void;
 
   /**
-   * @native
+   * Called when page security information is updated
+   * Is registered to {@link BrowserViewPopup.on}('page-security')
    */
-  OnStartRequest(): unknown;
+  OnPageSecurity(...args: Parameters<BrowserViewEventMap['page-security']>): void;
 
   /**
-   * @native
+   * Called when the page title is set
+   * Is registered to {@link BrowserViewPopup.on}('set-title')
    */
-  Reload(): unknown;
+  OnSetTitle(...args: Parameters<BrowserViewEventMap['set-title']>): void;
 
   /**
-   * @native
+   * Called when a page starts loading
+   * Is registered to {@link BrowserViewPopup.on}('start-loading')
    */
-  ShowURL(): unknown;
+  OnStartLoad(...args: Parameters<BrowserViewEventMap['start-loading']>): void;
 
+  /**
+   * Called when a request starts
+   * Is registered to {@link BrowserViewPopup.on}('start-request')
+   */
+  OnStartRequest(...args: Parameters<BrowserViewEventMap['start-request']>): void;
+
+  /**
+   * Reloads the current page in the browser
+   */
+  Reload(): void;
+
+  /**
+   * Opens a URL in the main window browser
+   * @param url - The URL to show
+   * @param navigationParams - Optional navigation parameters
+   */
+  ShowURL(url: string, navigationParams?: unknown): void;
+
+  /**
+   * Starts waiting for a history callback (sets timeout timestamp)
+   */
   StartWaitingForHistoryCallback(): void;
 
-  SyncWithNewBrowserHistory(e: unknown): void;
+  /**
+   * Synchronizes the router with new browser history state
+   * @param history - The new browser history
+   */
+  SyncWithNewBrowserHistory(history: BrowserViewHistory): void;
 
-  SyncWithNewRouterEvent(e: unknown, t: unknown): void;
+  /**
+   * Synchronizes the browser with new router event
+   * @param location - The location object
+   * @param action - The navigation action type
+   */
+  SyncWithNewRouterEvent(location: Location, action: Action): void;
 
-  UpdateActiveTab(e: unknown): void;
+  /**
+   * Updates the active tab based on URL
+   * @param url - The URL to determine the active tab from
+   */
+  UpdateActiveTab(url: string): void;
 
+  /**
+   * The URL to display (either requested URL while loading or current URL)
+   */
   DisplayURL: string;
 
-  LoadErrorCode: null;
+  /**
+   * The error code from the last load error, if any
+   */
+  LoadErrorCode: number | null | undefined;
 
-  LoadErrorDescription: null;
+  /**
+   * The description of the last load error, if any
+   */
+  LoadErrorDescription: string | null;
 
-  LoadErrorURL: null;
+  /**
+   * The URL that failed to load, if any
+   */
+  LoadErrorURL: string | null;
 
+  /**
+   * Whether the browser is currently loading
+   */
   Loading: boolean;
 
+  /**
+   * Flag indicating whether to expect an important replace operation
+   */
   m_bExpectImportantReplace: boolean;
 
+  /**
+   * Internal loading state
+   */
   m_bLoading: boolean;
 
+  /**
+   * Flag indicating whether router change was triggered by sync
+   */
   m_bRouterChangeTriggeredBySync: boolean;
 
-  m_browser: m_browser;
+  m_browser: BrowserViewPopup;
 
-  m_browserHistory: m_browserHistory;
+  /**
+   * The browser's history state
+   */
+  m_browserHistory: BrowserViewHistory;
 
-  m_history: m_history;
+  /**
+   * The router history instance
+   */
+  m_history: History;
 
+  /**
+   * The last active tab name
+   */
   m_lastActiveTab: string;
 
-  m_lastActiveTabURLs: m_lastActiveTabURLs;
+  /**
+   * URLs for each tab that was last active
+   */
+  m_lastActiveTabURLs: LastActiveTabURLs;
 
-  m_lastLocation: m_lastLocation;
+  /**
+   * The last location from the router
+   */
+  m_lastLocation: Location;
 
-  m_loadErrorCode: null;
+  /**
+   * Internal error code storage
+   */
+  m_loadErrorCode: number | null | undefined;
 
-  m_loadErrorDesc: null;
+  /**
+   * Internal error description storage
+   */
+  m_loadErrorDesc: string | null;
 
-  m_loadErrorURL: null;
+  /**
+   * Internal error URL storage
+   */
+  m_loadErrorURL: string | null;
 
-  m_pageSecurity: m_pageSecurity;
+  /**
+   * Internal page security storage
+   */
+  m_pageSecurity: BrowserViewPageSecurity | null;
 
-  m_rootTabURLs: m_rootTabURLs;
+  /**
+   * Root URLs for each tab type
+   */
+  m_rootTabURLs: LastActiveTabURLs;
 
+  /**
+   * Internal title storage
+   */
   m_strTitle: string;
 
-  m_tabbedBrowserStore: m_tabbedBrowserStore;
+  /**
+   * Internal tabbed browser store instance
+   */
+  m_tabbedBrowserStore: TabbedBrowserStore;
 
-  m_tsWaitingForBrowserChange: undefined;
+  /**
+   * Timestamp when waiting for browser change started
+   */
+  m_tsWaitingForBrowserChange: number | undefined;
 
+  /**
+   * The current URL
+   */
   m_URL: string;
 
-  m_URLRequested: string;
+  /**
+   * The currently requested URL
+   */
+  m_URLRequested: string | null;
 
-  PageSecurity: m_pageSecurity;
+  /**
+   * The current page security information
+   */
+  PageSecurity: BrowserViewPageSecurity | null;
 
-  TabbedBrowserStore: m_tabbedBrowserStore;
+  /**
+   * The tabbed browser store for managing web page requests
+   */
+  TabbedBrowserStore: TabbedBrowserStore;
 
+  /**
+   * The current page title
+   */
   Title: string;
 }
 
-export interface m_browser {
+export type SteamBrowserTabType = 'store' | 'me' | 'community';
+
+export interface Browser {
   /**
    * @native
    */
   AddGlass(): unknown;
+
+  /**
+   * @native
+   */
+  AddHeader(): unknown;
 
   /**
    * @native
@@ -266,59 +399,25 @@ export interface m_browser {
   StopFindInPage(): unknown;
 }
 
-export interface m_browserHistory {
-  entries: Entries[];
+export interface BrowserViewHistory {
+  entries: BrowserViewHistoryEntry[];
 
   index: number;
 }
 
-export interface m_history {
-  block(e: unknown): unknown;
-
-  canGo(e: unknown): boolean;
-
-  createHref(e: unknown): unknown;
-
-  go(e: unknown): void;
-
-  goBack(): void;
-
-  goForward(): void;
-
-  listen(e: unknown): unknown;
-
-  push(e: unknown, t: unknown): void;
-
-  replace(e: unknown, t: unknown): void;
-
-  action: string;
-
-  entries: m_lastLocation[];
-
-  index: number;
-
-  length: number;
-
-  location: m_lastLocation;
+export interface BrowserViewHistoryEntry {
+  url: string;
 }
 
-export interface m_lastActiveTabURLs {
-  store: string;
+export interface LastActiveTabURLs {
+  community: string;
+
+  me: string;
+
+  store?: string;
 }
 
-export interface m_lastLocation {
-  hash: string;
-
-  key: string;
-
-  pathname: string;
-
-  search: string;
-
-  state: (null | object | State | State2);
-}
-
-export interface m_pageSecurity {
+export interface BrowserViewPageSecurity {
   bHasCertError: boolean;
 
   bIsEVCert: boolean;
@@ -334,28 +433,25 @@ export interface m_pageSecurity {
   nCertBits: number;
 }
 
-export interface m_rootTabURLs {
-  community: string;
+export interface TabbedBrowserStore {
+  /**
+   * @param url Web page's URL. `data:text/html,<body></body>` by default.
+   */
+  AddWebPageRequest(url: string, shouldActivate: boolean): void;
 
-  me: string;
-
-  store: string;
-}
-
-export interface m_tabbedBrowserStore {
-  AddWebPageRequest(e: unknown, t: unknown): void;
+  CycleThroughWebPageRequests(): boolean;
 
   GetWebPageRequestsChangedCallbackList(): unknown;
 
   RemoveAllRequests(): void;
 
-  RemoveWebPageRequest(e: unknown): boolean;
+  RemoveWebPageRequest(requestId: unknown): boolean;
 
-  ReorderWebPageRequest(e: unknown, t: unknown): void;
+  ReorderWebPageRequest(requestId: unknown, newIndex: unknown): void;
 
-  Set(e: unknown, t: unknown, r: unknown): void;
+  Set(activeWebpageRequestId: number, webPageRequestId: number, webPageRequests: TabbedBrowserWebPageRequest[]): void;
 
-  UpdateWebPageRequest(e: unknown, t: unknown, r: unknown): boolean;
+  UpdateWebPageRequest(requestId?: number, url?: string, title?: string): boolean;
 
   active_web_requestid: number;
 
@@ -365,22 +461,12 @@ export interface m_tabbedBrowserStore {
 
   m_nWebPageRequestID: number;
 
-  m_rgWebPageRequests: m_rgWebPageRequests[];
+  m_rgWebPageRequests: TabbedBrowserWebPageRequest[];
 
-  web_requests: unknown/* circular reference to m_rgWebPageRequests */;
+  web_requests: unknown[];
 }
 
-export interface Entries {
-  url: string;
-}
-
-export interface State {
-  bExternal: boolean;
-
-  strURL: string;
-}
-
-export interface m_rgWebPageRequests {
+export interface TabbedBrowserWebPageRequest {
   requestid: number;
 
   strLastURL: string;
@@ -388,10 +474,4 @@ export interface m_rgWebPageRequests {
   strTitle: string;
 
   strURL: string;
-}
-
-export interface State2 {
-  AppDetailsActivitySectionDays_HistoryValue: number;
-
-  strCollectionId: string;
 }

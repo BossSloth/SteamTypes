@@ -50,7 +50,7 @@ export const SteamClientMaps: InterfaceMap[] = [
   IMap('SteamClient/Window', 'Window', /* ts */`SteamClient.Window`),
 
   IMap('SteamClient/BrowserView/index', 'BrowserView', /* ts */`SteamClient.BrowserView`),
-  IMap('SteamClient/BrowserView/BrowserViewPopup', 'BrowserViewPopup', /* ts */`SteamClient.BrowserView.Create()`),
+  IMap('SteamClient/BrowserView/BrowserViewPopup', 'BrowserViewPopup', /* ts */`MainWindowBrowserManager.m_browser`),
 
   IMap('SteamClient/System/index', 'System', /* ts */`SteamClient.System`),
   IMap('SteamClient/System/index', 'SystemInfo', /* ts */`await SteamClient.System.GetSystemInfo()`),

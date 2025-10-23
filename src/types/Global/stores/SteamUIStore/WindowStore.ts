@@ -1,5 +1,6 @@
 /* eslint-disable customRules/min-enum-members */
 import { EUIMode } from 'Global/managers/PopupManager';
+import { History } from 'history';
 import { ObservableMap } from 'mobx';
 import { ObservableValue } from 'mobx/dist/internal';
 import { Callbacks, ReducedValue } from 'shared';
@@ -579,36 +580,6 @@ export interface HeaderStore {
   m_TitleText: ReducedValue<unknown, (null | string)>;
 }
 
-export interface History {
-  block(e: unknown): unknown;
-
-  canGo(e: unknown): boolean;
-
-  createHref(e: unknown): unknown;
-
-  go(e: unknown): void;
-
-  goBack(): void;
-
-  goForward(): void;
-
-  listen(e: unknown): unknown;
-
-  push(e: unknown, t: unknown): void;
-
-  replace(e: unknown, t: unknown): void;
-
-  action: string;
-
-  entries: Entries[];
-
-  index: number;
-
-  length: number;
-
-  location: Entries;
-}
-
 export interface MenuStore {
   ClearLastRequestedSideMenu(): void;
 
@@ -807,21 +778,6 @@ export interface ELastPushedToWebHelperCompositionState {
   eCompositionMode: null;
 
   windowID: number;
-}
-
-export interface Entries {
-  hash: string;
-
-  key: string;
-
-  pathname: string;
-
-  search: string;
-
-  /**
-   * @ignore property typing cause it is based on where you navigated and unreliable
-   */
-  state?: (null | object | State | State2 | State3);
 }
 
 export interface MainMenuStore {

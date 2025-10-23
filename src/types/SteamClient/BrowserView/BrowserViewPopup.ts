@@ -1,3 +1,4 @@
+import { BrowserViewHistory, BrowserViewPageSecurity } from 'Global/managers/MainWindowBrowserManager';
 import { ETouchGesture } from '../Browser';
 
 export interface BrowserViewPopup {
@@ -152,7 +153,7 @@ export interface BrowserViewPopup {
   StopFindInPage(): void;
 }
 
-interface BrowserViewEventMap {
+export interface BrowserViewEventMap {
   /**
    * Fires when an `alert()` dialog appears.
    */
@@ -355,30 +356,4 @@ export enum EBrowserViewContextMenuCommand {
 export enum EWindowStackingOrder {
   Bottom,
   Top,
-}
-
-export interface BrowserViewHistory {
-  entries: BrowserViewHistoryEntry[];
-
-  index: number;
-}
-
-export interface BrowserViewHistoryEntry {
-  url: string;
-}
-
-export interface BrowserViewPageSecurity {
-  bHasCertError: boolean;
-
-  bIsEVCert: boolean;
-
-  bIsSecure: boolean;
-
-  certExpiry: number;
-
-  certName: string;
-
-  issuerName: string;
-
-  nCertBits: number;
 }

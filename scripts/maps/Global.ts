@@ -9,6 +9,7 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.cm`),
   GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.App.cm`),
   GMap('managers/PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
+  GMap('managers/MainWindowBrowserManager', 'MainWindowBrowserManager', /* ts */`window.MainWindowBrowserManager`),
 
   // Stores
   GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),
@@ -20,7 +21,5 @@ export const GlobalMaps: InterfaceMap[] = [
   // { file: 'Global/AppActivityStore', object: 'window.appActivityStore', srcName: 'AppActivityStore' },
   // NOTE: have the friend list open after todo is fixed
   // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug
-  // PopupManager
   // { file: 'Global/StoreItemCache', object: 'window.StoreItemCache', srcName: 'StoreItemCache' },
-  // { file: 'Global/MainWindowBrowserManager', object: 'window.MainWindowBrowserManager', srcName: 'MainWindowBrowserManager' },
 ];
