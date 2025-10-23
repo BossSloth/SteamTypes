@@ -165,13 +165,13 @@ async function extractInterface(map: InterfaceMap): Promise<string> {
   }
 
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}')`,
+    expression: `(async () => window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}'))()`,
     returnByValue: true,
     awaitPromise: true,
   });
 
   if (response.exceptionDetails) {
-    throw new Error(`Failed to convert object ${map.objectExpression}: ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
+    throw new Error(`Failed to convert object "${map.objectExpression}": ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
   }
 
   const interfaceContent = response.result.value as string;

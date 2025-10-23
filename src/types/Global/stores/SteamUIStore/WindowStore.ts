@@ -119,11 +119,11 @@ export interface WindowStore {
 
   m_simulatedVRGamepadUIOnDesktopInstance: undefined;
 
-  MainRunningAppWindowIDs: unknown[];
+  MainRunningAppWindowIDs: unknown[] | undefined;
 
   MainWindowInstance: WindowInstance;
 
-  OverlayWindows: unknown[];
+  OverlayWindows: unknown[] | undefined;
 
   SteamUIWindows: WindowInstance[];
 }

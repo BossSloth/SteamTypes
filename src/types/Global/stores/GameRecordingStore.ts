@@ -438,7 +438,7 @@ export type RunningRecording = CGameRecordingTimelineMetadata_Recording;
 /** Loaded timeline data containing events, game modes, and phases */
 export interface TimelineData {
   /** Timeline entries (achievements, events, screenshots, user markers) */
-  m_rgEntries: unknown[];
+  m_rgEntries: RgEntries[];
 
   /** Game mode changes within this timeline */
   m_rgGameModeChanges: GameModeChangeEvent[];
@@ -451,6 +451,26 @@ export interface TimelineData {
 
   /** Load state: 'loading', 'loaded', or 'error' */
   m_strState: string;
+}
+
+export interface RgEntries {
+  description: string;
+
+  duration: string;
+
+  icon: string;
+
+  id: string;
+
+  possible_clip: number;
+
+  priority: number;
+
+  time: string;
+
+  title: string;
+
+  type: string;
 }
 
 /** Game mode change event within a timeline */
@@ -495,7 +515,7 @@ export interface SchUpdateRunning {
   IsScheduled(): boolean;
 
   /** @native */
-  m_fnCallback(): unknown;
+  m_fnCallback?(): unknown;
 
   /** Schedules an update with specified parameters */
   Schedule(e: unknown, t: unknown): void;
