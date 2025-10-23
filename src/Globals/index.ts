@@ -7,6 +7,7 @@ import { ConnectionManager } from '../types/Global/ConnectionManager';
 import { ConsoleStore } from '../types/Global/ConsoleStore';
 import { GameRecordingStore } from '../types/Global/GameRecordingStore';
 import { PopupManager } from '../types/Global/PopupManager';
+import { SearchStore } from '../types/Global/SearchStore';
 import { SteamUIStore } from '../types/Global/SteamUIStore';
 import { UrlStore } from '../types/Global/UrlStore';
 
@@ -71,7 +72,7 @@ declare global {
   let RemotePlayStore_SteamUI: unknown;
   let ResetNewContentRollup: unknown;
   let screenshotStore: unknown;
-  let searchstore: unknown;
+  let searchstore: SearchStore;
   let securitystore: unknown;
   let serverBrowserStore: unknown;
   let SetBackgroundInterval: unknown;
@@ -165,7 +166,7 @@ declare global {
     RemotePlayStore_SteamUI: unknown;
     ResetNewContentRollup: unknown;
     screenshotStore: unknown;
-    searchstore: unknown;
+    searchstore: SearchStore;
     securitystore: unknown;
     serverBrowserStore: unknown;
     SetBackgroundInterval: unknown;
