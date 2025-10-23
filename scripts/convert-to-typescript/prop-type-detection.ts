@@ -255,8 +255,8 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
     return 'ReactRoot';
   }
   // @ts-expect-error App is not defined
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  if (typeof App !== 'undefined' && obj === App?.m_cm) {
+
+  if (typeof window.cm !== 'undefined' && obj === window.cm) {
     // import { ConnectionManager } from './ConnectionManager';
     if (addImport) context.addImport('./ConnectionManager', 'ConnectionManager');
 
