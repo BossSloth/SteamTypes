@@ -1,4 +1,4 @@
-import { MappedObservable, ObservableValue, Unsubscribable } from '../../shared';
+import { MappedObservable, ObservableValue, Unsubscribable } from 'shared';
 
 export interface GamepadNavigationManager {
   BatchedUpdate(e: unknown): void;

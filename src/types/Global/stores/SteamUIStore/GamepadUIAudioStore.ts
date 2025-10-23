@@ -1,5 +1,5 @@
-import { ESteamUISound, ObservableValue, Unsubscribable } from '../../shared';
-import { EUIMode } from '../PopupManager';
+import { EUIMode } from 'Global/PopupManager';
+import { ESteamUISound, ObservableValue, Unsubscribable } from 'shared';
 import { FocusNavigationContext } from './GamepadNavigationManager';
 
 export interface GamepadUIAudioStore {

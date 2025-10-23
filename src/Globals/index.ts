@@ -2,14 +2,14 @@
 import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
-import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 import { ConnectionManager } from '../types/Global/ConnectionManager';
-import { ConsoleStore } from '../types/Global/ConsoleStore';
-import { GameRecordingStore } from '../types/Global/GameRecordingStore';
 import { PopupManager } from '../types/Global/PopupManager';
-import { SearchStore } from '../types/Global/SearchStore';
-import { SteamUIStore } from '../types/Global/SteamUIStore';
-import { UrlStore } from '../types/Global/UrlStore';
+import { AppDetailsStore } from '../types/Global/stores/AppDetailsStore';
+import { ConsoleStore } from '../types/Global/stores/ConsoleStore';
+import { GameRecordingStore } from '../types/Global/stores/GameRecordingStore';
+import { SearchStore } from '../types/Global/stores/SearchStore';
+import { SteamUIStore } from '../types/Global/stores/SteamUIStore';
+import { UrlStore } from '../types/Global/stores/UrlStore';
 
 declare global {
   let App: App;

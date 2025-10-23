@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { GameRecordingStore } from '../../Global/GameRecordingStore';
+import type { GameRecordingStore } from 'Global/stores/GameRecordingStore';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Screenshot } from '../../SteamClient/Screenshots';
+import type { Screenshot } from 'SteamClient/Screenshots';
 
 /**
  * This interface allows you to navigate like {@link SteamUIStore.Navigate}, but

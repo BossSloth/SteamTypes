@@ -1,4 +1,4 @@
-import { URL } from '../SteamClient';
+import { URL } from 'SteamClient/URL';
 
 export interface UrlStore {
   BIsSteamURL(url: string): boolean;

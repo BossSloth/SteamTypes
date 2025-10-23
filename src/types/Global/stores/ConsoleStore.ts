@@ -1,5 +1,5 @@
-import { Console, SpewType } from '../SteamClient/Console';
-import { Unregisterable } from '../SteamClient/shared';
+import { Console, SpewType } from 'SteamClient/Console';
+import { Unregisterable } from 'SteamClient/shared';
 
 export interface ConsoleStore {
   AddSpewLine(spew: string, spewType: SpewType): void;

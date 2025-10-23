@@ -1,7 +1,7 @@
 import { ObservableMap } from 'mobx';
-import { GameRecordingRequestHandler } from '../Modules/GameRecordingRequestHandler';
-import { CGameRecording_ClipSummary, CGameRecording_GetAppsWithBackgroundVideo_Response_App, CGameRecording_RecordingSessionChanged_Notification, CTimelineEntry } from '../Protobufs';
-import { CGameRecordingTimelineMetadata, CGameRecordingTimelineMetadata_Recording } from '../Protobufs/steam/webuimessages_gamerecordingfiles';
+import { GameRecordingRequestHandler } from 'Modules/GameRecordingRequestHandler';
+import { CGameRecording_ClipSummary, CGameRecording_GetAppsWithBackgroundVideo_Response_App, CGameRecording_RecordingSessionChanged_Notification, CTimelineEntry } from 'Protobufs';
+import { CGameRecordingTimelineMetadata, CGameRecordingTimelineMetadata_Recording } from 'Protobufs/steam/webuimessages_gamerecordingfiles';
 
 export interface GameRecordingStore {
   BEnoughDiskSpace(): boolean;

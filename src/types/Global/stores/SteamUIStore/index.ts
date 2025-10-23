@@ -1,7 +1,7 @@
 /* eslint-disable customRules/min-enum-members */
-import { ObservableValue } from '../../shared';
+import { EUIMode } from 'Global/PopupManager';
+import { ObservableValue } from 'shared';
 import { EDisplayStatus } from '../AppDetailsStore';
-import { EUIMode } from '../PopupManager';
 import { GamepadNavigationManager, NavigationSource } from './GamepadNavigationManager';
 import { GamepadUIAudioStore } from './GamepadUIAudioStore';
 import { TextFilterStore } from './TextFilterStore';

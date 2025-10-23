@@ -1,9 +1,9 @@
 import Long from 'long';
 import { ObservableMap } from 'mobx';
-import { GameSessions } from '../SteamClient';
-import { JsPbMessage } from '../SteamClient/shared';
+import { GameSessions } from 'SteamClient';
+import { JsPbMessage } from 'SteamClient/shared';
+import { ConnectionManager } from '../ConnectionManager';
 import { AchievementData } from './AppDetailsStore';
-import { ConnectionManager } from './ConnectionManager';
 
 export interface AppActivityStoreOld {
   BAllowDeckCompatibilityFeedback(e: unknown): unknown;

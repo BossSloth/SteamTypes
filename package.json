@@ -19,6 +19,14 @@
       "types": "./dist/Types/Global/*.d.ts",
       "default": "./dist/Types/Global/*.js"
     },
+    "./Modules/*": {
+      "types": "./dist/Types/Modules/*.d.ts",
+      "default": "./dist/Types/Modules/*.js"
+    },
+    "./Protobufs/*": {
+      "types": "./dist/Types/Protobufs/*.d.ts",
+      "default": "./dist/Types/Protobufs/*.js"
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "default": "./dist/*.js"

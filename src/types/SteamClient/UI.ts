@@ -1,5 +1,5 @@
 import { EUIMode } from '../Global/PopupManager';
-import { DesiredSteamWindow } from '../Global/SteamUIStore/WindowStore';
+import { DesiredSteamWindow } from '../Global/stores/SteamUIStore/WindowStore';
 import { Unregisterable } from './shared';
 import { EOSType } from './System';
 

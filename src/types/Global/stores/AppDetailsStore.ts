@@ -1,9 +1,9 @@
+import { ConnectionManager } from 'Global/ConnectionManager';
+import { SteamAppOverview } from 'Global/stores/SteamUIStore';
 import { ObservableMap } from 'mobx';
-import { Apps } from '../SteamClient';
-import { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from '../SteamClient/Input';
-import { Unregisterable } from '../SteamClient/shared';
-import { ConnectionManager } from './ConnectionManager';
-import { SteamAppOverview } from './SteamUIStore';
+import { Apps } from 'SteamClient';
+import { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from 'SteamClient/Input';
+import { Unregisterable } from 'SteamClient/shared';
 
 export interface AppDetailsStore {
   /**
