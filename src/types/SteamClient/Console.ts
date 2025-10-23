@@ -37,5 +37,7 @@ export interface SpewOutput {
   /**
    * The type or category of the spew output.
    */
-  spew_type: 'error' | 'info' | 'input';
+  spew_type: SpewType;
 }
+
+export type SpewType = 'error' | 'info' | 'input';

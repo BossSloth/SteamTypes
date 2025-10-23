@@ -4,6 +4,7 @@ import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { AppDetailsStore } from '../types/Global/AppDetailsStore';
 import { ConnectionManager } from '../types/Global/ConnectionManager';
+import { ConsoleStore } from '../types/Global/ConsoleStore';
 import { GameRecordingStore } from '../types/Global/GameRecordingStore';
 import { PopupManager } from '../types/Global/PopupManager';
 import { SteamUIStore } from '../types/Global/SteamUIStore';
@@ -25,11 +26,11 @@ declare global {
   let ClientConnectionAPI: unknown;
   let cloudStorage: unknown;
   let cloudStorageInternalState: unknown;
-  let CLSTAMP: unknown;
+  let CLSTAMP: string;
   let cm: ConnectionManager;
   let collectionStore: unknown;
   let communityStore: unknown;
-  let consoleStore: unknown;
+  let consoleStore: ConsoleStore;
   let DebugLogDisable: (name: string) => void;
   let DebugLogDisableAll: () => Promise<void>;
   let DebugLogDisableBacktrace: () => Promise<void>;
@@ -61,6 +62,7 @@ declare global {
   let loginStore: unknown;
   let MainWindowBrowserManager: unknown;
   let multiSelectStore: unknown;
+  let NetworkDiagnosticsStore: unknown;
   let NotificationStore: unknown;
   let openDatabase: unknown;
   let overlayStore: unknown;
@@ -91,6 +93,7 @@ declare global {
   let SuspendResumeStore: unknown;
   let SystemDisplayManagerStore: unknown;
   let SystemNetworkStore: unknown;
+  let SystemPowerStore: unknown;
   let SystemReportStore: unknown;
   let trendingStore: unknown;
   let uiBroadcastWatchStore: unknown;
@@ -117,11 +120,11 @@ declare global {
     ClientConnectionAPI: unknown;
     cloudStorage: unknown;
     cloudStorageInternalState: unknown;
-    CLSTAMP: unknown;
+    CLSTAMP: string;
     cm: ConnectionManager;
     collectionStore: unknown;
     communityStore: unknown;
-    consoleStore: unknown;
+    consoleStore: ConsoleStore;
     DebugLogDisable: (name: string) => void;
     DebugLogDisableAll: () => Promise<void>;
     DebugLogDisableBacktrace: () => Promise<void>;
@@ -153,6 +156,7 @@ declare global {
     loginStore: unknown;
     MainWindowBrowserManager: unknown;
     multiSelectStore: unknown;
+    NetworkDiagnosticsStore: unknown;
     NotificationStore: unknown;
     openDatabase: unknown;
     overlayStore: unknown;
@@ -183,6 +187,7 @@ declare global {
     SuspendResumeStore: unknown;
     SystemDisplayManagerStore: unknown;
     SystemNetworkStore: unknown;
+    SystemPowerStore: unknown;
     SystemReportStore: unknown;
     trendingStore: unknown;
     uiBroadcastWatchStore: unknown;

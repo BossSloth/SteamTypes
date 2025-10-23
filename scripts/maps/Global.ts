@@ -5,6 +5,7 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('App', 'App', /* ts */`window.App`),
   GMap('ConnectionManager', 'ConnectionManager', /* ts */`window.cm`),
   GMap('ConnectionManager', 'ConnectionManager', /* ts */`window.App.cm`),
+  GMap('ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),
   GMap('AppDetailsStore', 'AppDetailsStore', /* ts */`window.appDetailsStore`),
   GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */`window.appAchievementProgressCache`, 'window.appAchievementProgressCache.RequestCacheUpdate()'),
   GMap('PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
