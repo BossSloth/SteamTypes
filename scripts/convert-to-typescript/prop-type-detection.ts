@@ -325,7 +325,7 @@ function getGenericObjectTypes(obj: unknown, path: string): Type | null {
   if (isSteamObservableValue(obj)) {
     const mainType = getType(obj.m_currentValue, path);
 
-    context.addImport('./shared', 'ObservableValue');
+    context.addImport('../shared', 'ObservableValue');
 
     return new GenericType('ObservableValue', [mainType]);
   }
