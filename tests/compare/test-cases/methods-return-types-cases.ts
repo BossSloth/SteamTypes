@@ -216,4 +216,35 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'combined union return type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Values | 'ignore' | 'maintain';
+      }
+
+      export type Values = 'store' | 'foo' | 'bar';
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
+      }
+    `,
+  },
+  'combined union return type mismatch': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): Values | 'ignore' | 'maintain';
+      }
+
+      export type Values = 'store' | 'bar';
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
+      }
+    `,
+  },
 };

@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import { ArrayTypeNode, EnumDeclaration, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
@@ -177,6 +178,25 @@ function handleIndexedReturnType(targetTypeReference: TypeReferenceNode, sourceN
 
 function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): boolean {
   const targetMembers = targetUnion.getTypeNodes();
+
+  const typeReferenceMembers = targetMembers.filter(node => node.isKind(ts.SyntaxKind.TypeReference));
+  if (typeReferenceMembers.length > 0) {
+    // If type references are TypeAliases, expand them
+    // Example test case 'combined union return type'
+    for (const typeReferenceMember of typeReferenceMembers) {
+      const definition = (typeReferenceMember.getTypeName() as Identifier).getDefinitionNodes()[0];
+      if (Node.isTypeAliasDeclaration(definition)) {
+        const typeNode = definition.getTypeNode();
+        if (typeNode) {
+          let nodes = [typeNode];
+          if (Node.isUnionTypeNode(typeNode)) {
+            nodes = typeNode.getTypeNodes();
+          }
+          targetMembers.splice(targetMembers.indexOf(typeReferenceMember), 1, ...nodes);
+        }
+      }
+    }
+  }
 
   if (Node.isUnionTypeNode(sourceNode)) {
     // Target=Union, Source=Union

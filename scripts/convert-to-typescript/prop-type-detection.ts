@@ -256,7 +256,7 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
   }
   // @ts-expect-error App is not defined
 
-  if (typeof window.cm !== 'undefined' && obj === window.cm) {
+  if (typeof window !== 'undefined' && typeof window.cm !== 'undefined' && obj === window.cm) {
     // import { ConnectionManager } from './managers/ConnectionManager';
     if (addImport) context.addImport('./managers/ConnectionManager', 'ConnectionManager');
 
@@ -325,7 +325,7 @@ function getGenericObjectTypes(obj: unknown, path: string): Type | null {
   if (isSteamObservableValue(obj)) {
     const mainType = getType(obj.m_currentValue, path);
 
-    context.addImport('../shared', 'ObservableValue');
+    context.addImport('shared', 'ObservableValue');
 
     return new GenericType('ObservableValue', [mainType]);
   }

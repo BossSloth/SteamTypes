@@ -1,5 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Return Types Cases > combined union return type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): Values | 'ignore' | 'maintain';
++  bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
+}
+
+export type Values = 'store' | 'bar';"
+`;
+
 exports[`Comparator Return Types Cases > method with interface return type 1`] = `
 "===================================================================
 --- a/target.ts
