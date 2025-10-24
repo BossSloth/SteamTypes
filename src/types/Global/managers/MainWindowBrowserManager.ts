@@ -172,7 +172,7 @@ export interface MainWindowBrowserManager {
   /**
    * URLs for each tab that was last active
    */
-  m_lastActiveTabURLs: LastActiveTabURLs;
+  m_lastActiveTabURLs: LastActiveTabURLs | object;
 
   /**
    * The last location from the router
@@ -258,9 +258,9 @@ export interface BrowserViewHistoryEntry {
 }
 
 export interface LastActiveTabURLs {
-  community: string;
+  community?: string;
 
-  me: string;
+  me?: string;
 
   store?: string;
 }

@@ -387,7 +387,7 @@ export interface ActiveTimelineLoader extends TimelineLoader {
   m_bInitialized: boolean;
 
   /** Clip ID if this loader is for a specific clip */
-  m_clipID: string | undefined;
+  m_clipID?: string | undefined;
 
   /** Game ID for the recordings */
   m_gameID: string;
@@ -524,7 +524,7 @@ export interface SchUpdateRunning {
   ScheduledInternal(): void;
 
   /** Timer handle or undefined */
-  m_schTimer: number | undefined;
+  m_schTimer?: number | undefined;
 }
 
 export interface RgListeners {
@@ -1131,7 +1131,7 @@ export interface RgListeners3 {
 
   m_scrollWindowWidth: number;
 
-  m_thumbnailHighlightEntry: null;
+  m_thumbnailHighlightEntry: null | undefined;
 
   m_timelineMask: RgListeners2;
 }
@@ -1139,7 +1139,7 @@ export interface RgListeners3 {
 export interface MapTimelineEntries {
   rgGameModes: GameModeChangeEvent[];
 
-  rgHighlights: never;
+  rgHighlights: RgEntries[];
 }
 
 export interface RgTimelineOffsets {

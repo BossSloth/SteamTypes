@@ -320,6 +320,7 @@ export interface WindowInstance {
 
   m_notificationPosition: NotificationPosition;
 
+  /** @ignore unreliable */
   m_params: (Params | Params2);
 
   m_setVRDashboardBarPopups: Set<unknown>;

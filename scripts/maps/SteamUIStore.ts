@@ -12,5 +12,5 @@ export const SteamUIStoreMaps: InterfaceMap[] = [
   GMap('stores/SteamUIStore/WindowStore/WindowStore', 'WindowStore', /* ts */`SteamUIStore.WindowStore`),
   GMap('stores/SteamUIStore/WindowStore/SteamWindowNavigator', 'SteamWindowNavigator', /* ts */`SteamUIStore.WindowStore.MainWindowInstance.Navigator`),
   GMap('stores/SteamUIStore/WindowStore/MenuStore', 'MenuStore', /* ts */`SteamUIStore.WindowStore.MainWindowInstance.MenuStore`),
-  GMap('stores/SteamUIStore/WindowStore/DesktopOverlay', 'DesktopOverlay', /* ts */`SteamUIStore.WindowStore.OverlayWindows[0]?.DesktopOverlay`),
+  GMap('stores/SteamUIStore/WindowStore/DesktopOverlay', 'DesktopOverlay', /* ts */`SteamUIStore.WindowStore.OverlayWindows[0]?.DesktopOverlay`, undefined, /* ts */`SteamUIStore.WindowStore.OverlayWindows.length > 0`),
 ];

@@ -64,7 +64,6 @@ declare global {
   let loginStore: unknown;
   let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
-  let NetworkDiagnosticsStore: unknown;
   let NotificationStore: unknown;
   let openDatabase: unknown;
   let overlayStore: unknown;
@@ -158,7 +157,6 @@ declare global {
     loginStore: unknown;
     MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
-    NetworkDiagnosticsStore: unknown;
     NotificationStore: unknown;
     openDatabase: unknown;
     overlayStore: unknown;

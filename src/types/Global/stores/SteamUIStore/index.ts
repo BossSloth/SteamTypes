@@ -1,5 +1,6 @@
 /* eslint-disable customRules/min-enum-members */
 import { EUIMode } from 'Global/managers/PopupManager';
+import { AppControllerSupportLevel, DisplayStatus, ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs';
 import { ObservableValue } from 'shared';
 import { EDisplayStatus } from '../AppDetailsStore';
 import { GamepadNavigationManager, NavigationSource } from './GamepadNavigationManager';
@@ -445,7 +446,7 @@ export interface SteamAppOverview {
 
   album_cover_hash: undefined;
 
-  app_type: EAppType;
+  app_type: ProtoAppType;
 
   appid: number;
 
@@ -457,7 +458,7 @@ export interface SteamAppOverview {
 
   display_name_elanguage: number;
 
-  display_status: number;
+  display_status: DisplayStatus;
 
   gameid: string;
 
@@ -521,9 +522,9 @@ export interface SteamAppOverview {
 
   per_client_data: SteamAppOverviewClientData[];
 
-  ps4_controller_support: EAppControllerSupportLevel;
+  ps4_controller_support: AppControllerSupportLevel;
 
-  ps5_controller_support: EAppControllerSupportLevel;
+  ps5_controller_support: AppControllerSupportLevel;
 
   review_percentage: number;
 
@@ -569,11 +570,11 @@ export interface SteamAppOverview {
 
   status_percentage: number;
 
-  steam_deck_compat_category: ESteamDeckCompatibilityCategory;
+  steam_deck_compat_category: SteamDeckCompatibilityCategory;
 
   steam_hw_compat_category_packed: number;
 
-  steam_os_compat_category: ESteamDeckCompatibilityCategory;
+  steam_os_compat_category: SteamDeckCompatibilityCategory;
 
   store_category: number[];
 
@@ -589,7 +590,7 @@ export interface SteamAppOverview {
 
   vr_supported: boolean | undefined;
 
-  xbox_controller_support: EAppControllerSupportLevel | undefined;
+  xbox_controller_support: AppControllerSupportLevel | undefined;
 }
 
 export interface SteamAppOverviewClientData {
@@ -629,40 +630,4 @@ export enum ESourceType {
 /** @generated */
 export enum EShutdownState {
   EShutdownState0 = 0,
-}
-
-export enum EAppType {
-  DepotOnly = -2147483648,
-  Invalid = 0,
-  Game = 1 << 0,
-  Application = 1 << 1,
-  Tool = 1 << 2,
-  Demo = 1 << 3,
-  Deprecated = 1 << 4,
-  DLC = 1 << 5,
-  Guide = 1 << 6,
-  Driver = 1 << 7,
-  Config = 1 << 8,
-  Hardware = 1 << 9,
-  Franchise = 1 << 10,
-  Video = 1 << 11,
-  Plugin = 1 << 12,
-  MusicAlbum = 1 << 13,
-  Series = 1 << 14,
-  Comic = 1 << 15,
-  Beta = 1 << 16,
-  Shortcut = 1073741824,
-}
-
-export enum EAppControllerSupportLevel {
-  None,
-  Partial,
-  Full,
-}
-
-export enum ESteamDeckCompatibilityCategory {
-  Unknown,
-  Unsupported,
-  Playable,
-  Verified,
 }

@@ -143,14 +143,34 @@ let extractTime = 0;
 /**
  * Extracts TypeScript interface from a Steam client object
  */
-async function extractInterface(map: InterfaceMap): Promise<string> {
+async function extractInterface(map: InterfaceMap): Promise<string | null> {
+  const startTime = Date.now();
+
+  if (map.condition !== undefined) {
+    const conditionResponse = await sharedJsClient.Runtime.evaluate({
+      expression: map.condition,
+      returnByValue: true,
+      awaitPromise: true,
+    });
+
+    if (conditionResponse.exceptionDetails) {
+      throw new Error(`Failed to check condition: ${JSON.stringify(conditionResponse.exceptionDetails.exception, null, 2)}`);
+    }
+
+    const value = conditionResponse.result.value as boolean;
+
+    if (!value) {
+      logger.debug(chalk.green(`✅ Condition not met for ${chalk.bold(map.objectExpression)}`));
+
+      return null;
+    }
+  }
+
   logger.debug('\n');
   logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.objectExpression)} as ${chalk.bold(map.interfaceName)}...`));
 
   // Execute the conversion function
   logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(map.objectExpression)} to TypeScript interface...`));
-
-  const startTime = Date.now();
 
   if (map.initFunction !== undefined) {
     const initResponse = await sharedJsClient.Runtime.evaluate({
@@ -248,14 +268,18 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   const rootDir = path.resolve(`${__dirname}/../`);
 
   // Create an array of promises for parallel execution
-  const interfacePromises = maps.map(async (map) => {
+  const interfacePromises = maps.map(async (map): Promise<{ filePath: string; result: string | null; } | null> => {
     const interfaceContent = await extractInterface(map);
+
+    if (interfaceContent === null) {
+      return null;
+    }
 
     const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
     // Check if the file exists
     if (!fs.existsSync(filePath)) {
       // Create the file
-      fs.writeFileSync(filePath, await extractInterface(map));
+      fs.writeFileSync(filePath, interfaceContent);
     }
 
     // if (options.interactive && (result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
@@ -277,7 +301,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
     }
   });
 
-  const results = await Promise.all(interfacePromises);
+  const results = (await Promise.all(interfacePromises)).filter(r => r !== null);
 
   diffs.push(...results.filter(r => r.result !== null));
 
@@ -331,25 +355,15 @@ async function main(): Promise<void> {
       logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
 
       const startTime = performance.now();
-      try {
-        await run(options, filter);
-      } finally {
-        sharedJsClient.close();
-      }
+
+      await run(options, filter);
+      sharedJsClient.close();
+
       const endTime = performance.now();
 
       logger.log(chalk.green('\n✅ Operation completed successfully\n'));
       logger.log(chalk.gray(`Memory usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`));
       logger.log(chalk.gray(`Execution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
-
-      // } catch (error: any) {
-      //     logger.error(chalk.red(`\n❌ Error: ${error.message}`));
-      //     if (error.stack && options.verbose) {
-      //         logger.error(chalk.gray('\nStack trace:'));
-      //         logger.error(chalk.gray(error.stack));
-      //     }
-      //     process.exit(1);
-      // }
     });
 
   await program.parseAsync();
