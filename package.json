@@ -27,13 +27,17 @@
       "types": "./dist/Types/Protobufs/*.d.ts",
       "default": "./dist/Types/Protobufs/*.js"
     },
+    "./Runtime/*": {
+      "types": "./dist/Runtime/*.d.ts",
+      "default": "./dist/Runtime/*.js"
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "default": "./dist/*.js"
     }
   },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "watch": "tsc -w --project tsconfig.build.json",
     "build-convert-debug": "esbuild scripts/convert-to-typescript/test.ts --bundle --format=iife --platform=browser --outfile=build/scripts/convert-to-typescript.js",
     "build-convert": "bun build-convert-debug --minify-identifiers --minify-syntax",

@@ -5,7 +5,7 @@ import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, customRules/no-deep-relative-imports
-import { CAppOverview_Change_Protobuf } from '../../Modules/Protobufs';
+import { CAppOverview_Change_Protobuf } from '../../Runtime/Protobufs';
 
 /**
  * Represents various functions related to Steam applications.
