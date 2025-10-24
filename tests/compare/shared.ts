@@ -1,4 +1,5 @@
 import dedent from 'dedent';
+import stripAnsi from 'strip-ansi';
 import { Project, SourceFile } from 'ts-morph';
 import { describe, expect, it } from 'vitest';
 import { compareAndCorrectAllInterfaces } from '../../scripts/compare/interface-comparator';
@@ -70,6 +71,6 @@ function assertDiff(diff: string | null): void {
   expect(diff, 'Diff should not be null').not.toBeNull();
 
   if (diff !== null) {
-    expect(dedent(diff)).toMatchSnapshot();
+    expect(dedent(stripAnsi(diff))).toMatchSnapshot();
   }
 }
