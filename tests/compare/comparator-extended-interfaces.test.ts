@@ -1,5 +1,6 @@
 import { createTest } from './shared';
-import { ComparatorTest, extendedInterfaceCases } from './test-cases';
+import { ComparatorTest } from './test-cases';
+import { extendedInterfaceCases } from './test-cases/extended-interface-test-cases';
 
 createTest('Extended Interface Cases', extendedInterfaceCases);
 

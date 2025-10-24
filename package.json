@@ -70,6 +70,7 @@
     "@types/node": "^24.9.1",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitest/coverage-v8": "^4.0.3",
+    "@vitest/ui": "^4.0.3",
     "ansi-regex": "^6.2.2",
     "chalk": "^5.6.2",
     "chrome-remote-interface": "^0.33.3",
