@@ -3,6 +3,7 @@ import type { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { ConnectionManager } from '../types/Global/managers/ConnectionManager';
+import { MainWindowBrowserManager } from '../types/Global/managers/MainWindowBrowserManager';
 import { PopupManager } from '../types/Global/managers/PopupManager';
 import { AppDetailsStore } from '../types/Global/stores/AppDetailsStore';
 import { ConsoleStore } from '../types/Global/stores/ConsoleStore';
@@ -61,7 +62,7 @@ declare global {
   let libraryScrollListener: unknown;
   let LocalizationManager: unknown;
   let loginStore: unknown;
-  let MainWindowBrowserManager: unknown;
+  let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
   let NetworkDiagnosticsStore: unknown;
   let NotificationStore: unknown;
@@ -155,7 +156,7 @@ declare global {
     libraryScrollListener: unknown;
     LocalizationManager: unknown;
     loginStore: unknown;
-    MainWindowBrowserManager: unknown;
+    MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
     NetworkDiagnosticsStore: unknown;
     NotificationStore: unknown;
