@@ -305,6 +305,12 @@ function handleTargetTuple(targetTuple: TupleTypeNode, sourceNode: TypeNode): bo
 }
 
 function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, sourceNode: TypeNode): boolean {
+  if (isImportedType(currentTargetSourceFile, targetIndexedAccess.getObjectTypeNode())) {
+    // Imported indexed access types are not compared ans should be ignored
+    // Example test case 'indexed access on external generic type'
+    return true;
+  }
+
   const targetType = targetIndexedAccess.getType();
   if (targetType.isTypeParameter()) {
     const typeParameterDeclaration = targetType.getSymbol()?.getDeclarations()[0];

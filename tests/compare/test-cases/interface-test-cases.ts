@@ -993,7 +993,7 @@ export const interfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Foo',
     expectsNoDiff: true,
     target: dedent/* ts */`
-      // import { Foo } from './bar';
+      import { Foo } from './bar';
       import { Callbacks } from './types';
 
       export interface Foo {
