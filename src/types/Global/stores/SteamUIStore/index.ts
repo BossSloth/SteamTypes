@@ -5,7 +5,7 @@ import { EDisplayStatus } from '../AppDetailsStore';
 import { GamepadNavigationManager, NavigationSource } from './GamepadNavigationManager';
 import { GamepadUIAudioStore } from './GamepadUIAudioStore';
 import { TextFilterStore } from './TextFilterStore';
-import { WindowInstance, WindowStore } from './WindowStore';
+import { WindowInstance, WindowStore } from './WindowStore/WindowStore';
 
 export interface SteamUIStore {
   BCanNavigateToRunningApp(): boolean;

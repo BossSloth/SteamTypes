@@ -1,10 +1,12 @@
-/* eslint-disable customRules/min-enum-members */
 import { EUIMode } from 'Global/managers/PopupManager';
 import { History } from 'history';
 import { ObservableMap } from 'mobx';
 import { ObservableValue } from 'mobx/dist/internal';
 import { Callbacks, ReducedValue } from 'shared';
-import { SteamUIStore } from '.';
+import { EUIComposition } from 'SteamClient/shared';
+import { SteamUIStore } from '..';
+import { DesktopOverlay } from './DesktopOverlay';
+import { MenuStore } from './MenuStore';
 import { SteamWindowNavigator } from './SteamWindowNavigator';
 
 export interface WindowStore {
@@ -114,7 +116,7 @@ export interface WindowStore {
 
   m_mapDesiredWindows: Map<number, DesiredSteamWindow>;
 
-  m_mapOverlayPopupByPID: ObservableMap<unknown, unknown>;
+  m_mapOverlayPopupByPID: ObservableMap<number, WindowInstance>;
 
   m_Parent: SteamUIStore;
 
@@ -124,7 +126,7 @@ export interface WindowStore {
 
   MainWindowInstance: WindowInstance;
 
-  OverlayWindows: unknown[] | undefined;
+  OverlayWindows: WindowInstance[];
 
   SteamUIWindows: WindowInstance[];
 }
@@ -198,7 +200,7 @@ export interface WindowInstance {
 
   IsVRWindowInGamescope(): boolean;
 
-  m_fnFocusApplicationRoot(): void;
+  m_fnFocusApplicationRoot?(): void;
 
   /**
    * @param t default: !1
@@ -266,17 +268,17 @@ export interface WindowInstance {
 
   CompositionStateStore: CompositionStateStore;
 
-  DesktopOverlay: undefined;
+  DesktopOverlay?: DesktopOverlay;
 
   FocusNavActiveSubscribableValue: unknown;
 
   FooterStore: FooterStore;
 
-  forcedAppID: undefined;
+  forcedAppID?: undefined;
 
   HeaderStore: HeaderStore;
 
-  LocationPathName: string;
+  LocationPathName?: string;
 
   m_ActionDescriptionStore: ActionDescriptionStore;
 
@@ -292,71 +294,71 @@ export interface WindowInstance {
 
   m_currentBackstackLevel: number;
 
-  m_DesktopOverlay: undefined;
+  m_DesktopOverlay?: DesktopOverlay;
 
   m_flLastHomePressMS: number;
 
   m_flLastQuickAccessPressMS: number;
 
-  m_FocusNavContext: undefined;
+  m_FocusNavContext?: undefined;
 
   m_FooterStore: FooterStore;
 
   m_HeaderStore: HeaderStore;
 
-  m_history: History;
+  m_history?: History;
 
-  m_lastControllerConfigURL: undefined;
+  m_lastControllerConfigURL?: undefined;
 
-  m_locationPathname: string;
+  m_locationPathname?: string;
 
   m_MenuStore: MenuStore;
 
-  m_ModalManager: undefined;
+  m_ModalManager?: undefined;
 
   m_Navigator: SteamWindowNavigator;
 
   m_notificationPosition: NotificationPosition;
 
-  m_params: Params;
+  m_params: (Params | Params2);
 
   m_setVRDashboardBarPopups: Set<unknown>;
 
-  m_StoreBrowser: undefined;
+  m_StoreBrowser?: undefined;
 
   m_VirtualKeyboardManager: VirtualKeyboardManager;
 
-  m_VRDashboardBarWindow: undefined;
+  m_VRDashboardBarWindow?: undefined;
 
-  m_VRFrameStore: undefined;
+  m_VRFrameStore?: undefined;
 
-  m_VRPooledPopupStore: undefined;
+  m_VRPooledPopupStore?: undefined;
 
-  MainRunningApp: undefined;
+  MainRunningApp?: SteamUIStore['MainRunningApp'];
 
-  MainRunningAppID: undefined;
+  MainRunningAppID?: SteamUIStore['MainRunningAppID'];
 
   MenuStore: MenuStore;
 
-  ModalManager: undefined;
+  ModalManager?: undefined;
 
   Navigator: SteamWindowNavigator;
 
   NotificationPosition: NotificationPosition;
 
-  params: Params;
+  params: WindowInstance['m_params'];
 
-  RunningApps: unknown[];
+  RunningApps: SteamUIStore['RunningApps'];
 
   VirtualKeyboardManager: VirtualKeyboardManager;
 
   VRDashboardBarPopups: Set<unknown>;
 
-  VRDashboardBarWindow: undefined;
+  VRDashboardBarWindow?: undefined;
 
-  VRFrameStore: undefined;
+  VRFrameStore?: undefined;
 
-  VRPooledPopupStore: undefined;
+  VRPooledPopupStore?: undefined;
 
   WindowType: number;
 }
@@ -469,11 +471,7 @@ export interface CompositionStateStore {
 
   m_eLastPushedToWebHelperCompositionState: ELastPushedToWebHelperCompositionState;
 
-  /**
-   * This value is an enum
-   * @currentValue 3
-   */
-  m_eLatestCompositionState: ELatestCompositionState;
+  m_eLatestCompositionState: EUIComposition;
 
   m_Instance: WindowInstance;
 
@@ -541,9 +539,9 @@ export interface HeaderStore {
 
   m_ActivateSearchBoxCallbackList: Callbacks<() => void>;
 
-  m_BackgroundForPagedSettingsInput: undefined;
+  m_BackgroundForPagedSettingsInput?: undefined;
 
-  m_BackgroundInput: undefined;
+  m_BackgroundInput?: undefined;
 
   m_BackgroundOpacity: ReducedValue<number, number>;
 
@@ -561,7 +559,7 @@ export interface HeaderStore {
 
   m_flCurrentHeaderHeight: number;
 
-  m_hResumeHeaderTimer: undefined;
+  m_hResumeHeaderTimer?: undefined;
 
   m_iHideHeaderCount: number;
 
@@ -571,80 +569,13 @@ export interface HeaderStore {
 
   m_Opacity: ReducedValue<number, number>;
 
-  m_OpacityInput: undefined;
+  m_OpacityInput?: undefined;
 
   m_rgHandles: unknown[];
 
   m_ShowUniversalSearch: ReducedValue<string, string>;
 
   m_TitleText: ReducedValue<unknown, (null | string)>;
-}
-
-export interface MenuStore {
-  ClearLastRequestedSideMenu(): void;
-
-  CloseSideMenus(): void;
-
-  GetLastRequestedSideMenu(): unknown;
-
-  GetOpenSideMenu(): unknown;
-
-  GetQuickAccessTab(): unknown;
-
-  Init(): never[];
-
-  IsAnySideMenuVisible(): boolean;
-
-  IsSideMenuInteractable(): boolean;
-
-  IsSideMenuVisible(e: unknown): boolean;
-
-  OnMenuDeactivated(e: unknown): void;
-
-  OnSideMenusChanged(): void;
-
-  OpenMainMenu(): unknown;
-
-  /**
-   * @native
-   */
-  OpenQuickAccessMenu(): unknown;
-
-  OpenSideMenu(e: unknown): void;
-
-  RequestExtendSideMenuVisibility(): () => number;
-
-  SetSuppressMenus(): () => number;
-
-  ToggleSideMenu(e: unknown, t: unknown): void;
-
-  m_cSideMenuExtendedVisibilityRequests: number;
-
-  m_cSuppressRequests: number;
-
-  /**
-   * This value is an enum
-   * @currentValue 0
-   */
-  m_eLastRequestedSideMenu: ELastRequestedSideMenu;
-
-  /**
-   * This value is an enum
-   * @currentValue 0
-   */
-  m_eOpenSideMenu: EOpenSideMenu;
-
-  /**
-   * This value is an enum
-   * @currentValue 4
-   */
-  m_eQuickAccessTab: EQuickAccessTab;
-
-  m_Instance: WindowInstance;
-
-  m_MainMenuStore: MainMenuStore;
-
-  MainMenuStore: MainMenuStore;
 }
 
 export interface NotificationPosition {
@@ -659,6 +590,24 @@ export interface Params {
   browserInfo: BrowserInfo;
 
   eWindowType: EWindowType;
+
+  strUserAgentIdentifier: string;
+}
+
+export interface Params2 {
+  appid: number;
+
+  browserInfo: BrowserInfo;
+
+  eWindowType: EWindowType;
+
+  flDisplayScale: number;
+
+  gameid: string;
+
+  nScreenHeight: number;
+
+  nScreenWidth: number;
 
   strUserAgentIdentifier: string;
 }
@@ -731,7 +680,7 @@ export interface VirtualKeyboardManager {
 
   KeyboardLocation: string;
 
-  m_ActiveElementProps: ActiveElementProps | undefined;
+  m_ActiveElementProps?: ActiveElementProps | undefined;
 
   m_bDismissOnEnter: boolean;
 
@@ -755,7 +704,7 @@ export interface VirtualKeyboardManager {
 
   m_OnTextEntered: Callbacks<(event: unknown) => void>;
 
-  m_ownerWindow: undefined;
+  m_ownerWindow?: undefined;
 
   m_strDeadKeyCombined: null;
 
@@ -780,80 +729,18 @@ export interface ELastPushedToWebHelperCompositionState {
   windowID: number;
 }
 
-export interface MainMenuStore {
-  GetFocusedApp(): unknown;
-
-  GetFocusedColumn(): unknown;
-
-  GetGamingDeviceType(): unknown;
-
-  GetRunningApps(): unknown;
-
-  GetSelectedGuide(e: unknown): unknown;
-
-  GetSelectedNavEntry(): unknown;
-
-  GetStoreURL(e: unknown): unknown;
-
-  Init(): unknown;
-
-  OnRunningAppsChanged(): void;
-
-  SetFocusedApp(e: unknown): void;
-
-  SetFocusedColumn(e: unknown): void;
-
-  SetSelectedGuide(e: unknown, t: unknown): void;
-
-  SetSelectedNavEntry(e: unknown): void;
-
-  /**
-   * This value is an enum
-   * @currentValue 0
-   */
-  m_eFocusedColumn: EFocusedColumn;
-
-  /**
-   * This value is an enum
-   * @currentValue 0
-   */
-  m_eGamingDeviceType: EGamingDeviceType;
-
-  /**
-   * This value is an enum
-   * @currentValue 1
-   */
-  m_eSelectedNavEntry: ESelectedNavEntry;
-
-  m_focusedApp: null;
-
-  m_mapSelectedGuide: ObservableMap<unknown, unknown>;
-
-  m_WindowInstance: WindowInstance;
-}
-
 export interface BrowserInfo {
-  /**
-   * This value is an enum
-   * @currentValue 7
-   */
+  m_eBrowserType?: EBrowserType;
+
   m_eUIMode: EUIMode;
+
+  m_gameID?: string;
 
   m_nBrowserID: number;
 
   m_unAppID: number;
 
   m_unPID: number;
-}
-
-export interface State {
-  AppDetailsActivitySectionDays_HistoryValue: number;
-
-  strCollectionId?: string;
-}
-
-export interface State2 {
-  strCollectionId: string;
 }
 
 export interface ActiveElementProps {
@@ -889,26 +776,6 @@ export interface CurrentVirtualKeyboardRef {
   bInVR: boolean;
 }
 
-/** @generated */
-export enum ELatestCompositionState {
-  ELatestCompositionState3 = 3,
-}
-
-/** @generated */
-export enum ELastRequestedSideMenu {
-  ELastRequestedSideMenu0 = 0,
-}
-
-/** @generated */
-export enum EOpenSideMenu {
-  EOpenSideMenu0 = 0,
-}
-
-/** @generated */
-export enum EQuickAccessTab {
-  EQuickAccessTab4 = 4,
-}
-
 export enum EWindowType {
   MainGamepadUI,
   OverlayGamepadUI,
@@ -921,31 +788,22 @@ export enum EWindowType {
   SteamChinaReviewLauncher,
 }
 
-/** @generated */
-export enum EFocusedColumn {
-  EFocusedColumn0 = 0,
-}
-
-/** @generated */
-export enum EGamingDeviceType {
-  EGamingDeviceType0 = 0,
-}
-
-/** @generated */
-export enum ESelectedNavEntry {
-  ESelectedNavEntry1 = 1,
-}
-
-export interface State3 {
-  bExternal: boolean;
-
-  strURL: string;
-}
-
 export interface MapAppWindows {
   appid: number;
 
   focusedWindowID: number;
 
   windowids: unknown[];
+}
+
+export enum EBrowserType {
+  OffScreen,
+  OpenVROverlay,
+  OpenVROverlay_Dashboard,
+  DirectHWND,
+  DirectHWND_Borderless,
+  DirectHWND_Hidden,
+  ChildHWNDNative,
+  Offscreen_SteamUI,
+  OpenVROverlay_Subview,
 }

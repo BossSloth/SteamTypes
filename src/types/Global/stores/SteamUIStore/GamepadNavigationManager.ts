@@ -91,7 +91,7 @@ export interface GamepadNavigationManager {
    */
   UpdateSourceToGamepad(e?: boolean): void;
 
-  m_ActiveContext?: never;
+  m_ActiveContext?: FocusNavigationContext;
 
   m_bRestoringHistory: boolean;
 

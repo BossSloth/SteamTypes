@@ -18,6 +18,7 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": false,
+    "baseUrl": "src/types"
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]
