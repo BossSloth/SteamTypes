@@ -32,6 +32,10 @@
       "types": "./dist/Runtime/*.d.ts",
       "default": "./dist/Runtime/*.js"
     },
+    "./Runtime": {
+      "types": "./dist/Runtime/index.d.ts",
+      "default": "./dist/Runtime/index.js"
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "default": "./dist/*.js"
