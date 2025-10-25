@@ -17,16 +17,16 @@
       "default": "./dist/index.js"
     },
     "./Global/*": {
-      "types": "./dist/Types/Global/*.d.ts",
-      "default": "./dist/Types/Global/*.js"
+      "types": "./dist/types/Global/*.d.ts",
+      "default": "./dist/types/Global/*.js"
     },
     "./Modules/*": {
-      "types": "./dist/Types/Modules/*.d.ts",
-      "default": "./dist/Types/Modules/*.js"
+      "types": "./dist/types/Modules/*.d.ts",
+      "default": "./dist/types/Modules/*.js"
     },
     "./Protobufs/*": {
-      "types": "./dist/Types/Protobufs/*.d.ts",
-      "default": "./dist/Types/Protobufs/*.js"
+      "types": "./dist/types/Protobufs/*.d.ts",
+      "default": "./dist/types/Protobufs/*.js"
     },
     "./Runtime/*": {
       "types": "./dist/Runtime/*.d.ts",
