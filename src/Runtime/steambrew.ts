@@ -5,3 +5,9 @@ declare global {
 }
 
 export const steambrew: typeof import('@steambrew/client') = window.MILLENNIUM_API as typeof import('@steambrew/client');
+
+if (typeof steambrew.findModuleExport === 'undefined') {
+  // Mock the findModuleExport function
+  // @ts-expect-error override readonly
+  steambrew.findModuleExport = (): null => null;
+}
