@@ -271,6 +271,7 @@ export function propertyStringSorter(a: string, b: string): number {
 
 const cachedClassDeclarations = new Map<string, ClassDeclaration>();
 const cachedFunctionDeclarations = new Map<string, Function>();
+const cachedMissingFunctions = new Set<string>();
 
 // TODO: this is unoptimized it is better to just give the function declaration directly to processVariableDeclaration as it should also support function declarations
 function handleNativeFunction(classObj: Record<string, unknown>, functionObj: Function, functionName: string, project: Project): Function {
@@ -296,7 +297,12 @@ function handleNativeFunction(classObj: Record<string, unknown>, functionObj: Fu
 
   const functionDeclaration = classDeclaration.getMethod(functionName);
   if (!functionDeclaration) {
-    console.error(`Function ${functionName} not found in class ${classDeclaration.getName()}`);
+    const missingFunctionKey = `${classDeclaration.getName()}.${functionName}`;
+    if (cachedMissingFunctions.has(missingFunctionKey)) {
+      return functionObj;
+    }
+    cachedMissingFunctions.add(missingFunctionKey);
+    console.warn(`Function ${functionName} not found in class ${classDeclaration.getName()}`);
 
     return functionObj;
   }
