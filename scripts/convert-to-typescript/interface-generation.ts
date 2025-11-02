@@ -31,6 +31,7 @@ export function createInterfaceDefinition(
     order: order++,
     nameCounter: interfaceToProcess.nameCounter,
     constructorString: interfaceToProcess.constructorString,
+    extendedConstructorString: interfaceToProcess.extendedConstructorString,
   };
 
   // Get all properties

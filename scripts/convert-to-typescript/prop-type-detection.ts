@@ -63,9 +63,13 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
   if (storeClassName) {
     const constructorString = value.constructor.toString();
     const isClass = (/^class\s/).test(constructorString);
+    const hasExtends = (/class \w+ extends/).test(constructorString);
 
     if (isClass) {
       interfaceToProcess.constructorString = constructorString;
+      if (hasExtends) {
+        interfaceToProcess.extendedConstructorString = (Object.getPrototypeOf(value.constructor) as Function).toString();
+      }
     }
   }
 

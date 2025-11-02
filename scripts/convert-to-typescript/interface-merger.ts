@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable max-lines-per-function */
 import { updateTypeReferences } from './replace-duplicate-types';
 import { Type, UnionType } from './Type';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from './types';
@@ -14,6 +16,12 @@ function shouldMergeInterfaces(
   interface1: TypeScriptInterface,
   interface2: TypeScriptInterface,
 ): boolean {
+  // Don't merge interfaces that have inheritance relationships
+  // These will be handled separately to preserve the inheritance hierarchy
+  if ((interface1.extendedConstructorString ?? '') !== '' || (interface2.extendedConstructorString ?? '') !== '') {
+    return false;
+  }
+
   if (interface1.constructorString !== interface2.constructorString) {
     return false;
   }
@@ -34,6 +42,103 @@ function shouldMergeInterfaces(
 
   // Return true if similarity score is greater than or equal to required overlap
   return similarityScore >= REQUIRED_OVERLAP;
+}
+
+/**
+ * Merges interfaces within a group that have the same constructor
+ * @param interfaces Map of interfaces
+ * @param group Array of interface names to check
+ * @returns Map of merged interfaces and alias map
+ */
+function mergeInterfacesWithinGroup(
+  interfaces: Map<string, TypeScriptInterface>,
+  group: string[],
+): { mergedInterfaces: Map<string, TypeScriptInterface>; aliasMap: Map<string, string>; } {
+  const mergedInterfaces = new Map<string, TypeScriptInterface>();
+  const aliasMap = new Map<string, string>();
+
+  // Group by constructorString
+  const constructorGroups = new Map<string, string[]>();
+  for (const interfaceName of group) {
+    const interfaceObj = interfaces.get(interfaceName);
+    if (!interfaceObj) continue;
+
+    const constructorStr = interfaceObj.constructorString ?? '';
+    const constructorGroup = constructorGroups.get(constructorStr) ?? [];
+    constructorGroup.push(interfaceName);
+    constructorGroups.set(constructorStr, constructorGroup);
+  }
+
+  // Merge interfaces with same constructor
+  for (const constructorGroup of constructorGroups.values()) {
+    if (constructorGroup.length === 1) {
+      const name = constructorGroup[0];
+      const interfaceObj = interfaces.get(name);
+      if (interfaceObj) {
+        mergedInterfaces.set(name, { ...interfaceObj });
+      }
+    } else {
+      // Merge this sub-group
+      const merged = mergeInterfaceGroup(interfaces, constructorGroup);
+      mergedInterfaces.set(merged.name, merged);
+
+      // Create aliases for the rest
+      for (let i = 1; i < constructorGroup.length; i++) {
+        aliasMap.set(constructorGroup[i], merged.name);
+      }
+    }
+  }
+
+  return { mergedInterfaces, aliasMap };
+}
+
+/**
+ * Finds groups of interfaces that share the same inheritance hierarchy
+ * Also handles nested inheritance (parent instances alongside child instances)
+ * @param interfaces Map of interfaces to analyze
+ * @returns Map of base constructor string to array of interface names
+ */
+function findInheritanceGroups(interfaces: Map<string, TypeScriptInterface>): Map<string, string[]> {
+  const inheritanceGroups = new Map<string, string[]>();
+  const constructorToNames = new Map<string, string[]>();
+
+  // Build a map of constructor strings to interface names
+  for (const [name, interfaceObj] of interfaces.entries()) {
+    const constructorStr = interfaceObj.constructorString ?? '';
+    if (constructorStr !== '') {
+      const names = constructorToNames.get(constructorStr) ?? [];
+      names.push(name);
+      constructorToNames.set(constructorStr, names);
+    }
+  }
+
+  // Find interfaces with extendedConstructorString
+  for (const [name, interfaceObj] of interfaces.entries()) {
+    const extendedConstructor = interfaceObj.extendedConstructorString ?? '';
+    if (extendedConstructor === '') continue;
+
+    const group = inheritanceGroups.get(extendedConstructor) ?? [];
+    group.push(name);
+    inheritanceGroups.set(extendedConstructor, group);
+
+    // Check if the parent class instances are also in the data
+    // (nested inheritance: parent instances alongside child instances)
+    const parentInstances = constructorToNames.get(extendedConstructor) ?? [];
+    for (const parentName of parentInstances) {
+      if (!group.includes(parentName)) {
+        group.push(parentName);
+      }
+    }
+  }
+
+  // Only keep groups with more than one interface
+  for (const [key, group] of inheritanceGroups.entries()) {
+    if (group.length <= 1) {
+      inheritanceGroups.delete(key);
+    }
+  }
+
+  return inheritanceGroups;
 }
 
 /**
@@ -90,12 +195,159 @@ function findInterfaceGroups(interfaces: Map<string, TypeScriptInterface>): stri
 }
 
 /**
+ * Merges multiple versions of a property into a single property
+ * @param propName Property name
+ * @param propVersions Array of property versions
+ * @returns Merged property
+ */
+function mergePropertyVersions(propName: string, propVersions: InterfaceProperty[]): InterfaceProperty {
+  const types: Type[] = propVersions.map(p => p.type);
+  let functionInfo: FunctionInfo | undefined;
+  const jsDoc = new Set<string>();
+
+  for (const property of propVersions) {
+    if (property.functionInfo) {
+      functionInfo = property.functionInfo;
+    }
+    if (property.jsDoc) {
+      property.jsDoc.forEach(jsDocLine => jsDoc.add(jsDocLine));
+    }
+  }
+
+  const mergedProperty: InterfaceProperty = {
+    name: propName,
+    type: types.length === 1 ? types[0] : new UnionType(types),
+    optional: propVersions.some(p => p.optional === true),
+  };
+
+  if (functionInfo) {
+    mergedProperty.functionInfo = functionInfo;
+  }
+
+  if (jsDoc.size > 0) {
+    mergedProperty.jsDoc = Array.from(jsDoc);
+  }
+
+  return mergedProperty;
+}
+
+/**
+ * Finds common properties across all interfaces in a group
+ * @param interfaces Map of all interfaces
+ * @param group Array of interface names
+ * @returns Map of property name to array of property versions
+ */
+function findCommonProperties(
+  interfaces: Map<string, TypeScriptInterface>,
+  group: string[],
+): Map<string, InterfaceProperty[]> {
+  const firstInterface = interfaces.get(group[0]);
+  if (!firstInterface) {
+    return new Map();
+  }
+
+  const firstProps = new Map(firstInterface.properties.map(p => [p.name, p]));
+  const commonProps = new Map<string, InterfaceProperty[]>();
+
+  // Initialize with properties from the first interface
+  for (const [propName, prop] of firstProps) {
+    commonProps.set(propName, [prop]);
+  }
+
+  // Check which properties are common across all interfaces
+  for (let i = 1; i < group.length; i++) {
+    const currentInterface = interfaces.get(group[i]);
+    if (!currentInterface) continue;
+
+    const currentPropNames = new Set(currentInterface.properties.map(p => p.name));
+
+    // Remove properties that are not in the current interface
+    for (const propName of commonProps.keys()) {
+      if (!currentPropNames.has(propName)) {
+        commonProps.delete(propName);
+      } else {
+        // Add the property version from this interface
+        const prop = currentInterface.properties.find(p => p.name === propName);
+        if (prop) {
+          commonProps.get(propName)?.push(prop);
+        }
+      }
+    }
+  }
+
+  return commonProps;
+}
+
+/**
+ * Extracts common properties from a group of interfaces (base class properties)
+ * @param interfaces Map of all interfaces
+ * @param group Array of interface names in the inheritance group
+ * @returns Array of common properties
+ */
+function extractBaseProperties(
+  interfaces: Map<string, TypeScriptInterface>,
+  group: string[],
+): InterfaceProperty[] {
+  if (group.length === 0) {
+    return [];
+  }
+
+  const commonProps = findCommonProperties(interfaces, group);
+
+  // Merge the common properties
+  const baseProperties: InterfaceProperty[] = [];
+  for (const [propName, propVersions] of commonProps.entries()) {
+    baseProperties.push(mergePropertyVersions(propName, propVersions));
+  }
+
+  return baseProperties;
+}
+
+/**
+ * Creates a base interface for an inheritance group
+ * @param baseName Name for the base interface
+ * @param baseProperties Properties for the base interface
+ * @param order Order number for the interface
+ * @returns The base interface
+ */
+function createBaseInterface(
+  baseName: string,
+  baseProperties: InterfaceProperty[],
+  order: number,
+): TypeScriptInterface {
+  return {
+    name: baseName,
+    properties: baseProperties,
+    order,
+  };
+}
+
+/**
+ * Removes base properties from a derived interface
+ * @param derivedInterface The derived interface
+ * @param baseProperties Properties to remove
+ * @returns The interface with base properties removed
+ */
+function removeBaseProperties(
+  derivedInterface: TypeScriptInterface,
+  baseProperties: InterfaceProperty[],
+): TypeScriptInterface {
+  const basePropertyNames = new Set(baseProperties.map(p => p.name));
+  const filteredProperties = derivedInterface.properties.filter(p => !basePropertyNames.has(p.name));
+
+  return {
+    ...derivedInterface,
+    properties: filteredProperties,
+  };
+}
+
+/**
  * Merges a group of interfaces into a single interface
  * @param interfaces Map of all interfaces
  * @param group Array of interface names to merge
  * @returns The merged interface
  */
-// eslint-disable-next-line max-lines-per-function
+
 function mergeInterfaceGroup(
   interfaces: Map<string, TypeScriptInterface>,
   group: string[],
@@ -119,6 +371,8 @@ function mergeInterfaceGroup(
     order: baseInterface.order,
     extends: baseInterface.extends,
     nameCounter: baseInterface.nameCounter,
+    constructorString: baseInterface.constructorString,
+    extendedConstructorString: baseInterface.extendedConstructorString,
   };
 
   // Track all properties across all interfaces
@@ -198,42 +452,214 @@ function mergeInterfaceGroup(
 }
 
 /**
+ * Creates base interface and derived interfaces for an inheritance group
+ * @param groupMerged Merged interfaces from the group
+ * @param mergedGroupNames Array of merged interface names
+ * @param mergedInterfaces Map to add processed interfaces to
+ * @param processedInheritance Set to track processed interfaces
+ * @param inheritanceGroup Original inheritance group names
+ * @param interfaces Original interfaces map to check for parent class
+ */
+function createBaseAndDerivedInterfaces(
+  groupMerged: Map<string, TypeScriptInterface>,
+  mergedGroupNames: string[],
+  mergedInterfaces: Map<string, TypeScriptInterface>,
+  processedInheritance: Set<string>,
+  inheritanceGroup: string[],
+  interfaces: Map<string, TypeScriptInterface>,
+): void {
+  const baseProperties = extractBaseProperties(groupMerged, mergedGroupNames);
+
+  if (baseProperties.length === 0) {
+    // No common properties - keep interfaces separate
+    for (const interfaceName of mergedGroupNames) {
+      const interfaceObj = groupMerged.get(interfaceName);
+      if (interfaceObj) {
+        mergedInterfaces.set(interfaceName, { ...interfaceObj });
+        processedInheritance.add(interfaceName);
+      }
+    }
+
+    for (const originalName of inheritanceGroup) {
+      processedInheritance.add(originalName);
+    }
+
+    return;
+  }
+
+  // Check if any interface is the parent class
+  // The parent is the one whose original instances don't have extendedConstructorString
+  const firstInterface = groupMerged.get(mergedGroupNames[0]);
+  if (!firstInterface) return;
+
+  // Find which merged interface corresponds to the parent class
+  // The parent is the one that has at least one original instance without extendedConstructorString
+  let parentInterfaceName: string | undefined;
+  for (const mergedName of mergedGroupNames) {
+    const mergedInterface = groupMerged.get(mergedName);
+    if (!mergedInterface) continue;
+
+    // Check if any original instance that contributed to this merged interface
+    // is a parent class instance (no extendedConstructorString)
+    let hasParentInstance = false;
+    for (const originalName of inheritanceGroup) {
+      const originalInterface = interfaces.get(originalName);
+      if (!originalInterface) continue;
+
+      const constructorsMatch = mergedInterface.constructorString === originalInterface.constructorString;
+      const extendedConstructor = originalInterface.extendedConstructorString ?? '';
+
+      // Check if this original contributed to the current merged interface
+      if (constructorsMatch) {
+        // If it has no extendedConstructorString, it's a parent class instance
+        if (extendedConstructor === '') {
+          hasParentInstance = true;
+          break;
+        }
+      }
+    }
+
+    if (hasParentInstance) {
+      parentInterfaceName = mergedName;
+      break;
+    }
+  }
+
+  if (parentInterfaceName !== undefined) {
+    // Use the parent interface as the base
+    const parentInterface = groupMerged.get(parentInterfaceName);
+    if (parentInterface) {
+      mergedInterfaces.set(parentInterfaceName, { ...parentInterface });
+      processedInheritance.add(parentInterfaceName);
+    }
+
+    // Make other interfaces extend the parent
+    for (const interfaceName of mergedGroupNames) {
+      if (interfaceName === parentInterfaceName) continue;
+
+      const derivedInterface = groupMerged.get(interfaceName);
+      if (!derivedInterface) continue;
+
+      const parentProps = parentInterface?.properties ?? [];
+      const updatedInterface = removeBaseProperties(derivedInterface, parentProps);
+      updatedInterface.extends = parentInterfaceName;
+
+      mergedInterfaces.set(interfaceName, updatedInterface);
+      processedInheritance.add(interfaceName);
+    }
+  } else {
+    // No parent interface in group - create a new base interface
+    let baseName = firstInterface.name;
+    if (firstInterface.nameCounter !== undefined) {
+      baseName = baseName.substring(0, baseName.length - String(firstInterface.nameCounter).length);
+    }
+    const baseInterfaceName = `${baseName}Base`;
+
+    const baseInterface = createBaseInterface(baseInterfaceName, baseProperties, firstInterface.order);
+    mergedInterfaces.set(baseInterfaceName, baseInterface);
+
+    for (const interfaceName of mergedGroupNames) {
+      const derivedInterface = groupMerged.get(interfaceName);
+      if (!derivedInterface) continue;
+
+      const updatedInterface = removeBaseProperties(derivedInterface, baseProperties);
+      updatedInterface.extends = baseInterfaceName;
+
+      mergedInterfaces.set(interfaceName, updatedInterface);
+      processedInheritance.add(interfaceName);
+    }
+  }
+
+  for (const originalName of inheritanceGroup) {
+    processedInheritance.add(originalName);
+  }
+}
+
+/**
+ * Processes inheritance group by creating base interface and updating derived interfaces
+ * @param interfaces Original interfaces map
+ * @param inheritanceGroup Array of interface names in the group
+ * @param mergedInterfaces Map to add processed interfaces to
+ * @param processedInheritance Set to track processed interfaces
+ * @param aliasMap Map to track interface aliases
+ */
+function processInheritanceGroup(
+  interfaces: Map<string, TypeScriptInterface>,
+  inheritanceGroup: string[],
+  mergedInterfaces: Map<string, TypeScriptInterface>,
+  processedInheritance: Set<string>,
+  aliasMap: Map<string, string>,
+): void {
+  // First, merge interfaces within the group that have the same constructorString
+  const { mergedInterfaces: groupMerged, aliasMap: groupAliases } = mergeInterfacesWithinGroup(
+    interfaces,
+    inheritanceGroup,
+  );
+
+  // Update alias map
+  for (const [oldName, newName] of groupAliases) {
+    aliasMap.set(oldName, newName);
+  }
+
+  // Now work with the merged interfaces from this group
+  const mergedGroupNames = Array.from(groupMerged.keys());
+
+  // If all instances merged into a single interface, no need for a base interface
+  if (mergedGroupNames.length === 1) {
+    const interfaceName = mergedGroupNames[0];
+    const interfaceObj = groupMerged.get(interfaceName);
+    if (interfaceObj) {
+      mergedInterfaces.set(interfaceName, { ...interfaceObj });
+      processedInheritance.add(interfaceName);
+    }
+
+    // Mark all original interfaces as processed
+    for (const originalName of inheritanceGroup) {
+      processedInheritance.add(originalName);
+    }
+
+    return;
+  }
+
+  // Multiple distinct interfaces - check if they should share a base
+  createBaseAndDerivedInterfaces(groupMerged, mergedGroupNames, mergedInterfaces, processedInheritance, inheritanceGroup, interfaces);
+}
+
+/**
  * Merges similar interfaces in the provided map
  * @param interfaces Map of interfaces to merge
  * @returns Map of merged interfaces
  */
 export function mergeInterfaces(interfaces: Map<string, TypeScriptInterface>): Map<string, TypeScriptInterface> {
-  // Find groups of interfaces to merge
+  const inheritanceGroups = findInheritanceGroups(interfaces);
   const groups = findInterfaceGroups(interfaces);
-
-  // Create a new map for the merged interfaces
   const mergedInterfaces = new Map<string, TypeScriptInterface>();
-
-  // Create a map of original interface names to their merged equivalents
   let aliasMap = new Map<string, string>();
+  const processedInheritance = new Set<string>();
+
+  // Handle inheritance groups
+  for (const [, inheritanceGroup] of inheritanceGroups) {
+    processInheritanceGroup(interfaces, inheritanceGroup, mergedInterfaces, processedInheritance, aliasMap);
+  }
 
   // Process each group
   for (const group of groups) {
-    if (group.length === 1) {
-      // If group has only one interface, just copy it
-      const name = group[0];
+    const filteredGroup = group.filter(name => !processedInheritance.has(name));
+    if (filteredGroup.length === 0) continue;
+
+    if (filteredGroup.length === 1) {
+      const name = filteredGroup[0];
       const interfaceObj = interfaces.get(name);
       if (!interfaceObj) {
         throw new Error(`Interface ${name} not found`);
       }
-
       mergedInterfaces.set(name, { ...interfaceObj });
     } else {
-      // Merge the group
-      const mergedInterface = mergeInterfaceGroup(interfaces, group);
-
-      // Add the merged interface under its original name
+      const mergedInterface = mergeInterfaceGroup(interfaces, filteredGroup);
       mergedInterfaces.set(mergedInterface.name, mergedInterface);
 
-      // For all other interfaces in the group, create aliases
-      for (let i = 1; i < group.length; i++) {
-        const aliasName = group[i];
-        aliasMap.set(aliasName, mergedInterface.name);
+      for (let i = 1; i < filteredGroup.length; i++) {
+        aliasMap.set(filteredGroup[i], mergedInterface.name);
       }
     }
   }

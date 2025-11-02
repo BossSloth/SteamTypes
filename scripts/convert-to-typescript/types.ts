@@ -40,12 +40,14 @@ export interface TypeScriptInterface {
   order: number;
   extends?: string;
   constructorString?: string;
+  extendedConstructorString?: string;
 }
 
 export interface InterfaceToProcess {
   obj: Record<string, unknown>;
   nameCounter?: number;
   constructorString?: string;
+  extendedConstructorString?: string;
 }
 
 /**

@@ -39,7 +39,7 @@ export interface BasicMergedInterfaceTests {
 export interface ClassBasedMergedInterfaceTests {
   differentClassInstances: (DifferentClassInstances | DifferentClassInstances2)[];
 
-  mergedClassInstances: MergedClassInstances[];
+  mergedClassInstances: (MergedClassInstances | MergedClassInstances2)[];
 
   objectsWithDifferentMethods: ObjectsWithDifferentMethods[];
 
@@ -222,6 +222,10 @@ export interface MergedClassInstances {
   test1?: boolean;
 
   testDetails: TestDetails;
+}
+
+export interface MergedClassInstances2 extends MergedClassInstances {
+  complexData: ComplexData;
 }
 
 export interface ObjectsWithDifferentMethods {
@@ -426,7 +430,7 @@ export interface NestedGenericTypes {
   type: string;
 }
 
-export interface MultipleData {
+export interface MultipleDataBase {
   asyncProcess(): Promise<number>;
 
   loop(): number[];
@@ -444,34 +448,18 @@ export interface MultipleData {
   id: number;
 
   name: string;
+}
 
+export interface MultipleData extends MultipleDataBase {
   rtUnlocked: number;
 
   strDescription: string;
 }
 
-export interface MultipleData2 {
-  asyncProcess(): Promise<number>;
-
-  loop(): number[];
-
-  process(): number;
-
-  bAchieved: boolean;
-
+export interface MultipleData2 extends MultipleDataBase {
   bar: boolean;
 
-  bHidden: boolean;
-
-  email: string;
-
-  flAchieved: number;
-
   foo: string;
-
-  id: number;
-
-  name: string;
 }
 
 export interface Developers {
@@ -516,6 +504,12 @@ export interface TestDetails {
   other: number;
 
   test2?: string;
+}
+
+export interface ComplexData {
+  name: string;
+
+  value: number;
 }
 
 export interface Metadata {

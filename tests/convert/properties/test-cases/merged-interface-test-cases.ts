@@ -297,6 +297,13 @@ class TestClass {
   }
 }
 
+class MoreComplexTestClass extends TestClass {
+  complexData = {
+    name: 'complex',
+    value: 42,
+  };
+}
+
 const classBasedMergedInterfaceTests = {
   // Test case for arrays with objects that are instances of different classes
   differentClassInstances: [
@@ -325,6 +332,7 @@ const classBasedMergedInterfaceTests = {
     new TestClass('Alice', 1),
     new TestClass('Admin', 3),
     new TestClass('Bob', 2, true),
+    new MoreComplexTestClass('Complex', 4, true),
   ],
 
   // Test case for arrays with objects that have methods with different signatures
