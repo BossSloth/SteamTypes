@@ -1,5 +1,7 @@
 import { JsPbMessage, Unregisterable } from './shared';
 
+// TODO: Use auto generated protobufs types
+
 /**
  * Everything is taken from here:
  * https://github.com/SteamDatabase/SteamTracking/blob/master/Protobufs/steammessages_clientnotificationtypes.proto

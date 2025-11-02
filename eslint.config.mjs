@@ -144,6 +144,7 @@ export default defineConfig(
       'id-length': 'off',
       'no-console': 'off',
       'customRules/no-deep-relative-imports': ['error', { maxDepth: 1 }],
+      'no-restricted-imports': ['error', '@steambrew/client'],
       // #endregion
     },
   },

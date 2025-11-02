@@ -1,11 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
 import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from 'Global/stores/AppDetailsStore';
+import { CAppOverview_Change } from 'Protobufs';
+import { SerializedArrayBuffer } from 'shared';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, customRules/no-deep-relative-imports
+import type { CAppOverview_Change_Protobuf } from '../../Runtime/Protobufs';
 import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
 import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, customRules/no-deep-relative-imports
-import { CAppOverview_Change_Protobuf } from '../../Runtime/Protobufs';
 
 /**
  * Represents various functions related to Steam applications.
@@ -380,7 +382,7 @@ export interface Apps {
    * data can be deserialized with {@link CAppOverview_Change_Protobuf}.
    * @remarks This is not a mistake, it doesn't return anything.
    */
-  RegisterForAppOverviewChanges(callback: (data: ArrayBuffer) => void): void;
+  RegisterForAppOverviewChanges(callback: (data: SerializedArrayBuffer<CAppOverview_Change>) => void): void;
 
   RegisterForDRMFailureResponse(callback: (appid: number, eResult: number, errorCode: number) => void): Unregisterable;
 

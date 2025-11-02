@@ -225,3 +225,8 @@ type InterfaceToTuple<T> = T extends object
         : never;
     }[keyof T][]
   : T;
+
+export type SerializedArrayBuffer<T> = ArrayBuffer & {
+  /** @internal doesn't exist in the actual type but is used to store the type in typescript */
+  __deserializesTo: T;
+};

@@ -128,6 +128,9 @@ export interface CAppOverview {
   xbox_controller_support?: AppControllerSupportLevel;
 }
 
+/**
+ * Use {@link CAppOverview_Change_Protobuf} to deserialize/serialize data.
+ */
 export interface CAppOverview_Change {
   app_overview?: CAppOverview[];
 

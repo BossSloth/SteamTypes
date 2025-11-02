@@ -1,9 +1,10 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
-import { SteamAppOverview } from 'Global/stores/SteamUIStore';
 import { ObservableMap } from 'mobx';
+import { DisplayStatus } from 'Protobufs/steam';
 import { Apps } from 'SteamClient';
 import { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from 'SteamClient/Input';
 import { Unregisterable } from 'SteamClient/shared';
+import { SteamAppOverview } from './AppStore';
 
 export interface AppDetailsStore {
   /**
@@ -516,7 +517,7 @@ export interface AppDetails {
 
   eControllerRumblePreference: EControllerRumbleSetting;
 
-  eDisplayStatus: EDisplayStatus;
+  eDisplayStatus: DisplayStatus;
 
   eEnableThirdPartyControllerConfiguration: EThirdPartyControllerConfiguration;
 
@@ -979,49 +980,6 @@ export enum EAppCloudStatus {
   SyncFailed,
   Conflict,
   PendingElsewhere,
-}
-
-export enum EDisplayStatus {
-  Invalid,
-  Launching,
-  Uninstalling,
-  Installing,
-  Running,
-  Validating,
-  Updating,
-  Downloading,
-  Synchronizing,
-  ReadyToInstall,
-  ReadyToPreload,
-  ReadyToLaunch,
-  RegionRestricted,
-  PresaleOnly,
-  InvalidPlatform,
-  // ty valve
-  PreloadComplete = 16,
-  BorrowerLocked,
-  UpdatePaused,
-  UpdateQueued,
-  UpdateRequired,
-  UpdateDisabled,
-  DownloadPaused,
-  DownloadQueued,
-  DownloadRequired,
-  DownloadDisabled,
-  LicensePending,
-  LicenseExpired,
-  AvailForFree,
-  AvailToBorrow,
-  AvailGuestPass,
-  Purchase,
-  Unavailable,
-  NotLaunchable,
-  CloudError,
-  CloudOutOfDate,
-  Terminating,
-  OwnerLocked,
-  DownloadFailed,
-  UpdateFailed,
 }
 
 // TODO: not the actual name
