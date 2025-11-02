@@ -143,7 +143,7 @@ export default defineConfig(
       camelcase: 'off',
       'id-length': 'off',
       'no-console': 'off',
-      'customRules/no-deep-relative-imports': ['error', { maxDepth: 1 }],
+      'customRules/no-deep-relative-imports': ['error', { maxDepth: 1, ignorePatterns: ['../../Runtime.*'] }],
       'no-restricted-imports': ['error', '@steambrew/client'],
       // #endregion
     },
