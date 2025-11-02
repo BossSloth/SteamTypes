@@ -1,7 +1,7 @@
 /* eslint-disable max-depth */
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
-import { ArrayTypeNode, EnumDeclaration, Identifier, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, EnumDeclaration, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
 import { currentTargetSourceFile, isImportedType } from './shared';
@@ -65,9 +65,15 @@ function isUnknownTypeNode(typeNode: TypeNode): boolean {
 }
 
 function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourceNode: TypeNode): boolean {
+  // Skip QualifiedNames
+  if (Node.isQualifiedName(targetTypeReference.getTypeName())) {
+    return true;
+  }
+
   if (targetTypeReference.getTypeName().getText() === 'ReturnType') {
     return handleIndexedReturnType(targetTypeReference, sourceNode);
   }
+
   if (targetTypeReference.getTypeName().getText() === 'Record') {
     const recordEquals = handleRecord(targetTypeReference, sourceNode);
     if (recordEquals) {
@@ -75,7 +81,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     }
   }
 
-  const targetDefinitionNode = (targetTypeReference.getTypeName() as Identifier).getDefinitionNodes()[0];
+  const targetDefinitionNode = getDeclarationNode(targetTypeReference);
   if (Node.isTypeAliasDeclaration(targetDefinitionNode)) {
     // If the target is a type alias, check the type node
     // Example test case 'external template literal types'
@@ -190,7 +196,7 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
     // If type references are TypeAliases, expand them
     // Example test case 'combined union return type'
     for (const typeReferenceMember of typeReferenceMembers) {
-      const definition = (typeReferenceMember.getTypeName() as Identifier).getDefinitionNodes()[0];
+      const definition = getDeclarationNode(typeReferenceMember);
       if (Node.isTypeAliasDeclaration(definition)) {
         const typeNode = definition.getTypeNode();
         if (typeNode) {
@@ -391,7 +397,7 @@ function handleRecord(targetTypeReference: TypeReferenceNode, sourceNode: TypeNo
 
   // Target=Record, Source=TypeReference
   // Example test case 'numeric interface same as record'
-  const sourceDefinition = (sourceNode.getTypeName() as Identifier).getDefinitionNodes()[0];
+  const sourceDefinition = getDeclarationNode(sourceNode);
   if (!Node.isInterfaceDeclaration(sourceDefinition)) {
     return false;
   }
@@ -425,4 +431,11 @@ export function getText(typeNode: TypeNode): string {
   }
 
   return text.replace(/import\(".+?\)\./, '');
+}
+
+function getDeclarationNode(typeNode: TypeReferenceNode): Node {
+  const typeName = typeNode.getTypeName();
+  const identifier = Node.isQualifiedName(typeName) ? typeName.getRight() : typeName;
+
+  return identifier.getDefinitionNodes()[0];
 }
