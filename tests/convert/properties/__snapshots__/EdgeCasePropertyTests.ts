@@ -1,3 +1,4 @@
+import { QueryObserver } from '@tanstack/query-core';
 import { ComputedValue } from 'mobx/dist/internal';
 import { Root as ReactRoot } from 'react-dom/client';
 
@@ -99,6 +100,8 @@ export interface SpecialValueTests {
   reactRoot: ReactRoot;
 
   styleSheet: CSSStyleSheet;
+
+  tanStackQueryObserver: QueryObserver;
 
   whitespaceString: string;
 

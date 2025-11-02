@@ -133,6 +133,13 @@ const specialValueTests = {
     unmount: () => {},
     _internalRoot: {},
   },
+
+  tanStackQueryObserver: {
+    createResult: () => {},
+    getCurrentResult: () => {},
+    subscribe: () => {},
+    unsubscribe: () => {},
+  },
 };
 // @ts-expect-error we want window object
 specialValueTests.windowObject.m_popup.window = specialValueTests.windowObject.m_popup;

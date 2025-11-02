@@ -267,6 +267,12 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
 
     return `SimpleJsPbMessage<${obj.getClassName()}>`;
   }
+  if (isTanStackQueryObserver(obj)) {
+    // import { QueryObserver } from '@tanstack/query-core';
+    if (addImport) context.addImport('@tanstack/query-core', 'QueryObserver');
+
+    return 'QueryObserver';
+  }
 
   return null;
 }
@@ -341,4 +347,15 @@ function isSteamObservableValue(obj: unknown): obj is { m_currentValue: unknown;
     && 'm_currentValue' in obj
     && 'SubscriberCount' in obj
     && 'Value' in obj;
+}
+
+function isTanStackQueryObserver(obj: unknown): boolean {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'createResult' in obj
+    && typeof obj.createResult === 'function'
+    && 'getCurrentResult' in obj
+    && typeof obj.getCurrentResult === 'function'
+    && 'subscribe' in obj
+    && typeof obj.subscribe === 'function';
 }

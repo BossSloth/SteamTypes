@@ -102,6 +102,7 @@
     "@steambrew/client": "^5.8.0"
   },
   "dependencies": {
+    "@tanstack/query-core": "^5.90.6",
     "@types/google-protobuf": "^3.15.12",
     "@types/react-dom": "^19.2.2",
     "long": "^5.3.2",
