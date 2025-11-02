@@ -130,7 +130,17 @@ function generateEnumDefinition(enumType: protobuf.Enum, parentName?: string): s
 
   const entries = Object.entries(enumType.values).map(([name, value]) => `  ${normalizeEnumValueName(name, enumType.name)} = ${value},`);
 
-  return `export enum ${enumName} {\n${entries.join('\n')}\n}`;
+  const enumComments = ctx.existingComments.get(enumName);
+  const enumComment = enumComments?.get('__interface_comment');
+  const result: string[] = [];
+
+  if (enumComment !== undefined) {
+    result.push(enumComment);
+  }
+
+  result.push(`export enum ${enumName} {\n${entries.join('\n')}\n}`);
+
+  return result.join('\n');
 }
 
 function generateInterfaceDefinition(
@@ -145,6 +155,14 @@ function generateInterfaceDefinition(
 
   const fields = messageType.fieldsArray.sort((a, b) => propertyStringSorter(a.name, b.name));
   const interfaceComments = ctx.existingComments.get(interfaceName);
+
+  // Start with interface-level comment if it exists
+  const interfaceComment = interfaceComments?.get('__interface_comment');
+  const result: string[] = [];
+
+  if (interfaceComment !== undefined) {
+    result.push(interfaceComment);
+  }
 
   const fieldLines = fields.flatMap((field, index) => {
     const tsType = convertProtoTypeToTS(field);
@@ -162,10 +180,14 @@ function generateInterfaceDefinition(
   });
 
   if (fieldLines.length === 0) {
-    return `export interface ${interfaceName} { }`;
+    result.push(`export interface ${interfaceName} { }`);
+
+    return result.join('\n');
   }
 
-  return `export interface ${interfaceName} {\n${fieldLines.join('\n')}\n}`;
+  result.push(`export interface ${interfaceName} {\n${fieldLines.join('\n')}\n}`);
+
+  return result.join('\n');
 }
 
 function mapTypeToFile(
@@ -273,11 +295,23 @@ function parseExistingComments(filePath: string): void {
 
     const interfaceMatch = trimmed.match(/^export\s+(?:interface|enum)\s+(\w+)/);
     if (interfaceMatch) {
-      currentInterface = interfaceMatch[1];
-      if (!ctx.existingComments.has(currentInterface)) {
-        ctx.existingComments.set(currentInterface, new Map());
+      // If we have a pending comment, save it before resetting
+      if (currentComment.length > 0) {
+        currentInterface = interfaceMatch[1];
+        if (!ctx.existingComments.has(currentInterface)) {
+          ctx.existingComments.set(currentInterface, new Map());
+        }
+        // Store the interface-level comment with a special key
+        const interfaceMap = ctx.existingComments.get(currentInterface);
+        interfaceMap?.set('__interface_comment', currentComment.join('\n'));
+        currentComment = [];
+      } else {
+        currentInterface = interfaceMatch[1];
+        if (!ctx.existingComments.has(currentInterface)) {
+          ctx.existingComments.set(currentInterface, new Map());
+        }
+        currentComment = [];
       }
-      currentComment = [];
       continue;
     }
 
