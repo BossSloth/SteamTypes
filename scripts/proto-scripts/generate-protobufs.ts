@@ -17,6 +17,7 @@ const PROTOBUF_FILES = [
   'steam\\steammessages_player.steamclient.proto',
   'steam\\enums.proto',
   'steam\\steammessages_appoverview.proto',
+  'steam\\steammessages_client_objects.proto',
 ];
 
 const TYPE_MAP: Record<string, string> = {
