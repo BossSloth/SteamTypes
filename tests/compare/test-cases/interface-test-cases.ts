@@ -1016,4 +1016,68 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'numeric interface same as record': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        values: Record<number, string>;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        values: Values;
+      }
+
+      export interface Values {
+        12: string;
+        240: string;
+        5: string;
+      }
+    `,
+  },
+
+  'string interface same as record': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        values: Record<string, string>;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        values: Values;
+      }
+
+      export interface Values {
+        'value1': string;
+        'value2': string;
+        'value3': string;
+      }
+    `,
+  },
+
+  'string interface with normal properties same as record': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        values: Record<string, string>;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        values: Values;
+      }
+
+      export interface Values {
+        'value1': string;
+        'value2': string;
+        'value3': string;
+        value4: string;
+        value5: string;
+      }
+    `,
+  },
 };

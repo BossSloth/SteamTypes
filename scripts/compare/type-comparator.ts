@@ -68,6 +68,12 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
   if (targetTypeReference.getTypeName().getText() === 'ReturnType') {
     return handleIndexedReturnType(targetTypeReference, sourceNode);
   }
+  if (targetTypeReference.getTypeName().getText() === 'Record') {
+    const recordEquals = handleRecord(targetTypeReference, sourceNode);
+    if (recordEquals) {
+      return true;
+    }
+  }
 
   const targetDefinitionNode = (targetTypeReference.getTypeName() as Identifier).getDefinitionNodes()[0];
   if (Node.isTypeAliasDeclaration(targetDefinitionNode)) {
@@ -227,7 +233,19 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
 }
 
 function handleSourceUnion(targetNode: TypeNode, sourceUnion: UnionTypeNode): boolean {
-  const isCompatible = sourceUnion.getTypeNodes().every(sourceMember => compareTypes(targetNode, sourceMember));
+  // Filter out duplicates with same text
+  const sourceMemberNames = new Set<string>();
+  const uniqueSourceMembers = sourceUnion.getTypeNodes().filter((sourceMember) => {
+    const name = sourceMember.getText();
+    if (sourceMemberNames.has(name)) {
+      return false;
+    }
+    sourceMemberNames.add(name);
+
+    return true;
+  });
+
+  const isCompatible = uniqueSourceMembers.every(sourceMember => compareTypes(targetNode, sourceMember));
 
   if (!isCompatible) {
     targetNode.replaceWithText(getText(sourceUnion));
@@ -360,6 +378,44 @@ function handleTargetTypeQuery(targetTypeQuery: TypeQueryNode, sourceNode: TypeN
   }
 
   return false;
+}
+
+function handleRecord(targetTypeReference: TypeReferenceNode, sourceNode: TypeNode): boolean {
+  if (!Node.isTypeReference(sourceNode)) {
+    return false;
+  }
+
+  if (sourceNode.getTypeName().getText() === 'Record') {
+    return false;
+  }
+
+  // Target=Record, Source=TypeReference
+  // Example test case 'numeric interface same as record'
+  const sourceDefinition = (sourceNode.getTypeName() as Identifier).getDefinitionNodes()[0];
+  if (!Node.isInterfaceDeclaration(sourceDefinition)) {
+    return false;
+  }
+
+  const sourceMembers = sourceDefinition.getMembers();
+  const keyType = new Set<string>();
+  const valueType = new Set<string>();
+
+  for (const member of sourceMembers) {
+    if (Node.isPropertySignature(member)) {
+      const nameNode = member.getNameNode();
+      if (Node.isIdentifier(nameNode) || Node.isStringLiteral(nameNode)) {
+        keyType.add('string');
+      } else if (Node.isNumericLiteral(nameNode)) {
+        keyType.add('number');
+      }
+
+      valueType.add(getText(member.getTypeNodeOrThrow()));
+    }
+  }
+
+  const recordType = `Record<${Array.from(keyType).join(' | ')}, ${Array.from(valueType).join(' | ')}>`;
+
+  return getText(targetTypeReference) === recordType;
 }
 
 export function getText(typeNode: TypeNode): string {
