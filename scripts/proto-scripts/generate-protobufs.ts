@@ -1,4 +1,6 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+/* eslint-disable max-lines-per-function */
+import chalk from 'chalk';
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
 import protobuf, { NamespaceBase } from 'protobufjs';
 import { propertyStringSorter } from '../convert-to-typescript/interface-generation';
@@ -396,13 +398,28 @@ function createProtoRoot(): protobuf.Root {
 }
 
 function generateTypeScriptDefinitions(): void {
+  // Display a nice header
+  console.log('');
+  console.log(chalk.magenta.bold('╔══════════════════════════════════════════════════════╗'));
+  console.log(chalk.magenta.bold('║            Steam Types Protobuf Generator            ║'));
+  console.log(chalk.magenta.bold('╚══════════════════════════════════════════════════════╝'));
+  console.log('');
+
   if (!existsSync(OUTPUT_DIR)) {
     mkdirSync(OUTPUT_DIR, { recursive: true });
+    console.log(chalk.cyan(`📁 Created output directory: ${OUTPUT_DIR}`));
+    console.log('');
   }
 
-  try {
-    console.log('🔍 Generating TypeScript definitions...');
+  const startTime = performance.now();
 
+  try {
+    console.log(chalk.blue.bold('🔍 Generating TypeScript definitions...'));
+    console.log(chalk.gray(`Processing ${PROTOBUF_FILES.length} protobuf files...`));
+    console.log('');
+
+    let processedCount = 0;
+    let totalSizeKB = 0;
     for (const protoFile of PROTOBUF_FILES) {
       const protoPath = join(PROTO_DIR, protoFile);
       const root = createProtoRoot();
@@ -418,13 +435,31 @@ function generateTypeScriptDefinitions(): void {
       const tsDefinitions = generateTypeScriptFromReflection(root, protoFile, outputFilePath);
 
       writeFileSync(outputFilePath, tsDefinitions, 'utf-8');
-      console.log(`📦 Output: ${outputFilePath}`);
+
+      // Get file size for display
+      const stats = statSync(outputFilePath);
+      const fileSizeKB = stats.size / 1024;
+      totalSizeKB += fileSizeKB;
+
+      processedCount++;
+      const progress = chalk.yellow(`[${processedCount}/${PROTOBUF_FILES.length}]`);
+      console.log(chalk.green(`📦 ${progress} Generated: ${chalk.white(outputFileName)} ${chalk.gray(`(${fileSizeKB.toFixed(1)} KB)`)}`));
     }
 
-    console.log('✅ TypeScript definitions generated successfully!');
+    console.log('');
+    console.log(chalk.green.bold('✅ TypeScript definitions generated successfully!'));
+    console.log(chalk.gray(`📊 Processed ${processedCount} files in ${chalk.cyan(path.basename(OUTPUT_DIR))} directory`));
+    console.log(chalk.gray(`📏 Total output size: ${chalk.yellow(totalSizeKB.toFixed(1))} KB`));
   } catch (error) {
-    console.error('❌ Failed to generate TypeScript definitions:', error);
+    console.error('');
+    console.error(chalk.red.bold('❌ Failed to generate TypeScript definitions:'));
+    console.error(chalk.red(`   ${error as Error}`));
     throw error;
+  } finally {
+    const endTime = performance.now();
+    const duration = (endTime - startTime).toFixed(2);
+    console.log(chalk.cyan(`⏱️  Completed in ${duration}ms`));
+    console.log('');
   }
 }
 
