@@ -28,7 +28,7 @@ export function initContext(mainInterfaceName: string): void {
   context.interfaceNameCounter = new Map();
 }
 
-const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d+(?=\w)/u;
+const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d+(?=[^\d])/u;
 /**
  * Formats a property name to handle special characters
  */
