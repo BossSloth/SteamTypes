@@ -12,8 +12,9 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('managers/MainWindowBrowserManager', 'MainWindowBrowserManager', /* ts */`window.MainWindowBrowserManager`),
 
   // Stores
-  GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),
   GMap('stores/AppDetailsStore', 'AppDetailsStore', /* ts */`window.appDetailsStore`),
+  GMap('stores/AppInfoStore', 'AppInfoStore', /* ts */`window.appInfoStore`),
+  GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),
   GMap('stores/UrlStore', 'UrlStore', /* ts */`window.urlStore`),
   GMap('stores/GameRecordingStore', 'GameRecordingStore', /* ts */`window.g_GRS`),
   GMap('stores/SearchStore', 'SearchStore', /* ts */`window.searchstore`),

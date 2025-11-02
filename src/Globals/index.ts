@@ -6,6 +6,7 @@ import { ConnectionManager } from '../types/Global/managers/ConnectionManager';
 import { MainWindowBrowserManager } from '../types/Global/managers/MainWindowBrowserManager';
 import { PopupManager } from '../types/Global/managers/PopupManager';
 import { AppDetailsStore } from '../types/Global/stores/AppDetailsStore';
+import { AppInfoStore } from '../types/Global/stores/AppInfoStore';
 import { ConsoleStore } from '../types/Global/stores/ConsoleStore';
 import { GameRecordingStore } from '../types/Global/stores/GameRecordingStore';
 import { SearchStore } from '../types/Global/stores/SearchStore';
@@ -18,7 +19,7 @@ declare global {
   let appActivityStore: unknown;
   let appDetailsCache: unknown;
   let appDetailsStore: AppDetailsStore;
-  let appInfoStore: unknown;
+  let appInfoStore: AppInfoStore;
   let appReviewStore: unknown;
   let appSpotlightStore: unknown;
   let appStore: unknown;
@@ -94,7 +95,6 @@ declare global {
   let SuspendResumeStore: unknown;
   let SystemDisplayManagerStore: unknown;
   let SystemNetworkStore: unknown;
-  let SystemPowerStore: unknown;
   let SystemReportStore: unknown;
   let trendingStore: unknown;
   let uiBroadcastWatchStore: unknown;
@@ -111,7 +111,7 @@ declare global {
     appActivityStore: unknown;
     appDetailsCache: unknown;
     appDetailsStore: AppDetailsStore;
-    appInfoStore: unknown;
+    appInfoStore: AppInfoStore;
     appReviewStore: unknown;
     appSpotlightStore: unknown;
     appStore: unknown;
@@ -187,7 +187,6 @@ declare global {
     SuspendResumeStore: unknown;
     SystemDisplayManagerStore: unknown;
     SystemNetworkStore: unknown;
-    SystemPowerStore: unknown;
     SystemReportStore: unknown;
     trendingStore: unknown;
     uiBroadcastWatchStore: unknown;
