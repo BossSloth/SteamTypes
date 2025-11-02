@@ -3,7 +3,8 @@ import { CloudStorage } from 'Global/App';
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
-import { AppControllerSupportLevel, CAppOverview, CAppOverview_Change, DisplayStatus, ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs';
+import { ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs/steam/enums';
+import { CAppOverview_Change, CAppOverview, DisplayStatus, AppControllerSupportLevel } from 'Protobufs/steam/steammessages_appoverview';
 import { ProtobufInterface, SerializedArrayBuffer } from 'shared';
 
 export interface AppStore {

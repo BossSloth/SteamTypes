@@ -1,6 +1,6 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableMap } from 'mobx';
-import { ProtoAppType } from 'Protobufs';
+import { ProtoAppType } from 'Protobufs/steam/enums';
 import { Callbacks } from 'shared';
 
 export interface AppInfoStore {

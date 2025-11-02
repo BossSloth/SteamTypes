@@ -1,6 +1,6 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableMap } from 'mobx';
-import { DisplayStatus } from 'Protobufs/steam';
+import { DisplayStatus } from 'Protobufs/steam/steammessages_appoverview';
 import { Apps } from 'SteamClient';
 import { EControllerRumbleSetting, EThirdPartyControllerConfiguration } from 'SteamClient/Input';
 import { Unregisterable } from 'SteamClient/shared';
