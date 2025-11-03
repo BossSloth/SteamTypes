@@ -1,4 +1,5 @@
-import { Callbacks, SteamId } from 'shared';
+import { Callbacks } from 'shared/interfaces';
+import { SteamId } from 'shared/steamid';
 
 export interface ConnectionManager {
   AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;

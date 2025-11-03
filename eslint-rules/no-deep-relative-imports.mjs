@@ -13,7 +13,7 @@ export default {
           ignorePatterns: {
             type: 'array',
             items: { type: 'string' },
-            description: 'Array of regex patterns to ignore for relative import depth checking'
+            description: 'Array of regex patterns to ignore for relative import depth checking',
           },
         },
         additionalProperties: false,
@@ -26,7 +26,7 @@ export default {
   create(context) {
     const options = context.options[0] ?? {};
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : 1;
-    const ignorePatterns = Array.isArray(options.ignorePatterns) 
+    const ignorePatterns = Array.isArray(options.ignorePatterns)
       ? options.ignorePatterns.map(pattern => new RegExp(pattern))
       : [];
 
@@ -45,10 +45,10 @@ export default {
      */
     function checkLiteral(node, value) {
       if (typeof value !== 'string') return;
-      
+
       // Skip if the import path matches any ignore pattern
       if (shouldIgnore(value)) return;
-      
+
       const depth = (value.match(/\.\.\//g) ?? []).length;
       if (depth > maxDepth) {
         context.report({

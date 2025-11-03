@@ -1,5 +1,5 @@
-import { CPlayer_TextFilterWords } from 'Protobufs/steam/steammessages_player.steamclient';
 import { ObservableMap } from 'mobx';
+import { CPlayer_TextFilterWords } from 'Protobufs/steam/steammessages_player.steamclient';
 import { ProtobufInterface } from 'shared/protobuf';
 
 export interface TextFilterStore {

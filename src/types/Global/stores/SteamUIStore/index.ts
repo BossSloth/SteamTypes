@@ -1,6 +1,6 @@
 /* eslint-disable customRules/min-enum-members */
 import { EUIMode } from 'Global/managers/PopupManager';
-import { ObservableValue } from 'shared';
+import { ObservableValue } from 'shared/interfaces';
 import { SteamAppOverview } from '../AppStore';
 import { GamepadNavigationManager, NavigationSource } from './GamepadNavigationManager';
 import { GamepadUIAudioStore } from './GamepadUIAudioStore';

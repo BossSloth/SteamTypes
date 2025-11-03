@@ -18,7 +18,16 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": false,
-    "baseUrl": "src/types"
+    "baseUrl": "src",
+    "paths": {
+      "Global/*": ["types/Global/*"],
+      "Modules/*": ["types/Modules/*"],
+      "Protobufs/*": ["types/Protobufs/*"],
+      "shared/*": ["types/shared/*"],
+      "SteamClient/*": ["types/SteamClient/*"],
+      "SteamClient": ["types/SteamClient/index"],
+      "@Runtime/*": ["Runtime/*"],
+    }
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]

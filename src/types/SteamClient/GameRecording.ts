@@ -1,6 +1,6 @@
-import { CGameRecording_AudioSessionsChanged_Notification_Protobuf } from '../../Runtime/Protobufs';
-import { SerializedArrayBuffer } from '../shared';
-import type { Unregisterable } from './shared';
+import { CGameRecording_AudioSessionsChanged_Notification_Protobuf } from '@Runtime/Protobufs';
+import { SerializedArrayBuffer } from 'shared/protobuf';
+import { Unregisterable } from './shared';
 
 export interface GameRecording {
   /**

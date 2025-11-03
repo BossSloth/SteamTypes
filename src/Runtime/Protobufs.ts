@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { CAppOverview_Change } from '../types/Protobufs/steam/steammessages_appoverview';
-import { CMsgAchievementChange, CMsgCloudPendingRemoteOperations } from '../types/Protobufs/steam/steammessages_client_objects';
-import { CMsgClientSettings } from '../types/Protobufs/steam/steammessages_clientsettings';
-import { CGameRecording_AudioSessionsChanged_Notification } from '../types/Protobufs/steam/steammessages_gamerecording_objects';
-import { ProtobufClass } from '../types/shared/protobuf';
+import { CAppOverview_Change } from 'Protobufs/steam/steammessages_appoverview';
+import { CMsgAchievementChange, CMsgCloudPendingRemoteOperations } from 'Protobufs/steam/steammessages_client_objects';
+import { CMsgClientSettings } from 'Protobufs/steam/steammessages_clientsettings';
+import { CGameRecording_AudioSessionsChanged_Notification } from 'Protobufs/steam/steammessages_gamerecording_objects';
+import { ProtobufClass } from 'shared/protobuf';
 import { steambrew } from './steambrew';
 
 export const CAppOverview_Change_Protobuf = (

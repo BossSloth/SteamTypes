@@ -1,5 +1,5 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
-import { ObservableValue } from 'shared';
+import { ObservableValue } from 'shared/interfaces';
 
 export interface SearchStore {
   BIsSuggestionVisible(appId: string): boolean;

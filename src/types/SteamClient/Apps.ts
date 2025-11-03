@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { CAppOverview_Change_Protobuf, CMsgAchievementChange_Protobuf, CMsgCloudPendingRemoteOperations_Protobuf } from '@Runtime/Protobufs';
 import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
 import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from 'Global/stores/AppDetailsStore';
-import { SerializedArrayBuffer } from 'shared';
-import type { CAppOverview_Change_Protobuf, CMsgAchievementChange_Protobuf, CMsgCloudPendingRemoteOperations_Protobuf } from '../../Runtime/Protobufs';
-import type { EThirdPartyControllerConfiguration } from './Input';
+import { SerializedArrayBuffer } from 'shared/protobuf';
+import { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
-import type { EResult, OperationResponse, Unregisterable } from './shared';
+import { EResult, OperationResponse, Unregisterable } from './shared';
 
 /**
  * Represents various functions related to Steam applications.

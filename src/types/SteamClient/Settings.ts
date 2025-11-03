@@ -1,5 +1,5 @@
-import { SerializedArrayBuffer } from 'shared';
-import { CMsgClientSettings_Protobuf } from '../../Runtime/Protobufs';
+import { CMsgClientSettings_Protobuf } from '@Runtime/Protobufs';
+import { SerializedArrayBuffer } from 'shared/protobuf';
 import { CompatibilityToolInfo } from './Apps';
 import { JsPbMessage, OperationResponse, Unregisterable } from './shared';
 

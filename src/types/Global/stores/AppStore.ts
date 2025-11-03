@@ -4,8 +4,8 @@ import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs/steam/enums';
-import { CAppOverview_Change, CAppOverview, DisplayStatus, AppControllerSupportLevel } from 'Protobufs/steam/steammessages_appoverview';
-import { ProtobufInterface, SerializedArrayBuffer } from 'shared';
+import { AppControllerSupportLevel, CAppOverview, CAppOverview_Change, DisplayStatus } from 'Protobufs/steam/steammessages_appoverview';
+import { SerializedArrayBuffer, ProtobufInterface } from 'shared/protobuf';
 
 export interface AppStore {
   BIsAppPrivate(appid: number): boolean;

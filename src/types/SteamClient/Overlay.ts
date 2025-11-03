@@ -1,5 +1,5 @@
 import { EBrowserType, EUIMode } from 'Global/managers/PopupManager';
-import type { ESteamRealm, EUIComposition, Unregisterable } from './shared';
+import { ESteamRealm, EUIComposition, Unregisterable } from './shared';
 
 export interface Overlay {
   /**

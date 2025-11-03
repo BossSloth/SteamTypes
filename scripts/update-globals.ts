@@ -6,11 +6,11 @@
  */
 
 import chalk from 'chalk';
-import type ChromeRemoteInterface from 'chrome-remote-interface';
+import ChromeRemoteInterface from 'chrome-remote-interface';
 import fs from 'node:fs';
 import path from 'node:path';
 import { __dirname } from './dirname';
-import type { Logger } from './logger';
+import { Logger } from './logger';
 
 const defaultChromeWindowFilePath = path.join(__dirname, 'defaultChromeWindow.js');
 const globalsFilePath = path.join(path.resolve(`${__dirname}/../`), 'src', 'Globals', 'index.ts');

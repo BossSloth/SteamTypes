@@ -1,6 +1,7 @@
 import pluginJs from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
+import { jsdoc } from 'eslint-plugin-jsdoc';
 import perfectionist from 'eslint-plugin-perfectionist';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
@@ -21,10 +22,11 @@ export default defineConfig(
   ]),
   {
     languageOptions: {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       globals: globals.node,
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.mjs', '*.config.ts', 'eslint-rules/*.mjs'],
+          allowDefaultProject: ['*.mjs', '*.config.ts'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -57,6 +59,7 @@ export default defineConfig(
       },
     },
   },
+  jsdoc({}),
   {
     plugins: {
       '@stylistic': stylistic,
@@ -77,6 +80,7 @@ export default defineConfig(
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       curly: ['error', 'multi-line'],
       'perfectionist/sort-interfaces': ['error', { type: 'natural', groups: ['method', 'property'] }],
+      'perfectionist/sort-imports': ['error', { type: 'natural', newlinesBetween: 0 }],
 
       '@stylistic/array-element-newline': 'off',
       '@stylistic/implicit-arrow-linebreak': 'off',
@@ -93,7 +97,6 @@ export default defineConfig(
       'max-lines-per-function': ['error', { max: 50, skipBlankLines: true, skipComments: true }],
 
       '@typescript-eslint/consistent-type-exports': 'off',
-      '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/explicit-member-accessibility': 'off',
       '@typescript-eslint/init-declarations': 'off',
       '@typescript-eslint/max-params': 'off',
@@ -143,8 +146,10 @@ export default defineConfig(
       camelcase: 'off',
       'id-length': 'off',
       'no-console': 'off',
-      'customRules/no-deep-relative-imports': ['error', { maxDepth: 1, ignorePatterns: ['../../Runtime.*'] }],
+      'customRules/no-deep-relative-imports': ['error', { maxDepth: 1 }],
       'no-restricted-imports': ['error', '@steambrew/client'],
+      'jsdoc/no-undefined-types': ['error', { disableReporting: true }],
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
       // #endregion
     },
   },

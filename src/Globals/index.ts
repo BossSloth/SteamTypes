@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-interfaces */
-import type { SteamClient } from '../types';
+import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
 import { ConnectionManager } from '../types/Global/managers/ConnectionManager';

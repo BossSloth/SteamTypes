@@ -1,5 +1,5 @@
 import { Action, History, Location } from 'history';
-import { Callbacks } from 'shared';
+import { Callbacks } from 'shared/interfaces';
 import { BrowserViewEventMap, BrowserViewPopup } from 'SteamClient/BrowserView/BrowserViewPopup';
 
 export interface MainWindowBrowserManager {
