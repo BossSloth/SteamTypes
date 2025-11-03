@@ -1,13 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
 import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from 'Global/stores/AppDetailsStore';
-import { CAppOverview_Change } from 'Protobufs';
 import { SerializedArrayBuffer } from 'shared';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, customRules/no-deep-relative-imports
-import type { CAppOverview_Change_Protobuf } from '../../Runtime/Protobufs';
+import type { CAppOverview_Change_Protobuf, CMsgAchievementChange_Protobuf, CMsgCloudPendingRemoteOperations_Protobuf } from '../../Runtime/Protobufs';
 import type { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
-import type { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
+import type { EResult, OperationResponse, Unregisterable } from './shared';
 
 /**
  * Represents various functions related to Steam applications.
@@ -138,10 +136,10 @@ export interface Apps {
   GetCachedAppDetails(appId: number): Promise<string>;
 
   /**
-   * @returns a ProtoBuf message. If deserialized, returns {@link CMsgCloudPendingRemoteOperations}.
+   * @returns a ProtoBuf message. Can be deserialized using {@link CMsgCloudPendingRemoteOperations_Protobuf}.
    */
   GetCloudPendingRemoteOperations(appId: number): Promise<{
-    PendingOperations: ArrayBuffer;
+    PendingOperations: SerializedArrayBuffer<typeof CMsgCloudPendingRemoteOperations_Protobuf>;
   }>;
 
   GetCompatExperiment(param0: number): Promise<unknown>;
@@ -355,7 +353,7 @@ export interface Apps {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForAchievementChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
+  RegisterForAchievementChanges(callback: (data: SerializedArrayBuffer<typeof CMsgAchievementChange_Protobuf>) => void): Unregisterable;
 
   RegisterForAppBackupStatus(callback: (appBackupStatus: AppBackupStatus) => void): Unregisterable;
 
@@ -382,7 +380,7 @@ export interface Apps {
    * data can be deserialized with {@link CAppOverview_Change_Protobuf}.
    * @remarks This is not a mistake, it doesn't return anything.
    */
-  RegisterForAppOverviewChanges(callback: (data: SerializedArrayBuffer<CAppOverview_Change>) => void): void;
+  RegisterForAppOverviewChanges(callback: (data: SerializedArrayBuffer<typeof CAppOverview_Change_Protobuf>) => void): void;
 
   RegisterForDRMFailureResponse(callback: (appid: number, eResult: number, errorCode: number) => void): Unregisterable;
 
@@ -1217,30 +1215,4 @@ export interface LogoPositionForApp {
 
   /** @note Usually 1 */
   nVersion: number;
-}
-
-export enum ECloudPendingRemoteOperation {
-  None,
-  AppSessionActive,
-  UploadInProgress,
-  UploadPending,
-  AppSessionSuspended,
-}
-
-export interface CCloud_PendingRemoteOperation {
-  client_id(): number;
-
-  device_type(): number;
-
-  machine_name(): string;
-
-  operation(): ECloudPendingRemoteOperation;
-
-  os_type(): number;
-
-  time_last_updated(): number;
-}
-
-export interface CMsgCloudPendingRemoteOperations extends JsPbMessage {
-  operations: CCloud_PendingRemoteOperation[];
 }

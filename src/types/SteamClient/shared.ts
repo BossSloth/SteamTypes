@@ -199,17 +199,8 @@ export interface Unregisterable {
   unregister(): void;
 }
 
-// /**
-//  * ProtoBuf message class.
-//  */
-// export interface JsPbMessageClass {
-//   /**
-//    * @todo Returns {@link JsPbMessage}, but not sure how to do it for the messages.
-//    */
-//   deserializeBinary(data: ArrayBuffer): unknown;
-// }
-
 /**
+ * @todo Get rid of this interface and use `ProtobufInterface` instead from the other shared folder
  * Deserialized ProtoBuf message.
  */
 export interface JsPbMessage {

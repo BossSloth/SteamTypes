@@ -200,7 +200,7 @@ export interface ProtobufClass<T> {
   /**
    * Deserializes a protobuf message from binary data
    */
-  deserializeBinary(data: ArrayBuffer): ProtobufInterface<T>;
+  deserializeBinary(data: SerializedArrayBuffer<T>): ProtobufInterface<T>;
 
   /**
    * Creates a new instance from a plain object
@@ -226,7 +226,7 @@ type InterfaceToTuple<T> = T extends object
     }[keyof T][]
   : T;
 
-export type SerializedArrayBuffer<T> = ArrayBuffer & {
+export type SerializedArrayBuffer<T> = ArrayBuffer & Partial<{
   /** @internal doesn't exist in the actual type but is used to store the type in typescript */
   __deserializesTo: T;
-};
+}>;
