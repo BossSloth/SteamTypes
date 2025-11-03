@@ -1,4 +1,5 @@
 /* eslint-disable perfectionist/sort-interfaces */
+import { AppStore } from 'Global/stores/AppStore';
 import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
@@ -22,7 +23,7 @@ declare global {
   let appInfoStore: AppInfoStore;
   let appReviewStore: unknown;
   let appSpotlightStore: unknown;
-  let appStore: unknown;
+  let appStore: AppStore;
   let badgeStore: unknown;
   let ClearBackgroundInterval: unknown;
   let ClearBackgroundTimeout: unknown;
@@ -114,7 +115,7 @@ declare global {
     appInfoStore: AppInfoStore;
     appReviewStore: unknown;
     appSpotlightStore: unknown;
-    appStore: unknown;
+    appStore: AppStore;
     badgeStore: unknown;
     ClearBackgroundInterval: unknown;
     ClearBackgroundTimeout: unknown;

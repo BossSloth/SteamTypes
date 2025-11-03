@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "project": ["src/**", "tests/**", "scripts/**"],
+  "entry": [
+    "src/Runtime/*.ts"
+  ],
   "ignore":["tests/**/__snapshots__/**", "scripts/defaultChromeWindow.js", "src/types/SteamClient/Notifications.ts", "src/types/Protobufs/**"],
   "ignoreExportsUsedInFile": {
     "interface": true,
