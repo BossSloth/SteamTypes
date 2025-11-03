@@ -5,6 +5,11 @@ export interface GameSession {
 
   player_stats?: GameSession_PlayerStats[];
 
+  /**
+   * @Options
+   * ui_section: General
+   * ui_name: Session ID
+   */
   session_id?: string;
 
   start_time?: number;
