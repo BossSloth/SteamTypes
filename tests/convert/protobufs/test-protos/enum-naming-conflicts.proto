@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package test;
+
+// Interface that will conflict with enum name
+message StoreBrowseFilterFailure {
+  string filter_name = 1;
+  bool failed = 2;
+}
+
+// Enum with E prefix that should NOT be renamed due to interface conflict
+enum EStoreBrowseFilterFailure {
+  STORE_BROWSE_FILTER_FAILURE_NONE = 0;
+  STORE_BROWSE_FILTER_FAILURE_REDUNDANT = 1;
+}
+
+// Enum with E prefix that SHOULD be renamed (no interface conflict)
+enum EStoreLinkType {
+  STORE_LINK_TYPE_NONE = 0;
+  STORE_LINK_TYPE_YOUTUBE = 1;
+}
+
+// Regular enum without E prefix
+enum StoreCategoryType {
+  STORE_CATEGORY_TYPE_CATEGORY = 0;
+  STORE_CATEGORY_TYPE_FEATURE = 1;
+}

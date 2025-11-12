@@ -19,6 +19,10 @@ const PROTOBUF_FILES = [
   'steam\\steammessages_appoverview.proto',
   'steam\\steammessages_client_objects.proto',
   'steam\\steammessages_clientsettings.proto',
+  'steam\\steammessages_store.steamclient.proto',
+  'steam\\contenthubs.proto',
+  'steam\\steammessages_storebrowse.steamclient.proto',
+  'steam\\enums_productinfo.proto',
 ];
 
 const TYPE_MAP: Record<string, string> = {
@@ -273,7 +277,34 @@ function mapTypeToFile(
   }
 }
 
+function collectInterfaceNames(ns: protobuf.Namespace, parentName?: string): Set<string> {
+  const interfaceNames = new Set<string>();
+
+  for (const messageType of getMessageTypes(ns)) {
+    if (shouldSkipType(messageType.filename)) continue;
+
+    const interfaceName = getFullTypeName(parentName, messageType.name);
+    interfaceNames.add(interfaceName);
+
+    if (messageType.nested) {
+      const nestedParentName = getFullTypeName(parentName, messageType.name);
+      const nestedNames = collectInterfaceNames(messageType, nestedParentName);
+      nestedNames.forEach(name => interfaceNames.add(name));
+    }
+  }
+
+  for (const nestedNs of getNamespaces(ns)) {
+    const nestedNames = collectInterfaceNames(nestedNs, parentName);
+    nestedNames.forEach(name => interfaceNames.add(name));
+  }
+
+  return interfaceNames;
+}
+
 function mapAllTypesToFiles(ns: protobuf.Namespace, parentName?: string): void {
+  // First collect all interface names to check for conflicts
+  const interfaceNames = collectInterfaceNames(ns, parentName);
+
   for (const messageType of getMessageTypes(ns)) {
     mapTypeToFile(messageType.name, messageType.filename, parentName);
     if (messageType.nested) {
@@ -292,7 +323,11 @@ function mapAllTypesToFiles(ns: protobuf.Namespace, parentName?: string): void {
       const normalizedName = enumType.name.slice(1);
       const fullEnumName = getFullTypeName(parentName, enumType.name);
       const fullNormalizedName = getFullTypeName(parentName, normalizedName);
-      ctx.replacedNames.set(fullEnumName, fullNormalizedName);
+
+      // Only remove the "E" prefix if there isn't already an interface with the same name
+      if (!interfaceNames.has(fullNormalizedName)) {
+        ctx.replacedNames.set(fullEnumName, fullNormalizedName);
+      }
     }
   }
 }

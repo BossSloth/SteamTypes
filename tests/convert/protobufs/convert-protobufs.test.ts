@@ -8,4 +8,6 @@ describe('Protobuf to TypeScript Conversion', () => {
   createTest('Nested Types', 'nested-types.proto');
 
   createTest('Complex Structures', 'complex-structures.proto');
+
+  createTest('Enum Naming Conflicts', 'enum-naming-conflicts.proto');
 });
