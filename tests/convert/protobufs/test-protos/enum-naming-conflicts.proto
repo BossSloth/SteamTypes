@@ -25,3 +25,17 @@ enum StoreCategoryType {
   STORE_CATEGORY_TYPE_CATEGORY = 0;
   STORE_CATEGORY_TYPE_FEATURE = 1;
 }
+
+// Test enum key prefix removal - E prefix enum (should remove EWindowStackingOrder_ prefix)
+enum EWindowStackingOrder {
+  k_EWindowStackingOrder_Invalid = 0;
+  k_EWindowStackingOrder_Top = 1;
+  k_EWindowStackingOrder_Bottom = 2;
+}
+
+// Test enum key prefix removal - no E prefix enum (should remove BluetoothDeviceType_ prefix)
+enum EBluetoothDeviceType {
+  k_BluetoothDeviceType_Invalid = 0;
+  k_BluetoothDeviceType_Unknown = 1;
+  k_BluetoothDeviceType_Phone = 2;
+}

@@ -1,26 +1,26 @@
 export enum PublishedFileQueryType {
-  PublishedFileQueryType_RankedByVote = 0,
-  PublishedFileQueryType_RankedByPublicationDate = 1,
-  PublishedFileQueryType_AcceptedForGameRankedByAcceptanceDate = 2,
-  PublishedFileQueryType_RankedByTrend = 3,
-  PublishedFileQueryType_FavoritedByFriendsRankedByPublicationDate = 4,
-  PublishedFileQueryType_CreatedByFriendsRankedByPublicationDate = 5,
-  PublishedFileQueryType_RankedByNumTimesReported = 6,
-  PublishedFileQueryType_CreatedByFollowedUsersRankedByPublicationDate = 7,
-  PublishedFileQueryType_NotYetRated = 8,
-  PublishedFileQueryType_RankedByTotalUniqueSubscriptions = 9,
-  PublishedFileQueryType_RankedByTotalVotesAsc = 10,
-  PublishedFileQueryType_RankedByVotesUp = 11,
-  PublishedFileQueryType_RankedByTextSearch = 12,
-  PublishedFileQueryType_RankedByPlaytimeTrend = 13,
-  PublishedFileQueryType_RankedByTotalPlaytime = 14,
-  PublishedFileQueryType_RankedByAveragePlaytimeTrend = 15,
-  PublishedFileQueryType_RankedByLifetimeAveragePlaytime = 16,
-  PublishedFileQueryType_RankedByPlaytimeSessionsTrend = 17,
-  PublishedFileQueryType_RankedByLifetimePlaytimeSessions = 18,
-  PublishedFileQueryType_RankedByInappropriateContentRating = 19,
-  PublishedFileQueryType_RankedByBanContentCheck = 20,
-  PublishedFileQueryType_RankedByLastUpdatedDate = 21,
+  RankedByVote = 0,
+  RankedByPublicationDate = 1,
+  AcceptedForGameRankedByAcceptanceDate = 2,
+  RankedByTrend = 3,
+  FavoritedByFriendsRankedByPublicationDate = 4,
+  CreatedByFriendsRankedByPublicationDate = 5,
+  RankedByNumTimesReported = 6,
+  CreatedByFollowedUsersRankedByPublicationDate = 7,
+  NotYetRated = 8,
+  RankedByTotalUniqueSubscriptions = 9,
+  RankedByTotalVotesAsc = 10,
+  RankedByVotesUp = 11,
+  RankedByTextSearch = 12,
+  RankedByPlaytimeTrend = 13,
+  RankedByTotalPlaytime = 14,
+  RankedByAveragePlaytimeTrend = 15,
+  RankedByLifetimeAveragePlaytime = 16,
+  RankedByPlaytimeSessionsTrend = 17,
+  RankedByLifetimePlaytimeSessions = 18,
+  RankedByInappropriateContentRating = 19,
+  RankedByBanContentCheck = 20,
+  RankedByLastUpdatedDate = 21,
 }
 
 export enum PublishedFileInappropriateProvider {
@@ -122,9 +122,9 @@ export enum StorageFormatStage {
 }
 
 export enum SystemFanControlMode {
-  SystemFanControlMode_Invalid = 0,
-  SystemFanControlMode_Disabled = 1,
-  SystemFanControlMode_Default = 2,
+  Invalid = 0,
+  Disabled = 1,
+  Default = 2,
 }
 
 export enum StartupMovieVariant {
@@ -135,9 +135,9 @@ export enum StartupMovieVariant {
 }
 
 export enum ColorGamutLabelSet {
-  ColorGamutLabelSet_Default = 0,
-  ColorGamutLabelSet_sRGB_Native = 1,
-  ColorGamutLabelSet_Native_sRGB_Boosted = 2,
+  Default = 0,
+  sRGB_Native = 1,
+  Native_sRGB_Boosted = 2,
 }
 
 export enum WindowStackingOrder {
@@ -147,51 +147,51 @@ export enum WindowStackingOrder {
 }
 
 export enum BluetoothDeviceType {
-  BluetoothDeviceType_Invalid = 0,
-  BluetoothDeviceType_Unknown = 1,
-  BluetoothDeviceType_Phone = 2,
-  BluetoothDeviceType_Computer = 3,
-  BluetoothDeviceType_Headset = 4,
-  BluetoothDeviceType_Headphones = 5,
-  BluetoothDeviceType_Speakers = 6,
-  BluetoothDeviceType_OtherAudio = 7,
-  BluetoothDeviceType_Mouse = 8,
-  BluetoothDeviceType_Joystick = 9,
-  BluetoothDeviceType_Gamepad = 10,
-  BluetoothDeviceType_Keyboard = 11,
+  Invalid = 0,
+  Unknown = 1,
+  Phone = 2,
+  Computer = 3,
+  Headset = 4,
+  Headphones = 5,
+  Speakers = 6,
+  OtherAudio = 7,
+  Mouse = 8,
+  Joystick = 9,
+  Gamepad = 10,
+  Keyboard = 11,
 }
 
 export enum SystemAudioDirection {
-  SystemAudioDirection_Invalid = 0,
-  SystemAudioDirection_Input = 1,
-  SystemAudioDirection_Output = 2,
+  Invalid = 0,
+  Input = 1,
+  Output = 2,
 }
 
 export enum SystemAudioChannel {
-  SystemAudioChannel_Invalid = 0,
-  SystemAudioChannel_Aggregated = 1,
-  SystemAudioChannel_FrontLeft = 2,
-  SystemAudioChannel_FrontRight = 3,
-  SystemAudioChannel_LFE = 4,
-  SystemAudioChannel_BackLeft = 5,
-  SystemAudioChannel_BackRight = 6,
-  SystemAudioChannel_FrontCenter = 7,
-  SystemAudioChannel_Unknown = 8,
-  SystemAudioChannel_Mono = 9,
+  Invalid = 0,
+  Aggregated = 1,
+  FrontLeft = 2,
+  FrontRight = 3,
+  LFE = 4,
+  BackLeft = 5,
+  BackRight = 6,
+  FrontCenter = 7,
+  Unknown = 8,
+  Mono = 9,
 }
 
 export enum SystemAudioPortType {
-  SystemAudioPortType_Invalid = 0,
-  SystemAudioPortType_Unknown = 1,
-  SystemAudioPortType_Audio32f = 2,
-  SystemAudioPortType_Midi8b = 3,
-  SystemAudioPortType_Video32RGBA = 4,
+  Invalid = 0,
+  Unknown = 1,
+  Audio32f = 2,
+  Midi8b = 3,
+  Video32RGBA = 4,
 }
 
 export enum SystemAudioPortDirection {
-  SystemAudioPortDirection_Invalid = 0,
-  SystemAudioPortDirection_Input = 1,
-  SystemAudioPortDirection_Output = 2,
+  Invalid = 0,
+  Input = 1,
+  Output = 2,
 }
 
 export enum SystemServiceState {
@@ -663,10 +663,10 @@ export enum ExternalSaleEventType {
 }
 
 export enum EnhancedMarketAppearanceStatus {
-  EnhancedMarketAppearanceStatus_None = 0,
-  EnhancedMarketAppearanceStatus_Pending = 1,
-  EnhancedMarketAppearanceStatus_InProgress = 2,
-  EnhancedMarketAppearanceStatus_Completed = 3,
+  None = 0,
+  Pending = 1,
+  InProgress = 2,
+  Completed = 3,
 }
 
 export enum ContentReportSubjectType {

@@ -595,8 +595,8 @@ export enum RecordingSessionChangeNotificationType {
 }
 
 export enum DiskSpaceType {
-  eDiskSpaceType_Recording = 0,
-  eDiskSpaceType_Clip = 1,
+  eRecording = 0,
+  eClip = 1,
 }
 
 export enum ThumbnailTimePrecision {

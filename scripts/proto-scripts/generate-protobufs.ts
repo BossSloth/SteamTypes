@@ -120,13 +120,20 @@ function getImportPathForType(typeName: string): string | null {
   return baseFileName !== undefined ? `./${baseFileName}` : null;
 }
 
-function normalizeEnumValueName(valueName: string, enumTypeName: string): string {
+function normalizeEnumValueName(valueName: string, originalEnumTypeName: string, finalEnumTypeName?: string): string {
   let normalized = valueName;
   if (normalized.startsWith('k_')) {
     normalized = normalized.slice(2);
   }
-  if (normalized.includes(enumTypeName)) {
-    normalized = normalized.replace(`${enumTypeName}_`, '').replace(new RegExp(`^${enumTypeName}`), '');
+
+  // Try to remove the original enum name prefix
+  if (normalized.includes(originalEnumTypeName)) {
+    normalized = normalized.replace(`${originalEnumTypeName}_`, '').replace(new RegExp(`^${originalEnumTypeName}`), '');
+  }
+
+  // Also try to remove the final enum name prefix (if different from original)
+  if (finalEnumTypeName !== undefined && finalEnumTypeName !== originalEnumTypeName && normalized.includes(finalEnumTypeName)) {
+    normalized = normalized.replace(`${finalEnumTypeName}_`, '').replace(new RegExp(`^${finalEnumTypeName}`), '');
   }
 
   return normalized;
@@ -187,7 +194,8 @@ function generateEnumDefinition(enumType: protobuf.Enum, parentName?: string): s
   const baseEnumName = getFullTypeName(parentName, enumType.name);
   const enumName = ctx.replacedNames.get(baseEnumName) ?? baseEnumName;
 
-  const entries = Object.entries(enumType.values).map(([name, value]) => `  ${normalizeEnumValueName(name, enumType.name)} = ${value},`);
+  const entries = Object.entries(enumType.values).map(([name, value]) =>
+    `  ${normalizeEnumValueName(name, enumType.name, enumName)} = ${value},`);
 
   const enumComments = ctx.existingComments.get(enumName);
   const enumComment = enumComments?.get('__interface_comment');

@@ -18,3 +18,15 @@ export enum StoreCategoryType {
   STORE_CATEGORY_TYPE_CATEGORY = 0,
   STORE_CATEGORY_TYPE_FEATURE = 1,
 }
+
+export enum WindowStackingOrder {
+  Invalid = 0,
+  Top = 1,
+  Bottom = 2,
+}
+
+export enum BluetoothDeviceType {
+  Invalid = 0,
+  Unknown = 1,
+  Phone = 2,
+}
