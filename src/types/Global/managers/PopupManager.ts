@@ -1,6 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { Callbacks } from 'shared/interfaces';
-import { SteamId } from 'shared/steamid';
+import { SteamID } from 'shared/steamid';
 import { Window as SteamWindow } from 'SteamClient/Window';
 
 export interface PopupManager {
@@ -101,7 +101,7 @@ export interface PopupManager {
    */
   SaveSavedDimensionStore(): void;
 
-  SetCurrentLoggedInAccountID(accountId: ReturnType<SteamId['GetAccountID']>): void;
+  SetCurrentLoggedInAccountID(accountId: ReturnType<SteamID['GetAccountID']>): void;
 
   SetRestoreDetails(popupName: string, restoreDetails: RestoreDetail['strRestoreDetails'], expires: RestoreDetail['bExpires']): void;
 
@@ -124,7 +124,7 @@ export interface PopupManager {
   m_rgShutdownCallbacks: PopupCallback_t[];
 
   /**
-   * The current logged in account ID same as {@link SteamId.GetAccountID}
+   * The current logged in account ID same as {@link SteamID.GetAccountID}
    */
   m_unCurrentAccountID: number;
 }

@@ -278,6 +278,12 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
     return 'QueryObserver';
   }
 
+  if (isSteamID(obj)) {
+    if (addImport) context.addImport('shared/steamid', 'SteamID');
+
+    return 'SteamID';
+  }
+
   return null;
 }
 
@@ -362,4 +368,10 @@ function isTanStackQueryObserver(obj: unknown): boolean {
     && typeof obj.getCurrentResult === 'function'
     && 'subscribe' in obj
     && typeof obj.subscribe === 'function';
+}
+
+function isSteamID(obj: unknown): boolean {
+  if (obj === null || typeof obj !== 'object') return false;
+
+  return 'm_ulSteamID' in obj && 'ConvertTo64BitString' in obj;
 }

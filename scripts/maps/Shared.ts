@@ -6,5 +6,5 @@ export const SharedMaps: InterfaceMap[] = [
   IMap('shared/Interfaces', 'Callbacks', /* ts */`window.SteamUIStore.m_GamepadUIAudioStore.m_currentlyFocusedAppid.m_callbacks`),
   IMap('shared/Interfaces', 'MappedObservable', /* ts */`window.SteamUIStore.m_GamepadNavigationManager.NavigationSourceSupportsFocus`),
 
-  IMap('shared/steamid', 'SteamId', /* ts */`window.App.cm.m_steamid`),
+  IMap('shared/steamid', 'SteamID', /* ts */`window.App.cm.m_steamid`),
 ];

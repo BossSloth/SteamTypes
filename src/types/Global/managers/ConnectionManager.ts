@@ -1,5 +1,5 @@
 import { Callbacks } from 'shared/interfaces';
-import { SteamId } from 'shared/steamid';
+import { SteamID } from 'shared/steamid';
 
 export interface ConnectionManager {
   AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;
@@ -136,7 +136,7 @@ export interface ConnectionManager {
 
   m_setServiceMethodHandlers: Set<string>;
 
-  m_steamid: SteamId;
+  m_steamid: SteamID;
 
   m_strIPCountry: string;
 
@@ -152,7 +152,7 @@ export interface ConnectionManager {
 
   rtReconnectThrottleStart: number;
 
-  steamid: SteamId;
+  steamid: SteamID;
 }
 
 export interface ClientServersAvailableHandler {
