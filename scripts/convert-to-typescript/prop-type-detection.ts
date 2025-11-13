@@ -267,9 +267,9 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
     return 'ConnectionManager';
   }
   if (isSimpleProtobufMessage(obj)) {
-    if (addImport) context.addImport('../shared/protobuf', 'SimpleJsPbMessage');
+    if (addImport) context.addImport('shared/protobuf', 'ProtobufInterface');
 
-    return `SimpleJsPbMessage<${obj.getClassName()}>`;
+    return `ProtobufInterface<${obj.getClassName()}>`;
   }
   if (isTanStackQueryObserver(obj)) {
     // import { QueryObserver } from '@tanstack/query-core';

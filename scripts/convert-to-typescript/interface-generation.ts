@@ -113,7 +113,7 @@ function processInterfaceProperties(
       }
       context.functionsToProcess.get(interfaceName)?.set(formattedName, value as Function);
     } else {
-      if (key === 'CMInterface' || key === 'm_CMInterface') {
+      if (key === 'CMInterface' || key === 'm_CMInterface' || key === 'm_CM') {
         const interfaceProperty: InterfaceProperty = {
           name: formattedName,
           type: new InterfaceType('ConnectionManager'),
