@@ -347,6 +347,13 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
   }).join('\n');
 }
 
+function removeDuplicateUnionTypes(sourceText: string): string {
+  const regex = /\b(\w+)(\s+\|\s+\1\b)+/g;
+  const regexWithBrackets = new RegExp(`\\(${regex.source}\\)`, 'g');
+
+  return sourceText.replace(regexWithBrackets, '$1').replace(regex, '$1');
+}
+
 /**
  * Main function to compare and correct interfaces between two source files
  * @param targetSourceFile The source file containing interfaces to be edited
@@ -379,7 +386,8 @@ export function compareAndCorrectAllInterfaces(
 
   const newSourceText = targetSourceFile.getFullText();
 
-  const formattedSourceText = newSourceText.replace(/^(?!import).+[^\s]:.+;(?!\n\n)(?!\n\s*})$/gm, '$&\n');
+  let formattedSourceText = newSourceText.replace(/^(?!import).+[^\s]:.+;(?!\n\n)(?!\n\s*})$/gm, '$&\n');
+  formattedSourceText = removeDuplicateUnionTypes(formattedSourceText);
 
   // Generate a diff of the entire source file
   return generateDiff(originalSourceText, formattedSourceText, filePath);

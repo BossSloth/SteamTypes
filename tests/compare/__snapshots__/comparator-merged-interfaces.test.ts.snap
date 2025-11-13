@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Merged Interface Cases > merge with union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,23 +2,25 @@
+  info: Community_data
+  extra_info?: (Community_data | Foo)
+}
+
+export interface Community_data {
+-  avatar_frame: string;
++  animated_avatar?: string;
+
++  avatar_frame?: string;
++
+  avatar_url: string;
+
+-  favorite_badge: Player_badge;
++  favorite_badge?: Player_badge;
+
+  level: number;
+
+  level_class: string;
+
+  persona_name: string;
+
+-  profile_background?: Profile_background2;
++  profile_background?: Profile_background;
+}
+
+export interface Foo {
+  bar: string;
+}"
+`;
