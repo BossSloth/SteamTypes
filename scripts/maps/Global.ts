@@ -3,7 +3,7 @@ import { GMap, InterfaceMap } from '.';
 
 export const GlobalMaps: InterfaceMap[] = [
   GMap('App', 'App', /* ts */`window.App`),
-  GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */`window.appAchievementProgressCache`, 'window.appAchievementProgressCache.RequestCacheUpdate()'),
+  GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */`window.appAchievementProgressCache`, { initFunction: 'window.appAchievementProgressCache.RequestCacheUpdate()' }),
 
   // Managers
   GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.cm`),
@@ -15,7 +15,7 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('stores/AppDetailsStore', 'AppDetailsStore', /* ts */`window.appDetailsStore`),
   GMap('stores/AppInfoStore', 'AppInfoStore', /* ts */`window.appInfoStore`),
   GMap('stores/AppStore', 'AppStore', /* ts */`window.appStore`),
-  GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, /* ts */`SteamClient.Console.ExecCommand("test")`),
+  GMap('stores/ConsoleStore', 'ConsoleStore', /* ts */`window.consoleStore`, { initFunction: /* ts */`SteamClient.Console.ExecCommand("test")` }),
   GMap('stores/UrlStore', 'UrlStore', /* ts */`window.urlStore`),
   GMap('stores/GameRecordingStore', 'GameRecordingStore', /* ts */`window.g_GRS`),
   GMap('stores/SearchStore', 'SearchStore', /* ts */`window.searchstore`),
