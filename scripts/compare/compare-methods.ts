@@ -1,5 +1,5 @@
 import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
-import { updatePropertyModifiers } from './shared';
+import { CustomJsDocTags, getJsDocTagValues, updatePropertyModifiers } from './shared';
 import { compareTypes } from './type-comparator';
 
 /**
@@ -8,6 +8,12 @@ import { compareTypes } from './type-comparator';
  * @param sourceMethod The method to use as the source of truth
  */
 export function compareAndCorrectMethodTypes(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
+  const ignore = getJsDocTagValues(targetMethod, CustomJsDocTags.ignore);
+
+  if (ignore.length > 0) {
+    return;
+  }
+
   updatePropertyModifiers(targetMethod, sourceMethod);
 
   // If it has the @native jsDoc don't compare

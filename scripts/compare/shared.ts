@@ -1,6 +1,12 @@
 import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, QuestionTokenableNode, ReadonlyableNode, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
 import { Logger } from '../logger';
 
+export const CustomJsDocTags = {
+  originalName: 'compareOriginalName',
+  currentValue: 'currentValue',
+  ignore: 'ignore',
+};
+
 /**
  * Interface to represent a task in the processing queue
  */
