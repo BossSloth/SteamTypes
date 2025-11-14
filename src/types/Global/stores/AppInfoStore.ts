@@ -6,48 +6,59 @@ import { Callbacks } from 'shared/interfaces';
 export interface AppInfoStore {
   BHavePendingAppInfoRequests(): boolean;
 
-  EnsureAppInfoForAppIDs(e: unknown): Promise<unknown>;
+  /** Ensures app info is loaded for the given app IDs, queuing requests if needed */
+  EnsureAppInfoForAppIDs(appids: number[]): Promise<void>;
 
+  /** Processes all queued app info requests */
   FlushPendingAppInfo(): Promise<void>;
 
-  GetAppInfo(e: unknown): unknown;
+  /** Gets app info for the given app ID, queuing a request if not already loaded */
+  GetAppInfo(appid: number): AppInfo;
 
-  GetCacheKeyForAppID(e: unknown): string;
+  GetCacheKeyForAppID(appid: number): string;
 
-  GetRichPresenceLoc(e: unknown): unknown;
+  /** Gets rich presence localization data for the given app ID */
+  GetRichPresenceLoc(appid: number): MapRichPresenceLoc;
 
-  GetRichPresenceLocAsync(e: unknown): unknown;
+  /** Gets rich presence localization data asynchronously, waiting for it to load if needed */
+  GetRichPresenceLocAsync(appid: number): Promise<MapRichPresenceLoc>;
 
-  Init(e: unknown): void;
+  Init(cmInterface: ConnectionManager): void;
 
-  IsLoadingAppID(e: unknown): unknown;
+  IsLoadingAppID(appid: number): boolean;
 
-  LoadAppInfoBatch(e: unknown): Promise<void>;
+  /** Loads a batch of app info from Steam servers */
+  LoadAppInfoBatch(appids: number[]): Promise<void>;
 
-  LoadAppInfoBatchFromLocalCache(e: unknown): Promise<unknown>;
+  /** Attempts to load app info from local cache, returns app IDs that need to be fetched from server */
+  LoadAppInfoBatchFromLocalCache(appids: number[]): Promise<number[]>;
 
-  Localize(e: unknown, t: unknown, r: unknown): unknown;
+  /** Localizes a rich presence token for the given app ID */
+  Localize(appid: number, token: string, params?: Record<string, string>): string;
 
-  OnAppOverviewChange(e: unknown): void;
+  OnAppOverviewChange(appOverview: unknown[]): void;
 
-  OnGetAppsResponse(e: unknown): void;
+  OnGetAppsResponse(response: unknown): void;
 
-  OnRichPresenceLocUpdate(e: unknown, t: unknown): void;
+  OnRichPresenceLocUpdate(richPresenceLoc: MapRichPresenceLoc, tokenLists: unknown[]): void;
 
-  QueueAppInfoRequest(e: unknown): unknown;
+  /** Queues an app info request for the given app ID, batching requests with a 25ms delay */
+  QueueAppInfoRequest(appid: number): Promise<void>;
 
-  QueueRichPresenceLocRequest(e: unknown): unknown;
+  QueueRichPresenceLocRequest(richPresenceLoc: MapRichPresenceLoc): Promise<MapRichPresenceLoc>;
 
-  RegisterCallbackOnLoad(e: unknown): undefined;
+  /** Registers a callback to be invoked when all pending app info requests complete */
+  RegisterCallbackOnLoad(callback: () => void): void;
 
-  SaveAppInfoBatchToLocalCache(e: unknown): Promise<void>;
+  SaveAppInfoBatchToLocalCache(appInfos: AppInfo[]): Promise<void>;
 
-  SetCacheStorage(e: unknown): void;
+  SetCacheStorage(cacheStorage: CacheStorage): void;
 
   CMInterface: ConnectionManager;
 
-  m_CacheStorage: null;
+  m_CacheStorage: CacheStorage | null;
 
+  /** Number of app info requests currently in flight */
   m_cAppInfoRequestsInFlight: number;
 
   m_CMInterface: ConnectionManager;
@@ -58,33 +69,35 @@ export interface AppInfoStore {
 
   m_mapRichPresenceLoc: ObservableMap<string, MapRichPresenceLoc>;
 
-  m_PendingAppInfoPromise: undefined;
+  /** Promise that resolves when the current batch of app info requests completes */
+  m_PendingAppInfoPromise: Promise<void> | undefined;
 
-  m_PendingAppInfoResolve: undefined;
+  m_PendingAppInfoResolve: (() => void) | undefined;
 
-  m_setPendingAppInfo: Set<unknown>;
+  /** Set of app IDs waiting to be requested in the next batch */
+  m_setPendingAppInfo: Set<number>;
 }
 
 export interface AppInfo {
   BIsApplicationOrTool(): boolean;
 
-  BuildAppURL(e: unknown, t: unknown): unknown;
+  BuildAppURL(path: string, params?: Record<string, string>): string;
 
-  DeserializeFromAppOverview(e: unknown): void;
+  DeserializeFromAppOverview(appOverview: unknown): void;
 
-  DeserializeFromCacheObject(e: unknown): void;
+  DeserializeFromCacheObject(cacheObject: CachedAppInfo): void;
 
-  DeserializeFromMessage(e: unknown): void;
+  DeserializeFromMessage(message: unknown): void;
 
-  SerializeToCacheObject(): { strName: unknown; strIconURL: unknown; strUpdatedFromServer: unknown; eAppType: unknown; } | null;
+  SerializeToCacheObject(): CachedAppInfo | null;
 
   appid: number;
 
-  apptype: number;
+  apptype?: number;
 
   icon_url: string;
 
-  icon_url_no_default: string;
+  icon_url_no_default?: string;
 
   is_initialized: boolean;
 
@@ -96,31 +109,51 @@ export interface AppInfo {
 
   m_eAppType: ProtoAppType;
 
-  m_strIconURL: string;
+  m_strIconURL?: string;
 
-  m_strName: string;
+  m_strName?: string;
 
   m_unAppID: number;
 
-  name: string;
+  name?: string;
 
   time_updated_from_server: Date;
 }
 
+export interface CachedAppInfo {
+  eAppType: ProtoAppType;
+
+  strIconURL: string;
+
+  strName: string;
+
+  strUpdatedFromServer: string;
+}
+
 export interface MapRichPresenceLoc {
-  GetAppID(): unknown;
+  GetAppID(): number;
 
-  GetTokenList(e: unknown): unknown;
+  GetTokenList(language: string): Map<string, string> | undefined;
 
-  Localize(e: unknown, t: unknown): unknown;
+  /** Localizes a token with optional parameter substitution */
+  Localize(token: string, params?: Record<string, string>): string;
 
-  SubstituteParams(e: unknown, t: unknown): unknown;
+  SubstituteParams(text: string, params: Record<string, string>): string;
 
   m_appid: number;
 
-  m_fetching: null;
+  /** Promise that resolves when rich presence localization data is fetched */
+  m_fetching: Promise<MapRichPresenceLoc> | null;
 
-  m_mapLanguages: ObservableMap<string, ObservableMap<string, string>>;
+  /** Map of language codes to token name/value maps */
+  m_mapLanguages: Map<string, Map<string, string>>;
 
+  /** Timestamp of last update in milliseconds */
   m_nLastUpdated: number;
+}
+
+export interface CacheStorage {
+  GetObject(key: string): Promise<unknown>;
+
+  StoreObject(key: string, value: unknown): Promise<void>;
 }
