@@ -262,7 +262,7 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
 
   if (typeof window !== 'undefined' && typeof window.cm !== 'undefined' && obj === window.cm) {
     // import { ConnectionManager } from './managers/ConnectionManager';
-    if (addImport) context.addImport('./managers/ConnectionManager', 'ConnectionManager');
+    if (addImport) context.addImport('Global/managers/ConnectionManager', 'ConnectionManager');
 
     return 'ConnectionManager';
   }

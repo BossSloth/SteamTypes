@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { ClassDeclaration, Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
 import { getType } from './prop-type-detection';
@@ -118,7 +117,7 @@ function processInterfaceProperties(
           name: formattedName,
           type: new InterfaceType('ConnectionManager'),
         };
-        context.addImport('./managers/ConnectionManager', 'ConnectionManager');
+        context.addImport('Global/managers/ConnectionManager', 'ConnectionManager');
         interfaceDefinition.properties.push(interfaceProperty);
 
         continue;
