@@ -43,25 +43,18 @@ export interface CGameRecordingClipFile {
 }
 
 export interface CGameRecordingTimelineMetadata {
-  /** Unix timestamp when this timeline was recorded */
   date_recorded?: number;
 
-  /** Duration in milliseconds (as string) */
   duration_ms?: number;
 
-  /** Steam game ID */
   game_id?: number;
 
-  /** Optional phase information */
   phases?: CGameRecordingPhase[];
 
-  /** Array of recordings within this timeline */
   recordings?: CGameRecordingTimelineMetadata_Recording[];
 
-  /** Optional significant events within this timeline */
   significant_events?: CGameRecordingTimelineEvent[];
 
-  /** Unique identifier for this timeline */
   timeline_id?: string;
 }
 
@@ -70,21 +63,16 @@ export interface CGameRecordingTimelineMetadata_Recording {
 
   delete_on_cleanup?: boolean;
 
-  /** Duration of this recording in milliseconds (as string) */
   duration_ms?: number;
 
-  /** Optional file size of the recording */
   file_size?: number;
 
-  /** Unique identifier for this recording */
   recording_id?: string;
 
   recording_type?: GameRecordingType;
 
-  /** Offset in MS where recording zero aligns with timeline */
   recording_zero_timeline_offset_ms?: number;
 
-  /** Start offset of this recording within the timeline in milliseconds (as string) */
   start_offset_ms?: number;
 
   video_manager_clip_id?: number;

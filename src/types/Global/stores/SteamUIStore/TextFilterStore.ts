@@ -1,5 +1,6 @@
 import { ObservableMap } from 'mobx';
 import { CPlayer_TextFilterWords } from 'Protobufs/steam/steammessages_player.steamclient';
+import { Log } from 'shared/interfaces';
 import { ProtobufInterface } from 'shared/protobuf';
 
 export interface TextFilterStore {
@@ -397,26 +398,6 @@ export interface MapServiceMethodHandlers {
    * This is a class function
    */
   msgClass: unknown;
-}
-
-export interface Log {
-  Assert(e: unknown, ...t: unknown[]): void;
-
-  Debug(): void;
-
-  Error(): void;
-
-  Info(): void;
-
-  IsDebugEnabled(): unknown;
-
-  Log(e: unknown, ...t: unknown[]): void;
-
-  m_fnIdGenerator(): unknown;
-
-  Warning(): void;
-
-  m_sName: string;
 }
 
 export interface RgErrorQueue {

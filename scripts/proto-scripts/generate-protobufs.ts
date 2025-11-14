@@ -23,6 +23,8 @@ const PROTOBUF_FILES = [
   'steam\\contenthubs.proto',
   'steam\\steammessages_storebrowse.steamclient.proto',
   'steam\\enums_productinfo.proto',
+  'steam\\steammessages_chat.steamclient.proto',
+  'steam\\steammessages_clientserver_friends.proto',
 ];
 
 const TYPE_MAP: Record<string, string> = {
