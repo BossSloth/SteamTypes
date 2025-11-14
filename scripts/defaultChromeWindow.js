@@ -283,7 +283,7 @@ const unwantedWindowProperties = [
 const windowProperties = [...defaultChromeWindowProperties, ...millenniumWindowProperties, ...unwantedWindowProperties];
 
 
-const keys1 = new Set(Object.keys(window));
+const keys1 = new Set(Object.keys(window).filter(key => !key.startsWith("temp")));
 const keys2 = new Set(windowProperties);
 
 const onlyInObj1 = [...keys1].filter(key => !keys2.has(key));
