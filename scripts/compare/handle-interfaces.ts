@@ -12,6 +12,26 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
   const targetInterfaces = extractInterfaceReferences(targetTypeNode);
   let sourceInterfaces = extractInterfaceReferences(sourceTypeNode);
 
+  // Check if target has a single interface and source has multiple (manual merge case)
+  if (targetInterfaces.length === 1 && sourceInterfaces.length > 1) {
+    const targetInterfaceDeclaration = getInterfaceDeclaration(targetInterfaces[0]);
+    if (targetInterfaceDeclaration && canMergeIntoTarget(sourceInterfaces, targetInterfaceDeclaration)) {
+      // Rename all source interfaces to match the target and queue them for comparison
+      for (const sourceInterface of sourceInterfaces) {
+        const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
+        if (sourceInterfaceDeclaration) {
+          sourceInterfaceDeclaration.rename(targetInterfaceDeclaration.getName());
+          interfaceQueue.push({
+            targetInterface: targetInterfaceDeclaration,
+            sourceInterface: sourceInterfaceDeclaration,
+          });
+        }
+      }
+
+      return;
+    }
+  }
+
   // Rename and remove any imported interfaces
   for (let i = 0; i < sourceInterfaces.length; i++) {
     const sourceInterface = sourceInterfaces[i];
@@ -64,6 +84,85 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
       addMissingInterface(sourceInterface);
     }
   }
+}
+
+/**
+ * Checks if all source interfaces can be merged into the target interface
+ * This is true when the target has all properties from all source interfaces,
+ * with appropriate optional markers
+ */
+function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterface: InterfaceDeclaration): boolean {
+  const targetProperties = getInterfaceMembers(targetInterface).filter(prop => prop.isKind(SyntaxKind.PropertySignature));
+  const targetPropMap = new Map<string, { optional: boolean; type: string; }>();
+
+  // Build a map of target properties
+  for (const prop of targetProperties) {
+    const typeNode = prop.getTypeNode();
+    targetPropMap.set(prop.getName(), {
+      optional: prop.hasQuestionToken(),
+      type: typeNode ? typeNode.getText() : 'any',
+    });
+  }
+
+  // Collect all properties from all source interfaces
+  // Map: propName -> { types: Set<string>, interfaceCount: number }
+  const allSourceProperties = new Map<string, { types: Set<string>; interfaceCount: number; }>();
+  let totalSourceInterfaces = 0;
+
+  for (const sourceInterfaceRef of sourceInterfaces) {
+    const sourceInterface = getInterfaceDeclaration(sourceInterfaceRef);
+    if (!sourceInterface) {
+      continue;
+    }
+
+    totalSourceInterfaces++;
+    const sourceProperties = getInterfaceMembers(sourceInterface).filter(prop => prop.isKind(SyntaxKind.PropertySignature));
+
+    for (const sourceProp of sourceProperties) {
+      const propName = sourceProp.getName();
+      if (!allSourceProperties.has(propName)) {
+        allSourceProperties.set(propName, { types: new Set(), interfaceCount: 0 });
+      }
+      const propData = allSourceProperties.get(propName);
+      if (propData) {
+        propData.interfaceCount++;
+        const typeNode = sourceProp.getTypeNode();
+        if (typeNode) {
+          propData.types.add(typeNode.getText());
+        }
+      }
+    }
+  }
+
+  // Check if target can represent all source properties
+  for (const [propName, propData] of allSourceProperties) {
+    const targetProp = targetPropMap.get(propName);
+    if (!targetProp) {
+      // Target is missing a property that exists in source
+      return false;
+    }
+
+    // Property exists in all source interfaces -> can be required or optional in target
+    // Property exists in some source interfaces -> must be optional in target
+    const existsInAllSources = propData.interfaceCount === totalSourceInterfaces;
+
+    if (!existsInAllSources && !targetProp.optional) {
+      // Property is optional in some sources but required in target - not a valid merge
+      return false;
+    }
+
+    // Check if types are compatible (allow type unions in target)
+    const targetType = targetProp.type;
+    const allSourceTypesMatched = Array.from(propData.types).every(sourceType =>
+      targetType === sourceType || targetType.includes(sourceType));
+
+    if (!allSourceTypesMatched) {
+      // Types don't match - not a valid merge
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**

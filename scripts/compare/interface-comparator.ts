@@ -330,7 +330,7 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
     newText,
     undefined,
     undefined,
-    { context: 5 },
+    { context: 5, stripTrailingCr: true },
   );
 
   // Format the diff with colors

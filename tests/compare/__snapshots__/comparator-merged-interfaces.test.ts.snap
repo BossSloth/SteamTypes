@@ -1,5 +1,94 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Merged Interface Cases > manual merge multiple into one with extra property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Chat {
+-  emoticons: Emoticon[]
++  emoticons: (Emoticon_list | Emoticon | Emoticon_list3 | Emoticon_list4)[]
+}
+
+export interface Emoticon {
+  appid?: number;
+
+@@ -11,5 +11,27 @@
+
+  name_normalized?: string;
+
+  use_count?: number;
+}
++
++export interface Emoticon_list {
++  appid: number;
++
++  name: string;
++
++  name_normalized?: string;
++}
++
++export interface Emoticon_list3 {
++  last_used: number;
++
++  name: string;
++
++  name_extra: string;
++
++  use_count: number;
++}
++
++export interface Emoticon_list4 {
++  name: string;
++}"
+`;
+
+exports[`Comparator Merged Interface Cases > manual merge multiple into one with wrong optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,37 @@
+export interface Chat {
+-  emoticons: Emoticon[]
++  emoticons: (Emoticon_list | Emoticon | Emoticon_list3 | Emoticon_list4)[]
+}
+
+export interface Emoticon {
+  appid?: number;
+
+  last_used?: number;
+
+  name: string;
+
+-  name_normalized: string;
++  name_normalized?: string;
+
+  use_count?: number;
+}
++
++export interface Emoticon_list {
++  appid: number;
++
++  name: string;
++
++  name_normalized?: string;
++}
++
++export interface Emoticon_list3 {
++  last_used: number;
++
++  name: string;
++
++  name_extra: string;
++
++  use_count: number;
++}
++
++export interface Emoticon_list4 {
++  name: string;
++}"
+`;
+
 exports[`Comparator Merged Interface Cases > merge with union 1`] = `
 "===================================================================
 --- a/target.ts
