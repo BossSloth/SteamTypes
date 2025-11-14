@@ -258,6 +258,8 @@ export interface BaseGamepadInputSource {
 
   m_eNavigationSourceType: ENavigationSourceType;
 
+  m_fLastActiveTime?: number;
+
   m_NavigationTypeChangeCallbacks: UnhandledButtonEventsCallbacks;
 
   m_nLastActiveControllerIndex: number;
@@ -278,8 +280,6 @@ export interface StandardGamepadInputSource extends BaseGamepadInputSource {
 
   OnSystemButtonPress(e: unknown, t: unknown): void;
 
-  m_fLastActiveTime: undefined;
-
   m_rgControllers: Map<unknown, unknown>;
 }
 
@@ -299,8 +299,6 @@ export interface MouseGamepadInputSource extends BaseGamepadInputSource {
 
   m_bFirstMouseUpdate: boolean;
 
-  m_fLastActiveTime?: number;
-
   m_lastButtonDown: number;
 
   m_nAccumulatedMouseMovement: number;
@@ -314,8 +312,6 @@ export interface TouchGamepadInputSource extends BaseGamepadInputSource {
   OnTouchEnd(e: unknown): void;
 
   OnTouchStart(e: unknown): void;
-
-  m_fLastActiveTime?: never;
 }
 
 export interface UnhandledButtonEventsCallbacks {
