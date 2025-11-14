@@ -185,7 +185,7 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
  * Finds a similar interface based on property structure
  * Uses a similarity score to determine the best match
  */
-function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceDeclaration | undefined {
+export function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceDeclaration | undefined {
   const targetInterfaces = currentStartingInterfaces.filter(i => !i.wasForgotten());
 
   let bestMatch: InterfaceDeclaration | undefined;

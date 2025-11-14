@@ -3,7 +3,7 @@ import { createTwoFilesPatch } from 'diff';
 import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
-import { addMissingInterface } from './handle-interfaces';
+import { addMissingInterface, findSimilarInterface } from './handle-interfaces';
 import { getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
 
 const processedInterfaces = new Set<string>();
@@ -204,27 +204,40 @@ function compareAndCorrectHeritageClause(
 ): void {
   const targetExtends = targetInterface.getExtends();
   const sourceExtends = sourceInterface.getExtends();
-
-  // Create sets of extends clauses for easier comparison
   const targetExtendsSet = new Set(targetExtends.map(ext => ext.getText()));
-  const sourceExtendsSet = new Set(sourceExtends.map(ext => ext.getText()));
 
-  // Add missing extends clauses to target
-  for (const sourceExt of sourceExtendsSet) {
-    if (!targetExtendsSet.has(sourceExt)) {
-      targetInterface.addExtends(sourceExt);
-    }
-  }
-
-  // Process extended interfaces
+  // Process extended interfaces and keep target heritage in sync
   for (const sourceExt of sourceExtends) {
-    const sourceExtName = sourceExt.getText();
+    const rawSourceExtText = sourceExt.getText();
+    const sourceExtName = sourceExt.getExpression().getText();
 
     // Find the extended interface in the source file
     const sourceExtInterface = sourceInterface.getSourceFile().getInterface(sourceExtName);
 
-    // Find the corresponding interface in the target file
-    const targetExtInterface = targetInterface.getSourceFile().getInterface(sourceExtName);
+    // Find the corresponding interface in the target file by name
+    let targetExtInterface = targetInterface.getSourceFile().getInterface(sourceExtName);
+    let finalTargetExtName = sourceExtName;
+
+    // If the base interface name does not exist in the target, try to find a similar one
+    if (!targetExtInterface && sourceExtInterface) {
+      const similarTargetInterface = findSimilarInterface(sourceExtInterface);
+      if (similarTargetInterface) {
+        finalTargetExtName = similarTargetInterface.getName();
+        targetExtInterface = similarTargetInterface;
+
+        // Rename the source base interface so future references use the resolved name
+        sourceExtInterface.rename(finalTargetExtName);
+      }
+    }
+
+    // Preserve any generic arguments on the extends clause while updating the base name
+    const extendsText = rawSourceExtText.replace(sourceExtName, finalTargetExtName);
+
+    // Add missing extends clauses to target using the resolved name
+    if (!targetExtendsSet.has(extendsText)) {
+      targetInterface.addExtends(extendsText);
+      targetExtendsSet.add(extendsText);
+    }
 
     // If both interfaces exist, add them to the queue for processing
     if (sourceExtInterface && targetExtInterface) {
