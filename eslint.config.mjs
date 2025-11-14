@@ -94,7 +94,7 @@ export default defineConfig(
       '@typescript-eslint/method-signature-style': ['error', 'method'],
       '@typescript-eslint/prefer-literal-enum-member': ['error', { allowBitwiseExpressions: true }],
       'func-style': ['error', 'declaration'],
-      'max-lines-per-function': ['error', { max: 50, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 75, skipBlankLines: true, skipComments: true }],
 
       '@typescript-eslint/consistent-type-exports': 'off',
       '@typescript-eslint/explicit-member-accessibility': 'off',

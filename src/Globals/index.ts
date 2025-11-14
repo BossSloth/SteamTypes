@@ -1,5 +1,6 @@
 /* eslint-disable perfectionist/sort-interfaces */
 import { AppStore } from 'Global/stores/AppStore';
+import { FriendStore } from 'Global/stores/FriendStore/FriendStore';
 import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
@@ -47,7 +48,7 @@ declare global {
   let EnableSteamConsole: (enable: boolean) => void;
   let FocusedAppWindowStore: unknown;
   let FocusNavController: unknown;
-  let friendStore: unknown;
+  let friendStore: FriendStore;
   let g_ClanStore: unknown;
   let g_CreatorHomeStore: unknown;
   let g_EventCalendarDevFeatures: unknown;
@@ -139,7 +140,7 @@ declare global {
     EnableSteamConsole: (enable: boolean) => void;
     FocusedAppWindowStore: unknown;
     FocusNavController: unknown;
-    friendStore: unknown;
+    friendStore: FriendStore;
     g_ClanStore: unknown;
     g_CreatorHomeStore: unknown;
     g_EventCalendarDevFeatures: unknown;
