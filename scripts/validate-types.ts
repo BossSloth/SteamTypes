@@ -185,7 +185,7 @@ async function extractInterface(map: InterfaceMap): Promise<string | null> {
   }
 
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `(async () => window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}'))()`,
+    expression: `(async () => window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}', {ignoredProperties: [${map.ignoredProperties?.map(p => `'${p}'`).join(', ')}]}))()`,
     returnByValue: true,
     awaitPromise: true,
   });
@@ -232,7 +232,6 @@ interface ValidateTypesOptions {
   diff?: boolean;
 }
 
-// eslint-disable-next-line max-lines-per-function
 async function run(options: ValidateTypesOptions, filter?: string): Promise<void> {
   const targetId = await getSharedJsContextTarget();
 

@@ -74,6 +74,17 @@ function processInterfaceProperties(
   project: Project,
 ): void {
   for (const key of properties) {
+    if (context.ignoredProperties.has(key)) {
+      const formattedName = formatPropertyName(key);
+      const interfaceProperty: InterfaceProperty = {
+        name: formattedName,
+        type: new PrimitiveType('unknown'),
+        jsDoc: ['@todo property ignored by configuration, please type this'],
+      };
+      interfaceDefinition.properties.push(interfaceProperty);
+      continue;
+    }
+
     let value: unknown;
     try {
       value = obj[key];

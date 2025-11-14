@@ -63,6 +63,7 @@ export interface ConversionContext {
   processedObjectPaths: Map<unknown, string>;
   mainInterfaceName: string;
   functionsToProcess: Map<string, Map<string, Function>>; // Key: interface name, Value: Map of function name to function
+  ignoredProperties: Set<string>; // Set of property names to ignore and convert to unknown
 }
 
 /**

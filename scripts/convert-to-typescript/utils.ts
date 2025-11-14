@@ -16,9 +16,10 @@ export const context: ConversionContext = {
   mainInterfaceName: '',
   functionsToProcess: new Map(),
   interfaceNameCounter: new Map(),
+  ignoredProperties: new Set(),
 };
 
-export function initContext(mainInterfaceName: string): void {
+export function initContext(mainInterfaceName: string, ignoredProperties: string[] = []): void {
   context.interfacesToProcess = new Map();
   context.interfaceDefinitions = new Map();
   context.imports = new Map();
@@ -26,6 +27,7 @@ export function initContext(mainInterfaceName: string): void {
   context.mainInterfaceName = mainInterfaceName;
   context.functionsToProcess = new Map();
   context.interfaceNameCounter = new Map();
+  context.ignoredProperties = new Set(ignoredProperties);
 }
 
 const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d+(?=[^\d])/u;

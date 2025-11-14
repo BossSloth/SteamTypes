@@ -3,16 +3,30 @@ import { mergeInterfaces } from './interface-merger';
 import { context, initContext } from './utils';
 
 /**
+ * Options for the convertToTypescript function
+ */
+export interface ConvertToTypescriptOptions {
+  /** Array of property names to ignore and convert to unknown */
+  ignoredProperties?: string[];
+  /** Whether to output profiling information */
+  profiling?: boolean;
+}
+
+/**
  * Converts a JavaScript object to TypeScript interfaces using ts-morph
  * @param {Record<string, unknown>} obj - The JavaScript object to convert
  * @param {string} mainInterfaceName - The name for the main interface
- * @param {boolean} profiling - Whether to output profiling information
+ * @param {ConvertToTypescriptOptions} options - Options for conversion
  * @returns {string} TypeScript interface definitions
  */
-export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceName: string, profiling = false): string {
+export function convertToTypescript(
+  obj: Record<string, unknown>,
+  mainInterfaceName: string,
+  { profiling = false, ignoredProperties = [] }: ConvertToTypescriptOptions = {},
+): string {
   const startTime = performance.now();
   // Initialize the context
-  initContext(mainInterfaceName);
+  initContext(mainInterfaceName, ignoredProperties);
 
   // Add the main interface
   context.interfacesToProcess.set(mainInterfaceName, { obj, nameCounter: undefined });
@@ -68,7 +82,7 @@ export function convertToTypescript(obj: Record<string, unknown>, mainInterfaceN
   }
 
   // Cleanup by reinitializing the context
-  initContext(mainInterfaceName);
+  initContext(mainInterfaceName, ignoredProperties);
 
   return result;
 }
