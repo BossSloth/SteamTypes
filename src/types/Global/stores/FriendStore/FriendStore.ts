@@ -1,6 +1,7 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { SteamID } from 'shared/steamid';
+import { Unregisterable } from 'SteamClient/shared';
 import { ChatStore } from './ChatStore/ChatStore';
 
 export interface FriendStore {
@@ -56,53 +57,63 @@ export interface FriendStore {
 }
 
 export interface SteamFriend {
-  BHaveReceivedPersonaUpdateSince(e: unknown): boolean;
+  BHaveReceivedPersonaUpdateSince(timestamp: number): boolean;
 
-  BLoadedEquippedItems(): unknown;
-
-  BMatchesSearchString(e: unknown, t: unknown): boolean;
-
-  BPlayInGameSound(): unknown;
-
-  BPlayMessageSound(): unknown;
-
-  BPlayOnlineSound(): unknown;
-
-  BShowInGameNotification(): unknown;
-
-  BShowMessageNotification(): unknown;
-
-  BShowOnlineNotification(): unknown;
+  BLoadedEquippedItems(): boolean;
 
   /**
-   * @param t default: 15
+   * @param includeGameName If true, also searches current game name
    */
-  BWasRecentlyPlayingAppID(e: unknown, t?: number): boolean;
+  BMatchesSearchString(searchString: string, includeGameName: boolean): boolean;
+
+  /** Checks notification settings and gamepad mode */
+  BPlayInGameSound(): boolean;
+
+  /** Checks notification settings and gamepad mode */
+  BPlayMessageSound(): boolean;
+
+  /** Checks notification settings and gamepad mode */
+  BPlayOnlineSound(): boolean;
+
+  /** Checks notification settings and gamepad mode */
+  BShowInGameNotification(): boolean;
+
+  /** Checks notification settings, mobile mode, and gamepad mode */
+  BShowMessageNotification(): boolean;
+
+  /** Checks notification settings and gamepad mode */
+  BShowOnlineNotification(): boolean;
+
+  /**
+   * @param seconds Default: 15
+   */
+  BWasRecentlyPlayingAppID(appId: number, seconds?: number): boolean;
 
   ClearStateOnDisconnect(): void;
 
-  GetBroadcastDescription(): unknown;
+  GetBroadcastDescription(): string | null;
 
   GetCommunityProfileURL(): string;
 
-  GetEquippedProfileItems(): unknown;
+  GetEquippedProfileItems(): EquippedProfileItems;
 
-  is_appinfo_ready(): unknown;
+  is_appinfo_ready(): boolean;
 
+  /** Loads golden profile frame from AJAX endpoint */
   LoadAndSetGoldenProfileFrame(): Promise<void>;
 
-  /**
-   * @param e default: !1
-   */
-  LoadEquippedProfileItems(e?: boolean): Promise<void>;
+  LoadEquippedProfileItems(forceReload?: boolean): Promise<void>;
 
   LoadIfNecessary(): void;
 
-  MatchSearchString(e: unknown): { match: number; iOffset: unknown; bFullMatch: boolean; } | { match: number; iOffset?: undefined; bFullMatch?: undefined; };
+  /**
+   * @returns match: 0=none, 1=name, 2=nickname
+   */
+  MatchSearchString(searchString: string): { match: 0 | 1 | 2; iOffset?: number; bFullMatch?: boolean; };
 
-  OpenChatDialog(e: unknown): unknown;
+  OpenChatDialog(context: unknown): unknown;
 
-  SetLastSeenPlaying(e: unknown): void;
+  SetLastSeenPlaying(appId: number): void;
 
   SetPersonaStateUpdated(): void;
 
@@ -114,10 +125,12 @@ export interface SteamFriend {
 
   current_game_rich_presence: string;
 
+  /** Nickname or persona name, includes secondary if enabled */
   display_name: string;
 
   efriendrelationship: number;
 
+  /** Normalized for search */
   game_name_normalized: string;
 
   has_nickname: boolean;
@@ -126,17 +139,19 @@ export interface SteamFriend {
 
   is_blocked: boolean;
 
+  /** True if nickname is shown as primary display name */
   is_display_name_nickname: boolean;
 
   is_friend: boolean;
 
+  /** True when persona name is initialized */
   is_ready: boolean;
 
   localized_online_status: string;
 
   m_bLoadedEquippedProfileItems: boolean;
 
-  m_bPersonaNameHistoryLoaded: boolean;
+  m_bPersonaNameHistoryLoaded?: boolean | undefined;
 
   m_bPersonaStateLoadRequested: boolean;
 
@@ -152,13 +167,13 @@ export interface SteamFriend {
    */
   m_eFriendRelationship: EFriendRelationship;
 
-  m_equippedProfileItems: (EquippedProfileItems | object);
+  m_equippedProfileItems: EquippedProfileItems | object;
 
-  m_miniProfileDataLoader: MiniProfileData;
+  m_miniProfileDataLoader?: MiniProfileData | undefined;
 
   m_nAppIDLastSeenPlaying: number;
 
-  m_NotificationSettings: NotificationSettings;
+  m_NotificationSettings?: NotificationSettings | undefined;
 
   m_persona: Persona;
 
@@ -168,9 +183,9 @@ export interface SteamFriend {
 
   m_strNickname?: string;
 
-  m_strPlayerNameNormalized: string;
+  m_strPlayerNameNormalized?: string;
 
-  m_strPlayerNicknameNormalized?: string;
+  m_strPlayerNicknameNormalized?: string | undefined;
 
   m_tsLastPersonaStateUpdate: number;
 
@@ -190,12 +205,16 @@ export interface SteamFriend {
 
   persona_name_history_loaded: boolean;
 
+  /** Normalized for search */
   player_name_normalized: string;
 
+  /** Nickname if set and not parenthesized, otherwise persona name */
   primary_display_name: string;
 
+  /** Nickname if parenthesized, otherwise persona name */
   secondary_display_name: string;
 
+  /** Based on parenthesize preference */
   showing_secondary_display_name: boolean;
 
   steamid: SteamID;
@@ -204,96 +223,97 @@ export interface SteamFriend {
 }
 
 export interface FriendsUIFriendStore {
-  AddFriend(e: unknown, t: unknown, r: unknown): void;
+  AddFriend(steamid: string, relationshipType: number, skipLoading: boolean): void;
 
-  AddPersonaStateChangedCallback(e: unknown): unknown;
+  AddPersonaStateChangedCallback(callback: (friend: SteamFriend) => void): Unregisterable;
 
-  AddPlayerGameChangedCallback(e: unknown): unknown;
+  AddPlayerGameChangedCallback(callback: (accountId: number, oldAppId: number, newAppId: number) => void): Unregisterable;
 
   /**
-   * @param r default: !0
+   * @param playerType 1=self, 2=friend, 3=other
    */
-  AddPlayerToCache(e: unknown, t: unknown, r?: boolean): unknown;
+  AddPlayerToCache(accountId: number, playerType: 1 | 2 | 3, loadImmediately?: boolean): SteamFriend;
 
-  AdjustPersonaStateForIdleTime(e: unknown): unknown;
+  /** Adjusts persona state based on idle time (300s->away, 7200s->snooze) */
+  AdjustPersonaStateForIdleTime(personaState: number): number;
 
-  BApprovedNonFriendMessages(e: unknown): boolean;
+  /** Checks if non-friend has 24h message approval */
+  BApprovedNonFriendMessages(accountId: number): boolean;
 
   BIsInvisibleMode(): boolean;
 
   BIsOfflineMode(): boolean;
 
-  /**
-   * @param t default: !1
-   */
-  BlockPlayer(e: unknown, t?: boolean): unknown;
+  BlockPlayer(friend: SteamFriend, unignore?: boolean): Promise<number>;
 
   EnsureApprovedNonFriendMapReady(): void;
 
   /**
-   * @param e default: !1
+   * @param delayIfInactive If true, delays 20-140s when client is inactive
    */
-  EnsureFriendsListLoaded(e?: boolean): void;
+  EnsureFriendsListLoaded(delayIfInactive?: boolean): void;
 
-  FillInChatUsabilityMetrics(e: unknown): void;
+  FillInChatUsabilityMetrics(metrics: unknown): void;
 
-  FillMessageFromPerFriendNotificationSettings(e: unknown, t: unknown): void;
+  FillMessageFromPerFriendNotificationSettings(message: unknown, settings: NotificationSettings): void;
 
-  FillPerFriendNotificationSettingsFromMessage(e: unknown, t: unknown): void;
+  FillPerFriendNotificationSettingsFromMessage(settings: NotificationSettings, message: unknown): void;
 
   ForceReadyToRender(): void;
 
-  GetClanInviteCount(): unknown;
+  GetClanInviteCount(): number;
 
-  GetFriend(e: unknown): unknown;
+  GetFriend(accountId: number): SteamFriend | null;
 
-  GetFriendIfCached(e: unknown): unknown;
+  GetFriendIfCached(accountId: number): SteamFriend | null;
 
-  GetFriendInviteCount(): unknown;
+  GetFriendInviteCount(): number;
 
   GetFriendsList(): Promise<void>;
 
-  GetOnlineFriendCount(): unknown;
+  GetOnlineFriendCount(): number;
 
-  GetOutgoingFriendRequestCount(): unknown;
+  GetOutgoingFriendRequestCount(): number;
 
-  GetPendingInviteCount(): unknown;
+  GetPendingInviteCount(): number;
 
-  GetPersonaStatePreference(): unknown;
+  GetPersonaStatePreference(): number;
 
-  GetPlayer(e: unknown): unknown;
+  GetPlayer(accountId: number): SteamFriend;
 
-  GetPlayerIfCached(e: unknown): unknown;
+  GetPlayerIfCached(accountId: number): SteamFriend | undefined;
 
-  GetUserDoNotDisturb(): unknown;
+  GetUserDoNotDisturb(): boolean;
 
-  Init(e: unknown): Promise<unknown>;
+  Init(cmInterface: ConnectionManager): Promise<void>;
 
+  /** Sets idle callbacks: 300s->away, 7200s->snooze */
   InitializeIdleTracking(): void;
 
-  InviteToGame(e: unknown, t: unknown, r: unknown): void;
+  InviteToGame(friend: SteamFriend, appId: number, connectString?: string): void;
 
-  InviteToLobby(e: unknown, t: unknown, r: unknown): void;
+  InviteToLobby(friend: SteamFriend, appId: number, lobbySteamId: string): void;
 
-  InviteToWatch(e: unknown): void;
+  InviteToWatch(friend: SteamFriend): void;
 
-  OnFriendPersonaStateChanged(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): undefined;
+  OnFriendPersonaStateChanged(friend: SteamFriend, oldState: number, newState: number, gameChanged: boolean, recentlySameApp: boolean): undefined;
 
-  OnIdle(e: unknown): void;
+  /** @param state 3=away, 4=snooze */
+  OnIdle(state: 3 | 4): void;
 
-  OnParentalLockChanged(e: unknown): void;
+  OnParentalLockChanged(locked: boolean): void;
 
-  OnPersonaStateUpdate(e: unknown): void;
+  OnPersonaStateUpdate(message: unknown): void;
 
   PlayFriendOnlineSound(): void;
 
   PlayJoinGameSound(): void;
 
-  QueueFriendPersonaStateLoad(e: unknown): void;
+  QueueFriendPersonaStateLoad(friend: SteamFriend): void;
 
-  RemoveFriend(e: unknown): unknown;
+  RemoveFriend(friend: SteamFriend): Promise<number>;
 
-  RemoveFriendBySteamID(e: unknown): unknown;
+  RemoveFriendBySteamID(steamid: SteamID | string): Promise<number>;
 
   RequestFriendPersonaStates(): Promise<void>;
 
@@ -303,42 +323,47 @@ export interface FriendsUIFriendStore {
 
   ResetIdleState(): void;
 
-  SendFriendInvite(e: unknown): Promise<unknown>;
+  SendFriendInvite(friend: SteamFriend): Promise<{ eResult: number; eFriendRelationship: number; }>;
 
-  SendFriendInviteBySteamID(e: unknown): Promise<{ eResult: number; eFriendRelationship: unknown; }>;
+  SendFriendInviteBySteamID(steamid: SteamID | string): Promise<{ eResult: number; eFriendRelationship: number; }>;
 
-  SendPersonaStateToServer(e: unknown, t: unknown): boolean;
+  /**
+   * Rate limited: 200 tokens, refills 1 per 10ms
+   * @param needResponse Request persona response from server
+   * @param reason Debug string for tracking
+   */
+  SendPersonaStateToServer(needResponse: boolean, reason: string): boolean;
 
-  SetApprovedNonFriendMessages(e: unknown): void;
+  /** Approves for 24 hours */
+  SetApprovedNonFriendMessages(accountId: number): void;
 
-  SetFriendsList(e: unknown): void;
+  SetFriendsList(friendsList: unknown): void;
 
-  SetPersonasOffline(e: unknown): void;
+  /** @param nonFriendsOnly If true, only sets non-friends offline */
+  SetPersonasOffline(nonFriendsOnly: boolean): void;
 
-  SetPlayerNickname(e: unknown, t: unknown): unknown;
+  SetPlayerNickname(friend: SteamFriend, nickname: string): Promise<number>;
 
-  SetPlayerNotificationSettings(e: unknown, t: unknown): unknown;
+  SetPlayerNotificationSettings(friend: SteamFriend, settings: NotificationSettings): Promise<number>;
 
-  SetPlayerPerFriendPreferences(e: unknown, t: unknown, r: unknown): unknown;
+  SetPlayerPerFriendPreferences(friend: SteamFriend, nickname: string, settings: NotificationSettings): Promise<number>;
 
   SetReconnectedSinceLastIdleUpdate(): void;
 
-  SetUserDoNotDisturb(e: unknown): void;
+  SetUserDoNotDisturb(enabled: boolean): void;
 
-  /**
-   * @param t default: !0
-   */
-  SetUserPersonaState(e: unknown, t?: boolean): void;
+  SetUserPersonaState(state: number, userInitiated?: boolean): void;
 
   StartWaitForInitialAppInfo(): Promise<void>;
 
+  /** Retries up to 5 times with 10s delays */
   SubscribeToMissingPersonaStates(): void;
 
   UpdateReadyToRenderState(): void;
 
   UpdateUnreadMessagesGlobal(): void;
 
-  UpdateUserPersonaStateInternal(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown): void;
+  UpdateUserPersonaStateInternal(state: number, userSet: boolean, clientIdle: boolean, receivedFromServer: boolean, reason: string): void;
 
   all_friends: SteamFriend[];
 
@@ -364,7 +389,7 @@ export interface FriendsUIFriendStore {
 
   m_bNextActivityCallbackRegistered: boolean;
 
-  m_bParentalLocked: undefined;
+  m_bParentalLocked: boolean | undefined;
 
   m_bPerFriendPreferencesLoaded: boolean;
 
@@ -382,15 +407,11 @@ export interface FriendsUIFriendStore {
 
   m_ClanStore: ClanStore;
 
-  m_cLastUnreadPriorityMessageCountPosted: number;
+  m_cLastUnreadPriorityMessageCountPosted: number | undefined;
 
   m_CMInterface: ConnectionManager;
 
-  /**
-   * This value is an enum
-   * @currentValue 1
-   */
-  m_eUserPersonaState: EUserPersonaState;
+  m_eUserPersonaState: UserPersonaState;
 
   /**
    * This value is an enum
@@ -400,7 +421,7 @@ export interface FriendsUIFriendStore {
 
   m_FavoritesStore: FavoritesStore;
 
-  m_fnOnReadyToRender: undefined;
+  m_fnOnReadyToRender: (() => void) | undefined;
 
   m_FriendGroupStore: FriendGroupStore;
 
@@ -408,13 +429,14 @@ export interface FriendsUIFriendStore {
 
   m_FriendStorePrefs: FriendStorePrefs;
 
-  m_iIntervalDelayLoadFriendsList: undefined;
+  m_iIntervalDelayLoadFriendsList: number | undefined;
 
   m_iIntervalSubscribeToPersonaStateUpdates: number;
 
   m_InitialAppInfoPromises: Promise<unknown>[];
 
-  m_mapApprovedNonFriendMessages: undefined;
+  /** Expiration timestamps for 24h approval */
+  m_mapApprovedNonFriendMessages: Map<number, number> | undefined;
 
   m_mapPlayerCache: Map<number, SteamFriend>;
 
@@ -430,18 +452,21 @@ export interface FriendsUIFriendStore {
 
   m_setFriendAccountIDs: ObservableSet<number>;
 
-  m_setFriendsNeedingPersonaStateLoad: Set<unknown>;
+  m_setFriendsNeedingPersonaStateLoad: Set<number>;
 
-  m_setIncomingInviteAccountIDs: Set<unknown>;
+  m_setIncomingInviteAccountIDs: Set<number>;
 
+  /** 200 tokens, refills 1 per 10ms */
   m_TokenBucketChangeStatus: TokenBucketChangeStatus;
 
   m_TokenFailureAssertCount: number;
 
   m_tsLastConnect: number;
 
+  /** Debugging: last 10 change reasons */
   m_vecLastTenChangeStatusReasons: string[];
 
+  /** Debug: P=prefs, F=friends, I=initial, A=appinfo */
   not_ready_to_render_reason: string;
 
   online_friends: SteamFriend[];
@@ -1298,11 +1323,12 @@ export enum EFriendRelationship {
   EFriendRelationship5 = 5,
 }
 
-/** @generated */
-export enum EUserPersonaState {
-  EUserPersonaState0 = 0,
-  EUserPersonaState1 = 1,
-  EUserPersonaState4 = 4,
+export enum UserPersonaState {
+  Offline = 0,
+  Online = 1,
+  Away = 3,
+  Snooze = 4,
+  Invisible = 7,
 }
 
 /** @generated */
