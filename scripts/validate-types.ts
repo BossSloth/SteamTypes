@@ -13,6 +13,7 @@
 import ansiRegex from 'ansi-regex';
 import chalk from 'chalk';
 import ChromeRemoteInterface from 'chrome-remote-interface';
+import * as cliProgress from 'cli-progress';
 import { Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
@@ -232,6 +233,73 @@ interface ValidateTypesOptions {
   diff?: boolean;
 }
 
+let comparisonTime = 0;
+
+async function processInterfaces(
+  maps: InterfaceMap[],
+  rootDir: string,
+  options: ValidateTypesOptions,
+): Promise<{ filePath: string; result: string | null; }[]> {
+  const progressBar = new cliProgress.SingleBar({
+    format: `${chalk.cyan('Progress')} ${chalk.green('{bar}')} ${chalk.yellow('{percentage}%')} | ${chalk.blue('{value}/{total}')} | ${chalk.blue('{name}')}`,
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: true,
+    clearOnComplete: false,
+  });
+
+  progressBar.start(maps.length, 0, { name: 'Starting...' });
+
+  const diffs: { filePath: string; result: string | null; }[] = [];
+  let completedCount = 0;
+
+  for (const map of maps) {
+    progressBar.update(completedCount, { name: map.interfaceName });
+
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const interfaceContent = await extractInterface(map);
+
+      if (interfaceContent === null) {
+        completedCount++;
+        continue;
+      }
+
+      const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, interfaceContent);
+      }
+
+      try {
+        const comparisonStartTime = Date.now();
+        const result = compareInterfaces(
+          `src/types/${map.file}.ts`,
+          map.interfaceName,
+          interfaceContent,
+          options.verbose,
+        );
+        comparisonTime += Date.now() - comparisonStartTime;
+
+        if (result !== null) {
+          diffs.push({
+            filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
+            result,
+          });
+        }
+      } catch (error) {
+        throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
+      }
+    } finally {
+      completedCount++;
+      progressBar.update(completedCount, { name: map.interfaceName });
+    }
+  }
+
+  progressBar.stop();
+
+  return diffs;
+}
+
 async function run(options: ValidateTypesOptions, filter?: string): Promise<void> {
   const targetId = await getSharedJsContextTarget();
 
@@ -260,49 +328,10 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   }
   logger.log(chalk.blue(`Comparing ${maps.length} maps`));
 
-  // const startExtractTime = Date.now();
-  // const interfaceContent = await extractInterfaces(maps);
-  // extractTime = Date.now() - startExtractTime;
-
   const rootDir = path.resolve(`${__dirname}/../`);
 
-  // Create an array of promises for parallel execution
-  const interfacePromises = maps.map(async (map): Promise<{ filePath: string; result: string | null; } | null> => {
-    const interfaceContent = await extractInterface(map);
-
-    if (interfaceContent === null) {
-      return null;
-    }
-
-    const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-      // Create the file
-      fs.writeFileSync(filePath, interfaceContent);
-    }
-
-    // if (options.interactive && (result.addedMembers.length > 0 || result.removedMembers.length > 0) && maps.length > 1) {
-    //     await confirm({message: `Are you done with "src/types/${map.file}"?`, theme: {prefix: '❓'}});
-    // }
-
-    try {
-      return {
-        filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
-        result: compareInterfaces(
-          `src/types/${map.file}.ts`,
-          map.interfaceName,
-          interfaceContent,
-          options.verbose,
-        ),
-      };
-    } catch (error) {
-      throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
-    }
-  });
-
-  const results = (await Promise.all(interfacePromises)).filter(r => r !== null);
-
-  diffs.push(...results.filter(r => r.result !== null));
+  const results = await processInterfaces(maps, rootDir, options);
+  diffs.push(...results);
 
   if (diffs.length > 0) {
     logger.log('\n');
@@ -310,6 +339,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   }
 
   logger.log(chalk.blue(`Extract time: ${extractTime} ms`));
+  logger.log(chalk.blue(`Comparison time: ${comparisonTime} ms`));
 
   if (options.diff === false) {
     return;
