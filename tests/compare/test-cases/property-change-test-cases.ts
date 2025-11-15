@@ -642,4 +642,28 @@ export const propertyChangeCases: Record<string, ComparatorTest> = {
         value: number;
       }`,
   },
+  'union with null to null wrapped': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: (string | null);
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: null;
+      }`,
+  },
+  'union with null to null': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: string | null;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: null;
+      }`,
+  },
 };

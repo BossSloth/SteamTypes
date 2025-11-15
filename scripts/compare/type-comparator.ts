@@ -1,6 +1,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
+
 import { ArrayTypeNode, EnumDeclaration, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
@@ -19,6 +19,13 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
 
   if (isUnknownTypeNode(sourceNode)) {
     return true;
+  }
+
+  // Unwrap types
+  if (Node.isParenthesizedTypeNode(targetNode)) {
+    return compareTypes(targetNode.getTypeNode(), sourceNode);
+  } else if (Node.isParenthesizedTypeNode(sourceNode)) {
+    return compareTypes(targetNode, sourceNode.getTypeNode());
   }
 
   if (Node.isUnionTypeNode(targetNode)) {
