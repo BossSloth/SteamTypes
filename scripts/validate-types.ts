@@ -144,7 +144,7 @@ let extractTime = 0;
 /**
  * Extracts TypeScript interface from a Steam client object
  */
-async function extractInterface(map: InterfaceMap): Promise<string | null> {
+async function extractInterface(map: InterfaceMap): Promise<{ content: string | null; extractTime: number; }> {
   const startTime = Date.now();
 
   if (map.condition !== undefined) {
@@ -163,7 +163,7 @@ async function extractInterface(map: InterfaceMap): Promise<string | null> {
     if (!value) {
       logger.debug(chalk.green(`✅ Condition not met for ${chalk.bold(map.objectExpression)}`));
 
-      return null;
+      return { content: null, extractTime: Date.now() - startTime };
     }
   }
 
@@ -198,9 +198,10 @@ async function extractInterface(map: InterfaceMap): Promise<string | null> {
   const interfaceContent = response.result.value as string;
   logger.debug(chalk.green('✅ Successfully generated TypeScript interface'));
 
-  extractTime += Date.now() - startTime;
+  const currentExtractTime = Date.now() - startTime;
+  extractTime += currentExtractTime;
 
-  return interfaceContent;
+  return { content: interfaceContent, extractTime: currentExtractTime };
 }
 
 // TODO: check when we have more mapped if this improves performance
@@ -231,6 +232,7 @@ interface ValidateTypesOptions {
   interactive: boolean;
   force: boolean;
   diff?: boolean;
+  timing?: boolean;
 }
 
 let comparisonTime = 0;
@@ -252,13 +254,14 @@ async function processInterfaces(
 
   const diffs: { filePath: string; result: string | null; }[] = [];
   let completedCount = 0;
+  const interfaceTimings: { interfaceName: string; extractTime: number; comparisonTime: number; }[] = [];
 
   for (const map of maps) {
     progressBar.update(completedCount, { name: map.interfaceName });
 
     try {
       // eslint-disable-next-line no-await-in-loop
-      const interfaceContent = await extractInterface(map);
+      const { content: interfaceContent, extractTime: currentExtractTime } = await extractInterface(map);
 
       if (interfaceContent === null) {
         completedCount++;
@@ -270,6 +273,7 @@ async function processInterfaces(
         fs.writeFileSync(filePath, interfaceContent);
       }
 
+      let currentComparisonTime = 0;
       try {
         const comparisonStartTime = Date.now();
         const result = compareInterfaces(
@@ -278,7 +282,8 @@ async function processInterfaces(
           interfaceContent,
           options.verbose,
         );
-        comparisonTime += Date.now() - comparisonStartTime;
+        currentComparisonTime = Date.now() - comparisonStartTime;
+        comparisonTime += currentComparisonTime;
 
         if (result !== null) {
           diffs.push({
@@ -289,6 +294,14 @@ async function processInterfaces(
       } catch (error) {
         throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
       }
+
+      if (options.timing === true) {
+        interfaceTimings.push({
+          interfaceName: map.interfaceName,
+          extractTime: currentExtractTime,
+          comparisonTime: currentComparisonTime,
+        });
+      }
     } finally {
       completedCount++;
       progressBar.update(completedCount, { name: map.interfaceName });
@@ -296,6 +309,16 @@ async function processInterfaces(
   }
 
   progressBar.stop();
+
+  if (options.timing === true && interfaceTimings.length > 0) {
+    logger.log(chalk.blue('\n📊 Per-interface Timing:'));
+    interfaceTimings
+      .sort((a, b) => (b.extractTime + b.comparisonTime) - (a.extractTime + a.comparisonTime))
+      .forEach(({ interfaceName, extractTime: interfaceExtractTime, comparisonTime: interfaceComparisonTime }) => {
+        const totalTime = interfaceExtractTime + interfaceComparisonTime;
+        logger.log(`${chalk.magenta(interfaceName)}: ${chalk.yellow(`Extract: ${interfaceExtractTime}ms`)} | ${chalk.cyan(`Compare: ${interfaceComparisonTime}ms`)} | ${chalk.green(`Total: ${totalTime}ms`)}`);
+      });
+  }
 
   return diffs;
 }
@@ -377,8 +400,9 @@ async function main(): Promise<void> {
     .option('-i, --interactive', 'Enable interactive mode', false)
     .option('-f, --force', 'Force reload the inject script', false)
     .option('-d, --diff', 'Write diffs to file', false)
+    .option('-t, --timing', 'Show per-interface timing information', false)
     .argument('[filter]', 'Only validate interfaces that match the file filter. Example: "SteamClient/Apps"')
-    .action(async (filter?: string, options: ValidateTypesOptions = { verbose: false, interactive: false, force: false }) => {
+    .action(async (filter?: string, options: ValidateTypesOptions = { verbose: false, interactive: false, force: false, timing: false }) => {
       logger = new Logger(options);
       // try {
       logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
