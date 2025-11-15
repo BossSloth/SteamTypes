@@ -5,6 +5,11 @@ import { CChatRoleActions } from 'Protobufs/steam/steammessages_chat.steamclient
 import { ProtobufInterface } from 'shared/protobuf';
 import { SteamID } from 'shared/steamid';
 import { FriendDisplayType, FriendsUIFriendStore, SteamFriend } from '../FriendStore';
+import { EmbedStore } from './EmbedStore';
+import { EmoticonStore } from './EmoticonStore';
+import { GameInviteStore } from './GameInviteStore';
+import { InviteStore } from './InviteStore';
+import { NotificationBBCodeParser } from './NotificationBBCodeParser';
 import { SettingsStore } from './SettingsStore';
 import { VoiceChatStore } from './VoiceChatStore';
 
@@ -194,23 +199,23 @@ export interface ChatRoomBBCodeParser {
 }
 
 export interface ChatRoomEffectSettings {
-  balloons: Balloons;
+  balloons: ChatRoomEffect;
 
-  confetti: Balloons;
+  confetti: ChatRoomEffect;
 
-  firework: Balloons;
+  firework: ChatRoomEffect;
 
-  goldfetti: Balloons;
+  goldfetti: ChatRoomEffect;
 
-  lny2020_confetti: Balloons;
+  lny2020_confetti: ChatRoomEffect;
 
-  lny2020_firework: Balloons;
+  lny2020_firework: ChatRoomEffect;
 
-  lny2020_lanterns: Balloons;
+  lny2020_lanterns: ChatRoomEffect;
 
-  snow: Balloons;
+  snow: ChatRoomEffect;
 
-  snowball: Balloons;
+  snowball: ChatRoomEffect;
 }
 
 export interface ChatRoomGroupDisplayPrefs {
@@ -594,124 +599,6 @@ export interface ChatGroup {
   watching_broadcast_steamid: (null | SteamID);
 }
 
-export interface EmbedStore {
-  EvictOldestIfNecessary(): void;
-
-  GetCollapsedState(e: unknown, t: unknown): boolean;
-
-  GetKey(e: unknown, t: unknown): string;
-
-  GetOrCreateEmbedData(e: unknown, t: unknown): unknown;
-
-  GetWidths(e: unknown, t: unknown): { nDesiredWidth: unknown; nDefaultWidth: unknown; } | undefined;
-
-  Init(): void;
-
-  SaveEmbedData(e: unknown, t: unknown, r: unknown): void;
-
-  SetCollapsedState(e: unknown, t: unknown, r: unknown): void;
-
-  SetWidths(e: unknown, t: unknown, r: unknown, n: unknown): void;
-
-  WriteToLocalStorage(): void;
-
-  m_mapEmbed: ObservableMap<string, MapEmbed>;
-}
-
-export interface EmoticonStore {
-  BAwaitInitialized(): Promise<unknown>;
-
-  BHasEmoticon(e: unknown): unknown;
-
-  BTransportReady(): boolean;
-
-  BuildRecentEmoticonList(): void;
-
-  BuildRecentList(e: unknown): unknown;
-
-  BuildRecentStickerList(): void;
-
-  GetEffectList(): unknown;
-
-  GetFlairListByGroupID(e: unknown): unknown;
-
-  GetServerTime(): unknown;
-
-  GetStickerList(): unknown;
-
-  GetTimeReceivedForStickerOrEffect(): unknown;
-
-  GetTimeReceivedNewestEmoticon(): unknown;
-
-  Init(e: unknown): void;
-
-  /**
-   * @native
-   */
-  m_emoticonTrackerCallback(): unknown;
-
-  /**
-   * @native
-   */
-  m_stickerTrackerCallback(): unknown;
-
-  OnEmoticonListReceived(e: unknown): void;
-
-  RequestEmoticonList(): void;
-
-  RequestEmoticonListInternal(): void;
-
-  /**
-   * @param t default: 25
-   * @param r default: !0
-   */
-  SearchEmoticons(e: unknown, t?: number, r?: boolean): never[];
-
-  SetEmoticonTrackerCallback(e: unknown): void;
-
-  SetStickerTrackerCallback(e: unknown): void;
-
-  TrackEmoticonUsage(e: unknown, t: unknown): void;
-
-  TrackStickerUsage(e: unknown, t: unknown): void;
-
-  UpdateEmoticonList(): void;
-
-  emoticon_list: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[];
-
-  flair_list: unknown[];
-
-  is_initialized: boolean;
-
-  m_bEmoticonListRequested: boolean;
-
-  m_bInitialized: boolean;
-
-  m_CMInterface: ConnectionManager;
-
-  m_rgEffects: RgEffects[];
-
-  m_rgEmoticons: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[];
-
-  m_rgFlairs: unknown[];
-
-  m_rgRecentEmoticons: (Emoticon_list2 | Emoticon_list3)[];
-
-  m_rgRecentStickers: unknown[];
-
-  m_rgStickers: (RgEffects | RgStickers11)[];
-
-  m_rtLastStickerOrEffect: number;
-
-  m_rtMostRecentEmoticon: undefined;
-
-  m_setEmoticonOwned: Set<string>;
-
-  recent_emoticons: (Emoticon_list2 | Emoticon_list3)[];
-
-  recent_stickers: unknown[];
-}
-
 export interface FriendChatStore {
   AddFriendPushNotificationData(e: unknown, t: unknown): void;
 
@@ -771,38 +658,6 @@ export interface FriendChatStore {
   RecentChatCutoffDuration: number;
 }
 
-export interface GameInviteStore {
-  Init(): void;
-
-  RecordDismissTime(e: unknown): void;
-
-  RegisterGameInvite(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown): unknown;
-
-  WriteToLocalStorage(): void;
-
-  m_mapDismissedInvites: ObservableMap<number, DeepDismissedInvites>;
-
-  m_mapGameInvites: Map<unknown, unknown>;
-
-  m_mapInviteByCode: Map<unknown, unknown>;
-}
-
-export type DeepDismissedInvites = number | [DeepDismissedInvites, DeepDismissedInvites];
-
-export interface InviteStore {
-  AcceptInvite(e: unknown, t: unknown): unknown;
-
-  GetDirectInviteInfo(e: unknown, t: unknown, r: unknown): unknown;
-
-  GetInviteFromCode(e: unknown): unknown;
-
-  JoinChatGroup(e: unknown, t: unknown, r: unknown): unknown;
-
-  m_ChatStore: ChatStore;
-
-  m_mapInviteByCode: Map<unknown, unknown>;
-}
-
 export interface GroupAddedCallbacks {
   ClearAllCallbacks(): void;
 
@@ -843,16 +698,6 @@ export interface HiddenRecentChatSettings {
   m_settings: Settings;
 
   m_storage: object;
-}
-
-export interface NotificationBBCodeParser {
-  dictComponents(): unknown;
-
-  Parse_NotificationHandlers(e: unknown, t: unknown): unknown;
-
-  ParseBBCode(e: unknown, t: unknown): unknown;
-
-  m_dictComponents: DictComponents2;
 }
 
 export interface DictComponents {
@@ -1012,7 +857,7 @@ export interface DictComponents {
   youtube: unknown;
 }
 
-export interface Balloons {
+export interface ChatRoomEffect {
   render(e: unknown): unknown;
 
   renderButton(): unknown;
@@ -1328,7 +1173,7 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   has_unread_messages: boolean;
 
-  lastChatLinkInfo: (LastChatLinkInfo | null);
+  lastChatLinkInfo?: (LastChatLinkInfo | null);
 
   m_bIsDefaultForGroup: boolean;
 
@@ -1352,7 +1197,7 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   m_groupVoiceActiveMembers: GroupVoiceActiveMembers;
 
-  m_lastChatLink: (LastChatLinkInfo | null);
+  m_lastChatLink?: (LastChatLinkInfo | null);
 
   m_mapMessageReactionReactors: never;
 
@@ -1430,74 +1275,6 @@ export interface Members_to_highlight {
   remaining_count: number;
 }
 
-export interface MapEmbed {
-  IsEmpty(): boolean;
-
-  bCollapsed: boolean;
-
-  nDefaultWidth: number;
-
-  nDesiredWidth: number;
-}
-
-export interface Emoticon_list {
-  appid: number;
-
-  name: string;
-
-  name_normalized?: string;
-}
-
-export interface Emoticon_list2 {
-  appid: number;
-
-  last_used: number;
-
-  name: string;
-
-  name_normalized?: string;
-
-  use_count: number;
-}
-
-export interface Emoticon_list3 {
-  last_used: number;
-
-  name: string;
-
-  use_count: number;
-}
-
-export interface Emoticon_list4 {
-  name: string;
-}
-
-export interface RgEffects {
-  appid: number;
-
-  count: number;
-
-  infinite_use?: boolean;
-
-  name: string;
-
-  time_received: number;
-}
-
-export interface RgStickers11 {
-  appid: number;
-
-  count: number;
-
-  name: string;
-
-  time_last_used: number;
-
-  time_received: number;
-
-  use_count: number;
-}
-
 export interface RgFriendChats extends ChatRoomListBase {
   ClearFriendIsTypingState(): void;
 
@@ -1521,9 +1298,9 @@ export interface RgFriendChats extends ChatRoomListBase {
 
   m_bNeedsNonFriendWarning: boolean;
 
-  m_iClearFriendIsTypingInterval: undefined;
+  m_iClearFriendIsTypingInterval?: undefined;
 
-  m_tsLastSentTypingNotification: undefined;
+  m_tsLastSentTypingNotification?: undefined;
 
   m_unAccountIDFriend: number;
 }
@@ -1532,26 +1309,6 @@ export interface Settings {
   friends: object;
 
   groups: object;
-}
-
-export interface DictComponents2 {
-  gameinvite(e: unknown): { title: string; body: unknown; state: unknown; } | null;
-
-  img(t: unknown): { body: unknown; };
-
-  invite(e: unknown): { title: string; body: unknown; } | null;
-
-  lobbyinvite(e: unknown): { title: string; body: unknown; state: string; } | null;
-
-  roomeffect(e: unknown): { body: unknown; } | null;
-
-  spoiler(e: unknown): { body: unknown; };
-
-  sticker(t: unknown): { body: unknown; };
-
-  tradeoffer(e: unknown): { title: unknown; body: unknown; } | null;
-
-  video(t: unknown): { body: unknown; };
 }
 
 export interface Chat_message_blocks {
