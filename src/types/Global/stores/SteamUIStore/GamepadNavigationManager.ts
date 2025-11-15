@@ -258,7 +258,7 @@ export interface BaseGamepadInputSource {
 
   m_eNavigationSourceType: ENavigationSourceType;
 
-  m_fLastActiveTime?: number;
+  m_fLastActiveTime?: number | undefined;
 
   m_NavigationTypeChangeCallbacks: UnhandledButtonEventsCallbacks;
 
@@ -682,8 +682,7 @@ export interface Tree {
 
   OnRootButtonDown(e: unknown): unknown;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  RegisterNavigationItem(e: unknown, t: unknown): () => any;
+  RegisterNavigationItem(e: unknown, t: unknown): () => unknown;
 
   SetIsEmbeddedInLegacyTree(e: unknown): void;
 
