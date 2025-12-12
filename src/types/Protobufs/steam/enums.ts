@@ -676,7 +676,8 @@ export enum ContentReportSubjectType {
   UGCFile = 3,
   FriendChatMsg = 4,
   ChatRoomMsg = 5,
-  MAX = 6,
+  ChatGroup = 6,
+  MAX = 7,
 }
 
 export enum ControlledLegalCategoryStatus {
@@ -705,7 +706,9 @@ export enum ContentReportResolution {
   SuspiciousIncludingUpvoters = 8,
   VisibilityChanged = 9,
   CountryRestrictionsChanged = 10,
-  MAX = 11,
+  RemoveAndWarn = 11,
+  RemoveAndBan = 12,
+  MAX = 13,
 }
 
 export enum ContentReportSubjectAction {
@@ -720,6 +723,17 @@ export enum ContentReportSubjectAction {
   SustainedOnDispute = 8,
   Locked = 9,
   Unlocked = 10,
+  Deleted = 11,
+  Warned = 12,
+  BannedFromHub = 13,
+  BannedFromCommunity = 14,
+  TradeBanned = 15,
+  MarkedAsSuspicious = 16,
+  ResetContent = 17,
+  EscalatedForCSAM = 18,
+  EscalatedForTerrorism = 19,
+  Claimed = 20,
+  Released = 21,
 }
 
 export enum ContentReportReason {
@@ -785,7 +799,8 @@ export enum ContentReportReason {
   FakedGenderedNonConsensualMaterial = 59,
   FakedNonConsensualMaterial = 60,
   NegativeEffectonDiscourseOrElections = 61,
-  MAX = 62,
+  QuotesModeratedContent = 62,
+  MAX = 63,
 }
 
 export enum ResolutionAutomation {
@@ -793,4 +808,15 @@ export enum ResolutionAutomation {
   PartiallyAutomated = 1,
   FullyAutomated = 2,
   MAX = 3,
+}
+
+export enum PressOutletAction {
+  Invalid = 0,
+  Granted = 1,
+  Removed = 2,
+  Created = 3,
+  Updated = 4,
+  Deleted = 5,
+  Undeleted = 6,
+  MAX = 7,
 }

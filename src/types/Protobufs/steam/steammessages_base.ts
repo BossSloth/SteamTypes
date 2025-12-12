@@ -412,6 +412,10 @@ export interface CPackageReservationStatus {
 
   packageid?: number;
 
+  queue_head_position_at_reservation?: number;
+
+  queue_head_position_now?: number;
+
   queue_position?: number;
 
   reservation_country_code?: string;

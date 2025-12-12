@@ -277,6 +277,22 @@ export interface CStore_GetUserGameInterestState_Response_InQueue {
   type?: StoreDiscoveryQueueType;
 }
 
+export interface CStore_GetGamesFollowed_Request {
+  steamid?: string;
+}
+
+export interface CStore_GetGamesFollowed_Response {
+  appids?: number[];
+}
+
+export interface CStore_GetGamesFollowedCount_Request {
+  steamid?: string;
+}
+
+export interface CStore_GetGamesFollowedCount_Response {
+  followed_game_count?: number;
+}
+
 export interface CStore_GetDiscoveryQueueSkippedApps_Request {
   queue_type?: StoreDiscoveryQueueType;
 

@@ -1,4 +1,4 @@
-import { ContentReportReason } from './enums';
+import { ContentReportReason, ContentReportResolution, ContentReportSubjectType } from './enums';
 import { CMsgClientPersonaState_Friend } from './steammessages_clientserver_friends';
 
 export interface CChat_RequestFriendPersonaStates_Request { }
@@ -161,6 +161,8 @@ export interface CUserChatRoomGroupState {
   chat_group_id?: number;
 
   desktop_notification_level?: ChatRoomNotificationLevel;
+
+  direct_messages_allowed?: boolean;
 
   mobile_notification_level?: ChatRoomNotificationLevel;
 
@@ -778,6 +780,8 @@ export interface CChatRoom_SetUserChatGroupPreferences_Request {
 export interface CChatRoom_SetUserChatGroupPreferences_Request_ChatGroupPreferences {
   desktop_notification_level?: ChatRoomNotificationLevel;
 
+  direct_messages_allowed?: boolean;
+
   mobile_notification_level?: ChatRoomNotificationLevel;
 
   unread_indicator_muted?: boolean;
@@ -906,10 +910,24 @@ export interface CChatRoom_ReportMessage_Request {
 
   steamid_from?: string;
 
+  subject_type?: ContentReportSubjectType;
+
   timestamp?: number;
 }
 
 export interface CChatRoom_ReportMessage_Response { }
+
+export interface CChatRoom_ResolveReport_Request {
+  reason?: ContentReportReason;
+
+  resolution?: ContentReportResolution;
+
+  subject_group_id?: number;
+
+  subject_id?: number;
+}
+
+export interface CChatRoom_ResolveReport_Response { }
 
 export interface CClanChatRooms_GetClanChatRoomInfo_Request {
   autocreate?: boolean;

@@ -93,15 +93,21 @@ export interface CMsgNetworkDevicesData_Device_Wireless {
 }
 
 export interface CMsgNetworkDevicesData_Device_Wireless_AP {
+  band_filter?: string;
+
   esecurity?: number;
 
   estrength?: number;
+
+  has_non_6ghz_channel?: boolean;
 
   id?: number;
 
   is_active?: boolean;
 
   is_autoconnect?: boolean;
+
+  is_saved?: boolean;
 
   password?: string;
 
@@ -124,6 +130,8 @@ export interface CMsgNetworkDeviceConnect {
   ip4?: CMsgNetworkDeviceIP4Config;
 
   ip6?: CMsgNetworkDeviceIP6Config;
+
+  wireless?: CMsgNetworkDeviceConnect_Wireless;
 }
 
 export interface CMsgNetworkDeviceConnect_KnownAP {
@@ -140,6 +148,22 @@ export interface CMsgNetworkDeviceConnect_Credentials {
   password?: string;
 
   username?: string;
+}
+
+export interface CMsgNetworkDeviceConnect_Wireless {
+  band_filter?: string;
+}
+
+export interface CMsgNetworkDeviceSetOptions {
+  wireless?: CMsgNetworkDeviceSetOptions_Wireless;
+}
+
+export interface CMsgNetworkDeviceSetOptions_Wireless {
+  ap_id: number;
+
+  band_filter?: string;
+
+  is_autoconnect?: boolean;
 }
 
 export interface CMsgStorageDevicesData {
@@ -732,12 +756,6 @@ export interface CMsgSystemManagerSettings {
   idle_backlight_dim_ac_seconds?: number;
 
   idle_backlight_dim_battery_seconds?: number;
-
-  idle_suspend_ac_seconds?: number;
-
-  idle_suspend_battery_seconds?: number;
-
-  idle_suspend_supressed?: boolean;
 
   is_adaptive_brightness_available?: boolean;
 

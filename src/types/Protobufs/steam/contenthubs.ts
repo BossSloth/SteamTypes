@@ -7,6 +7,8 @@ export interface CStorePageFilter {
 }
 
 export interface CStorePageFilter_SalePageFilter {
+  creator_clan_account_id?: number;
+
   sale_tagid?: number;
 }
 

@@ -105,6 +105,8 @@ export interface StoreItem {
 
   internal_name?: string;
 
+  invalid_purchase_options?: StoreItem_PurchaseOption[];
+
   is_coming_soon?: boolean;
 
   is_early_access?: boolean;
@@ -339,6 +341,8 @@ export interface StoreItem_PurchaseOption {
 
   lowest_recent_price_in_cents?: number;
 
+  must_purchase_as_set?: boolean;
+
   original_price_in_cents?: number;
 
   packageid?: number;
@@ -547,11 +551,19 @@ export interface CStoreBrowse_GetContentHubConfig_Response {
 }
 
 export interface CStoreBrowse_GetContentHubConfig_Response_ContentHubConfig {
+  any_one_of_tags?: number[];
+
   display_name?: string;
 
   handle?: string;
 
   hubcategoryid?: number;
+
+  must_have_tags?: number[];
+
+  must_not_have_tags?: number[];
+
+  replaces_tags?: number[];
 
   type?: string;
 

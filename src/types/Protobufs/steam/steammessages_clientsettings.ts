@@ -238,7 +238,9 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
-   * Setting store: k_ClientSettingStore_CustomFunc
+   * Setting store: k_ClientSettingStore_ConfigStore_UserRoaming
+   * Setting name: Software\Valve\Steam\CloudEnabled
+   * Default: true
    */
   cloud_enabled?: boolean;
 
@@ -520,10 +522,10 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
-   * Setting name: System/GameFrameRateReporting/Enabled
-   * Default: false
+   * Setting name: System/GameFrameRateReportEnabled
+   * Default: 0
    */
-  game_framerate_reporting_enabled?: boolean;
+  game_framerate_report_enabled?: FrameRateReportEnabled;
 
   /**
    * @Options
@@ -1165,6 +1167,78 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPChannel5GHz
+   * Default: 0
+   */
+  remote_play_wifi_ap_channel_5ghz?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPChannel6GHz
+   * Default: 0
+   */
+  remote_play_wifi_ap_channel_6ghz?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPChannelWidth
+   * Default: 0
+   */
+  remote_play_wifi_ap_channel_width?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPEnabled
+   * Default: true
+   */
+  remote_play_wifi_ap_enabled?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPHotspotMode
+   * Default: false
+   */
+  remote_play_wifi_ap_hotspot_mode?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPHotspotPassword
+   * Default: ""
+   */
+  remote_play_wifi_ap_hotspot_password?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPHotspotRouting
+   * Default: "noroute"
+   */
+  remote_play_wifi_ap_hotspot_routing?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPHotspotSSID
+   * Default: ""
+   */
+  remote_play_wifi_ap_hotspot_ssid?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: streaming_v2/WifiAPShowAdvanced
+   * Default: false
+   */
+  remote_play_wifi_ap_show_advanced?: boolean;
+
+  /**
+   * @Options
    * Setting store: k_ClientSettingStore_CustomFunc
    */
   restrict_auto_updates?: boolean;
@@ -1577,10 +1651,50 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/WifiReloadDriverOnSleep
+   * Default: false
+   */
+  steamos_wifi_reload_wifi_driver_on_sleep?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\AllowBatteryLowPowerDownloads
+   * Default: false
+   */
+  system_allow_battery_low_power_downloads?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: System/Bluetooth/Enabled
    * Default: false
    */
   system_bluetooth_enabled?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\EnableLowPowerDownloads
+   * Default: true
+   */
+  system_enable_low_power_downloads?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\IdleSuspendACSeconds
+   * Default: 3600
+   */
+  system_idle_suspend_ac_sec?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\IdleSuspendBatterySeconds
+   * Default: 900
+   */
+  system_idle_suspend_battery_sec?: number;
 
   /**
    * @Options
@@ -1667,4 +1781,10 @@ export enum GRExportLimitType {
   Native = 0,
   FileSize = 1,
   Advanced = 2,
+}
+
+export enum FrameRateReportEnabled {
+  Unset = 0,
+  Enabled = 1,
+  Disabled = 2,
 }
