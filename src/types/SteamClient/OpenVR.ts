@@ -147,6 +147,9 @@ export interface VROverlay {
    */
   RegisterForCursorMovement(): Unregisterable;
 
+  /** @native */
+  RegisterForOverlayMousePressEvents(): unknown;
+
   /**
    * @params unknown
    */

@@ -42,6 +42,9 @@ export interface RemotePlay {
   /** @native */
   GetRemotePlayTogetherGroupIDForOverlayPID(): unknown;
 
+  /** @native */
+  HasRemoteDevicePIN(): unknown;
+
   IdentifyController(nControllerIndex: number): unknown;
 
   /**
@@ -74,12 +77,8 @@ export interface RemotePlay {
    */
   RegisterForBitrateOverride(): Unregisterable;
 
-  RegisterForClearControllers(callback: () => void): Unregisterable;
-
-  /**
-   * @params unknown
-   */
-  RegisterForControllerIndexSet(): Unregisterable;
+  /** @native */
+  RegisterForControllersUpdated(): unknown;
 
   RegisterForDevicesChanges(callback: (devicesChange: RemotePlayDevice[]) => void): Unregisterable;
 
@@ -211,7 +210,11 @@ export interface RemotePlay {
    */
   SetStreamingServerConfigEnabled(): unknown;
 
-  StopStreamingClient(): void;
+  /** @native */
+  StartDesktopStream(): unknown;
+
+  /** @native */
+  StopRemoteClientStream(): unknown;
 
   /**
    * @params unknown
@@ -224,6 +227,12 @@ export interface RemotePlay {
   StopStreamingSessionAndSuspendDevice(): unknown;
 
   UnlockH264(): void;
+
+  /** @native */
+  UnpairRemoteClient(): unknown;
+
+  /** @native */
+  UnpairRemoteDevice(): unknown;
 
   // unpairs all devices
   UnpairRemoteDevices(): void;

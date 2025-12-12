@@ -122,7 +122,6 @@ async function getSystemInformation(): Promise<void> {
 
   // Only keep the properties we need
   const properties = [
-    'sOSName',
     'nSteamVersion',
     'sSteamBuildDate',
     'sSteamAPI',
@@ -368,12 +367,11 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
     return;
   }
 
-  fs.rmdirSync('diffs', { recursive: true });
-
-  // Create the diffs directory if it doesn't exist
-  if (!fs.existsSync('diffs')) {
-    fs.mkdirSync('diffs');
+  if (fs.existsSync('diffs')) {
+    fs.rmdirSync('diffs', { recursive: true });
   }
+
+  fs.mkdirSync('diffs');
 
   for (const diff of diffs) {
     if (diff.result !== null) {

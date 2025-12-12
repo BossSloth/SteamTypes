@@ -288,6 +288,8 @@ export enum EOSType {
 }
 
 export interface SystemInfo {
+  bIsCEFDebuggingEnabled: boolean;
+
   bIsUnsupportedPrototypeHardware: boolean;
 
   /**

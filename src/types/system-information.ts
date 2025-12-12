@@ -1,6 +1,5 @@
 export const systemInformation = {
-  sOSName: 'Windows 11',
-  nSteamVersion: 1759461205,
-  sSteamBuildDate: 'Oct  2 2025 19:27:40',
+  nSteamVersion: 1763795278,
+  sSteamBuildDate: 'Nov 22 2025 07:00:32',
   sSteamAPI: 'SteamClient023',
 };
