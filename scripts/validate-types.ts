@@ -322,7 +322,7 @@ async function processInterfaces(
   return diffs;
 }
 
-async function run(options: ValidateTypesOptions, filter?: string): Promise<void> {
+async function run(options: ValidateTypesOptions, filter?: string): Promise<boolean> {
   const targetId = await getSharedJsContextTarget();
 
   await injectConvertToTypescriptJs(targetId, options.force);
@@ -364,7 +364,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
   logger.log(chalk.blue(`Comparison time: ${comparisonTime} ms`));
 
   if (options.diff === false) {
-    return;
+    return diffs.length > 0;
   }
 
   if (fs.existsSync('diffs')) {
@@ -379,6 +379,8 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<void
       fs.writeFileSync(`diffs/${diff.filePath}.diff`, diff.result.replace(ansiRegex(), ''), 'utf-8');
     }
   }
+
+  return diffs.length > 0;
 }
 
 /**
@@ -407,12 +409,16 @@ async function main(): Promise<void> {
 
       const startTime = performance.now();
 
-      await run(options, filter);
+      const result = await run(options, filter);
       sharedJsClient.close();
 
       const endTime = performance.now();
 
-      logger.log(chalk.green('\n✅ Operation completed successfully\n'));
+      if (result) {
+        logger.log(chalk.yellow('\n⚠️  Operation completed with new types\n'));
+      } else {
+        logger.log(chalk.green('\n✅ Operation completed successfully\n'));
+      }
       logger.log(chalk.gray(`Memory usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`));
       logger.log(chalk.gray(`Execution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
     });

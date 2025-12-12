@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$(ls -A diffs)" ]; then
+    echo -e "\033[0;31mDiffs directory is empty, no diffs applied.\033[0m"
+    exit 1
+fi
+
 # Apply all .diff files in the diffs directory
 for diff_file in diffs/*.diff; do
     if [ -f "$diff_file" ]; then
@@ -12,8 +17,3 @@ for diff_file in diffs/*.diff; do
         fi
     fi
 done
-
-# If diffs directory is empty, delete it
-if [ -z "$(ls -A diffs)" ]; then
-    echo -e "\033[0;31mDiffs directory is empty, no diffs applied.\033[0m"
-fi
