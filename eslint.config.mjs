@@ -22,7 +22,6 @@ export default defineConfig(
   ]),
   {
     languageOptions: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       globals: globals.node,
       parserOptions: {
         projectService: {
