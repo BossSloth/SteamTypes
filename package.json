@@ -97,7 +97,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@steambrew/client": "^5.8.0"
+    "@steambrew/client": "^5.8.3"
   },
   "peerDependenciesMeta": {
     "@steambrew/client": {
@@ -105,6 +105,6 @@
     }
   },
   "patchedDependencies": {
-    "@steambrew/client@5.8.0": "patches/@steambrew%2Fclient@5.8.0.patch"
+    "@steambrew/client@5.8.3": "patches/@steambrew%2Fclient@5.8.3.patch"
   }
 }
