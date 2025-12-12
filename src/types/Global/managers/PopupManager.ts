@@ -247,6 +247,8 @@ export interface Popup<
    */
   OnMessage(): unknown;
 
+  OnMove(): void;
+
   /**
    * Calls the `onResize` callback.
    */
@@ -376,6 +378,8 @@ export type PopupCallbackParams = [popupWindow: Popup['m_popup'], bodyElement: P
 
 export interface MainWindowPopupCallback extends PopupCallback {
   onLoad(...args: PopupCallbackParams): void;
+
+  onMove(t: unknown, r: unknown, s: unknown): void;
 
   onResize(...args: PopupCallbackParams): void;
 }

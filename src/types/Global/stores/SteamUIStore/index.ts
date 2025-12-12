@@ -20,19 +20,11 @@ export interface SteamUIStore {
 
   BIsShuttingDown(): boolean;
 
-  BIsStreamingGame(e: unknown): boolean;
-
-  BIsStreamingRemotePlayTogether(): unknown;
-
-  BIsStreamingRemotePlayTogetherGame(e: unknown): unknown;
-
   BIsTransparentBackgroundPath(e: unknown): unknown;
 
   BIsVrOnlyGame(e: unknown): unknown;
 
   BIsVROverlayApp(e: unknown): unknown;
-
-  BRemotePlaySessionLocalClient(e: unknown): boolean;
 
   BShowControllerConfigInOverlay(e: unknown): unknown;
 
@@ -153,12 +145,6 @@ export interface SteamUIStore {
 
   RegisterMainWindow(e: unknown): () => void;
 
-  RemotePlaySessionStarted(e: unknown, t: unknown, r: unknown, n: unknown): void;
-
-  RemotePlaySessionStopped(e: unknown, t: unknown, r: unknown): void;
-
-  RemotePlayTogetherClientStarted(e: unknown): void;
-
   ReopenPreModalSideMenu(): void;
 
   ResetErrorCondition(): void;
@@ -181,11 +167,9 @@ export interface SteamUIStore {
 
   SetStandaloneConfiguratorURL(e: unknown): void;
 
-  StreamingClientFinished(e: unknown, t: unknown): void;
+  StreamingClientFinished(e: unknown, t: unknown, r: unknown, n: unknown): void;
 
-  StreamingClientStarted(e: unknown): void;
-
-  StreamingLaunchComplete(e: unknown, t: unknown): void;
+  StreamingClientStarted(e: unknown, t: unknown, r: unknown, n: unknown): void;
 
   ActiveControllerIndex: number;
 
@@ -221,8 +205,6 @@ export interface SteamUIStore {
 
   m_bShowingLockScreen: boolean;
 
-  m_bStreamingRemotePlayTogether: boolean;
-
   m_ConfiguratorWidth: number;
 
   /**
@@ -249,15 +231,13 @@ export interface SteamUIStore {
 
   m_navigationSource: NavigationSource;
 
-  m_nResumeStreamingInputTimeoutHandle: null;
+  m_remoteClientStreams: never;
 
   m_runningAppIDs: number[];
 
   m_setVisibleMainWindows: Set<Window>;
 
   m_shutdownState: ShutdownState;
-
-  m_streamingAppID: number;
 
   m_strStandaloneConfiguratorURL: null;
 

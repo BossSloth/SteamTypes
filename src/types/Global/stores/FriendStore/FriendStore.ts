@@ -108,6 +108,7 @@ export interface SteamFriend {
 
   /**
    * @returns match: 0=none, 1=name, 2=nickname
+   * @ignore
    */
   MatchSearchString(searchString: string): { match: 0 | 1 | 2; iOffset?: number; bFullMatch?: boolean; };
 
@@ -512,7 +513,7 @@ export interface OwnedGamesCache {
 
   m_params: Params;
 
-  m_timeoutTocSave: number;
+  m_timeoutTocSave: number | undefined;
 }
 
 export interface MiniProfileData {
@@ -820,9 +821,9 @@ export interface FriendGroupStore {
 
   default_groups: (ExpandedChatGroup | Default_groups)[];
 
-  friend_groups: (ExpandedChatGroup | Default_groups)[];
+  friend_groups: (ExpandedChatGroup | Default_groups | MapGameGroups)[];
 
-  game_groups: unknown[];
+  game_groups: MapGameGroups[];
 
   games_with_friends_playing: number[];
 
@@ -858,7 +859,7 @@ export interface FriendGroupStore {
 
   outgoing_invites_group: ExpandedChatGroup;
 
-  singleton_game_group: ExpandedChatGroup;
+  singleton_game_group: ExpandedChatGroup | undefined;
 
   user_groups: unknown[];
 }

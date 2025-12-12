@@ -888,6 +888,8 @@ export interface ChatRoomListBase {
 
   AddRoomEffectIfNeeded(e: unknown): void;
 
+  AddSessionNotice(e: unknown): void;
+
   AddVoiceChannelInviteMsg(e: unknown, t: unknown, r: unknown): void;
 
   AppendChatMsg(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
@@ -898,6 +900,8 @@ export interface ChatRoomListBase {
    * @native
    */
   BASELOG(): unknown;
+
+  BHasSessionNotice(e: unknown): unknown;
 
   BIsVoiceAllowed(): boolean;
 
@@ -983,6 +987,8 @@ export interface ChatRoomListBase {
   RemoveChatView(e: unknown): void;
 
   RemoveMessage(e: unknown): void;
+
+  RemoveSessionNotice(e: unknown): void;
 
   ResetPrepended(): void;
 
@@ -1081,6 +1087,8 @@ export interface ChatRoomListBase {
   m_rtLastServerMessageReceived: number;
 
   m_setInflightClientMessageID: never;
+
+  m_setSessionNotices: never;
 
   m_strLastMessage?: undefined;
 
@@ -1434,7 +1442,7 @@ export interface MapAccountToExtra {
 
   m_rank: number;
 
-  m_role_ids: never;
+  m_role_ids: unknown[];
 }
 
 export interface Member_counts {

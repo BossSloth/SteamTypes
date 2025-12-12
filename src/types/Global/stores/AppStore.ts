@@ -348,7 +348,7 @@ export interface SteamAppOverview {
 
   owner_account_id?: number;
 
-  per_client_data: SteamAppOverviewClientData[];
+  per_client_data: (SteamAppOverviewClientData[] | SteamAppOverviewClientData[]);
 
   ps4_controller_support: AppControllerSupportLevel;
 

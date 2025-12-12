@@ -105,7 +105,7 @@ export interface AppInfo {
 
   m_bInitialized: boolean;
 
-  m_dtUpdatedFromServer: Date;
+  m_dtUpdatedFromServer?: Date;
 
   m_eAppType: ProtoAppType;
 
@@ -117,7 +117,7 @@ export interface AppInfo {
 
   name?: string;
 
-  time_updated_from_server: Date;
+  time_updated_from_server?: Date;
 }
 
 export interface CachedAppInfo {

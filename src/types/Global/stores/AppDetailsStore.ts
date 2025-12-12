@@ -565,6 +565,8 @@ export interface AppDetails {
 
   strCloudBytesUsed: string;
 
+  strCompatExperiment: string;
+
   strCompatToolDisplayName: string;
 
   strCompatToolName: string;
