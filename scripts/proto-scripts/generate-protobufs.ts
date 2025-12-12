@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import chalk from 'chalk';
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
@@ -9,23 +8,25 @@ const ROOT_DIR = path.resolve(`${__dirname}/../../`);
 const PROTO_DIR = join(ROOT_DIR, 'scripts', 'Protobufs');
 const OUTPUT_DIR = join(ROOT_DIR, 'src', 'types', 'Protobufs', 'steam');
 
-const PROTOBUF_FILES = [
-  'steam\\webuimessages_gamerecording.proto',
-  'steam\\webuimessages_gamerecordingfiles.proto',
-  'steam\\steammessages_gamerecording_objects.proto',
-  'steam\\steammessages_base.proto',
-  'steam\\steammessages_player.steamclient.proto',
-  'steam\\enums.proto',
-  'steam\\steammessages_appoverview.proto',
-  'steam\\steammessages_client_objects.proto',
-  'steam\\steammessages_clientsettings.proto',
-  'steam\\steammessages_store.steamclient.proto',
-  'steam\\contenthubs.proto',
-  'steam\\steammessages_storebrowse.steamclient.proto',
-  'steam\\enums_productinfo.proto',
-  'steam\\steammessages_chat.steamclient.proto',
-  'steam\\steammessages_clientserver_friends.proto',
+const STEAM_PROTOBUF_FILES = [
+  'webuimessages_gamerecording.proto',
+  'webuimessages_gamerecordingfiles.proto',
+  'steammessages_gamerecording_objects.proto',
+  'steammessages_base.proto',
+  'steammessages_player.steamclient.proto',
+  'enums.proto',
+  'steammessages_appoverview.proto',
+  'steammessages_client_objects.proto',
+  'steammessages_clientsettings.proto',
+  'steammessages_store.steamclient.proto',
+  'contenthubs.proto',
+  'steammessages_storebrowse.steamclient.proto',
+  'enums_productinfo.proto',
+  'steammessages_chat.steamclient.proto',
+  'steammessages_clientserver_friends.proto',
 ];
+
+const PROTOBUF_FILES = [...STEAM_PROTOBUF_FILES.map(file => join('steam', file))];
 
 const TYPE_MAP: Record<string, string> = {
   string: 'string',
@@ -117,9 +118,9 @@ function getImportPathForType(typeName: string): string | null {
     return null;
   }
 
-  const baseFileName = sourceFile.split('\\').pop()?.replace('.proto', '');
+  const baseFileName = path.basename(sourceFile).replace('.proto', '');
 
-  return baseFileName !== undefined ? `./${baseFileName}` : null;
+  return `./${baseFileName}`;
 }
 
 function normalizeEnumValueName(valueName: string, originalEnumTypeName: string, finalEnumTypeName?: string): string {
@@ -537,11 +538,7 @@ function generateTypeScriptDefinitions(): void {
 
       root.loadSync(protoPath, { keepCase: true });
 
-      const outputFileName = protoFile.split('\\').pop()?.replace('.proto', '.ts');
-      if (outputFileName === undefined) {
-        throw new Error(`Failed to generate output file name for ${protoFile}`);
-      }
-
+      const outputFileName = path.basename(protoFile).replace('.proto', '.ts');
       const outputFilePath = join(OUTPUT_DIR, outputFileName);
       const tsDefinitions = generateTypeScriptFromReflection(root, protoFile, outputFilePath);
 
