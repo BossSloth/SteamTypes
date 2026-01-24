@@ -96,6 +96,8 @@ export interface SteamUIStore {
 
   OnMicroTxnAuth(e: unknown, t: unknown, r: unknown, n: unknown): void;
 
+  OnMicroTxnAuthDismiss(e: unknown, t: unknown): void;
+
   OnModalCountChanged(e: unknown): void;
 
   OnModalKeyboardMessage(e: unknown): void;
@@ -180,8 +182,6 @@ export interface SteamUIStore {
   ActiveNavigationSourceType: number;
 
   ActiveWindowInstance: WindowInstance;
-
-  BIsInOOBE: boolean;
 
   ConfiguratorWidth: number;
 

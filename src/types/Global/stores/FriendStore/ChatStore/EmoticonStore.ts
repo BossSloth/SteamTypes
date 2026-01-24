@@ -85,11 +85,11 @@ export interface EmoticonStore {
 
   m_rtLastStickerOrEffect: number;
 
-  m_rtMostRecentEmoticon: undefined;
+  m_rtMostRecentEmoticon: number;
 
   m_setEmoticonOwned: Set<string>;
 
-  recent_emoticons: (Emoticon_list2 | Emoticon_list3)[];
+  recent_emoticons: (Emoticon_list2 | RgEffects)[];
 
   recent_stickers: unknown[];
 }
@@ -115,15 +115,21 @@ export interface Emoticon_list2 {
 }
 
 export interface Emoticon_list3 {
+  appid: number;
+
+  count?: number;
+
+  name: string;
+
+  time_received: number;
+}
+
+export interface Emoticon_list4 {
   last_used: number;
 
   name: string;
 
   use_count: number;
-}
-
-export interface Emoticon_list4 {
-  name: string;
 }
 
 export interface RgEffects {

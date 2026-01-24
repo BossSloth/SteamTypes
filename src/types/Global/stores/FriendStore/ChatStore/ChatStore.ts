@@ -280,6 +280,8 @@ export interface ChatGroup {
 
   BCanKickMember(e: unknown): unknown;
 
+  BDirectMessagesAllowed(): boolean;
+
   BDoesRoleAllowAction(e: unknown, t: unknown): boolean;
 
   BHasEverBeenAcked(): boolean;
@@ -442,6 +444,8 @@ export interface ChatGroup {
 
   SetChatRoomGroupWatchingBroadcast(e: unknown, t: unknown): Promise<void>;
 
+  SetDirectMessagesAllowed(value: boolean): unknown;
+
   SetInitialGroupState(e: unknown): void;
 
   SetMemberListVirtualized(e: unknown): void;
@@ -501,6 +505,8 @@ export interface ChatGroup {
   HasUnreadMention: boolean;
 
   hasVoiceRoom: boolean;
+
+  m_bDirectMessagesAllowed: boolean;
 
   m_bFullStateLoaded: boolean;
 

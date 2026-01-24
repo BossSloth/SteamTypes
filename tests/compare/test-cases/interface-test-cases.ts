@@ -1080,4 +1080,32 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+
+  'external array type': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { Values } from './values';
+
+      export interface Foo {
+        values: Values[];
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        values: ((Values | Values2)[] | Values[]);
+      }
+
+      export interface Values {
+        foo: string;
+        bar: string;
+        baz: string;
+      }
+
+      export interface Values2 {
+        foo: string;
+        baz: string;
+      }
+    `,
+  },
 };

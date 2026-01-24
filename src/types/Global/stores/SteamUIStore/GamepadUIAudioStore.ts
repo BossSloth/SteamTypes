@@ -57,6 +57,8 @@ export interface AudioPlaybackManager {
 
   DelayedCleanupContextIfInactive(): void;
 
+  EnsureContext(): void;
+
   GetActiveDestination(): unknown;
 
   GetLastObservedSampleRate(): unknown;
@@ -85,6 +87,8 @@ export interface AudioPlaybackManager {
   SetVoiceStore(e: unknown): void;
 
   context: undefined | object;
+
+  m_bIsFrameFactoryImage: boolean;
 
   m_bSupportsAudioWorkletProcessors: boolean;
 

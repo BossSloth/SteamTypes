@@ -384,7 +384,7 @@ export interface StoreApp {
 
   k_regexSalePage: RegExp;
 
-  m_Assets: Assets;
+  m_Assets?: Assets;
 
   m_AssetsWithoutOverrides?: Assets;
 

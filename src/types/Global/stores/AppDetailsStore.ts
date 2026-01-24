@@ -449,6 +449,8 @@ export interface AppDetails {
 
   bControllerSurveyFilledOut: boolean;
 
+  bDisableSteamDeckAutoDetection: boolean;
+
   bDisableUserMediaUpload: boolean;
 
   bEnableAllowDesktopConfiguration: boolean;
@@ -565,7 +567,7 @@ export interface AppDetails {
 
   strCloudBytesUsed: string;
 
-  strCompatExperiment: string;
+  strCompatExperiment?: string;
 
   strCompatToolDisplayName: string;
 
@@ -645,7 +647,7 @@ export interface Achievements {
 
   nTotal: number;
 
-  vecAchievedHidden: AchievementData[];
+  vecAchievedHidden: PlayerAchievement[];
 
   vecHighlight: PlayerAchievement[];
 
@@ -830,14 +832,16 @@ export interface AchievementData {
 export interface PlayerAchievement extends AchievementData {
   bHidden?: boolean;
 
-  flCurrentProgress: number;
+  flCurrentProgress?: number;
 
-  flMaxProgress: number;
+  flMaxProgress?: number;
 
-  flMinProgress: number;
+  flMinProgress?: number;
 }
 
 export interface AppBeta {
+  rtLastUpdated: number;
+
   /** Beta description. */
   strDescription: string;
 
@@ -1015,6 +1019,7 @@ export enum EAppUpdateError {
 /** Cloud sync status, seems similar to {@link EAppCloudStatus} but with some differences */
 export enum ECloudSync {
   Unavailable = 0,
+  CloudSync1 = 1,
   Valid = 2,
   /** @note This doesn't mean this app has cloud sync enabled, just that it is revalidating */
   PendingRevalidation = 3,

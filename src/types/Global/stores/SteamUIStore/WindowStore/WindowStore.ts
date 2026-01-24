@@ -40,9 +40,9 @@ export interface WindowStore {
 
   CreateVRWindow(e: unknown, t: unknown): unknown;
 
-  DEBUG_DumpDesiredSteamUIWindows(): Promise<unknown>;
+  DEBUG_GetDesiredSteamUIWindows(): Promise<unknown>;
 
-  DEBUG_SuppressVRGamepadUI(e: unknown): Promise<void>;
+  DEBUG_SuppressWindowType(e: unknown, t: unknown): Promise<void>;
 
   /**
    * @param e default: !0
@@ -106,8 +106,6 @@ export interface WindowStore {
 
   GamepadUIVRWindowInstance: undefined;
 
-  m_bSuppressVRGamepadUIOverlays: boolean;
-
   m_mapAppOverlayPosition: Map<unknown, unknown>;
 
   m_mapAppWindows: ObservableMap<number, MapAppWindows>;
@@ -119,6 +117,8 @@ export interface WindowStore {
   m_mapOverlayPopupByPID: ObservableMap<number, WindowInstance>;
 
   m_Parent: SteamUIStore;
+
+  m_setSuppressedWindowTypes: Set<unknown>;
 
   m_simulatedVRGamepadUIOnDesktopInstance: undefined;
 

@@ -157,6 +157,8 @@ export interface SteamAppOverview {
    */
   BIsLastTimePlayedEqual(proto: ProtoAppOverview): boolean;
 
+  BIsLocalMultiplayer(): unknown;
+
   BIsModOrShortcut(): boolean;
 
   BIsMusicAlbum(): boolean;
@@ -277,6 +279,8 @@ export interface SteamAppOverview {
   app_type: ProtoAppType;
 
   appid: number;
+
+  bitfield_supported_languages: string;
 
   canonicalAppType: number;
 

@@ -306,6 +306,10 @@ function handleTargetLiteral(targetLiteral: LiteralTypeNode, sourceNode: TypeNod
 }
 
 function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): boolean {
+  if (isImportedType(currentTargetSourceFile, targetArray.getElementTypeNode())) {
+    return true;
+  }
+
   if (!Node.isArrayTypeNode(sourceNode)) {
     return false;
   }
