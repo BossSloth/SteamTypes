@@ -128,7 +128,7 @@ export interface ConnectionManager {
 
   m_rtReconnectThrottleStart: number;
 
-  m_ServiceTransport: m_ServiceTransport;
+  m_ServiceTransport: ServiceTransport;
 
   m_setConnectedServers: Set<number>;
 
@@ -217,7 +217,7 @@ export interface m_messageHandlers {
   servicemethod_list: string[];
 }
 
-export interface m_ServiceTransport {
+export interface ServiceTransport {
   /**
    * @native
    */
@@ -272,7 +272,7 @@ export interface m_ErrorReportingStore {
 
   m_strVersion: string;
 
-  m_transport: m_ServiceTransport;
+  m_transport: ServiceTransport;
 
   product: string;
 

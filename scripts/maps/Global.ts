@@ -23,5 +23,5 @@ export const GlobalMaps: InterfaceMap[] = [
   // { file: 'Global/AppActivityStore', object: 'window.appActivityStore', srcName: 'AppActivityStore' },
   // NOTE: have the friend list open after todo is fixed
   // TODO: the friends popup takes a WHILE to convert because if recursive stores use new util function to debug
-  // { file: 'Global/StoreItemCache', object: 'window.StoreItemCache', srcName: 'StoreItemCache' },
+  GMap('stores/StoreItemCache', 'StoreItemCache', /* ts */`window.StoreItemCache`),
 ];

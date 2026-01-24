@@ -1,6 +1,7 @@
 /* eslint-disable perfectionist/sort-interfaces */
 import { AppStore } from 'Global/stores/AppStore';
 import { FriendStore } from 'Global/stores/FriendStore/FriendStore';
+import { StoreItemCache } from 'Global/stores/StoreItemCache';
 import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
 import { AppAchievementProgressCache } from '../types/Global/AppAchievementProgressCache';
@@ -36,12 +37,17 @@ declare global {
   let collectionStore: unknown;
   let communityStore: unknown;
   let consoleStore: ConsoleStore;
+  let controllerConfiguratorStore: unknown;
+  let ControllerStore: unknown;
+  let DEBUG_GetDesiredSteamUIWindows: unknown;
+  let DEBUG_SuppressWindowType: unknown;
   let DebugLogDisable: (name: string) => void;
   let DebugLogDisableAll: () => Promise<void>;
   let DebugLogDisableBacktrace: () => Promise<void>;
   let DebugLogEnable: (name: string) => void;
   let DebugLogEnableAll: () => Promise<void>;
   let DebugLogEnableBacktrace: () => Promise<void>;
+  let DebugLogEnabled: unknown;
   let DebugLogNames: () => string[];
   let downloadsStore: unknown;
   let dragStore: unknown;
@@ -50,6 +56,7 @@ declare global {
   let FocusNavController: unknown;
   let friendStore: FriendStore;
   let g_ClanStore: unknown;
+  let g_CreatorHomeListInfoStore: unknown;
   let g_CreatorHomeStore: unknown;
   let g_EventCalendarDevFeatures: unknown;
   let g_EventCalendarMap: unknown;
@@ -57,6 +64,7 @@ declare global {
   let g_FriendsUIApp: unknown;
   let g_GRS: GameRecordingStore;
   let g_PartnerEventStore: unknown;
+  let g_PartnerEventSummaryStore: unknown;
   let g_PopupManager: PopupManager;
   let gameReleaseStore: unknown;
   let installFolderStore: unknown;
@@ -92,7 +100,7 @@ declare global {
   let steamAjaxRequest: unknown;
   let SteamClient: SteamClient;
   let SteamUIStore: SteamUIStore;
-  let StoreItemCache: unknown;
+  let StoreItemCache: StoreItemCache;
   let subscriberAgreementStore: unknown;
   let SuspendResumeStore: unknown;
   let SystemDisplayManagerStore: unknown;
@@ -128,12 +136,17 @@ declare global {
     collectionStore: unknown;
     communityStore: unknown;
     consoleStore: ConsoleStore;
+    controllerConfiguratorStore: unknown;
+    ControllerStore: unknown;
+    DEBUG_GetDesiredSteamUIWindows: unknown;
+    DEBUG_SuppressWindowType: unknown;
     DebugLogDisable: (name: string) => void;
     DebugLogDisableAll: () => Promise<void>;
     DebugLogDisableBacktrace: () => Promise<void>;
     DebugLogEnable: (name: string) => void;
     DebugLogEnableAll: () => Promise<void>;
     DebugLogEnableBacktrace: () => Promise<void>;
+    DebugLogEnabled: unknown;
     DebugLogNames: () => string[];
     downloadsStore: unknown;
     dragStore: unknown;
@@ -142,6 +155,7 @@ declare global {
     FocusNavController: unknown;
     friendStore: FriendStore;
     g_ClanStore: unknown;
+    g_CreatorHomeListInfoStore: unknown;
     g_CreatorHomeStore: unknown;
     g_EventCalendarDevFeatures: unknown;
     g_EventCalendarMap: unknown;
@@ -149,6 +163,7 @@ declare global {
     g_FriendsUIApp: unknown;
     g_GRS: GameRecordingStore;
     g_PartnerEventStore: unknown;
+    g_PartnerEventSummaryStore: unknown;
     g_PopupManager: PopupManager;
     gameReleaseStore: unknown;
     installFolderStore: unknown;
@@ -184,7 +199,7 @@ declare global {
     steamAjaxRequest: unknown;
     SteamClient: SteamClient;
     SteamUIStore: SteamUIStore;
-    StoreItemCache: unknown;
+    StoreItemCache: StoreItemCache;
     subscriberAgreementStore: unknown;
     SuspendResumeStore: unknown;
     SystemDisplayManagerStore: unknown;
