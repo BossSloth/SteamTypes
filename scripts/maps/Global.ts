@@ -10,6 +10,7 @@ export const GlobalMaps: InterfaceMap[] = [
   GMap('managers/ConnectionManager', 'ConnectionManager', /* ts */`window.App.cm`),
   GMap('managers/PopupManager', 'PopupManager', /* ts */`window.g_PopupManager`),
   GMap('managers/MainWindowBrowserManager', 'MainWindowBrowserManager', /* ts */`window.MainWindowBrowserManager`),
+  GMap('managers/LocalizationManager', 'LocalizationManager', /* ts */`window.LocalizationManager`),
 
   // Stores
   GMap('stores/AppDetailsStore', 'AppDetailsStore', /* ts */`window.appDetailsStore`),

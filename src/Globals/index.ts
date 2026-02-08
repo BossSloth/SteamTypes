@@ -1,4 +1,5 @@
 /* eslint-disable perfectionist/sort-interfaces */
+import { LocalizationManager } from 'Global/managers/LocalizationManager';
 import { AppStore } from 'Global/stores/AppStore';
 import { FriendStore } from 'Global/stores/FriendStore/FriendStore';
 import { StoreItemCache } from 'Global/stores/StoreItemCache';
@@ -71,7 +72,7 @@ declare global {
   let lastScrollTime: unknown;
   let libraryEventStore: unknown;
   let libraryScrollListener: unknown;
-  let LocalizationManager: unknown;
+  let LocalizationManager: LocalizationManager;
   let loginStore: unknown;
   let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
@@ -170,7 +171,7 @@ declare global {
     lastScrollTime: unknown;
     libraryEventStore: unknown;
     libraryScrollListener: unknown;
-    LocalizationManager: unknown;
+    LocalizationManager: LocalizationManager;
     loginStore: unknown;
     MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
