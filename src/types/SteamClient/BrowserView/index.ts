@@ -5,7 +5,7 @@ export interface BrowserView {
 
   CreatePopup(browser?: BrowserViewInit): PopupResult;
 
-  Destroy(browser: BrowserViewInit): void;
+  Destroy(browser: BrowserViewPopup): void;
 
   PostMessageToParent(message: string, args: string): void;
 }
