@@ -1,10 +1,11 @@
 import chalk from 'chalk';
 import { createTwoFilesPatch } from 'diff';
-import { InterfaceDeclaration, MethodSignature, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
+import { Identifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface, findSimilarInterface } from './handle-interfaces';
-import { getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
+import { currentTargetSourceFile, getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
+import * as TypeComparator from './type-comparator';
 
 const processedInterfaces = new Set<string>();
 
@@ -72,6 +73,310 @@ function processInterfaceQueue(): void {
   }
 }
 
+function findDeclaringInheritedMember(
+  targetInterface: InterfaceDeclaration,
+  memberName: string,
+): { baseInterface: InterfaceDeclaration; baseMember: PropertySignature | MethodSignature; } | undefined {
+  for (const ext of targetInterface.getExtends()) {
+    const def = (ext.getExpression() as Identifier).getDefinitionNodes().at(0);
+    if (def === undefined || !Node.isInterfaceDeclaration(def)) {
+      continue;
+    }
+
+    const directMember = (def.getMembers() as (PropertySignature | MethodSignature)[])
+      .find(m => m.getName() === memberName);
+
+    if (directMember) {
+      return { baseInterface: def, baseMember: directMember };
+    }
+
+    const deepMember = findDeclaringInheritedMember(def, memberName);
+    if (deepMember) {
+      return deepMember;
+    }
+  }
+
+  return undefined;
+}
+
+function removeAllExtends(targetInterface: InterfaceDeclaration): void {
+  targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
+}
+
+function getSourceDerivedInterfacesForSyntheticBase(
+  baseInterface: InterfaceDeclaration,
+  sourceDerived: InterfaceDeclaration,
+): InterfaceDeclaration[] {
+  const derivedTargets = currentTargetSourceFile.getInterfaces().filter(i =>
+    i.getExtends().some(e => e.getExpression().getText() === baseInterface.getName()));
+
+  const sourceFile = sourceDerived.getSourceFile();
+  const derivedSources = derivedTargets
+    .map(t => sourceFile.getInterface(t.getName()))
+    .filter((i): i is InterfaceDeclaration => i !== undefined);
+
+  return derivedSources.length > 0 ? derivedSources : [sourceDerived];
+}
+
+function collectAgreeingSourceMembers(
+  sourceDerivedInterfaces: InterfaceDeclaration[],
+  memberName: string,
+  baseMemberKind: SyntaxKind,
+): (PropertySignature | MethodSignature)[] | undefined {
+  const agreeingSourceMembers: (PropertySignature | MethodSignature)[] = [];
+
+  for (const srcIface of sourceDerivedInterfaces) {
+    const srcMember = getInterfaceMembers(srcIface).find(m => m.getName() === memberName);
+    if (!srcMember || srcMember.getKind() !== baseMemberKind) {
+      return undefined;
+    }
+    agreeingSourceMembers.push(srcMember);
+  }
+
+  return agreeingSourceMembers;
+}
+
+function propertySourcesAgree(sourceMembers: PropertySignature[]): boolean {
+  const first = sourceMembers[0];
+  const firstTypeNode = first.getTypeNode();
+  if (!firstTypeNode) {
+    return false;
+  }
+
+  for (const other of sourceMembers.slice(1)) {
+    const otherTypeNode = other.getTypeNode();
+    if (!otherTypeNode || !TypeComparator.compareTypes(firstTypeNode, otherTypeNode)) {
+      return false;
+    }
+
+    if (other.hasQuestionToken() !== first.hasQuestionToken() || other.isReadonly() !== first.isReadonly()) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function reconcileSyntheticBasePropertyMember(
+  baseMember: PropertySignature,
+  sourceMembers: PropertySignature[],
+): { changed: boolean; baseMemberRemoved: boolean; } {
+  if (!propertySourcesAgree(sourceMembers)) {
+    baseMember.remove();
+
+    return { changed: true, baseMemberRemoved: true };
+  }
+
+  compareAndCorrectPropertyTypes(baseMember, sourceMembers[0], false);
+
+  return { changed: true, baseMemberRemoved: false };
+}
+
+function reconcileSyntheticBaseMethodMember(
+  baseMember: MethodSignature,
+  sourceMembers: MethodSignature[],
+): { changed: boolean; baseMemberRemoved: boolean; } {
+  const first = sourceMembers[0];
+  for (const other of sourceMembers.slice(1)) {
+    if (other.getText() !== first.getText()) {
+      baseMember.remove();
+
+      return { changed: true, baseMemberRemoved: true };
+    }
+  }
+
+  compareAndCorrectMethodTypes(baseMember, first);
+
+  return { changed: true, baseMemberRemoved: false };
+}
+
+function reconcileSyntheticBaseMemberFromDerivedSources(
+  targetDerived: InterfaceDeclaration,
+  sourceDerived: InterfaceDeclaration,
+  memberName: string,
+): { changed: boolean; baseMemberRemoved: boolean; } {
+  const declaring = findDeclaringInheritedMember(targetDerived, memberName);
+  if (!declaring) {
+    return { changed: false, baseMemberRemoved: false };
+  }
+
+  const { baseInterface, baseMember } = declaring;
+  const sourceBaseInterface = sourceDerived.getSourceFile().getInterface(baseInterface.getName());
+
+  if (sourceBaseInterface) {
+    return { changed: false, baseMemberRemoved: false };
+  }
+
+  const sourceDerivedInterfaces = getSourceDerivedInterfacesForSyntheticBase(baseInterface, sourceDerived);
+  const baseMemberKind = baseMember.getKind();
+  const agreeingSourceMembers = collectAgreeingSourceMembers(sourceDerivedInterfaces, memberName, baseMemberKind);
+
+  if (!agreeingSourceMembers) {
+    baseMember.remove();
+
+    return { changed: true, baseMemberRemoved: true };
+  }
+
+  if (baseMember instanceof PropertySignature) {
+    if (agreeingSourceMembers.some(m => !(m instanceof PropertySignature))) {
+      baseMember.remove();
+
+      return { changed: true, baseMemberRemoved: true };
+    }
+
+    return reconcileSyntheticBasePropertyMember(baseMember, agreeingSourceMembers as PropertySignature[]);
+  }
+
+  if (baseMember instanceof MethodSignature) {
+    if (agreeingSourceMembers.some(m => !(m instanceof MethodSignature))) {
+      baseMember.remove();
+
+      return { changed: true, baseMemberRemoved: true };
+    }
+
+    return reconcileSyntheticBaseMethodMember(baseMember, agreeingSourceMembers as MethodSignature[]);
+  }
+
+  return { changed: false, baseMemberRemoved: false };
+}
+
+function recompareSyntheticBaseDerivedInterfaces(
+  baseInterface: InterfaceDeclaration,
+  sourceDerived: InterfaceDeclaration,
+): void {
+  const sourceFile = sourceDerived.getSourceFile();
+  const targetDerivedInterfaces = currentTargetSourceFile.getInterfaces().filter(i =>
+    i.getExtends().some(ext => ext.getExpression().getText() === baseInterface.getName()));
+
+  for (const targetDerivedInterface of targetDerivedInterfaces) {
+    const sourceDerivedInterface = sourceFile.getInterface(targetDerivedInterface.getName());
+    if (!sourceDerivedInterface) {
+      continue;
+    }
+
+    compareAndCorrectMembers(targetDerivedInterface, sourceDerivedInterface);
+  }
+}
+
+function reconcileNonSyntheticBaseMember(
+  targetDerived: InterfaceDeclaration,
+  sourceDerived: InterfaceDeclaration,
+  memberName: string,
+): boolean {
+  const targetDeclaring = findDeclaringInheritedMember(targetDerived, memberName);
+  const sourceDeclaring = findDeclaringInheritedMember(sourceDerived, memberName);
+
+  if (!targetDeclaring || !sourceDeclaring) {
+    return false;
+  }
+
+  const { baseMember: targetBaseMember } = targetDeclaring;
+  const { baseMember: sourceBaseMember } = sourceDeclaring;
+
+  if (targetBaseMember.getKind() !== sourceBaseMember.getKind()) {
+    targetBaseMember.remove();
+
+    return true;
+  }
+
+  if (targetBaseMember instanceof PropertySignature && sourceBaseMember instanceof PropertySignature) {
+    compareAndCorrectPropertyTypes(targetBaseMember, sourceBaseMember, false);
+
+    return true;
+  }
+
+  if (targetBaseMember instanceof MethodSignature && sourceBaseMember instanceof MethodSignature) {
+    compareAndCorrectMethodTypes(targetBaseMember, sourceBaseMember);
+
+    return true;
+  }
+
+  return false;
+}
+
+function handleNeedsExtendUpdate(
+  targetInterface: InterfaceDeclaration,
+  sourceInterface: InterfaceDeclaration,
+  memberName: string,
+): void {
+  if (reconcileNonSyntheticBaseMember(targetInterface, sourceInterface, memberName)) {
+    return;
+  }
+
+  const declaring = findDeclaringInheritedMember(targetInterface, memberName);
+  if (declaring) {
+    const sourceBaseInterface = sourceInterface.getSourceFile().getInterface(declaring.baseInterface.getName());
+    if (!sourceBaseInterface) {
+      const { changed: baseChanged, baseMemberRemoved } = reconcileSyntheticBaseMemberFromDerivedSources(
+        targetInterface,
+        sourceInterface,
+        memberName,
+      );
+      if (baseChanged) {
+        if (baseMemberRemoved) {
+          recompareSyntheticBaseDerivedInterfaces(declaring.baseInterface, sourceInterface);
+        }
+
+        return;
+      }
+
+      return;
+    }
+  }
+
+  const { changed: baseChanged, baseMemberRemoved } = reconcileSyntheticBaseMemberFromDerivedSources(
+    targetInterface,
+    sourceInterface,
+    memberName,
+  );
+  if (baseChanged) {
+    if (baseMemberRemoved) {
+      compareAndCorrectMembers(targetInterface, sourceInterface);
+    }
+
+    return;
+  }
+
+  removeAllExtends(targetInterface);
+  compareAndCorrectMembers(targetInterface, sourceInterface);
+}
+
+function handleExtraInheritedMember(
+  targetInterface: InterfaceDeclaration,
+  sourceInterface: InterfaceDeclaration,
+  memberName: string,
+): void {
+  const declaring = findDeclaringInheritedMember(targetInterface, memberName);
+  if (declaring) {
+    const sourceBaseInterface = sourceInterface.getSourceFile().getInterface(declaring.baseInterface.getName());
+    if (sourceBaseInterface) {
+      removeAllExtends(targetInterface);
+      compareAndCorrectMembers(targetInterface, sourceInterface);
+
+      return;
+    }
+  }
+
+  const { changed: baseChanged, baseMemberRemoved } = reconcileSyntheticBaseMemberFromDerivedSources(
+    targetInterface,
+    sourceInterface,
+    memberName,
+  );
+  if (!baseChanged) {
+    return;
+  }
+
+  if (baseMemberRemoved) {
+    if (declaring) {
+      recompareSyntheticBaseDerivedInterfaces(declaring.baseInterface, sourceInterface);
+
+      return;
+    }
+
+    compareAndCorrectMembers(targetInterface, sourceInterface);
+  }
+}
+
 /**
  * Compares and corrects properties between two interfaces
  * @param targetInterface The interface to be edited
@@ -121,10 +426,10 @@ export function compareAndCorrectMembers(
     if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
       const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
       const needsExtendUpdate = compareAndCorrectPropertyTypes(targetProp, sourceProp, isFromExtendedInterface);
-      if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration) {
-        // Property is from an extended interface and doesn't match, remove extends and recompare
-        targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
-        changed = compareAndCorrectMembers(targetInterface, sourceInterface);
+      if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration && sourceInterface instanceof InterfaceDeclaration) {
+        handleNeedsExtendUpdate(targetInterface, sourceInterface, propName);
+
+        return true;
       }
     } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
       compareAndCorrectMethodTypes(targetProp, sourceProp);
@@ -139,9 +444,11 @@ export function compareAndCorrectMembers(
         targetProp.remove();
         changed = true;
       } else if (targetInterface instanceof InterfaceDeclaration) {
-        // Property is from an extended interface, remove extends and recompare
-        targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
-        changed = compareAndCorrectMembers(targetInterface, sourceInterface);
+        if (sourceInterface instanceof InterfaceDeclaration) {
+          handleExtraInheritedMember(targetInterface, sourceInterface, propName);
+
+          return true;
+        }
       }
     }
   }

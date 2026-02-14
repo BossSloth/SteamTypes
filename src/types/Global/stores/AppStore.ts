@@ -5,7 +5,7 @@ import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs/steam/enums';
 import { AppControllerSupportLevel, CAppOverview, CAppOverview_Change, DisplayStatus } from 'Protobufs/steam/steammessages_appoverview';
-import { SerializedArrayBuffer, ProtobufInterface } from 'shared/protobuf';
+import { ProtobufInterface, SerializedArrayBuffer } from 'shared/protobuf';
 
 export interface AppStore {
   BIsAppPrivate(appid: number): boolean;
@@ -352,7 +352,7 @@ export interface SteamAppOverview {
 
   owner_account_id?: number;
 
-  per_client_data: (SteamAppOverviewClientData[] | SteamAppOverviewClientData[]);
+  per_client_data: SteamAppOverviewClientData[];
 
   ps4_controller_support: AppControllerSupportLevel;
 

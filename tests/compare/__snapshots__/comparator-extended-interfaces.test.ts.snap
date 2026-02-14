@@ -132,6 +132,203 @@ export interface User {
 }"
 `;
 
+exports[`Comparator Extended Interface Cases > extended interface multiple extra function on base 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,23 +3,23 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  GetInfo(): string;
+-
+  id: number;
+
+  name: string;
+
+-  info: undefined;
++  info: string[];
+}
+
+export interface ChatRoom extends BaseChat {
+  SetInfo(info: string): void;
+
+  email: string;
++
++  GetInfo(): string;
+}
+
+export interface OtherChat extends BaseChat {
+  counter: number;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface multiple interface type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -7,13 +7,13 @@
+export interface BaseChat {
+  id: number;
+
+  name: string;
+
+-  info: undefined;
++  info: string[];
+
+-  messages: never;
++  messages: Message[];
+}
+
+export interface ChatRoom extends BaseChat {
+  GetInfo(): string;
+
+@@ -27,5 +27,15 @@
+
+  permissions: string[];
+
+  role: string;
+}
++
++export interface Message {
++  author: string;
++
++  content: string;
++
++  friendId: number;
++
++  id: number;
++}"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface multiple missing function 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -7,22 +7,26 @@
+export interface BaseChat {
+  id: number;
+
+  name: string;
+
+-  info: undefined;
++  info: string[];
+}
+
+export interface ChatRoom extends BaseChat {
++  AddMessage(message: string): void;
++
+  GetInfo(): string;
+
+  SetInfo(info: string): void;
+
+  email: string;
+}
+
+export interface OtherChat extends BaseChat {
++  AddMessage(message: string): void;
++
+  counter: number;
+
+  permissions: string[];
+
+  role: string;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface multiple missing function and extra function 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,26 +3,30 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  GetInfo(): string;
+-
+  id: number;
+
+  name: string;
+
+-  info: undefined;
++  info: string[];
+}
+
+export interface ChatRoom extends BaseChat {
++  AddMessage(message: string): void;
++
+  SetInfo(info: string): void;
+
+  email: string;
++
++  GetInfo(): string;
+}
+
+export interface OtherChat extends BaseChat {
++  AddMessage(message: string): void;
++
+  counter: number;
+
+  permissions: string[];
+
+  role: string;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface multiple type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -7,11 +7,11 @@
+export interface BaseChat {
+  id: number;
+
+  name: string;
+
+-  info: undefined;
++  info: string[];
+}
+
+export interface ChatRoom extends BaseChat {
+  GetInfo(): string;"
+`;
+
+exports[`Comparator Extended Interface Cases > extended interface multiple type partial mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -6,24 +6,26 @@
+
+export interface BaseChat {
+  id: number;
+
+  name: string;
+-
+-  info: undefined;
+}
+
+export interface ChatRoom extends BaseChat {
+  GetInfo(): string;
+
+  SetInfo(info: string): void;
+
+  email: string;
++
++  info: string[];
+}
+
+export interface OtherChat extends BaseChat {
+  counter: number;
+
+  permissions: string[];
+
+  role: string;
++
++  info: undefined;
+}"
+`;
+
 exports[`Comparator Extended Interface Cases > extended interface removed property - union 1`] = `
 "===================================================================
 --- a/target.ts

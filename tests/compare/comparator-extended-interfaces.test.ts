@@ -8,6 +8,11 @@ const unionExtendedInterfaceCases: Record<string, ComparatorTest> = {};
 // Add forEach test to all existing cases
 Object.keys(extendedInterfaceCases).forEach((key) => {
   const testCase = extendedInterfaceCases[key];
+
+  if (!testCase.target.includes('admin: Admin;')) {
+    return;
+  }
+
   const newKey = `${key} - union`;
 
   // Create modified versions that has a union type

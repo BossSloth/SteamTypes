@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "post_setup_worktree": [
+      {
+        "command": "bun install",
+        "show_output": true
+      }
+    ]
+  }
+}
