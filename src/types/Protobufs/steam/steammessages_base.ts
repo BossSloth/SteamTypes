@@ -451,6 +451,42 @@ export interface UserContentDescriptorPreferences_ContentDescriptor {
   timestamp_added?: number;
 }
 
+export interface UserSystemInformation {
+  adapter_description?: string;
+
+  cpu_name?: string;
+
+  cpu_vendor?: string;
+
+  driver_date?: string;
+
+  driver_version?: string;
+
+  dx_deviceid?: number;
+
+  dx_driver_name?: string;
+
+  dx_driver_version?: string;
+
+  dx_vendorid?: number;
+
+  dx_video_card?: string;
+
+  gaming_device_type?: number;
+
+  manufacturer?: string;
+
+  model?: string;
+
+  num_gpu?: number;
+
+  os?: string;
+
+  system_ram?: number;
+
+  vram_size?: number;
+}
+
 export enum BanContentCheckResult {
   NotScanned = 0,
   Reset = 1,

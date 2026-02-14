@@ -73,6 +73,14 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Accessibility/MonoAudio
+   * Default: false
+   */
+  accessibility_mono_audio?: boolean;
+
+  /**
+   * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: Accessibility/ReduceMotion
    * Default: false
@@ -118,6 +126,22 @@ export interface CMsgClientSettings {
    * Default: 1
    */
   accessibility_screen_reader_volume?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\AchievementNotificationSound
+   * Default: true
+   */
+  achievement_notification_sound?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\AchievementNotificationToast
+   * Default: true
+   */
+  achievement_notification_toast?: boolean;
 
   /**
    * @Options
@@ -243,6 +267,62 @@ export interface CMsgClientSettings {
    * Default: true
    */
   cloud_enabled?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/0
+   */
+  controller_chat_radial_menu_option_0?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/1
+   */
+  controller_chat_radial_menu_option_1?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/2
+   */
+  controller_chat_radial_menu_option_2?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/3
+   */
+  controller_chat_radial_menu_option_3?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/4
+   */
+  controller_chat_radial_menu_option_4?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/5
+   */
+  controller_chat_radial_menu_option_5?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/6
+   */
+  controller_chat_radial_menu_option_6?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: SteamInput/ChatRadialMenu/7
+   */
+  controller_chat_radial_menu_option_7?: string;
 
   /**
    * @Options
@@ -516,16 +596,17 @@ export interface CMsgClientSettings {
    * @Options
    * Setting store: k_ClientSettingStore_Registry
    * Setting name: HKEY_CURRENT_USER\Software\Valve\Steam\ForceOOBE
+   * Setting pre-login: true
    */
   force_oobe?: boolean;
 
   /**
    * @Options
-   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
-   * Setting name: System/GameFrameRateReportEnabled
-   * Default: 0
+   * Setting store: k_ClientSettingStore_Registry
+   * Setting name: HKEY_CURRENT_USER\Software\Valve\Steam\ForceOOBEStage2
+   * Setting pre-login: true
    */
-  game_framerate_report_enabled?: FrameRateReportEnabled;
+  force_stage_2_oobe?: boolean;
 
   /**
    * @Options
@@ -1009,8 +1090,35 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
-   * Setting store: k_ClientSettingStore_ConfigStore_Install
-   * Setting name: Software\Valve\Steam\OOBETestModeEnabled
+   * Setting store: k_ClientSettingStore_CustomFunc
+   * Setting pre-login: true
+   * Setting description: True if OOBE stage 1 has completed or we're on a platform where we don't do OOBE
+   */
+  oobe_completed?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_CustomFunc
+   * Setting pre-login: true
+   * Setting description: True if OOBE stage 2 has completed or we're on a platform where we don't do OOBE
+   */
+  oobe_stage_2_completed?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_CustomFunc
+   * Setting pre-login: true
+   * Setting readonly: true
+   * Setting description: OOBE test mode is enabled for stage 2 either by passing -testoobe on the command line or setting the force_stage2_oobe client setting
+   */
+  oobe_stage_2_test_mode_enabled?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_CustomFunc
+   * Setting pre-login: true
+   * Setting readonly: true
+   * Setting description: OOBE test mode is enabled either by passing -testoobe on the command line or setting the force_oobe client setting
    */
   oobe_test_mode_enabled?: boolean;
 
@@ -1231,6 +1339,14 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: streaming_v2\WifiAPPairedSSID
+   * Default: ""
+   */
+  remote_play_wifi_ap_paired_ssid?: string;
+
+  /**
+   * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: streaming_v2/WifiAPShowAdvanced
    * Default: false
@@ -1404,10 +1520,25 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: system\ShowSwitchToDesktopAtLogin
+   * Setting pre-login: true
+   */
+  show_switch_to_desktop_at_login?: boolean;
+
+  /**
+   * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: Developer\ShowTimestampsInConsole
    */
   show_timestamps_in_console?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\SteamFrameWirelessAdapterPairingDialog
+   */
+  skip_steamframe_pairing_dialog?: boolean;
 
   /**
    * @Options

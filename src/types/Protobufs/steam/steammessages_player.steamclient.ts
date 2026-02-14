@@ -549,6 +549,40 @@ export interface CPlayer_GetGameAchievements_Response_Achievement {
   player_percent_unlocked?: string;
 }
 
+export interface CPlayer_GetUserStats_Request {
+  appid?: number;
+
+  crc_stats?: number;
+
+  sha_schema?: Uint8Array;
+
+  steamid?: number;
+}
+
+export interface CPlayer_GetUserStats_Response {
+  crc_stats?: number;
+
+  schema?: Uint8Array;
+
+  sha_schema?: Uint8Array;
+
+  stats?: CPlayer_GetUserStats_Response_Stats[];
+}
+
+export interface CPlayer_GetUserStats_Response_Unlock_Time {
+  achievement_bit?: number;
+
+  unlock_time?: number;
+}
+
+export interface CPlayer_GetUserStats_Response_Stats {
+  stat_id?: number;
+
+  stat_value?: number;
+
+  unlock_times?: CPlayer_GetUserStats_Response_Unlock_Time[];
+}
+
 export interface CPlayer_GetFavoriteBadge_Request {
   steamid?: number;
 }

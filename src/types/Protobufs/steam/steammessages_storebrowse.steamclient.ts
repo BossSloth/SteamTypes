@@ -22,8 +22,6 @@ export interface StoreBrowseContext {
   elanguage?: number;
 
   language?: string;
-
-  steam_realm?: number;
 }
 
 export interface StoreBrowseItemDataRequest {
@@ -281,6 +279,10 @@ export interface StoreItem_ReleaseInfo {
 
   original_steam_release_date?: number;
 
+  release_from_early_access_date?: number;
+
+  release_from_early_access_style?: number;
+
   steam_release_date?: number;
 }
 
@@ -423,13 +425,9 @@ export interface StoreItem_Trailers_Trailer {
 
   screenshot_medium?: string;
 
-  trailer_480p?: StoreItem_Trailers_VideoSource[];
-
   trailer_base_id?: number;
 
   trailer_category?: TrailerCategory;
-
-  trailer_max?: StoreItem_Trailers_VideoSource[];
 
   trailer_name?: string;
 
@@ -556,6 +554,8 @@ export interface CStoreBrowse_GetContentHubConfig_Response_ContentHubConfig {
   display_name?: string;
 
   handle?: string;
+
+  hub_description?: string;
 
   hubcategoryid?: number;
 

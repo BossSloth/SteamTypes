@@ -918,13 +918,21 @@ export interface CChatRoom_ReportMessage_Request {
 export interface CChatRoom_ReportMessage_Response { }
 
 export interface CChatRoom_ResolveReport_Request {
+  chat_group_id?: number;
+
+  kick_expiration_time?: number;
+
   reason?: ContentReportReason;
 
   resolution?: ContentReportResolution;
 
+  skip_lock?: boolean;
+
   subject_group_id?: number;
 
   subject_id?: number;
+
+  subject_type?: ContentReportSubjectType;
 }
 
 export interface CChatRoom_ResolveReport_Response { }
@@ -1302,6 +1310,9 @@ export enum ChatRoomServerMessage {
   EChatRoomServerMsg_ChatRoomTaglineChanged = 9,
   EChatRoomServerMsg_ChatRoomAvatarChanged = 10,
   EChatRoomServerMsg_AppCustom = 11,
+  EChatRoomServerMsg_JoinedMany = 12,
+  EChatRoomServerMsg_PartedMany = 13,
+  EChatRoomServerMsg_InvitedMany = 14,
 }
 
 export enum ChatRoomMessageReactionType {

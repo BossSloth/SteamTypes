@@ -132,6 +132,7 @@ export enum StartupMovieVariant {
   Generic = 1,
   DeckBlue = 2,
   DeckOrange = 3,
+  Machine = 4,
 }
 
 export enum ColorGamutLabelSet {
@@ -471,6 +472,22 @@ export enum ProvideDeckFeedbackPreference {
   No = 2,
 }
 
+export enum HardwareCompatibilityFeedbackDetails {
+  Unset = 0,
+  Performance = 1,
+  Stability = 2,
+  Legibility = 4,
+  Input = 8,
+  Other = 16,
+}
+
+export enum GameFrameRateReportingPreference {
+  Unset = 0,
+  No = 1,
+  Yes_Anonymous = 2,
+  Yes_NonAnonymous = 3,
+}
+
 export enum TouchGesture {
   None = 0,
   Touch = 1,
@@ -708,7 +725,22 @@ export enum ContentReportResolution {
   CountryRestrictionsChanged = 10,
   RemoveAndWarn = 11,
   RemoveAndBan = 12,
-  MAX = 13,
+  RemoveAndKick = 13,
+  Sanctioned = 14,
+  Sustained = 15,
+  MAX = 16,
+}
+
+export enum ContentModerationSanction {
+  Invalid = 0,
+  Deleted = 1,
+  CommunityBanned = 2,
+  HubBanned = 3,
+  TradeBanned = 4,
+  CommentHistoryDeleted = 5,
+  Relabelled = 6,
+  MarkAsSuspicious = 7,
+  MAX = 8,
 }
 
 export enum ContentReportSubjectAction {
@@ -734,6 +766,7 @@ export enum ContentReportSubjectAction {
   EscalatedForTerrorism = 19,
   Claimed = 20,
   Released = 21,
+  PrivateMessaged = 22,
 }
 
 export enum ContentReportReason {
@@ -800,7 +833,8 @@ export enum ContentReportReason {
   FakedNonConsensualMaterial = 60,
   NegativeEffectonDiscourseOrElections = 61,
   QuotesModeratedContent = 62,
-  MAX = 63,
+  CredibleThreatOfViolence = 63,
+  MAX = 64,
 }
 
 export enum ResolutionAutomation {
@@ -818,5 +852,28 @@ export enum PressOutletAction {
   Updated = 4,
   Deleted = 5,
   Undeleted = 6,
-  MAX = 7,
+  StagedAdd = 7,
+  StagedDelete = 8,
+  EnterStaging = 9,
+  ExitStaging = 10,
+  ReverseStagedAdd = 11,
+  ReverseStagedDelete = 12,
+  MAX = 13,
+}
+
+export enum PressOutletMemberPendingState {
+  Member = 0,
+  StagedDelete = 1,
+  StagedAdd = 2,
+  MAX = 3,
+}
+
+export enum CommentDeleteReason {
+  Invalid = 0,
+  User = 1,
+  ThreadOwner = 2,
+  Moderator = 3,
+  Support = 4,
+  Spam = 5,
+  AccountDeletion = 6,
 }

@@ -31,6 +31,8 @@ export interface CAppOverview {
 
   appid?: number;
 
+  bitfield_supported_languages?: number;
+
   display_name?: string;
 
   display_name_elanguage?: number;

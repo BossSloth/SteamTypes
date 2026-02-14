@@ -1,5 +1,5 @@
 import { CStorePageFilter } from './contenthubs';
-import { ProvideDeckFeedbackPreference, SteamDeckCompatibilityFeedback } from './enums';
+import { GameFrameRateReportingPreference, ProvideDeckFeedbackPreference, SteamDeckCompatibilityFeedback } from './enums';
 import { CPackageReservationStatus, UserContentDescriptorPreferences } from './steammessages_base';
 import { StoreBrowseContext, StoreBrowseItemDataRequest, StoreItem } from './steammessages_storebrowse.steamclient';
 
@@ -322,6 +322,8 @@ export interface CStore_GetStorePreferences_Request {
 export interface CStore_UserPreferences {
   additional_languages?: string;
 
+  game_frame_rate_reporting?: GameFrameRateReportingPreference;
+
   hide_store_broadcast?: boolean;
 
   platform_linux?: boolean;
@@ -471,6 +473,8 @@ export interface CSteamDeckCompatibility_SetFeedback_Request {
   appid?: number;
 
   feedback?: SteamDeckCompatibilityFeedback;
+
+  feedback_details?: number;
 }
 
 export interface CSteamDeckCompatibility_SetFeedback_Response { }
