@@ -56,6 +56,9 @@ export const SteamClientMaps: InterfaceMap[] = [
   IMap('SteamClient/System/index', 'SystemInfo', /* ts */`await SteamClient.System.GetSystemInfo()`),
   IMap('SteamClient/System/Devkit', 'Devkit', /* ts */`SteamClient.System.Devkit`),
   IMap('SteamClient/System/Display', 'Display', /* ts */`SteamClient.System.Display`),
+  IMap('SteamClient/System/Network/index', 'Network', /* ts */`SteamClient.System.Network`),
+  IMap('SteamClient/System/Network/Device', 'Device', /* ts */`SteamClient.System.Network.Device`),
   IMap('SteamClient/System/Report', 'Report', /* ts */`SteamClient.System.Report`),
   IMap('SteamClient/System/UI', 'UI', /* ts */`SteamClient.System.UI`),
+  IMap('SteamClient/System/Audio', 'Audio', /* ts */`SteamClient.System.Audio`),
 ];

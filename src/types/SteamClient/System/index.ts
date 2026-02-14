@@ -1,4 +1,5 @@
 import { JsPbMessage, OperationResponse, Unregisterable } from '../shared';
+import { Audio } from './Audio';
 import { Devkit } from './Devkit';
 import { Display } from './Display';
 import { Network } from './Network';
@@ -27,8 +28,6 @@ export interface System {
   CreateTempPath(path: string): Promise<string>;
 
   ExitFakeCaptivePortal(): unknown;
-
-  FactoryReset(): unknown;
 
   FormatStorage(force: boolean): unknown;
 
@@ -71,8 +70,6 @@ export interface System {
 
   RebootToAlternateSystemPartition(): never;
 
-  RebootToFactoryTestImage(param0: unknown): never;
-
   RegisterForAirplaneModeChanges(callback: (airplaneModeChange: AirplaneModeChange) => void): Unregisterable;
 
   RegisterForBatteryStateChanges(callback: (batteryStateChange: BatteryStateChange) => void): Unregisterable;
@@ -109,6 +106,8 @@ export interface System {
   UpdateSettings(base64: string): unknown;
 
   VideoRecordingDriverCheck(): unknown;
+
+  Audio: Audio;
 
   Devkit: Devkit;
 

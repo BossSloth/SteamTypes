@@ -24,6 +24,10 @@ const STEAM_PROTOBUF_FILES = [
   'enums_productinfo.proto',
   'steammessages_chat.steamclient.proto',
   'steammessages_clientserver_friends.proto',
+  'steamnetworkingsockets_messages.proto',
+  'steamdatagram_messages_sdr.proto',
+  'steammessages_gamenetworkingui.proto',
+  'steamnetworkingsockets_messages_certs.proto',
 ];
 
 const PROTOBUF_FILES = [...STEAM_PROTOBUF_FILES.map(file => join('steam', file))];
