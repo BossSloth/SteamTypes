@@ -75,8 +75,6 @@ export interface Input {
 
   GetControllerPreviouslySeen(): Promise<number[]>;
 
-  GetSteamControllerDongleState(): Promise<boolean>;
-
   GetTouchMenuIconsForApp(appId: number): Promise<unknown>;
 
   // "{nResult":0}"
@@ -87,6 +85,9 @@ export interface Input {
   InitControllerSounds(): unknown;
 
   InitializeControllerPersonalizationSettings(controllerIndex: number): unknown;
+
+  /** @native */
+  InitSDLFuncs(): unknown;
 
   ModalKeyboardDismissed(): void;
 
@@ -160,6 +161,9 @@ export interface Input {
    * @returns An object that can be used to unregister the callback.
    */
   RegisterForGameKeyboardMessages(callback: (gameKeyboardMessage: GameKeyboardMessage) => void): Unregisterable;
+
+  /** @native */
+  RegisterForKeyboardDeviceChanges(): unknown;
 
   RegisterForRemotePlayConfigChanges(callback: () => void): Unregisterable;
 
@@ -323,6 +327,9 @@ export interface Input {
   // f.Debug("sending to client"), this.SetEditingConfigurationValue(e, t, c.QU, (e => SteamClient.Input.SetEditingControllerConfigurationSourceMode(this.m_unControllerIndex, e)))
   SetEditingControllerConfigurationSourceMode(controllerIndex: number, param1: unknown): unknown;
 
+  /** @native */
+  SetEditingTritonCapSenseSettings(): unknown;
+
   SetGamepadKeyboardText(param0: boolean, param1: string): unknown;
 
   SetKeyboardActionset(param0: boolean, param1: boolean): unknown;
@@ -396,6 +403,9 @@ export interface Input {
   TriggerHapticPulse(controllerIndex: number, eHapticType: number, param2: number): unknown;
 
   TriggerSimpleHapticEvent(controllerIndex: number, eHapticType: number, unIntensity: number, ndBGain: number, param4: number): unknown;
+
+  /** @native */
+  TurnOffController(): unknown;
 
   UploadChangesForCloudedControllerConfigs(): unknown;
 }

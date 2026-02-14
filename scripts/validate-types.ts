@@ -258,53 +258,50 @@ async function processInterfaces(
   for (const map of maps) {
     progressBar.update(completedCount, { name: map.interfaceName });
 
+    // eslint-disable-next-line no-await-in-loop
+    const { content: interfaceContent, extractTime: currentExtractTime } = await extractInterface(map);
+
+    if (interfaceContent === null) {
+      completedCount++;
+      continue;
+    }
+
+    const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, interfaceContent);
+    }
+
+    let currentComparisonTime: number;
     try {
-      // eslint-disable-next-line no-await-in-loop
-      const { content: interfaceContent, extractTime: currentExtractTime } = await extractInterface(map);
+      const comparisonStartTime = Date.now();
+      const result = compareInterfaces(
+        `src/types/${map.file}.ts`,
+        map.interfaceName,
+        interfaceContent,
+        options.verbose,
+      );
+      currentComparisonTime = Date.now() - comparisonStartTime;
+      comparisonTime += currentComparisonTime;
 
-      if (interfaceContent === null) {
-        completedCount++;
-        continue;
-      }
-
-      const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
-      if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, interfaceContent);
-      }
-
-      let currentComparisonTime = 0;
-      try {
-        const comparisonStartTime = Date.now();
-        const result = compareInterfaces(
-          `src/types/${map.file}.ts`,
-          map.interfaceName,
-          interfaceContent,
-          options.verbose,
-        );
-        currentComparisonTime = Date.now() - comparisonStartTime;
-        comparisonTime += currentComparisonTime;
-
-        if (result !== null) {
-          diffs.push({
-            filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
-            result,
-          });
-        }
-      } catch (error) {
-        throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
-      }
-
-      if (options.timing === true) {
-        interfaceTimings.push({
-          interfaceName: map.interfaceName,
-          extractTime: currentExtractTime,
-          comparisonTime: currentComparisonTime,
+      if (result !== null) {
+        diffs.push({
+          filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
+          result,
         });
       }
-    } finally {
-      completedCount++;
-      progressBar.update(completedCount, { name: map.interfaceName });
+    } catch (error) {
+      throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
     }
+
+    if (options.timing === true) {
+      interfaceTimings.push({
+        interfaceName: map.interfaceName,
+        extractTime: currentExtractTime,
+        comparisonTime: currentComparisonTime,
+      });
+    }
+    completedCount++;
+    progressBar.update(completedCount, { name: map.interfaceName });
   }
 
   progressBar.stop();

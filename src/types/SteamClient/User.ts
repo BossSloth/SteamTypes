@@ -100,6 +100,9 @@ export interface User {
   // Hardware survey information
   RunSurvey(callback: (surveySections: SurveySection[]) => void): void;
 
+  /** @native */
+  SaveHardwareInformationToAccount(): unknown;
+
   SendSurvey(): void;
 
   SetAsyncNotificationEnabled(appId: number, enable: boolean): unknown;
@@ -111,8 +114,6 @@ export interface User {
    * @param rememberMe Whether to remember that account.
    */
   SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
-
-  SetOOBEComplete(): void;
 
   ShouldShowUserChooser(): Promise<boolean>;
 

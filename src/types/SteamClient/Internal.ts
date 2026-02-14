@@ -35,6 +35,9 @@ export interface Internal {
    * @native
    */
   SetForceDeviceScaleFactor(value: number): void;
+
+  /** @native */
+  SetRightToLeftMode(): unknown;
 }
 
 export interface DisplayScaleFactors {

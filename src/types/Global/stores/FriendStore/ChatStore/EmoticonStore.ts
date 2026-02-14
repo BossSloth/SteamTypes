@@ -59,7 +59,7 @@ export interface EmoticonStore {
 
   UpdateEmoticonList(): void;
 
-  emoticon_list: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[];
+  emoticon_list: Emoticon_list[];
 
   flair_list: unknown[];
 
@@ -73,11 +73,11 @@ export interface EmoticonStore {
 
   m_rgEffects: RgEffects[];
 
-  m_rgEmoticons: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[];
+  m_rgEmoticons: Emoticon_list[];
 
   m_rgFlairs: unknown[];
 
-  m_rgRecentEmoticons: (Emoticon_list2 | Emoticon_list3)[];
+  m_rgRecentEmoticons: Emoticon_list[];
 
   m_rgRecentStickers: unknown[];
 
@@ -85,51 +85,29 @@ export interface EmoticonStore {
 
   m_rtLastStickerOrEffect: number;
 
-  m_rtMostRecentEmoticon: number;
+  m_rtMostRecentEmoticon: number | undefined;
 
   m_setEmoticonOwned: Set<string>;
 
-  recent_emoticons: (Emoticon_list2 | RgEffects)[];
+  recent_emoticons: Emoticon_list[];
 
   recent_stickers: unknown[];
 }
 
 export interface Emoticon_list {
-  appid: number;
-
-  name: string;
-
-  name_normalized?: string;
-}
-
-export interface Emoticon_list2 {
-  appid: number;
-
-  last_used: number;
-
-  name: string;
-
-  name_normalized?: string;
-
-  use_count: number;
-}
-
-export interface Emoticon_list3 {
-  appid: number;
+  appid?: number;
 
   count?: number;
 
-  name: string;
-
-  time_received: number;
-}
-
-export interface Emoticon_list4 {
-  last_used: number;
+  last_used?: number;
 
   name: string;
 
-  use_count: number;
+  name_normalized?: string;
+
+  time_received?: number;
+
+  use_count?: number;
 }
 
 export interface RgEffects {

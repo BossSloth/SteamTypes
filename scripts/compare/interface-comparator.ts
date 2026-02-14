@@ -46,7 +46,7 @@ function processInterfaceQueue(): void {
     const { targetInterface, sourceInterface } = interfaceQueue.shift()!;
 
     // Check if interface still exists
-    if (targetInterface.wasForgotten()) {
+    if (targetInterface.wasForgotten() || sourceInterface.wasForgotten()) {
       continue;
     }
 

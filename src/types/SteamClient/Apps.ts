@@ -295,6 +295,9 @@ export interface Apps {
   // unknown.strName
   JoinAppContentBetaByPassword(appId: number, accessCode: unknown): Promise<unknown>;
 
+  /** @native */
+  LaunchNonSteamApp(): unknown;
+
   ListFlatpakApps(): Promise<unknown>;
 
   /**
@@ -441,6 +444,9 @@ export interface Apps {
    */
   RegisterForShowMarketingMessageDialog(): Unregisterable;
 
+  /** @native */
+  RegisterForShowPendingGiftsDialog(): unknown;
+
   /**
    * Registers a callback function to be notified when workshop items are added or removed from a Steam application.
    * @param callback The callback function to be called.
@@ -464,6 +470,9 @@ export interface Apps {
   ReportLibraryAssetCacheMiss(appId: number, assetType: ELibraryAssetType): void;
 
   ReportMarketingMessageDialogShown(): void;
+
+  /** @native */
+  ReportPendingGiftsDialogShown(): unknown;
 
   RequestIconDataForApp(appId: number): unknown;
 
@@ -567,6 +576,9 @@ export interface Apps {
    * @returns A Promise that resolves when the custom logo position is successfully set.
    */
   SetCustomLogoPositionForApp(appId: number, details: string): Promise<void>;
+
+  /** @native */
+  SetDisableSteamDeckAutoDetection(): unknown;
 
   /**
    * Sets the enabled state for downloadable content (DLC) of a specific app.

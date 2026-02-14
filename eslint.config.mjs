@@ -226,4 +226,11 @@ export default defineConfig(
       'customRules/no-deep-relative-imports': 'off',
     },
   },
+  {
+    files: ['src/types/Protobufs/**'],
+    rules: {
+      'customRules/min-enum-members': 'off',
+      'perfectionist/sort-interfaces': 'off',
+    },
+  },
 );

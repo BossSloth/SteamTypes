@@ -62,6 +62,9 @@ export interface RemotePlay {
    */
   MoveControllerToSlot(): unknown;
 
+  /** @native */
+  PairViaWifiAP(): unknown;
+
   /**
    * @params unknown
    */
@@ -227,6 +230,9 @@ export interface RemotePlay {
   StopStreamingSessionAndSuspendDevice(): unknown;
 
   UnlockH264(): void;
+
+  /** @native */
+  UnpairLocalWifiAP(): unknown;
 
   /** @native */
   UnpairRemoteClient(): unknown;

@@ -34,8 +34,6 @@ export interface Settings {
    */
   GetMonitorInfo(): Promise<ArrayBuffer>;
 
-  GetOOBETestMode(): Promise<boolean>;
-
   GetRegisteredSteamDeck(): Promise<RegisteredSteamDeck>;
 
   // Returns the current timezone
@@ -102,8 +100,6 @@ export interface Settings {
    * @params unknown
    */
   SetMicTestMode(): unknown;
-
-  SetOOBETestMode(value: boolean): void;
 
   SetPreferredMonitor(monitor: string): void;
 
