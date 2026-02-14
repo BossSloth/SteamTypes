@@ -16,8 +16,6 @@ export interface App {
 
   BIsInFamilyGroup(): boolean;
 
-  BIsInOOBE(): boolean;
-
   BIsOfflineMode(): CurrentUser['bIsOfflineMode'];
 
   BMustShowSupportAlertDialog(): CurrentUser['bSupportPopupMessage'];

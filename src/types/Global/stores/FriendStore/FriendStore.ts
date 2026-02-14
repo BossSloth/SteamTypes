@@ -180,7 +180,7 @@ export interface SteamFriend {
 
   m_rgPersonaNameHistory: string[];
 
-  m_strGameNameNormalized: string;
+  m_strGameNameNormalized?: string;
 
   m_strNickname?: string;
 
@@ -1078,7 +1078,7 @@ export interface MapClans {
 
   m_strClanTag: string;
 
-  m_ulChatRoomGroupID?: never;
+  m_ulChatRoomGroupID?: string;
 
   m_unOGGAppID?: never;
 
@@ -1212,6 +1212,8 @@ export interface MapGameGroups extends ChatGroupBase {
 }
 
 export interface Data {
+  toJSON(): { setApps: unknown[]; };
+
   setApps: Set<number>;
 }
 

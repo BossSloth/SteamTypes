@@ -122,7 +122,7 @@ export interface ConnectionManager {
 
   m_nWallClockDriftMS: number;
 
-  m_onConnect?: Promise<unknown>;
+  m_onConnect?: Promise<unknown> | undefined;
 
   m_rtReconnectThrottleExpiration: number;
 

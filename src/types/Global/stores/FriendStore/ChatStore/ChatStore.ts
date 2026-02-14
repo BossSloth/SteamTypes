@@ -1030,7 +1030,7 @@ export interface ChatRoomListBase {
 
   chat_message_blocks: Chat_message_blocks;
 
-  chat_messages: never;
+  chat_messages: Chat_messages[];
 
   ChatStore: ChatStore;
 
@@ -1072,11 +1072,11 @@ export interface ChatRoomListBase {
 
   m_nLoadingHistoryInProgressCount: number;
 
-  m_oldestMessageOrdinal?: undefined;
+  m_oldestMessageOrdinal?: number;
 
-  m_oldestMessageTime?: undefined;
+  m_oldestMessageTime?: number;
 
-  m_rgChatMessages: never;
+  m_rgChatMessages: Chat_messages[];
 
   m_rgChatViews: never;
 
@@ -1493,11 +1493,11 @@ export interface RgMessageBlocks {
 
   m_nextBlock?: never;
 
-  m_rgMessages: never;
+  m_rgMessages: Chat_messages[];
 
-  m_rtMidnightBeforeBlock?: never;
+  m_rtMidnightBeforeBlock?: number;
 
-  messages: never;
+  messages: Chat_messages[];
 }
 
 export interface MapRoomEffectQueue {
@@ -1546,4 +1546,97 @@ export interface LastChatLinkInfo {
   rtExpires: number;
 
   strInviteURL: string;
+}
+
+export interface Chat_messages {
+  BHasServerAcknowledged(): boolean;
+
+  BIsInvite(): boolean;
+
+  BIsLocalEcho(): boolean;
+
+  BIsNewerThan(e: unknown): boolean;
+
+  BIsOlderThan(e: unknown): boolean;
+
+  BIsServerMessage(): boolean;
+
+  GetSlashCommand(): unknown;
+
+  HandleSpecialMessage(e: unknown): unknown;
+
+  HasUserContent(): boolean;
+
+  OnAnimationEnd(): void;
+
+  UniqueKey(): unknown;
+
+  UpdateReaction(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eAnimationState: EAnimationState;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eDeleteState: EDeleteState;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eErrorSending: EErrorSending;
+
+  eServerMsgType: undefined;
+
+  m_bNoUserContent: undefined;
+
+  m_mentions: undefined;
+
+  m_rgReactions: unknown[];
+
+  m_strSlashCommand: null;
+
+  Mentions: object;
+
+  reactions: unknown[];
+
+  rtTimestamp: number;
+
+  strMessage: string;
+
+  strMessageInternal: string;
+
+  strServerMsgAppCustomLocalized: undefined;
+
+  strServerMsgParam: undefined;
+
+  unAccountID: number;
+
+  unOrdinal: number;
+
+  unServerMsgParamAccountID: undefined;
+}
+
+export enum EAnimationState {
+  None,
+  Animating,
+}
+
+export enum EDeleteState {
+  None,
+  Deleting,
+  Deleted,
+}
+
+export enum EErrorSending {
+  None,
+  Generic,
+  NotFriends,
+  NoChatPermissionInGroup,
+  RateLimitExceeded,
 }

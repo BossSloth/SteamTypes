@@ -78,6 +78,8 @@ declare global {
   let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
   let NotificationStore: unknown;
+  let onYouTubeIframeAPIReady: unknown;
+  let onYTReady: unknown;
   let openDatabase: unknown;
   let overlayStore: unknown;
   let partnerEventStore: unknown;
@@ -85,6 +87,7 @@ declare global {
   let RemotePlayStore_SteamUI: unknown;
   let ResetNewContentRollup: unknown;
   let screenshotStore: unknown;
+  let scriptUrl: unknown;
   let searchstore: SearchStore;
   let securitystore: unknown;
   let serverBrowserStore: unknown;
@@ -110,6 +113,7 @@ declare global {
   let SystemReportStore: unknown;
   let tempNavStore: NavigationStore;
   let trendingStore: unknown;
+  let ttPolicy: unknown;
   let uiBroadcastWatchStore: unknown;
   let uiStore: unknown;
   let UpdateStore: unknown;
@@ -117,6 +121,8 @@ declare global {
   let userProfileStore: unknown;
   let vrAudioSettingsStore: unknown;
   let workshopStore: unknown;
+  let YT: unknown;
+  let YTConfig: unknown;
 
   interface Window {
     App: App;
@@ -178,6 +184,8 @@ declare global {
     MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
     NotificationStore: unknown;
+    onYouTubeIframeAPIReady: unknown;
+    onYTReady: unknown;
     openDatabase: unknown;
     overlayStore: unknown;
     partnerEventStore: unknown;
@@ -185,6 +193,7 @@ declare global {
     RemotePlayStore_SteamUI: unknown;
     ResetNewContentRollup: unknown;
     screenshotStore: unknown;
+    scriptUrl: unknown;
     searchstore: SearchStore;
     securitystore: unknown;
     serverBrowserStore: unknown;
@@ -210,6 +219,7 @@ declare global {
     SystemReportStore: unknown;
     tempNavStore: NavigationStore;
     trendingStore: unknown;
+    ttPolicy: unknown;
     uiBroadcastWatchStore: unknown;
     uiStore: unknown;
     UpdateStore: unknown;
@@ -217,5 +227,7 @@ declare global {
     userProfileStore: unknown;
     vrAudioSettingsStore: unknown;
     workshopStore: unknown;
+    YT: unknown;
+    YTConfig: unknown;
   }
 }
