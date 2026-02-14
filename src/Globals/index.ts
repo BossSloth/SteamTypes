@@ -2,6 +2,7 @@
 import { LocalizationManager } from 'Global/managers/LocalizationManager';
 import { AppStore } from 'Global/stores/AppStore';
 import { FriendStore } from 'Global/stores/FriendStore/FriendStore';
+import { NavigationStore } from 'Global/stores/NavigationStore';
 import { StoreItemCache } from 'Global/stores/StoreItemCache';
 import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
@@ -107,6 +108,7 @@ declare global {
   let SystemDisplayManagerStore: unknown;
   let SystemNetworkStore: unknown;
   let SystemReportStore: unknown;
+  let tempNavStore: NavigationStore;
   let trendingStore: unknown;
   let uiBroadcastWatchStore: unknown;
   let uiStore: unknown;
@@ -206,6 +208,7 @@ declare global {
     SystemDisplayManagerStore: unknown;
     SystemNetworkStore: unknown;
     SystemReportStore: unknown;
+    tempNavStore: NavigationStore;
     trendingStore: unknown;
     uiBroadcastWatchStore: unknown;
     uiStore: unknown;

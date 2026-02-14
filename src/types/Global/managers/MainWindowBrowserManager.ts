@@ -161,6 +161,8 @@ export interface MainWindowBrowserManager {
 
   /**
    * The router history instance
+   *
+   * Only works in desktop mode (not in Big Picture)
    */
   m_history: History;
 
