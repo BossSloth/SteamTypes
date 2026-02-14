@@ -1,3 +1,23 @@
+# [2.1.0](https://github.com/BossSloth/SteamTypes/compare/v2.0.0...v2.1.0) (2026-02-14)
+
+
+### Bug Fixes
+
+* **types:** correct Destroy parameter type from BrowserViewInit to BrowserViewPopup ([60270ab](https://github.com/BossSloth/SteamTypes/commit/60270ab3924b3d80ce1da594efb72a7730c6a0be))
+
+
+### Features
+
+* added types for `StoreItemCache` ([b85b86d](https://github.com/BossSloth/SteamTypes/commit/b85b86d7fc55e56a8b6191087d320cbcbc1b9f78))
+* **compare:** implement intelligent handling of synthetic extended base interfaces during comparison ([f714e55](https://github.com/BossSloth/SteamTypes/commit/f714e55b82f00c6447bafd411e72c59bab7696ce))
+* **protobufs:** Updated and regenerated protobuf types ([612e7c8](https://github.com/BossSloth/SteamTypes/commit/612e7c87cc648b084425094373edf777df97e51d))
+* **types:** add LocalizationManager types ([52d0fe3](https://github.com/BossSloth/SteamTypes/commit/52d0fe3f10e4757f65daf9b766e368dda754eb29))
+* **types:** add NavigationStore global type ([37ca23c](https://github.com/BossSloth/SteamTypes/commit/37ca23c75fd4de15f3eef97920a34a7ab662dcce))
+* **types:** add SteamClient.System.Network, SteamClient.System.Audio types and networking protobufs ([783d995](https://github.com/BossSloth/SteamTypes/commit/783d995de918598b7c4767274f2c5737f55a68b0))
+* **types:** type ChatStore message types and other small changes ([b8af988](https://github.com/BossSloth/SteamTypes/commit/b8af988a9a565c7d69d77e4989edba4dbbd00176))
+* **types:** Update SteamClient types and improve EmoticonStore types ([0a4254c](https://github.com/BossSloth/SteamTypes/commit/0a4254c83c35848470d9e04c566c6bc39e76e7fd))
+* update all types for steam version 1769025840 ([b3aee36](https://github.com/BossSloth/SteamTypes/commit/b3aee36a29519496f5e0fc5847c36872b6b57b4a))
+
 # [2.0.0](https://github.com/BossSloth/SteamTypes/compare/v1.0.2...v2.0.0) (2025-12-12)
 
 
