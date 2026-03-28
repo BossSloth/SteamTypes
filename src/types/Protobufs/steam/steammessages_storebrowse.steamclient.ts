@@ -121,6 +121,8 @@ export interface StoreItem {
 
   platforms?: StoreItem_Platforms;
 
+  purchase_description_bbcode?: string;
+
   purchase_options?: StoreItem_PurchaseOption[];
 
   related_items?: StoreItem_RelatedItems;
@@ -168,6 +170,8 @@ export interface StoreItem_RelatedItems {
 
 export interface StoreItem_IncludedItems {
   included_apps?: StoreItem[];
+
+  included_bundles?: StoreItem[];
 
   included_packages?: StoreItem[];
 }

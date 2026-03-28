@@ -464,8 +464,6 @@ export interface UserSystemInformation {
 
   dx_deviceid?: number;
 
-  dx_driver_name?: string;
-
   dx_driver_version?: string;
 
   dx_vendorid?: number;

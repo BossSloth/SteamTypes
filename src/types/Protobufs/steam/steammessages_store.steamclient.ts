@@ -322,6 +322,10 @@ export interface CStore_GetStorePreferences_Request {
 export interface CStore_UserPreferences {
   additional_languages?: string;
 
+  disable_animated_marketing?: boolean;
+
+  disable_microtrailers?: boolean;
+
   game_frame_rate_reporting?: GameFrameRateReportingPreference;
 
   hide_store_broadcast?: boolean;

@@ -258,6 +258,12 @@ export interface CMsgClientSettings {
    * @Options
    * Setting store: k_ClientSettingStore_CustomFunc
    */
+  browserview_underlays_allowed?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_CustomFunc
+   */
   cef_remote_debugging_enabled?: boolean;
 
   /**
@@ -569,6 +575,12 @@ export interface CMsgClientSettings {
    * Setting store: k_ClientSettingStore_CustomFunc
    */
   enable_shader_precache?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_CustomFunc
+   */
+  enable_steamrt64_client?: boolean;
 
   /**
    * @Options
@@ -1814,6 +1826,22 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\IdleScreensaverACSeconds
+   * Default: 300
+   */
+  system_idle_screensaver_ac_sec?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Software\Valve\Steam\System\IdleScreensaverBatterySeconds
+   * Default: 0
+   */
+  system_idle_screensaver_battery_sec?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: Software\Valve\Steam\System\IdleSuspendACSeconds
    * Default: 3600
    */
@@ -1863,6 +1891,22 @@ export interface CMsgClientSettings {
    * Setting store: k_ClientSettingStore_CustomFunc
    */
   voice_speaker_output_gain?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Audio/Spatialize
+   * Default: false
+   */
+  vr_audio_spatialize?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Audio/SpatializeSurround
+   * Default: false
+   */
+  vr_audio_spatialize_surround?: boolean;
 
   /**
    * @Options

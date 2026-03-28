@@ -728,7 +728,8 @@ export enum ContentReportResolution {
   RemoveAndKick = 13,
   Sanctioned = 14,
   Sustained = 15,
-  MAX = 16,
+  Broken = 16,
+  MAX = 17,
 }
 
 export enum ContentModerationSanction {
@@ -740,7 +741,10 @@ export enum ContentModerationSanction {
   CommentHistoryDeleted = 5,
   Relabelled = 6,
   MarkAsSuspicious = 7,
-  MAX = 8,
+  Warned = 8,
+  KickedFromGroup = 9,
+  HarassmentBanned = 10,
+  MAX = 11,
 }
 
 export enum ContentReportSubjectAction {

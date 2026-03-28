@@ -895,7 +895,7 @@ export interface CMsgShortcutAppIds {
 export interface CMsgMonitorInfo {
   monitors?: CMsgMonitorInfo_MonitorInfo[];
 
-  selected_display_name: string;
+  selected_device_name: string;
 }
 
 export interface CMsgMonitorInfo_MonitorInfo {
