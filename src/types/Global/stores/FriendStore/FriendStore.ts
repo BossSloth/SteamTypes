@@ -583,6 +583,8 @@ export interface Persona {
 
   GetOfflineStatusUpdateRate(): number;
 
+  GetSteamIDAsString(): unknown;
+
   HasCurrentGameRichPresence(): unknown;
 
   HasRichPresenceForViewGameInfo(): boolean;
@@ -1212,8 +1214,6 @@ export interface MapGameGroups extends ChatGroupBase {
 }
 
 export interface Data {
-  toJSON(): { setApps: unknown[]; };
-
   setApps: Set<number>;
 }
 
@@ -1232,7 +1232,7 @@ export interface EquippedProfileItems {
 
   profile_background: (ColorProfileAvatar | ProfileAvatar);
 
-  profile_modifier: ColorProfileAvatar;
+  profile_modifier: (ColorProfileAvatar | ProfileAvatar);
 
   steam_deck_keyboard_skin: (ColorProfileAvatar | ProfileAvatar);
 }

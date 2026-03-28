@@ -310,6 +310,11 @@ function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): bo
     return true;
   }
 
+  if (Node.isUnionTypeNode(sourceNode)) {
+    return sourceNode.getTypeNodes().every(member =>
+      Node.isArrayTypeNode(member) && compareTypes(targetArray.getElementTypeNode(), member.getElementTypeNode()));
+  }
+
   if (!Node.isArrayTypeNode(sourceNode)) {
     return false;
   }

@@ -52,6 +52,9 @@ export interface User {
 
   GoOnline(): void;
 
+  /** @native */
+  OnCloseSaveHardwareDialog(): unknown;
+
   OptOutOfSurvey(): void;
 
   PrepareForSystemSuspend(): unknown;
@@ -84,6 +87,9 @@ export interface User {
 
   RegisterForShutdownState(): Unregisterable;
 
+  /** @native */
+  RegisterShowSaveHardwareDialog(): unknown;
+
   /**
    * Removes an account from remembered users.
    * @param accountName The account to remove.
@@ -100,9 +106,6 @@ export interface User {
   // Hardware survey information
   RunSurvey(callback: (surveySections: SurveySection[]) => void): void;
 
-  /** @native */
-  SaveHardwareInformationToAccount(): unknown;
-
   SendSurvey(): void;
 
   SetAsyncNotificationEnabled(appId: number, enable: boolean): unknown;
@@ -116,6 +119,9 @@ export interface User {
   SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
 
   ShouldShowUserChooser(): Promise<boolean>;
+
+  /** @native */
+  ShowSaveHardwareDialog(): unknown;
 
   /**
    * Signs out and restarts Steam.

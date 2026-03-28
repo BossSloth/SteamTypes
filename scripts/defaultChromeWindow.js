@@ -264,6 +264,9 @@ const millenniumWindowProperties = [
   "__ROUTER_HOOK_INSTANCE",
   "__TOASTER_INSTANCE",
   "process",
+  "__millennium_plugin_config_changed__",
+  "__private_millennium_ffi_do_not_use__",
+  "MILLENNIUM_PRIVATE_INTERNAL_FOREIGN_FUNCTION_INTERFACE_DO_NOT_USE"
 ];
 
 const unwantedWindowProperties = [
@@ -278,9 +281,16 @@ const unwantedWindowProperties = [
   "fillAppData",
   "checkConversionTime",
   "webpackChunksteamui",
+  "YT",
+  "YTConfig",
+  "ttPolicy",
 ];
 
-const windowProperties = [...defaultChromeWindowProperties, ...millenniumWindowProperties, ...unwantedWindowProperties];
+const windowProperties = [
+  ...defaultChromeWindowProperties,
+  ...millenniumWindowProperties,
+  ...unwantedWindowProperties,
+];
 
 
 const keys1 = new Set(Object.keys(window));

@@ -354,4 +354,60 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'merge multiple array into one': {
+    interfaceName: 'Data',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Data {
+        clientData: ClientData[];
+      }
+
+      export interface ClientData {
+        active_beta?: string;
+
+        client_name: string;
+
+        clientid: string;
+
+        display_status: number;
+
+        installed?: boolean;
+
+        is_available_on_current_platform?: boolean;
+
+        status_percentage?: number;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Data {
+        clientData: (ClientData[] | ClientData2[]);
+      }
+
+      export interface ClientData {
+        client_name: string;
+
+        clientid: string;
+
+        display_status: number;
+
+        installed?: boolean;
+
+        is_available_on_current_platform?: boolean;
+
+        status_percentage?: number;
+      }
+
+      export interface ClientData2 {
+        client_name: string;
+
+        clientid: string;
+
+        display_status: number;
+
+        installed: boolean;
+
+        status_percentage: number;
+      }
+    `,
+  },
 };

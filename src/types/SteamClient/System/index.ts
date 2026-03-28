@@ -98,11 +98,6 @@ export interface System {
    */
   SuspendPC(): unknown;
 
-  /**
-   * Switches to desktop mode.
-   */
-  SwitchToDesktop(): unknown;
-
   UpdateSettings(base64: string): unknown;
 
   VideoRecordingDriverCheck(): unknown;

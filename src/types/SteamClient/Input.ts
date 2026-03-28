@@ -86,9 +86,6 @@ export interface Input {
 
   InitializeControllerPersonalizationSettings(controllerIndex: number): unknown;
 
-  /** @native */
-  InitSDLFuncs(): unknown;
-
   ModalKeyboardDismissed(): void;
 
   /**
@@ -150,8 +147,6 @@ export interface Input {
    * @returns An object that can be used to unregister the callback.
    */
   RegisterForControllerInputMessages(callback: (controllerInputMessages: ControllerInputMessage[]) => void): Unregisterable;
-
-  RegisterForControllerListChanges(callback: (controllerListChanges: ControllerInfo[]) => void): Unregisterable;
 
   RegisterForDualSenseUpdateNotification(callback: (m_strDualSenseUpdateProduct: string) => void): Unregisterable;
 
@@ -633,87 +628,6 @@ export interface ControllerInputMessage {
   nA: number;
 
   nC: number;
-}
-
-export interface ActiveAccount {
-  strActiveAccountID: string;
-
-  strAvatarHash: string;
-
-  strName: string;
-}
-
-export interface ControllerInfo {
-  ActiveAccount: ActiveAccount | undefined;
-
-  bHaptics: boolean;
-
-  bNintendoLayout: boolean;
-
-  bRemoteDevice: boolean;
-
-  bSWAntiDrift: boolean;
-
-  bUseReversedLayout: boolean;
-
-  bWireless: boolean;
-
-  eControllerType: EControllerType;
-
-  eRumblePreference: EControllerRumbleSetting;
-
-  flAccelerometerStationaryTolerance: number;
-
-  flGyroStationaryTolerance: number;
-
-  flLEDBrightness: number;
-
-  flLEDSaturation: number;
-
-  flLPadPressureCurve: number;
-
-  flRPadPressureCurve: number;
-
-  nControllerIndex: number;
-
-  nLEDColorB: number;
-
-  nLEDColorG: number;
-
-  nLEDColorR: number;
-
-  nLHapticStrength: number;
-
-  nLStickDeadzone: number;
-
-  nRHapticStrength: number;
-
-  nRStickDeadzone: number;
-
-  nTurnOffSound: number;
-
-  nTurnOnSound: number;
-
-  nXInputIndex: number;
-
-  strChipID: string;
-
-  strFirmwareBuildTime: string;
-
-  strName: string;
-
-  strSerialNumber: string;
-
-  unCapabilities: number;
-
-  unProductID: number;
-
-  unUniqueID: number;
-
-  unVendorID: number;
-
-  // TODO: The type for this property might need to be more specific based on the actual data structure
-  vecAltAccounts: unknown[];
 }
 
 export enum EControllerType {

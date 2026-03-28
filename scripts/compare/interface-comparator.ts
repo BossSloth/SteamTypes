@@ -668,7 +668,7 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
 }
 
 function removeDuplicateUnionTypes(sourceText: string): string {
-  const regex = /\b(\w+)(\s+\|\s+\1\b)+/g;
+  const regex = /\b(\w+(?:\[\])*)(\s+\|\s+\1(?!\w))+/g;
   const regexWithBrackets = new RegExp(`\\(${regex.source}\\)`, 'g');
 
   return sourceText.replace(regexWithBrackets, '$1').replace(regex, '$1');

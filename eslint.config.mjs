@@ -16,9 +16,6 @@ export default defineConfig(
     'coverage/*',
     'node_modules/*',
     '**/*.js',
-    'scripts/convert/test-output/*',
-    'scripts/convert/test-cases/functions/*',
-    'scripts/convert/test-cases/properties/*',
   ]),
   {
     languageOptions: {

@@ -2002,9 +2002,15 @@ export interface MapTokens {
 
   Audio_Channels_5Point1: string;
 
+  Audio_Channels_5Point1_Testing: string;
+
   Audio_Channels_7Point1: string;
 
+  Audio_Channels_7Point1_Testing: string;
+
   Audio_Channels_Stereo: string;
+
+  Audio_Channels_Stereo_Testing: string;
 
   Audio_DeviceAux: string;
 
@@ -2038,6 +2044,10 @@ export interface MapTokens {
 
   Audio_Setting_Enable_UI_Sounds: string;
 
+  Audio_Setting_Use_Bluetooth_Mic: string;
+
+  Audio_Setting_Use_Bluetooth_Mic_Hint: string;
+
   Audio_SpeakerConfiguration: string;
 
   Audio_SpeakerTuning: string;
@@ -2063,6 +2073,16 @@ export interface MapTokens {
   Audio_VRMicrophone_Unmute: string;
 
   Audio_VRMicrophone_Volume: string;
+
+  AudioChannelsScreen_Error: string;
+
+  AudioChannelsScreen_Note: string;
+
+  AudioChannelsScreen_PlayAudio: string;
+
+  AudioChannelsScreen_Query: string;
+
+  AudioDeviceScreen_Query: string;
 
   BackupApps_BackingUpFiles: string;
 
@@ -3032,6 +3052,22 @@ export interface MapTokens {
 
   ControllerBinding_AccelerationMouseJoystick_Off_Description: string;
 
+  ControllerBinding_AccelerationStyle_GyroJoystick: string;
+
+  ControllerBinding_AccelerationStyle_GyroJoystick_AxialAcceleration_Description: string;
+
+  ControllerBinding_AccelerationStyle_GyroJoystick_CircularAcceleration_Description: string;
+
+  ControllerBinding_AccelerationStyle_GyroJoystick_Description: string;
+
+  ControllerBinding_AccelerationStyle_JoystickMouse: string;
+
+  ControllerBinding_AccelerationStyle_JoystickMouse_AxialAcceleration_Description: string;
+
+  ControllerBinding_AccelerationStyle_JoystickMouse_CircularAcceleration_Description: string;
+
+  ControllerBinding_AccelerationStyle_JoystickMouse_Description: string;
+
   ControllerBinding_AccelerationStyle_JoystickMove: string;
 
   ControllerBinding_AccelerationStyle_JoystickMove_AxialAcceleration_Description: string;
@@ -3372,6 +3408,10 @@ export interface MapTokens {
 
   ControllerBinding_CameraTurnToFaceDirection_UseLastDirectionIfDeadzoned: string;
 
+  ControllerBinding_Chord_AnyOrAll: string;
+
+  ControllerBinding_Chord_AnyOrAll_Description: string;
+
   ControllerBinding_Chord_Binding: string;
 
   ControllerBinding_Chord_Binding_Description: string;
@@ -3455,6 +3495,10 @@ export interface MapTokens {
   ControllerBinding_Chord_ChordButton_Y: string;
 
   ControllerBinding_Chord_ChordButton_Y_Description: string;
+
+  ControllerBinding_Chord_ChordButtonMask: string;
+
+  ControllerBinding_Chord_ChordButtonMask_Description: string;
 
   ControllerBinding_Chord_CycleBindings: string;
 
@@ -8764,6 +8808,8 @@ export interface MapTokens {
 
   ControllerSetting_GyroButtonOn: string;
 
+  ControllerSettings_ManagePair: string;
+
   ControllerSettings_PSSupport: string;
 
   ControllerSettings_PSSupport_Disabled: string;
@@ -8811,6 +8857,8 @@ export interface MapTokens {
   ControllerSettingValue_AxisY: string;
 
   ControllerSettingValue_CenterTrackpad: string;
+
+  ControllerSettingValue_ChordMaskButtons_NoneSelected: string;
 
   ControllerSettingValue_Circle: string;
 
@@ -10792,6 +10840,8 @@ export interface MapTokens {
 
   GameList_Category_Hidden_Tooltip: string;
 
+  GameList_Category_ReadyToPlay: string;
+
   GameList_Category_RemotePlay: string;
 
   GameList_Category_SharedLibraries: string;
@@ -11972,6 +12022,10 @@ export interface MapTokens {
 
   Library_FilterCollection_VRSubtabs_All: string;
 
+  Library_FilterCollection_VRSubtabs_InstalledLocally: string;
+
+  Library_FilterCollection_VRSubtabs_InstalledRemotely: string;
+
   Library_FilterCollection_VRSubtabs_NonVR: string;
 
   Library_FilterCollection_VRSubtabs_VR: string;
@@ -12203,6 +12257,8 @@ export interface MapTokens {
   LibraryTab_PS4ControllerGames: string;
 
   LibraryTab_PS5ControllerGames: string;
+
+  LibraryTab_ReadyToPlay: string;
 
   LibraryTab_RecentlyPlayed: string;
 
@@ -12984,6 +13040,8 @@ export interface MapTokens {
 
   NotificationsSettings_DisableAll: string;
 
+  NotificationsSettings_Heading_Client: string;
+
   NotificationsSettings_Heading_Friends: string;
 
   NotificationsSettings_Heading_FriendsDescription: string;
@@ -13008,6 +13066,8 @@ export interface MapTokens {
 
   NotificationsSettings_Notification_GroupEvent: string;
 
+  NotificationsSettings_Notification_UnlockAchievement: string;
+
   NotificationsSettings_PlaySoundOnToast: string;
 
   NotificationsSettings_ShowAlways: string;
@@ -13018,29 +13078,41 @@ export interface MapTokens {
 
   NotificationsSettings_ShowWhenNotInGame: string;
 
+  OOBE_HardwareUpdater_Error: string;
+
+  OOBE_HardwareUpdater_Error_Later: string;
+
+  OOBE_HardwareUpdater_NoController: string;
+
+  OOBE_HardwareUpdater_PlugInController: string;
+
+  OOBE_HardwareUpdater_UpdatingController: string;
+
   OOBE_KeepScreenReaderOn_Header: string;
 
   OOBE_KeepScreenReaderOn_No: string;
 
   OOBE_KeepScreenReaderOn_Yes: string;
 
-  OOBE_PairIbex_PairToMachine_Success1: string;
+  OOBE_PairSteamController_Explainer_KnownHardware: string;
 
-  OOBE_PairIbex_PairToMachine_Success2: string;
+  OOBE_PairSteamController_Explainer_UnknownHardware: string;
 
-  OOBE_PairIbex_PairToPuck_Success1: string;
+  OOBE_PairSteamController_Failure1: string;
 
-  OOBE_PairIbex_SuccessFooter: string;
+  OOBE_PairSteamController_Failure2: string;
 
-  OOBE_PairIbex_Wired_Failure1: string;
+  OOBE_PairSteamController_Pair: string;
 
-  OOBE_PairIbex_Wired_Failure2: string;
+  OOBE_PairSteamController_Retry: string;
 
-  OOBE_PairIbex_WiredPairToMachine_Action1: string;
+  OOBE_PairSteamController_Skip: string;
 
-  OOBE_PairIbex_WiredPairToMachine_Action2: string;
+  OOBE_PairSteamController_Success1_KnownHardware: string;
 
-  OOBE_PairIbex_WiredPairToPuck_Action1: string;
+  OOBE_PairSteamController_Success1_UnknownHardware: string;
+
+  OOBE_PairSteamController_Success2: string;
 
   OOBE_Plug_In_Controller_Alt_Text: string;
 
@@ -13164,17 +13236,11 @@ export interface MapTokens {
 
   OverlayNetworkStatus_ViaRelay: string;
 
-  PairControllerScreen_ControllerTypeExplainer: string;
+  PairControllerScreen_Explainer: string;
 
-  PairControllerScreen_Generic_Text1: string;
+  PairControllerScreen_Explainer_NoImage: string;
 
-  PairControllerScreen_GenericExplainer: string;
-
-  PairControllerScreen_Ibex_Text1: string;
-
-  PairControllerScreen_Ibex_Text2: string;
-
-  PairControllerScreen_Pair: string;
+  PairControllerScreen_Explainer_Plural: string;
 
   PairControllerScreen_Skip: string;
 
@@ -13648,7 +13714,13 @@ export interface MapTokens {
 
   QuickAccess_Tab_Settings_Section_Brightness_Title: string;
 
+  QuickAccess_Tab_Settings_Section_Controller_Bluetooth: string;
+
+  QuickAccess_Tab_Settings_Section_Controller_Identify: string;
+
   QuickAccess_Tab_Settings_Section_Controller_Title: string;
+
+  QuickAccess_Tab_Settings_Section_Controller_USB: string;
 
   QuickAccess_Tab_Settings_Section_Display_Title: string;
 
@@ -14308,6 +14380,8 @@ export interface MapTokens {
 
   Settings_Connect_VRDongle_NoHosts: string;
 
+  Settings_Controller_Advanced: string;
+
   Settings_Controller_BaseConfigurations: string;
 
   Settings_Controller_BindInput: string;
@@ -14362,15 +14436,63 @@ export interface MapTokens {
 
   Settings_Controller_Config_Edit_Name: string;
 
+  Settings_Controller_Connection: string;
+
+  Settings_Controller_Connection_BT: string;
+
+  Settings_Controller_Connection_Machine: string;
+
+  Settings_Controller_Connection_Puck: string;
+
+  Settings_Controller_Connection_Unknown: string;
+
+  Settings_Controller_Connection_USB: string;
+
   Settings_Controller_CopyToClipboard: string;
 
   Settings_Controller_DesktopConfig: string;
+
+  Settings_Controller_DongleExternalDescription: string;
+
+  Settings_Controller_DongleExternalLabel: string;
+
+  Settings_Controller_DongleInternalDescription: string;
+
+  Settings_Controller_DongleInternalLabel: string;
 
   Settings_Controller_GenericGamepadSupport: string;
 
   Settings_Controller_GuideButtonFocus: string;
 
+  Settings_Controller_Hardware: string;
+
+  Settings_Controller_IdentifyController: string;
+
+  Settings_Controller_IdentifyController_Click: string;
+
   Settings_Controller_NoControllers: string;
+
+  Settings_Controller_PairingInfo: string;
+
+  Settings_Controller_PairingInfo_Active: string;
+
+  Settings_Controller_PairingInfo_Description: string;
+
+  Settings_Controller_PairingInfo_Disconnected: string;
+
+  Settings_Controller_PairingInfo_Forget: string;
+
+  Settings_Controller_PairingInfo_Inactive: string;
+
+  Settings_Controller_PairingInfo_Machine: string;
+
+  Settings_Controller_PairingInfo_Puck: string;
+
+  Settings_Controller_PairingInfo_SelectedInactive: string;
+
+  Settings_Controller_PairingInfo_Slot: string;
+
+  Settings_Controller_PairingInfo_Unpaired: string;
 
   Settings_Controller_PasteFromClipboard: string;
 
@@ -14397,6 +14519,8 @@ export interface MapTokens {
   Settings_Controller_SCPairing_Success: string;
 
   Settings_Controller_SCPairing_Title: string;
+
+  Settings_Controller_SerialNumber: string;
 
   Settings_Controller_Settings: string;
 
@@ -14826,6 +14950,14 @@ export interface MapTokens {
 
   Settings_Developer_Controller_Configurator_Type: string;
 
+  Settings_Developer_DesktopPreferX11Mode: string;
+
+  Settings_Developer_DesktopSession_plasma: string;
+
+  Settings_Developer_DesktopSession_plasmax11: string;
+
+  Settings_Developer_DesktopSessionDropdown: string;
+
   Settings_Developer_EnableGamescopeComposer: string;
 
   Settings_Developer_EnableGamescopeVRComposer: string;
@@ -15228,6 +15360,8 @@ export interface MapTokens {
 
   Settings_Interface_ShowMarketingMessages: string;
 
+  Settings_Interface_ShowSwitchToDesktopAtLoginScreen: string;
+
   Settings_Interface_StartInBigPicture: string;
 
   Settings_Interface_StartPage: string;
@@ -15573,6 +15707,10 @@ export interface MapTokens {
   Settings_LowPowerDownloads_Enable: string;
 
   Settings_Miscellaneous_Title: string;
+
+  Settings_MonoDownmix: string;
+
+  Settings_MonoDownmix_Description: string;
 
   Settings_Music_DisplayNotification: string;
 
@@ -16226,6 +16364,10 @@ export interface MapTokens {
 
   Settings_System_OSVersionId: string;
 
+  Settings_System_ProductSerialNumber: string;
+
+  Settings_System_ProductVendor: string;
+
   Settings_System_RAMSize: string;
 
   Settings_System_SDCard: string;
@@ -16820,6 +16962,8 @@ export interface MapTokens {
 
   Steam_EOLAlert: string;
 
+  Steam_EOLAlert_Expired: string;
+
   Steam_EOLAlert_Plural: string;
 
   Steam_ErrorCondition_AccountDisabled: string;
@@ -17068,6 +17212,10 @@ export interface MapTokens {
 
   SteamUI_Dialog_HelpChangePassword_Title: string;
 
+  SteamUI_Dialog_Review_AttachPCSpecs: string;
+
+  SteamUI_Dialog_Review_AttachPCSpecs_AddNew: string;
+
   SteamUI_Dialog_SupportMessage_Title: string;
 
   SteamUI_Dialog_SystemInfo_Close: string;
@@ -17075,6 +17223,18 @@ export interface MapTokens {
   SteamUI_Dialog_SystemInfo_Copy: string;
 
   SteamUI_Dialog_SystemInfo_Desc: string;
+
+  SteamUI_Dialog_SystemInfo_NameHardware: string;
+
+  SteamUI_Dialog_SystemInfo_NameHardware_Desc: string;
+
+  SteamUI_Dialog_SystemInfo_SavedHardware: string;
+
+  SteamUI_Dialog_SystemInfo_SavedHardware_Desc: string;
+
+  SteamUI_Dialog_SystemInfo_SavedHardware_Error: string;
+
+  SteamUI_Dialog_SystemInfo_SaveHardware_Button: string;
 
   SteamUI_Dialog_SystemInfo_ViewSurvey: string;
 
@@ -17159,6 +17319,8 @@ export interface MapTokens {
   SteamUI_ValveSurvey_SendSurvey: string;
 
   SteamUI_ValveSurvey_Summary_3DNOW: string;
+
+  SteamUI_ValveSurvey_Summary_Adapter: string;
 
   SteamUI_ValveSurvey_Summary_AES: string;
 
@@ -17464,6 +17626,8 @@ export interface MapTokens {
 
   SteamUI_ValveSurvey_Summary_RAM: string;
 
+  SteamUI_ValveSurvey_Summary_RAM_Pretty: string;
+
   SteamUI_ValveSurvey_Summary_RDTSC: string;
 
   SteamUI_ValveSurvey_Summary_RefreshRate: string;
@@ -17553,6 +17717,8 @@ export interface MapTokens {
   SteamUI_ValveSurvey_Summary_VideoVendorID_Unknown: string;
 
   SteamUI_ValveSurvey_Summary_VRAMSize: string;
+
+  SteamUI_ValveSurvey_Summary_VRAMSize_Pretty: string;
 
   SteamUI_ValveSurvey_Summary_VRAMSize_Unknown: string;
 
@@ -18084,6 +18250,8 @@ export interface MapTokens {
 
   TritonUSBPairingPrompt_PairInternal: string;
 
+  TritonUSBPairingPrompt_Skip: string;
+
   TritonUSBPairingPrompt_Title: string;
 
   TryAgain: string;
@@ -18095,6 +18263,8 @@ export interface MapTokens {
   UGC_Spoilers_Field_Yes: string;
 
   UGC_Visibility_Field: string;
+
+  UnderscanScreen_Explainer: string;
 
   UninstallDialog_AppUpdateError: string;
 

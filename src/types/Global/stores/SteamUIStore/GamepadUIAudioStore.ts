@@ -21,6 +21,8 @@ export interface GamepadUIAudioStore {
    */
   PlayAudioURL(sound: `/sounds/${NavAudioFile_t}`): SteamAudioPlaybackObj;
 
+  PlayAudioURLWithRepeats(e: unknown[]): unknown;
+
   /**
    * Plays a Steam UI sound.
    *
@@ -29,6 +31,8 @@ export interface GamepadUIAudioStore {
   PlayNavSound(type: ESteamUISound, t: unknown): void;
 
   PlayNavSoundInternal(type: ESteamUISound): void;
+
+  PlaySpeakerTestOnChannel(e: unknown[]): unknown;
 
   RegisterFocusNavContext(context: FocusNavigationContext): Unsubscribable;
 
@@ -71,7 +75,7 @@ export interface AudioPlaybackManager {
   /**
    * @param t default: 1
    */
-  PlayAudioURL(e: unknown, t?: number): SteamAudioPlaybackObj;
+  PlayAudioURL(e: unknown): SteamAudioPlaybackObj;
 
   /**
    * @param t default: 0

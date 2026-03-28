@@ -1,6 +1,7 @@
 /* eslint-disable customRules/min-enum-members */
 import { EUIMode } from 'Global/managers/PopupManager';
 import { ObservableValue } from 'shared/interfaces';
+import { EControllerType } from 'SteamClient/Input';
 import { SteamAppOverview } from '../AppStore';
 import { GamepadNavigationManager, NavigationSource } from './GamepadNavigationManager';
 import { GamepadUIAudioStore } from './GamepadUIAudioStore';
@@ -155,6 +156,8 @@ export interface SteamUIStore {
 
   ScopeRunningApps(): void;
 
+  SetChatRadialVisible(e: unknown): void;
+
   SetConfiguratorWidth(e: unknown): void;
 
   SetConsoleEnabled(): void;
@@ -183,6 +186,8 @@ export interface SteamUIStore {
 
   ActiveWindowInstance: WindowInstance;
 
+  ChatRadialVisible: ObservableValue<boolean>;
+
   ConfiguratorWidth: number;
 
   ErrorCondition: number;
@@ -194,6 +199,8 @@ export interface SteamUIStore {
   GamepadUIAudio: GamepadUIAudioStore;
 
   m_appDetailsDisplayMode: number;
+
+  m_bChatRadialVisible: ObservableValue<boolean>;
 
   m_bConsoleEnabledByUser: boolean;
 
@@ -253,7 +260,7 @@ export interface SteamUIStore {
 
   MainWindowVisible: ObservableValue<boolean>;
 
-  MostRecentlyActiveController?: never;
+  MostRecentlyActiveController?: MostRecentlyActiveController;
 
   MostRecentlyActiveControllerIndex: number;
 
@@ -329,4 +336,123 @@ export enum ESourceType {
 /** @generated */
 export enum EShutdownState {
   EShutdownState0 = 0,
+}
+
+export interface MostRecentlyActiveController {
+  bBluetooth: boolean;
+
+  bCharging: boolean;
+
+  bHaptics: boolean;
+
+  bHasTouchscreen: boolean;
+
+  bIMUOneEuroFilter: boolean;
+
+  bLeftStickTouchDisablesLeftTrackPad: boolean;
+
+  bNintendoLayout: boolean;
+
+  bRemoteDevice: boolean;
+
+  bRightStickTouchDisablesRightTrackPad: boolean;
+
+  bSWAntiDrift: boolean;
+
+  bUseReversedLayout: boolean;
+
+  bUseUniversalFaceButtonGlyphs: boolean;
+
+  bWireless: boolean;
+
+  /**
+   * This value is an enum
+   * @currentValue 1
+   */
+  eControllerStyle: EControllerStyle;
+
+  eControllerType: EControllerType;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  ePlayerSlotLEDSetting: EPlayerSlotLEDSetting;
+
+  /**
+   * This value is an enum
+   * @currentValue -1
+   */
+  eRumblePreference: ERumblePreference;
+
+  flAccelerometerStationaryTolerance: number;
+
+  flGyroStationaryTolerance: number;
+
+  flLEDBrightness: number;
+
+  flLEDSaturation: number;
+
+  flLPadPressureCurve: number;
+
+  flRPadPressureCurve: number;
+
+  nAuxCapSenseHysteresis: number;
+
+  nAuxCapSenseThreshold: number;
+
+  nControllerIndex: number;
+
+  nLEDColorB: number;
+
+  nLEDColorG: number;
+
+  nLEDColorR: number;
+
+  nLHapticStrength: number;
+
+  nLStickDeadzone: number;
+
+  nRHapticStrength: number;
+
+  nRStickDeadzone: number;
+
+  nTurnOffSound: number;
+
+  nTurnOnSound: number;
+
+  nXInputIndex: number;
+
+  strChipID: string;
+
+  strFirmwareBuildTime: string;
+
+  strName: string;
+
+  strSerialNumber: string;
+
+  ucBatteryLevel: number;
+
+  unCapabilities: bigint;
+
+  unProductID: number;
+
+  unVendorID: number;
+
+  vecMacAddrs: string[];
+}
+
+/** @generated */
+export enum EControllerStyle {
+  EControllerStyle1 = 1,
+}
+
+/** @generated */
+export enum EPlayerSlotLEDSetting {
+  EPlayerSlotLEDSetting0 = 0,
+}
+
+/** @generated */
+export enum ERumblePreference {
+  'ERumblePreference-1' = -1,
 }

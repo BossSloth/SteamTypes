@@ -14,6 +14,9 @@ export interface Audio {
    */
   GetDevices(): Promise<GetDevicesResponse | undefined>;
 
+  /** @native */
+  GetUseBluetoothForMic(): unknown;
+
   /**
    * Register callback for when an audio app is added
    */
@@ -86,6 +89,15 @@ export interface Audio {
     channel: EAudioChannel,
     volume: number
   ): Promise<void> | undefined;
+
+  /** @native */
+  SetUseBluetoothForMic(): unknown;
+
+  /** @native */
+  SupportsMonoDownmix(): unknown;
+
+  /** @native */
+  SupportsUseBluetoothForMic(): unknown;
 }
 
 interface GetAppsResponse {

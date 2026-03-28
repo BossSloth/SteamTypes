@@ -790,6 +790,11 @@ export interface DictComponents {
   /**
    * This is a class function
    */
+  playtestinvite?: unknown;
+
+  /**
+   * This is a class function
+   */
   plusone: unknown;
 
   /**
@@ -907,7 +912,7 @@ export interface ChatRoomListBase {
    */
   BASELOG(): unknown;
 
-  BHasSessionNotice(e: unknown): unknown;
+  BHasSessionNotice(e: unknown): boolean;
 
   BIsVoiceAllowed(): boolean;
 
@@ -943,7 +948,7 @@ export interface ChatRoomListBase {
 
   GetVisibilityState(e: unknown): number;
 
-  GetVoiceNotAllowedReason(): unknown;
+  GetVoiceNotAllowedReason(): null;
 
   HasChatMessage(e: unknown, t: unknown): boolean;
 
@@ -1010,7 +1015,7 @@ export interface ChatRoomListBase {
 
   SetupAppCustomServerMsg(e: unknown): Promise<string>;
 
-  ToggleVoiceChat(): boolean;
+  ToggleVoiceChat(): void;
 
   TrimLogsIfPossible(): void;
 

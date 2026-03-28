@@ -11,7 +11,7 @@ export interface GamepadNavigationManager {
 
   BlurNavTree(e: unknown): void;
 
-  ChangeNavigationSource(e: unknown, t: unknown): boolean;
+  ChangeNavigationSource(e: unknown, t: unknown, r: unknown, n: unknown): boolean;
 
   CreateContext(e: unknown, t: unknown): unknown;
 
@@ -44,13 +44,13 @@ export interface GamepadNavigationManager {
 
   m_fnGamepadEventUpdateBatcher(e: unknown, t: unknown): unknown;
 
-  NewGamepadNavigationTree(e: unknown, t: unknown, r: unknown): unknown;
+  NewGamepadNavigationTree(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
 
-  OnButtonActionInternal(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown): undefined;
+  OnButtonActionInternal(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown, c: unknown): undefined;
 
-  OnButtonDown(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown): void;
+  OnButtonDown(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown): void;
 
-  OnButtonUp(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown): void;
+  OnButtonUp(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown): void;
 
   OnContextActivated(e: unknown): void;
 
@@ -101,6 +101,8 @@ export interface GamepadNavigationManager {
 
   m_fnCatchAllGamepadInput: null;
 
+  m_glyphInfo: ObservableValue<GlyphInfo>;
+
   m_LastActiveContext: FocusNavigationContext;
 
   m_navigationSource: ObservableValue<NavigationSource>;
@@ -114,6 +116,8 @@ export interface GamepadNavigationManager {
   m_UnhandledButtonEventsCallbacks: UnhandledButtonEventsCallbacks;
 
   NavigationSource: GamepadNavigationManager['m_navigationSource'];
+
+  NavigationSourceGlyphInfo: ObservableValue<GlyphInfo>;
 
   NavigationSourceSupportsFocus: NavigationSourceSupportsFocus;
 }
@@ -162,9 +166,9 @@ export interface FocusNavigationContext {
    */
   SetActiveNavTree(e: unknown, t?: boolean): void;
 
-  UnregisterGamepadNavigationTree(e: unknown): void;
+  UnregisterGamepadNavigationTree(e: unknown): Promise<void>;
 
-  ActiveWindow: Window;
+  ActiveWindow: Window | undefined;
 
   FocusChangedCallbacks: UnhandledButtonEventsCallbacks;
 
@@ -174,7 +178,7 @@ export interface FocusNavigationContext {
 
   m_ActiveFocusChange: ActiveFocusChange | undefined;
 
-  m_activeWindow: Window;
+  m_activeWindow: Window | undefined;
 
   m_bIsGamepadInputSuppressed: boolean;
 
@@ -198,6 +202,8 @@ export interface FocusNavigationContext {
 
   m_valueIsActive: ObservableValue<boolean>;
 
+  NavigationSourceGlyphInfo: ObservableValue<GlyphInfo>;
+
   RootWindow: Window;
 }
 
@@ -212,7 +218,7 @@ export interface NavigationSource {
 export type NavigationSourceSupportsFocus = MappedObservable<NavigationSource, boolean>;
 
 export interface BaseGamepadInputSource {
-  DispatchButtonDown(e: unknown, t: unknown): void;
+  DispatchButtonDown(e: unknown, t: unknown, n: unknown, r: unknown): void;
 
   GetActiveControllerIndex(): unknown;
 
@@ -222,7 +228,7 @@ export interface BaseGamepadInputSource {
 
   OnAnalogPad(e: unknown, t: unknown, n: unknown, r: unknown): void;
 
-  OnButtonDown(e: unknown, t: unknown): void;
+  OnButtonDown(e: unknown, t: unknown, n: unknown, r: unknown): void;
 
   OnButtonUp(e: unknown, t: unknown): void;
 
@@ -268,7 +274,13 @@ export interface BaseGamepadInputSource {
 }
 
 export interface StandardGamepadInputSource extends BaseGamepadInputSource {
+  DoControllerListQuery(): Promise<void>;
+
   EnableAnalogInputMessages(e: unknown): void;
+
+  fnOnControllerDisconnect(e: unknown): number;
+
+  fnOnControllerListItem(e: unknown): number;
 
   GetController(e: unknown): unknown;
 
@@ -280,7 +292,7 @@ export interface StandardGamepadInputSource extends BaseGamepadInputSource {
 
   OnSystemButtonPress(e: unknown, t: unknown): void;
 
-  m_rgControllers: Map<unknown, unknown>;
+  m_rgControllers: Map<number, RgControllers>;
 }
 
 export interface MouseGamepadInputSource extends BaseGamepadInputSource {
@@ -335,15 +347,21 @@ export interface ActiveFocusChange {
 }
 
 export interface SchDeferredActivate {
+  AsyncSchedule(e: unknown, t: unknown): Promise<unknown>;
+
   Cancel(): void;
 
   IsScheduled(): boolean;
+
+  Reset(): void;
 
   Schedule(e: unknown, t: unknown): void;
 
   ScheduledInternal(): void;
 
   m_fnCallback?: undefined;
+
+  m_fnOnCancel: undefined;
 
   m_schTimer?: undefined;
 }
@@ -830,4 +848,18 @@ export enum ENavigationSourceType {
   TOUCH,
   LPAD,
   RPAD,
+}
+
+export interface GlyphInfo {
+  nControllerStyle: number;
+
+  nControllerType: number;
+}
+
+export interface RgControllers {
+  activeButtons: object;
+
+  controllerStyle: number;
+
+  controllerType: number;
 }

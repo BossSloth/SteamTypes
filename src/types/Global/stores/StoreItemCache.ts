@@ -264,8 +264,6 @@ export interface StoreApp {
 
   GetAppID(): unknown;
 
-  GetAppIDToRun(): unknown;
-
   GetAppType(): unknown;
 
   GetAssets(): unknown;
