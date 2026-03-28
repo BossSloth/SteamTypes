@@ -1,4 +1,6 @@
-import { JsPbMessage, OperationResponse } from '../shared';
+import { CMsgGenerateSystemReportReply_Protobuf } from '@Runtime/Protobufs';
+import { SerializedArrayBuffer } from 'shared/protobuf';
+import { OperationResponse } from '../shared';
 
 export interface Report {
   /**
@@ -21,20 +23,5 @@ export interface Report {
 }
 
 export interface SystemReportReply extends OperationResponse {
-  /**
-   * If deserialized, returns {@link MsgGenerateSystemReportReply}.
-   */
-  reply: ArrayBuffer;
-}
-
-/**
- * CMsgGenerateSystemReportReply
- */
-export interface MsgGenerateSystemReportReply extends JsPbMessage {
-  /**
-   * The report file name.
-   */
-  report_id(): string | undefined;
-
-  set_report_id(param0: unknown): unknown;
+  reply: SerializedArrayBuffer<typeof CMsgGenerateSystemReportReply_Protobuf>;
 }

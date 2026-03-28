@@ -1,4 +1,6 @@
-import { JsPbMessage, OperationResponse, Unregisterable } from '../shared';
+import { CMsgSystemManagerSettings_Protobuf } from '@Runtime/Protobufs';
+import { SerializedArrayBuffer } from 'shared/protobuf';
+import { OperationResponse, Unregisterable } from '../shared';
 import { Audio } from './Audio';
 import { Devkit } from './Devkit';
 import { Display } from './Display';
@@ -77,10 +79,7 @@ export interface System {
   // {"flProgress":0,"rtEstimatedCompletionTime":0,"eStage":1}
   RegisterForFormatStorageProgress(callback: () => void): Unregisterable;
 
-  /**
-   * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link MsgSystemManagerSettings}.
-   */
-  RegisterForSettingsChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
+  RegisterForSettingsChanges(callback: (data: SerializedArrayBuffer<typeof CMsgSystemManagerSettings_Protobuf>) => void): Unregisterable;
 
   /**
    * Restarts the system.
@@ -333,67 +332,6 @@ export interface SystemInfo {
   sVideoCardName: string;
 
   sVideoDriverVersion: string;
-}
-
-/**
- * CMsgSystemManagerSettings
- */
-export interface MsgSystemManagerSettings extends JsPbMessage {
-  display_adaptive_brightness_enabled(): boolean;
-
-  display_colorgamut(): number;
-
-  display_colorgamut_labelset(): number;
-
-  display_colortemp(): number;
-
-  display_colortemp_default(): number;
-
-  display_colortemp_enabled(): boolean;
-
-  display_diagnostics_enabled(): boolean;
-
-  display_nightmode_blend(): number;
-
-  display_nightmode_enabled(): boolean;
-
-  display_nightmode_maxhue(): number;
-
-  display_nightmode_maxsat(): number;
-
-  display_nightmode_schedule_enabled(): boolean;
-
-  display_nightmode_schedule_endtime(): number;
-
-  display_nightmode_schedule_starttime(): number;
-
-  display_nightmode_tintstrength(): number;
-
-  display_nightmode_uiexp(): number;
-
-  fan_control_mode(): number;
-
-  idle_backlight_dim_ac_seconds(): number;
-
-  idle_backlight_dim_battery_seconds(): number;
-
-  idle_suspend_ac_seconds(): number;
-
-  idle_suspend_battery_seconds(): number;
-
-  idle_suspend_supressed(): boolean;
-
-  is_adaptive_brightness_available(): boolean;
-
-  is_display_brightness_available(): boolean;
-
-  is_display_colormanagement_available(): boolean;
-
-  is_display_colortemp_available(): boolean;
-
-  is_fan_control_available(): boolean;
-
-  is_wifi_powersave_enabled(): boolean;
 }
 
 export enum GamingDeviceType {

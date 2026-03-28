@@ -1,4 +1,6 @@
-import { EResult, JsPbMessage, OperationResponse, Unregisterable } from './shared';
+import { CMsgSystemUpdateState_Protobuf } from '@Runtime/Protobufs';
+import { SerializedArrayBuffer } from 'shared/protobuf';
+import { OperationResponse, Unregisterable } from './shared';
 
 export interface Updates {
   ApplyUpdates(param0: string): Promise<OperationResponse>;
@@ -10,11 +12,7 @@ export interface Updates {
 
   GetOSBranchList(): Promise<unknown[]>;
 
-  /**
-   * If `data` is deserialized, returns {@link MsgSystemUpdateState}.
-   * @returns A Promise that resolves to a ProtoBuf message.
-   */
-  RegisterForUpdateStateChanges(callback: (data: ArrayBuffer) => void): Unregisterable;
+  RegisterForUpdateStateChanges(callback: (data: SerializedArrayBuffer<typeof CMsgSystemUpdateState_Protobuf>) => void): Unregisterable;
 
   // 1 - Stable, 2 - Beta, 3 - Preview
   // Return maybe an enum?
@@ -37,70 +35,4 @@ export enum EOSBranch {
   PreviewCandidate,
   Main,
   Staging,
-}
-
-/**
- * CMsgSystemUpdateState
- */
-export interface MsgSystemUpdateState extends JsPbMessage {
-  progress(): UpdateProgress | undefined;
-
-  state(): EUpdaterState | undefined;
-
-  supports_os_updates(): boolean | undefined;
-
-  update_apply_results(): UpdateApplyResult[];
-
-  update_check_results(): UpdateCheckResult[];
-}
-
-export interface UpdateApplyResult {
-  eresult: EResult;
-
-  requires_client_restart: boolean;
-
-  requires_system_restart: boolean;
-
-  type: EUpdaterType;
-}
-
-export interface UpdateCheckResult {
-  available: boolean;
-
-  eresult: EResult;
-
-  rtime_checked: number;
-
-  type: EUpdaterType;
-}
-
-export interface UpdateProgress {
-  rtime_estimated_completion: number | undefined;
-
-  stage_progress: number | undefined;
-
-  stage_size_bytes: number | undefined;
-}
-
-export enum EUpdaterState {
-  Invalid,
-  // ty valve
-  UpToDate = 2,
-  Checking,
-  Available,
-  Applying,
-  ClientRestartPending,
-  SystemRestartPending,
-  RollBack,
-}
-
-export enum EUpdaterType {
-  Invalid,
-  Client,
-  OS,
-  BIOS,
-  Aggregated,
-  Test1,
-  Test2,
-  Dummy,
 }

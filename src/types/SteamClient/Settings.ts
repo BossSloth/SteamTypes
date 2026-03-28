@@ -1,7 +1,7 @@
-import { CMsgClientSettings_Protobuf } from '@Runtime/Protobufs';
+import { CMsgClientSettings_Protobuf, CMsgMonitorInfo_Protobuf } from '@Runtime/Protobufs';
 import { SerializedArrayBuffer } from 'shared/protobuf';
 import { CompatibilityToolInfo } from './Apps';
-import { JsPbMessage, OperationResponse, Unregisterable } from './shared';
+import { OperationResponse, Unregisterable } from './shared';
 
 export interface Settings {
   AddClientBeta(name: string, password: string): void;
@@ -30,9 +30,9 @@ export interface Settings {
   GetGlobalCompatTools(): Promise<CompatibilityToolInfo[]>;
 
   /**
-   * @returns A Promise that resolves to a ProtoBuf message. If deserialized, returns {@link MsgMonitorInfo}.
+   * @note doesn't seem to work on linux as it returns an empty array buffer
    */
-  GetMonitorInfo(): Promise<ArrayBuffer>;
+  GetMonitorInfo(): Promise<SerializedArrayBuffer<typeof CMsgMonitorInfo_Protobuf>>;
 
   GetRegisteredSteamDeck(): Promise<RegisteredSteamDeck>;
 
@@ -310,28 +310,4 @@ export enum EClientBetaState {
   NoneChosenNonAdmin,
   InBeta,
   InBetaNonAdmin,
-}
-
-/**
- * CMsgMonitorInfo
- */
-export interface MsgMonitorInfo extends JsPbMessage {
-  add_monitors(param0: unknown, param1: unknown): unknown;
-
-  monitors(): Monitor[];
-
-  selected_display_name(): string;
-
-  set_monitors(param0: unknown): unknown;
-
-  set_selected_display_name(param0: unknown): unknown;
-}
-
-/**
- * @todo Doesn't work on Linux ?
- */
-export interface Monitor {
-  monitor_device_name: string;
-
-  monitor_display_name: string;
 }

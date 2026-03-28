@@ -226,6 +226,9 @@ type InterfaceToTuple<T> = T extends object
     }[keyof T][]
   : T;
 
+/**
+ * An ArrayBuffer that can be deserialized by calling deserializeBinary on an instance of the referenced protobuf class
+ */
 export type SerializedArrayBuffer<T> = ArrayBuffer & Partial<{
   /** @internal doesn't exist in the actual type but is used to store the type in typescript */
   __deserializesTo: T;
