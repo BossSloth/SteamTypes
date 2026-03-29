@@ -1,6 +1,7 @@
 import { CAppOverview_Change_Protobuf, CMsgAchievementChange_Protobuf, CMsgCloudPendingRemoteOperations_Protobuf } from '@Runtime/Protobufs';
 import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
-import { AppDetails, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, LogoPosition, PlayerAchievement } from 'Global/stores/AppDetailsStore';
+import { AppDetails, CustomImageInfo, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, PlayerAchievement } from 'Global/stores/AppDetailsStore';
+import { SerializedJsonString } from 'shared/helpers';
 import { SerializedArrayBuffer } from 'shared/protobuf';
 import { EThirdPartyControllerConfiguration } from './Input';
 import { EUCMFilePrivacyState, Screenshot } from './Screenshots';
@@ -500,7 +501,7 @@ export interface Apps {
    * ```
    * @param progress The achievement progress to save. Which is a stringified JSON object of {@link AppAchievementProgressCache.m_achievementProgress}
    */
-  SaveAchievementProgressCache(progress: string): unknown;
+  SaveAchievementProgressCache(progress: SerializedJsonString<AppAchievementProgressCache['m_achievementProgress']>): unknown;
 
   /**
    * Scans the system for installed non-Steam applications.
@@ -572,10 +573,10 @@ export interface Apps {
   /**
    * Sets a custom logo position for a specific app.
    * @param appId The ID of the application.
-   * @param details The details of the custom logo position, expected to be a JSON stringified {@link LogoPositionForApp} object.
+   * @param details The details of the custom logo position, expected to be a JSON stringified {@link CustomImageInfo} object.
    * @returns A Promise that resolves when the custom logo position is successfully set.
    */
-  SetCustomLogoPositionForApp(appId: number, details: string): Promise<void>;
+  SetCustomLogoPositionForApp(appId: number, details: SerializedJsonString<CustomImageInfo>): Promise<void>;
 
   /** @native */
   SetDisableSteamDeckAutoDetection(): unknown;
@@ -1219,11 +1220,4 @@ export interface NonSteamApp {
   strExePath: string;
 
   strIconDataBase64: string;
-}
-
-export interface LogoPositionForApp {
-  logoPosition: LogoPosition;
-
-  /** @note Usually 1 */
-  nVersion: number;
 }

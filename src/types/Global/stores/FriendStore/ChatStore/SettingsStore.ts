@@ -1,6 +1,7 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { CStore_GetStorePreferences_Response } from 'Protobufs/steam/steammessages_store.steamclient';
 import { ProtobufInterface } from 'shared/protobuf';
+import { BooleanToVDFBoolean } from 'SteamClient/FriendSettings';
 
 export interface SettingsStore {
   BackfillSingleWindowMode(e: unknown): void;
@@ -155,12 +156,14 @@ export interface FriendsSettings {
 
   bSounds_PlayOnline: boolean;
 
-  featuresEnabled: FeaturesEnabled;
+  featuresEnabled: FriendFeaturesEnabled;
 
-  nChatFlashMode: number;
+  nChatFlashMode: EChatFlashMode;
 
   nChatFontSize: number;
 }
+
+export type FriendsSettingsVDF = BooleanToVDFBoolean<FriendsSettings>;
 
 export interface IFriendSettingsStore {
   BUpdateSettings(e: unknown): boolean;
@@ -183,7 +186,7 @@ export interface Content_descriptor_preferences {
   content_descriptors_to_exclude: unknown[];
 }
 
-export interface FeaturesEnabled {
+export interface FriendFeaturesEnabled {
   DoNotDisturb: number;
 
   FriendsFilter: number;
@@ -199,4 +202,10 @@ export interface FeaturesEnabled {
   ServerVirtualizedMemberLists: number;
 
   SteamworksChatAPI: number;
+}
+
+export enum EChatFlashMode {
+  Always,
+  Minimized,
+  Never,
 }
