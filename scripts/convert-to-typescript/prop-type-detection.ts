@@ -54,12 +54,46 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
 
   const lastPathSegment = path.split('.').pop() ?? '';
 
-  const [interfaceName, nameCounter] = generateInterfaceName(lastPathSegment);
+  let interfaceName: string;
+  let nameCounter: number | undefined;
+  let protobufClassName: string | undefined;
+
+  // When the key would produce InvalidName (e.g. numeric keys), try deriving name from protobuf class
+  const candidateName = lastPathSegment.charAt(1) === '_'
+    ? lastPathSegment
+    : lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
+  const wouldBeInvalid = formatInterfaceName(candidateName) === 'InvalidName';
+
+  if (wouldBeInvalid) {
+    const protoInfo = findProtobufClassInObject(value);
+    if (protoInfo) {
+      const parentName = path.split('.').at(-2) ?? '';
+      const singularParent = parentName.endsWith('s') ? parentName.slice(0, -1) : parentName;
+      const derivedName = `${protoInfo.className}${singularParent}`;
+      protobufClassName = protoInfo.className;
+
+      // Handle name counter for the derived name
+      let counter = context.interfaceNameCounter.get(derivedName) ?? 0;
+      counter++;
+      context.interfaceNameCounter.set(derivedName, counter);
+      if (counter === 1) {
+        interfaceName = derivedName;
+        nameCounter = undefined;
+      } else {
+        interfaceName = `${derivedName}${counter}`;
+        nameCounter = counter;
+      }
+    } else {
+      [interfaceName, nameCounter] = generateInterfaceName(lastPathSegment);
+    }
+  } else {
+    [interfaceName, nameCounter] = generateInterfaceName(lastPathSegment);
+  }
 
   // Register this object as being processed to detect circular references
   context.processedObjectPaths.set(value, interfaceName);
 
-  const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter };
+  const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter, protobufClassName };
   if (storeClassName) {
     const constructorString = value.constructor.toString();
     const isClass = (/^class\s/).test(constructorString);
@@ -374,4 +408,42 @@ function isSteamID(obj: unknown): boolean {
   if (obj === null || typeof obj !== 'object') return false;
 
   return 'm_ulSteamID' in obj && 'ConvertTo64BitString' in obj;
+}
+
+export function isProtobufClass(value: unknown): boolean {
+  if (typeof value !== 'function') return false;
+
+  if (!('toObject' in value && 'fromObject' in value && 'deserializeBinary' in value)) return false;
+
+  const proto = value.prototype as Record<string, unknown> | null;
+  if (proto === null || typeof proto !== 'object') return false;
+
+  return 'getClassName' in proto;
+}
+
+export function getProtobufClassName(value: Function): string | null {
+  const proto = value.prototype as Record<string, unknown>;
+  const func = proto.getClassName as Function | undefined;
+  if (typeof func !== 'function') return null;
+  const match = func.toString().match(/return\s*["']([^"']+)["']/);
+
+  return match?.[1] ?? null;
+}
+
+function findProtobufClassInObject(obj: Record<string, unknown>): { className: string; propertyKey: string; } | null {
+  for (const key of Object.keys(obj)) {
+    try {
+      const value = obj[key];
+      if (isProtobufClass(value)) {
+        const className = getProtobufClassName(value as Function);
+        if (className !== null && className.length > 0) {
+          return { className, propertyKey: key };
+        }
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
 }

@@ -26,6 +26,16 @@ function shouldMergeInterfaces(
     return false;
   }
 
+  // Don't merge interfaces derived from different protobuf classes
+  if (interface1.protobufClassName !== interface2.protobufClassName) {
+    return false;
+  }
+
+  // Don't merge interfaces if they have a property named proto, this is a special case
+  if (interface1.properties.some(p => p.name === 'proto') || interface2.properties.some(p => p.name === 'proto')) {
+    return false;
+  }
+
   // Get property names from both interfaces
   const props1 = interface1.properties.map(p => p.name);
   const props2 = interface2.properties.map(p => p.name);

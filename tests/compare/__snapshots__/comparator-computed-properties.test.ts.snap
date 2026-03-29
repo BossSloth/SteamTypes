@@ -1,0 +1,90 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Computed Property Cases > compareOriginalName with property changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,7 +2,9 @@
+  1: Child;
+}
+
+/** @compareOriginalName InvalidName */
+export interface Child {
++  age: number;
++
+  name: string;
+}"
+`;
+
+exports[`Comparator Computed Property Cases > computed property name preserved with type correction 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -7,10 +7,12 @@
+
+  2: ChildB;
+}
+
+export interface ChildA {
++  age: number;
++
+  name: string;
+}
+
+export interface ChildB {
+  id: number;"
+`;
+
+exports[`Comparator Computed Property Cases > computed property that changed type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,17 @@
+enum SomeEnum {
+  Value = 1,
+}
+
+export interface NotificationTargets {
+-  [SomeEnum.Value]: string;
++  [SomeEnum.Value]: ChildA;
+
+  2: ChildB;
+}
+
+export interface ChildB {
+  id: number;
+}
++
++export interface ChildA {
++  name: string;
++}"
+`;
+
+exports[`Comparator Computed Property Cases > computed property with additional property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -10,10 +10,12 @@
+  [EnumA.First]: TypeA;
+
+  [EnumB.Second]: TypeB;
+
+  3: TypeC;
++
++  4: TypeD;
+}
+
+export interface TypeA {
+  foo: string;
+}
+@@ -23,5 +25,9 @@
+}
+
+export interface TypeC {
+  baz: boolean;
+}
++
++export interface TypeD {
++  qux: string;
++}"
+`;

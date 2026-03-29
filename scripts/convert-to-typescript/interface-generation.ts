@@ -1,7 +1,7 @@
 import { ClassDeclaration, Project } from 'ts-morph';
 import { massExtractFunctionInfo } from './function-extraction';
-import { getType } from './prop-type-detection';
-import { InterfaceType, PrimitiveType, Type } from './Type';
+import { getProtobufClassName, getType, isProtobufClass } from './prop-type-detection';
+import { GenericType, InterfaceType, PrimitiveType, Type } from './Type';
 import { InterfaceProperty, InterfaceToProcess, TypeScriptInterface } from './types';
 import { context, formatPropertyName, getProperties } from './utils';
 
@@ -31,6 +31,7 @@ export function createInterfaceDefinition(
     nameCounter: interfaceToProcess.nameCounter,
     constructorString: interfaceToProcess.constructorString,
     extendedConstructorString: interfaceToProcess.extendedConstructorString,
+    protobufClassName: interfaceToProcess.protobufClassName,
   };
 
   // Get all properties
@@ -104,6 +105,13 @@ function processInterfaceProperties(
     const formattedName = formatPropertyName(key);
 
     if (typeof value === 'function') {
+      const protobufProperty = tryGetProtobufClassProperty(value, formattedName);
+      if (protobufProperty) {
+        interfaceDefinition.properties.push(protobufProperty);
+
+        continue;
+      }
+
       if (isClassFunction(value)) {
         interfaceDefinition.properties.push({
           name: formattedName,
@@ -147,6 +155,19 @@ function processInterfaceProperties(
       interfaceDefinition.properties.push(interfaceProperty);
     }
   }
+}
+
+function tryGetProtobufClassProperty(value: unknown, formattedName: string): InterfaceProperty | null {
+  if (!isProtobufClass(value)) return null;
+  const protoClassName = getProtobufClassName(value as Function);
+  if (protoClassName === null) return null;
+
+  context.addImport('shared/protobuf', 'ProtobufClass');
+
+  return {
+    name: formattedName,
+    type: new GenericType('ProtobufClass', [protoClassName]),
+  };
 }
 
 function generatePropertyJsDoc(type: Type, propertyName: string, value: unknown): string[] | undefined {

@@ -127,7 +127,7 @@ function collectAgreeingSourceMembers(
 
   for (const srcIface of sourceDerivedInterfaces) {
     const srcMember = getInterfaceMembers(srcIface).find(m => m.getName() === memberName);
-    if (!srcMember || srcMember.getKind() !== baseMemberKind) {
+    if (srcMember?.getKind() !== baseMemberKind) {
       return undefined;
     }
     agreeingSourceMembers.push(srcMember);
@@ -378,6 +378,36 @@ function handleExtraInheritedMember(
 }
 
 /**
+ * Reconciles computed property names (e.g. [Enum.Value]) with source numeric keys.
+ * Resolves the computed expression to its literal value via the type checker,
+ * then remaps the target member so it matches the equivalent source key.
+ */
+function reconcileComputedPropertyNames(
+  targetMembers: (PropertySignature | MethodSignature)[],
+  targetMembersMap: Map<string, PropertySignature | MethodSignature>,
+  realTargetMembersMap: Map<string, PropertySignature | MethodSignature>,
+  sourceMembersMap: Map<string, PropertySignature | MethodSignature>,
+): void {
+  for (const member of targetMembers) {
+    if (!(member instanceof PropertySignature)) continue;
+    const nameNode = member.getNameNode();
+    if (!nameNode.isKind(SyntaxKind.ComputedPropertyName)) continue;
+
+    const computedName = member.getName();
+    const resolvedValue = nameNode.getExpression().getType().getLiteralValue();
+    if (typeof resolvedValue !== 'number' && typeof resolvedValue !== 'string') continue;
+
+    const resolvedKey = `${resolvedValue}`;
+    if (!sourceMembersMap.has(resolvedKey) || targetMembersMap.has(resolvedKey)) continue;
+
+    // Remap the computed target member to the resolved source key
+    targetMembersMap.set(resolvedKey, member);
+    targetMembersMap.delete(computedName);
+    realTargetMembersMap.set(resolvedKey, member);
+  }
+}
+
+/**
  * Compares and corrects properties between two interfaces
  * @param targetInterface The interface to be edited
  * @param sourceInterface The interface to use as the source of truth
@@ -400,6 +430,9 @@ export function compareAndCorrectMembers(
 
   const sourceMembersMap = new Map<string, PropertySignature | MethodSignature>();
   sourceMembers.forEach(member => sourceMembersMap.set(member.getName(), member));
+
+  // Reconcile computed property names (e.g. [Enum.Value]) with source numeric keys
+  reconcileComputedPropertyNames(targetMembers, targetMembersMap, realTargetMembersMap, sourceMembersMap);
 
   let changed = false;
 
@@ -609,8 +642,11 @@ export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteral
       return -1;
     }
 
-    // Use propertyStringSorter for consistent and efficient string comparison
-    return (b as PropertySignature | MethodSignature).getName().toLowerCase().localeCompare((a as PropertySignature | MethodSignature).getName().toLowerCase());
+    // Use natural sort for consistent ordering (handles numbers properly)
+    const aName = (a as PropertySignature | MethodSignature).getName().toLowerCase();
+    const bName = (b as PropertySignature | MethodSignature).getName().toLowerCase();
+
+    return bName.localeCompare(aName, undefined, { numeric: true, sensitivity: 'base' });
   });
 
   for (let i = members.length - 1; i >= 0; i--) {

@@ -3,6 +3,7 @@ import { LocalizationManager } from 'Global/managers/LocalizationManager';
 import { AppStore } from 'Global/stores/AppStore';
 import { FriendStore } from 'Global/stores/FriendStore/FriendStore';
 import { NavigationStore } from 'Global/stores/NavigationStore';
+import { NotificationStore } from 'Global/stores/NotificationStore';
 import { StoreItemCache } from 'Global/stores/StoreItemCache';
 import { SteamClient } from '../types';
 import { App } from '../types/Global/App';
@@ -77,7 +78,7 @@ declare global {
   let loginStore: unknown;
   let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
-  let NotificationStore: unknown;
+  let NotificationStore: NotificationStore;
   let openDatabase: unknown;
   let overlayStore: unknown;
   let partnerEventStore: unknown;

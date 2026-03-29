@@ -1,6 +1,6 @@
 import { InterfaceDeclaration, SyntaxKind, Type, TypeFlags, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { orderMembers } from './interface-comparator';
-import { currentStartingInterfaces, currentTargetSourceFile, getIdentifierName, getInterfaceMembers, interfaceQueue, isImportedType } from './shared';
+import { currentStartingInterfaces, currentTargetSourceFile, CustomJsDocTags, getIdentifierName, getInterfaceMembers, getJsDocTagValues, interfaceQueue, isImportedType } from './shared';
 
 const REQUIRED_OVERLAP = 0.65;
 
@@ -187,6 +187,15 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
  */
 export function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceDeclaration | undefined {
   const targetInterfaces = currentStartingInterfaces.filter(i => !i.wasForgotten());
+  const sourceInterfaceName = sourceInterface.getName();
+
+  // Check for @compareOriginalName match first
+  for (const targetInterface of targetInterfaces) {
+    const originalNames = getJsDocTagValues(targetInterface, CustomJsDocTags.originalName);
+    if (originalNames.includes(sourceInterfaceName)) {
+      return targetInterface;
+    }
+  }
 
   let bestMatch: InterfaceDeclaration | undefined;
   let highestScore = 0;

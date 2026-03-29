@@ -41,6 +41,7 @@ export interface TypeScriptInterface {
   extends?: string;
   constructorString?: string;
   extendedConstructorString?: string;
+  protobufClassName?: string;
 }
 
 export interface InterfaceToProcess {
@@ -48,6 +49,7 @@ export interface InterfaceToProcess {
   nameCounter?: number;
   constructorString?: string;
   extendedConstructorString?: string;
+  protobufClassName?: string;
 }
 
 /**

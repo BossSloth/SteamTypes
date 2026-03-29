@@ -5,7 +5,7 @@
     "src/index.ts",
     "src/Runtime/*.ts"
   ],
-  "ignore":["tests/**/__snapshots__/**", "scripts/defaultChromeWindow.js", "src/types/SteamClient/Notifications.ts", "src/types/Protobufs/**"],
+  "ignore":["tests/**/__snapshots__/**", "scripts/defaultChromeWindow.js", "src/types/Protobufs/**"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "enum": true,
@@ -13,7 +13,6 @@
   },
   "ignoreDependencies": [
     "@semantic-release/github",
-    "@semantic-release/npm",
-    "@steambrew/client"
+    "@semantic-release/npm"
   ]
 }

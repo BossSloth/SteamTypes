@@ -282,6 +282,76 @@ export const genericsCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+  'generic property with enum source preserves type parameter': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        items: Item<number>[];
+      }
+
+      export interface Item<T extends number> {
+        eType: T;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        items: Item[];
+      }
+
+      export interface Item {
+        /**
+         * This value is an enum
+         * @currentValue 7
+         */
+        eType: number;
+        name: string;
+      }
+      `,
+  },
+
+  'type argument with conditional type referencing type parameter': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      interface TypeMap {
+        a: { value: string; };
+
+        b: { value: number; };
+      }
+
+      export interface Container {
+        items: Item<'a'>[];
+      }
+
+      export interface Item<T extends keyof TypeMap> {
+        data: Wrapper<TypeMap[T] extends { value: infer U } ? U : never>;
+
+        name: string;
+      }
+
+      export interface Wrapper<T> {
+        value: T;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        items: Item[];
+      }
+
+      export interface Item {
+        data: Wrapper<string>;
+        name: string;
+      }
+
+      export interface Wrapper {
+        value: string;
+      }
+      `,
+  },
+
   'MappedObservable': {
     interfaceName: 'MappedObservable',
     expectsNoDiff: true,

@@ -143,7 +143,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
       for (const [i, typeArgument] of targetTypeArguments.entries()) {
         const sourceTypeArgument = sourceTypeArguments[i];
         const matches = compareTypes(typeArgument, sourceTypeArgument);
-        if (!matches) {
+        if (!matches && !containsTypeParameterReference(typeArgument)) {
           typeArgument.replaceWithText(getText(sourceTypeArgument));
         }
       }
@@ -438,6 +438,20 @@ function handleRecord(targetTypeReference: TypeReferenceNode, sourceNode: TypeNo
   const recordType = `Record<${Array.from(keyType).join(' | ')}, ${Array.from(valueType).join(' | ')}>`;
 
   return getText(targetTypeReference) === recordType;
+}
+
+function isTypeParameterRef(ref: TypeReferenceNode): boolean {
+  const declarations = ref.getTypeName().getSymbol()?.getDeclarations() ?? [];
+
+  return declarations.some(d => Node.isTypeParameterDeclaration(d));
+}
+
+function containsTypeParameterReference(typeNode: TypeNode): boolean {
+  if (Node.isTypeReference(typeNode) && isTypeParameterRef(typeNode)) {
+    return true;
+  }
+
+  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some(isTypeParameterRef);
 }
 
 export function getText(typeNode: TypeNode): string {

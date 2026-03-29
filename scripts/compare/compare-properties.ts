@@ -61,6 +61,10 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
       return true;
     }
 
+    if (targetProp.getType().isTypeParameter()) {
+      return true;
+    }
+
     if (!targetProp.getType().isEnum()) {
       const enumName = sourceProp.getName().replace(/^m_e|^e(?=[A-Z])/, 'E');
       // Check if the enum already exists in the target file

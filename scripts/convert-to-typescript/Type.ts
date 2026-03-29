@@ -249,16 +249,24 @@ type SetName = 'Set' | 'ObservableSet';
 
 type MapName = 'Map' | 'ObservableMap';
 
-export type GenericTypeName = MapName | SetName | 'ObservableValue';
+type ProtoBufNames = 'ProtobufClass' | 'ProtobufInterface';
+
+export type GenericTypeName = MapName | SetName | ProtoBufNames | 'ObservableValue';
 
 export class GenericType extends Type {
   public readonly kind: string = 'generic';
+  public readonly typeParameters: Type[];
 
   constructor(
     public readonly genericName: GenericTypeName,
-    public readonly typeParameters: Type[],
+    typeParameters: Type[] | string[],
   ) {
     super();
+    if (typeParameters.every(param => typeof param === 'string')) {
+      this.typeParameters = typeParameters.map(param => new PrimitiveType(param));
+    } else {
+      this.typeParameters = typeParameters;
+    }
   }
 
   public toString(): string {
