@@ -76,9 +76,9 @@ export interface Keyboard {
   Hide(): unknown;
 
   /**
-   * {@link EKeyboardFlags} could be useful here
+   * @param m_eKeyboardFlags Bitmask flags representing keyboard state
    */
-  RegisterForStatus(callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: number, m_sInitialKeyboardText: string) => void): Unregisterable;
+  RegisterForStatus(callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: EKeyboardFlags, m_sInitialKeyboardText: string) => void): Unregisterable;
 
   SendDone(): unknown;
 

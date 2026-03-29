@@ -178,7 +178,7 @@ declare global {
     loginStore: unknown;
     MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
-    NotificationStore: unknown;
+    NotificationStore: NotificationStore;
     openDatabase: unknown;
     overlayStore: unknown;
     partnerEventStore: unknown;

@@ -277,9 +277,8 @@ export interface BrowserViewContextMenu {
   /**
    * Bitmask representing edit state.
    * @remarks Appears on editable elements like `<input>`, etc.
-   * @see {@link EBrowserViewContextMenuEditFlag}
    */
-  edit_state_flags?: number;
+  edit_state_flags?: EBrowserViewContextMenuEditFlag;
 
   /**
    * Browser page URL.
@@ -306,9 +305,8 @@ export interface BrowserViewContextMenu {
 
   /**
    * Bitmask representing context menu type.
-   * @see {@link EBrowserViewContextMenuTypeFlag}
    */
-  type_flags: number;
+  type_flags: EBrowserViewContextMenuTypeFlag;
 
   /**
    * Browser page URL.

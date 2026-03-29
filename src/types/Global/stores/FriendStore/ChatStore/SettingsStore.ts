@@ -1,7 +1,6 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { CStore_GetStorePreferences_Response } from 'Protobufs/steam/steammessages_store.steamclient';
 import { ProtobufInterface } from 'shared/protobuf';
-import { BooleanToVDFBoolean } from 'SteamClient/FriendSettings';
 
 export interface SettingsStore {
   BackfillSingleWindowMode(e: unknown): void;
@@ -162,8 +161,6 @@ export interface FriendsSettings {
 
   nChatFontSize: number;
 }
-
-export type FriendsSettingsVDF = BooleanToVDFBoolean<FriendsSettings>;
 
 export interface IFriendSettingsStore {
   BUpdateSettings(e: unknown): boolean;

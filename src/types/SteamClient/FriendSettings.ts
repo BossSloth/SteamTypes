@@ -14,9 +14,9 @@ export interface FriendSettings {
   /**
    * Registers a callback function to be notified of friend settings changes.
    * @param callback The callback function to be called when friend settings change.
-   * @remarks The callback receives a JSON object string which may be parsed into {BooleanToVDFBoolean\<FriendsSettings\>}.
+   * @remarks The callback receives a JSON object string which may be parsed into {@link FriendsSettingsVDF}.
    */
-  RegisterForSettingsChanges(callback: (settings: SerializedJsonString<BooleanToVDFBoolean<FriendsSettings>>) => void): void;
+  RegisterForSettingsChanges(callback: (settings: SerializedJsonString<FriendsSettingsVDF>) => void): void;
 
   /**
    * @param details String received from {@link FriendSettings.RegisterForSettingsChanges}.
@@ -34,6 +34,8 @@ export type BooleanToVDFBoolean<T> = {
       ? BooleanToVDFBoolean<T[K]>
       : T[K];
 };
+
+export type FriendsSettingsVDF = BooleanToVDFBoolean<FriendsSettings>;
 
 export interface FriendSettingsFeatureObject {
   bEnabled: boolean;

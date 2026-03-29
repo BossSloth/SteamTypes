@@ -1,3 +1,4 @@
+import { SerializedJsonString } from 'shared/helpers';
 import { BrowserContext } from './shared';
 
 export interface ClientNotifications {
@@ -7,7 +8,7 @@ export interface ClientNotifications {
    * @param options Stringified object of {@link SteamNotificationOptions}.
    * @param callback
    */
-  DisplayClientNotification(notification: EClientUINotificationType, options: string, callback: (context: BrowserContext) => void): void;
+  DisplayClientNotification(notification: EClientUINotificationType, options: SerializedJsonString<SteamNotificationOptions>, callback: (context: BrowserContext) => void): void;
 
   /**
    * @param notificationId The ID of the notification to handle.
