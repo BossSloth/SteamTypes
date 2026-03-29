@@ -1,0 +1,121 @@
+diff --git a/build/globals/SteamClient.d.ts b/build/globals/SteamClient.d.ts
+index db0ae5f77fd80cfc61cdf780f2da6aaab2531bc3..8b137891791fe96927ad78e64b0aad7bded08bdc 100644
+--- a/build/globals/SteamClient.d.ts
++++ b/build/globals/SteamClient.d.ts
+@@ -1,5 +1 @@
+-import { SteamClient } from './steam-client';
+-export * from './steam-client';
+-declare global {
+-    var SteamClient: SteamClient;
+-}
++
+diff --git a/build/globals/stores.d.ts b/build/globals/stores.d.ts
+index 9243c7ab7caa69fd07c15704e8119e7c043c0ea8..81d88b1fe942bacf83cc9298777d94f9013a4db5 100644
+--- a/build/globals/stores.d.ts
++++ b/build/globals/stores.d.ts
+@@ -1,5 +1,4 @@
+-import { WindowRouter } from '../modules/Router';
+-import { AppDetails, LogoPosition, SteamAppOverview } from "./steam-client/App";
++import { AppDetails, SteamAppOverview } from "./steam-client/App";
+ interface AppData {
+     details: AppDetails;
+ }
+@@ -11,60 +10,5 @@ interface AppStoreAppOverview extends SteamAppOverview {
+     BIsModOrShortcut: () => boolean;
+     BIsShortcut: () => boolean;
+ }
+-declare global {
+-    interface Window {
+-        LocalizationManager: {
+-            m_mapTokens: Map<string, string>;
+-            m_mapFallbackTokens: Map<string, string>;
+-            m_rgLocalesToUse: string[];
+-        };
+-        App: {
+-            m_CurrentUser: {
+-                bIsLimited: boolean;
+-                bIsOfflineMode: boolean;
+-                bSupportAlertActive: boolean;
+-                bCanInviteFriends: boolean;
+-                NotificationCounts: {
+-                    comments: number;
+-                    inventory_items: number;
+-                    invites: number;
+-                    gifts: number;
+-                    offline_messages: number;
+-                    trade_offers: number;
+-                    async_game_updates: number;
+-                    moderator_messages: number;
+-                    help_request_replies: number;
+-                };
+-                strAccountBalance: string;
+-                strAccountName: string;
+-                strSteamID: string;
+-            };
+-        };
+-        appStore: {
+-            GetAppOverviewByAppID: (appId: number) => SteamAppOverview | null;
+-            GetCustomVerticalCapsuleURLs: (app: AppStoreAppOverview) => string[];
+-            GetCustomLandcapeImageURLs: (app: AppStoreAppOverview) => string[];
+-            GetCustomHeroImageURLs: (app: AppStoreAppOverview) => string[];
+-            GetCustomLogoImageURLs: (app: AppStoreAppOverview) => string[];
+-            GetLandscapeImageURLForApp: (app: AppStoreAppOverview) => string;
+-            GetVerticalCapsuleURLForApp: (app: AppStoreAppOverview) => string;
+-            GetCachedLandscapeImageURLForApp: (app: AppStoreAppOverview) => string;
+-            GetCachedVerticalImageURLForApp: (app: AppStoreAppOverview) => string;
+-            GetPregeneratedVerticalCapsuleForApp: (app: AppStoreAppOverview) => string;
+-            GetIconURLForApp: (app: AppStoreAppOverview) => string;
+-        };
+-        appDetailsStore: {
+-            GetAppData: (appId: number) => AppData | null;
+-            GetAppDetails: (appId: number) => AppDetails | null;
+-            GetCustomLogoPosition: (app: AppStoreAppOverview) => LogoPosition | null;
+-            SaveCustomLogoPosition: (app: AppStoreAppOverview, logoPositions: LogoPosition) => any;
+-        };
+-        SteamUIStore: {
+-            GetFocusedWindowInstance: () => WindowRouter;
+-        };
+-        securitystore: {
+-            IsLockScreenActive: () => boolean;
+-        };
+-    }
+-}
+-export {};
++export { };
++
+diff --git a/build/hooks/toaster-hook.d.ts b/build/hooks/toaster-hook.d.ts
+index b24e87f083be9493dd1c3448ea641d0bdb83de2b..2e12ab97e21a32e5bb7e22df940ade7a9e5539c2 100644
+--- a/build/hooks/toaster-hook.d.ts
++++ b/build/hooks/toaster-hook.d.ts
+@@ -1,5 +1,5 @@
+-import Logger from '../logger';
+ import { ReactNode } from 'react';
++import Logger from '../logger';
+ export interface ToastData {
+     title: ReactNode;
+     body: ReactNode;
+@@ -29,8 +29,6 @@ export interface ToastNotification {
+ declare global {
+     interface Window {
+         __TOASTER_INSTANCE: any;
+-        settingsStore: any;
+-        NotificationStore: any;
+     }
+ }
+ declare class Toaster extends Logger {
+diff --git a/build/utils/index.d.ts b/build/utils/index.d.ts
+index d9eff69d5f8e9ddeb65e2dfcc90497d7025d428b..71f3b62e87bcbe4251e33acb256549c84da75be5 100644
+--- a/build/utils/index.d.ts
++++ b/build/utils/index.d.ts
+@@ -1,10 +1,9 @@
+ export * from './patcher';
+-export * from './react/react';
+ export * from './react/fc';
++export * from './react/react';
+ export * from './react/treepatcher';
+ export * from './static-classes';
+ declare global {
+-    var FocusNavController: any;
+     var GamepadNavTree: any;
+ }
+ export declare function joinClassNames(...classes: string[]): string;

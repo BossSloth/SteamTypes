@@ -50,7 +50,7 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/npm": "^13.1.5",
-    "@steambrew/client": "^5.8.3",
+    "@steambrew/client": "^5.8.4",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/chrome-remote-interface": "^0.33.0",
     "@types/cli-progress": "^3.11.6",
@@ -96,7 +96,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@steambrew/client": "^5.8.3"
+    "@steambrew/client": "^5.8.4"
   },
   "peerDependenciesMeta": {
     "@steambrew/client": {
@@ -104,6 +104,6 @@
     }
   },
   "patchedDependencies": {
-    "@steambrew/client@5.8.3": "patches/@steambrew%2Fclient@5.8.3.patch"
+    "@steambrew/client@5.8.4": "patches/@steambrew%2Fclient@5.8.4.patch"
   }
 }

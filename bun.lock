@@ -17,7 +17,7 @@
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^12.0.6",
         "@semantic-release/npm": "^13.1.5",
-        "@steambrew/client": "^5.8.3",
+        "@steambrew/client": "^5.8.4",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/chrome-remote-interface": "^0.33.0",
         "@types/cli-progress": "^3.11.6",
@@ -49,12 +49,15 @@
         "vitest": "^3.2.4",
       },
       "peerDependencies": {
-        "@steambrew/client": "^5.8.3",
+        "@steambrew/client": "^5.8.4",
       },
       "optionalPeers": [
         "@steambrew/client",
       ],
     },
+  },
+  "patchedDependencies": {
+    "@steambrew/client@5.8.4": "patches/@steambrew%2Fclient@5.8.4.patch",
   },
   "packages": {
     "@actions/core": ["@actions/core@3.0.0", "", { "dependencies": { "@actions/exec": "^3.0.0", "@actions/http-client": "^4.0.0" } }, "sha512-zYt6cz+ivnTmiT/ksRVriMBOiuoUpDCJJlZ5KPl2/FRdvwU3f7MPh9qftvbkXJThragzUZieit2nyHUyw53Seg=="],
