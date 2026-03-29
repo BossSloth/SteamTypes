@@ -198,20 +198,3 @@ export interface Unregisterable {
    */
   unregister(): void;
 }
-
-/**
- * @todo Get rid of this interface and use `ProtobufInterface` instead from the other shared folder
- * Deserialized ProtoBuf message.
- */
-export interface JsPbMessage {
-  getClassName(): string;
-
-  serializeBase64String(): string;
-
-  serializeBinary(): Uint8Array;
-
-  /**
-   * Converts the message to an object.
-   */
-  toObject(includeJsPbInstance: boolean): unknown;
-}
