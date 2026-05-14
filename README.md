@@ -51,7 +51,7 @@ map an app details value:
 
 Profile a script:
 ```
-tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert-to-typescript/test.ts
+tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert-to-typescript/index.ts
 ```
 
 ### Type Validation

@@ -45,7 +45,7 @@ async function getSharedJsContextTarget(): Promise<string> {
   } catch (error) {
     throw new Error(`
 ${chalk.red('❌ Unable to connect to Steam on port 8080.')}
-${chalk.yellow('⚠️  Make sure Steam is running and CEF is enabled.')}`, { cause: error });
+${chalk.yellow('⚠️  Make sure Steam is running with -dev and CEF is enabled.')}`, { cause: error });
   }
 
   logger.log(chalk.green('✅ Connected to Steam CEF instance'));
