@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Heritage Clause Cases > extends clause added to target when source extends a known base 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,13 @@
+export interface User {
+  id: number;
++
+  name: string;
+}
+
+-export interface Admin {
++export interface Admin extends User {
++  id: number;
++
++  name: string;
++
+  permissions: string[];
+}"
+`;
+
+exports[`Comparator Heritage Clause Cases > matching extends clause with generics is not re-added 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,8 @@
+export interface User<T> {
+  id: T;
++
+  name: string;
+}
+
+export interface Admin extends User<number> {
+  permissions: string[];"
+`;

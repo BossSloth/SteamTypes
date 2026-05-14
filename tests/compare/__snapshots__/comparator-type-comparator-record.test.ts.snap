@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Type Comparator Record Cases > target record vs source different record 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface WithRecord {
+-  data: Record<string, number>;
++  data: Record<string, string>;
+}"
+`;
+
+exports[`Comparator Type Comparator Record Cases > target record vs source primitive falls through 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface WithRecord {
+-  data: Record<string, number>;
++  data: number;
+}"
+`;
+
+exports[`Comparator Type Comparator Record Cases > target record vs source type alias falls through 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface WithRecord {
+-  data: Record<string, number>;
++  data: DataMap;
+}"
+`;

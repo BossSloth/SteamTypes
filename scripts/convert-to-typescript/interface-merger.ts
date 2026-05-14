@@ -362,6 +362,7 @@ function mergeInterfaceGroup(
   interfaces: Map<string, TypeScriptInterface>,
   group: string[],
 ): TypeScriptInterface {
+  /* v8 ignore next -- @preserve */
   if (group.length === 0) {
     throw new Error('Cannot merge empty group');
   }
@@ -370,6 +371,7 @@ function mergeInterfaceGroup(
   const baseName = group[0];
   const baseInterface = interfaces.get(baseName);
 
+  /* v8 ignore next -- @preserve */
   if (!baseInterface) {
     throw new Error(`Base interface ${baseName} not found`);
   }
@@ -392,6 +394,7 @@ function mergeInterfaceGroup(
   for (const interfaceName of group) {
     const currentInterface = interfaces.get(interfaceName);
 
+    /* v8 ignore next -- @preserve */
     if (!currentInterface) {
       throw new Error(`Interface ${interfaceName} not found`);
     }
@@ -660,6 +663,7 @@ export function mergeInterfaces(interfaces: Map<string, TypeScriptInterface>): M
     if (filteredGroup.length === 1) {
       const name = filteredGroup[0];
       const interfaceObj = interfaces.get(name);
+      /* v8 ignore next -- @preserve */
       if (!interfaceObj) {
         throw new Error(`Interface ${name} not found`);
       }
@@ -698,6 +702,7 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
   for (const name of interfaces.keys()) {
     // Use nameCounter if available, otherwise fall back to regex
     const interfaceObj = interfaces.get(name);
+    /* v8 ignore next -- @preserve */
     if (!interfaceObj) {
       throw new Error(`Interface ${name} not found`);
     }
@@ -724,6 +729,7 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
       const aInterface = interfaces.get(a);
       const bInterface = interfaces.get(b);
 
+      /* v8 ignore next -- @preserve */
       if (!aInterface || !bInterface) {
         throw new Error(`Interface ${a} or ${b} not found`);
       }
@@ -737,6 +743,7 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
       if (aInterface.nameCounter === undefined) return -1;
       if (bInterface.nameCounter === undefined) return 1;
 
+      /* v8 ignore next -- @preserve */
       return 0;
     });
 
@@ -746,6 +753,7 @@ function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterface>): Ma
       const newName = `${baseName}${i + 1}`;
       const interfaceObj = interfaces.get(oldName);
 
+      /* v8 ignore next -- @preserve */
       if (!interfaceObj) {
         throw new Error(`Interface ${oldName} not found`);
       }

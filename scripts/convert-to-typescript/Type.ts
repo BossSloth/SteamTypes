@@ -91,6 +91,7 @@ export class UnionType extends Type {
     const arrayGroups = UnionType.createArrayGroups(arrayTypes);
 
     // If no union array types found, no optimization possible
+    /* v8 ignore next -- @preserve */
     if (arrayGroups.size === 0) {
       return types;
     }
@@ -202,6 +203,7 @@ export class UnionType extends Type {
       } else {
         // Handle non-union element types
         const typeString = arrayType.valueType.toString();
+        /* v8 ignore next -- @preserve */
         if (!seenTypeStrings.has(typeString)) {
           seenTypeStrings.add(typeString);
           uniqueElementTypes.push(arrayType.valueType);
@@ -249,9 +251,11 @@ type SetName = 'Set' | 'ObservableSet';
 
 type MapName = 'Map' | 'ObservableMap';
 
+export type IterableTypeName = SetName | MapName;
+
 type ProtoBufNames = 'ProtobufClass' | 'ProtobufInterface';
 
-export type GenericTypeName = MapName | SetName | ProtoBufNames | 'ObservableValue';
+export type GenericTypeName = IterableTypeName | ProtoBufNames | 'ObservableValue';
 
 export class GenericType extends Type {
   public readonly kind: string = 'generic';

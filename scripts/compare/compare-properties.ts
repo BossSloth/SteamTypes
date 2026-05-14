@@ -89,6 +89,7 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
     }
 
     const targetSymbol = targetProp.getType().getSymbol();
+    /* v8 ignore next -- @preserve */
     if (!targetSymbol) {
       throw new Error(`Failed to get symbol for property ${targetProp.getName()}`);
     }

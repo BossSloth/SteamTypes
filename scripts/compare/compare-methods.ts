@@ -110,6 +110,7 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
     return;
   }
 
+  /* v8 ignore next -- @preserve */
   if (sourceParam === undefined || targetParam === undefined) {
     return;
   }

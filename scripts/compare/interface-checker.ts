@@ -5,7 +5,12 @@ import { IndentationText, Project, QuoteKind, SourceFile } from 'ts-morph';
 import { __dirname } from '../dirname';
 import { Logger } from '../logger';
 import { compareAndCorrectAllInterfaces } from './interface-comparator';
-import { logger, setLogger } from './shared';
+
+let logger: Logger;
+
+function setLogger(newLogger: Logger): void {
+  logger = newLogger;
+}
 
 const project = new Project({
   compilerOptions: {

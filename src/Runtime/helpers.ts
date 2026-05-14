@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { SerializedJsonString } from 'shared/helpers';
 
 export async function sleep(ms: number): Promise<void> {

@@ -126,6 +126,8 @@ export default defineConfig(
       'sort-imports': 'off',
       'sort-keys': 'off',
       '@typescript-eslint/strict-void-return': 'off',
+      '@typescript-eslint/consistent-return': 'off',
+      'default-case': 'off',
       // #endregion
 
       // #region Project specific

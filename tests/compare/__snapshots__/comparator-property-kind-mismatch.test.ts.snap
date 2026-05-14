@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Property Kind Mismatch Cases > method becomes property when source switches kind 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface KindMismatch {
+-  item(): string;
++  item: string;
+}"
+`;
+
+exports[`Comparator Property Kind Mismatch Cases > property becomes method when source switches kind 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface KindMismatch {
+-  item: string;
++  item(): string;
+}"
+`;

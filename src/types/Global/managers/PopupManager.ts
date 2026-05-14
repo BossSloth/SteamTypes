@@ -139,7 +139,7 @@ export interface DebouncedSaveSavedDimensionStore_DebounceProperties {
 }
 
 export type MainWindowPopup = Popup<MainWindowPopupParameters, MainWindowPopupCallback>;
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
+
 export type BasicPopup = Popup<PopupParameters, PopupCallback>;
 
 export interface Popup<

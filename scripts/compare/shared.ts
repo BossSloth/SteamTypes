@@ -1,5 +1,4 @@
 import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, QuestionTokenableNode, ReadonlyableNode, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
-import { Logger } from '../logger';
 
 export const CustomJsDocTags = {
   originalName: 'compareOriginalName',
@@ -27,12 +26,6 @@ export function initGlobalState(
   interfaceQueue = [];
   currentTargetSourceFile = _currentTargetSourceFile;
   currentStartingInterfaces = _currentStartingInterfaces;
-}
-
-export let logger: Logger;
-
-export function setLogger(newLogger: Logger): void {
-  logger = newLogger;
 }
 
 /**

@@ -1,6 +1,8 @@
+import tsConfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  plugins: [tsConfigPaths()],
   test: {
     environment: 'node',
     globals: true,
@@ -36,6 +38,20 @@ export default defineConfig({
         'scripts/convert-to-typescript/fill-app-data.ts',
         'scripts/convert-to-typescript/global-utils.ts',
       ],
+      thresholds: {
+        autoUpdate: newThreshold => Math.floor(newThreshold),
+        statements: 62,
+        branches: 57,
+        functions: 81,
+        lines: 63,
+        perFile: true,
+      },
+      watermarks: {
+        statements: [85, 99],
+        branches: [85, 99],
+        functions: [85, 99],
+        lines: [85, 99],
+      },
     },
   },
 });

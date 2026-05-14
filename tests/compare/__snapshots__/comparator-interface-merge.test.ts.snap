@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Interface Merge Cases > manual merge falls back when source property type mismatches target 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,7 +2,8 @@
+  items: Item[];
+}
+
+export interface Item {
+  id: number;
++
+  name: string;
+}"
+`;
+
+exports[`Comparator Interface Merge Cases > manual merge skips unresolved source interface reference 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,11 @@
+import { Imported } from 'somewhere';
+
+export interface Container {
+-  items: Item[];
++  items: (Item | Imported)[];
+}
+
+export interface Item {
+  id: number;
++
+  name: string;
+}"
+`;

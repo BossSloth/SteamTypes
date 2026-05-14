@@ -2,14 +2,14 @@ import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
 import { ComputedValue } from 'mobx/dist/internal';
 import { Root as ReactRoot } from 'react-dom/client';
-import { ArrayType, createMapType, createSetType, GenericType, GenericTypeName, InterfaceType, PrimitiveType, Type, UnionType } from './Type';
+import { ArrayType, createMapType, createSetType, GenericType, InterfaceType, IterableTypeName, PrimitiveType, Type, UnionType } from './Type';
 import { defaultProtoProps, InterfaceToProcess } from './types';
 import { context, formatInterfaceName } from './utils';
 
 /**
  * Gets the TypeScript type for a value
  */
-export function getType(value: unknown, path: string, storeClassName = false): Type {
+export function getType(value: unknown, path: string, storeClassName = false, addImport = true): Type {
   if (value === null) return new PrimitiveType('null');
 
   const type = typeof value;
@@ -22,26 +22,24 @@ export function getType(value: unknown, path: string, storeClassName = false): T
     case 'bigint': return new PrimitiveType('bigint');
     case 'symbol': return new PrimitiveType('symbol');
     case 'function': return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
-    case 'object': return getObjectType(value as Record<string, unknown>, path, storeClassName);
-    default:
-      return new PrimitiveType('unknown');
+    case 'object': return getObjectType(value as Record<string, unknown>, path, storeClassName, addImport);
   }
 }
 
-function getObjectType(value: Record<string, unknown>, path: string, storeClassName = false): Type {
+function getObjectType(value: Record<string, unknown>, path: string, storeClassName = false, addImport = true): Type {
   const isValueIterable = isIterable(value);
   const circularReference = getCircularReference(value, isValueIterable);
 
   if (circularReference) return circularReference;
 
   if (isValueIterable) {
-    return getIterableType(value, path);
+    return getIterableType(value, path, addImport);
   }
 
-  const primitiveObjectType = getPrimitiveObjectTypes(value);
+  const primitiveObjectType = getPrimitiveObjectTypes(value, addImport);
   if (primitiveObjectType !== null) return new PrimitiveType(primitiveObjectType);
 
-  const genericObjectType = getGenericObjectTypes(value, path);
+  const genericObjectType = getGenericObjectTypes(value, path, addImport);
   if (genericObjectType !== null) return genericObjectType;
 
   if (!path) {
@@ -52,7 +50,9 @@ function getObjectType(value: Record<string, unknown>, path: string, storeClassN
 
   if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
 
-  const lastPathSegment = path.split('.').pop() ?? '';
+  // split will always have one segment so pop() is safe
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const lastPathSegment = path.split('.').pop()!;
 
   let interfaceName: string;
   let nameCounter: number | undefined;
@@ -158,7 +158,7 @@ function generateInterfaceName(pathSegment: string): [string, number | undefined
 /**
  * Gets the TypeScript type for iterable values (arrays, sets, maps)
  */
-function getIterableType(value: Iterable<unknown>, path: string): ArrayType | GenericType {
+function getIterableType(value: Iterable<unknown>, path: string, addImport: boolean): ArrayType | GenericType {
   // Register this iterable as being processed to detect circular references
   // context.processedObjectPaths.set(value, path.split('.').pop() ?? 'Item');
   // TODO: somehow figure out a better way to detect circular references in nested arrays
@@ -169,9 +169,8 @@ function getIterableType(value: Iterable<unknown>, path: string): ArrayType | Ge
     return new ArrayType(getArrayTypes(array, path));
   }
 
-  const iterableTypeName = getIterableTypeName(value);
+  const iterableTypeName = getIterableTypeName(value, addImport);
   const isMap = iterableTypeName === 'Map' || iterableTypeName === 'ObservableMap';
-  const isSet = iterableTypeName === 'Set' || iterableTypeName === 'ObservableSet';
 
   if (isMap) {
     // Handle Map objects
@@ -180,15 +179,13 @@ function getIterableType(value: Iterable<unknown>, path: string): ArrayType | Ge
     const valueType = getArrayTypes(Array.from(map.values()), path);
 
     return createMapType(keyType, valueType, iterableTypeName);
-  } else if (isSet) {
-    // Handle Set objects
-    const set = value as Set<unknown>;
-    const valueType = getArrayTypes(Array.from(set.values()), path);
-
-    return createSetType(valueType, iterableTypeName);
   }
 
-  throw new Error('Invalid iterable type');
+  // Handle Set objects
+  const set = value as Set<unknown>;
+  const valueType = getArrayTypes(Array.from(set.values()), path);
+
+  return createSetType(valueType, iterableTypeName);
 }
 
 /**
@@ -229,22 +226,25 @@ function getArrayTypes(items: unknown[], path: string): Type {
  * Gets the TypeScript type name for an object
  * And also adds the import for the object if it's not already imported
  */
-function getIterableTypeName(value: unknown): GenericTypeName {
-  if (isObservableSet(value)) {
-    context.addImport('mobx', 'ObservableSet');
+function getIterableTypeName(value: unknown, addImport: boolean): IterableTypeName {
+  // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
+  switch (true) {
+    case isObservableSet(value):
+      if (addImport) context.addImport('mobx', 'ObservableSet');
 
-    return 'ObservableSet';
-  } else if (value instanceof Set) {
-    return 'Set';
-  } else if (isObservableMap(value)) {
-    context.addImport('mobx', 'ObservableMap');
+      return 'ObservableSet';
+    case value instanceof Set:
+      return 'Set';
+    case isObservableMap(value):
+      if (addImport) context.addImport('mobx', 'ObservableMap');
 
-    return 'ObservableMap';
-  } else if (value instanceof Map) {
-    return 'Map';
+      return 'ObservableMap';
+    case value instanceof Map:
+      return 'Map';
+      /* v8 ignore next -- @preserve */
+    default:
+      throw new Error('Invalid iterable type');
   }
-
-  throw new Error('Invalid iterable type');
 }
 
 function isIterable(value: unknown): value is Iterable<unknown> {
@@ -259,7 +259,7 @@ function isIterable(value: unknown): value is Iterable<unknown> {
  * Checks for non-generic object types and returns their TypeScript type
  */
 // eslint-disable-next-line complexity
-function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null {
+function getPrimitiveObjectTypes(obj: Record<string, unknown>, addImport = true): string | null {
   if (Long.isLong(obj)) {
     if (addImport) context.addImport('long', 'Long', true);
 
@@ -321,29 +321,21 @@ function getPrimitiveObjectTypes(obj: unknown, addImport = true): string | null 
   return null;
 }
 
-function isWindowObject(obj: unknown): obj is Window {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isWindowObject(obj: object): obj is Window {
   return 'window' in obj && obj.window === obj;
 }
 
 const ELEMENT_NODE = 1;
 
-function isHTMLElement(obj: unknown): obj is HTMLElement {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isHTMLElement(obj: object): obj is HTMLElement {
   return 'nodeType' in obj && obj.nodeType === ELEMENT_NODE;
 }
 
-function isCssStyleSheet(obj: unknown): obj is CSSStyleSheet {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isCssStyleSheet(obj: object): obj is CSSStyleSheet {
   return 'cssRules' in obj && 'type' in obj && obj.type === 'text/css';
 }
 
-function isComputedValue(obj: unknown): obj is ComputedValue<unknown> {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isComputedValue(obj: object): obj is ComputedValue<unknown> {
   return 'isMobXComputedValue' in obj && obj.isMobXComputedValue === true;
 }
 
@@ -353,29 +345,25 @@ function getComputedValueType(obj: ComputedValue<unknown>, addImport = true): st
   return `ComputedValue<${typeof obj.get()}>`;
 }
 
-function isMutationObserver(obj: unknown): obj is MutationObserver {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isMutationObserver(obj: object): obj is MutationObserver {
   return 'disconnect' in obj && 'observe' in obj;
 }
 
-function isReactRoot(obj: unknown): obj is ReactRoot {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isReactRoot(obj: object): obj is ReactRoot {
   return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
 }
 
-function isSimpleProtobufMessage(obj: unknown): obj is { getClassName(): string; } {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isSimpleProtobufMessage(obj: object): obj is { getClassName(): string; } {
   return 'toObject' in obj && 'serializeBinary' in obj && 'serializeBase64String' in obj && 'getClassName' in obj;
 }
 
-function getGenericObjectTypes(obj: unknown, path: string): Type | null {
+function getGenericObjectTypes(obj: Record<string, unknown>, path: string, addImport: boolean): Type | null {
   if (isSteamObservableValue(obj)) {
-    const mainType = getType(obj.m_currentValue, path);
+    const mainType = getType(obj.m_currentValue, path, undefined, addImport);
 
-    context.addImport('shared', 'ObservableValue');
+    if (addImport) {
+      context.addImport('shared', 'ObservableValue');
+    }
 
     return new GenericType('ObservableValue', [mainType]);
   }
@@ -383,9 +371,7 @@ function getGenericObjectTypes(obj: unknown, path: string): Type | null {
   return null;
 }
 
-function isSteamObservableValue(obj: unknown): obj is { m_currentValue: unknown; } {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isSteamObservableValue(obj: object): obj is { m_currentValue: unknown; } {
   return 'Set' in obj
     && 'Subscribe' in obj
     && 'm_currentValue' in obj
@@ -393,9 +379,7 @@ function isSteamObservableValue(obj: unknown): obj is { m_currentValue: unknown;
     && 'Value' in obj;
 }
 
-function isTanStackQueryObserver(obj: unknown): boolean {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isTanStackQueryObserver(obj: object): boolean {
   return 'createResult' in obj
     && typeof obj.createResult === 'function'
     && 'getCurrentResult' in obj
@@ -404,9 +388,7 @@ function isTanStackQueryObserver(obj: unknown): boolean {
     && typeof obj.subscribe === 'function';
 }
 
-function isSteamID(obj: unknown): boolean {
-  if (obj === null || typeof obj !== 'object') return false;
-
+function isSteamID(obj: object): boolean {
   return 'm_ulSteamID' in obj && 'ConvertTo64BitString' in obj;
 }
 

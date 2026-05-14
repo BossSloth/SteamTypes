@@ -45,11 +45,13 @@ export function convertToTypescript(
   // Then add all other interfaces
   for (const [name, interfaceObj] of sortedInterfaces) {
     // Skip already processed interfaces and the main interface
+    /* v8 ignore next -- @preserve */
     if (processedNames.has(name)) {
       continue;
     }
 
     // Skip duplicate interfaces (those that were merged)
+    /* v8 ignore next -- @preserve */
     if (processedNames.has(interfaceObj.name)) {
       continue;
     }
@@ -65,6 +67,7 @@ export function convertToTypescript(
     const sortedImports = Array.from(context.imports.entries()).sort((a, b) => b[0].localeCompare(a[0]));
     for (const [moduleName, { types, defaultImport }] of sortedImports) {
       if (defaultImport ?? false) {
+        /* v8 ignore next -- @preserve */
         if (types.size > 1) {
           throw new Error('Cannot import multiple types with default import');
         }

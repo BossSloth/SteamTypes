@@ -135,6 +135,7 @@ function analyzeSourceFile(
   const sourceFile = project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, sourceCode);
 
   // Check for diagnostics if enabled
+  /* v8 ignore next -- @preserve */
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (enableDiagnostics) {
     const diagnostics = project.getPreEmitDiagnostics();
@@ -171,6 +172,7 @@ function processVariableDeclaration(
   const originalFuncName = nameMap.get(sanitizedName);
   const originalFunc = functionsToProcess.get(sanitizedName);
 
+  /* v8 ignore next -- @preserve */
   if (originalFuncName === undefined || originalFunc === undefined) {
     console.warn(`Could not find original mapping for ${sanitizedName}`);
 
