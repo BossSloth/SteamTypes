@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message TrulyEmpty {
+}
+
+message HasOneField {
+  string name = 1;
+}

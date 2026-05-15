@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+  optional string setting_description = 60001;
+  optional string setting_name = 60002;
+  optional bool setting_default_bool = 60003;
+  optional int32 setting_default_int = 60004;
+  optional uint32 setting_default_uint = 60005;
+  optional float setting_default_float = 60006;
+  optional string setting_default_string = 60007;
+  optional string setting_store = 60008;
+  optional bool setting_pre_login = 60009;
+  optional bool setting_readonly = 60010;
+  optional string setting_profile_mode = 60011;
+  optional int32 setting_clamp_min = 60012;
+  optional int32 setting_clamp_max = 60013;
+  optional string custom_unknown_option = 60099;
+}
+
+message Settings {
+  // Field with a string default that should get quoted, plus a tab in another option's value
+  optional string overlay_key = 1 [
+    (setting_name) = "system\\OverlayKey",
+    (setting_default_string) = "Shift\tKEY_TAB"
+  ];
+
+  // Field with int default + clamp range + readonly
+  optional int32 max_fps = 2 [
+    (setting_default_int) = 60,
+    (setting_clamp_min) = 24,
+    (setting_clamp_max) = 120,
+    (setting_readonly) = true
+  ];
+
+  // Bool default + uint default + float default
+  optional bool enabled = 3 [(setting_default_bool) = true];
+  optional uint32 port = 4 [(setting_default_uint) = 8080];
+  optional float scale = 5 [(setting_default_float) = 1.5];
+
+  // Description and other plain options
+  optional string label = 6 [
+    (setting_description) = "User-facing label",
+    (setting_store) = "ConfigStore",
+    (setting_pre_login) = true,
+    (setting_profile_mode) = "Default"
+  ];
+
+  // Unknown option key falls through to raw key
+  optional string opaque = 7 [(custom_unknown_option) = "opaque-value"];
+
+  // Only blacklisted "default" option (no comment expected)
+  optional int32 only_default = 8 [default = 7];
+}

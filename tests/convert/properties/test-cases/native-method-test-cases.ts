@@ -33,9 +33,9 @@ function buildHost(): NativeHost {
 function buildSecondHost(): NativeHost {
   const instance = new NativeHost();
   const mutable = instance as unknown as Record<string, unknown>;
-  // Same method name & class → exercises the function declaration cache.
+  // Same method name & class -> exercises the function declaration cache.
   mutable.greet = instance.greet.bind(instance);
-  // Same missing-method name → exercises the cachedMissingFunctions short-circuit.
+  // Same missing-method name -> exercises the cachedMissingFunctions short-circuit.
   mutable.notOnClass = ghost2.bind(instance);
 
   return instance;

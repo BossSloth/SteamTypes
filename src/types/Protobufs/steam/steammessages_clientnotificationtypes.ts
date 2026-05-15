@@ -253,6 +253,7 @@ export interface CClientNotificationGameRecordingInstantClip {
 export interface CClientNotificationHardwareUpdateAvailable {
   etype?: number[];
 }
+
 /**
  * @note make sure to copy these values if updated to NotificationTargets.ts
  */

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message DocumentedThing {
+  string title = 1;
+  string body = 2;
+  // This field had an @Options comment in the existing file; it should be dropped
+  int32 stale = 3;
+}
+
+enum EDocumentedKind {
+  k_EDocumentedKind_Unknown = 0;
+  k_EDocumentedKind_Active = 1;
+}

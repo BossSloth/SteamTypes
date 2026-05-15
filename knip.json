@@ -5,7 +5,7 @@
     "src/index.ts",
     "src/Runtime/*.ts"
   ],
-  "ignore":["tests/**/__snapshots__/**", "scripts/defaultChromeWindow.js", "src/types/Protobufs/**"],
+  "ignore":["tests/**/__snapshots__/**", "tests/**/__fixtures__/**", "scripts/defaultChromeWindow.js", "src/types/Protobufs/**"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "enum": true,

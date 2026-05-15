@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message SharedMessage {
+  string id = 1;
+  int32 count = 2;
+}
+
+enum ESharedKind {
+  k_ESharedKind_Unknown = 0;
+  k_ESharedKind_Primary = 1;
+  k_ESharedKind_Secondary = 2;
+}
+
+message OtherShared {
+  string note = 1;
+}

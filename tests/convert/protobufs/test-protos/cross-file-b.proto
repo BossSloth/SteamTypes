@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "cross-file-a.proto";
+
+message Consumer {
+  SharedMessage shared = 1;
+  ESharedKind kind = 2;
+  OtherShared other = 3;
+  string local = 4;
+}

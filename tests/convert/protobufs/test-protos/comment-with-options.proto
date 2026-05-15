@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+  optional string setting_description = 60001;
+  optional string setting_name = 60002;
+  optional bool setting_default_bool = 60003;
+}
+
+message MessageWithCommentAndOptions {
+  // This field has a regular comment
+  optional string field_with_both = 1 [
+    (setting_description) = "Field description from options",
+    (setting_name) = "field_name"
+  ];
+
+  // Another field with comment and options
+  optional bool enabled = 2 [
+    (setting_default_bool) = true
+  ];
+
+  // Field with only comment (no options)
+  optional int32 simple_field = 3;
+
+  // Field with only options (no comment)
+  optional string options_only = 4 [(setting_description) = "Only options"];
+}

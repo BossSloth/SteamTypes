@@ -40,10 +40,10 @@ export default defineConfig({
       ],
       thresholds: {
         autoUpdate: newThreshold => Math.floor(newThreshold),
-        statements: 62,
-        branches: 57,
-        functions: 81,
-        lines: 63,
+        statements: 83,
+        branches: 72,
+        functions: 89,
+        lines: 84,
         perFile: true,
       },
       watermarks: {

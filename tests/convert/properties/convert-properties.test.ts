@@ -23,8 +23,8 @@ createTest('Steam Runtime Types Tests', steamRuntimeTypesTests);
 
 createTest('Union Type Tests', unionTypeTests);
 
-createTest('Getter Throws Tests', getterThrowsTests);
+createTest('Getter Throws Tests', getterThrowsTests, { expectConsoleErrors: ['failed to get property unstable'] });
 
 createTest('Converter Flow Tests', converterFlowTests);
 
-createTest('Native Method Tests', nativeMethodTests);
+createTest('Native Method Tests', nativeMethodTests, { expectConsoleWarnings: ['Function notOnClass not found in class NativeHost'] });
