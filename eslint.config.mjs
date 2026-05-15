@@ -148,7 +148,7 @@ export default defineConfig(
       'customRules/no-deep-relative-imports': ['error', { maxDepth: 1 }],
       'no-restricted-imports': ['error', '@steambrew/client'],
       'jsdoc/no-undefined-types': ['error', { disableReporting: true }],
-      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
+      '@typescript-eslint/consistent-type-imports': 'off',
       // #endregion
     },
   },

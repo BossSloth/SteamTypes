@@ -1,22 +1,21 @@
 diff --git a/build/globals/SteamClient.d.ts b/build/globals/SteamClient.d.ts
-index db0ae5f77fd80cfc61cdf780f2da6aaab2531bc3..8b137891791fe96927ad78e64b0aad7bded08bdc 100644
+index db0ae5f77fd80cfc61cdf780f2da6aaab2531bc3..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 100644
 --- a/build/globals/SteamClient.d.ts
 +++ b/build/globals/SteamClient.d.ts
-@@ -1,5 +1 @@
+@@ -1,5 +0,0 @@
 -import { SteamClient } from './steam-client';
 -export * from './steam-client';
 -declare global {
 -    var SteamClient: SteamClient;
 -}
-+
 diff --git a/build/globals/stores.d.ts b/build/globals/stores.d.ts
-index 9243c7ab7caa69fd07c15704e8119e7c043c0ea8..81d88b1fe942bacf83cc9298777d94f9013a4db5 100644
+index 36508d2c6fe0da7da5677900b32ee6a3003d1f9b..c62fdc7badaa8e8e1d84a8ebe26c50b902ea131f 100644
 --- a/build/globals/stores.d.ts
 +++ b/build/globals/stores.d.ts
 @@ -1,5 +1,4 @@
 -import { WindowRouter } from '../modules/Router';
--import { AppDetails, LogoPosition, SteamAppOverview } from "./steam-client/App";
-+import { AppDetails, SteamAppOverview } from "./steam-client/App";
+-import { AppDetails, LogoPosition, SteamAppOverview } from './steam-client/App';
++import { AppDetails, SteamAppOverview } from './steam-client/App';
  interface AppData {
      details: AppDetails;
  }
@@ -104,10 +103,10 @@ index b24e87f083be9493dd1c3448ea641d0bdb83de2b..2e12ab97e21a32e5bb7e22df940ade7a
  }
  declare class Toaster extends Logger {
 diff --git a/build/utils/index.d.ts b/build/utils/index.d.ts
-index d9eff69d5f8e9ddeb65e2dfcc90497d7025d428b..71f3b62e87bcbe4251e33acb256549c84da75be5 100644
+index d9eff69d5f8e9ddeb65e2dfcc90497d7025d428b..18647d9cf9dc745c9f9856d993250d6ca2dfb260 100644
 --- a/build/utils/index.d.ts
 +++ b/build/utils/index.d.ts
-@@ -1,10 +1,9 @@
+@@ -1,11 +1,9 @@
  export * from './patcher';
 -export * from './react/react';
  export * from './react/fc';
@@ -116,6 +115,7 @@ index d9eff69d5f8e9ddeb65e2dfcc90497d7025d428b..71f3b62e87bcbe4251e33acb256549c8
  export * from './static-classes';
  declare global {
 -    var FocusNavController: any;
-     var GamepadNavTree: any;
+-    var GamepadNavTree: any;
  }
  export declare function joinClassNames(...classes: string[]): string;
+ export declare function sleep(ms: number): Promise<unknown>;

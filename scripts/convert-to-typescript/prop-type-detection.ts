@@ -1,7 +1,6 @@
 import Long from 'long';
 import { isObservableMap, isObservableSet } from 'mobx';
 import { ComputedValue } from 'mobx/dist/internal';
-import { Root as ReactRoot } from 'react-dom/client';
 import { ArrayType, createMapType, createSetType, GenericType, InterfaceType, IterableTypeName, PrimitiveType, Type, UnionType } from './Type';
 import { defaultProtoProps, InterfaceToProcess } from './types';
 import { context, formatInterfaceName } from './utils';
@@ -349,7 +348,7 @@ function isMutationObserver(obj: object): obj is MutationObserver {
   return 'disconnect' in obj && 'observe' in obj;
 }
 
-function isReactRoot(obj: object): obj is ReactRoot {
+function isReactRoot(obj: object): boolean {
   return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
 }
 

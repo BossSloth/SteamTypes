@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
 declare global {
   interface Window {
     MILLENNIUM_API: unknown;

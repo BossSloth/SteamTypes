@@ -1,10 +1,10 @@
+import type { History } from 'history';
 import { EUIMode } from 'Global/managers/PopupManager';
-import { History } from 'history';
 import { ObservableMap } from 'mobx';
 import { ObservableValue } from 'mobx/dist/internal';
 import { Callbacks, ReducedValue } from 'shared/interfaces';
 import { EUIComposition } from 'SteamClient/shared';
-import { SteamUIStore } from '..';
+import { SteamUIStore } from '../';
 import { DesktopOverlay } from './DesktopOverlay';
 import { MenuStore } from './MenuStore';
 import { SteamWindowNavigator } from './SteamWindowNavigator';

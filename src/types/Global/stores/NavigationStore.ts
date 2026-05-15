@@ -1,4 +1,4 @@
-import { History, Location } from 'history';
+import type { History, Location } from 'history';
 
 export interface NavigationStore {
   BRouteMatch(path: string): boolean;

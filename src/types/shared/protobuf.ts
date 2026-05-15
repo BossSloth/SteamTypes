@@ -1,4 +1,4 @@
-import { ExtensionFieldInfo } from 'google-protobuf';
+import type { ExtensionFieldInfo } from 'google-protobuf';
 import { CMsgProtoBufHeader } from '../Protobufs/steam/steammessages_base';
 
 /**

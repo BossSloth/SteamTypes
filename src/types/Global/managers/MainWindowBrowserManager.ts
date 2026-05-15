@@ -1,4 +1,4 @@
-import { Action, History, Location } from 'history';
+import type { Action, History, Location } from 'history';
 import { Callbacks } from 'shared/interfaces';
 import { BrowserViewEventMap, BrowserViewPopup } from 'SteamClient/BrowserView/BrowserViewPopup';
 
