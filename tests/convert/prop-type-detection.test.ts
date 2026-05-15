@@ -77,7 +77,7 @@ function assertImports(expected: ExpectedImport[]): void {
       expect(entry!.types.has(t), `expected '${t}' in imports for '${imp.module}'`).toBe(true);
     }
     if (imp.defaultImport !== undefined) {
-      expect(entry!.defaultImport ?? false).toBe(imp.defaultImport);
+      expect(entry!.defaultImport).toBe(imp.defaultImport);
     }
   }
 }

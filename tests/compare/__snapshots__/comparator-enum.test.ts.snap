@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Enum Cases > existing enum is used when source has @currentValue 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,11 +3,11 @@
+
+/**
+ * @currentValue 1
+ * @currentValue 2
+ */
+-  m_eStatus: number;
++  m_eStatus: EStatus;
+
+/**
+ * @currentValue 1
+ * @currentValue 2
+ */"
+`;

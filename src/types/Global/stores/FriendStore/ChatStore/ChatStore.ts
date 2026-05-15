@@ -1015,7 +1015,7 @@ export interface ChatRoomListBase {
 
   SetupAppCustomServerMsg(e: unknown): Promise<string>;
 
-  ToggleVoiceChat(): void;
+  ToggleVoiceChat(): boolean;
 
   TrimLogsIfPossible(): void;
 

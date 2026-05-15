@@ -1,10 +1,11 @@
 import chalk from 'chalk';
 import { createTwoFilesPatch } from 'diff';
-import { Identifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
+import { compare } from 'natural-orderby';
+import { Identifier, InterfaceDeclaration, MethodSignature, NamedNode, Node, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface, findSimilarInterface } from './handle-interfaces';
-import { currentTargetSourceFile, getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
+import { currentTargetSourceFile, CustomJsDocTags, getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
 import * as TypeComparator from './type-comparator';
 
 const processedInterfaces = new Set<string>();
@@ -624,6 +625,10 @@ function removeUnusedInterfaces(targetSourceFile: SourceFile, rootInterface: Int
 
 // TODO: This might be very slow sometimes have to check to make sure with validate-types
 export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteralNode): void {
+  if (Node.isJSDocable(targetInterface) && getJsDocTagValues(targetInterface, CustomJsDocTags.dontSort).length > 0) {
+    return;
+  }
+
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
   const newText = targetInterface.getFullText()
     .replace(/ {2}\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
@@ -642,11 +647,12 @@ export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteral
       return -1;
     }
 
-    // Use natural sort for consistent ordering (handles numbers properly)
-    const aName = (a as PropertySignature | MethodSignature).getName().toLowerCase();
-    const bName = (b as PropertySignature | MethodSignature).getName().toLowerCase();
+    // Strip quotes from property names to ensure correct sorting
+    const aName = (a as NamedNode).getName().toLowerCase().replace(/^['"`]|['"`]$/g, '');
+    const bName = (b as NamedNode).getName().toLowerCase().replace(/^['"`]|['"`]$/g, '');
 
-    return bName.localeCompare(aName, undefined, { numeric: true, sensitivity: 'base' });
+    // Use natural-orderby package as that is the same as the perfectionist eslint plugin uses
+    return compare({ order: 'desc', locale: 'en' })(aName, bName);
   });
 
   for (let i = members.length - 1; i >= 0; i--) {

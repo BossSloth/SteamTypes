@@ -34,8 +34,8 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   const typesAreEqual = targetReturnTypeNode !== undefined && sourceReturnTypeNode !== undefined
     && compareTypes(targetReturnTypeNode, sourceReturnTypeNode);
 
-  if (!typesAreEqual) {
-    targetMethod.setReturnType(sourceReturnTypeNode?.getText() ?? '');
+  if (!typesAreEqual && sourceReturnTypeNode !== undefined) {
+    targetMethod.setReturnType(sourceReturnTypeNode.getText());
   }
 
   // if (sourceReturnTypeNode?.getType().isNever() === true || (Node.isArrayTypeNode(sourceReturnTypeNode) && sourceReturnTypeNode.getElementTypeNode().getType().isNever())) {
@@ -117,9 +117,9 @@ function compareParameter(targetMethod: MethodSignature, targetParam?: Parameter
 
   updatePropertyModifiers(targetParam, sourceParam);
 
-  const typesAreEqual = sourceTypeNode !== undefined && targetTypeNode !== undefined
-    && compareTypes(targetTypeNode, sourceTypeNode);
+  const typesAreEqual = sourceTypeNode === undefined
+    || (targetTypeNode !== undefined && compareTypes(targetTypeNode, sourceTypeNode));
   if (!typesAreEqual) {
-    targetParam.setType(sourceTypeNode?.getText() ?? '');
+    targetParam.setType(sourceTypeNode.getText());
   }
 }

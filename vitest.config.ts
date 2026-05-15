@@ -20,6 +20,14 @@ export default defineConfig({
         test: {
           name: 'convert',
           include: ['./tests/convert/**/*.test.ts'],
+          exclude: ['./tests/convert/protobufs/**/*.test.ts'],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'protobufs',
+          include: ['./tests/convert/protobufs/**/*.test.ts'],
           sequence: {
             concurrent: false,
           },
@@ -39,18 +47,17 @@ export default defineConfig({
         'scripts/convert-to-typescript/global-utils.ts',
       ],
       thresholds: {
-        autoUpdate: newThreshold => Math.floor(newThreshold),
-        statements: 83,
-        branches: 72,
-        functions: 89,
-        lines: 84,
-        perFile: true,
+        autoUpdate: true,
+        statements: 95.37,
+        branches: 91.23,
+        functions: 97.95,
+        lines: 95.92,
       },
       watermarks: {
-        statements: [85, 99],
-        branches: [85, 99],
-        functions: [85, 99],
-        lines: [85, 99],
+        statements: [90, 99],
+        branches: [90, 99],
+        functions: [90, 99],
+        lines: [90, 99],
       },
     },
   },

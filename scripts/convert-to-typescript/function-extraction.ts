@@ -248,7 +248,7 @@ function extractParams(initializer: ParameteredNode): MappedParam[] {
 
     return {
       name: paramName,
-      type: paramType || 'unknown',
+      type: paramType,
       optional: isOptional,
       defaultValue,
     };

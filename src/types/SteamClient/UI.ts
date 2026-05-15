@@ -46,6 +46,9 @@ export interface UI {
 
   RegisterForUIModeChanged(callback: (mode: EUIMode) => void): Unregisterable;
 
+  /** @native */
+  RegisterMoveGamepadUIMainWindowToPrimaryDisplay(): unknown;
+
   ResetErrorCondition(): void;
 
   /**

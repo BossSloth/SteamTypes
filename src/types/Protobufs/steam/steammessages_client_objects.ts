@@ -766,8 +766,6 @@ export interface CMsgSystemManagerSettings {
   is_display_colortemp_available?: boolean;
 
   is_fan_control_available?: boolean;
-
-  is_wifi_powersave_enabled?: boolean;
 }
 
 export interface CMsgSelectOSBranchParams {

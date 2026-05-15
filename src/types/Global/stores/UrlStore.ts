@@ -687,10 +687,15 @@ export interface m_steamUrls {
   yearinreview: SteamUrl;
 }
 
+/**
+ * @todo figure out a better way to type this so it isn't always marked wrong by validate types
+ */
 export interface SteamUrl {
   bDuplicate?: boolean;
 
   feature: URLFeature;
+
+  regexMatchURL?: RegExp;
 
   url: string;
 }

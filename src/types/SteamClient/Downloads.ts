@@ -46,6 +46,9 @@ export interface Downloads {
    */
   RegisterForDownloadOverview(callback: (downloadOverview: DownloadOverview) => void): Unregisterable;
 
+  /** @native */
+  RegisterForRemoteClientsConnected(): unknown;
+
   /**
    * Removes the update for a specific app from the download list and places it in the unscheduled list.
    * @param appId The ID of the application to remove.

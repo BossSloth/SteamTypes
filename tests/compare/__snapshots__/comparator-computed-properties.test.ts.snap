@@ -64,14 +64,21 @@ exports[`Comparator Computed Property Cases > computed property with additional 
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -10,10 +10,12 @@
+@@ -5,15 +5,17 @@
+enum EnumB {
+  Second = 2,
+}
+
+export interface Config {
++  3: TypeC;
++
++  4: TypeD;
++
   [EnumA.First]: TypeA;
 
   [EnumB.Second]: TypeB;
-
-  3: TypeC;
-+
-+  4: TypeD;
+-
+-  3: TypeC;
 }
 
 export interface TypeA {

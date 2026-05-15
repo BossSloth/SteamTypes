@@ -2,6 +2,7 @@ import { ObservableMap } from 'mobx';
 import { CPlayer_TextFilterWords } from 'Protobufs/steam/steammessages_player.steamclient';
 import { Log } from 'shared/interfaces';
 import { ProtobufInterface } from 'shared/protobuf';
+import { MessageHandlers } from 'types/Global/managers/ConnectionManager';
 
 export interface TextFilterStore {
   BHasFilter(): boolean;
@@ -218,48 +219,6 @@ export interface MapConnectionDetails {
   sUrl: string;
 }
 
-export interface MessageHandlers {
-  AddCallback(e: unknown, t: unknown, n: unknown): { invoke: unknown; unregister: () => void; };
-
-  AddServiceMethodHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
-
-  AddServiceNotificationHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
-
-  DEBUG_LogMessageDispatch(e: unknown, t: unknown): void;
-
-  DispatchMsgToHandlers(e: unknown, t: unknown): boolean;
-
-  InstallErrorReportingStore(e: unknown): void;
-
-  RegisterBaseEMessageHandler(e: unknown, t: unknown): unknown;
-
-  RegisterEMessageAction(e: unknown, t: unknown, n: unknown): unknown;
-
-  RegisterEMessageHandler(e: unknown, t: unknown, n: unknown): unknown;
-
-  RegisterServiceMethodHandler(e: unknown, t: unknown): unknown;
-
-  RegisterServiceMethodHandlerAction(e: unknown, t: unknown): unknown;
-
-  RegisterServiceNotificationHandler(e: unknown, t: unknown): unknown;
-
-  RegisterServiceNotificationHandlerAction(e: unknown, t: unknown): unknown;
-
-  emsg_list: unknown[];
-
-  m_ErrorReportingStore: ErrorReportingStore;
-
-  m_mapCallbacks: Map<unknown, unknown>;
-
-  m_mapServiceMethodHandlers: Map<string, MapServiceMethodHandlers[]>;
-
-  m_rgRegisteredEMsgs: unknown[];
-
-  m_rgRegisteredServiceMethodHandlers: string[];
-
-  servicemethod_list: string[];
-}
-
 export interface Connection {
   BCanSendMessages(): boolean;
 
@@ -336,87 +295,6 @@ export interface Connection {
   m_sURL: string;
 
   name: string;
-}
-
-export interface ErrorReportingStore {
-  BIsBlacklisted(e: unknown): boolean;
-
-  /**
-   * @param n default: {}
-   */
-  Init(e: unknown, t: unknown, r: unknown, n?: unknown): void;
-
-  m_fnGetReportingInterval(): number;
-
-  m_fnGetReportTags(): never[];
-
-  PauseReporting(): void;
-
-  PauseReportingForDuration(e: unknown): void;
-
-  QueueReport(e: unknown): void;
-
-  ReportError(e: unknown, t: unknown): Promise<{ identifier: unknown; identifierHash: unknown; message: unknown; } | null>;
-
-  ResumeReporting(): void;
-
-  ScheduleSend(): void;
-
-  SendErrorReport(e: unknown): void;
-
-  SendErrorReports(e: unknown): void;
-
-  m_bEnabled: boolean;
-
-  m_bInitialized: boolean;
-
-  m_bReportingPaused: boolean;
-
-  m_pauseTimer: number;
-
-  m_rgErrorQueue: RgErrorQueue[];
-
-  m_sendTimer: number | null;
-
-  m_strProduct: string;
-
-  m_strVersion: string;
-
-  m_transport: Transport;
-
-  product: string;
-
-  reporting_enabled: boolean;
-
-  version: string;
-}
-
-export interface MapServiceMethodHandlers {
-  invoke(n: unknown, r: unknown): void;
-
-  /**
-   * This is a class function
-   */
-  msgClass: unknown;
-}
-
-export interface RgErrorQueue {
-  identifier: string;
-
-  identifierHash: string;
-
-  message: ((number | string)[] | string)[];
-}
-
-export interface Transport {
-  /**
-   * @native
-   */
-  MakeReady(): unknown;
-
-  SendMsg(e: unknown, t: unknown, n: unknown): unknown;
-
-  SendNotification(e: unknown, t: unknown): unknown;
 }
 
 export enum ChatFilterType {

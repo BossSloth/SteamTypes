@@ -601,7 +601,7 @@ export interface Persona {
 
   avatar_url_medium: string;
 
-  connect_string?: never;
+  connect_string?: string;
 
   has_joinable_game_flag: boolean;
 
@@ -1214,6 +1214,8 @@ export interface MapGameGroups extends ChatGroupBase {
 }
 
 export interface Data {
+  toJSON(): { setApps: unknown[]; };
+
   setApps: Set<number>;
 }
 

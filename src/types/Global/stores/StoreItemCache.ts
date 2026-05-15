@@ -408,7 +408,7 @@ export interface StoreApp {
 
   m_eItemType: StoreItemType;
 
-  m_freeWeekend: object;
+  m_freeWeekend: FreeWeekend | object;
 
   m_Platforms?: StoreItem_Platforms;
 
@@ -564,15 +564,11 @@ export interface HighlightTrailers {
 
   GetScreenshot(): unknown;
 
-  GetTrailer480p(): unknown;
-
   GetTrailerCategory(): unknown;
 
   GetTrailerHls(): unknown;
 
   GetTrailerID(): unknown;
-
-  GetTrailerMax(): unknown;
 
   GetTrailersDash(): unknown;
 
@@ -593,14 +589,16 @@ export interface HighlightTrailers {
   m_strScreenshotMedium?: string;
 
   m_strTrailerName: string;
-
-  m_Trailer480p: (MicroTrailer | object);
-
-  m_TrailerMax: (MicroTrailer | object);
 }
 
 export interface MicroTrailer {
   strMP4URL: string;
 
   strWebMURL: string;
+}
+
+export interface FreeWeekend {
+  end_time: number;
+
+  start_time: number;
 }

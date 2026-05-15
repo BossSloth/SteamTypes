@@ -374,6 +374,8 @@ export interface CClanEventData {
 
   rtime32_visibility_start?: number;
 
+  rtime_created?: number;
+
   rtime_mod_reviewed?: number;
 
   server_address?: string;
@@ -480,9 +482,32 @@ export interface UserSystemInformation {
 
   os?: string;
 
+  precise_frame_rate?: boolean;
+
+  screen_height?: number;
+
+  screen_width?: number;
+
   system_ram?: number;
 
   vram_size?: number;
+}
+
+export interface GamePerformanceSettings {
+  game_resolution_height?: number;
+
+  game_resolution_width?: number;
+
+  setting?: GamePerformanceSettings_GamePerformanceSetting;
+}
+
+export enum GamePerformanceSettings_GamePerformanceSetting {
+  NotSet = 0,
+  Low = 1,
+  Medium = 2,
+  High = 3,
+  Ultra = 4,
+  Custom = 5,
 }
 
 export enum BanContentCheckResult {

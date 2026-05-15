@@ -1,5 +1,38 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Interface Merge Cases > adds new interface even when structurally similar to an existing one if source has both 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,8 @@
+export interface Container {
++  added: NewSimilar;
++
+  existing: Existing;
+}
+
+export interface Existing {
+  a: number;
+@@ -9,5 +11,17 @@
+
+  c: number;
+
+  d: number;
+}
++
++export interface NewSimilar {
++  a: number;
++
++  b: number;
++
++  c: number;
++
++  d: number;
++
++  e: number;
++}"
+`;
+
 exports[`Comparator Interface Merge Cases > manual merge falls back when source property type mismatches target 1`] = `
 "===================================================================
 --- a/target.ts

@@ -254,6 +254,22 @@ export interface CClientNotificationHardwareUpdateAvailable {
   etype?: number[];
 }
 
+export interface CClientNotificationControllerLowBattery {
+  controller_type?: number;
+
+  pct_remaining?: number;
+}
+
+export interface CClientNotificationControllerConnected {
+  controller_index?: number;
+}
+
+export interface CClientNotificationControllerDisconnected {
+  controller_name?: string;
+
+  controller_type?: number;
+}
+
 /**
  * @note make sure to copy these values if updated to NotificationTargets.ts
  */
@@ -318,6 +334,9 @@ export enum ClientNotificationType {
   PlaytestInvite = 59,
   TradeReversal = 60,
   HardwareUpdateAvailable = 61,
+  ControllerLowBattery = 62,
+  ControllerConnected = 63,
+  ControllerDisconnected = 64,
 }
 
 export enum SystemUpdateNotificationType {

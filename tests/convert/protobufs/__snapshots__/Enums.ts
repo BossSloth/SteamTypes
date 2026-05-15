@@ -37,4 +37,5 @@ export enum TimelineEntryType {
   Error = 7,
   Tag = 8,
   GamePhase = 9,
+  _10 = 10,
 }

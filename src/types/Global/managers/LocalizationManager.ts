@@ -2048,6 +2048,14 @@ export interface MapTokens {
 
   Audio_Setting_Use_Bluetooth_Mic_Hint: string;
 
+  Audio_Spatialize: string;
+
+  Audio_Spatialize_Description: string;
+
+  Audio_Spatialize_Surround: string;
+
+  Audio_Spatialize_Surround_Description: string;
+
   Audio_SpeakerConfiguration: string;
 
   Audio_SpeakerTuning: string;
@@ -2335,6 +2343,46 @@ export interface MapTokens {
   ChatFilterType_Disabled: string;
 
   ChatFilterType_Enabled: string;
+
+  ChatRadialMenu_CenterExplanation: string;
+
+  ChatRadialMenu_Footer: string;
+
+  ChatRadialMenu_Header: string;
+
+  ChatRadialMenu_InlineHelperText: string;
+
+  ChatRadialMenu_Option0: string;
+
+  ChatRadialMenu_Option1: string;
+
+  ChatRadialMenu_Option2: string;
+
+  ChatRadialMenu_Option3: string;
+
+  ChatRadialMenu_Option4: string;
+
+  ChatRadialMenu_Option5: string;
+
+  ChatRadialMenu_Option6: string;
+
+  ChatRadialMenu_Option7: string;
+
+  ChatRadialMenu_Option8: string;
+
+  ChatRadialMenu_Option9: string;
+
+  ChatRadialMenu_Option10: string;
+
+  ChatRadialMenu_OptionLabel: string;
+
+  ChatRadialMenu_SettingsHint: string;
+
+  ChatRadialMenu_SpecialOption_AcceptGameInvite: string;
+
+  ChatRadialMenu_SpecialOption_InviteToGame: string;
+
+  ChatRadialMenu_SpecialOption_SetStatusToBusy: string;
 
   Clear: string;
 
@@ -2809,6 +2857,8 @@ export interface MapTokens {
   controller_steamcontroller_unknown: string;
 
   controller_steamos_handheld: string;
+
+  controller_switch2_pro: string;
 
   controller_switch_joycon_left: string;
 
@@ -9328,6 +9378,70 @@ export interface MapTokens {
 
   ControllerVisualization_Joystick_LiveUpdate_Description: string;
 
+  ControllerWelcome_BigPictureIntro_Body_KnownHardware: string;
+
+  ControllerWelcome_BigPictureIntro_Body_UnknownHardware: string;
+
+  ControllerWelcome_BigPictureIntro_Title: string;
+
+  ControllerWelcome_CheckingForUpdates_Body: string;
+
+  ControllerWelcome_CheckingForUpdates_Title: string;
+
+  ControllerWelcome_Close: string;
+
+  ControllerWelcome_Error_Body: string;
+
+  ControllerWelcome_Error_Later: string;
+
+  ControllerWelcome_Error_Title: string;
+
+  ControllerWelcome_Error_TryAgain: string;
+
+  ControllerWelcome_Next: string;
+
+  ControllerWelcome_PlugInController_Body_KnownHardware: string;
+
+  ControllerWelcome_PlugInController_Body_UnknownHardware: string;
+
+  ControllerWelcome_PlugInController_Title: string;
+
+  ControllerWelcome_PlugInPuck_Body: string;
+
+  ControllerWelcome_PlugInPuck_Title: string;
+
+  ControllerWelcome_PuckIntro_Body_KnownHardware: string;
+
+  ControllerWelcome_PuckIntro_Body_UnknownHardware: string;
+
+  ControllerWelcome_PuckIntro_BodyWithPuck_KnownHardware: string;
+
+  ControllerWelcome_PuckIntro_BodyWithPuck_UnknownHardware: string;
+
+  ControllerWelcome_Setting_Label: string;
+
+  ControllerWelcome_Skip: string;
+
+  ControllerWelcome_Title: string;
+
+  ControllerWelcome_UpdateController_Body_KnownHardware: string;
+
+  ControllerWelcome_UpdateController_Body_UnknownHardware: string;
+
+  ControllerWelcome_UpdateController_Title: string;
+
+  ControllerWelcome_UpdatePuck_Body_KnownHardware: string;
+
+  ControllerWelcome_UpdatePuck_Body_UnknownHardware: string;
+
+  ControllerWelcome_UpdatePuck_Title: string;
+
+  ControllerWelcome_Welcome_Body: string;
+
+  ControllerWelcome_Welcome_Title: string;
+
+  ControllerWelcome_WelcomeNoUpdate_Body: string;
+
   ControlSoundtrack: string;
 
   Corner_BottomCenter: string;
@@ -9656,6 +9770,8 @@ export interface MapTokens {
 
   Downloads_AutoUpdates_Enabled: string;
 
+  Downloads_ChangeDevice: string;
+
   Downloads_ContentType_AppContent: string;
 
   Downloads_ContentType_Content: string;
@@ -9735,6 +9851,8 @@ export interface MapTokens {
   Downloads_LocalNetworkTransfer_Stop_ttip: string;
 
   Downloads_LocalNetworkTransfer_Upload: string;
+
+  Downloads_ManageDownloadsFor: string;
 
   Downloads_MoveToTop_Tooltip: string;
 
@@ -9846,7 +9964,13 @@ export interface MapTokens {
 
   Downloads_Stats_TotalBytes: string;
 
+  Downloads_ThisDevice: string;
+
+  Downloads_ThisDeviceUppercase: string;
+
   Downloads_Throttle: string;
+
+  Downloads_Throttle_Remote: string;
 
   Downloads_ThrottleSuspended: string;
 
@@ -11022,6 +11146,10 @@ export interface MapTokens {
 
   GamepadKey_Y: string;
 
+  GameRecording_Settings_FAQLearnMore: string;
+
+  GameRecording_Settings_FAQViewFAQ: string;
+
   GameRecording_Settings_LearnMore: string;
 
   GameRecording_Settings_SendFeedback: string;
@@ -11291,6 +11419,8 @@ export interface MapTokens {
   Header_DeviceName_LowBattery_BatteryPercentage: string;
 
   HeaderActions_AccountPage: string;
+
+  HeaderActions_Controller: string;
 
   HeaderActions_Downloads: string;
 
@@ -12318,6 +12448,8 @@ export interface MapTokens {
 
   Login_EnterCredentials: string;
 
+  Login_EnterCredentials_WithBLE: string;
+
   Login_EnterSteamguardCode: string;
 
   Login_EnterTwoFactorCode: string;
@@ -12888,6 +13020,12 @@ export interface MapTokens {
 
   Notification_CloudSyncFailure_Title: string;
 
+  Notification_ControllerBatteryLow: string;
+
+  Notification_ControllerConnected: string;
+
+  Notification_ControllerDisconnected: string;
+
   Notification_DockUnsupportedFirmware_Body: string;
 
   Notification_DockUnsupportedFirmware_Title: string;
@@ -13059,6 +13197,10 @@ export interface MapTokens {
   NotificationsSettings_Notification_ChatMessage: string;
 
   NotificationsSettings_Notification_ChatRoomNotification: string;
+
+  NotificationsSettings_Notification_ControllerConnect: string;
+
+  NotificationsSettings_Notification_ControllerLowBattery: string;
 
   NotificationsSettings_Notification_FriendJoins: string;
 
@@ -14380,7 +14522,15 @@ export interface MapTokens {
 
   Settings_Connect_VRDongle_NoHosts: string;
 
+  Settings_Controller_AdaptersHeader: string;
+
+  Settings_Controller_AddANewController: string;
+
+  Settings_Controller_AddANewController_Button: string;
+
   Settings_Controller_Advanced: string;
+
+  Settings_Controller_AdvancedButton: string;
 
   Settings_Controller_BaseConfigurations: string;
 
@@ -14436,6 +14586,8 @@ export interface MapTokens {
 
   Settings_Controller_Config_Edit_Name: string;
 
+  Settings_Controller_ConnectedHeader: string;
+
   Settings_Controller_Connection: string;
 
   Settings_Controller_Connection_BT: string;
@@ -14443,6 +14595,8 @@ export interface MapTokens {
   Settings_Controller_Connection_Machine: string;
 
   Settings_Controller_Connection_Puck: string;
+
+  Settings_Controller_Connection_PuckWithSerial: string;
 
   Settings_Controller_Connection_Unknown: string;
 
@@ -14452,6 +14606,10 @@ export interface MapTokens {
 
   Settings_Controller_DesktopConfig: string;
 
+  Settings_Controller_Details: string;
+
+  Settings_Controller_DisconnectedHeader: string;
+
   Settings_Controller_DongleExternalDescription: string;
 
   Settings_Controller_DongleExternalLabel: string;
@@ -14459,6 +14617,14 @@ export interface MapTokens {
   Settings_Controller_DongleInternalDescription: string;
 
   Settings_Controller_DongleInternalLabel: string;
+
+  Settings_Controller_EndpointStrength_Excellent: string;
+
+  Settings_Controller_EndpointStrength_Good: string;
+
+  Settings_Controller_EndpointStrength_Ok: string;
+
+  Settings_Controller_EndpointStrength_Weak: string;
 
   Settings_Controller_GenericGamepadSupport: string;
 
@@ -14470,7 +14636,17 @@ export interface MapTokens {
 
   Settings_Controller_IdentifyController_Click: string;
 
+  Settings_Controller_NoBluetooth: string;
+
+  Settings_Controller_NoController: string;
+
   Settings_Controller_NoControllers: string;
+
+  Settings_Controller_NoDongle: string;
+
+  Settings_Controller_PairBTController: string;
+
+  Settings_Controller_PairBTController_Click: string;
 
   Settings_Controller_PairingInfo: string;
 
@@ -14498,7 +14674,19 @@ export interface MapTokens {
 
   Settings_Controller_PS4Support: string;
 
+  Settings_Controller_PuckDetected: string;
+
+  Settings_Controller_PuckDetectedNoIbex: string;
+
   Settings_Controller_ResetInput: string;
+
+  Settings_Controller_RSSI_Label: string;
+
+  Settings_Controller_RSSI_Machine_Description: string;
+
+  Settings_Controller_RSSI_Puck_Description: string;
+
+  Settings_Controller_RSSI_Value: string;
 
   Settings_Controller_SCPairing: string;
 
@@ -14862,6 +15050,8 @@ export interface MapTokens {
 
   Settings_Customization_Advanced: string;
 
+  Settings_Customization_ChatRadialMenu: string;
+
   Settings_Customization_StartupVideo: string;
 
   Settings_Customization_StartupVideo_Default: string;
@@ -14963,6 +15153,8 @@ export interface MapTokens {
   Settings_Developer_EnableGamescopeVRComposer: string;
 
   Settings_Developer_ForceSystemComposer: string;
+
+  Settings_Developer_ForceTriggerCaptivePortal: string;
 
   Settings_Developer_HDRCompatTesting: string;
 
@@ -15368,6 +15560,8 @@ export interface MapTokens {
 
   Settings_Interface_StartPage_Description: string;
 
+  Settings_Interface_SteamRTClient: string;
+
   Settings_Interface_TaskbarPreferences: string;
 
   Settings_Internet_Active_Networks: string;
@@ -15541,6 +15735,8 @@ export interface MapTokens {
   Settings_Internet_Wifi_Enabled: string;
 
   Settings_Internet_Wired_Network: string;
+
+  Settings_Internet_Wired_Networks: string;
 
   Settings_Keyboard_ActiveKeyboards: string;
 
@@ -15826,6 +16022,8 @@ export interface MapTokens {
 
   Settings_RemotePlay_AudioChannels_6: string;
 
+  Settings_RemotePlay_AudioChannels_8: string;
+
   Settings_RemotePlay_AudioChannels_AutoDetect0: string;
 
   Settings_RemotePlay_AudioChannels_AutoDetect2: string;
@@ -15834,6 +16032,8 @@ export interface MapTokens {
 
   Settings_RemotePlay_AudioChannels_AutoDetect6: string;
 
+  Settings_RemotePlay_AudioChannels_AutoDetect8: string;
+
   Settings_RemotePlay_AV1: string;
 
   Settings_RemotePlay_Bandwidth: string;
@@ -15841,8 +16041,6 @@ export interface MapTokens {
   Settings_RemotePlay_Bandwidth_Auto: string;
 
   Settings_RemotePlay_Bandwidth_Unlimited: string;
-
-  Settings_RemotePlay_ChangeDesktopResolution: string;
 
   Settings_RemotePlay_ChangePIN: string;
 
@@ -15884,6 +16082,16 @@ export interface MapTokens {
 
   Settings_RemotePlay_ControllerOverlayHotkeyY: string;
 
+  Settings_RemotePlay_CustomDisplayDevice: string;
+
+  Settings_RemotePlay_CustomHDR: string;
+
+  Settings_RemotePlay_CustomRefreshRate: string;
+
+  Settings_RemotePlay_CustomResolutionX: string;
+
+  Settings_RemotePlay_CustomResolutionY: string;
+
   Settings_RemotePlay_Description: string;
 
   Settings_RemotePlay_Description_DisabledBySystemPolicy: string;
@@ -15895,6 +16103,20 @@ export interface MapTokens {
   Settings_RemotePlay_DeviceName: string;
 
   Settings_RemotePlay_DevicesEmpty: string;
+
+  Settings_RemotePlay_DisplaySetting_Client: string;
+
+  Settings_RemotePlay_DisplaySetting_Custom: string;
+
+  Settings_RemotePlay_DisplaySetting_None: string;
+
+  Settings_RemotePlay_DisplaySettingHDR: string;
+
+  Settings_RemotePlay_DisplaySettingRefreshRate: string;
+
+  Settings_RemotePlay_DisplaySettingResolution: string;
+
+  Settings_RemotePlay_EditValue: string;
 
   Settings_RemotePlay_EnableCaptureNVFBC: string;
 
@@ -16497,6 +16719,8 @@ export interface MapTokens {
   Settings_Tracing: string;
 
   Settings_Tracing_Description: string;
+
+  Settings_Update_AutoRestartWhenComplete: string;
 
   Settings_UpdateChannel_Beta: string;
 

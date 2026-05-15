@@ -77,7 +77,7 @@ export interface EmoticonStore {
 
   m_rgFlairs: unknown[];
 
-  m_rgRecentEmoticons: Emoticon_list[] | undefined;
+  m_rgRecentEmoticons: Emoticon_list[];
 
   m_rgRecentStickers: unknown[];
 

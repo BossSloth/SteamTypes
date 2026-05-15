@@ -24,11 +24,6 @@ export interface Window {
    */
   DefaultMonitorHasFullscreenWindow(): Promise<boolean>;
 
-  /**
-   * Flashes the window in the taskbar.
-   */
-  FlashWindow(): void;
-
   GetDefaultMonitorDimensions(): Promise<MonitorDimensions>;
 
   /**
@@ -164,6 +159,9 @@ export interface Window {
    */
   SetResizeGrip(width: number, height: number): void;
 
+  /** @native */
+  SetWindowFlashing(): unknown;
+
   /**
    * Set the window's icon.
    * @param icon The window icon to be used.
@@ -174,11 +172,6 @@ export interface Window {
    * Shows the window.
    */
   ShowWindow(): void;
-
-  /**
-   * Stops the window's taskbar flashing.
-   */
-  StopFlashWindow(): void;
 
   /**
    * Toggles the window's fullscreen state.

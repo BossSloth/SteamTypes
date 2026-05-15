@@ -247,4 +247,18 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'source method has no return type annotation': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): string;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar();
+      }
+    `,
+  },
 };

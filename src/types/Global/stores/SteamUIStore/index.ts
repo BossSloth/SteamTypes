@@ -156,8 +156,6 @@ export interface SteamUIStore {
 
   ScopeRunningApps(): void;
 
-  SetChatRadialVisible(e: unknown): void;
-
   SetConfiguratorWidth(e: unknown): void;
 
   SetConsoleEnabled(): void;
@@ -176,6 +174,8 @@ export interface SteamUIStore {
 
   StreamingClientStarted(e: unknown, t: unknown, r: unknown, n: unknown): void;
 
+  UpdateSteamVRRunningAppInfoAutorun(): void;
+
   ActiveControllerIndex: number;
 
   ActiveNavigationInfo: ActiveNavigationInfo;
@@ -185,8 +185,6 @@ export interface SteamUIStore {
   ActiveNavigationSourceType: number;
 
   ActiveWindowInstance: WindowInstance;
-
-  ChatRadialVisible: ObservableValue<boolean>;
 
   ConfiguratorWidth: number;
 
@@ -199,8 +197,6 @@ export interface SteamUIStore {
   GamepadUIAudio: GamepadUIAudioStore;
 
   m_appDetailsDisplayMode: number;
-
-  m_bChatRadialVisible: ObservableValue<boolean>;
 
   m_bConsoleEnabledByUser: boolean;
 

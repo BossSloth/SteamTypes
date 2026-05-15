@@ -62,15 +62,18 @@ declare global {
   let g_CreatorHomeListInfoStore: unknown;
   let g_CreatorHomeStore: unknown;
   let g_EventCalendarDevFeatures: unknown;
-  let g_EventCalendarMap: unknown;
   let g_EventCalendarTrackingStore: unknown;
   let g_FriendsUIApp: unknown;
   let g_GRS: GameRecordingStore;
+  let g_LogManager: unknown;
   let g_PartnerEventStore: unknown;
   let g_PartnerEventSummaryStore: unknown;
   let g_PopupManager: PopupManager;
   let gameReleaseStore: unknown;
+  let Gio: unknown;
+  let IBus: unknown;
   let installFolderStore: unknown;
+  let jsonit: unknown;
   let lastScrollTime: unknown;
   let libraryEventStore: unknown;
   let libraryScrollListener: unknown;
@@ -83,6 +86,8 @@ declare global {
   let overlayStore: unknown;
   let partnerEventStore: unknown;
   let playNextStore: unknown;
+  let protoPathProperties: unknown;
+  let protoPathPropertyDebug: unknown;
   let RemotePlayStore_SteamUI: unknown;
   let ResetNewContentRollup: unknown;
   let screenshotStore: unknown;
@@ -110,6 +115,7 @@ declare global {
   let SystemNetworkStore: unknown;
   let SystemReportStore: unknown;
   let tempNavStore: NavigationStore;
+  let toJS: unknown;
   let trendingStore: unknown;
   let uiBroadcastWatchStore: unknown;
   let uiStore: unknown;
@@ -117,6 +123,7 @@ declare global {
   let urlStore: UrlStore;
   let userProfileStore: unknown;
   let vrAudioSettingsStore: unknown;
+  let VRPathProperties: unknown;
   let workshopStore: unknown;
 
   interface Window {
@@ -162,15 +169,18 @@ declare global {
     g_CreatorHomeListInfoStore: unknown;
     g_CreatorHomeStore: unknown;
     g_EventCalendarDevFeatures: unknown;
-    g_EventCalendarMap: unknown;
     g_EventCalendarTrackingStore: unknown;
     g_FriendsUIApp: unknown;
     g_GRS: GameRecordingStore;
+    g_LogManager: unknown;
     g_PartnerEventStore: unknown;
     g_PartnerEventSummaryStore: unknown;
     g_PopupManager: PopupManager;
     gameReleaseStore: unknown;
+    Gio: unknown;
+    IBus: unknown;
     installFolderStore: unknown;
+    jsonit: unknown;
     lastScrollTime: unknown;
     libraryEventStore: unknown;
     libraryScrollListener: unknown;
@@ -183,6 +193,8 @@ declare global {
     overlayStore: unknown;
     partnerEventStore: unknown;
     playNextStore: unknown;
+    protoPathProperties: unknown;
+    protoPathPropertyDebug: unknown;
     RemotePlayStore_SteamUI: unknown;
     ResetNewContentRollup: unknown;
     screenshotStore: unknown;
@@ -210,6 +222,7 @@ declare global {
     SystemNetworkStore: unknown;
     SystemReportStore: unknown;
     tempNavStore: NavigationStore;
+    toJS: unknown;
     trendingStore: unknown;
     uiBroadcastWatchStore: unknown;
     uiStore: unknown;
@@ -217,6 +230,7 @@ declare global {
     urlStore: UrlStore;
     userProfileStore: unknown;
     vrAudioSettingsStore: unknown;
+    VRPathProperties: unknown;
     workshopStore: unknown;
   }
 }

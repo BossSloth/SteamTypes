@@ -233,3 +233,17 @@ export type SerializedArrayBuffer<T> = ArrayBuffer & Partial<{
   /** @internal doesn't exist in the actual type but is used to store the type in typescript */
   __deserializesTo: T;
 }>;
+
+export interface RequestHandler<TReq, TResp = never> {
+  name: string;
+
+  /**
+   * Reference to the protobuf request message class
+   */
+  request: ProtobufClass<TReq>;
+
+  /**
+   * Reference to the protobuf response message class
+   */
+  response: [TResp] extends [never] ? undefined : ProtobufClass<TResp>;
+}

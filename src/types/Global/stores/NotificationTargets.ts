@@ -6,6 +6,9 @@ type ClientNotificationTypeMap = {
   [K in keyof typeof ClientNotificationType]: object;
 };
 
+/**
+ * @dontSort
+ */
 export interface NotificationTargets extends ClientNotificationTypeMap {
   [ClientNotificationType.DownloadCompleted]: CClientNotificationDownloadCompletedNotificationTarget;
 
@@ -122,6 +125,12 @@ export interface NotificationTargets extends ClientNotificationTypeMap {
   [ClientNotificationType.TradeReversal]: NotificationTarget;
 
   [ClientNotificationType.HardwareUpdateAvailable]: CClientNotificationHardwareUpdateAvailableNotificationTarget;
+
+  [ClientNotificationType.ControllerLowBattery]: CClientNotificationControllerLowBatteryNotificationTarget;
+
+  [ClientNotificationType.ControllerConnected]: CClientNotificationControllerConnectedNotificationTarget;
+
+  [ClientNotificationType.ControllerDisconnected]: CClientNotificationControllerDisconnectedNotificationTarget;
 }
 
 export interface CClientNotificationDownloadCompletedNotificationTarget {
@@ -722,6 +731,56 @@ export interface CClientNotificationGroupChatMessageNotificationTarget {
   strTest: string;
 }
 
+export interface CClientNotificationControllerLowBatteryNotificationTarget {
+  playSound(): unknown;
+
+  showToast(): unknown;
+
+  bCritical: boolean;
+
+  eFeature: Feature;
+
+  fnTray: null;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationControllerLowBattery>;
+
+  sound: number;
+
+  toastDurationMS: number;
+}
+
+export interface CClientNotificationControllerConnectedNotificationTarget {
+  playSound(): unknown;
+
+  showToast(): unknown;
+
+  eFeature: Feature;
+
+  fnTray: null;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationControllerConnected>;
+
+  sound: number;
+
+  toastDurationMS: number;
+}
+
+export interface CClientNotificationControllerDisconnectedNotificationTarget {
+  playSound(): unknown;
+
+  showToast(): unknown;
+
+  eFeature: Feature;
+
+  fnTray: null;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationControllerDisconnected>;
+
+  sound: number;
+
+  toastDurationMS: number;
+}
+
 export enum Feature {
   NotPresent,
   Failed,
@@ -797,4 +856,7 @@ export enum ClientNotificationType {
   PlaytestInvite = 59,
   TradeReversal = 60,
   HardwareUpdateAvailable = 61,
+  ControllerLowBattery = 62,
+  ControllerConnected = 63,
+  ControllerDisconnected = 64,
 }

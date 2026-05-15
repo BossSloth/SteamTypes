@@ -123,8 +123,6 @@ export interface BrowserViewPopup {
    */
   SetFocus(value: boolean): void;
 
-  SetName(browserName: string): void;
-
   /**
    * Registers a callback to be called when a context menu is shown.
    * @param callback The callback function to be called.

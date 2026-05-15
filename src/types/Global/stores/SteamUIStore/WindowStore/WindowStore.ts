@@ -22,7 +22,9 @@ export interface WindowStore {
 
   BHasStandaloneKeyboard(): boolean;
 
-  BHasVRWindow(): boolean;
+  BHasVRMainWindow(): boolean;
+
+  BHasVRWindows(): boolean;
 
   CreateDesktopLoginWindow(e: unknown): unknown;
 
@@ -63,11 +65,7 @@ export interface WindowStore {
 
   GetOverlayInstanceWithFallback(e: unknown, t: unknown): unknown;
 
-  GetSimultedVRWindowInstance(): unknown;
-
   GetSteamUIWindowByType(e: unknown): unknown;
-
-  GetVRWindowInstance(): unknown;
 
   GetWindowInstanceFromWindow(e: unknown): unknown;
 
@@ -76,6 +74,8 @@ export interface WindowStore {
   OnAppNoLongerRunning(e: unknown): void;
 
   OnDesiredSteamUIWindowsChanged(): void;
+
+  OnMoveGamepadUIMainWindowToPrimaryDisplay(): void;
 
   OnOverlayBrowserClosed(e: unknown): void;
 
@@ -104,8 +104,6 @@ export interface WindowStore {
 
   GamepadUIMainWindowInstance: undefined;
 
-  GamepadUIVRWindowInstance: undefined;
-
   m_mapAppOverlayPosition: Map<unknown, unknown>;
 
   m_mapAppWindows: ObservableMap<number, MapAppWindows>;
@@ -129,6 +127,12 @@ export interface WindowStore {
   OverlayWindows: WindowInstance[];
 
   SteamUIWindows: WindowInstance[];
+
+  VRGamepadUIMainWindowInstance: undefined;
+
+  VRGamepadUINonSimulatedMainWindowInstance: undefined;
+
+  VRGamepadUISimulatedMainWindowInstance: undefined;
 }
 
 export interface WindowInstance {
@@ -156,11 +160,11 @@ export interface WindowInstance {
 
   FocusApplicationRoot(): void;
 
-  GetMainVROverlayKey(): unknown;
-
   GetShowingGlobalModal(): unknown;
 
   GetStoreBrowser(): unknown;
+
+  GetVROverlayKey(): unknown;
 
   Init(): () => void;
 
@@ -173,6 +177,8 @@ export interface WindowInstance {
   InitializeDefaultActions(): void;
 
   InitNavigation(e: unknown, t: unknown): () => void;
+
+  IsAnyVRWindow(): boolean;
 
   IsControllerConfiguratorWindow(): boolean;
 
@@ -190,13 +196,17 @@ export interface WindowInstance {
 
   IsMainGamepadUIWindow(): boolean;
 
+  IsMainVRGamepadUIWindow(): boolean;
+
+  IsOverlayWindow(): unknown;
+
   IsStandaloneKeyboardWindow(): boolean;
 
   IsSteamChinaReviewLauncher(): boolean;
 
-  IsVRSimulatedOnDesktopWindow(): boolean;
+  IsVRGamepadUIOverlayWindow(): boolean;
 
-  IsVRWindow(): boolean;
+  IsVRSimulatedOnDesktopWindow(): boolean;
 
   IsVRWindowInGamescope(): boolean;
 
@@ -223,7 +233,7 @@ export interface WindowInstance {
   /**
    * @param e default: !1
    */
-  NavigateToStandaloneAppRunningControls(e?: boolean): void;
+  NavigateToStandaloneAppRunningControls(e?: boolean, t?: boolean): void;
 
   /**
    * Open a URL in the Steam main window browser.
@@ -651,9 +661,13 @@ export interface VirtualKeyboardManager {
 
   SelectBestModalPosition(e: unknown): undefined;
 
+  SendChatRadialMenuMsg(): void;
+
   SendClientPasteCommand(): void;
 
   SetActiveVirtualKeyboardTarget(e: unknown, t: unknown): void;
+
+  SetChatRadialMenuParams(e: unknown): void;
 
   SetDismissOnEnterKey(e: unknown): void;
 
@@ -690,6 +704,8 @@ export interface VirtualKeyboardManager {
   m_bIsVirtualKeyboardModal: ObservableValue<boolean>;
 
   m_bUseVRKeyboard: boolean;
+
+  m_ChatRadialMenuParams: null;
 
   m_currentVirtualKeyboardRef: CurrentVirtualKeyboardRef | null;
 

@@ -1,5 +1,7 @@
 import { Callbacks } from 'shared/interfaces';
+import { ProtobufClass, ProtobufInterface, ProtobufNotification, RequestHandler } from 'shared/protobuf';
 import { SteamID } from 'shared/steamid';
+import { EResult } from 'SteamClient/shared';
 
 export interface ConnectionManager {
   AddOnDisconnectCallback(callback: (param0: unknown) => void, serverId?: number): unknown;
@@ -116,7 +118,7 @@ export interface ConnectionManager {
 
   m_hSharedConnection: number;
 
-  m_messageHandlers: m_messageHandlers;
+  m_messageHandlers: MessageHandlers;
 
   m_nPerfClockServerMSOffset: number;
 
@@ -144,7 +146,7 @@ export interface ConnectionManager {
 
   m_unAccountFlags: number;
 
-  messageHandlers: m_messageHandlers;
+  messageHandlers: MessageHandlers;
 
   persona_name: string;
 
@@ -175,40 +177,93 @@ export interface m_callbacksOnConnect {
   m_mapServerTypeCallbacks: never;
 }
 
-export interface m_messageHandlers {
-  AddCallback(e: unknown, t: unknown, n: unknown): { invoke: unknown; unregister: () => void; };
+export interface MessageRegistration<TInvoke extends (...args: never[]) => unknown> {
+  unregister(): void;
 
-  AddServiceMethodHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
+  invoke: TInvoke;
+}
 
-  AddServiceNotificationHandler(e: unknown, t: unknown): { invoke: (n: unknown, r: unknown) => void; unregister: () => void; };
+export type EMsgCallback<T> = (msg: ProtobufNotification<T>) => void;
 
-  DEBUG_LogMessageDispatch(e: unknown, t: unknown): void;
+export type EMsgDeserializedCallback<T> = (msg: ProtobufInterface<T>) => void;
 
-  DispatchMsgToHandlers(e: unknown, t: unknown): boolean;
+export type ServiceMethodCallback<TReq, TResp> = (
+  req: ProtobufInterface<TReq>,
+  resp: ProtobufInterface<TResp>,
+) => EResult | Promise<EResult>;
 
-  InstallErrorReportingStore(e: unknown): void;
+export type ServiceNotificationCallback<TReq> = (req: ProtobufInterface<TReq>) => void;
 
-  RegisterBaseEMessageHandler(e: unknown, t: unknown): unknown;
+export interface MessageHandlers {
+  AddCallback<T>(
+    eMsg: number,
+    msgClass: ProtobufClass<T> | undefined,
+    callback: EMsgCallback<T>,
+  ): MessageRegistration<EMsgCallback<T>>;
 
-  RegisterEMessageAction(e: unknown, t: unknown, n: unknown): unknown;
+  AddServiceMethodHandler<TReq, TResp>(
+    method: RequestHandler<TReq, TResp>,
+    handler: ServiceMethodCallback<TReq, TResp>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>, sendResponse: (resp: ProtobufInterface<TResp>) => void) => void>;
 
-  RegisterEMessageHandler(e: unknown, t: unknown, n: unknown): unknown;
+  AddServiceNotificationHandler<TReq>(
+    method: RequestHandler<TReq>,
+    handler: ServiceNotificationCallback<TReq>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>) => void>;
 
-  RegisterServiceMethodHandler(e: unknown, t: unknown): unknown;
+  DEBUG_LogMessageDispatch(msg: ProtobufNotification<unknown>, handler: MessageCallback): void;
 
-  RegisterServiceMethodHandlerAction(e: unknown, t: unknown): unknown;
+  DispatchMsgToHandlers(
+    msg: ProtobufNotification<unknown>,
+    sendResponse: (resp: ProtobufInterface<unknown>) => void,
+  ): boolean;
 
-  RegisterServiceNotificationHandler(e: unknown, t: unknown): unknown;
+  InstallErrorReportingStore(store: ErrorReportingStore): void;
 
-  RegisterServiceNotificationHandlerAction(e: unknown, t: unknown): unknown;
+  RegisterBaseEMessageHandler<T>(
+    eMsg: number,
+    callback: EMsgCallback<T>,
+  ): MessageRegistration<EMsgCallback<T>>;
+
+  RegisterEMessageAction<T>(
+    eMsg: number,
+    msgClass: ProtobufClass<T>,
+    callback: EMsgDeserializedCallback<T>,
+  ): MessageRegistration<EMsgCallback<T>>;
+
+  RegisterEMessageHandler<T>(
+    eMsg: number,
+    msgClass: ProtobufClass<T>,
+    callback: EMsgDeserializedCallback<T>,
+  ): MessageRegistration<EMsgCallback<T>>;
+
+  RegisterServiceMethodHandler<TReq, TResp>(
+    method: RequestHandler<TReq, TResp>,
+    handler: ServiceMethodCallback<TReq, TResp>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>, sendResponse: (resp: ProtobufInterface<TResp>) => void) => void>;
+
+  RegisterServiceMethodHandlerAction<TReq, TResp>(
+    method: RequestHandler<TReq, TResp>,
+    handler: ServiceMethodCallback<TReq, TResp>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>, sendResponse: (resp: ProtobufInterface<TResp>) => void) => void>;
+
+  RegisterServiceNotificationHandler<TReq>(
+    method: RequestHandler<TReq>,
+    handler: ServiceNotificationCallback<TReq>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>) => void>;
+
+  RegisterServiceNotificationHandlerAction<TReq>(
+    method: RequestHandler<TReq>,
+    handler: ServiceNotificationCallback<TReq>,
+  ): MessageRegistration<(msg: ProtobufNotification<TReq>) => void>;
 
   emsg_list: number[];
 
-  m_ErrorReportingStore: m_ErrorReportingStore;
+  m_ErrorReportingStore: ErrorReportingStore;
 
-  m_mapCallbacks: Map<number, m_mapCallbacks[]>;
+  m_mapCallbacks: Map<number, MessageCallback[]>;
 
-  m_mapServiceMethodHandlers: Map<string, m_mapCallbacks[]>;
+  m_mapServiceMethodHandlers: Map<string, MessageCallback[]>;
 
   m_rgRegisteredEMsgs: number[];
 
@@ -228,7 +283,7 @@ export interface ServiceTransport {
   SendNotification(e: unknown, t: unknown): unknown;
 }
 
-export interface m_ErrorReportingStore {
+export interface ErrorReportingStore {
   BIsBlacklisted(e: unknown): boolean;
 
   /**
@@ -264,7 +319,7 @@ export interface m_ErrorReportingStore {
 
   m_pauseTimer: number;
 
-  m_rgErrorQueue: m_rgErrorQueue[];
+  m_rgErrorQueue: RgErrorQueue[];
 
   m_sendTimer: null | number;
 
@@ -281,16 +336,16 @@ export interface m_ErrorReportingStore {
   version: string;
 }
 
-export interface m_mapCallbacks {
-  invoke(n: unknown, r: unknown): void;
+export interface MessageCallback<T = unknown> {
+  invoke(msg: ProtobufNotification<T>, sendResponse?: (resp: ProtobufInterface<unknown>) => void): void;
 
   /**
-   * This is a class function
+   * This is the protobuf class for the message
    */
-  msgClass: unknown;
+  msgClass: ProtobufClass<T> | undefined;
 }
 
-export interface m_rgErrorQueue {
+export interface RgErrorQueue {
   identifier: string;
 
   identifierHash: string;

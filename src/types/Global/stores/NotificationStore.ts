@@ -41,6 +41,12 @@ export interface NotificationStore {
 
   ClearRemoveFromTrayTimer(): void;
 
+  ControllerConnectedNotification(e: unknown): void;
+
+  ControllerDisconnectedNotification(e: unknown, t: unknown): void;
+
+  ControllerLowBatteryNotification(e: unknown, t: unknown): void;
+
   Dev_SendTestNotifications(): void;
 
   DispatchNextToast(): void;
@@ -240,7 +246,7 @@ export interface NotificationStore {
 
   m_iLastBatteryLevelNotification: number;
 
-  m_LastSystemUpdateNotification: LastSystemUpdateNotification;
+  m_LastSystemUpdateNotification: LastSystemUpdateNotification | null;
 
   m_mapAppOverlayToasts: ObservableMap<unknown, unknown>;
 
@@ -298,7 +304,7 @@ export interface Notification<T extends ClientNotificationType> {
 
   eType: T;
 
-  notificationID: number;
+  notificationID: string;
 
   nToastDurationMS: number;
 
@@ -309,4 +315,5 @@ export interface Notification<T extends ClientNotificationType> {
 export enum ESource {
   Unknwon = 0,
   ESource1 = 1,
+  ESource2 = 2,
 }

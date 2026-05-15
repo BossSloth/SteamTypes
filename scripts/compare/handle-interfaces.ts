@@ -308,7 +308,12 @@ export function addMissingInterface(type: TypeNode, currentIteration = 0): void 
 
     const similarInterface = findSimilarInterface(interfaceDeclaration);
     if (similarInterface) {
-      return;
+      // If the source file also contains an interface with the similar's name,
+      // both coexist in source -> this is a genuinely new interface, not a rename. Add it.
+      const sourceHasSimilarByName = interfaceDeclaration.getSourceFile().getInterface(similarInterface.getName()) !== undefined;
+      if (!sourceHasSimilarByName) {
+        return;
+      }
     }
 
     // Add the interface to the target source file

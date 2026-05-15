@@ -1,4 +1,4 @@
-import { ProtobufNotification } from 'shared/protobuf';
+import { ProtobufNotification, RequestHandler } from 'shared/protobuf';
 import {
   CGameRecording_CleanupBackgroundRecordings_Request,
   CGameRecording_CleanupBackgroundRecordings_Response,
@@ -280,107 +280,93 @@ export interface GameRecordingRequestHandler {
 
   ZipClip(request?: CGameRecording_ZipClip_Request, transport?: unknown): Promise<ProtobufNotification<CGameRecording_ZipClip_Response>>;
 
-  CleanupBackgroundRecordingsHandler: Handler;
+  CleanupBackgroundRecordingsHandler: RequestHandler<CGameRecording_CleanupBackgroundRecordings_Request, CGameRecording_CleanupBackgroundRecordings_Response>;
 
-  DeleteClipHandler: Handler;
+  DeleteClipHandler: RequestHandler<CGameRecording_DeleteClip_Request, CGameRecording_DeleteClip_Response>;
 
-  DeletePerGameSettingsHandler: Handler;
+  DeletePerGameSettingsHandler: RequestHandler<CGameRecording_DeletePerGameSettings_Request, CGameRecording_DeletePerGameSettings_Response>;
 
-  ExportClipHandler: Handler;
+  ExportClipHandler: RequestHandler<CGameRecording_ExportClip_Request, CGameRecording_ExportClip_Response>;
 
-  ExportClipPreviewHandler: Handler;
+  ExportClipPreviewHandler: RequestHandler<CGameRecording_ExportClipPreview_Request, CGameRecording_ExportClipPreview_Response>;
 
-  GetAndTrimPostGameHighlightsHandler: Handler;
+  GetAndTrimPostGameHighlightsHandler: RequestHandler<CGameRecording_GetAndTrimPostGameHighlights_Request, CGameRecording_GetAndTrimPostGameHighlights_Response>;
 
-  GetAppsWithBackgroundVideoHandler: Handler;
+  GetAppsWithBackgroundVideoHandler: RequestHandler<CGameRecording_GetAppsWithBackgroundVideo_Request, CGameRecording_GetAppsWithBackgroundVideo_Response>;
 
-  GetAvailableDiskSpaceHandler: Handler;
+  GetAvailableDiskSpaceHandler: RequestHandler<CGameRecording_GetAvailableDiskSpace_Request, CGameRecording_GetAvailableDiskSpace_Response>;
 
-  GetBackgroundRecordingFileSizeHandler: Handler;
+  GetBackgroundRecordingFileSizeHandler: RequestHandler<CGameRecording_GetRecordingSize_Request, CGameRecording_GetRecordingSize_Response>;
 
-  GetClipsHandler: Handler;
+  GetClipsHandler: RequestHandler<CGameRecording_GetClips_Request, CGameRecording_GetClips_Response>;
 
-  GetEnoughDiskSpaceHandler: Handler;
+  GetEnoughDiskSpaceHandler: RequestHandler<CGameRecording_GetEnoughDiskSpace_Request, CGameRecording_GetEnoughDiskSpace_Response>;
 
-  GetPerGameSettingsHandler: Handler;
+  GetPerGameSettingsHandler: RequestHandler<CGameRecording_GetPerGameSettings_Request, CGameRecording_GetPerGameSettings_Response>;
 
-  GetPlatformCapabilitiesHandler: Handler;
+  GetPlatformCapabilitiesHandler: RequestHandler<CGameRecording_GetPlatformCapabilities_Request, CGameRecording_GetPlatformCapabilities_Response>;
 
-  GetTagsHandler: Handler;
+  GetTagsHandler: RequestHandler<CGameRecording_GetTags_Request, CGameRecording_GetTags_Response>;
 
-  GetThumbnailsHandler: Handler;
+  GetThumbnailsHandler: RequestHandler<CGameRecording_GetThumbnails_Request, CGameRecording_GetThumbnails_Response>;
 
-  GetTimelinesForAppHandler: Handler;
+  GetTimelinesForAppHandler: RequestHandler<CGameRecording_GetTimelinesForApp_Request, CGameRecording_GetTimelinesForApp_Response>;
 
-  GetTimelinesForClipHandler: Handler;
+  GetTimelinesForClipHandler: RequestHandler<CGameRecording_GetTimelinesForClip_Request, CGameRecording_GetTimelinesForClip_Response>;
 
-  GetTotalDiskSpaceUsageHandler: Handler;
+  GetTotalDiskSpaceUsageHandler: RequestHandler<CGameRecording_GetTotalDiskSpaceUsage_Request, CGameRecording_GetTotalDiskSpaceUsage_Response>;
 
-  ManuallyDeleteRecordingsForAppsHandler: Handler;
+  ManuallyDeleteRecordingsForAppsHandler: RequestHandler<CGameRecording_ManuallyDeleteRecordingsForApps_Request, CGameRecording_ManuallyDeleteRecordingsForApps_Response>;
 
-  NotifyClipCreatedHandler: Handler;
+  NotifyClipCreatedHandler: RequestHandler<CGameRecording_ClipCreated_Notification>;
 
-  NotifyClipDeletedHandler: Handler;
+  NotifyClipDeletedHandler: RequestHandler<CGameRecording_ClipDeleted_Notification>;
 
-  NotifyExportProgressHandler: Handler;
+  NotifyExportProgressHandler: RequestHandler<CGameRecording_ExportProgress_Notification>;
 
-  NotifyLowDiskSpaceHandler: Handler;
+  NotifyLowDiskSpaceHandler: RequestHandler<CGameRecording_LowDiskSpace_Notification>;
 
-  NotifyOpenOverlayToGamePhaseHandler: Handler;
+  NotifyOpenOverlayToGamePhaseHandler: RequestHandler<CGameRecording_OpenOverlayToGamePhase_Notification>;
 
-  NotifyOpenOverlayToTimelineEventHandler: Handler;
+  NotifyOpenOverlayToTimelineEventHandler: RequestHandler<CGameRecording_OpenOverlayToTimelineEvent_Notification>;
 
-  NotifyPhaseListChangedHandler: Handler;
+  NotifyPhaseListChangedHandler: RequestHandler<CGameRecording_PhaseListChanged_Notification>;
 
-  NotifyPostGameHighlightsChangedHandler: Handler;
+  NotifyPostGameHighlightsChangedHandler: RequestHandler<CGameRecording_PostGameHighlightsChanged_Notification>;
 
-  NotifyRecordingSessionChangedHandler: Handler;
+  NotifyRecordingSessionChangedHandler: RequestHandler<CGameRecording_RecordingSessionChanged_Notification>;
 
-  NotifyTimelineChangedHandler: Handler;
+  NotifyTimelineChangedHandler: RequestHandler<CGameRecording_TimelineChanged_Notification>;
 
-  NotifyTimelineEntryChangedHandler: Handler;
+  NotifyTimelineEntryChangedHandler: RequestHandler<CGameRecording_TimelineEntryChanged_Notification>;
 
-  NotifyTimelineEntryRemovedHandler: Handler;
+  NotifyTimelineEntryRemovedHandler: RequestHandler<CGameRecording_TimelineEntryRemoved_Notification>;
 
-  NotifyUploadProgressHandler: Handler;
+  NotifyUploadProgressHandler: RequestHandler<CGameRecording_UploadProgress_Notification>;
 
-  QueryPhasesHandler: Handler;
+  QueryPhasesHandler: RequestHandler<CGameRecording_QueryPhases_Request, CGameRecording_QueryPhases_Response>;
 
-  SaveClipHandler: Handler;
+  SaveClipHandler: RequestHandler<CGameRecording_SaveClip_Request, CGameRecording_SaveClip_Response>;
 
-  SetPerGameSettingsHandler: Handler;
+  SetPerGameSettingsHandler: RequestHandler<CGameRecording_SetPerGameSettings_Request, CGameRecording_SetPerGameSettings_Response>;
 
-  StartRecordingHandler: Handler;
+  StartRecordingHandler: RequestHandler<CGameRecording_StartRecording_Request, CGameRecording_StartRecording_Response>;
 
-  StopRecordingHandler: Handler;
+  StopRecordingHandler: RequestHandler<CGameRecording_StopRecording_Request, CGameRecording_StopRecording_Response>;
 
-  SwitchBackgroundRecordingGameHandler: Handler;
+  SwitchBackgroundRecordingGameHandler: RequestHandler<CGameRecording_SwitchBackgroundRecordingGame_Request, CGameRecording_SwitchBackgroundRecordingGame_Response>;
 
-  TakeScreenshotHandler: Handler;
+  TakeScreenshotHandler: RequestHandler<CGameRecording_TakeScreenshot_Request, CGameRecording_TakeScreenshot_Response>;
 
-  UploadClipToSteamHandler: Handler;
+  UploadClipToSteamHandler: RequestHandler<CGameRecording_UploadClipToSteam_Request, CGameRecording_UploadClipToSteam_Response>;
 
-  UserAddTimelineEntryHandler: Handler;
+  UserAddTimelineEntryHandler: RequestHandler<CGameRecording_UserAddTimelineEntry_Request, CGameRecording_UserAddTimelineEntry_Response>;
 
-  UserRemoveTimelineEntryHandler: Handler;
+  UserRemoveTimelineEntryHandler: RequestHandler<CGameRecording_UserRemoveTimelineEntry_Request, CGameRecording_UserRemoveTimelineEntry_Response>;
 
-  UserUpdateTimelineEntryHandler: Handler;
+  UserUpdateTimelineEntryHandler: RequestHandler<CGameRecording_UserUpdateTimelineEntry_Request, CGameRecording_UserUpdateTimelineEntry_Response>;
 
-  ZipClipHandler: Handler;
-}
-
-export interface Handler {
-  name: string;
-
-  /**
-   * Reference to the protobuf request message class
-   */
-  request: unknown;
-
-  /**
-   * Reference to the protobuf response message class
-   */
-  response?: unknown;
+  ZipClipHandler: RequestHandler<CGameRecording_ZipClip_Request, CGameRecording_ZipClip_Response>;
 }
 
 export interface Unregisterable {

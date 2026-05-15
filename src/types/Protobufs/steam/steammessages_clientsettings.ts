@@ -363,6 +363,22 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\ControllerLowBatteryNotificationSound
+   * Default: false
+   */
+  controller_low_battery_notification_sound?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\ControllerLowBatteryNotificationToast
+   * Default: true
+   */
+  controller_low_battery_notification_toast?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: SteamController_Poll_Rate
    * Default: 2
    */
@@ -383,6 +399,14 @@ export interface CMsgClientSettings {
    * Default: 1
    */
   controller_ps_support?: number;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserRoaming
+   * Setting name: ShowIbexWelcomeTour
+   * Default: true
+   */
+  controller_show_ibex_tour?: boolean;
 
   /**
    * @Options
@@ -412,6 +436,22 @@ export interface CMsgClientSettings {
    * Setting name: SteamController_XBoxSupport
    */
   controller_xbox_support?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\ControllerConnectNotificationSound
+   * Default: false
+   */
+  controllerconnect_notification_sound?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\ControllerConnectNotificationToast
+   * Default: true
+   */
+  controllerconnect_notification_toast?: boolean;
 
   /**
    * @Options
@@ -1790,6 +1830,14 @@ export interface CMsgClientSettings {
    * Default: false
    */
   steamos_wifi_force_wpa_supplicant?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/WifiPowerManagement
+   * Default: false
+   */
+  steamos_wifi_power_management_enabled?: boolean;
 
   /**
    * @Options

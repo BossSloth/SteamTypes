@@ -179,6 +179,8 @@ export interface SteamAppOverview {
 
   BIsPerClientDataLocal(clientData: SteamAppOverviewClientData): boolean;
 
+  BIsRemotePerClientDataEqual(e: unknown): boolean;
+
   BIsSelectedClientLocal(): boolean;
 
   BIsShortcut(): boolean;
@@ -219,6 +221,8 @@ export interface SteamAppOverview {
 
   GetPrimaryAppID(): number;
 
+  GetRemotePerClientData(e: unknown): unknown;
+
   GetStoreTags(): Set<number>;
 
   InitFromProto(proto: ProtoAppOverview): void;
@@ -247,6 +251,8 @@ export interface SteamAppOverview {
    * @param proto The proto to set the per client data from.
    */
   SetPerClientData(proto: ProtoAppOverview): void;
+
+  SetRemotePerClientData(e: unknown): void;
 
   /**
    * Sets the sort as from the proto.
@@ -357,6 +363,8 @@ export interface SteamAppOverview {
   ps4_controller_support: AppControllerSupportLevel;
 
   ps5_controller_support: AppControllerSupportLevel;
+
+  remote_per_client_data: never;
 
   review_percentage: number;
 

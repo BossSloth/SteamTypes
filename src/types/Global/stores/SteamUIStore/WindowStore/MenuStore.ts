@@ -58,6 +58,8 @@ export interface MenuStore {
 }
 
 export interface MainMenuStore {
+  GetAppControlsLastLocation(e: unknown): unknown;
+
   GetFocusedApp(): unknown;
 
   GetFocusedColumn(): unknown;
@@ -68,13 +70,13 @@ export interface MainMenuStore {
 
   GetSelectedGuide(e: unknown): unknown;
 
-  GetSelectedNavEntry(): unknown;
-
   GetStoreURL(e: unknown): unknown;
 
   Init(): unknown;
 
   OnRunningAppsChanged(): void;
+
+  SetAppControlsLastLocation(e: unknown, t: unknown): void;
 
   SetFocusedApp(e: unknown): void;
 
@@ -82,15 +84,13 @@ export interface MainMenuStore {
 
   SetSelectedGuide(e: unknown, t: unknown): void;
 
-  SetSelectedNavEntry(e: unknown): void;
-
   m_eFocusedColumn: SideMenu;
 
   m_eGamingDeviceType: GamingDeviceType;
 
-  m_eSelectedNavEntry: SelectedNavEntry;
-
   m_focusedApp: null;
+
+  m_mapAppControlsLastLocation: Map<unknown, unknown>;
 
   m_mapSelectedGuide: ObservableMap<unknown, unknown>;
 
@@ -112,13 +112,4 @@ export enum QuickAccessTab {
   Perf,
   Help,
   Soundtrack,
-}
-
-export enum SelectedNavEntry {
-  Achievements,
-  Controller,
-  Guides,
-  Notes,
-  Browser,
-  GR,
 }

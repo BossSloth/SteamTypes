@@ -27,6 +27,7 @@ enum ETimelineEntryType {
 	k_ETimelineEntryType_Error = 7;
 	k_ETimelineEntryType_Tag = 8;
 	k_ETimelineEntryType_GamePhase = 9;
+  k_ETimelineEntryType_10 = 10;
 }
 
 // Test message that references enums

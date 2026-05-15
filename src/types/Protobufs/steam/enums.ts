@@ -21,6 +21,8 @@ export enum PublishedFileQueryType {
   RankedByInappropriateContentRating = 19,
   RankedByBanContentCheck = 20,
   RankedByLastUpdatedDate = 21,
+  RankedByNumParentItems = 22,
+  RankedByNumParentCollections = 23,
 }
 
 export enum PublishedFileInappropriateProvider {
@@ -127,14 +129,6 @@ export enum SystemFanControlMode {
   Default = 2,
 }
 
-export enum StartupMovieVariant {
-  Invalid = 0,
-  Generic = 1,
-  DeckBlue = 2,
-  DeckOrange = 3,
-  Machine = 4,
-}
-
 export enum ColorGamutLabelSet {
   Default = 0,
   sRGB_Native = 1,
@@ -160,6 +154,13 @@ export enum BluetoothDeviceType {
   Joystick = 9,
   Gamepad = 10,
   Keyboard = 11,
+}
+
+export enum SpeakerConfiguration {
+  Other = 0,
+  Stereo = 1,
+  _51 = 2,
+  _71 = 3,
 }
 
 export enum SystemAudioDirection {
@@ -771,6 +772,7 @@ export enum ContentReportSubjectAction {
   Claimed = 20,
   Released = 21,
   PrivateMessaged = 22,
+  OwnerDisputed = 23,
 }
 
 export enum ContentReportReason {

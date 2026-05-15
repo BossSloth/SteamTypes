@@ -27,6 +27,8 @@ export interface GamepadNavigationManager {
 
   GetActiveContext(): unknown;
 
+  GetActiveNavTree(): unknown;
+
   GetDefaultContext(): unknown;
 
   /**

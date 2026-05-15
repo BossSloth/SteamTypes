@@ -66,7 +66,7 @@ export function convertToTypescript(
     result = `\n${result}`;
     const sortedImports = Array.from(context.imports.entries()).sort((a, b) => b[0].localeCompare(a[0]));
     for (const [moduleName, { types, defaultImport }] of sortedImports) {
-      if (defaultImport ?? false) {
+      if (defaultImport) {
         /* v8 ignore next -- @preserve */
         if (types.size > 1) {
           throw new Error('Cannot import multiple types with default import');

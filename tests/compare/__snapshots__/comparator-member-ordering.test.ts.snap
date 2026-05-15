@@ -1,0 +1,132 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Member Ordering Cases > interface with @dontSort preserves member order 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -5,6 +5,8 @@
+  alpha: number;
+
+  methodB(): void;
+
+  methodA(): boolean;
++
++  foo: string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > interface without @dontSort reorders members 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,11 @@
+export interface OrderedInterface {
+-  zebra: string;
++  methodA(): boolean;
+
++  methodB(): void;
++
+  alpha: number;
+
+-  methodB(): void;
++  foo: string;
+
+-  methodA(): boolean;
++  zebra: string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > member ordering with numerics 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,5 @@
+export interface Names {
++  switch2_pro: string;
++
+  switch_pro: string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > member ordering with trailing numerics 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,9 @@
+export interface Servers {
+  ping_250: string;
+
+  ping_500: string;
+
++  ping_750: string;
++
+  ping_1000: string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > method overloads preserve order when members are added 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,7 @@
+export interface OverloadedApi {
+  Lookup(id: number): string;
++
+  Lookup(id: string): number;
++
++  NewMethod(): void;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > mixed quoted and unquoted properties 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,6 +2,8 @@
+  'a': number;
+
+  b: boolean;
+
+  c: string;
++
++  'd': string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > quoted property names should be ordered correctly 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,11 @@
+export interface TestInterface {
+-  zebra: string;
+-
+  'alpha': number;
+
+  'beta': boolean;
+
+  charlie: string;
++
++  'delta': number;
++
++  zebra: string;
+}"
+`;
+
+exports[`Comparator Member Ordering Cases > quoted property with hyphen 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,9 @@
+export interface HyphenInterface {
+-  zProp: string;
+-
+  'a-prop': number;
+
++  'b-prop': string;
++
+  mProp: boolean;
++
++  zProp: string;
+}"
+`;

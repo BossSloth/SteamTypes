@@ -69,8 +69,6 @@ export interface CStoreBrowse_GetItems_Request {
 }
 
 export interface StoreItem {
-  accessories?: StoreItem_PurchaseOption[];
-
   appid?: number;
 
   assets?: StoreItem_Assets;
@@ -87,7 +85,7 @@ export interface StoreItem {
 
   free_weekend?: StoreItem_FreeWeekend;
 
-  full_description?: string;
+  full_description_bbcode?: string;
 
   game_count?: number;
 
@@ -103,8 +101,6 @@ export interface StoreItem {
 
   internal_name?: string;
 
-  invalid_purchase_options?: StoreItem_PurchaseOption[];
-
   is_coming_soon?: boolean;
 
   is_early_access?: boolean;
@@ -118,6 +114,8 @@ export interface StoreItem {
   links?: StoreItem_Link[];
 
   name?: string;
+
+  package_groups?: StoreItem_PackageGroup[];
 
   platforms?: StoreItem_Platforms;
 
@@ -160,12 +158,32 @@ export interface StoreItem {
   visible?: boolean;
 }
 
+export interface StoreItem_Demo {
+  appid?: number;
+
+  label?: string;
+
+  show_above_purchase?: boolean;
+}
+
+export interface StoreItem_Playtest {
+  appid?: number;
+
+  is_open?: boolean;
+}
+
 export interface StoreItem_RelatedItems {
   demo_appid?: number[];
 
+  demos?: StoreItem_Demo[];
+
   parent_appid?: number;
 
+  playtests?: StoreItem_Playtest[];
+
   standalone_demo_appid?: number[];
+
+  standalone_demos?: StoreItem_Demo[];
 }
 
 export interface StoreItem_IncludedItems {
@@ -233,7 +251,11 @@ export interface StoreItem_Assets {
 
   community_icon?: string;
 
+  edition_comparison?: string;
+
   header?: string;
+
+  header_2x?: string;
 
   hero_capsule?: string;
 
@@ -249,6 +271,8 @@ export interface StoreItem_Assets {
 
   main_capsule?: string;
 
+  main_capsule_2x?: string;
+
   package_header?: string;
 
   page_background?: string;
@@ -258,6 +282,8 @@ export interface StoreItem_Assets {
   raw_page_background?: string;
 
   small_capsule?: string;
+
+  small_capsule_2x?: string;
 }
 
 export interface StoreItem_ReleaseInfo {
@@ -335,13 +361,19 @@ export interface StoreItem_PurchaseOption {
 
   formatted_price_before_bundle_discount?: string;
 
+  free_to_keep_base_package?: number;
+
   free_to_keep_ends?: number;
+
+  free_with_master_sub_appid?: number;
 
   hide_discount_pct_for_compliance?: boolean;
 
   included_game_count?: number;
 
   is_commercial_license?: boolean;
+
+  is_edition?: boolean;
 
   is_free_to_keep?: boolean;
 
@@ -351,9 +383,15 @@ export interface StoreItem_PurchaseOption {
 
   original_price_in_cents?: number;
 
+  package_group?: string;
+
   packageid?: number;
 
   price_before_bundle_discount?: number;
+
+  price_cannot_be_displayed_as_discount?: boolean;
+
+  price_to_base_discount_on?: number;
 
   purchase_option_name?: string;
 
@@ -423,6 +461,8 @@ export interface StoreItem_Trailers_Trailer {
 
   all_ages?: boolean;
 
+  captions_manifest?: string;
+
   microtrailer?: StoreItem_Trailers_VideoSource[];
 
   screenshot_full?: string;
@@ -464,6 +504,23 @@ export interface StoreItem_Link {
   text?: string;
 
   url?: string;
+}
+
+export interface StoreItem_PackageGroup {
+  display_type?: StoreItem_PackageGroup_PackageGroupDisplayType;
+
+  dropdown_description_bbcode?: string;
+
+  dropdown_title?: string;
+
+  heading?: string;
+
+  name?: string;
+}
+
+export enum StoreItem_PackageGroup_PackageGroupDisplayType {
+  Default = 0,
+  Dropdown = 1,
 }
 
 export interface StoreGameRating {
@@ -661,11 +718,15 @@ export interface CStoreBrowse_GetHardwareItems_Request {
 }
 
 export interface CHardwarePackageDetails {
+  account_first_date_purchase_requirement?: number;
+
   account_restricted_from_purchasing?: boolean;
 
   allow_purchase_in_country?: boolean;
 
   allow_quantity_purchase?: boolean;
+
+  appid_ownership_not_allowed_to_reserve?: number;
 
   estimated_delivery_latest_business_days?: number;
 
@@ -678,6 +739,8 @@ export interface CHardwarePackageDetails {
   inventory_available?: boolean;
 
   max_quantity_per_purchase?: number;
+
+  not_allowed_to_reserved_because_already_owned?: boolean;
 
   notificaton_token?: string;
 

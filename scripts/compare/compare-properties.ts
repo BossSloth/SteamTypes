@@ -57,7 +57,8 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 
   // If it's an enum in the source, preserve the type and copy the JSDoc
   if (enumCurrentValues !== undefined) {
-    if (isImportedType(currentTargetSourceFile, targetProp.getType())) {
+    const targetTypeNode = targetProp.getTypeNode();
+    if (targetTypeNode && isImportedType(currentTargetSourceFile, targetTypeNode)) {
       return true;
     }
 
@@ -146,6 +147,7 @@ function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 
+  /* v8 ignore next -- @preserve */
   if (!targetTypeNode || !sourceTypeNode) return false;
 
   const needsExtendUpdate = updateTypeIfNeeded(targetProp, targetTypeNode, sourceTypeNode, isFromExtendedInterface);

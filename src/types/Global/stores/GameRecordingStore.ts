@@ -98,7 +98,7 @@ export interface GameRecordingStore {
 
   SwitchRecordedGame(gameId: string): Promise<ReturnType<GameRecordingRequestHandler['SwitchBackgroundRecordingGame']>>;
 
-  TakeScreenshot(gameId: string, timelineId: string, timelineOffsetMs: number): Promise<{ handle: number; result: number; } | { result: number; handle?: undefined; }>;
+  TakeScreenshot(gameId: string, timelineId: string, timelineOffsetMs: number, i: unknown): Promise<{ handle: number; result: number; } | { result: number; handle?: undefined; }>;
 
   UpdateClipExportPath(clipId: string, exportPath: string): void;
 

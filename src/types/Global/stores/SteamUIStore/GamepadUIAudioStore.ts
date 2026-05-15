@@ -126,6 +126,8 @@ export interface SteamAudioPlaybackObj {
   /** @native */
   OnPlaybackEnded(): unknown;
 
+  PlayBuffer(e: unknown, t: unknown): unknown;
+
   RegisterOnPlaybackFinished(e: unknown): void;
 
   StartPlayback(): void;

@@ -30,6 +30,46 @@ export const interfaceMergeCases: Record<string, ComparatorTest> = {
       `,
   },
 
+  'adds new interface even when structurally similar to an existing one if source has both': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        existing: Existing;
+      }
+
+      export interface Existing {
+        a: number;
+
+        b: number;
+
+        c: number;
+
+        d: number;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        existing: Existing;
+        added: NewSimilar;
+      }
+
+      export interface Existing {
+        a: number;
+        b: number;
+        c: number;
+        d: number;
+      }
+
+      export interface NewSimilar {
+        a: number;
+        b: number;
+        c: number;
+        d: number;
+        e: number;
+      }
+      `,
+  },
+
   'manual merge falls back when source property type mismatches target': {
     interfaceName: 'Container',
     target: dedent/* ts */`

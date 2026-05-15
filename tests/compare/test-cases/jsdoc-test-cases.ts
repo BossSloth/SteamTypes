@@ -1,13 +1,15 @@
 import dedent from 'dedent';
 import { ComparatorTest } from './index';
 
-export const jsDocIgnoreCases: Record<string, ComparatorTest> = {
+export const jsDocCases: Record<string, ComparatorTest> = {
   'ignored property keeps original type': {
     interfaceName: 'WithIgnoredProperty',
+    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface WithIgnoredProperty {
         /** @ignore */
         legacyField: string;
+
         normalField: number;
       }`,
     source: dedent/* ts */`
@@ -19,10 +21,12 @@ export const jsDocIgnoreCases: Record<string, ComparatorTest> = {
 
   'ignored method keeps original signature': {
     interfaceName: 'WithIgnoredMethod',
+    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface WithIgnoredMethod {
         /** @ignore */
         legacyMethod(input: string): boolean;
+
         normalMethod(): void;
       }`,
     source: dedent/* ts */`
@@ -45,4 +49,5 @@ export const jsDocIgnoreCases: Record<string, ComparatorTest> = {
         nativeMethod(unknown: number): number;
       }`,
   },
+
 };

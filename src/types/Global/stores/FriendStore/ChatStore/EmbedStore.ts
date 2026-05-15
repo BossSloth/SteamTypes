@@ -27,6 +27,18 @@ export interface EmbedStore {
 export interface MapEmbed {
   IsEmpty(): boolean;
 
+  0: string;
+
+  1: InvalidName;
+
+  bCollapsed: boolean;
+
+  nDefaultWidth: undefined;
+
+  nDesiredWidth: undefined;
+}
+
+export interface InvalidName {
   bCollapsed: boolean;
 
   nDefaultWidth: number;

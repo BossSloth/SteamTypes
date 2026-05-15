@@ -334,6 +334,8 @@ export interface CGameRecording_ExportClipPreview_Response {
 export interface CGameRecording_TakeScreenshot_Request {
   game_id?: string;
 
+  source_clip_id?: string;
+
   timeline_id?: string;
 
   timeline_offset_ms?: number;

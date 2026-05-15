@@ -526,19 +526,33 @@ export interface CPlayer_GetAchievementsProgress_Response_AchievementProgress {
 export interface CPlayer_GetGameAchievements_Request {
   appid?: number;
 
+  hash_only?: boolean;
+
   language?: string;
 }
 
 export interface CPlayer_GetGameAchievements_Response {
   achievements?: CPlayer_GetGameAchievements_Response_Achievement[];
+
+  groups?: CPlayer_GetGameAchievements_Response_Group[];
+
+  schema_hash?: number;
+
+  schema_version?: number;
 }
 
 export interface CPlayer_GetGameAchievements_Response_Achievement {
+  archived?: boolean;
+
+  groupid?: number;
+
   hidden?: boolean;
 
   icon?: string;
 
   icon_gray?: string;
+
+  internal_key?: number;
 
   internal_name?: string;
 
@@ -546,7 +560,25 @@ export interface CPlayer_GetGameAchievements_Response_Achievement {
 
   localized_name?: string;
 
+  max_progress?: number;
+
+  min_progress?: number;
+
   player_percent_unlocked?: string;
+}
+
+export interface CPlayer_GetGameAchievements_Response_Group {
+  archived?: boolean;
+
+  developeronly?: boolean;
+
+  dlcappid?: number;
+
+  groupid?: number;
+
+  localized_name?: string;
+
+  order?: number;
 }
 
 export interface CPlayer_GetUserStats_Request {

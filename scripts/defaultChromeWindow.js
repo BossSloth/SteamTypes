@@ -266,7 +266,12 @@ const millenniumWindowProperties = [
   "process",
   "__millennium_plugin_config_changed__",
   "__private_millennium_ffi_do_not_use__",
-  "MILLENNIUM_PRIVATE_INTERNAL_FOREIGN_FUNCTION_INTERFACE_DO_NOT_USE"
+  "MILLENNIUM_PRIVATE_INTERNAL_FOREIGN_FUNCTION_INTERFACE_DO_NOT_USE",
+  '__millennium_cdp_event__',
+  '__millennium_cdp_proxy__',
+  '__millennium_cdp_reject__',
+  '__millennium_cdp_resolve__',
+  '__millennium_extension_route__'
 ];
 
 const unwantedWindowProperties = [

@@ -15,4 +15,16 @@ export const missingTypeNodeCases: Record<string, ComparatorTest> = {
         typed: number;
       }`,
   },
+  'source property missing type annotation does not change target': {
+    interfaceName: 'PartiallyTyped',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface PartiallyTyped {
+        untyped: number;
+      }`,
+    source: dedent/* ts */`
+      export interface PartiallyTyped {
+        untyped;
+      }`,
+  },
 };

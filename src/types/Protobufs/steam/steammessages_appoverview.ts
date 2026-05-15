@@ -77,6 +77,8 @@ export interface CAppOverview {
 
   per_client_data?: CAppOverview_PerClientData[];
 
+  remote_per_client_data?: CAppOverview_PerClientData[];
+
   review_percentage_with_bombs?: number;
 
   review_percentage_without_bombs?: number;

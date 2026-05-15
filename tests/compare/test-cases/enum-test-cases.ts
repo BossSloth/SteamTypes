@@ -19,4 +19,60 @@ export const enumCases: Record<string, ComparatorTest> = {
         status: number;
       }`,
   },
+  'optional imported enum is preserved when source has @currentValue': {
+    interfaceName: 'EnumProperty',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      import { StoreAppType } from 'other-file';
+
+      export interface EnumProperty {
+        m_eAppType?: StoreAppType;
+      }`,
+    source: dedent/* ts */`
+      export interface EnumProperty {
+        /**
+         * @currentValue 0
+         */
+        m_eAppType?: number;
+      }`,
+  },
+  'existing enum is used when source has @currentValue': {
+    interfaceName: 'EnumProperty',
+    target: dedent/* ts */`
+      export interface EnumProperty {
+        foo: number;
+
+        /**
+         * @currentValue 1
+         * @currentValue 2
+         */
+        m_eStatus: number;
+
+        /**
+         * @currentValue 1
+         * @currentValue 2
+         */
+        otherThing: EStatus;
+      }
+
+      export enum EStatus {
+        EStatus1 = 1,
+        EStatus2 = 2,
+      }
+      `,
+    source: dedent/* ts */`
+      export interface EnumProperty {
+        foo: number;
+        /**
+         * @currentValue 1
+         * @currentValue 2
+         */
+        m_eStatus: number;
+        /**
+         * @currentValue 1
+         * @currentValue 2
+         */
+        otherThing: number;
+      }`,
+  },
 };

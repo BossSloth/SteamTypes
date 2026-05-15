@@ -552,6 +552,8 @@ export interface VoiceChatStore {
 
   m_hRegisterForPushToTalkStateChange: HRegisterForPushToTalkStateChange;
 
+  m_LastPendingCount: number;
+
   m_localPose: undefined;
 
   m_LogVoiceChatDetails: boolean;

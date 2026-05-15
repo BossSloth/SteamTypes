@@ -203,13 +203,40 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'source optional method': {
     interfaceName: 'Foo',
     target: dedent/* ts */`
+      export interface Foo {
+        GetOptions(options: string): string
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        GetOptions?(options: string): string
+      }
+    `,
+  },
+  'source parameter has no type annotation': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Foo {
+        GetOptions(options: string): string
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        GetOptions(e): string
+      }
+    `,
+  },
+  'source rest parameter is not unknown array triggers else branch': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
     export interface Foo {
       GetOptions(options: string): string
     }
   `,
     source: dedent/* ts */`
     export interface Foo {
-      GetOptions?(options: string): string
+      GetOptions(...e: string[]): string
     }
   `,
   },

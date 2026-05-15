@@ -42,6 +42,11 @@ export function normalizeEnumValueName(valueName: string, originalEnumTypeName: 
     normalized = normalized.replace(`${finalEnumTypeName}_`, '').replace(new RegExp(`^${finalEnumTypeName}`), '');
   }
 
+  // If name is fully numeric, prefix with "_"
+  if ((/^\d+$/).test(normalized)) {
+    normalized = `_${normalized}`;
+  }
+
   return normalized;
 }
 

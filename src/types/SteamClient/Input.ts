@@ -118,8 +118,6 @@ export interface Input {
 
   RegisterForControllerAnalogInputMessages(callback: (controllerAnalogInputMessages: ControllerAnalogInputMessage[]) => void): Unregisterable;
 
-  RegisterForControllerBatteryChanges(callback: unknown): Unregisterable;
-
   RegisterForControllerCommandMessages(callback: (controllerCommandMessage: ControllerCommandMessage) => void): Unregisterable;
 
   /**
