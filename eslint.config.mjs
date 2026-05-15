@@ -1,6 +1,7 @@
 import pluginJs from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import { importX } from 'eslint-plugin-import-x';
 import { jsdoc } from 'eslint-plugin-jsdoc';
 import perfectionist from 'eslint-plugin-perfectionist';
 import { defineConfig, globalIgnores } from 'eslint/config';
@@ -24,13 +25,13 @@ export default defineConfig(
         projectService: {
           allowDefaultProject: ['*.mjs', '*.config.ts'],
         },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
 
   pluginJs.configs.all,
-  // eslint-disable-next-line import/no-named-as-default-member
   ...tseslint.configs.all,
   stylistic.configs.all,
   stylistic.configs['disable-legacy'],
@@ -41,18 +42,17 @@ export default defineConfig(
     blockSpacing: true,
     commaDangle: 'always-multiline',
   }),
-  importPlugin.flatConfigs.recommended,
-  importPlugin.flatConfigs.typescript,
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
   {
     settings: {
-      'import/resolver': {
-        typescript: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
           alwaysTryTypes: true,
           project: ['./tsconfig.json', 'src/*/tsconfig.json'],
           noWarnOnMultipleProjects: true,
-        },
-        node: true,
-      },
+        }),
+      ],
     },
   },
   jsdoc({}),
@@ -149,6 +149,7 @@ export default defineConfig(
       'no-restricted-imports': ['error', '@steambrew/client'],
       'jsdoc/no-undefined-types': ['error', { disableReporting: true }],
       '@typescript-eslint/consistent-type-imports': 'off',
+      'import-x/no-named-as-default-member': 'off',
       // #endregion
     },
   },
@@ -182,7 +183,7 @@ export default defineConfig(
       'perfectionist/sort-interfaces': 'off',
       '@stylistic/quote-props': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
-      'import/no-unresolved': 'off',
+      'import-x/no-unresolved': 'off',
     },
   },
   {

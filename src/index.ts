@@ -1,3 +1,3 @@
-// eslint-disable-next-line import/export
+// eslint-disable-next-line import-x/export
 export * from './Globals';
 export * from './types';
