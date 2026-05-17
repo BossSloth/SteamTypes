@@ -1,0 +1,184 @@
+# SteamTypes Project Overview
+
+## Purpose
+TypeScript type definitions for the Steam client (`steam-types` npm package). Types cover the Steam `SharedJSContext` window — `SteamClient` and all its submodules, plus global store/manager objects. Types are **auto-generated** by running scripts against a live Steam client via Chrome DevTools Protocol (CDP).
+
+---
+
+## Directory Structure
+
+```
+steamtypes/
+├── scripts/          # Generation & validation scripts (dev-only, not published)
+├── src/              # Published TypeScript type definitions
+├── tests/            # Vitest tests for the scripts
+├── build/            # Compiled inject script output (gitignored)
+├── diffs/            # Diff output from validate-types (gitignored)
+├── dist/             # Built package output (gitignored)
+└── patches/          # Bun patch for @steambrew/client
+```
+
+---
+
+## `scripts/` — Generation Scripts
+
+### Entry Points
+- **`validate-types.ts`** — Main developer script. Connects to Steam via CDP, injects the convert script, runs `convertToTypescript()` on each mapped object, compares results against existing source files, and writes diffs.
+  - Requires Steam running with CEF debugging on **port 8080** (it almost always is)
+  - Requires `build/scripts/convert-to-typescript.js` to exist first (run `bun run build-convert-debug`)
+- **`update-globals.ts`** — Updates `src/Globals/index.ts` with actual window properties discovered from Steam. Called automatically by `validate-types.ts`.
+
+### Sub-directories
+- **`convert-to-typescript/`** — Core JS->TS conversion pipeline (runs *inside* Steam's browser context)
+  - `index.ts` — Initialises global `tsProject` and exports `convertToTypescript`
+  - `converter.ts` — Main orchestrator: processes interfaces, merges, generates output
+  - `interface-generation.ts` — Creates `TypeScriptInterface` objects from JS objects
+  - `interface-merger.ts` — Merges similar interfaces using Jaccard similarity (≥65% overlap)
+  - `function-extraction.ts` — Extracts function parameter/return types via ts-morph
+  - `prop-type-detection.ts` — Detects property types from runtime values
+  - `replace-duplicate-types.ts` — Handles type deduplication after merge
+  - `types.ts` — Internal data model (`TypeScriptInterface`, `InterfaceProperty`, `FunctionInfo`, `ConversionContext`)
+  - `Type.ts` — `Type` class hierarchy (PrimitiveType, InterfaceType, UnionType, etc.)
+  - `utils.ts` — Context management, property enumeration helpers
+  - `fill-app-data.ts` — Helper to populate app data for richer type extraction
+  - `index.ts` — Entry point used by `build-convert-debug` esbuild bundle
+
+- **`compare/`** — Interface comparison & auto-correction (runs on the host, uses ts-morph)
+  - `interface-comparator.ts` — Core: compares source (generated) vs target (existing file), queues interfaces, applies corrections, produces diffs
+  - `interface-checker.ts` — Entry: `compareInterfaces()` called from `validate-types.ts`
+  - `compare-methods.ts` — Method signature comparison logic
+  - `compare-properties.ts` — Property type comparison logic
+  - `handle-interfaces.ts` — Adds missing interfaces, finds similar ones
+  - `type-comparator.ts` — Deep type comparison utilities
+  - `shared.ts` — Shared state (queue, logger, JSDoc tag helpers, `CustomJsDocTags`)
+
+- **`maps/`** — Declares what Steam objects map to what TypeScript files
+  - `index.ts` — Exports `interfaceMaps` array and `IMap()`/`GMap()` factory helpers
+  - `SteamClient.ts` — All `SteamClient.*` sub-interface mappings
+  - `Global.ts` — Global store/manager mappings (uses `GMap` -> `src/types/Global/`)
+  - `FriendStore.ts`, `SteamUIStore.ts`, `Modules.ts`, `Shared.ts` — Category-specific maps
+  - `InterfaceMap` shape: `{ file, interfaceName, objectExpression, initFunction?, condition?, ignoredProperties? }`
+
+---
+
+## `src/` — Published Type Definitions
+
+```
+src/
+├── index.ts                    # Package entry, re-exports all types
+├── Globals/
+│   └── index.ts                # Global window declarations (declare global + Window interface) — auto-updated
+├── Runtime/                    # Runtime helpers distributed with the package
+└── types/
+    ├── index.ts                # Re-exports all type categories
+    ├── system-information.ts   # Auto-generated: Steam version info
+    ├── shared/                 # Shared types used across modules
+    ├── Global/
+    │   ├── App.ts
+    │   ├── AppAchievementProgressCache.ts
+    │   ├── managers/           # ConnectionManager, LocalizationManager, etc.
+    │   └── stores/             # AppStore, AppDetailsStore, FriendStore, SteamUIStore, etc.
+    ├── SteamClient/
+    │   ├── index.ts            # Main SteamClient interface
+    │   ├── shared.ts           # Shared SteamClient types
+    │   ├── Apps.ts, Auth.ts, ... (one file per submodule)
+    │   └── System/             # SteamClient.System and its sub-interfaces
+    ├── Modules/                # Module types
+    └── Protobufs/              # Protobuf message types (generated by proto:generate)
+```
+
+### Key Conventions
+- Each file in `src/types/` corresponds to one `IMap` entry in `scripts/maps/`
+- `src/Globals/index.ts` is auto-managed — do not manually reorder global property lists; the script keeps them alphabetical
+- Files use `@compareOriginalName` JSDoc tag to track renames; `@ignore` to skip comparison
+
+---
+
+## `tests/` — Vitest Tests
+
+Two test suites configured in `vitest.config.ts`:
+
+- **`tests/compare/`** — Tests for the `scripts/compare/` interface comparator
+  - `shared.ts` — Test helpers: `createTest()`, `runComparisonTest()`, `assertDiff()`
+  - `test-cases/` — TypeScript test case files (target + source interface strings + expected diff snapshots)
+  - `__snapshots__/` — Vitest snapshot files
+  - Each `*.test.ts` file imports a test case file and calls `createTest()`
+
+- **`tests/convert/`** — Tests for the `scripts/convert-to-typescript/` converter
+  - `functions/` — Function extraction test cases
+  - `properties/` — Property type detection test cases
+  - `protobufs/` — Protobuf type test cases
+
+---
+
+## Common Commands
+
+```bash
+# Run all tests
+bun run test
+
+# Build the inject script (required before validate-types)
+bun run build-convert-debug       # dev build with identifiers
+bun run build-convert             # minified build
+
+# Validate & update types against live Steam client (Steam must be running on port 8080)
+bun validate-types
+bun validate-types --diff         # writes diffs/ folder
+bun validate-types --force        # force re-inject script
+bun validate-types [filter]       # e.g. "SteamClient" to filter by file path
+
+# Generate protobuf types
+bun run proto:generate
+
+# Build for publish
+bun run build
+
+# Lint
+bun run lint
+bun run lint:fix
+```
+
+---
+
+## Type Validation Workflow
+
+1. Steam must be running with CEF remote debugging on port 8080 (it always is)
+2. Build the inject bundle: `bun run build-convert-debug`
+3. Run `bun validate-types` which:
+   a. Connects to Steam's `SharedJSContext` via CDP
+   b. Injects `build/scripts/convert-to-typescript.js` into the window
+   c. Calls `window.convertToTypescript(SteamClient.Apps, 'Apps', {...})` for each map entry
+   d. Compares generated interface with `src/types/<file>.ts` using `scripts/compare/`
+   e. Auto-corrects differences in the source file in-place
+   f. Optionally writes `.diff` files to `diffs/`
+4. Apply diffs manually or via `apply-diffs.sh` / `apply-diffs.ps1`
+
+---
+
+## Adding a New Interface
+
+1. Add an `IMap` or `GMap` entry in the appropriate `scripts/maps/*.ts` file
+2. Create the target file at `src/types/<file>.ts` (or let `validate-types` create it)
+3. Run `bun validate-types` to populate/update it
+4. Export the new interface from `src/types/index.ts`
+
+---
+
+## JSDoc Tags Used in Source Files
+
+| Tag | Purpose |
+|-----|---------|
+| `@compareOriginalName <name>` | Tracks a renamed property/interface for comparison |
+| `@currentValue <value>` | Documents the current runtime value of a property |
+| `@ignore` | Tells the comparator to skip this member |
+
+---
+
+## Technical Notes
+
+- **ts-morph** is used throughout for AST manipulation both in conversion and comparison
+- The convert script runs in an **in-memory ts-morph project** inside Steam's CEF browser
+- Interface merging uses Jaccard similarity: interfaces with ≥65% property overlap are merged
+- `src/Globals/index.ts` has both a `declare global { let X: T }` block and `interface Window { X: T }` — both are kept in sync and sorted alphabetically
+- `tsconfig.build.json` builds only `src/` for publish; `tsconfig.json` covers everything
+- The package exports subpath aliases: `steam-types/Global/*`, `steam-types/Modules/*`, etc.

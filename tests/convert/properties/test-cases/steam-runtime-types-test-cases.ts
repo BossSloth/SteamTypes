@@ -26,9 +26,16 @@ if (typeof globalThis.window === 'undefined') {
   (globalThis as unknown as { window: { cm: unknown; }; }).window.cm = fakeConnectionManager;
 }
 
+const cmContainer = {
+  CMInterface: {},
+  m_CMInterface: {},
+  m_CM: {},
+};
+
 export const steamRuntimeTypesTests = {
   protoMessage: fakeProtobufInstance,
   steamID: fakeSteamID,
   queryObserver: fakeQueryObserver,
   cmObject: fakeConnectionManager,
+  cmContainer: cmContainer,
 };

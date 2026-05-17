@@ -65,6 +65,21 @@ export class UnionType extends Type {
     this.types.sort((a, b) => a.toString().localeCompare(b.toString()));
   }
 
+  public static create(types: Type[]): Type {
+    if (types.length === 0) {
+      return new PrimitiveType('never');
+    }
+    if (types.length === 1) {
+      return types[0];
+    }
+
+    if (types.every(t => t.toString() === types[0].toString())) {
+      return types[0];
+    }
+
+    return new UnionType(types);
+  }
+
   /**
      * Optimizes array types within a union to simplify expressions like:
      *

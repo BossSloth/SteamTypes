@@ -1,0 +1,386 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`inheritance grouping > collapses inheritance group whose members all share the same constructor 1`] = `
+Map {
+  "A" => {
+    "constructorString": "class Same{}",
+    "extendedConstructorString": "class Parent{}",
+    "extends": undefined,
+    "name": "A",
+    "nameCounter": undefined,
+    "order": 0,
+    "properties": [
+      {
+        "name": "x",
+        "optional": false,
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > discards inheritance groups that contain only a single interface 1`] = `
+Map {
+  "Lonely" => {
+    "constructorString": "class Lonely{}",
+    "extendedConstructorString": "class Missing{}",
+    "name": "Lonely",
+    "order": 0,
+    "properties": [
+      {
+        "name": "x",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > does not duplicate parent name when multiple children extend the same parent 1`] = `
+Map {
+  "Parent" => {
+    "constructorString": "class P{}",
+    "name": "Parent",
+    "order": 0,
+    "properties": [
+      {
+        "name": "shared",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "ChildA" => {
+    "constructorString": "class CA{}",
+    "extendedConstructorString": "class P{}",
+    "extends": "Parent",
+    "name": "ChildA",
+    "order": 1,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "ChildB" => {
+    "constructorString": "class CB{}",
+    "extendedConstructorString": "class P{}",
+    "extends": "Parent",
+    "name": "ChildB",
+    "order": 2,
+    "properties": [
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > handles inheritance entries that lack a constructorString 1`] = `
+Map {
+  "A" => {
+    "constructorString": undefined,
+    "extendedConstructorString": "class Parent{}",
+    "extends": undefined,
+    "name": "A",
+    "nameCounter": undefined,
+    "order": 0,
+    "properties": [
+      {
+        "name": "a",
+        "optional": false,
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+      {
+        "name": "b",
+        "optional": true,
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > keeps interfaces separate when inheritance group has no common properties 1`] = `
+Map {
+  "A" => {
+    "constructorString": "class CA{}",
+    "extendedConstructorString": "class Parent{}",
+    "name": "A",
+    "order": 0,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "B" => {
+    "constructorString": "class CB{}",
+    "extendedConstructorString": "class Parent{}",
+    "name": "B",
+    "order": 1,
+    "properties": [
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > merges shared jsDoc onto base properties for inheritance groups 1`] = `
+Map {
+  "ABase" => {
+    "name": "ABase",
+    "order": 0,
+    "properties": [
+      {
+        "jsDoc": [
+          "/** shared docs */",
+          "/** more docs */",
+        ],
+        "name": "shared",
+        "optional": false,
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "A" => {
+    "constructorString": "class CA{}",
+    "extendedConstructorString": "class Parent{}",
+    "extends": "ABase",
+    "name": "A",
+    "order": 0,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "B" => {
+    "constructorString": "class CB{}",
+    "extendedConstructorString": "class Parent{}",
+    "extends": "ABase",
+    "name": "B",
+    "order": 1,
+    "properties": [
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > strips numeric suffix from base interface name when first member uses nameCounter 1`] = `
+Map {
+  "FooBase" => {
+    "name": "FooBase",
+    "order": 0,
+    "properties": [
+      {
+        "name": "shared",
+        "optional": false,
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "Foo2" => {
+    "constructorString": "class CB{}",
+    "extendedConstructorString": "class Parent{}",
+    "extends": "FooBase",
+    "name": "Foo2",
+    "nameCounter": 2,
+    "order": 0,
+    "properties": [
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "Foo" => {
+    "constructorString": "class CA{}",
+    "extendedConstructorString": "class Parent{}",
+    "extends": "FooBase",
+    "name": "Foo",
+    "order": 1,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`inheritance grouping > treats two empty-property interfaces with the same constructor as mergeable 1`] = `
+Map {
+  "Empty1" => {
+    "constructorString": "class E{}",
+    "extendedConstructorString": undefined,
+    "extends": undefined,
+    "name": "Empty1",
+    "nameCounter": undefined,
+    "order": 0,
+    "properties": [],
+  },
+}
+`;
+
+exports[`inheritance grouping > uses parent class as base when an instance lacks extendedConstructorString 1`] = `
+Map {
+  "Parent" => {
+    "constructorString": "class P{}",
+    "name": "Parent",
+    "order": 0,
+    "properties": [
+      {
+        "name": "shared",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "Child" => {
+    "constructorString": "class C{}",
+    "extendedConstructorString": "class P{}",
+    "extends": "Parent",
+    "name": "Child",
+    "order": 1,
+    "properties": [
+      {
+        "name": "extra",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`shouldMergeInterfaces - proto property guard > does not merge when first interface has a \`proto\` property 1`] = `
+Map {
+  "A" => {
+    "constructorString": "class C{}",
+    "name": "A",
+    "order": 0,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+      {
+        "name": "proto",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "B" => {
+    "constructorString": "class C{}",
+    "name": "B",
+    "order": 1,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`shouldMergeInterfaces - proto property guard > does not merge when second interface has a \`proto\` property 1`] = `
+Map {
+  "A" => {
+    "constructorString": "class C{}",
+    "name": "A",
+    "order": 0,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+      {
+        "name": "b",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+  "B" => {
+    "constructorString": "class C{}",
+    "name": "B",
+    "order": 1,
+    "properties": [
+      {
+        "name": "a",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+      {
+        "name": "proto",
+        "type": PrimitiveType {
+          "kind": "string",
+        },
+      },
+    ],
+  },
+}
+`;

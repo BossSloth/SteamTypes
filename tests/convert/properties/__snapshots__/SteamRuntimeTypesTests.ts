@@ -4,6 +4,8 @@ import { ProtobufInterface } from 'shared/protobuf';
 import { SteamID } from 'shared/steamid';
 
 export interface SteamRuntimeTypesTests {
+  cmContainer: CmContainer;
+
   cmObject: ConnectionManager;
 
   protoMessage: ProtobufInterface<CMsgFakeProto>;
@@ -11,4 +13,12 @@ export interface SteamRuntimeTypesTests {
   queryObserver: QueryObserver;
 
   steamID: SteamID;
+}
+
+export interface CmContainer {
+  CMInterface: ConnectionManager;
+
+  m_CM: ConnectionManager;
+
+  m_CMInterface: ConnectionManager;
 }

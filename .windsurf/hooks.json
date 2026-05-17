@@ -4,6 +4,10 @@
       {
         "command": "bun install",
         "show_output": true
+      },
+      {
+        "command": "git submodule update --init --recursive scripts/Protobufs",
+        "show_output": true
       }
     ]
   }

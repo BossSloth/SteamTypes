@@ -160,6 +160,7 @@ function processInterfaceProperties(
 function tryGetProtobufClassProperty(value: unknown, formattedName: string): InterfaceProperty | null {
   if (!isProtobufClass(value)) return null;
   const protoClassName = getProtobufClassName(value as Function);
+  /* v8 ignore next -- @preserve */
   if (protoClassName === null) return null;
 
   context.addImport('shared/protobuf', 'ProtobufClass');
