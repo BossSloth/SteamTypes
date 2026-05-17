@@ -117,6 +117,16 @@ Two test suites configured in `vitest.config.ts`:
 # Run all tests
 bun run test
 
+# Run tests with coverage (files with 100% coverage are hidden by skipFull option)
+bun run test:coverage
+
+# Run tests with coverage showing all files (including 100% covered) only run when the file doesn't appear in the normal command
+bun run test:coverage --coverage.reporter=text
+
+# IMPORTANT: NEVER pipe test or coverage output through `tail`, `head`, etc.
+# Vitest detects the truncated TTY and shortens its own per-file uncovered-line list,
+# hiding the actual line numbers you need. Always run the command unpiped.
+
 # Build the inject script (required before validate-types)
 bun run build-convert-debug       # dev build with identifiers
 bun run build-convert             # minified build

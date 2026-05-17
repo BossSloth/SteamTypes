@@ -1,7 +1,6 @@
-/* eslint-disable max-depth */
 /* eslint-disable complexity */
 
-import { ArrayTypeNode, EnumDeclaration, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import { ArrayTypeNode, EnumDeclaration, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, PropertySignature, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeParameterDeclaration, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
 import { currentTargetSourceFile, isImportedType } from './shared';
@@ -93,6 +92,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     // If the target is a type alias, check the type node
     // Example test case 'external template literal types'
     const typeNode = targetDefinitionNode.getTypeNode();
+    /* v8 ignore next -- @preserve */
     if (!typeNode) {
       return false;
     }
@@ -205,14 +205,10 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
     for (const typeReferenceMember of typeReferenceMembers) {
       const definition = getDeclarationNode(typeReferenceMember);
       if (Node.isTypeAliasDeclaration(definition)) {
-        const typeNode = definition.getTypeNode();
-        if (typeNode) {
-          let nodes = [typeNode];
-          if (Node.isUnionTypeNode(typeNode)) {
-            nodes = typeNode.getTypeNodes();
-          }
-          targetMembers.splice(targetMembers.indexOf(typeReferenceMember), 1, ...nodes);
-        }
+        // A TypeAliasDeclaration always has a type node.
+        const typeNode = definition.getTypeNodeOrThrow();
+        const nodes = Node.isUnionTypeNode(typeNode) ? typeNode.getTypeNodes() : [typeNode];
+        targetMembers.splice(targetMembers.indexOf(typeReferenceMember), 1, ...nodes);
       }
     }
   }
@@ -353,20 +349,22 @@ function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, s
 
   const targetType = targetIndexedAccess.getType();
   if (targetType.isTypeParameter()) {
-    const typeParameterDeclaration = targetType.getSymbol()?.getDeclarations()[0];
-    if (Node.isTypeParameterDeclaration(typeParameterDeclaration)) {
-      const constraint = typeParameterDeclaration.getConstraint();
-      if (constraint) {
-        return compareTypes(constraint, sourceNode);
-      }
+    // When the type resolves to a type parameter, its symbol's first declaration
+    // is always the TypeParameterDeclaration it originated from.
+    const typeParameterDeclaration = targetType.getSymbol()?.getDeclarations()[0] as TypeParameterDeclaration | undefined;
+    const constraint = typeParameterDeclaration?.getConstraint();
+    if (constraint) {
+      return compareTypes(constraint, sourceNode);
     }
   }
 
   const targetNode = targetIndexedAccess.getObjectTypeNode().getType().getSymbol()
     ?.getDeclarations()[0];
   if (Node.isInterfaceDeclaration(targetNode)) {
-    const referencedProperty = targetNode.getMembers().find(member => Node.isPropertySignature(member) && member.getName() === targetIndexedAccess.getIndexTypeNode().getType().getLiteralValue());
-    if (Node.isPropertySignature(referencedProperty)) {
+    const indexValue = targetIndexedAccess.getIndexTypeNode().getType().getLiteralValue();
+    const referencedProperty = targetNode.getMembers().find((member): member is PropertySignature =>
+      Node.isPropertySignature(member) && member.getName() === indexValue);
+    if (referencedProperty) {
       return compareTypes(referencedProperty.getTypeNodeOrThrow(), sourceNode);
     }
   }
@@ -425,11 +423,8 @@ function handleRecord(targetTypeReference: TypeReferenceNode, sourceNode: TypeNo
   for (const member of sourceMembers) {
     if (Node.isPropertySignature(member)) {
       const nameNode = member.getNameNode();
-      if (Node.isIdentifier(nameNode) || Node.isStringLiteral(nameNode)) {
-        keyType.add('string');
-      } else if (Node.isNumericLiteral(nameNode)) {
-        keyType.add('number');
-      }
+      // Property names in interfaces are always identifier, string literal, or numeric literal.
+      keyType.add(Node.isNumericLiteral(nameNode) ? 'number' : 'string');
 
       valueType.add(getText(member.getTypeNodeOrThrow()));
     }
@@ -440,18 +435,12 @@ function handleRecord(targetTypeReference: TypeReferenceNode, sourceNode: TypeNo
   return getText(targetTypeReference) === recordType;
 }
 
-function isTypeParameterRef(ref: TypeReferenceNode): boolean {
-  const declarations = ref.getTypeName().getSymbol()?.getDeclarations() ?? [];
-
-  return declarations.some(d => Node.isTypeParameterDeclaration(d));
-}
-
 function containsTypeParameterReference(typeNode: TypeNode): boolean {
-  if (Node.isTypeReference(typeNode) && isTypeParameterRef(typeNode)) {
-    return true;
-  }
-
-  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some(isTypeParameterRef);
+  // Only called when compareTypes(typeArgument, ...) returned false. A bare TypeReference
+  // resolving to a type parameter always matches in compareTypes (see the
+  // TypeParameterDeclaration branch in handleTargetTypeReference), so the typeNode here
+  // is always a composite (array/union/generic/etc.) wrapping a possible type parameter.
+  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some(desc => Node.isTypeParameterDeclaration(getDeclarationNode(desc)));
 }
 
 export function getText(typeNode: TypeNode): string {

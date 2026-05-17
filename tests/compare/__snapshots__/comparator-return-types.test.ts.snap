@@ -45,6 +45,20 @@ export interface Foo {
 }"
 `;
 
+exports[`Comparator Return Types Cases > return type with ReturnType, target method has no return type annotation 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): ReturnType<Foo['bar2']>;
++  bar(): string;
+
+-  bar2();
++  bar2(): string;
+}"
+`;
+
 exports[`Comparator Return Types Cases > return type with wrong ReturnType, source is known 1`] = `
 "===================================================================
 --- a/target.ts
@@ -70,5 +84,31 @@ export interface Bar {
   height: number;
 +
 +  name: string;
+}"
+`;
+
+exports[`Comparator Return Types Cases > typeof function declaration mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+function fn(): string { return 'a'; }
+
+export interface Foo {
+-  value: typeof fn;
++  value: number;
+}"
+`;
+
+exports[`Comparator Return Types Cases > typeof object literal mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const obj = { a: 1 };
+
+export interface Foo {
+-  value: typeof obj;
++  value: number;
 }"
 `;

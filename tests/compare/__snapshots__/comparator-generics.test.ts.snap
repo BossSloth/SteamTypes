@@ -32,6 +32,34 @@ export interface DataStore {
   name: string;"
 `;
 
+exports[`Comparator Generics Cases > indexed access on type alias falls through 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+type Foo = { bar: string; };
+
+export interface Container {
+-  value: Foo['bar'];
++  value: number;
+}"
+`;
+
+exports[`Comparator Generics Cases > indexed access referencing non-existent property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Foo {
+  bar: string;
+}
+
+export interface Container {
+-  value: Foo['nonexistent'];
++  value: number;
+}"
+`;
+
 exports[`Comparator Generics Cases > simple generic mismatch 1`] = `
 "===================================================================
 --- a/target.ts

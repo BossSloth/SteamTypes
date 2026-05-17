@@ -261,4 +261,51 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'return type with ReturnType, target method has no return type annotation': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      export interface Foo {
+        bar(): ReturnType<Foo['bar2']>;
+
+        bar2();
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar(): string;
+
+        bar2(): string;
+      }
+    `,
+  },
+  'typeof object literal mismatch': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      const obj = { a: 1 };
+
+      export interface Foo {
+        value: typeof obj;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        value: number;
+      }
+    `,
+  },
+  'typeof function declaration mismatch': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      function fn(): string { return 'a'; }
+
+      export interface Foo {
+        value: typeof fn;
+      }
+    `,
+    source: dedent/* ts */`
+      export interface Foo {
+        value: number;
+      }
+    `,
+  },
 };

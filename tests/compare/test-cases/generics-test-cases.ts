@@ -461,4 +461,55 @@ export const genericsCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+
+  'indexed access on unconstrained type parameter': {
+    interfaceName: 'UserData',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface UserData<T> {
+        id: T;
+
+        info: UserData<T>['id'];
+      }`,
+    source: dedent/* ts */`
+      export interface UserData {
+        id: number;
+
+        info: number;
+      }`,
+  },
+
+  'indexed access on type alias falls through': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      type Foo = { bar: string; };
+
+      export interface Container {
+        value: Foo['bar'];
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        value: number;
+      }`,
+  },
+
+  'indexed access referencing non-existent property': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+      }
+
+      export interface Container {
+        value: Foo['nonexistent'];
+      }`,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+      }
+
+      export interface Container {
+        value: number;
+      }`,
+  },
 };

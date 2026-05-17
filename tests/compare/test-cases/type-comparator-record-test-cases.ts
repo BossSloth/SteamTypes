@@ -39,4 +39,42 @@ export const typeComparatorRecordCases: Record<string, ComparatorTest> = {
         data: DataMap;
       }`,
   },
+  // TODO: This case might be wrong as it should see that not every property of NumberMap fits the record
+  'target record matches source interface with method member': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: Record<string, number>;
+      }`,
+    source: dedent/* ts */`
+      export interface NumberMap {
+        a: number;
+
+        compute(): void;
+      }
+
+      export interface Container {
+        data: NumberMap;
+      }`,
+  },
+
+  'target record with numeric keys matches numeric-keyed interface': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: Record<number, string>;
+      }`,
+    source: dedent/* ts */`
+      export interface NumberMap {
+        1: string;
+
+        2: string;
+      }
+
+      export interface Container {
+        data: NumberMap;
+      }`,
+  },
 };

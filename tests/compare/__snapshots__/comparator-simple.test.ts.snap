@@ -174,3 +174,31 @@ export interface FooInterface {
 +  foo: { summary?: string, result: number } | { summary?: undefined, result: number };
 }"
 `;
+
+exports[`Comparator Simple Cases > union with non-union type alias member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+type Alias = string;
+
+export interface Foo {
+-  value: Alias | number;
++  value: boolean;
+}"
+`;
+
+exports[`Comparator Simple Cases > union with qualified name type alias member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export namespace NS {
+  export type Alias = string;
+}
+
+export interface Container {
+-  value: NS.Alias | number;
++  value: boolean;
+}"
+`;

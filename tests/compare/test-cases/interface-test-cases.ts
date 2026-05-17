@@ -1108,4 +1108,16 @@ export const interfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+
+  'intersection type vs primitive': {
+    interfaceName: 'Foo',
+    target: dedent/* ts */`
+      export interface Foo {
+        value: { a: number; } & { b: string; };
+      }`,
+    source: dedent/* ts */`
+      export interface Foo {
+        value: number;
+      }`,
+  },
 };
