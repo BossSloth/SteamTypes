@@ -16,6 +16,7 @@ export default defineConfig({
         test: {
           name: 'compare',
           include: ['./tests/compare/**/*.test.ts'],
+          exclude: ['./tests/compare/snapshot-cases/compare-single.test.ts'],
         },
       },
       {

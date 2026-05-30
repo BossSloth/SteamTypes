@@ -54,8 +54,7 @@ export function createTest(name: string, testCases: Record<string, ComparatorTes
  * Returns null when there are no nested interfaces to rename (nothing meaningful to test).
  */
 function renameNestedInterfaces(testCase: ComparatorTest, suffix = 'Renamed'): ComparatorTest | null {
-  const renameProject = new Project({ useInMemoryFileSystem: true });
-  const file = renameProject.createSourceFile('rename.ts', testCase.target, { overwrite: true });
+  const file = project.createSourceFile('rename.ts', testCase.target, { overwrite: true });
 
   const nested = file.getInterfaces().filter(iface => iface.getName() !== testCase.interfaceName);
 
