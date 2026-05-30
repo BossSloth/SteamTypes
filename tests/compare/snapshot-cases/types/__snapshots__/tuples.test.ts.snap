@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Tuples > interface with tuple type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,5 @@
+export interface TupleContainer {
+-  coordinates: [number, number];
++  coordinates: [number, boolean, number];
++
++  labels: [string, string];
+}"
+`;
+
+exports[`Comparator Tuples > mixed missing tuple types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface CoordinateSystem {
+-  point: [number, number];
++  point: (number | string)[];
+}"
+`;

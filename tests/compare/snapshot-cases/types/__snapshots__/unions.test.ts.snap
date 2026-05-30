@@ -1,0 +1,221 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Union Renames > inverse union type with interface - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,3 @@
+export interface Container {
+-  data: DataTypeRenamed | null;
++  data: string | null;
+}
+-
+-export interface DataTypeRenamed {
+-  value: string;
+-  id: number;
+-}"
+`;
+
+exports[`Comparator Union Renames > nested interface in union type - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,17 @@
+export interface Container {
+-  data: BaseRenamed | ExtendedRenamed;
++  data: BaseRenamed | Extended;
+}
+
+export interface BaseRenamed {
++  created: Date;
++
+  id: number;
++
+  name: string;
+}
+
+-export interface ExtendedRenamed {
++export interface Extended {
++  active: boolean;
++
+  details: string;
+}"
+`;
+
+exports[`Comparator Union Renames > union type with interface and different lengths - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,21 @@
+export interface Container {
+-  data: ARenamed | BRenamed;
++  data: ARenamed | BRenamed | C;
+}
+
+export interface ARenamed {
+  propA: string;
+}
+
+export interface BRenamed {
+-  propB: number;
++  extraB: Date;
++
+  fooB: string;
++
+  otherB: boolean;
++
++  propB: number;
+}
++
++export interface C {
++  propC: boolean;
++}"
+`;
+
+exports[`Comparator Unions > inverse union type with interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,3 @@
+export interface Container {
+-  data: DataType | null;
++  data: string | null;
+}
+-
+-export interface DataType {
+-  value: string;
+-  id: number;
+-}"
+`;
+
+exports[`Comparator Unions > nested interface in union type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,17 @@
+export interface Container {
+  data: Base | Extended;
+}
+
+export interface Base {
++  created: Date;
++
+  id: number;
++
+  name: string;
+}
+
+export interface Extended {
++  active: boolean;
++
+  details: string;
+}"
+`;
+
+exports[`Comparator Unions > simple union type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: string;
++  existingProp: number | string;
+}"
+`;
+
+exports[`Comparator Unions > union literal type with unknown wrong optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface FooInterface {
+-  foo: { summary: string, result: number } | { summary?: undefined, result: number };
++  foo: { summary?: string, result: number } | { summary?: undefined, result: number };
+}"
+`;
+
+exports[`Comparator Unions > union type with different lengths 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Container {
+-  data: string | number;
++  data: string | number | boolean;
+}"
+`;
+
+exports[`Comparator Unions > union type with interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,9 @@
+export interface Container {
+-  data: string | null;
++  data: DataType | null;
+}
++
++export interface DataType {
++  id: number;
++
++  value: string;
++}"
+`;
+
+exports[`Comparator Unions > union type with interface and different lengths 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,21 @@
+export interface Container {
+-  data: A | B;
++  data: A | B | C;
+}
+
+export interface A {
+  propA: string;
+}
+
+export interface B {
+-  propB: number;
++  extraB: Date;
++
+  fooB: string;
++
+  otherB: boolean;
++
++  propB: number;
+}
++
++export interface C {
++  propC: boolean;
++}"
+`;
+
+exports[`Comparator Unions > union with non-union type alias member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+type Alias = string;
+
+export interface Foo {
+-  value: Alias | number;
++  value: boolean;
+}"
+`;
+
+exports[`Comparator Unions > union with qualified name type alias member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export namespace NS {
+  export type Alias = string;
+}
+
+export interface Container {
+-  value: NS.Alias | number;
++  value: boolean;
+}"
+`;

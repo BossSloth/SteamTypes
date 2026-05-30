@@ -1,0 +1,311 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Nested Interfaces > 2 level recursive interface missing interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,15 @@
+export interface TreeNode {
+-  value: id;
++  children: Node[];
++
+  foo: string;
++
++  value: string;
+}
++
++export interface Node {
++  children: Node[];
++
++  parent: TreeNode;
++
++  value: string;
++}"
+`;
+
+exports[`Comparator Nested Interfaces > deeply nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,17 @@
+export interface GrandParent {
++  generation: number;
++
+  parent: Parent;
+}
+
+export interface Parent {
+  child: Child;
++
++  id: number;
+}
+
+export interface Child {
++  age: number;
++
+  name: string;
+}"
+`;
+
+exports[`Comparator Nested Interfaces > interface with added nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,31 @@
+export interface AppConfiguration {
++  features: FeatureFlags;
++
++  settings: AppSettings;
++
+  version: string;
+-  settings: {
+-    theme: string;
+-    language: string;
+-  };
+}
++
++export interface AppSettings {
++  language: string;
++
++  notifications: NotificationSettings;
++
++  theme: string;
++}
++
++export interface NotificationSettings {
++  desktop: boolean;
++
++  enabled: boolean;
++
++  sound: boolean;
++}
++
++export interface FeatureFlags {
++  betaFeatures: boolean;
++
++  darkMode: boolean;
++
++  experimentalApi: boolean;
++}"
+`;
+
+exports[`Comparator Nested Interfaces > interface with circular reference 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,5 @@
+export interface Node {
++  next: Node | null;
++
+  value: string;
+}"
+`;
+
+exports[`Comparator Nested Interfaces > interface with mismatched interface types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,16 +1,11 @@
+export interface ServiceConfig {
+  userService: UserService;
+}
+
+export interface UserService {
+-  getUserById(id: number): User;
+-  createUser(name: string, email: string): User;
++  email: string;
+
+-  user: User;
+-}
+-
+-export interface User {
+-  id: number;
+  name: string;
+-  email: string;
++
++  role: string;
+}"
+`;
+
+exports[`Comparator Nested Interfaces > interface with modified nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,28 @@
+export interface NetworkConfig {
+  baseUrl: string;
++
+  connection: ConnectionParams;
++
++  endpoints: Record<string, string>;
+}
+
+export interface ConnectionParams {
++  keepAlive: boolean;
++
++  proxy?: ProxySettings;
++
++  retries: number;
++
+  /**
+   * Timeout in milliseconds
+   */
+  timeout: number;
+-  retries: number;
+}
++
++export interface ProxySettings {
++  auth?: string;
++
++  host: string;
++
++  port: number;
++}"
+`;
+
+exports[`Comparator Nested Interfaces > nested interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,11 @@
+export interface Parent {
+  child: Child;
++
++  id: number;
+}
+
+export interface Child {
++  age: number;
++
+  name: string;
+}"
+`;
+
+exports[`Comparator Nested Interfaces > recursive interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,7 @@
+export interface Node {
+-  value: string;
+  children: Node[];
++
++  parent: Node | null;
++
++  value: string;
+}"
+`;
+
+exports[`Comparator Nested Renames > deeply nested interfaces - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,17 @@
+export interface GrandParent {
+-  parent: ParentRenamed;
++  generation: number;
++
++  parent: Parent;
+}
+
+-export interface ParentRenamed {
+-  child: ChildRenamed;
++export interface Parent {
++  child: Child;
++
++  id: number;
+}
+
+-export interface ChildRenamed {
++export interface Child {
++  age: number;
++
+  name: string;
+}"
+`;
+
+exports[`Comparator Nested Renames > interface with mismatched interface types - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,16 +1,11 @@
+export interface ServiceConfig {
+-  userService: UserServiceRenamed;
++  userService: UserService;
+}
+
+-export interface UserServiceRenamed {
+-  getUserById(id: number): UserRenamed;
+-  createUser(name: string, email: string): UserRenamed;
++export interface UserService {
++  email: string;
+
+-  user: UserRenamed;
+-}
+-
+-export interface UserRenamed {
+-  id: number;
+  name: string;
+-  email: string;
++
++  role: string;
+}"
+`;
+
+exports[`Comparator Nested Renames > interface with modified nested interfaces - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,25 @@
+export interface NetworkConfig {
+  baseUrl: string;
+-  connection: ConnectionParamsRenamed;
++
++  connection: ConnectionParams;
++
++  endpoints: Record<string, string>;
+}
+
+-export interface ConnectionParamsRenamed {
+-  /**
+-   * Timeout in milliseconds
+-   */
+-  timeout: number;
++export interface ConnectionParams {
++  keepAlive: boolean;
++
++  proxy?: ProxySettings;
++
+  retries: number;
++
++  timeout: number;
+}
++
++export interface ProxySettings {
++  auth?: string;
++
++  host: string;
++
++  port: number;
++}"
+`;
+
+exports[`Comparator Nested Renames > nested interfaces - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,11 @@
+export interface Parent {
+-  child: ChildRenamed;
++  child: Child;
++
++  id: number;
+}
+
+-export interface ChildRenamed {
++export interface Child {
++  age: number;
++
+  name: string;
+}"
+`;

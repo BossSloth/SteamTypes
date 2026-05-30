@@ -1,0 +1,82 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Literals > external template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,10 @@
+-export type HttpMethod = 'GET' | 'POST';
++export type HttpMethod = number;
+export type ResourceType = 4 | 5;
+
+export interface RouteConfig {
+  method: HttpMethod;
++
+  path: string;
++
+  type: ResourceType;
+}"
+`;
+
+exports[`Comparator Literals > mismatching literal number, string 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: 5;
++  existingProp: string;
+}"
+`;
+
+exports[`Comparator Literals > mismatching literal string, number 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: 'a';
++  existingProp: number;
+}"
+`;
+
+exports[`Comparator Literals > mismatching typeof literal number 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const num = 'a';
+
+export interface SimpleInterface {
+-  existingProp: typeof num;
++  existingProp: number;
+}"
+`;
+
+exports[`Comparator Literals > mismatching typeof literal string 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const text = 'a';
+
+export interface SimpleInterface {
+-  existingProp: typeof text;
++  existingProp: number;
+}"
+`;
+
+exports[`Comparator Literals > template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,7 @@
+export interface RouteConfig {
+-  method: 'GET' | 'POST';
++  method: number;
++
+  path: string;
++
+  type: 4 | 5;
+}"
+`;

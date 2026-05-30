@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Collections > interface with different ObservableMap type in an intersection 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+import { ObservableMap } from 'mobx';
+
+export interface Container {
+-  data: number | ObservableMap<string, number>;
++  data: number | ObservableMap<string, boolean>;
+}"
+`;
+
+exports[`Comparator Collections > map type different 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Container {
+-  data: Map<string, number>;
++  data: Map<string, boolean>;
+}"
+`;
+
+exports[`Comparator Collections > mismatching ObservableMap 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+import { ObservableMap } from 'mobx';
+
+export interface Container {
+-  data: ObservableMap<string, number>;
++  data: ObservableMap<string, boolean>;
+}"
+`;
+
+exports[`Comparator Collections > observable map 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+import { ObservableMap } from 'mobx';
+
+export interface Container {
+-  data: ObservableMap<string, number>;
++  data: ObservableMap<string, boolean>;
+}"
+`;
+
+exports[`Comparator Collections > observable set 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+import { ObservableSet } from 'mobx';
+
+export interface Container {
+-  data: ObservableSet<number>;
++  data: ObservableSet<boolean>;
+}"
+`;
+
+exports[`Comparator Collections > set type different 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Container {
+-  data: Set<number>;
++  data: Set<boolean>;
+}"
+`;
+
+exports[`Comparator Collections > simple array type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: string[];
++  existingProp: number[];
+}"
+`;
+
+exports[`Comparator Collections > simple number, set mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: number;
++  existingProp: Set<number>;
+}"
+`;
+
+exports[`Comparator Collections > simple set type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: Set<string>;
++  existingProp: Set<number>;
+}"
+`;
+
+exports[`Comparator Collections > simple string, array mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface SimpleInterface {
+-  existingProp: string;
++  existingProp: string[];
+}"
+`;

@@ -1,0 +1,444 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Generic Renames > generic interface type in map mismatch - data - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface DataStore {
+-  data: Map<string, number>;
++  data: Map<string, UserDataRenamed>;
+}
+
+export interface UserDataRenamed<T extends number> {
+  email: string;"
+`;
+
+exports[`Comparator Generic Renames > generic interface type in map mismatch - id - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: Map<string, UserDataRenamed<number>>;
+}
+
+-export interface UserDataRenamed<T extends string> {
++export interface UserDataRenamed<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;
+
+exports[`Comparator Generic Renames > generic type parameter changes - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,25 +1,37 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataStore {
+-  cache: Set<string>;
+-  items: Map<string, ItemRenamed>;
+-  reactive: ObservableMap<string, ReactiveDataRenamed>;
+-  users: ObservableSet<UserDataRenamed>;
++  cache: Set<number>;
++
++  items: Map<string, Item>;
++
++  reactive: ObservableMap<number, ReactiveDataRenamed>;
++
++  users: ObservableSet<ItemRenamed>;
+}
+
+export interface ItemRenamed {
+-  id: string;
+-  name: string;
+-}
++  avatarUrl: string;
+
+-export interface UserDataRenamed {
+  id: number;
++
+  name: string;
+-  email: string;
+}
+
+export interface ReactiveDataRenamed {
+  id: number;
++
+  name: string;
++
+  tracking: boolean;
+}
++
++export interface Item {
++  data: string;
++
++  id: string;
++
++  name: string;
++
++  type: 'text' | 'image' | 'file';
++}"
+`;
+
+exports[`Comparator Generic Renames > generic type parameter changes with union types - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,29 +1,37 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataCollection {
+-  cache: ObservableMap<string, BasicItemRenamed | ExtendedItemRenamed>;
+-  items: Set<ReactiveDataRenamed | ExtendedItemRenamed>;
+-  mappings: Map<string, UserDataRenamed | ReactiveDataRenamed>;
++  cache: ObservableMap<string, BasicItemRenamed | ExtendedItemRenamed | SpecialItem>;
++
++  items: Set<BasicItemRenamed | ExtendedItemRenamed>;
++
++  mappings: Map<string, BasicItemRenamed>;
+}
+
+export interface BasicItemRenamed {
++  createdAt: Date;
++
+  id: string;
++
+  name: string;
+}
+
+export interface ExtendedItemRenamed {
+  description: string;
++
+  id: string;
++
++  isActive: boolean;
++
+  metadata: Record<string, unknown>;
+-  name: string;
+-}
+
+-export interface UserDataRenamed {
+-  id: number;
+  name: string;
+}
+
+-export interface ReactiveDataRenamed {
+-  id: number;
+-  tracking: boolean;
++export interface SpecialItem {
++  id: string;
++
++  priority: number;
++
++  type: 'special';
+}"
+`;
+
+exports[`Comparator Generic Renames > indexed access referencing non-existent property - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface FooRenamed {
+  bar: string;
+}
+
+export interface Container {
+-  value: FooRenamed['nonexistent'];
++  value: number;
+}"
+`;
+
+exports[`Comparator Generic Renames > interface with complex nested generics - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,27 @@
+export interface ApiResponse<T> {
+-  data: T[];
++  data: number | string[];
++
++  error: ApiError;
++
+  pagination: PaginationRenamed;
++
+  success: boolean;
+}
+
+export interface PaginationRenamed {
+-  page: number;
++  hasMore: boolean;
++
+  limit: number;
++
++  page: number;
++
+  total: number;
+}
++
++export interface ApiError {
++  code: string;
++
++  details?: Record<string, unknown>;
++
++  message: string;
++}"
+`;
+
+exports[`Comparator Generic Renames > simple generic mismatch - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: UserDataRenamed<number>;
+}
+
+-export interface UserDataRenamed<T extends string> {
++export interface UserDataRenamed<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;
+
+exports[`Comparator Generics > generic interface type in map mismatch - data 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface DataStore {
+-  data: Map<string, number>;
++  data: Map<string, UserData>;
+}
+
+export interface UserData<T extends number> {
+  email: string;"
+`;
+
+exports[`Comparator Generics > generic interface type in map mismatch - id 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: Map<string, UserData<number>>;
+}
+
+-export interface UserData<T extends string> {
++export interface UserData<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;
+
+exports[`Comparator Generics > generic type parameter changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,25 +1,37 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataStore {
+-  cache: Set<string>;
++  cache: Set<number>;
++
+  items: Map<string, Item>;
+-  reactive: ObservableMap<string, ReactiveData>;
++
++  reactive: ObservableMap<number, ReactiveData>;
++
+  users: ObservableSet<UserData>;
+}
+
+export interface Item {
++  data: string;
++
+  id: string;
++
+  name: string;
++
++  type: 'text' | 'image' | 'file';
+}
+
+export interface UserData {
++  avatarUrl: string;
++
+  id: number;
++
+  name: string;
+-  email: string;
+}
+
+export interface ReactiveData {
+  id: number;
++
+  name: string;
++
+  tracking: boolean;
+}"
+`;
+
+exports[`Comparator Generics > generic type parameter changes with union types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,29 +1,53 @@
+import { ObservableMap } from 'mobx';
+
+export interface DataCollection {
+-  cache: ObservableMap<string, BasicItem | ExtendedItem>;
++  cache: ObservableMap<string, BasicItem | ExtendedItem | SpecialItem>;
++
+  items: Set<ReactiveData | ExtendedItem>;
++
+  mappings: Map<string, UserData | ReactiveData>;
+}
+
+export interface BasicItem {
++  createdAt: Date;
++
+  id: string;
++
+  name: string;
+}
+
+export interface ExtendedItem {
+  description: string;
++
+  id: string;
++
++  isActive: boolean;
++
+  metadata: Record<string, unknown>;
++
+  name: string;
+}
+
+export interface UserData {
++  avatarUrl: string;
++
+  id: number;
++
+  name: string;
+}
+
+export interface ReactiveData {
+  id: number;
++
++  name: string;
++
+  tracking: boolean;
+}
++
++export interface SpecialItem {
++  id: string;
++
++  priority: number;
++
++  type: 'special';
++}"
+`;
+
+exports[`Comparator Generics > generic type with typeof string mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
+
+export interface Container {
+-  data: Map<typeof MAIN_WINDOW_NAME, string>;
++  data: Map<number, string>;
+}"
+`;
+
+exports[`Comparator Generics > indexed access on type alias falls through 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+type Foo = { bar: string; };
+
+export interface Container {
+-  value: Foo['bar'];
++  value: number;
+}"
+`;
+
+exports[`Comparator Generics > indexed access referencing non-existent property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Foo {
+  bar: string;
+}
+
+export interface Container {
+-  value: Foo['nonexistent'];
++  value: number;
+}"
+`;
+
+exports[`Comparator Generics > interface with complex nested generics 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,27 @@
+export interface ApiResponse<T> {
+-  data: T[];
++  data: number | string[];
++
++  error: ApiError;
++
+  pagination: Pagination;
++
+  success: boolean;
+}
+
+export interface Pagination {
+-  page: number;
++  hasMore: boolean;
++
+  limit: number;
++
++  page: number;
++
+  total: number;
+}
++
++export interface ApiError {
++  code: string;
++
++  details?: Record<string, unknown>;
++
++  message: string;
++}"
+`;
+
+exports[`Comparator Generics > simple generic mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,10 @@
+export interface DataStore {
+  data: UserData<number>;
+}
+
+-export interface UserData<T extends string> {
++export interface UserData<T extends number> {
+  email: string;
+
+  id: T;
+
+  name: string;"
+`;

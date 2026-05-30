@@ -1,7 +1,7 @@
 import tsConfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
-const idAgent = process.env.WINDSURF_CASCADE_TERMINAL === '1';
+const isAgent = process.env.WINDSURF_CASCADE_TERMINAL === '1';
 
 export default defineConfig({
   plugins: [tsConfigPaths()],
@@ -9,7 +9,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     pool: 'threads',
-    reporters: idAgent ? ['agent'] : ['default'],
+    reporters: isAgent ? ['agent'] : ['default'],
     projects: [
       {
         extends: true,
@@ -39,7 +39,7 @@ export default defineConfig({
     ],
     coverage: {
       provider: 'v8',
-      reporter: idAgent ? [['text', { skipFull: true }], 'text-summary', 'html'] : ['text', 'html'],
+      reporter: isAgent ? [['text', { skipFull: true }], 'text-summary', 'html'] : ['text', 'html'],
       exclude: [
         'node_modules',
         'dist',

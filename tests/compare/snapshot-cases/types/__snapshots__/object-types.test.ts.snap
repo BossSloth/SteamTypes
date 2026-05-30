@@ -1,0 +1,169 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Object Type Renames > interface with complex nested structures - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,53 @@
+export interface AppConfig {
+-  api: ApiConfigRenamed;
+-  ui: UiConfigRenamed;
++  api: ApiConfig;
++
++  features: Record<string, boolean>;
++
++  ui: UiConfig;
+}
+
+-export interface ApiConfigRenamed {
++export interface ApiConfig {
+  baseUrl: string;
++
++  endpoints: Record<string, EndpointConfig>;
++
++  headers: Record<string, string>;
++
+  timeout: number;
+}
+
+-export interface UiConfigRenamed {
++export interface EndpointConfig {
++  method: string;
++
++  path: string;
++
++  requiresAuth: boolean;
++}
++
++export interface UiConfig {
++  animations: boolean;
++
++  components: ComponentsConfig;
++
++  layout: 'vertical' | 'horizontal';
++
+  theme: string;
+}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++
++  input: InputConfig;
++}
++
++export interface ButtonConfig {
++  borderRadius: number;
++
++  fontSize: number;
++}
++
++export interface InputConfig {
++  borderRadius: number;
++
++  padding: number;
++}"
+`;
+
+exports[`Comparator Object Types > interface with complex nested structures 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,13 +1,53 @@
+export interface AppConfig {
+  api: ApiConfig;
++
++  features: Record<string, boolean>;
++
+  ui: UiConfig;
+}
+
+export interface ApiConfig {
+  baseUrl: string;
++
++  endpoints: Record<string, EndpointConfig>;
++
++  headers: Record<string, string>;
++
+  timeout: number;
+}
+
+export interface UiConfig {
++  animations: boolean;
++
++  components: ComponentsConfig;
++
++  layout: 'vertical' | 'horizontal';
++
+  theme: string;
+}
++
++export interface EndpointConfig {
++  method: string;
++
++  path: string;
++
++  requiresAuth: boolean;
++}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++
++  input: InputConfig;
++}
++
++export interface ButtonConfig {
++  borderRadius: number;
++
++  fontSize: number;
++}
++
++export interface InputConfig {
++  borderRadius: number;
++
++  padding: number;
++}"
+`;
+
+exports[`Comparator Object Types > interface with complex property types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,9 @@
+export interface ComplexData {
+-  simpleArray: string[];
++  complexMap: Map<string, Set<number>>;
++
++  nestedArray: Array<Array<string>>;
++
+  record: Record<string, number>;
++
++  simpleArray: string[];
+}"
+`;
+
+exports[`Comparator Object Types > object type added member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,7 @@
+export interface SimpleInterface {
+  existingProp: {
+    prop1: string;
++
++    prop2: unknown;
+  };
+}"
+`;
+
+exports[`Comparator Object Types > object type removed member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,5 @@
+export interface SimpleInterface {
+  existingProp: {
+    prop1: string;
+-    prop2: unknown;
+  };
+}"
+`;

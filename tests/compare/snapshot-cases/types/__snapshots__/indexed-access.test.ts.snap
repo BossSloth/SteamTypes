@@ -1,0 +1,167 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Indexed Access > indexed access interface type with mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface UserProfile {
+-  theme: User['info'];
++  theme: Settings;
+
+  user: User;
+}
+
+export interface User {"
+`;
+
+exports[`Comparator Indexed Access > indexed access type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,15 @@
+export interface UserProfile {
+-  preferences: User['email'];
++  preferences: string;
+
+-  theme: User['settings']['notifications'];
++  theme: boolean;
+
+  user: User;
+}
+
+export interface User {
+-  email: number;
++  email: string;
+
+  id: number;
+
+  name: string;
+
+@@ -17,9 +17,9 @@
+}
+
+export interface Settings {
+  language: string;
+
+-  notifications: string;
++  notifications: boolean;
+
+  theme: string;
+}"
+`;
+
+exports[`Comparator Indexed Access > interface with indexed access types 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,16 +1,25 @@
+export interface UserProfile {
+  preferences: User['settings'];
++
++  theme: string;
++
+  user: User;
+}
+
+export interface User {
++  email: string;
++
+  id: number;
++
+  name: string;
++
+  settings: Settings;
+}
+
+export interface Settings {
++  language: string;
++
+  notifications: boolean;
+
+  theme: string;
+}"
+`;
+
+exports[`Comparator Indexed Access Renames > indexed access interface type with mismatch - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface UserProfile {
+-  theme: UserRenamed['info'];
++  theme: SettingsRenamed;
+
+  user: UserRenamed;
+}
+
+export interface UserRenamed {"
+`;
+
+exports[`Comparator Indexed Access Renames > indexed access type mismatch - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,15 @@
+export interface UserProfile {
+-  preferences: UserRenamed['email'];
++  preferences: string;
+
+-  theme: UserRenamed['settings']['notifications'];
++  theme: boolean;
+
+  user: UserRenamed;
+}
+
+export interface UserRenamed {
+-  email: number;
++  email: string;
+
+  id: number;
+
+  name: string;
+
+@@ -17,9 +17,9 @@
+}
+
+export interface SettingsRenamed {
+  language: string;
+
+-  notifications: string;
++  notifications: boolean;
+
+  theme: string;
+}"
+`;
+
+exports[`Comparator Indexed Access Renames > interface with indexed access types - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,16 +1,25 @@
+export interface UserProfile {
+  preferences: UserRenamed['settings'];
++
++  theme: string;
++
+  user: UserRenamed;
+}
+
+export interface UserRenamed {
++  email: string;
++
+  id: number;
++
+  name: string;
++
+  settings: SettingsRenamed;
+}
+
+export interface SettingsRenamed {
++  language: string;
++
+  notifications: boolean;
+
+  theme: string;
+}"
+`;

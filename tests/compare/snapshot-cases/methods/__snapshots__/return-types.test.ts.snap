@@ -1,0 +1,114 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Return Types > combined union return type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): Values | 'ignore' | 'maintain';
++  bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
+}
+
+export type Values = 'store' | 'bar';"
+`;
+
+exports[`Comparator Return Types > method with interface return type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,13 @@
+export interface UserService {
+-  getUserById(id: number): unknown;
++  createUser(email: string, name: string): User;
++
++  getUserById(id: number): User | null;
+}
++
++export interface User {
++  email: string;
++
++  id: UserIdentifier;
++
++  name: string;
++}"
+`;
+
+exports[`Comparator Return Types > return type mismatch source array 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Foo {
+-  bar(): unknown;
++  bar(): unknown[];
+}"
+`;
+
+exports[`Comparator Return Types > return type with ReturnType, target method has no return type annotation 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): ReturnType<Foo['bar2']>;
++  bar(): string;
+
+-  bar2();
++  bar2(): string;
+}"
+`;
+
+exports[`Comparator Return Types > return type with wrong ReturnType, source is known 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+export interface Foo {
+-  bar(): ReturnType<Foo['bar2']>;
++  bar(): string[];
+
+  bar2(): number[];
+}"
+`;
+
+exports[`Comparator Return Types > type literal and interface return type different 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -4,6 +4,8 @@
+
+export interface Bar {
+  age: number;
+
+  height: number;
++
++  name: string;
+}"
+`;
+
+exports[`Comparator Return Types > typeof function declaration mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+function fn(): string { return 'a'; }
+
+export interface Foo {
+-  value: typeof fn;
++  value: number;
+}"
+`;
+
+exports[`Comparator Return Types > typeof object literal mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+const obj = { a: 1 };
+
+export interface Foo {
+-  value: typeof obj;
++  value: number;
+}"
+`;

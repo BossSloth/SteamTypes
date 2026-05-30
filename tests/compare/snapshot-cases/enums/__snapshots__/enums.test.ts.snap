@@ -1,0 +1,187 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Enums > existing enum is used when source has @currentValue 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,11 +3,11 @@
+
+/**
+ * @currentValue 1
+ * @currentValue 2
+ */
+-  m_eStatus: number;
++  m_eStatus: EStatus;
+
+/**
+ * @currentValue 1
+ * @currentValue 2
+ */"
+`;
+
+exports[`Comparator Enums > flags enum with missing value 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -6,6 +6,8 @@
+
+export enum EStatusFlags {
+  CONNECTED = 1 << 0,
+  DISCONNECTED = 1 << 1,
+  PENDING = 1 << 2,
++  /** @generated bitfield value */
++  Flag_12 = 12
+}"
+`;
+
+exports[`Comparator Enums > implied enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,8 @@
+export interface StatusHolder {
+-  m_eStatus: number;
++  m_eStatus: EStatus;
+}
++
++/** @generated */
++export enum EStatus {
++  EStatus7 = 7
++}"
+`;
+
+exports[`Comparator Enums > implied enum property with multiple currentValues 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,9 @@
+export interface StatusHolder {
+-  m_eStatus: number;
++  m_eStatus: EStatus;
+}
++
++/** @generated */
++export enum EStatus {
++  EStatus7 = 7,
++  EStatus8 = 8
++}"
+`;
+
+exports[`Comparator Enums > interface with implied enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,4 +1,16 @@
+export interface SteamStatus {
+-  m_eResult: number;
+  m_bRequireRestart: boolean;
++
++  /**
++   * This value is an enum
++   * @currentValue 0
++   */
++  m_eAppUpdateBytes: number;
++
++  m_eResult: EResult;
+}
++
++/** @generated */
++export enum EResult {
++  EResult1 = 1
++}"
+`;
+
+exports[`Comparator Enums > interface with missing enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -4,6 +4,7 @@
+
+export enum GameType {
+  Pending,
+  Active,
+  Inactive,
++  "TODO: change me 3" = 3
+}"
+`;
+
+exports[`Comparator Enums > new enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,9 @@
+export interface StatusHolder {
+  foo: string;
++
++  /**
++   * this value is an enum
++   * @currentValue 7
++   */
++  status: number;
+}"
+`;
+
+exports[`Comparator Enums > property with enum value changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,14 @@
+export interface StatusConfig {
+-  status: ConnectionStatus;
++  errorCode?: number;
++
+  message: string;
++
++  status: ConnectionStatus;
+}
+
+export enum ConnectionStatus {
+  CONNECTED = 1,
+  DISCONNECTED = 2,
+  PENDING = 3,
++  "TODO: change me 5" = 5
+}"
+`;
+
+exports[`Comparator Enums > property with shorter enum value changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,10 +1,14 @@
+export interface StatusConfig {
++  errorCode?: number;
++
+  eStatus: ConnectionStatus;
++
+  message: string;
+}
+
+export enum ConnectionStatus {
+  CONNECTED = 1,
+  DISCONNECTED = 2,
+  PENDING = 3,
++  "TODO: change me 5" = 5
+}"
+`;
+
+exports[`Comparator Enums > shorted implied enum property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,14 @@
+export interface SteamStatus {
+-  eResult: number;
++  /**
++   * This value is an enum
++   * @currentValue 0
++   */
++  eAppUpdateBytes: number;
++
++  eResult: EResult;
+}
++
++/** @generated */
++export enum EResult {
++  EResult1 = 1
++}"
+`;

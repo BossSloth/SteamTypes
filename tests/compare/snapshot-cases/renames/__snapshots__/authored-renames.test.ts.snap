@@ -1,0 +1,120 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Authored Renames > external template literal types with missing type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,10 @@
+-export type HttpMethodType = 'GET' | 'POST';
++export type HttpMethodType = number;
+export type ResourceTypeValue = 4 | 5;
+
+export interface RouteConfig {
+  method: HttpMethodType;
++
+  path: string;
++
+  type: ResourceTypeValue;
+}"
+`;
+
+exports[`Comparator Authored Renames > interface with complex nested structures 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,57 @@
+export interface AppConfig {
+  api: ApiSettings;
+-  ui: UiSettings;
++
++  features: Record<string, boolean>;
++
++  ui: UiConfig;
+}
+
+export interface ApiSettings {
+  baseUrl: string;
+-  timeout: number;
+-  isActive: boolean;
++
++  endpoints: Record<string, EndpointConfig>;
++
+  extraInfo: string;
++
++  headers: Record<string, string>;
++
++  isActive: boolean;
++
++  timeout: number;
+}
+
+-export interface UiSettings {
++export interface UiConfig {
++  animations: boolean;
++
++  components: ComponentsConfig;
++
++  layout: 'vertical' | 'horizontal';
++
+  theme: string;
+}
++
++export interface ComponentsConfig {
++  button: ButtonConfig;
++
++  input: InputConfig;
++}
++
++export interface ButtonConfig {
++  borderRadius: number;
++
++  fontSize: number;
++}
++
++export interface InputConfig {
++  borderRadius: number;
++
++  padding: number;
++}
++
++export interface EndpointConfig {
++  method: string;
++
++  path: string;
++
++  requiresAuth: boolean;
++}"
+`;
+
+exports[`Comparator Authored Renames > interface with property and member renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,23 @@
+export interface ChatMessage {
+-  content: TextData;
++  content: MessageContent;
++
+  id: string;
++
++  read: boolean;
++
+  sender: string;
++
+  timestamp: number;
+}
+
+-export interface TextInformation {
++export interface MessageContent {
++  data: TextData;
++
++  type: 'text' | 'image' | 'file';
++}
++
++export interface TextData {
++  format: 'plain' | 'markdown' | 'html';
++
+  text: string;
+-  informationFormat: 'plain' | 'markdown';
+}"
+`;
