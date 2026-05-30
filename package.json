@@ -29,7 +29,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "knip": "knip",
-    "lint": "knip ; eslint",
+    "lint": "knip ; eslint && echo 'Lint passed'",
     "lint:fix": "knip --fix ; eslint --fix",
     "prepublishOnly": "bun run build",
     "proto:generate": "bun run scripts/proto-scripts/generate-protobufs.ts",

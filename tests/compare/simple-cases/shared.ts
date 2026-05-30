@@ -2,7 +2,7 @@ import dedent from 'dedent';
 import stripAnsi from 'strip-ansi';
 import { Project, SourceFile } from 'ts-morph';
 import { describe, expect, it } from 'vitest';
-import { compareAndCorrectAllInterfaces } from '../../scripts/compare/interface-comparator';
+import { compareAndCorrectAllInterfaces } from '../../../scripts/compare/interface-comparator';
 import { ComparatorTest } from './test-cases';
 
 const project = new Project({
