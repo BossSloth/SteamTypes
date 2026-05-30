@@ -271,7 +271,8 @@ const millenniumWindowProperties = [
   '__millennium_cdp_proxy__',
   '__millennium_cdp_reject__',
   '__millennium_cdp_resolve__',
-  '__millennium_extension_route__'
+  '__millennium_extension_route__',
+  '__millennium_sdk_ready__',
 ];
 
 const unwantedWindowProperties = [

@@ -450,6 +450,39 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+  'manual merge with untyped properties': {
+    interfaceName: 'Info',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Info {
+        developers: Developers[];
+      }
+
+      export interface Developers {
+        creator_clan_account_id?: number;
+
+        name: string;
+
+        untyped?;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Info {
+        developers: (Developers | Developers2)[];
+      }
+
+      export interface Developers {
+        name: string;
+
+        untyped;
+      }
+
+      export interface Developers2 {
+        creator_clan_account_id: number;
+        name: string;
+      }
+      `,
+  },
   'merge multiple array into one': {
     interfaceName: 'Data',
     expectsNoDiff: true,

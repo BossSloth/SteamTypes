@@ -92,6 +92,7 @@ export function getIdentifierName(node: Node | Type | TypeNode): string {
 }
 
 export function updatePropertyModifiers(target: Node, source: Node): void {
+  /* v8 ignore else -- @preserve */
   if (Node.isQuestionTokenable(target) && Node.isQuestionTokenable(source)) {
     // Update optional status if different
     if (!target.hasQuestionToken() && source.hasQuestionToken()) {

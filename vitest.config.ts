@@ -53,10 +53,10 @@ export default defineConfig({
       ],
       thresholds: {
         autoUpdate: true,
-        statements: 97.51,
-        branches: 95.04,
+        statements: 97.65,
+        branches: 95.9,
         functions: 98.29,
-        lines: 97.76,
+        lines: 97.81,
       },
       watermarks: {
         statements: [90, 100],

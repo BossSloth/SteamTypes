@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 import { compareAndCorrectAllInterfaces } from '../../../scripts/compare/interface-comparator';
 
 export interface ComparatorTest {
+  /** expected thrown exceptions */
+  expectedException?: string;
   /** whether the diff is expected to be null */
   expectsNoDiff?: boolean;
   /** name of the interface to edit */
@@ -96,6 +98,12 @@ export function createRenamedTest(name: string, baseCases: Record<string, Compar
 
 export function runComparisonTest(testValues: ComparatorTest): void {
   const { targetFile, sourceFile } = createTestFiles(testValues.target, testValues.source);
+
+  if (testValues.expectedException !== undefined) {
+    expect(() => runComparison(targetFile, sourceFile, testValues.interfaceName)).toThrow(testValues.expectedException);
+
+    return;
+  }
 
   const diff = runComparison(targetFile, sourceFile, testValues.interfaceName);
 

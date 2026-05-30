@@ -170,6 +170,35 @@ export const missingCases: Record<string, ComparatorTest> = {
         untyped;
       }`,
   },
+
+  'empty source interface matched to empty target interface': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: ExistingEmpty;
+      }
+
+      export interface ExistingEmpty {
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: NewEmpty;
+      }
+
+      export interface NewEmpty {
+      }`,
+  },
+
+  'error - root interface missing': {
+    interfaceName: 'Foo',
+    expectedException: 'Interface Foo not found in one of the source files',
+    target: dedent/* ts */``,
+    source: dedent/* ts */`
+      export interface Foo {
+        bar: string;
+      }`,
+  },
 };
 
 createTest('Missing Interfaces', missingCases);
