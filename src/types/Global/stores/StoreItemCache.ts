@@ -308,6 +308,8 @@ export interface StoreApp {
 
   GetFreeWeekendPlayTextOverride(): unknown;
 
+  GetFullDescriptionBBCode(): unknown;
+
   GetID(): unknown;
 
   GetIncludedAppIDs(): unknown;
@@ -437,6 +439,8 @@ export interface StoreApp {
   m_SelfPurchaseOption?: StoreItem_PurchaseOption;
 
   m_StoreCategories: StoreItem_Categories;
+
+  m_strFullDescriptionBBCode?: never;
 
   m_strInternalName?: never;
 

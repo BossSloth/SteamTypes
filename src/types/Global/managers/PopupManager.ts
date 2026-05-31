@@ -68,6 +68,8 @@ export interface PopupManager {
    */
   GetLocalStorageKey(): string;
 
+  GetPopupForVROverlayKey(e: unknown): unknown;
+
   /**
    * @param window The window to get the popup for
    * @returns The popup for the given window

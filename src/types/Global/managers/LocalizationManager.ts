@@ -980,6 +980,8 @@ export interface MapTokens {
 
   AppDetails_SectionTitle_SelectedBetaTooltip: string;
 
+  AppDetails_SectionTitle_SelectedBetaTooltipWithDesc: string;
+
   AppDetails_SectionTitle_SignIn: string;
 
   AppDetails_SectionTitle_SignIn_Pre: string;
@@ -2042,7 +2044,13 @@ export interface MapTokens {
 
   Audio_OutputVolume: string;
 
+  Audio_Setting_Enable_Hdmi_Cec: string;
+
+  Audio_Setting_Enable_Hdmi_Cec_Hint: string;
+
   Audio_Setting_Enable_UI_Sounds: string;
+
+  Audio_Setting_Hdmi_Cec_Not_Working: string;
 
   Audio_Setting_Use_Bluetooth_Mic: string;
 
@@ -2059,6 +2067,8 @@ export interface MapTokens {
   Audio_SpeakerConfiguration: string;
 
   Audio_SpeakerTuning: string;
+
+  Audio_Tv_Volume: string;
 
   Audio_Volume: string;
 
@@ -5518,6 +5528,14 @@ export interface MapTokens {
 
   ControllerBinding_GyroDeflectionAngleMin_Description: string;
 
+  ControllerBinding_GyroDeflectionJoystickOutputMax: string;
+
+  ControllerBinding_GyroDeflectionJoystickOutputMax_Description: string;
+
+  ControllerBinding_GyroDeflectionJoystickOutputMin: string;
+
+  ControllerBinding_GyroDeflectionJoystickOutputMin_Description: string;
+
   ControllerBinding_GyroDeflectionTiltAngle: string;
 
   ControllerBinding_GyroDeflectionTiltAngle_Description: string;
@@ -5537,6 +5555,12 @@ export interface MapTokens {
   ControllerBinding_GyroEnableAngleCatchUp: string;
 
   ControllerBinding_GyroEnableAngleCatchUp_Description: string;
+
+  ControllerBinding_GyroEnableAngleCatchUp_GyroCatchUp_AlwaysCatchup_Description: string;
+
+  ControllerBinding_GyroEnableAngleCatchUp_GyroCatchUp_Off_Description: string;
+
+  ControllerBinding_GyroEnableAngleCatchUp_GyroCatchUp_OnlyWhileGyroActive_Description: string;
 
   ControllerBinding_GyroEnableButton: string;
 
@@ -8730,6 +8754,8 @@ export interface MapTokens {
 
   ControllerConfigurator_SourceMode_Group_Behavior: string;
 
+  ControllerConfigurator_SourceMode_Group_BehaviorField: string;
+
   ControllerConfigurator_SourceMode_Group_ConvertToEditable: string;
 
   ControllerConfigurator_SourceMode_Group_RevertToInherited: string;
@@ -8973,6 +8999,12 @@ export interface MapTokens {
   ControllerSettingValue_GyroC: string;
 
   ControllerSettingValue_GyroCapture: string;
+
+  ControllerSettingValue_GyroCatchUp_AlwaysCatchup: string;
+
+  ControllerSettingValue_GyroCatchUp_Off: string;
+
+  ControllerSettingValue_GyroCatchUp_OnlyWhileGyroActive: string;
 
   ControllerSettingValue_GyroCircle: string;
 
@@ -10028,7 +10060,11 @@ export interface MapTokens {
 
   DownloadSettings_DefaultAppUpdateBehavior_UpdateOnLaunch: string;
 
+  DownloadSettings_DefaultAppUpdateBehaviorShort: string;
+
   DownloadSettings_DisplayInBitsPerSecond: string;
+
+  DownloadSettings_GameUpdateTiming: string;
 
   DownloadSettings_ManageAppUpdateOverrides: string;
 
@@ -10052,7 +10088,11 @@ export interface MapTokens {
 
   DownloadSettings_PreShaderDesc: string;
 
+  DownloadSettings_PreShaderDescShort: string;
+
   DownloadSettings_PreShaderEnable: string;
+
+  DownloadSettings_PreShaderEnableDesc: string;
 
   DownloadSettings_PreShaderHeader: string;
 
@@ -10105,6 +10145,8 @@ export interface MapTokens {
   EGraphicsPerfOverlayLevel_Medium: string;
 
   EGraphicsPerfOverlayLevel_Minimal: string;
+
+  Email_OptOut_Settings_Section_Title: string;
 
   Emoji_Activity: string;
 
@@ -10183,6 +10225,8 @@ export interface MapTokens {
   FactoryReset_ErrorModal_Title: string;
 
   FactoryReset_RequestModal_Description: string;
+
+  FactoryReset_RequestModal_ResetDongle: string;
 
   FactoryReset_RequestModal_ResetOS: string;
 
@@ -12374,6 +12418,8 @@ export interface MapTokens {
 
   LibraryTab_Collections: string;
 
+  LibraryTab_ControllerGames: string;
+
   LibraryTab_DeckGames: string;
 
   LibraryTab_Favorites: string;
@@ -13182,10 +13228,6 @@ export interface MapTokens {
 
   NotificationsSettings_Heading_Friends: string;
 
-  NotificationsSettings_Heading_FriendsDescription: string;
-
-  NotificationsSettings_Heading_FriendsDescription_InGame: string;
-
   NotificationsSettings_Heading_Notifications: string;
 
   NotificationsSettings_Heading_PlatformNotif: string;
@@ -13471,6 +13513,8 @@ export interface MapTokens {
   PowerChordMenu_ChordScreen: string;
 
   PowerChordMenu_Shutdown: string;
+
+  PowerChordMenu_Sleep: string;
 
   PowerChordMenu_Suspend: string;
 
@@ -14462,6 +14506,8 @@ export interface MapTokens {
 
   Settings_Broadcast_RecordMicrophone: string;
 
+  Settings_Broadcast_SettingsSection: string;
+
   Settings_Broadcast_ShowChat: string;
 
   Settings_Broadcast_ShowUploadStats: string;
@@ -14778,6 +14824,8 @@ export interface MapTokens {
 
   Settings_ControllerCalibration_CalibrateJoystick: string;
 
+  Settings_ControllerCalibration_CalibrateJoystick_Description: string;
+
   Settings_ControllerCalibration_CalibrateTrackpad: string;
 
   Settings_ControllerCalibration_Calibrating_Drift: string;
@@ -14815,6 +14863,10 @@ export interface MapTokens {
   Settings_ControllerCalibration_HapticsEnable: string;
 
   Settings_ControllerCalibration_Joystick: string;
+
+  Settings_ControllerCalibration_JoystickLowDeadzoneWarning: string;
+
+  Settings_ControllerCalibration_JoystickLowDeadzoneWarning_Description: string;
 
   Settings_ControllerCalibration_LEDs: string;
 
@@ -14858,7 +14910,9 @@ export interface MapTokens {
 
   Settings_ControllerCalibration_TrackpadsVsSticks: string;
 
-  Settings_ControllerCalibration_TrackpadsVsSticks_Description: string;
+  Settings_ControllerCalibration_TrackpadsVsSticks_Left_Description: string;
+
+  Settings_ControllerCalibration_TrackpadsVsSticks_Right_Description: string;
 
   Settings_ControllerCalibration_TurnOffSound: string;
 
@@ -15530,6 +15584,8 @@ export interface MapTokens {
 
   Settings_InGame_WebBrowserHome: string;
 
+  Settings_Interface_Advanced: string;
+
   Settings_Interface_EnableContextMenuBlurDelay: string;
 
   Settings_Interface_EnableDirectWrite: string;
@@ -15788,6 +15844,8 @@ export interface MapTokens {
 
   Settings_Keyboard_Preview: string;
 
+  Settings_Keyboard_SelectKeyboards: string;
+
   Settings_Keyboard_SetThemeError_Body: string;
 
   Settings_Keyboard_SwitchHint: string;
@@ -15825,6 +15883,10 @@ export interface MapTokens {
   Settings_LED_SeparateColors: string;
 
   Settings_LED_Speed: string;
+
+  Settings_LED_StartupBrightness: string;
+
+  Settings_LED_StartupBrightness_Desc: string;
 
   Settings_Library_Activate: string;
 
@@ -16012,7 +16074,9 @@ export interface MapTokens {
 
   Settings_ReduceMotion_Description: string;
 
-  Settings_RemotePlay_AdvancedConfig: string;
+  Settings_RemotePlay_AdvancedClientHeader: string;
+
+  Settings_RemotePlay_AdvancedHostHeader: string;
 
   Settings_RemotePlay_Audio: string;
 
@@ -16168,6 +16232,8 @@ export interface MapTokens {
 
   Settings_RemotePlay_LowLatencyNetworking: string;
 
+  Settings_RemotePlay_Microphone: string;
+
   Settings_RemotePlay_P2PScope_Description: string;
 
   Settings_RemotePlay_P2PScopeAutomatic: string;
@@ -16295,6 +16361,8 @@ export interface MapTokens {
   Settings_RemotePlay_WifiAPStatus_Channel: string;
 
   Settings_RemotePlay_WifiAPStatus_Status: string;
+
+  Settings_RemotePlay_WindowedMode: string;
 
   Settings_RestartLater_ButtonText: string;
 
@@ -16465,6 +16533,10 @@ export interface MapTokens {
   Settings_System_Change_Hostname_Set: string;
 
   Settings_System_Change_User_Password_Change: string;
+
+  Settings_System_Change_User_Password_Change_Failed: string;
+
+  Settings_System_Change_User_Password_EmptyNewPassword: string;
 
   Settings_System_Change_User_Password_Failed: string;
 
@@ -16893,6 +16965,14 @@ export interface MapTokens {
   SettingsController_AutosaveDescription: string;
 
   SettingsController_AutosaveName: string;
+
+  SettingsController_FirmwareRecovery_Button: string;
+
+  SettingsController_FirmwareRecovery_Label: string;
+
+  SettingsController_FirmwareRecovery_Running: string;
+
+  SettingsController_FirmwareRecovery_Title: string;
 
   SettingsController_XBoxDriver: string;
 
@@ -18459,6 +18539,8 @@ export interface MapTokens {
   TritonDockedPairingPrompt_Title: string;
 
   TritonUSBPairingPrompt_Description: string;
+
+  TritonUSBPairingPrompt_Description_AlreadyPaired: string;
 
   TritonUSBPairingPrompt_Description_Failed: string;
 

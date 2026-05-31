@@ -2,6 +2,7 @@ import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { SteamID } from 'shared/steamid';
 import { Unregisterable } from 'SteamClient/shared';
+import { GamingDeviceType } from 'types/SteamClient/System';
 import { ChatStore } from './ChatStore/ChatStore';
 
 export interface FriendStore {
@@ -647,12 +648,7 @@ export interface Persona {
 
   m_bStatusInitialized: boolean;
 
-  /**
-   * This value is an enum
-   * @currentValue 0
-   * @currentValue 1
-   */
-  m_eGamingDeviceType: EGamingDeviceType;
+  m_eGamingDeviceType: GamingDeviceType;
 
   /**
    * This value is an enum
@@ -1214,8 +1210,6 @@ export interface MapGameGroups extends ChatGroupBase {
 }
 
 export interface Data {
-  toJSON(): { setApps: unknown[]; };
-
   setApps: Set<number>;
 }
 
@@ -1232,7 +1226,7 @@ export interface EquippedProfileItems {
 
   mini_profile_background: (ColorProfileAvatar | ProfileAvatar);
 
-  profile_background: (ColorProfileAvatar | ProfileAvatar);
+  profile_background: (ColorProfileAvatar | Profile_background);
 
   profile_modifier: (ColorProfileAvatar | ProfileAvatar);
 
@@ -1340,12 +1334,6 @@ export enum UserPersonaState {
 export enum EUserPersonaStateParental {
   EUserPersonaStateParental0 = 0,
   EUserPersonaStateParental1 = 1,
-}
-
-/** @generated */
-export enum EGamingDeviceType {
-  EGamingDeviceType0 = 0,
-  EGamingDeviceType1 = 1,
 }
 
 /** @generated */

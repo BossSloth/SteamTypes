@@ -508,20 +508,25 @@ export interface GlobalOffsetMS {
 
 /** Scheduler for periodic updates of running timelines */
 export interface SchUpdateRunning {
+  AsyncSchedule(e: unknown, t: unknown): Promise<unknown>;
+
   /** Cancels the scheduled update */
   Cancel(): void;
 
   /** Returns whether an update is currently scheduled */
   IsScheduled(): boolean;
 
-  /** @native */
-  m_fnCallback?(): unknown;
+  Reset(): void;
 
   /** Schedules an update with specified parameters */
   Schedule(e: unknown, t: unknown): void;
 
   /** Internal scheduled callback */
   ScheduledInternal(): void;
+
+  m_fnCallback: undefined;
+
+  m_fnOnCancel: undefined;
 
   /** Timer handle or undefined */
   m_schTimer?: number | undefined;

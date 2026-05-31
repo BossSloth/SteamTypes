@@ -107,6 +107,8 @@ export interface System {
 
   Display: Display;
 
+  Dock: Dock;
+
   Network: Network;
 
   Report: Report;
@@ -281,7 +283,7 @@ export enum EOSType {
 }
 
 export interface SystemInfo {
-  bIsCEFDebuggingEnabled: boolean;
+  bIsDeckOled: boolean;
 
   bIsUnsupportedPrototypeHardware: boolean;
 
@@ -344,4 +346,15 @@ export enum GamingDeviceType {
   Handheld = 512,
   Phone = 528,
   SteamDeck = 544,
+}
+
+export interface Dock {
+  /** @native */
+  DisarmSafetyNet(): unknown;
+
+  /** @native */
+  RegisterForStateChanges(): unknown;
+
+  /** @native */
+  UpdateFirmware(): unknown;
 }

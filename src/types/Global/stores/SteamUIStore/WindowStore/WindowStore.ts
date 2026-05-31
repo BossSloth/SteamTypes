@@ -40,7 +40,7 @@ export interface WindowStore {
 
   CreateSteamChinaReviewLauncherWindow(e: unknown): unknown;
 
-  CreateVRWindow(e: unknown, t: unknown): unknown;
+  CreateVRWindow(e: unknown): unknown;
 
   DEBUG_GetDesiredSteamUIWindows(): Promise<unknown>;
 
@@ -160,6 +160,8 @@ export interface WindowInstance {
 
   FocusApplicationRoot(): void;
 
+  GetFocusNavContext(): unknown;
+
   GetShowingGlobalModal(): unknown;
 
   GetStoreBrowser(): unknown;
@@ -207,8 +209,6 @@ export interface WindowInstance {
   IsVRGamepadUIOverlayWindow(): boolean;
 
   IsVRSimulatedOnDesktopWindow(): boolean;
-
-  IsVRWindowInGamescope(): boolean;
 
   m_fnFocusApplicationRoot?(): void;
 
@@ -287,6 +287,8 @@ export interface WindowInstance {
   forcedAppID?: undefined;
 
   HeaderStore: HeaderStore;
+
+  History: History;
 
   LocationPathName?: string;
 
@@ -501,6 +503,8 @@ export interface FooterStore {
   HideFooter(): { unhide: () => void; };
 
   Init(): never[];
+
+  m_bEverHadNavSourceThatSupportsFocus: boolean;
 
   m_bKeyboardVisible: boolean;
 
@@ -810,7 +814,7 @@ export interface MapAppWindows {
 
   focusedWindowID: number;
 
-  windowids: unknown[];
+  windowids: number[];
 }
 
 export enum EBrowserType {

@@ -46,6 +46,8 @@ export interface AppStore {
 
   GetVerticalCapsuleURLForApp(appOverview: SteamAppOverview): string;
 
+  HandleSteamVRAppIconRequest(e: unknown): Promise<{ icon_url: unknown; }>;
+
   Init(connectionManager: ConnectionManager, cloudStorage: CloudStorage): Promise<void>;
 
   OnCloudStorageChanged(changeType: number, changedKeys: string[]): Promise<void>;

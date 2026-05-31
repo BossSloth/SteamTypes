@@ -17,6 +17,8 @@ export interface NavigationStore {
 }
 
 export interface Navigator {
+  Account(e: unknown[]): void;
+
   AllCollections(...e: unknown[]): void;
 
   App(...e: unknown[]): void;
@@ -41,17 +43,31 @@ export interface Navigator {
 
   Home(...e: unknown[]): void;
 
+  Invites(e: unknown[]): void;
+
+  LibraryTab(e: unknown[]): void;
+
+  Login(e: unknown[]): void;
+
+  MTXAuth(e: unknown[]): void;
+
   MyAchievements(...e: unknown[]): void;
 
-  RequestPlaytimeDialog(...e: unknown[]): void;
+  Reauthentication(e: unknown[]): void;
 
-  setNavigatingToInitialRoute(e: unknown): void;
+  RemotePlayTogether(e: unknown[]): void;
+
+  RequestPlaytimeDialog(...e: unknown[]): void;
 
   Settings(...e: unknown[]): void;
 
   SteamWeb(...e: unknown[]): void;
 
   SteamWebTab(...e: unknown[]): void;
+
+  AppOverlay: AppOverlay;
+
+  ControllerConfigurator: ControllerConfigurator;
 
   Media: Media;
 
@@ -68,4 +84,12 @@ export interface Media {
   Recording(e: unknown): unknown;
 
   Screenshot(e: unknown): unknown;
+}
+
+export interface AppOverlay {
+  Root(e: unknown): unknown;
+}
+
+export interface ControllerConfigurator {
+  Main(e: unknown): unknown;
 }

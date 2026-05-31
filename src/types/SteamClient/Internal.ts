@@ -16,6 +16,9 @@ export interface Internal {
    */
   GetDisplayScaleFactors(): Promise<DisplayScaleFactors>;
 
+  /** @native */
+  IsDebuggingEnabled(): unknown;
+
   /**
    * @native
    */

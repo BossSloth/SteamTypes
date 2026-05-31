@@ -9,7 +9,7 @@ import { TextFilterStore } from './TextFilterStore';
 import { WindowInstance, WindowStore } from './WindowStore/WindowStore';
 
 export interface SteamUIStore {
-  BCanNavigateToRunningApp(): boolean;
+  BCanAutoNavigateToRunningApp(): boolean;
 
   BControllerIndexValid(e: unknown): boolean;
 
@@ -204,7 +204,7 @@ export interface SteamUIStore {
 
   m_bIsDeckFactoryImage: boolean;
 
-  m_bPreviouslyNavigatedToRunningApp: boolean;
+  m_bPreviouslyAutoNavigatedToRunningApp: boolean;
 
   m_bShowingLockScreen: boolean;
 

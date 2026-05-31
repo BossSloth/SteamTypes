@@ -1077,9 +1077,9 @@ export interface ChatRoomListBase {
 
   m_nLoadingHistoryInProgressCount: number;
 
-  m_oldestMessageOrdinal?: number;
+  m_oldestMessageOrdinal?: number | undefined;
 
-  m_oldestMessageTime?: number;
+  m_oldestMessageTime?: number | undefined;
 
   m_rgChatMessages: Chat_messages[];
 

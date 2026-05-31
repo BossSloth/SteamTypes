@@ -359,12 +359,14 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
 
   logger.log(chalk.blue(`Extract time: ${extractTime} ms`));
   logger.log(chalk.blue(`Comparison time: ${comparisonTime} ms`));
+  logger.log(chalk.blue(`Amount of changed files: ${diffs.length}`));
 
   if (options.diff === false) {
     return diffs.length > 0;
   }
 
   if (fs.existsSync('diffs')) {
+    // @ts-expect-error - recursive option is valid
     fs.rmdirSync('diffs', { recursive: true });
   }
 

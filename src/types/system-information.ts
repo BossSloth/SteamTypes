@@ -1,5 +1,5 @@
 export const systemInformation = {
-  nSteamVersion: 1778281814,
-  sSteamBuildDate: 'May  8 2026 22:40:45',
+  nSteamVersion: 1779918128,
+  sSteamBuildDate: 'May 27 2026 21:21:26',
   sSteamAPI: 'SteamClient023',
 };

@@ -14,9 +14,6 @@ export interface Audio {
    */
   GetDevices(): Promise<GetDevicesResponse | undefined>;
 
-  /** @native */
-  GetUseBluetoothForMic(): unknown;
-
   /**
    * Register callback for when an audio app is added
    */
@@ -74,12 +71,6 @@ export interface Audio {
   SetDefaultDeviceOverride(deviceId: number, direction: EAudioDirection): void;
 
   /**
-   * Set number of output channels for a device
-   * @param channels - Number of channels
-   */
-  SetDeviceChannels(deviceId: number, channels: number): Promise<void> | undefined;
-
-  /**
    * Set volume for a specific device and channels
    * @param channel - Audio channel (EAudioChannel)
    * @param volume - Volume level (0.0 - 1.0)
@@ -89,15 +80,6 @@ export interface Audio {
     channel: EAudioChannel,
     volume: number
   ): Promise<void> | undefined;
-
-  /** @native */
-  SetUseBluetoothForMic(): unknown;
-
-  /** @native */
-  SupportsMonoDownmix(): unknown;
-
-  /** @native */
-  SupportsUseBluetoothForMic(): unknown;
 }
 
 interface GetAppsResponse {

@@ -1,4 +1,5 @@
 import { MappedObservable, ObservableValue, Unsubscribable } from 'shared/interfaces';
+import { WindowInstance } from './WindowStore/WindowStore';
 
 export interface GamepadNavigationManager {
   BatchedUpdate(e: unknown): void;
@@ -273,6 +274,8 @@ export interface BaseGamepadInputSource {
   m_nLastActiveControllerIndex: number;
 
   m_OnGamepadDetectedCallbacks: UnhandledButtonEventsCallbacks;
+
+  NonVRWindowInstance: WindowInstance;
 }
 
 export interface StandardGamepadInputSource extends BaseGamepadInputSource {
