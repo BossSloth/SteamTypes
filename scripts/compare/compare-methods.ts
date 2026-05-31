@@ -6,27 +6,37 @@ import { compareTypes } from './type-comparator';
  * Compares and corrects method types
  * @param targetMethod The method to be edited
  * @param sourceMethod The method to use as the source of truth
+ * @param isFromExtendedInterface Whether the method is inherited from an extended interface
+ *
+ * @returns true if the method is from an extended interface and its signature needs to change
  */
-export function compareAndCorrectMethodTypes(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
+export function compareAndCorrectMethodTypes(
+  targetMethod: MethodSignature,
+  sourceMethod: MethodSignature,
+  isFromExtendedInterface = false,
+): boolean {
   const ignore = getJsDocTagValues(targetMethod, CustomJsDocTags.ignore);
 
   if (ignore.length > 0) {
-    return;
+    return false;
   }
 
-  updatePropertyModifiers(targetMethod, sourceMethod);
+  if (!isFromExtendedInterface) {
+    updatePropertyModifiers(targetMethod, sourceMethod);
+  }
 
   // If it has the @native jsDoc don't compare
   if (sourceMethod.getJsDocs().some(doc => doc.getTags().some(tag => tag.getTagName() === 'native'))) {
-    return;
+    return false;
   }
 
-  compareReturnType(targetMethod, sourceMethod);
+  const returnTypeNeedsUpdate = compareReturnType(targetMethod, sourceMethod, isFromExtendedInterface);
+  const parametersNeedUpdate = compareParameters(targetMethod, sourceMethod, isFromExtendedInterface);
 
-  compareParameters(targetMethod, sourceMethod);
+  return returnTypeNeedsUpdate || parametersNeedUpdate;
 }
 
-function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
+function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
   // Compare return types
   const targetReturnTypeNode = targetMethod.getReturnTypeNode();
   const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
@@ -35,8 +45,13 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
     && compareTypes(targetReturnTypeNode, sourceReturnTypeNode);
 
   if (!typesAreEqual && sourceReturnTypeNode !== undefined) {
+    if (isFromExtendedInterface) {
+      return true;
+    }
     targetMethod.setReturnType(sourceReturnTypeNode.getText());
   }
+
+  return false;
 
   // if (sourceReturnTypeNode?.getType().isNever() === true || (Node.isArrayTypeNode(sourceReturnTypeNode) && sourceReturnTypeNode.getElementTypeNode().getType().isNever())) {
   //   return;
@@ -66,7 +81,7 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   // }
 }
 
-function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSignature): void {
+function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
   // Compare parameters
   const targetParams = targetMethod.getParameters();
   const sourceParams = sourceMethod.getParameters();
@@ -74,7 +89,7 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
   if (targetParams[0]?.isRestParameter() && Node.isTypeReference(targetParams[0]?.getTypeNode())) {
     // If we are using a reference type as a array deconstruction rest type skip
     // Example test case: 'external type accessed arguments'
-    return;
+    return false;
   }
 
   // If sourceParams is just '...e: unknown[]' skip type check
@@ -82,44 +97,67 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
     && sourceParams[0].isRestParameter()) {
     const sourceTypeNode = sourceParams[0].getTypeNode();
     if (sourceTypeNode?.isKind(SyntaxKind.ArrayType) === true && sourceTypeNode.getElementTypeNode().isKind(SyntaxKind.UnknownKeyword)) {
-      return;
+      return false;
     }
   }
 
+  let needsUpdate = false;
   for (let i = 0; i < Math.max(sourceParams.length, targetParams.length); i++) {
     const sourceParam = sourceParams[i];
     const targetParam = targetParams[i];
 
-    compareParameter(targetMethod, targetParam, sourceParam);
+    if (compareParameter(targetMethod, targetParam, sourceParam, isFromExtendedInterface)) {
+      needsUpdate = true;
+    }
   }
+
+  return needsUpdate;
 }
 
-function compareParameter(targetMethod: MethodSignature, targetParam?: ParameterDeclaration, sourceParam?: ParameterDeclaration): void {
+function compareParameter(
+  targetMethod: MethodSignature,
+  targetParam: ParameterDeclaration | undefined,
+  sourceParam: ParameterDeclaration | undefined,
+  isFromExtendedInterface: boolean,
+): boolean {
   const sourceTypeNode = sourceParam?.getTypeNode();
   const targetTypeNode = targetParam?.getTypeNode();
 
   if (targetParam === undefined && sourceParam !== undefined) {
+    if (isFromExtendedInterface) {
+      return true;
+    }
     targetMethod.addParameter(sourceParam.getStructure());
 
-    return;
+    return false;
   }
 
   if (targetParam !== undefined && sourceParam === undefined) {
+    if (isFromExtendedInterface) {
+      return true;
+    }
     targetParam.remove();
 
-    return;
+    return false;
   }
 
   /* v8 ignore next -- @preserve */
   if (sourceParam === undefined || targetParam === undefined) {
-    return;
+    return false;
+  }
+
+  const typesAreEqual = sourceTypeNode === undefined
+    || (targetTypeNode !== undefined && compareTypes(targetTypeNode, sourceTypeNode));
+
+  if (isFromExtendedInterface) {
+    return !typesAreEqual;
   }
 
   updatePropertyModifiers(targetParam, sourceParam);
 
-  const typesAreEqual = sourceTypeNode === undefined
-    || (targetTypeNode !== undefined && compareTypes(targetTypeNode, sourceTypeNode));
   if (!typesAreEqual) {
     targetParam.setType(sourceTypeNode.getText());
   }
+
+  return false;
 }

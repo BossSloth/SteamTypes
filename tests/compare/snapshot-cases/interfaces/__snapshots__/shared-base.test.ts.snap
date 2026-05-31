@@ -1,0 +1,290 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Shared Base Interfaces > shared base behind imported base property mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,11 +3,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface RealBase {
+-  id: number;
++  id: string;
+}
+
+export interface Admin extends ImportedBase, RealBase {
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared base member found on second of two bases 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -5,11 +5,11 @@
+export interface EmptyBase {
+  unrelated: string;
+}
+
+export interface RealBase {
+-  id: number;
++  id: string;
+}
+
+export interface Admin extends EmptyBase, RealBase {
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared base method parameter added 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface Base {
+-  setId(): void;
++  setId(id: string): void;
+}
+
+export interface Admin extends Base {
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared base method parameter removed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface Base {
+-  setId(id: string, extra: number): void;
++  setId(id: string): void;
+}
+
+export interface Admin extends Base {
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared base method parameter type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface Base {
+-  setId(id: number): void;
++  setId(id: string): void;
+}
+
+export interface Admin extends Base {
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared deep base method return type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface Base {
+-  getId(): number;
++  getId(): string;
+}
+
+export interface Mid extends Base {
+  mid: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > shared deep base property type mismatch 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export interface Config {
+  admin: Admin;
+}
+
+export interface Base {
+-  id: number;
++  id: string;
+}
+
+export interface Mid extends Base {
+  mid: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > source extends base with no matching target interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,23 @@
+export interface Root {
+  derived: Derived;
+}
+
+-export interface Derived {
+-  x: number;
++export interface Derived extends Mystery {
++  alpha: string;
++
++  beta: string;
++
++  gamma: string;
++
+  p1: string;
++
+  p2: string;
++
+  p3: string;
++
+  p4: string;
++
+  p5: string;
++
++  x: number;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base method removed when sources disagree 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,15 +3,18 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  getInfo(): number;
+}
+
+export interface ChatRoom extends BaseChat {
++  getInfo(): string;
++
+  email: string;
+}
+
+export interface OtherChat extends BaseChat {
+  role: string;
++
++  getInfo(): boolean;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base method updated from agreeing sources 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,11 +3,11 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  getInfo(): number;
++  getInfo(): string;
+}
+
+export interface ChatRoom extends BaseChat {
+  email: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base property missing type in one source 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,15 +3,16 @@
+
+  chats: ChatRoom[];
+}
+
+export interface BaseChat {
+-  info: undefined;
+}
+
+export interface ChatRoom extends BaseChat {
+  email: string;
+}
+
+export interface OtherChat extends BaseChat {
++  info: string[];
++
+  role: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base property optional mismatch across sources 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,15 +3,18 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  info: undefined;
+}
+
+export interface ChatRoom extends BaseChat {
+  email: string;
++
++  info: string[];
+}
+
+export interface OtherChat extends BaseChat {
+  role: string;
++
++  info?: string[];
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base removed with derived missing from source 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -3,19 +3,18 @@
+
+  otherChats: OtherChat[];
+}
+
+export interface BaseChat {
+-  info: undefined;
+}
+
+export interface ChatRoom extends BaseChat {
+  email: string;
++
++  info: string[];
+}
+
+export interface OtherChat extends BaseChat {
+  role: string;
+-}
+
+-export interface ThirdChat extends BaseChat {
+-  third: string;
++  info?: string[];
+}"
+`;

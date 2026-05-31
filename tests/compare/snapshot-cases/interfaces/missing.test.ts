@@ -190,6 +190,25 @@ export const missingCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'unused interface removed when a type alias is present': {
+    interfaceName: 'Root',
+    target: dedent/* ts */`
+      export type Alias = string;
+
+      export interface Root {
+        id: number;
+      }
+
+      export interface Unused {
+        x: number;
+      }`,
+    source: dedent/* ts */`
+      export interface Root {
+        id: number;
+        name: string;
+      }`,
+  },
+
   'error - root interface missing': {
     interfaceName: 'Foo',
     expectedException: 'Interface Foo not found in one of the source files',

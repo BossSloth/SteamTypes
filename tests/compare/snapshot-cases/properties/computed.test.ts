@@ -348,6 +348,69 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
         age: number;
       }`,
   },
+
+  'computed property with non-literal expression is left untouched': {
+    interfaceName: 'Config',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Config {
+        [Symbol.iterator]: ChildA;
+
+        2: ChildB;
+      }
+
+      export interface ChildA {
+        name: string;
+      }
+
+      export interface ChildB {
+        id: number;
+      }`,
+    source: dedent/* ts */`
+      export interface Config {
+        [Symbol.iterator]: ChildA;
+
+        2: ChildB;
+      }
+
+      export interface ChildA {
+        name: string;
+      }
+
+      export interface ChildB {
+        id: number;
+      }`,
+  },
+
+  'computed property removed when resolved key missing from source': {
+    interfaceName: 'Config',
+    target: dedent/* ts */`
+      enum SomeEnum {
+        Value = 5,
+      }
+
+      export interface Config {
+        [SomeEnum.Value]: ChildA;
+
+        2: ChildB;
+      }
+
+      export interface ChildA {
+        name: string;
+      }
+
+      export interface ChildB {
+        id: number;
+      }`,
+    source: dedent/* ts */`
+      export interface Config {
+        2: ChildB;
+      }
+
+      export interface ChildB {
+        id: number;
+      }`,
+  },
 };
 
 createTest('Computed Properties', computedPropertyCases);

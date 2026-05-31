@@ -38,3 +38,20 @@ export interface PartiallyTyped {
   typed: number;
 }"
 `;
+
+exports[`Comparator Missing Interfaces > unused interface removed when a type alias is present 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,7 @@
+export type Alias = string;
+
+export interface Root {
+  id: number;
+-}
+
+-export interface Unused {
+-  x: number;
++  name: string;
+}"
+`;

@@ -35,6 +35,30 @@ export interface ChildB {
   id: number;"
 `;
 
+exports[`Comparator Computed Properties > computed property removed when resolved key missing from source 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,17 +1,11 @@
+enum SomeEnum {
+  Value = 5,
+}
+
+export interface Config {
+-  [SomeEnum.Value]: ChildA;
+-
+  2: ChildB;
+}
+
+-export interface ChildA {
+-  name: string;
+-}
+-
+export interface ChildB {
+  id: number;
+}"
+`;
+
 exports[`Comparator Computed Properties > computed property that changed type 1`] = `
 "===================================================================
 --- a/target.ts

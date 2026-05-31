@@ -254,6 +254,37 @@ export const methodsCases: Record<string, ComparatorTest> = {
     }
   `,
   },
+
+  'method with jsdoc added from source': {
+    interfaceName: 'Api',
+    target: dedent/* ts */`
+      export interface Api {
+        id: number;
+      }`,
+    source: dedent/* ts */`
+      export interface Api {
+        id: number;
+
+        /**
+         * Does the thing.
+         */
+        DoThing(value: string): void;
+      }`,
+  },
+
+  // TODO: weird behaviour, the property should be replaced by the method
+  'optional property kept when source declares method of same name': {
+    interfaceName: 'Api',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Api {
+        foo?: string;
+      }`,
+    source: dedent/* ts */`
+      export interface Api {
+        foo(): void;
+      }`,
+  },
 };
 
 createTest('Methods', methodsCases);

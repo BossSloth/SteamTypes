@@ -14,6 +14,19 @@ export interface Service {
 }"
 `;
 
+exports[`Comparator Methods > method with jsdoc added from source 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,6 @@
+export interface Api {
++  /** Does the thing. */
++  DoThing(value: string): void;
++
+  id: number;
+}"
+`;
+
 exports[`Comparator Methods > parameter added to existing method 1`] = `
 "===================================================================
 --- a/target.ts
