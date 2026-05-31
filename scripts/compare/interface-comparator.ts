@@ -412,7 +412,7 @@ export function compareAndCorrectMembers(
     let targetProp = targetMembersMap.get(propName);
 
     // Check for mismatched kinds
-    if (targetProp && targetProp.getKind() !== sourceProp.getKind() && !targetProp.hasQuestionToken()) {
+    if (targetProp && targetProp.getKind() !== sourceProp.getKind()) {
       // Property kind mismatch, remove the property
       targetProp.remove();
       targetProp = undefined;
@@ -428,11 +428,11 @@ export function compareAndCorrectMembers(
 
     // Property exists in both, check for type differences
     const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
-    let needsExtendUpdate = false;
+    let needsExtendUpdate: boolean;
     if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
       needsExtendUpdate = compareAndCorrectPropertyTypes(targetProp, sourceProp, isFromExtendedInterface);
-    } else if (targetProp instanceof MethodSignature && sourceProp instanceof MethodSignature) {
-      needsExtendUpdate = compareAndCorrectMethodTypes(targetProp, sourceProp, isFromExtendedInterface);
+    } else {
+      needsExtendUpdate = compareAndCorrectMethodTypes(targetProp as MethodSignature, sourceProp as MethodSignature, isFromExtendedInterface);
     }
 
     if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration && sourceInterface instanceof InterfaceDeclaration) {

@@ -27,6 +27,17 @@ export interface Api {
 }"
 `;
 
+exports[`Comparator Methods > optional property replaced when source declares method of same name 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Api {
+-  foo?: string;
++  foo(): void;
+}"
+`;
+
 exports[`Comparator Methods > parameter added to existing method 1`] = `
 "===================================================================
 --- a/target.ts

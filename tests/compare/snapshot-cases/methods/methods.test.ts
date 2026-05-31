@@ -272,10 +272,8 @@ export const methodsCases: Record<string, ComparatorTest> = {
       }`,
   },
 
-  // TODO: weird behaviour, the property should be replaced by the method
-  'optional property kept when source declares method of same name': {
+  'optional property replaced when source declares method of same name': {
     interfaceName: 'Api',
-    expectsNoDiff: true,
     target: dedent/* ts */`
       export interface Api {
         foo?: string;

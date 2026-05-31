@@ -125,7 +125,7 @@ bun run test:coverage --coverage.reporter=text
 
 # IMPORTANT: NEVER pipe test or coverage output through `tail`, `head`, etc.
 # Vitest detects the truncated TTY and shortens its own per-file uncovered-line list,
-# hiding the actual line numbers you need. Always run the command unpiped.
+# hiding the actual line numbers you need. ALWAYS run the command unpiped.
 
 # Build the inject script (required before validate-types)
 bun run build-convert-debug       # dev build with identifiers
