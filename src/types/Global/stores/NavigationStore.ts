@@ -1,4 +1,4 @@
-import type { History, Location } from 'history';
+import type { History, Location, MemoryHistory } from 'history';
 
 export interface NavigationStore {
   BRouteMatch(path: string): boolean;
@@ -9,7 +9,7 @@ export interface NavigationStore {
 
   UpdateRoutingInfo(history: History, location: Location): void;
 
-  m_history?: History;
+  m_history?: MemoryHistory;
 
   m_locationPathname: string;
 
