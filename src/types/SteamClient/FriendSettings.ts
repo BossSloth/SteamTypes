@@ -27,6 +27,7 @@ export interface FriendSettings {
 /** 0 - false, 1 - true */
 type VDFBoolean = 0 | 1;
 
+/** @ignoreFormatting */
 export type BooleanToVDFBoolean<T> = {
   [K in keyof T]: T[K] extends boolean
     ? VDFBoolean

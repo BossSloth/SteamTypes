@@ -5,6 +5,7 @@ export const CustomJsDocTags = {
   currentValue: 'currentValue',
   ignore: 'ignore',
   dontSort: 'dontSort',
+  ignoreFormatting: 'ignoreFormatting',
 };
 
 /**

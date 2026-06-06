@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Comparator Ignore Formatting > does not preserves nested conditional type indentation without jsdoc 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+export type Mapped<T> = {
+  [K in keyof T]: T[K] extends boolean
+-    ? 1
+-    : T[K] extends object
+-      ? Mapped<T[K]>
+-      : T[K];
++  ? 1
++  : T[K] extends object
++  ? Mapped<T[K]>
++  : T[K];
+};
+
+export type Stable = string | number;
+
+export interface Root {"
+`;

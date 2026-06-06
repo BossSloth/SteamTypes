@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { createTwoFilesPatch } from 'diff';
 import { compare } from 'natural-orderby';
-import { Identifier, InterfaceDeclaration, MethodSignature, NamedNode, Node, PropertySignature, SourceFile, SyntaxKind, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
+import { Identifier, InterfaceDeclaration, MethodSignature, NamedNode, Node, PropertySignature, SourceFile, SyntaxKind, TypeAliasDeclaration, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface, findSimilarInterface } from './handle-interfaces';
@@ -688,6 +688,49 @@ function removeDuplicateUnionTypes(sourceText: string): string {
   return sourceText.replace(regexWithBrackets, '$1').replace(regex, '$1');
 }
 
+const ignoreFormattingTextOptions = { includeJsDocComments: true };
+
+/**
+ * Collects every type alias and interface tagged with `@ignoreFormatting`.
+ * The set is identical before and after `formatText` since formatting never
+ * adds or removes declarations.
+ */
+function getIgnoreFormattingNodes(sourceFile: SourceFile): (InterfaceDeclaration | TypeAliasDeclaration)[] {
+  const nodes = [...sourceFile.getTypeAliases(), ...sourceFile.getInterfaces()];
+
+  return nodes.filter(node => getJsDocTagValues(node, CustomJsDocTags.ignoreFormatting).length > 0);
+}
+
+/**
+ * Captures the exact text (including JSDoc) of every `@ignoreFormatting` declaration.
+ * Taken after the comparator's structural edits but before `formatText`, so legitimate
+ * changes are kept while `formatText`'s reformatting can later be reverted.
+ */
+function snapshotIgnoreFormatting(sourceFile: SourceFile): Map<string, string> {
+  const snapshot = new Map<string, string>();
+  for (const node of getIgnoreFormattingNodes(sourceFile)) {
+    snapshot.set(node.getName(), node.getText(ignoreFormattingTextOptions));
+  }
+
+  return snapshot;
+}
+
+/**
+ * Restores the pre-`formatText` text of every `@ignoreFormatting` declaration that
+ * `formatText` modified, undoing reformatting that would otherwise break lint rules
+ * such as `@stylistic/indent` on nested conditional types.
+ */
+function restoreIgnoreFormatting(sourceFile: SourceFile, snapshot: Map<string, string>): void {
+  for (const node of getIgnoreFormattingNodes(sourceFile)) {
+    // The snapshot is built from the same tagged-node set, so the entry always exists
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const originalText = snapshot.get(node.getName())!;
+    if (node.getText(ignoreFormattingTextOptions) !== originalText) {
+      node.replaceWithText(originalText);
+    }
+  }
+}
+
 /**
  * Main function to compare and correct interfaces between two source files
  * @param targetSourceFile The source file containing interfaces to be edited
@@ -712,11 +755,17 @@ export function compareAndCorrectAllInterfaces(
   // Compare and correct the interfaces
   compareAndCorrectInterfaces(targetSourceFile, sourceSourceFile, interfaceName);
 
+  // Snapshot `@ignoreFormatting` declarations after structural edits but before formatting
+  const ignoreFormattingSnapshot = snapshotIgnoreFormatting(targetSourceFile);
+
   // Get the updated text of the entire source file
   targetSourceFile.formatText({
     indentSize: 2,
     ensureNewLineAtEndOfFile: true,
   });
+
+  // Revert formatText's reformatting of `@ignoreFormatting` declarations
+  restoreIgnoreFormatting(targetSourceFile, ignoreFormattingSnapshot);
 
   const newSourceText = targetSourceFile.getFullText();
 
