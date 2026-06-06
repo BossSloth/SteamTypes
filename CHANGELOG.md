@@ -1,3 +1,26 @@
+# [2.2.0](https://github.com/BossSloth/SteamTypes/compare/v2.1.0...v2.2.0) (2026-06-06)
+
+
+### Bug Fixes
+
+* **compare:** Fixed method/property kind mismatch not updating optional properties ([1be8066](https://github.com/BossSloth/SteamTypes/commit/1be8066394a2f75d3f3cfcb7d3f9876a11cd365d))
+* Fixed steambrew patch that was no longer working ([8027279](https://github.com/BossSloth/SteamTypes/commit/802727952b9799bdca3ef9147e2a15189d6b9e0d))
+* Get rid of wrong description of the type of GetMachineID ([c2e6056](https://github.com/BossSloth/SteamTypes/commit/c2e6056ab14b09776937f1d750a61dd1d2a31648))
+* Migrate from bun patch to external global-overrides file to handle @steambrew/client type conflicts ([9418a33](https://github.com/BossSloth/SteamTypes/commit/9418a338ce6841c979e225eccf00bb9d18204d03))
+* NavigationStore using wrong History version and type ([adef94a](https://github.com/BossSloth/SteamTypes/commit/adef94a1d7fdcf7dc33899c33639a4f46bc17f0f))
+
+
+### Features
+
+* Add a bunch more test coverage to improve reliability (most files at 100% or close) ([5118e61](https://github.com/BossSloth/SteamTypes/commit/5118e619b569c874ad346a56b4614d5e3378539f))
+* **protobufs:** replace most simple JsPbMessage with correct ProtobufClass and SerializedArrayBuffer types ([5c4a0b5](https://github.com/BossSloth/SteamTypes/commit/5c4a0b50c068172121826161b0c3de7144eef5b8))
+* **protobufs:** Updated and regenerated protobuf types ([d1118b0](https://github.com/BossSloth/SteamTypes/commit/d1118b0613be659f999cd0630d94e899b0b5767b))
+* **types:** add NotificationStore types and improve protobuf class detection ([aafe33d](https://github.com/BossSloth/SteamTypes/commit/aafe33d0041c44d2faec5593592f55d70eb7a173))
+* **types:** added SerializedJsonString type for type-safe JSON serialization ([b9d91aa](https://github.com/BossSloth/SteamTypes/commit/b9d91aabad908716189af7dea39ec8bd58311ab9))
+* **types:** Update all types for steam version 1773426488 ([5cb6471](https://github.com/BossSloth/SteamTypes/commit/5cb64713a847c329844147c97a0453d85a2f776b))
+* **types:** Updated all types for steam version 1778281814 (May  8 2026) ([97c6e83](https://github.com/BossSloth/SteamTypes/commit/97c6e837f89b5eab1c46337e699e0f71469cb63a))
+* **types:** Updated all types for steam version 1779918128 (May 27 2026 21:21:26) ([925e0a4](https://github.com/BossSloth/SteamTypes/commit/925e0a47a4e5237a191991c2f1646e374e63514c))
+
 # [2.1.0](https://github.com/BossSloth/SteamTypes/compare/v2.0.0...v2.1.0) (2026-02-14)
 
 
