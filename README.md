@@ -14,7 +14,28 @@ pnpm add -D steam-types
 ```
 
 ### Usage
-To override the global SteamClient type that may be provided by other packages like `@steambrew/client`, create a patch file and remove the global SteamClient type
+
+`steam-types` provides global type declarations for `SteamClient` and the other Steam window globals (`App`, `appStore`, `appDetailsStore`, `LocalizationManager`, `SteamUIStore`, `NotificationStore`, …).
+
+If you also depend on `@steambrew/client`, both packages declare some of the same globals. `steam-types` ships a `global-overrides.d.ts` that re-declares them so its types take precedence. To apply it, add that file to the **`files`** array of your `tsconfig.json`:
+
+```jsonc
+{
+  "files": ["node_modules/steam-types/global-overrides.d.ts"]
+}
+```
+
+#### Directory-scoped projects (e.g. Millennium)
+
+Millennium plugins split their code across `frontend/` and `webkit/` directories. In that case, drop a small tsconfig inside each directory that extends your root config and adds the override, so it stays scoped to that directory:
+
+```jsonc
+// frontend/tsconfig.json  (and the same in webkit/tsconfig.json)
+{
+  "extends": "../tsconfig.json",
+  "files": ["../node_modules/steam-types/global-overrides.d.ts"]
+}
+```
 
 ## Project Structure
 

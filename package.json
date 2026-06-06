@@ -9,7 +9,8 @@
   "files": [
     "dist",
     "src",
-    "patches"
+    "patches",
+    "global-overrides.d.ts"
   ],
   "exports": {
     ".": "./dist/index.js",
@@ -20,6 +21,7 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
+    "postinstall": "bun scripts/strip-steambrew-globals.ts || true",
     "build": "rm -rf dist && tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "watch": "tsc -w --project tsconfig.build.json",
     "build-convert-debug": "esbuild scripts/convert-to-typescript/index.ts --bundle --format=iife --platform=browser --outfile=build/scripts/convert-to-typescript.js",

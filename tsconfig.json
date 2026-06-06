@@ -31,6 +31,6 @@
       "@Compare/*": ["./scripts/compare-to-typescript/*"]
     }
   },
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "tests/**/*", "global-overrides.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

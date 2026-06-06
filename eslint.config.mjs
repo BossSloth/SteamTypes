@@ -49,7 +49,7 @@ export default defineConfig(
       'import-x/resolver-next': [
         createTypeScriptImportResolver({
           alwaysTryTypes: true,
-          project: ['./tsconfig.json', 'src/*/tsconfig.json'],
+          project: ['./tsconfig.json'],
           noWarnOnMultipleProjects: true,
         }),
       ],
@@ -133,6 +133,7 @@ export default defineConfig(
       // #region Project specific
       '@typescript-eslint/member-ordering': ['error', { interfaces: ['method', 'field'], classes: undefined }],
       'customRules/min-enum-members': 'error',
+      'customRules/sort-global-declarations': 'error',
       'no-restricted-syntax': [
         'error',
         {
@@ -184,6 +185,24 @@ export default defineConfig(
       '@stylistic/quote-props': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       'import-x/no-unresolved': 'off',
+    },
+  },
+  {
+    files: ['src/**'],
+    rules: {
+      // Published code: every (type) import must resolve to a runtime `dependencies`/`peerDependencies` entry not `devDependencies`
+      'import-x/no-extraneous-dependencies': [
+        'error', {
+          devDependencies: false,
+          optionalDependencies: false,
+          peerDependencies: true,
+          includeTypes: true,
+          whitelist: [
+            'history', // Has been added by @types/history but seems to not be detected
+            '@types/history',
+          ],
+        },
+      ],
     },
   },
   {
