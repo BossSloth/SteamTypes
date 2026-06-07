@@ -1,9 +1,10 @@
 import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { TextFilterStore } from 'Global/stores/SteamUIStore/TextFilterStore';
-import { ObservableMap } from 'mobx';
+import { ObservableMap, ObservableSet } from 'mobx';
 import { CChatRoleActions } from 'Protobufs/steam/steammessages_chat.steamclient';
 import { ProtobufInterface } from 'shared/protobuf';
 import { SteamID } from 'shared/steamid';
+import { Callbacks } from 'types/shared/interfaces';
 import { FriendDisplayType, FriendsUIFriendStore, SteamFriend } from '../FriendStore';
 import { EmbedStore } from './EmbedStore';
 import { EmoticonStore } from './EmoticonStore';
@@ -156,7 +157,7 @@ export interface ChatStore {
 
   m_GameInviteStore: GameInviteStore;
 
-  m_GroupAddedCallbacks: GroupAddedCallbacks;
+  m_GroupAddedCallbacks: Callbacks;
 
   m_HiddenRecentChatSettings: HiddenRecentChatSettings;
 
@@ -538,7 +539,7 @@ export interface ChatGroup {
 
   m_rgGroupMembersSummary: number[];
 
-  m_rgPartyBeacons: never;
+  m_rgPartyBeacons: unknown[];
 
   m_roleActions: RoleActions[];
 
@@ -598,7 +599,7 @@ export interface ChatGroup {
 
   unique_id: string;
 
-  voiceRoomList: never;
+  voiceRoomList: unknown[];
 
   watching_broadcast_channel_id: string;
 
@@ -662,18 +663,6 @@ export interface FriendChatStore {
   m_rtLastSessionUpdate: number;
 
   RecentChatCutoffDuration: number;
-}
-
-export interface GroupAddedCallbacks {
-  ClearAllCallbacks(): void;
-
-  CountRegistered(): unknown;
-
-  Dispatch(...e: unknown[]): void;
-
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: never;
 }
 
 export interface HiddenRecentChatSettings {
@@ -1083,7 +1072,7 @@ export interface ChatRoomListBase {
 
   m_rgChatMessages: Chat_messages[];
 
-  m_rgChatViews: never;
+  m_rgChatViews: unknown[];
 
   m_rtFirstUnread: number;
 
@@ -1097,9 +1086,9 @@ export interface ChatRoomListBase {
 
   m_rtLastServerMessageReceived: number;
 
-  m_setInflightClientMessageID: never;
+  m_setInflightClientMessageID: Set<unknown>;
 
-  m_setSessionNotices: never;
+  m_setSessionNotices: ObservableSet<unknown>;
 
   m_strLastMessage?: undefined;
 
@@ -1109,7 +1098,7 @@ export interface ChatRoomListBase {
 
   time_last_ack: number;
 
-  time_last_message?: number;
+  time_last_message?: number | undefined;
 
   unique_id: string;
 
@@ -1218,9 +1207,9 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   m_lastChatLink?: (LastChatLinkInfo | null);
 
-  m_mapMessageReactionReactors: never;
+  m_mapMessageReactionReactors: ObservableMap<unknown, unknown>;
 
-  m_NewChatMsgAddedCallbacks: GroupAddedCallbacks;
+  m_NewChatMsgAddedCallbacks: Callbacks;
 
   m_rtLastMention: number;
 
@@ -1367,7 +1356,7 @@ export interface ChatRoomEffects {
 
   m_mapRoomEffectQueue: MapRoomEffectQueue;
 
-  m_rgRunningEffects: never;
+  m_rgRunningEffects: unknown[];
 }
 
 export interface GroupVoiceActiveMembers {
@@ -1397,7 +1386,7 @@ export interface GroupVoiceActiveMembers {
 
   display_type: number;
 
-  GetRawMemberList: never;
+  GetRawMemberList: unknown[];
 
   icon_url: string;
 
@@ -1405,21 +1394,21 @@ export interface GroupVoiceActiveMembers {
 
   m_eDisplayType: FriendDisplayType;
 
-  m_rgAccountIDMembers: never;
+  m_rgAccountIDMembers: unknown[];
 
-  m_setMembers: never;
+  m_setMembers: Set<unknown>;
 
   m_strName: string;
 
-  member_accountid_list: never;
+  member_accountid_list: unknown[];
 
   member_count: number;
 
   member_counts: Member_counts;
 
-  member_list: never;
+  member_list: unknown[];
 
-  member_list_unsorted: never;
+  member_list_unsorted: unknown[];
 
   name: string;
 
@@ -1443,9 +1432,9 @@ export interface MessageSendQueue {
 
   m_id: string;
 
-  m_queue: never;
+  m_queue: unknown[];
 
-  queued_messages: never;
+  queued_messages: unknown[];
 }
 
 export interface MapAccountToExtra {
@@ -1506,13 +1495,13 @@ export interface RgMessageBlocks {
 }
 
 export interface MapRoomEffectQueue {
-  confetti_snow: never;
+  confetti_snow: unknown[];
 
-  default: never;
+  default: unknown[];
 
-  festive: never;
+  festive: unknown[];
 
-  snowball: never;
+  snowball: unknown[];
 }
 
 /** @generated */

@@ -1,10 +1,13 @@
-import { MappedObservable, ObservableValue, Unsubscribable } from 'shared/interfaces';
-import { WindowInstance } from './WindowStore/WindowStore';
+import { Callbacks, MappedObservable, ObservableValue, Unsubscribable } from 'shared/interfaces';
 
 export interface GamepadNavigationManager {
   BatchedUpdate(e: unknown): void;
 
+  BCanActivateContext(e: unknown): boolean;
+
   BGlobalGamepadButton(e: unknown): boolean;
+
+  BHasVRGamepadNavigationContext(): unknown;
 
   BIsInActiveContext(e: unknown): boolean;
 
@@ -14,7 +17,7 @@ export interface GamepadNavigationManager {
 
   ChangeNavigationSource(e: unknown, t: unknown, r: unknown, n: unknown): boolean;
 
-  CreateContext(e: unknown, t: unknown): unknown;
+  CreateContext(e: unknown, t: unknown, r: unknown): unknown;
 
   DestroyContext(e: unknown): void;
 
@@ -23,6 +26,8 @@ export interface GamepadNavigationManager {
   DispatchVirtualGamepad(e: unknown, t: unknown): void;
 
   FindAnActiveContext(): unknown;
+
+  FindContextForRootWindow(e: unknown): unknown;
 
   FireUnhandledGamepadEventCallbacks(e: unknown): boolean;
 
@@ -94,11 +99,15 @@ export interface GamepadNavigationManager {
    */
   UpdateSourceToGamepad(e?: boolean): void;
 
+  ContextSetChangedCallbacks: Callbacks;
+
   m_ActiveContext?: FocusNavigationContext;
 
   m_bRestoringHistory: boolean;
 
   m_bShowDebugFocusRing: ObservableValue<boolean>;
+
+  m_ContextSetChangedCallbacks: Callbacks;
 
   m_DefaultContext?: never;
 
@@ -114,9 +123,9 @@ export interface GamepadNavigationManager {
 
   m_rgAllContexts: FocusNavigationContext[];
 
-  m_rgGamepadInputSources: (StandardGamepadInputSource | MouseGamepadInputSource | TouchGamepadInputSource)[];
+  m_rgGamepadInputSources: (StandardGamepadInputSource | MouseGamepadInputSource | TouchGamepadInputSource | VrGamepadInputSource)[];
 
-  m_UnhandledButtonEventsCallbacks: UnhandledButtonEventsCallbacks;
+  m_UnhandledButtonEventsCallbacks: Callbacks;
 
   NavigationSource: GamepadNavigationManager['m_navigationSource'];
 
@@ -132,11 +141,16 @@ export interface FocusNavigationContext {
 
   BIsGamepadInputSuppressed(): unknown;
 
+  BIsVR(): unknown;
+
   BlurNavTree(e: unknown): void;
 
   Destroy(e: unknown): void;
 
   FindNavTreeInFocusedWindow(): unknown;
+
+  /** @param t default: !0 */
+  FindNavTreeInWindow(e: unknown, t?: boolean): unknown;
 
   FindNavTreeToActivate(): unknown;
 
@@ -169,11 +183,13 @@ export interface FocusNavigationContext {
    */
   SetActiveNavTree(e: unknown, t?: boolean): void;
 
+  SetGamepadInputSuppressed(e: unknown): void;
+
   UnregisterGamepadNavigationTree(e: unknown): Promise<void>;
 
   ActiveWindow: Window | undefined;
 
-  FocusChangedCallbacks: UnhandledButtonEventsCallbacks;
+  FocusChangedCallbacks: Callbacks;
 
   IsActive: ObservableValue<boolean>;
 
@@ -187,15 +203,19 @@ export interface FocusNavigationContext {
 
   m_bMounted: boolean;
 
+  m_bVR: boolean;
+
   m_controller: GamepadNavigationManager;
 
-  m_FocusChangedCallbacks: UnhandledButtonEventsCallbacks;
+  m_FocusChangedCallbacks: Callbacks;
 
   m_iFocusChangeStack: number;
 
   m_LastActiveFocusNavTree: undefined;
 
   m_LastActiveNavTree: undefined;
+
+  m_NavTreeActivatedOrReactivatedCallbacks: Callbacks;
 
   m_rgGamepadNavigationTrees: unknown[];
 
@@ -206,6 +226,8 @@ export interface FocusNavigationContext {
   m_valueIsActive: ObservableValue<boolean>;
 
   NavigationSourceGlyphInfo: ObservableValue<GlyphInfo>;
+
+  NavTreeActivatedOrReactivatedCallbacks: Callbacks;
 
   RootWindow: Window;
 }
@@ -255,27 +277,25 @@ export interface BaseGamepadInputSource {
 
   SetSourceType(e: unknown): void;
 
-  m_AnalogCallbacks: UnhandledButtonEventsCallbacks;
+  m_AnalogCallbacks: Callbacks;
 
   m_bGamepadDetected: boolean;
 
-  m_ButtonDownCallbacks: UnhandledButtonEventsCallbacks;
+  m_ButtonDownCallbacks: Callbacks;
 
   m_ButtonRepeatHandler: ButtonRepeatHandler;
 
-  m_ButtonUpCallbacks: UnhandledButtonEventsCallbacks;
+  m_ButtonUpCallbacks: Callbacks;
 
   m_eNavigationSourceType: ENavigationSourceType;
 
   m_fLastActiveTime?: number | undefined;
 
-  m_NavigationTypeChangeCallbacks: UnhandledButtonEventsCallbacks;
+  m_NavigationTypeChangeCallbacks: Callbacks;
 
   m_nLastActiveControllerIndex: number;
 
-  m_OnGamepadDetectedCallbacks: UnhandledButtonEventsCallbacks;
-
-  NonVRWindowInstance: WindowInstance;
+  m_OnGamepadDetectedCallbacks: Callbacks;
 }
 
 export interface StandardGamepadInputSource extends BaseGamepadInputSource {
@@ -331,16 +351,15 @@ export interface TouchGamepadInputSource extends BaseGamepadInputSource {
   OnTouchStart(e: unknown): void;
 }
 
-export interface UnhandledButtonEventsCallbacks {
-  ClearAllCallbacks(): void;
+export interface VrGamepadInputSource extends BaseGamepadInputSource {
+  OnVROverlayInputFocusChanged(e: unknown): void;
 
-  CountRegistered(): unknown;
+  EnableGamepadInVR: boolean;
 
-  Dispatch(...e: unknown[]): void;
+  m_lastOverlayInputFocusChangedMessage: undefined;
 
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: never;
+  /** @todo property ignored by configuration, please type this */
+  NonVRWindowInstance: unknown;
 }
 
 export interface ActiveFocusChange {
@@ -522,11 +541,11 @@ export interface From {
 
   UpdateParentActiveChild(): void;
 
-  ActionDescriptionChangedCallbackList: UnhandledButtonEventsCallbacks;
+  ActionDescriptionChangedCallbackList: Callbacks;
 
   Element: HTMLDivElement;
 
-  m_ActionDescriptionsChangedCallbackList: UnhandledButtonEventsCallbacks;
+  m_ActionDescriptionsChangedCallbackList: Callbacks;
 
   m_ActiveChild?: never;
 
@@ -762,13 +781,13 @@ export interface Tree {
 
   m_lastFocusNodeYMovement: LastFocusNodeXMovement;
 
-  m_onActivateCallbacks: UnhandledButtonEventsCallbacks;
+  m_onActivateCallbacks: Callbacks;
 
-  m_onActiveFocusStateChangedCallbacks: UnhandledButtonEventsCallbacks;
+  m_onActiveFocusStateChangedCallbacks: Callbacks;
 
-  m_onChildTreesChanged: UnhandledButtonEventsCallbacks;
+  m_onChildTreesChanged: Callbacks;
 
-  m_onDeactivateCallbacks: UnhandledButtonEventsCallbacks;
+  m_onDeactivateCallbacks: Callbacks;
 
   m_onGlobalButtonDown: undefined;
 
@@ -784,13 +803,13 @@ export interface Tree {
 
   m_window: Window;
 
-  OnActivateCallbacks: UnhandledButtonEventsCallbacks;
+  OnActivateCallbacks: Callbacks;
 
-  OnActiveStateChangedCallbacks: UnhandledButtonEventsCallbacks;
+  OnActiveStateChangedCallbacks: Callbacks;
 
-  OnChildTreesChangedCallbacks: UnhandledButtonEventsCallbacks;
+  OnChildTreesChangedCallbacks: Callbacks;
 
-  OnDeactivateCallbacks: UnhandledButtonEventsCallbacks;
+  OnDeactivateCallbacks: Callbacks;
 
   Parent: undefined;
 

@@ -224,6 +224,20 @@ const primitiveObjectCases: TypeCase[] = [
     expected: 'ConnectionManager',
     expectedImports: [{ module: 'Global/managers/ConnectionManager', types: ['ConnectionManager'] }],
   },
+  {
+    name: 'Callback-like',
+    makeValue() {
+      return {
+        ClearAllCallbacks: () => {},
+        CountRegistered: () => {},
+        Dispatch: () => {},
+        Register: () => {},
+        m_vecCallbacks: [],
+      };
+    },
+    expected: 'Callbacks',
+    expectedImports: [{ module: 'shared/interfaces', types: ['Callbacks'] }],
+  },
 ];
 
 const iterableCases: TypeCase[] = [

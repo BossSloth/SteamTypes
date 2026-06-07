@@ -1,5 +1,101 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Shared Base Interfaces > extra source derived union member with base absent from target 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Root {
+-  items: (ItemA | ItemB)[];
++  items: (ItemA | ItemB | ItemC)[];
+}
+
+export interface ItemBase {
+  shared: number;
+}
+@@ -11,5 +11,9 @@
+}
+
+export interface ItemB extends ItemBase {
+  b: string;
+}
++
++export interface ItemC extends MysteryBase {
++  c: string;
++}"
+`;
+
+exports[`Comparator Shared Base Interfaces > extra source derived union member with base present in target 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Root {
+-  items: (ItemA | ItemB)[];
++  items: (ItemA | ItemB | ItemC)[];
+}
+
+export interface ItemBase {
+  shared: number;
+}
+@@ -15,5 +15,13 @@
+export interface ItemB extends ItemBase {
+  b: string;
+
+  bb: string;
+}
++
++export interface ItemC extends ItemBase {
++  c: string;
++
++  cc: string;
++
++  ccc: string;
++}"
+`;
+
+exports[`Comparator Shared Base Interfaces > renamed shared base with extra source derived union member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Root {
+-  sources: (StandardSource | MouseSource | TouchSource)[];
++  sources: (StandardSource | MouseSource | TouchSource | RgSource4)[];
+}
+
+/**
+ * @compareOriginalName SourceBase
+ */
+@@ -9,12 +9,10 @@
+  GetSourceType(): unknown;
+
+  m_bDetected: boolean;
+
+  m_nIndex: number;
+-
+-  NonVRWindowInstance: number;
+}
+
+export interface StandardSource extends BaseSource {
+  GetController(e: unknown): unknown;
+
+@@ -28,5 +26,13 @@
+}
+
+export interface TouchSource extends BaseSource {
+  OnTouchEnd(e: unknown): void;
+}
++
++export interface RgSource4 extends BaseSource {
++  OnVROverlayInputFocusChanged(e: unknown): void;
++
++  EnableGamepadInVR: boolean;
++
++  NonVRWindowInstance: number;
++}"
+`;
+
 exports[`Comparator Shared Base Interfaces > shared base behind imported base property mismatch 1`] = `
 "===================================================================
 --- a/target.ts

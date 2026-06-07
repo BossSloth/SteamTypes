@@ -230,6 +230,31 @@ export const unionCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'target array against union of array and non-array': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: string[];
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (string[] | number);
+      }`,
+  },
+
+  'source union with never keeps compatible target': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: string;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: string | never;
+      }`,
+  },
+
   'union with null to null wrapped': {
     interfaceName: 'Container',
     expectsNoDiff: true,
@@ -254,6 +279,216 @@ export const unionCases: Record<string, ComparatorTest> = {
       export interface Container {
         data: null;
       }`,
+  },
+
+  'union with undefined should keep undefined - string': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: string | undefined;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: string;
+      }`,
+  },
+
+  'union with undefined should keep undefined - array': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: string[] | undefined;
+      }`,
+    source: dedent/* ts */`
+      export interface Container {
+        data: string[];
+      }`,
+  },
+
+  'union with undefined should keep undefined - collapsed interface': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: Emoticon_list | undefined;
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        last_used?: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count?: number;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (Emoticon_list | Emoticon_list2);
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        name: string;
+
+        name_normalized?: string;
+      }
+
+      export interface Emoticon_list2 {
+        appid: number;
+
+        last_used: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count: number;
+      }
+      `,
+  },
+
+  'union with undefined should keep undefined - collapsed interface array': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: Emoticon_list[] | undefined;
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        last_used?: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count?: number;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (Emoticon_list | Emoticon_list2)[];
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        name: string;
+
+        name_normalized?: string;
+      }
+
+      export interface Emoticon_list2 {
+        appid: number;
+
+        last_used: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count: number;
+      }
+      `,
+  },
+
+  'collapsed interface array - interface misses optional': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: Emoticon_list[];
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        last_used?: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count: number;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (Emoticon_list | Emoticon_list2)[];
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        name: string;
+
+        name_normalized?: string;
+      }
+
+      export interface Emoticon_list2 {
+        appid: number;
+
+        last_used: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count: number;
+      }
+      `,
+  },
+
+  'collapsed interface array - interface misses property': {
+    interfaceName: 'Container',
+    target: dedent/* ts */`
+      export interface Container {
+        data: Emoticon_list[];
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        last_used?: number;
+
+        name: string;
+
+        name_normalized?: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (Emoticon_list | Emoticon_list2)[];
+      }
+
+      export interface Emoticon_list {
+        appid: number;
+
+        name: string;
+
+        name_normalized?: string;
+      }
+
+      export interface Emoticon_list2 {
+        appid: number;
+
+        last_used: number;
+
+        name: string;
+
+        name_normalized?: string;
+
+        use_count: number;
+      }
+      `,
   },
 };
 

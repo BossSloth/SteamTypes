@@ -81,7 +81,6 @@ declare global {
   let loginStore: unknown;
   let MainWindowBrowserManager: MainWindowBrowserManager;
   let multiSelectStore: unknown;
-  let NetworkDiagnosticsStore: unknown;
   let NotificationStore: NotificationStore;
   let openDatabase: unknown;
   let overlayStore: unknown;
@@ -113,9 +112,7 @@ declare global {
   let subscriberAgreementStore: unknown;
   let SuspendResumeStore: unknown;
   let SystemDisplayManagerStore: unknown;
-  let SystemDockStore: unknown;
   let SystemNetworkStore: unknown;
-  let SystemPowerStore: unknown;
   let SystemReportStore: unknown;
   let tempNavStore: NavigationStore;
   let toJS: unknown;
@@ -191,7 +188,6 @@ declare global {
     loginStore: unknown;
     MainWindowBrowserManager: MainWindowBrowserManager;
     multiSelectStore: unknown;
-    NetworkDiagnosticsStore: unknown;
     NotificationStore: NotificationStore;
     openDatabase: unknown;
     overlayStore: unknown;
@@ -223,9 +219,7 @@ declare global {
     subscriberAgreementStore: unknown;
     SuspendResumeStore: unknown;
     SystemDisplayManagerStore: unknown;
-    SystemDockStore: unknown;
     SystemNetworkStore: unknown;
-    SystemPowerStore: unknown;
     SystemReportStore: unknown;
     tempNavStore: NavigationStore;
     toJS: unknown;

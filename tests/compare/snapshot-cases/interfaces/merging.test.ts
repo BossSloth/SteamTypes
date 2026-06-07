@@ -70,6 +70,59 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
       `,
   },
 
+  'manual merge unions differing property types': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        items: Item[];
+      }
+
+      export interface Item {
+        id: number | string;
+
+        name: string;
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        items: (Item | Item2)[];
+      }
+
+      export interface Item {
+        id: number;
+        name: string;
+      }
+
+      export interface Item2 {
+        id: string;
+        name: string;
+      }
+      `,
+  },
+  'manual merge of empty interfaces': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent/* ts */`
+      export interface Container {
+        data: Empty;
+      }
+
+      export interface Empty {
+      }
+      `,
+    source: dedent/* ts */`
+      export interface Container {
+        data: (Empty | Empty2);
+      }
+
+      export interface Empty {
+      }
+
+      export interface Empty2 {
+      }
+      `,
+  },
   'manual merge falls back when source property type mismatches target': {
     interfaceName: 'Container',
     target: dedent/* ts */`

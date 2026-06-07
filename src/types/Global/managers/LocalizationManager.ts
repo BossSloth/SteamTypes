@@ -11302,6 +11302,8 @@ export interface MapTokens {
 
   GuidedTour_ContinueMessage_Template_NonDeck: string;
 
+  GuidedTour_Generic_Welcome_Description: string;
+
   GuidedTour_ParentalControls_Description_LGS: string;
 
   GuidedTour_ParentalControls_PressAnyOther: string;
@@ -11348,9 +11350,13 @@ export interface MapTokens {
 
   GuidedTour_SDCard_Description_LGS: string;
 
+  GuidedTour_SDCard_Description_SteamMachine: string;
+
   GuidedTour_SDCard_Title: string;
 
   GuidedTour_SDCard_Title_LGS: string;
+
+  GuidedTour_SDCard_Title_SteamMachine: string;
 
   GuidedTour_SendOff_Description: string;
 
@@ -11367,6 +11373,10 @@ export interface MapTokens {
   GuidedTour_SteamButton_Title: string;
 
   GuidedTour_SteamButton_Title_LGS: string;
+
+  GuidedTour_SteamMachine_SendOff_Description: string;
+
+  GuidedTour_SteamMachine_Welcome_Title: string;
 
   GuidedTour_SteamOS_SendOff_Description: string;
 
@@ -13420,11 +13430,25 @@ export interface MapTokens {
 
   OverlayNetworkStatus_ViaRelay: string;
 
+  PairControllerScreen_ControllerPaired: string;
+
+  PairControllerScreen_ControllerType_Dropdown: string;
+
   PairControllerScreen_Explainer: string;
 
   PairControllerScreen_Explainer_NoImage: string;
 
   PairControllerScreen_Explainer_Plural: string;
+
+  PairControllerScreen_Explainer_PS4: string;
+
+  PairControllerScreen_Explainer_PS5: string;
+
+  PairControllerScreen_Explainer_Switch: string;
+
+  PairControllerScreen_Explainer_Xbox: string;
+
+  PairControllerScreen_Searching: string;
 
   PairControllerScreen_Skip: string;
 

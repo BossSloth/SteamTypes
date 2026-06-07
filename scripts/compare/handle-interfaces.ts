@@ -1,4 +1,4 @@
-import { InterfaceDeclaration, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
+import { InterfaceDeclaration, PropertySignature, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { orderMembers } from './interface-comparator';
 import { currentStartingInterfaces, currentTargetSourceFile, CustomJsDocTags, getIdentifierName, getInterfaceMembers, getJsDocTagValues, interfaceQueue, isImportedType } from './shared';
 
@@ -16,17 +16,7 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
   if (targetInterfaces.length === 1 && sourceInterfaces.length > 1) {
     const targetInterfaceDeclaration = getInterfaceDeclaration(targetInterfaces[0]);
     if (targetInterfaceDeclaration && canMergeIntoTarget(sourceInterfaces, targetInterfaceDeclaration)) {
-      // Rename all source interfaces to match the target and queue them for comparison
-      for (const sourceInterface of sourceInterfaces) {
-        const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
-        if (sourceInterfaceDeclaration) {
-          sourceInterfaceDeclaration.rename(targetInterfaceDeclaration.getName());
-          interfaceQueue.push({
-            targetInterface: targetInterfaceDeclaration,
-            sourceInterface: sourceInterfaceDeclaration,
-          });
-        }
-      }
+      mergeSourcesIntoTarget(sourceInterfaces, targetInterfaceDeclaration);
 
       return;
     }
@@ -69,6 +59,11 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
     // If no exact name match, try to find by structure similarity
     if (!matchingTargetInterface) {
       targetInterfaceDeclaration = findSimilarInterface(sourceInterfaceDeclaration);
+
+      // Never collapse an extra source derived interface into a target base.
+      if (targetInterfaceDeclaration && isDerivedToBaseMismatch(sourceInterfaceDeclaration, targetInterfaceDeclaration)) {
+        targetInterfaceDeclaration = undefined;
+      }
     } else {
       targetInterfaceDeclaration = getInterfaceDeclaration(matchingTargetInterface);
     }
@@ -86,83 +81,162 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
   }
 }
 
-/**
- * Checks if all source interfaces can be merged into the target interface
- * This is true when the target has all properties from all source interfaces,
- * with appropriate optional markers
- */
-function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterface: InterfaceDeclaration): boolean {
-  const targetProperties = getInterfaceMembers(targetInterface).filter(prop => prop.isKind(SyntaxKind.PropertySignature));
-  const targetPropMap = new Map<string, { optional: boolean; type: string; }>();
+/** Aggregated information about a property across all source union members. */
+interface MergedPropertyInfo {
+  /** A representative declaration used to copy structure (docs, modifiers) when adding. */
+  representative: PropertySignature;
+  /** Distinct type texts seen across the source members. */
+  types: Set<string>;
+  /** How many source members declare this property. */
+  presentCount: number;
+  /** How many source members declare this property as optional. */
+  optionalCount: number;
+}
 
-  // Build a map of target properties
-  for (const prop of targetProperties) {
-    const typeNode = prop.getTypeNode();
-    targetPropMap.set(prop.getName(), {
-      optional: prop.hasQuestionToken(),
-      type: typeNode ? typeNode.getText() : 'any',
-    });
+/**
+ * Collects every property across all source union members, aggregating their distinct
+ * types, how often they appear, and how often they are optional.
+ */
+function collectMergedProperties(sourceInterfaces: InterfaceDeclaration[]): Map<string, MergedPropertyInfo> {
+  const merged = new Map<string, MergedPropertyInfo>();
+
+  for (const sourceInterface of sourceInterfaces) {
+    const properties = getInterfaceMembers(sourceInterface)
+      .filter((prop): prop is PropertySignature => prop.isKind(SyntaxKind.PropertySignature));
+
+    for (const prop of properties) {
+      const propName = prop.getName();
+      let info = merged.get(propName);
+      if (info === undefined) {
+        info = { representative: prop, types: new Set(), presentCount: 0, optionalCount: 0 };
+        merged.set(propName, info);
+      }
+
+      info.presentCount++;
+      if (prop.hasQuestionToken()) {
+        info.optionalCount++;
+      }
+      const typeNode = prop.getTypeNode();
+      if (typeNode) {
+        info.types.add(typeNode.getText());
+      }
+    }
   }
 
-  // Collect all properties from all source interfaces
-  // Map: propName -> { types: Set<string>, interfaceCount: number }
-  const allSourceProperties = new Map<string, { types: Set<string>; interfaceCount: number; }>();
-  let totalSourceInterfaces = 0;
+  return merged;
+}
 
-  for (const sourceInterfaceRef of sourceInterfaces) {
-    const sourceInterface = getInterfaceDeclaration(sourceInterfaceRef);
-    if (!sourceInterface) {
+/**
+ * Checks whether the source union members represent a manual merge into the single target
+ * interface. This is the case when the target overlaps enough with the union of all source
+ * properties and the types of the properties they share are compatible. Missing properties
+ * and optionality mismatches are intentionally allowed here - they are corrected during the
+ * merge (missing properties are added as optional, required properties only present in some
+ * members are made optional).
+ */
+function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterface: InterfaceDeclaration): boolean {
+  const targetPropMap = new Map<string, string>();
+  for (const prop of getInterfaceMembers(targetInterface).filter(p => p.isKind(SyntaxKind.PropertySignature))) {
+    const typeNode = prop.getTypeNode();
+    targetPropMap.set(prop.getName(), typeNode ? typeNode.getText() : 'any');
+  }
+
+  const sourceDeclarations = sourceInterfaces
+    .map(ref => getInterfaceDeclaration(ref))
+    .filter((decl): decl is InterfaceDeclaration => decl !== undefined);
+  const allSourceProperties = collectMergedProperties(sourceDeclarations);
+
+  // Overlap gate: too few shared property names means the single target is unlikely to be a
+  // merged representation of the source union, so leave it to the normal per-interface handling.
+  const sharedNames = [...allSourceProperties.keys()].filter(name => targetPropMap.has(name)).length;
+  const totalNames = new Set([...allSourceProperties.keys(), ...targetPropMap.keys()]).size;
+  const overlap = totalNames === 0 ? 1 : sharedNames / totalNames;
+  if (overlap < REQUIRED_OVERLAP) {
+    return false;
+  }
+
+  // Type compatibility gate: only properties present in both must have compatible types.
+  for (const [propName, info] of allSourceProperties) {
+    const targetType = targetPropMap.get(propName);
+    if (targetType === undefined) {
+      // Missing in target - it will be added as an optional property during the merge.
       continue;
     }
 
-    totalSourceInterfaces++;
-    const sourceProperties = getInterfaceMembers(sourceInterface).filter(prop => prop.isKind(SyntaxKind.PropertySignature));
-
-    for (const sourceProp of sourceProperties) {
-      const propName = sourceProp.getName();
-      let propData = allSourceProperties.get(propName);
-      if (propData === undefined) {
-        propData = { types: new Set(), interfaceCount: 0 };
-        allSourceProperties.set(propName, propData);
-      }
-
-      propData.interfaceCount++;
-      const typeNode = sourceProp.getTypeNode();
-      if (typeNode) {
-        propData.types.add(typeNode.getText());
-      }
-    }
-  }
-
-  // Check if target can represent all source properties
-  for (const [propName, propData] of allSourceProperties) {
-    const targetProp = targetPropMap.get(propName);
-    if (!targetProp) {
-      // Target is missing a property that exists in source
-      return false;
-    }
-
-    // Property exists in all source interfaces -> can be required or optional in target
-    // Property exists in some source interfaces -> must be optional in target
-    const existsInAllSources = propData.interfaceCount === totalSourceInterfaces;
-
-    if (!existsInAllSources && !targetProp.optional) {
-      // Property is optional in some sources but required in target - not a valid merge
-      return false;
-    }
-
-    // Check if types are compatible (allow type unions in target)
-    const targetType = targetProp.type;
-    const allSourceTypesMatched = Array.from(propData.types).every(sourceType =>
+    const allSourceTypesMatched = [...info.types].every(sourceType =>
       targetType === sourceType || targetType.includes(sourceType));
 
     if (!allSourceTypesMatched) {
-      // Types don't match - not a valid merge
       return false;
     }
   }
 
   return true;
+}
+
+/**
+ * Merges all source union members into the single target interface. The first source member
+ * becomes the merged interface: shared properties keep their type (unioned when members
+ * disagree) and become optional when they are not present-and-required in every member;
+ * properties missing from the first member are added as optional. The redundant source members
+ * are folded into the first one (their references are renamed to the merged interface so unions
+ * like `(A | B)[]` collapse to `(A | A)[]`) and the merged interface is queued for comparison.
+ */
+function mergeSourcesIntoTarget(
+  sourceInterfaces: TypeReferenceNode[],
+  targetInterface: InterfaceDeclaration,
+): void {
+  const sourceDeclarations = sourceInterfaces
+    .map(ref => getInterfaceDeclaration(ref))
+    .filter((decl): decl is InterfaceDeclaration => decl !== undefined);
+
+  /* v8 ignore next -- canMergeIntoTarget already validated there are source declarations @preserve */
+  if (sourceDeclarations.length === 0) {
+    return;
+  }
+
+  const totalSources = sourceDeclarations.length;
+  const mergedProperties = collectMergedProperties(sourceDeclarations);
+  const primary = sourceDeclarations[0];
+
+  for (const [propName, info] of mergedProperties) {
+    const shouldBeOptional = info.presentCount < totalSources || info.optionalCount > 0;
+    const mergedType = [...info.types].join(' | ');
+    const existing = primary.getProperty(propName);
+
+    if (existing) {
+      // Union distinct types when the members disagree on this property's type.
+      if (info.types.size > 1 && existing.getTypeNode()?.getText() !== mergedType) {
+        existing.setType(mergedType);
+      }
+      if (shouldBeOptional && !existing.hasQuestionToken()) {
+        existing.setHasQuestionToken(true);
+      }
+    } else {
+      primary.addProperty({
+        ...info.representative.getStructure(),
+        type: mergedType,
+        hasQuestionToken: shouldBeOptional,
+      });
+    }
+  }
+
+  // Fold the redundant members into the primary: renaming their references to the primary's
+  // name collapses the source unions (e.g. `(A | B)[]` -> `(A | A)[]`) everywhere they are used,
+  // including in other properties, before dropping their now-unused declarations.
+  const primaryName = primary.getName();
+  for (const declaration of sourceDeclarations.slice(1)) {
+    /* v8 ignore next -- defensive: declarations are not forgotten before this point @preserve */
+    if (declaration.wasForgotten() || declaration.getName() === primaryName) {
+      continue;
+    }
+    declaration.rename(primaryName);
+    declaration.remove();
+  }
+
+  primary.rename(targetInterface.getName());
+
+  interfaceQueue.push({ targetInterface, sourceInterface: primary });
 }
 
 /**
@@ -276,6 +350,23 @@ function calculateSimilarityScore(
   return matchingProps / totalUniqueProps;
 }
 
+/**
+ * A derived source interface (one that extends something) shares all of its base's
+ * members, so structure similarity will wrongly match it to a target base interface.
+ * Returns true when the matched target is itself a base (extended by other target
+ * interfaces), meaning the match should be rejected so the source interface is added
+ * on its own instead of being collapsed into the shared base.
+ */
+function isDerivedToBaseMismatch(sourceInterface: InterfaceDeclaration, matchedTarget: InterfaceDeclaration): boolean {
+  if (sourceInterface.getExtends().length === 0) {
+    return false;
+  }
+
+  return currentTargetSourceFile.getInterfaces().some(other =>
+    other !== matchedTarget
+    && other.getExtends().some(ext => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget));
+}
+
 function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | undefined {
   /* v8 ignore next -- @preserve */
   if (type instanceof TypeNode) {
@@ -286,6 +377,33 @@ function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | 
   if (!symbol) return undefined;
 
   return symbol.getDeclarations().find(d => d.isKind(SyntaxKind.InterfaceDeclaration));
+}
+
+/**
+ * Repoints a freshly added interface's `extends` clauses at the matching target base.
+ * The structure is copied verbatim from the source, so a renamed base (e.g. matched via
+ * `@compareOriginalName`) would otherwise leave a dangling reference to the source's name.
+ */
+function remapNewInterfaceExtends(newInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
+  const sourceExtends = sourceInterface.getExtends();
+  newInterface.getExtends().forEach(ext => newInterface.removeExtends(ext));
+
+  for (const sourceExt of sourceExtends) {
+    const sourceExtName = sourceExt.getExpression().getText();
+    let targetExtName = sourceExtName;
+
+    // Only remap when the source's base name is missing from the target.
+    if (!currentTargetSourceFile.getInterface(sourceExtName)) {
+      const sourceExtInterface = sourceInterface.getSourceFile().getInterface(sourceExtName);
+      /* v8 ignore next -- a generated source base is always a declared interface @preserve */
+      const similarTarget = sourceExtInterface ? findSimilarInterface(sourceExtInterface) : undefined;
+      if (similarTarget) {
+        targetExtName = similarTarget.getName();
+      }
+    }
+
+    newInterface.addExtends(sourceExt.getText().replace(sourceExtName, targetExtName));
+  }
 }
 
 /**
@@ -312,7 +430,9 @@ export function addMissingInterface(type: TypeNode, currentIteration = 0): void 
     }
 
     const similarInterface = findSimilarInterface(interfaceDeclaration);
-    if (similarInterface) {
+    // A derived interface always matches its own base via structure similarity, so ignore
+    // such matches here and add the interface instead of treating it as a base rename.
+    if (similarInterface && !isDerivedToBaseMismatch(interfaceDeclaration, similarInterface)) {
       // If the source file also contains an interface with the similar's name,
       // both coexist in source -> this is a genuinely new interface, not a rename. Add it.
       const sourceHasSimilarByName = interfaceDeclaration.getSourceFile().getInterface(similarInterface.getName()) !== undefined;
@@ -323,6 +443,7 @@ export function addMissingInterface(type: TypeNode, currentIteration = 0): void 
 
     // Add the interface to the target source file
     const newInterface = currentTargetSourceFile.addInterface(interfaceDeclaration.getStructure());
+    remapNewInterfaceExtends(newInterface, interfaceDeclaration);
     orderMembers(newInterface);
 
     // Recursively process referenced interfaces

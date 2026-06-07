@@ -373,7 +373,7 @@ export interface AppData {
 
   hAppDetails: Unregisterable;
 
-  listeners: never;
+  listeners: unknown[];
 }
 
 export interface AppDetailsSpotlight {

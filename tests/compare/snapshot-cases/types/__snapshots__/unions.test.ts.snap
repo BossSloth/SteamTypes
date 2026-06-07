@@ -1,5 +1,35 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Union Renames > collapsed interface array - interface misses optional - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -9,7 +9,7 @@
+
+  name: string;
+
+  name_normalized?: string;
+
+-  use_count: number;
++  use_count?: number;
+}"
+`;
+
+exports[`Comparator Union Renames > collapsed interface array - interface misses property - renamed 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -8,6 +8,8 @@
+  last_used?: number;
+
+  name: string;
+
+  name_normalized?: string;
++
++  use_count?: number;
+}"
+`;
+
 exports[`Comparator Union Renames > inverse union type with interface - renamed 1`] = `
 "===================================================================
 --- a/target.ts
@@ -72,6 +102,36 @@ export interface BRenamed {
 +}"
 `;
 
+exports[`Comparator Unions > collapsed interface array - interface misses optional 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -9,7 +9,7 @@
+
+  name: string;
+
+  name_normalized?: string;
+
+-  use_count: number;
++  use_count?: number;
+}"
+`;
+
+exports[`Comparator Unions > collapsed interface array - interface misses property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -8,6 +8,8 @@
+  last_used?: number;
+
+  name: string;
+
+  name_normalized?: string;
++
++  use_count?: number;
+}"
+`;
+
 exports[`Comparator Unions > inverse union type with interface 1`] = `
 "===================================================================
 --- a/target.ts
@@ -120,6 +180,17 @@ exports[`Comparator Unions > simple union type mismatch 1`] = `
 export interface SimpleInterface {
 -  existingProp: string;
 +  existingProp: number | string;
+}"
+`;
+
+exports[`Comparator Unions > target array against union of array and non-array 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Container {
+-  data: string[];
++  data: (string[] | number);
 }"
 `;
 

@@ -366,7 +366,7 @@ export interface SteamAppOverview {
 
   ps5_controller_support: AppControllerSupportLevel;
 
-  remote_per_client_data: never;
+  remote_per_client_data: unknown[];
 
   review_percentage: number;
 

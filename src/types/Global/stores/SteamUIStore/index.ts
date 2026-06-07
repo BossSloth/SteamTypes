@@ -234,7 +234,7 @@ export interface SteamUIStore {
 
   m_navigationSource: NavigationSource;
 
-  m_remoteClientStreams: never;
+  m_remoteClientStreams: unknown[];
 
   m_runningAppIDs: number[];
 

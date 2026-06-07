@@ -1,5 +1,5 @@
 import { ObservableMap, ObservableSet } from 'mobx';
-import { ObservableValue } from 'shared/interfaces';
+import { Callbacks, ObservableValue } from 'shared/interfaces';
 import { ProtobufClass, ProtobufInterface } from 'shared/protobuf';
 import { ClientNotificationType, NotificationTargets } from './NotificationTargets';
 
@@ -238,7 +238,7 @@ export interface NotificationStore {
 
   m_bTestNotifications: boolean;
 
-  m_cbkNotificationTray: CbkNotificationTray;
+  m_cbkNotificationTray: Callbacks;
 
   m_hPendingToastTimer: undefined;
 
@@ -267,18 +267,6 @@ export interface NotificationStore {
   m_setContextsRenderingToasts: ObservableSet<unknown>;
 
   m_valueCurrentToast: ObservableValue<null>;
-}
-
-export interface CbkNotificationTray {
-  ClearAllCallbacks(): void;
-
-  CountRegistered(): unknown;
-
-  Dispatch(...e: unknown[]): void;
-
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: unknown[];
 }
 
 export interface LastSystemUpdateNotification {

@@ -27,6 +27,17 @@ export function compareTypes(targetNode: TypeNode, sourceNode: TypeNode): boolea
     return compareTypes(targetNode, sourceNode.getTypeNode());
   }
 
+  // Collapse duplicate members in a source union. Identical members are redundant in a union,
+  // so after merging similar interfaces into one (turning `(A | B)` into `(A | A)`) the union
+  // is reduced to its distinct members. This keeps the comparison from treating the collapsed
+  // union as a mismatch and wrongly rewriting the target (e.g. stripping a `| undefined`).
+  if (Node.isUnionTypeNode(sourceNode)) {
+    const collapsed = collapseDuplicateUnionMembers(sourceNode);
+    if (collapsed !== undefined) {
+      return compareTypes(targetNode, collapsed);
+    }
+  }
+
   if (Node.isUnionTypeNode(targetNode)) {
     return handleTargetUnion(targetNode, sourceNode);
   } else if (Node.isLiteralTypeNode(targetNode)) {
@@ -241,20 +252,30 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
   return true;
 }
 
+/**
+ * Removes duplicate (textually identical) members from a source union. Returns the collapsed
+ * type node when duplicates were present (the single remaining member, or a rewritten union),
+ * or `undefined` when every member is already distinct.
+ */
+function collapseDuplicateUnionMembers(sourceUnion: UnionTypeNode): TypeNode | undefined {
+  const memberNodes = sourceUnion.getTypeNodes();
+  const uniqueNodes = memberNodes.filter((node, index) =>
+    memberNodes.findIndex(other => other.getText() === node.getText()) === index);
+
+  if (uniqueNodes.length === memberNodes.length) {
+    return undefined;
+  }
+
+  if (uniqueNodes.length === 1) {
+    return uniqueNodes[0];
+  }
+
+  return sourceUnion.replaceWithText(uniqueNodes.map(node => node.getText()).join(' | ')) as TypeNode;
+}
+
 function handleSourceUnion(targetNode: TypeNode, sourceUnion: UnionTypeNode): boolean {
-  // Filter out duplicates with same text
-  const sourceMemberNames = new Set<string>();
-  const uniqueSourceMembers = sourceUnion.getTypeNodes().filter((sourceMember) => {
-    const name = sourceMember.getText();
-    if (sourceMemberNames.has(name)) {
-      return false;
-    }
-    sourceMemberNames.add(name);
-
-    return true;
-  });
-
-  const isCompatible = uniqueSourceMembers.every(sourceMember => compareTypes(targetNode, sourceMember));
+  // Duplicate members are already collapsed by collapseDuplicateUnionMembers before this point.
+  const isCompatible = sourceUnion.getTypeNodes().every(sourceMember => compareTypes(targetNode, sourceMember));
 
   if (!isCompatible) {
     targetNode.replaceWithText(getText(sourceUnion));

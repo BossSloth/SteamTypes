@@ -2,6 +2,7 @@ import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { SteamID } from 'shared/steamid';
 import { Unregisterable } from 'SteamClient/shared';
+import { Callbacks } from 'types/shared/interfaces';
 import { GamingDeviceType } from 'types/SteamClient/System';
 import { ChatStore } from './ChatStore/ChatStore';
 
@@ -446,9 +447,9 @@ export interface FriendsUIFriendStore {
 
   m_nMissingPersonaStateRetryCount: number;
 
-  m_rgPersonaStateChangeCallbacks: RgPersonaStateChangeCallbacks;
+  m_rgPersonaStateChangeCallbacks: Callbacks;
 
-  m_rgPlayerGameChangedCallbacks: RgPersonaStateChangeCallbacks;
+  m_rgPlayerGameChangedCallbacks: Callbacks;
 
   m_self: SteamFriend;
 
@@ -889,18 +890,6 @@ export interface FriendStorePrefs {
   strNonFriendsAllowedToMsg: string;
 }
 
-export interface RgPersonaStateChangeCallbacks {
-  ClearAllCallbacks(): void;
-
-  CountRegistered(): unknown;
-
-  Dispatch(...e: unknown[]): void;
-
-  Register(e: unknown): { Unregister: () => void; };
-
-  m_vecCallbacks: never;
-}
-
 export interface TokenBucketChangeStatus {
   AddTokens(): void;
 
@@ -1234,7 +1223,7 @@ export interface EquippedProfileItems {
 }
 
 export interface ColorProfileAvatar {
-  profile_colors: never;
+  profile_colors: unknown[];
 }
 
 export interface ProfileAvatar {
@@ -1264,7 +1253,7 @@ export interface ProfileAvatar {
 
   name: string;
 
-  profile_colors: never;
+  profile_colors: unknown[];
 }
 
 export interface CommunityData {

@@ -446,6 +446,179 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  // Regression: a renamed shared base (matched via @compareOriginalName) where the
+  // source has an EXTRA derived union member with no target counterpart. That extra
+  // source derived shares all the base members, so it must NOT be matched to the
+  // target base (which would pollute the union, make the base extend itself, and
+  // inline every base member into the sibling derived interfaces). It should instead
+  // be added as a new interface, leaving the existing base/derived hierarchy intact.
+  'renamed shared base with extra source derived union member': {
+    interfaceName: 'Root',
+    target: dedent/* ts */`
+      export interface Root {
+        sources: (StandardSource | MouseSource | TouchSource)[];
+      }
+
+      /**
+       * @compareOriginalName SourceBase
+       */
+      export interface BaseSource {
+        GetSourceType(): unknown;
+
+        m_bDetected: boolean;
+
+        m_nIndex: number;
+
+        NonVRWindowInstance: number;
+      }
+
+      export interface StandardSource extends BaseSource {
+        GetController(e: unknown): unknown;
+
+        m_rgControllers: number;
+      }
+
+      export interface MouseSource extends BaseSource {
+        OnMouseDown(e: unknown): void;
+
+        m_bFirstMouseUpdate: boolean;
+      }
+
+      export interface TouchSource extends BaseSource {
+        OnTouchEnd(e: unknown): void;
+      }`,
+    source: dedent/* ts */`
+      export interface Root {
+        sources: (RgSource | RgSource2 | RgSource3 | RgSource4)[];
+      }
+
+      export interface SourceBase {
+        GetSourceType(): unknown;
+        m_bDetected: boolean;
+        m_nIndex: number;
+      }
+
+      export interface RgSource extends SourceBase {
+        GetController(e: unknown): unknown;
+        m_rgControllers: number;
+      }
+
+      export interface RgSource2 extends SourceBase {
+        OnMouseDown(e: unknown): void;
+        m_bFirstMouseUpdate: boolean;
+      }
+
+      export interface RgSource3 extends SourceBase {
+        OnTouchEnd(e: unknown): void;
+      }
+
+      export interface RgSource4 extends SourceBase {
+        OnVROverlayInputFocusChanged(e: unknown): void;
+        EnableGamepadInVR: boolean;
+        NonVRWindowInstance: number;
+      }`,
+  },
+
+  // An extra source derived union member with no target counterpart, whose base
+  // already exists in the target under the same name. The added interface keeps its
+  // `extends` clause pointing at the existing target base (no remap needed).
+  'extra source derived union member with base present in target': {
+    interfaceName: 'Root',
+    target: dedent/* ts */`
+      export interface Root {
+        items: (ItemA | ItemB)[];
+      }
+
+      export interface ItemBase {
+        shared: number;
+      }
+
+      export interface ItemA extends ItemBase {
+        a: string;
+
+        aa: string;
+      }
+
+      export interface ItemB extends ItemBase {
+        b: string;
+
+        bb: string;
+      }`,
+    source: dedent/* ts */`
+      export interface Root {
+        items: (ItemA | ItemB | ItemC)[];
+      }
+
+      export interface ItemBase {
+        shared: number;
+      }
+
+      export interface ItemA extends ItemBase {
+        a: string;
+        aa: string;
+      }
+
+      export interface ItemB extends ItemBase {
+        b: string;
+        bb: string;
+      }
+
+      export interface ItemC extends ItemBase {
+        c: string;
+        cc: string;
+        ccc: string;
+      }`,
+  },
+
+  // An extra source derived union member whose base only exists in the source and has
+  // no similar target interface. The added interface keeps the source base name (which
+  // is dangling, matching the existing "no matching target interface" behaviour).
+  'extra source derived union member with base absent from target': {
+    interfaceName: 'Root',
+    target: dedent/* ts */`
+      export interface Root {
+        items: (ItemA | ItemB)[];
+      }
+
+      export interface ItemBase {
+        shared: number;
+      }
+
+      export interface ItemA extends ItemBase {
+        a: string;
+      }
+
+      export interface ItemB extends ItemBase {
+        b: string;
+      }`,
+    source: dedent/* ts */`
+      export interface Root {
+        items: (ItemA | ItemB | ItemC)[];
+      }
+
+      export interface ItemBase {
+        shared: number;
+      }
+
+      export interface ItemA extends ItemBase {
+        a: string;
+      }
+
+      export interface ItemB extends ItemBase {
+        b: string;
+      }
+
+      export interface MysteryBase {
+        mysteryOne: string;
+        mysteryTwo: string;
+        mysteryThree: string;
+      }
+
+      export interface ItemC extends MysteryBase {
+        c: string;
+      }`,
+  },
+
   // The source extends a base interface that has no equivalent (or similar)
   // interface in the target, so no rename happens and the base is not queued.
   // The derived interface is large enough that the base stays below the

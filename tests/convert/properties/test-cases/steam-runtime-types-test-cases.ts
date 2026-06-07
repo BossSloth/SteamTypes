@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // Fake objects that satisfy duck-type checks for Steam runtime types.
 
 const fakeProtobufInstance = {
@@ -32,10 +33,19 @@ const cmContainer = {
   m_CM: {},
 };
 
+const myFakeCallbacks = {
+  ClearAllCallbacks: () => {},
+  CountRegistered: () => {},
+  Dispatch: () => {},
+  Register: () => {},
+  m_vecCallbacks: [],
+};
+
 export const steamRuntimeTypesTests = {
   protoMessage: fakeProtobufInstance,
   steamID: fakeSteamID,
   queryObserver: fakeQueryObserver,
   cmObject: fakeConnectionManager,
   cmContainer: cmContainer,
+  myFakeCallbacks: myFakeCallbacks,
 };

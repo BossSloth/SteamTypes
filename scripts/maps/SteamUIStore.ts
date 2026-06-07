@@ -6,7 +6,7 @@ export const SteamUIStoreMaps: InterfaceMap[] = [
   GMap('stores/SteamUIStore/TextFilterStore', 'TextFilterStore', /* ts */`SteamUIStore.TextFilterStore`, { ignoredProperties: ['messageHandlers', 'm_messageHandlers'] }),
   GMap('stores/SteamUIStore/GamepadUIAudioStore', 'GamepadUIAudioStore', /* ts */`SteamUIStore.m_GamepadUIAudioStore`),
   GMap('stores/SteamUIStore/GamepadUIAudioStore', 'SteamAudioPlaybackObj', /* ts */`SteamUIStore.GamepadUIAudio.PlayAudioURL("/sounds/test")`),
-  GMap('stores/SteamUIStore/GamepadNavigationManager', 'GamepadNavigationManager', /* ts */`SteamUIStore.m_GamepadNavigationManager`),
+  GMap('stores/SteamUIStore/GamepadNavigationManager', 'GamepadNavigationManager', /* ts */`SteamUIStore.m_GamepadNavigationManager`, { ignoredProperties: ['NonVRWindowInstance'] }),
 
   // WindowStore
   GMap('stores/SteamUIStore/WindowStore/WindowStore', 'WindowStore', /* ts */`SteamUIStore.WindowStore`),

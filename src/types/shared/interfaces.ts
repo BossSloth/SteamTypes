@@ -155,7 +155,7 @@ export interface MappedObservable<TSource, TMapped> {
   Value: TMapped;
 }
 
-export interface Callbacks<T extends (...args: any) => unknown = () => void> {
+export interface Callbacks<T extends (...args: any) => unknown = (...args: any) => unknown> {
   /**
    * Removes all registered callbacks in {@link m_vecCallbacks}.
    */

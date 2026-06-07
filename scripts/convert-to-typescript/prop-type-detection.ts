@@ -317,6 +317,12 @@ function getPrimitiveObjectTypes(obj: Record<string, unknown>, addImport = true)
     return 'SteamID';
   }
 
+  if (isCallbacks(obj)) {
+    if (addImport) context.addImport('shared/interfaces', 'Callbacks');
+
+    return 'Callbacks';
+  }
+
   return null;
 }
 
@@ -427,4 +433,12 @@ function findProtobufClassInObject(obj: Record<string, unknown>): { className: s
   }
 
   return null;
+}
+
+function isCallbacks(obj: object): boolean {
+  return 'ClearAllCallbacks' in obj
+    && 'CountRegistered' in obj
+    && 'Dispatch' in obj
+    && 'Register' in obj
+    && 'm_vecCallbacks' in obj;
 }
