@@ -17,6 +17,7 @@ export default defineConfig(
     'coverage/*',
     'node_modules/*',
     '**/*.js',
+    'eslint.config.mjs',
   ]),
   {
     languageOptions: {
@@ -197,10 +198,6 @@ export default defineConfig(
           optionalDependencies: false,
           peerDependencies: true,
           includeTypes: true,
-          whitelist: [
-            'history', // Has been added by @types/history but seems to not be detected
-            '@types/history',
-          ],
         },
       ],
     },
@@ -251,6 +248,7 @@ export default defineConfig(
     rules: {
       'customRules/min-enum-members': 'off',
       'perfectionist/sort-interfaces': 'off',
+      'jsdoc/no-undefined-types': 'off',
     },
   },
 );
