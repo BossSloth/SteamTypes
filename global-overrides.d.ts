@@ -4,11 +4,11 @@ import type {
   AppStore,
   LocalizationManager,
   NavigationStore,
+  NotificationStore,
   SteamClient,
   SteamUIStore,
 } from 'steam-types';
 // TODO: I don't know if the import from steam-types now fully works or if we should import from dist so i will leave both here for now.
-import { NotificationStore } from './dist/types/Global/stores/NotificationStore';
 
 declare global {
   let App: App;
