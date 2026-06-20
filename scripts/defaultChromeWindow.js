@@ -290,6 +290,7 @@ const unwantedWindowProperties = [
   "YT",
   "YTConfig",
   "ttPolicy",
+  'hltbDebug'
 ];
 
 const windowProperties = [

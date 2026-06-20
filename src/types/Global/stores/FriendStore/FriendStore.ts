@@ -656,7 +656,7 @@ export interface Persona {
    * @currentValue 0
    * @currentValue 1
    */
-  m_ePersonaState: EPersonaState;
+  m_ePersonaState: UserPersonaState;
 
   m_game_lobby_id: string;
 
@@ -885,7 +885,7 @@ export interface FriendStorePrefs {
    * This value is an enum
    * @currentValue 1
    */
-  ePersonaState: EPersonaState;
+  ePersonaState: UserPersonaState;
 
   strNonFriendsAllowedToMsg: string;
 }
@@ -1314,8 +1314,11 @@ export enum EFriendRelationship {
 export enum UserPersonaState {
   Offline = 0,
   Online = 1,
+  Busy = 2,
   Away = 3,
   Snooze = 4,
+  LookingToTrade = 5,
+  LookingToPlay = 6,
   Invisible = 7,
 }
 
@@ -1323,14 +1326,6 @@ export enum UserPersonaState {
 export enum EUserPersonaStateParental {
   EUserPersonaStateParental0 = 0,
   EUserPersonaStateParental1 = 1,
-}
-
-/** @generated */
-export enum EPersonaState {
-  EPersonaState0 = 0,
-  EPersonaState1 = 1,
-  EPersonaState3 = 3,
-  EPersonaState4 = 4,
 }
 
 /** @generated */
