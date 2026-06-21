@@ -10,12 +10,18 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable perfectionist/sort-interfaces */
 /* eslint-disable max-classes-per-file */
-import { getProtobufClassName, getType, isProtobufClass } from '@Convert/prop-type-detection';
+import { getProtobufClassName, isProtobufClass } from '@Convert/detection/protobuf-helpers';
+import { TypeDetector } from '@Convert/detection/TypeDetector';
+import { ConversionSession } from '@Convert/session/ConversionSession';
 import { InterfaceType, PrimitiveType, Type } from '@Convert/Type';
-import { context, initContext } from '@Convert/utils';
 import Long from 'long';
 import { computed, observable } from 'mobx';
+import { Project } from 'ts-morph';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const project = new Project({ useInMemoryFileSystem: true });
+let session: ConversionSession;
+let detector: TypeDetector;
 
 // ---------------------------------------------------------------------------
 // Data-provider plumbing
@@ -57,7 +63,7 @@ interface TypeCase {
 function runCase(caseData: TypeCase): Type {
   caseData.setup?.();
   try {
-    return getType(caseData.makeValue(), caseData.path ?? 'root.prop', caseData.storeClassName ?? false, caseData.addImports ?? true);
+    return detector.detect(caseData.makeValue(), caseData.path ?? 'root.prop', caseData.storeClassName ?? false, caseData.addImports ?? true);
   } finally {
     caseData.teardown?.();
   }
@@ -65,13 +71,13 @@ function runCase(caseData: TypeCase): Type {
 
 function assertImports(expected: ExpectedImport[]): void {
   if (expected.length === 0) {
-    expect(context.imports.size, 'expected no imports').toBe(0);
+    expect(session.imports.size, 'expected no imports').toBe(0);
 
     return;
   }
 
   for (const imp of expected) {
-    const entry = context.imports.get(imp.module);
+    const entry = session.imports.get(imp.module);
     expect(entry, `expected import of module '${imp.module}'`).toBeDefined();
     for (const t of imp.types) {
       expect(entry!.types.has(t), `expected '${t}' in imports for '${imp.module}'`).toBe(true);
@@ -84,13 +90,13 @@ function assertImports(expected: ExpectedImport[]): void {
 
 function assertInterfaces(expected: string[]): void {
   if (expected.length === 0) {
-    expect(context.interfacesToProcess.size, 'expected no interfaces').toBe(0);
+    expect(session.interfaceRepository.queue.size, 'expected no interfaces').toBe(0);
 
     return;
   }
 
   for (const name of expected) {
-    expect(context.interfacesToProcess.has(name), `expected interface '${name}' queued`).toBe(true);
+    expect(session.interfaceRepository.queue.has(name), `expected interface '${name}' queued`).toBe(true);
   }
 }
 
@@ -398,7 +404,7 @@ const interfaceGenerationCases: TypeCase[] = [
     expected: 'MsgFoo2',
     expectedInterfaces: ['MsgFoo2'],
     setup: () => {
-      context.interfaceNameCounter.set('MsgFoo', 1);
+      session.names.counter.set('MsgFoo', 1);
     },
   },
   {
@@ -470,7 +476,8 @@ const observableValueCases: TypeCase[] = [
 
 describe('getType (prop-type-detection)', () => {
   beforeEach(() => {
-    initContext('Root');
+    session = new ConversionSession([], project);
+    detector = new TypeDetector(session);
   });
 
   afterEach(() => {
@@ -519,9 +526,9 @@ describe('getType (prop-type-detection)', () => {
   describe('circular references', () => {
     it('returns an InterfaceType pointing at the already-registered name', () => {
       const obj: Record<string, unknown> = { a: 1 };
-      context.processedObjectPaths.set(obj, 'Existing');
+      session.circular.register(obj, 'Existing');
 
-      const result = getType(obj, 'root.whatever');
+      const result = detector.detect(obj, 'root.whatever');
 
       expect(result).toBeInstanceOf(InterfaceType);
       expect(result.toString()).toBe('Existing');
@@ -530,21 +537,21 @@ describe('getType (prop-type-detection)', () => {
 
   describe('interface name counter', () => {
     it('appends an incrementing suffix when the same interface name is seen multiple times', () => {
-      const first = getType({ a: 1 }, 'root.item');
-      const second = getType({ b: 2 }, 'root.item');
-      const third = getType({ c: 3 }, 'root.item');
+      const first = detector.detect({ a: 1 }, 'root.item');
+      const second = detector.detect({ b: 2 }, 'root.item');
+      const third = detector.detect({ c: 3 }, 'root.item');
 
       expect(first.toString()).toBe('Item');
       expect(second.toString()).toBe('Item2');
       expect(third.toString()).toBe('Item3');
-      expect(context.interfaceNameCounter.get('Item')).toBe(3);
+      expect(session.names.counter.get('Item')).toBe(3);
     });
   });
 
   describe('function type', () => {
     it('returns the unknown placeholder regardless of arity', () => {
-      expect(getType(() => 0, 'root.fn').toString()).toBe('unknown');
-      expect(getType((_a: number, _b: string) => 0, 'root.fn').toString()).toBe('unknown');
+      expect(detector.detect(() => 0, 'root.fn').toString()).toBe('unknown');
+      expect(detector.detect((_a: number, _b: string) => 0, 'root.fn').toString()).toBe('unknown');
     });
   });
 

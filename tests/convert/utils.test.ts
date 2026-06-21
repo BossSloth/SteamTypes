@@ -1,6 +1,7 @@
+import { NameAllocator } from '@Convert/session/NameAllocator';
 import { describe, expect, it } from 'vitest';
 import '../../scripts/convert-to-typescript';
-import { formatInterfaceName, formatPropertyName, getProperties } from '../../scripts/convert-to-typescript/utils';
+import { formatPropertyName, getProperties } from '../../scripts/convert-to-typescript/utils';
 
 describe('utils.getProperties', () => {
   it('returns an empty array for null and non-objects', () => {
@@ -42,14 +43,16 @@ describe('utils.formatPropertyName', () => {
   });
 });
 
+const nameAllocator = new NameAllocator();
+
 describe('utils.formatInterfaceName', () => {
   it('strips special characters and leading digits', () => {
-    expect(formatInterfaceName('My-Type')).toBe('MyType');
-    expect(formatInterfaceName('123Name')).toBe('Name');
+    expect(nameAllocator.formatInterfaceName('My-Type')).toBe('MyType');
+    expect(nameAllocator.formatInterfaceName('123Name')).toBe('Name');
   });
 
   it('falls back to InvalidName when the result is empty', () => {
-    expect(formatInterfaceName('123')).toBe('InvalidName');
-    expect(formatInterfaceName('--')).toBe('InvalidName');
+    expect(nameAllocator.formatInterfaceName('123')).toBe('InvalidName');
+    expect(nameAllocator.formatInterfaceName('--')).toBe('InvalidName');
   });
 });

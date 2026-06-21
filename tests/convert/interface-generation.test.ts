@@ -1,16 +1,16 @@
-import { createInterfaceDefinition } from '@Convert/interface-generation';
-import { context, initContext } from '@Convert/utils';
+import { InterfaceBuilder } from '@Convert/building/InterfaceBuilder';
+import { ConversionSession } from '@Convert/session/ConversionSession';
 import { Project } from 'ts-morph';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('createInterfaceDefinition', () => {
-  let project: Project;
+  let session: ConversionSession;
+  let builder: InterfaceBuilder;
 
   beforeEach(() => {
-    project = new Project({ useInMemoryFileSystem: true });
-    initContext('TestInterface');
-    // Reset the order counter by reimporting or by clearing the context
-    context.interfaceDefinitions.clear();
+    const project = new Project({ useInMemoryFileSystem: true });
+    session = new ConversionSession([], project);
+    builder = new InterfaceBuilder(session);
   });
 
   it('logs an error and returns early when duplicate interface name is provided', () => {
@@ -22,18 +22,18 @@ describe('createInterfaceDefinition', () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
 
     // First call should succeed
-    createInterfaceDefinition(interfaceName, interfaceToProcess, project);
-    expect(context.interfaceDefinitions.has(interfaceName)).toBe(true);
+    builder.createInterfaceDefinition(interfaceName, interfaceToProcess);
+    expect(session.interfaceRepository.definitions.has(interfaceName)).toBe(true);
     expect(consoleErrorSpy).not.toHaveBeenCalled();
 
     // Second call with the same name should log error and not create duplicate
-    createInterfaceDefinition(interfaceName, interfaceToProcess, project);
+    builder.createInterfaceDefinition(interfaceName, interfaceToProcess);
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       `❌ Error: duplicate interface name?: ${interfaceName}`,
       interfaceToProcess.obj,
     );
     // Should still only have one entry
-    expect(context.interfaceDefinitions.size).toBe(1);
+    expect(session.interfaceRepository.definitions.size).toBe(1);
 
     consoleErrorSpy.mockRestore();
   });
@@ -47,12 +47,12 @@ describe('createInterfaceDefinition', () => {
 
     const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
 
-    createInterfaceDefinition(interfaceName1, interfaceToProcess, project);
-    createInterfaceDefinition(interfaceName2, interfaceToProcess, project);
+    builder.createInterfaceDefinition(interfaceName1, interfaceToProcess);
+    builder.createInterfaceDefinition(interfaceName2, interfaceToProcess);
 
-    expect(context.interfaceDefinitions.has(interfaceName1)).toBe(true);
-    expect(context.interfaceDefinitions.has(interfaceName2)).toBe(true);
-    expect(context.interfaceDefinitions.size).toBe(2);
+    expect(session.interfaceRepository.definitions.has(interfaceName1)).toBe(true);
+    expect(session.interfaceRepository.definitions.has(interfaceName2)).toBe(true);
+    expect(session.interfaceRepository.definitions.size).toBe(2);
     expect(consoleErrorSpy).not.toHaveBeenCalled();
 
     consoleErrorSpy.mockRestore();

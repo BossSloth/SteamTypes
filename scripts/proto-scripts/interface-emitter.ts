@@ -1,5 +1,5 @@
 import protobuf from 'protobufjs';
-import { propertyStringSorter } from '../convert-to-typescript/interface-generation';
+import { propertyStringSorter } from '../convert-to-typescript/utils';
 import { getCtx } from './conversion-context';
 import { generateFieldComment } from './field-comments';
 import { convertProtoTypeToTS, getFullTypeName } from './type-mapping';

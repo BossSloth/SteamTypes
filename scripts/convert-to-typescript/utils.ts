@@ -1,36 +1,6 @@
-import './global-utils';
-import { ConversionContext, defaultProtoProps } from './types';
+import { defaultProtoProps } from './types';
 
-export const context: ConversionContext = {
-  addImport(moduleName: string, type: string, defaultImport = false): void {
-    if (!context.imports.has(moduleName)) {
-      context.imports.set(moduleName, { types: new Set<string>(), defaultImport });
-    }
-    context.imports.get(moduleName)?.types.add(type);
-  },
-
-  interfacesToProcess: new Map(),
-  interfaceDefinitions: new Map(),
-  imports: new Map(),
-  processedObjectPaths: new Map(),
-  mainInterfaceName: '',
-  functionsToProcess: new Map(),
-  interfaceNameCounter: new Map(),
-  ignoredProperties: new Set(),
-};
-
-export function initContext(mainInterfaceName: string, ignoredProperties: string[] = []): void {
-  context.interfacesToProcess = new Map();
-  context.interfaceDefinitions = new Map();
-  context.imports = new Map();
-  context.processedObjectPaths = new Map();
-  context.mainInterfaceName = mainInterfaceName;
-  context.functionsToProcess = new Map();
-  context.interfaceNameCounter = new Map();
-  context.ignoredProperties = new Set(ignoredProperties);
-}
-
-const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d+(?=[^\d])/u;
+export const specialCharactersRegex = /[\s\-.@*#%^\p{Extended_Pictographic}/]|^\d+(?=[^\d])/u;
 /**
  * Formats a property name to handle special characters
  */
@@ -43,17 +13,32 @@ export function formatPropertyName(propName: string): string {
   return propName;
 }
 
-export function formatInterfaceName(interfaceName: string): string {
-  let trimmed = interfaceName.replaceAll(new RegExp(specialCharactersRegex.source, 'gu'), '');
-  // Recursively remove numbers
-  while (trimmed.match(/^\d/)) {
-    trimmed = trimmed.replace(/^\d/g, '');
-  }
-  if (trimmed.length === 0) {
-    return 'InvalidName';
+const singleQuote = "'".charCodeAt(0);
+const space = ' '.charCodeAt(0);
+
+export function propertyStringSorter(a: string, b: string): number {
+  a = a.toLowerCase();
+  b = b.toLowerCase();
+  let i = 0;
+  let j = 0;
+  const lenA = a.length;
+  const lenB = b.length;
+
+  while (i < lenA && j < lenB) {
+    let charA = a.charCodeAt(i);
+    let charB = b.charCodeAt(j);
+
+    // Skip single quotes and spaces
+    while (charA === singleQuote || charA === space) charA = a.charCodeAt(++i);
+    while (charB === singleQuote || charB === space) charB = b.charCodeAt(++j);
+
+    if (charA !== charB) return charA - charB;
+
+    i++;
+    j++;
   }
 
-  return trimmed;
+  return (lenA - i) - (lenB - j);
 }
 
 /**

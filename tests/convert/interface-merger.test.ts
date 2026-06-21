@@ -1,7 +1,7 @@
+import { InterfaceMerger } from '@Convert/merging/InterfaceMerger';
+import { PrimitiveType, Type } from '@Convert/Type';
+import { InterfaceProperty, TypeScriptInterface } from '@Convert/types';
 import { describe, expect, it } from 'vitest';
-import { mergeInterfaces } from '../../scripts/convert-to-typescript/interface-merger';
-import { PrimitiveType, Type } from '../../scripts/convert-to-typescript/Type';
-import { InterfaceProperty, TypeScriptInterface } from '../../scripts/convert-to-typescript/types';
 
 interface PropSpec {
   jsDoc?: string[];
@@ -57,7 +57,7 @@ function defineTests(suiteName: string, cases: TestCase[]) {
     cases.forEach((testCase) => {
       it(testCase.name, () => {
         const interfaces = buildInterfaces(testCase.interfaces);
-        const merged = mergeInterfaces(interfaces);
+        const merged = new InterfaceMerger().merge(interfaces);
         expect(merged).toMatchSnapshot();
       });
     });
