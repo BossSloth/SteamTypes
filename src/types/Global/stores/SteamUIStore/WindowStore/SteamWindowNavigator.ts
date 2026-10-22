@@ -179,9 +179,7 @@ export interface Media {
 interface MediaManagerFilter {
   listSource:
     | { type: 'app'; gameid: string }
-    // eslint-disable-next-line @stylistic/indent-binary-ops
     | { type: 'clip' | 'recording' | 'screenshot'; id?: string; summary?: unknown }
-    // eslint-disable-next-line @stylistic/indent-binary-ops
     | { type: 'recents' };
 
   mediaType?: 'all' | 'clip' | 'recording' | 'screenshot';

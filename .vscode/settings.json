@@ -1,0 +1,9 @@
+{
+  "bun.test.enable": false,
+  "oxc.enable": true,
+  "oxc.enable.oxfmt": true,
+  "oxc.enable.oxlint": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  }
+}

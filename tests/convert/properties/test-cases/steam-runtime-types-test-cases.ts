@@ -22,9 +22,9 @@ const fakeQueryObserver = {
 const fakeConnectionManager = { connected: true };
 
 if (typeof globalThis.window === 'undefined') {
-  (globalThis as unknown as { window: { cm: unknown; }; }).window = { cm: fakeConnectionManager };
+  (globalThis as unknown as { window: { cm: unknown } }).window = { cm: fakeConnectionManager };
 } else {
-  (globalThis as unknown as { window: { cm: unknown; }; }).window.cm = fakeConnectionManager;
+  (globalThis as unknown as { window: { cm: unknown } }).window.cm = fakeConnectionManager;
 }
 
 const cmContainer = {

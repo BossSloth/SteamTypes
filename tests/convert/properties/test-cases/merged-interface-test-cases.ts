@@ -275,7 +275,7 @@ const arrayTypeMergedInterfaceTests = {
 class TestClass {
   idex: number;
   name: string;
-  testDetails: { name: string; };
+  testDetails: { name: string };
   index: number;
   status: string;
   createdAt: Date;

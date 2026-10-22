@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/array-bracket-newline */
 /* eslint-disable @stylistic/quotes */
 import { IMap, InterfaceMap } from '.';
 
