@@ -97,7 +97,9 @@ export function generateTypeScriptDefinitions(config: GenerateConfig = {}): void
       const progressPadding = files.length.toString().length;
 
       processedCount++;
-      const progress = chalk.yellow(`[${processedCount.toString().padStart(progressPadding, ' ')}/${files.length.toString().padStart(progressPadding, ' ')}]`);
+      const progress = chalk.yellow(
+        `[${processedCount.toString().padStart(progressPadding, ' ')}/${files.length.toString().padStart(progressPadding, ' ')}]`,
+      );
       log(chalk.green(`📦 ${progress} Generated: ${chalk.white(outputFileName)} ${chalk.gray(`(${fileSizeKB.toFixed(1)} KB)`)}`));
     }
 

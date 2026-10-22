@@ -74,13 +74,13 @@ export interface CSteamOSManagerState {
   tdp_limit_min?: number;
 }
 
-export interface CSteamOSManager_GetState_Request { }
+export interface CSteamOSManager_GetState_Request {}
 
 export interface CSteamOSManager_GetState_Response {
   state?: CSteamOSManagerState;
 }
 
-export interface CSteamOSManager_StateChanged_Notification { }
+export interface CSteamOSManager_StateChanged_Notification {}
 
 export interface CSteamOSManager_IsTelemetryHelperAvailable_Request {
   etype?: SLSHelper;
@@ -90,13 +90,13 @@ export interface CSteamOSManager_IsTelemetryHelperAvailable_Response {
   available?: boolean;
 }
 
-export interface CSteamOSManager_OptOutOfSideloadedClient_Request { }
+export interface CSteamOSManager_OptOutOfSideloadedClient_Request {}
 
-export interface CSteamOSManager_OptOutOfSideloadedClient_Response { }
+export interface CSteamOSManager_OptOutOfSideloadedClient_Response {}
 
-export interface CSteamOSManager_ApplyMandatoryUpdate_Request { }
+export interface CSteamOSManager_ApplyMandatoryUpdate_Request {}
 
-export interface CSteamOSManager_ApplyMandatoryUpdate_Response { }
+export interface CSteamOSManager_ApplyMandatoryUpdate_Response {}
 
 export interface CSteamOSManager_FactoryReset_Request {
   reset_os?: boolean;
@@ -104,11 +104,11 @@ export interface CSteamOSManager_FactoryReset_Request {
   reset_user_data?: boolean;
 }
 
-export interface CSteamOSManager_FactoryReset_Response { }
+export interface CSteamOSManager_FactoryReset_Response {}
 
-export interface CSteamOSManager_RefreshScreenReaderAutoLocale_Request { }
+export interface CSteamOSManager_RefreshScreenReaderAutoLocale_Request {}
 
-export interface CSteamOSManager_RefreshScreenReaderAutoLocale_Response { }
+export interface CSteamOSManager_RefreshScreenReaderAutoLocale_Response {}
 
 export interface CSteamOS_SetUserPassword_Request {
   current_password?: string;
@@ -116,9 +116,9 @@ export interface CSteamOS_SetUserPassword_Request {
   new_password?: string;
 }
 
-export interface CSteamOS_SetUserPassword_Response { }
+export interface CSteamOS_SetUserPassword_Response {}
 
-export interface CSteamOS_GetUserHasPassword_Request { }
+export interface CSteamOS_GetUserHasPassword_Request {}
 
 export interface CSteamOS_GetUserHasPassword_Response {
   has_password?: boolean;
@@ -128,17 +128,17 @@ export interface CSteamOSManager_PrepareFactoryImageTest_Request {
   factory_reset?: boolean;
 }
 
-export interface CSteamOSManager_PrepareFactoryImageTest_Response { }
+export interface CSteamOSManager_PrepareFactoryImageTest_Response {}
 
-export interface CSteamOSManager_SwitchToDesktop_Request { }
+export interface CSteamOSManager_SwitchToDesktop_Request {}
 
-export interface CSteamOSManager_SwitchToDesktop_Response { }
+export interface CSteamOSManager_SwitchToDesktop_Response {}
 
 export interface CSteamOSManager_SetDefaultDesktopSession_Request {
   session_name?: string;
 }
 
-export interface CSteamOSManager_SetDefaultDesktopSession_Response { }
+export interface CSteamOSManager_SetDefaultDesktopSession_Response {}
 
 export interface CSteamOSSLSPlugin {
   etype?: SLSHelper;
@@ -156,19 +156,19 @@ export interface CSteamOSSLSState {
   plugins?: CSteamOSSLSPlugin[];
 }
 
-export interface CSteamOSSLS_GetState_Request { }
+export interface CSteamOSSLS_GetState_Request {}
 
 export interface CSteamOSSLS_GetState_Response {
   state?: CSteamOSSLSState;
 }
 
-export interface CSteamOSSLS_StateChanged_Notification { }
+export interface CSteamOSSLS_StateChanged_Notification {}
 
 export interface CSteamOSSLS_SetEnabled_Request {
   enabled?: boolean;
 }
 
-export interface CSteamOSSLS_SetEnabled_Response { }
+export interface CSteamOSSLS_SetEnabled_Response {}
 
 export interface CSteamOSSLS_SetPluginEnabled_Request {
   enabled?: boolean;
@@ -176,4 +176,4 @@ export interface CSteamOSSLS_SetPluginEnabled_Request {
   etype?: SLSHelper;
 }
 
-export interface CSteamOSSLS_SetPluginEnabled_Response { }
+export interface CSteamOSSLS_SetPluginEnabled_Response {}

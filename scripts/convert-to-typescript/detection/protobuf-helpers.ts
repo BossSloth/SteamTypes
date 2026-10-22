@@ -27,7 +27,7 @@ export function getProtobufClassName(value: Function): string | null {
   return match?.[1] ?? null;
 }
 
-export function findProtobufClassInObject(obj: Record<string, unknown>): { className: string; propertyKey: string; } | null {
+export function findProtobufClassInObject(obj: Record<string, unknown>): { className: string; propertyKey: string } | null {
   for (const key of Object.keys(obj)) {
     try {
       const value = obj[key];

@@ -4,7 +4,7 @@ import { ComparatorTest, createTest } from '../shared';
 export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   'extends clause added to target when source extends a known base': {
     interfaceName: 'Admin',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface User {
         id: number;
         name: string;
@@ -13,7 +13,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       export interface Admin {
         permissions: string[];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface User {
         id: number;
         name: string;
@@ -26,7 +26,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'matching extends clause with generics is not re-added': {
     interfaceName: 'Admin',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface User<T> {
         id: T;
         name: string;
@@ -35,7 +35,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
       export interface Admin extends User<number> {
         permissions: string[];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface User<T> {
         id: T;
         name: string;
@@ -48,7 +48,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   'valid extended interface': {
     interfaceName: 'Config',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -71,7 +71,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -96,7 +96,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface removed property': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -119,7 +119,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -143,7 +143,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface both removed property': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -166,7 +166,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -189,7 +189,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface added property': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -212,7 +212,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -238,7 +238,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface both added property': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -261,7 +261,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -288,7 +288,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
 
@@ -311,7 +311,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -336,7 +336,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface with import': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { BaseUser } from './types';
 
       export interface Config {
@@ -353,7 +353,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         user: User;
         admin: Admin;
@@ -376,7 +376,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'extended interface multiple type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -407,7 +407,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -434,7 +434,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'extended interface multiple interface type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -467,7 +467,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -503,7 +503,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'extended interface multiple type partial mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -534,7 +534,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -562,7 +562,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   // This should remove GetInfo from BaseChat and add it to ChatRoom
   'extended interface multiple extra function on base': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -593,7 +593,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -621,7 +621,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   // This should add the missing AddMessage function to both interfaces
   'extended interface multiple missing function': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -652,7 +652,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -682,7 +682,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'extended interface multiple missing function and extra function': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -713,7 +713,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
         role: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -803,15 +803,9 @@ Object.keys(extendedInterfaceCases).forEach((key) => {
   const newKey = `${key} - union`;
 
   // Create modified versions that has a union type
-  const modifiedTarget = testCase.target.replace(
-    'admin: Admin;\n\n  user: User;',
-    'user: User | Admin;',
-  );
+  const modifiedTarget = testCase.target.replace('admin: Admin;\n\n  user: User;', 'user: User | Admin;');
 
-  const modifiedSource = testCase.source.replace(
-    'user: User;\n  admin: Admin;',
-    'user: User | Admin;',
-  );
+  const modifiedSource = testCase.source.replace('user: User;\n  admin: Admin;', 'user: User | Admin;');
 
   unionExtendedInterfaceCases[newKey] = {
     ...testCase,

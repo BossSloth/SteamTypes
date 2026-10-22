@@ -1,8 +1,8 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-      "noImplicitAny": false,
-      "types": ["vitest/globals", "node"]
-    },
-    "include": ["**/*.ts"]
-  }
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "types": ["vitest/globals", "node"]
+  },
+  "include": ["**/*.ts"]
+}

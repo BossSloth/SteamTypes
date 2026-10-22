@@ -43,9 +43,12 @@ async function getSharedJsContextTarget(): Promise<string> {
       port: 8080,
     });
   } catch (error) {
-    throw new Error(`
+    throw new Error(
+      `
 ${chalk.red('❌ Unable to connect to Steam on port 8080.')}
-${chalk.yellow('⚠️  Make sure Steam is running with -dev and CEF is enabled.')}`, { cause: error });
+${chalk.yellow('⚠️  Make sure Steam is running with -dev and CEF is enabled.')}`,
+      { cause: error },
+    );
   }
 
   logger.log(chalk.green('✅ Connected to Steam CEF instance'));
@@ -61,7 +64,9 @@ ${chalk.yellow('⚠️  Make sure Steam is running with -dev and CEF is enabled.
 
   if (!sharedJsContextTarget) {
     await client.close();
-    throw new Error(`${chalk.red('❌ Could not find window with title "SharedJSContext".')}\n${chalk.yellow('⚠️  Make sure Steam is running with the correct configuration.')}`);
+    throw new Error(
+      `${chalk.red('❌ Could not find window with title "SharedJSContext".')}\n${chalk.yellow('⚠️  Make sure Steam is running with the correct configuration.')}`,
+    );
   }
 
   logger.debug(chalk.green(`✅ Found SharedJSContext window (ID: ${sharedJsContextTarget.targetId})`));
@@ -99,7 +104,9 @@ async function injectConvertToTypescriptJs(targetId: string, force = false): Pro
 
   if (injectResult.exceptionDetails) {
     console.error(injectResult);
-    throw new Error(`Failed to inject conversion script: ${JSON.stringify(injectResult.exceptionDetails.exception?.description, null, 2)}`);
+    throw new Error(
+      `Failed to inject conversion script: ${JSON.stringify(injectResult.exceptionDetails.exception?.description, null, 2)}`,
+    );
   }
 }
 
@@ -115,24 +122,25 @@ async function getSystemInformation(): Promise<void> {
   });
 
   if (response.exceptionDetails) {
-    throw new Error(`Failed to get system information: ${JSON.stringify(response.exceptionDetails.exception?.description, null, 2)}`);
+    throw new Error(
+      `Failed to get system information: ${JSON.stringify(response.exceptionDetails.exception?.description, null, 2)}`,
+    );
   }
 
   const value = response.result.value as object;
 
   // Only keep the properties we need
-  const properties = [
-    'nSteamVersion',
-    'sSteamBuildDate',
-    'sSteamAPI',
-  ];
+  const properties = ['nSteamVersion', 'sSteamBuildDate', 'sSteamAPI'];
 
   const filteredValue = Object.fromEntries(Object.entries(value).filter(([key]) => properties.includes(key)));
 
   let systemInformation = JSON.stringify(filteredValue, null, 2);
   logger.debug(chalk.green('✅ Successfully got system information'));
 
-  systemInformation = systemInformation.replace(/"/g, '\'').replace(/'(\w+)':/g, '$1:').replace(/\n}$/gm, ',\n}');
+  systemInformation = systemInformation
+    .replace(/"/g, "'")
+    .replace(/'(\w+)':/g, '$1:')
+    .replace(/\n}$/gm, ',\n}');
   systemInformation += ';\n';
 
   fs.writeFileSync(systemInformationFilePath, `export const systemInformation = ${systemInformation}`);
@@ -143,7 +151,7 @@ let extractTime = 0;
 /**
  * Extracts TypeScript interface from a Steam client object
  */
-async function extractInterface(map: InterfaceMap): Promise<{ content: string | null; extractTime: number; }> {
+async function extractInterface(map: InterfaceMap): Promise<{ content: string | null; extractTime: number }> {
   const startTime = Date.now();
 
   if (map.condition !== undefined) {
@@ -167,7 +175,9 @@ async function extractInterface(map: InterfaceMap): Promise<{ content: string | 
   }
 
   logger.debug('\n');
-  logger.debug(chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.objectExpression)} as ${chalk.bold(map.interfaceName)}...`));
+  logger.debug(
+    chalk.blue(`🔄 Extracting interface for ${chalk.bold(map.objectExpression)} as ${chalk.bold(map.interfaceName)}...`),
+  );
 
   // Execute the conversion function
   logger.debug(chalk.blue(`🔄 Converting ${chalk.bold(map.objectExpression)} to TypeScript interface...`));
@@ -191,7 +201,9 @@ async function extractInterface(map: InterfaceMap): Promise<{ content: string | 
   });
 
   if (response.exceptionDetails) {
-    throw new Error(`Failed to convert object "${map.objectExpression}": ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`);
+    throw new Error(
+      `Failed to convert object "${map.objectExpression}": ${JSON.stringify(response.exceptionDetails.exception, null, 2)}`,
+    );
   }
 
   const interfaceContent = response.result.value as string;
@@ -240,7 +252,7 @@ async function processInterfaces(
   maps: InterfaceMap[],
   rootDir: string,
   options: ValidateTypesOptions,
-): Promise<{ filePath: string; result: string | null; }[]> {
+): Promise<{ filePath: string; result: string | null }[]> {
   const progressBar = new cliProgress.SingleBar({
     format: `${chalk.cyan('Progress')} ${chalk.green('{bar}')} ${chalk.yellow('{percentage}%')} | ${chalk.blue('{value}/{total}')} | ${chalk.blue('{name}')}`,
     barCompleteChar: '\u2588',
@@ -251,9 +263,9 @@ async function processInterfaces(
 
   progressBar.start(maps.length, 0, { name: 'Starting...' });
 
-  const diffs: { filePath: string; result: string | null; }[] = [];
+  const diffs: { filePath: string; result: string | null }[] = [];
   let completedCount = 0;
-  const interfaceTimings: { interfaceName: string; extractTime: number; comparisonTime: number; }[] = [];
+  const interfaceTimings: { interfaceName: string; extractTime: number; comparisonTime: number }[] = [];
 
   for (const map of maps) {
     progressBar.update(completedCount, { name: map.interfaceName });
@@ -274,12 +286,7 @@ async function processInterfaces(
     let currentComparisonTime: number;
     try {
       const comparisonStartTime = Date.now();
-      const result = compareInterfaces(
-        `src/types/${map.file}.ts`,
-        map.interfaceName,
-        interfaceContent,
-        options.verbose,
-      );
+      const result = compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
       currentComparisonTime = Date.now() - comparisonStartTime;
       comparisonTime += currentComparisonTime;
 
@@ -309,10 +316,12 @@ async function processInterfaces(
   if (options.timing === true && interfaceTimings.length > 0) {
     logger.log(chalk.blue('\n📊 Per-interface Timing:'));
     interfaceTimings
-      .sort((a, b) => (b.extractTime + b.comparisonTime) - (a.extractTime + a.comparisonTime))
+      .sort((a, b) => b.extractTime + b.comparisonTime - (a.extractTime + a.comparisonTime))
       .forEach(({ interfaceName, extractTime: interfaceExtractTime, comparisonTime: interfaceComparisonTime }) => {
         const totalTime = interfaceExtractTime + interfaceComparisonTime;
-        logger.log(`${chalk.magenta(interfaceName)}: ${chalk.yellow(`Extract: ${interfaceExtractTime}ms`)} | ${chalk.cyan(`Compare: ${interfaceComparisonTime}ms`)} | ${chalk.green(`Total: ${totalTime}ms`)}`);
+        logger.log(
+          `${chalk.magenta(interfaceName)}: ${chalk.yellow(`Extract: ${interfaceExtractTime}ms`)} | ${chalk.cyan(`Compare: ${interfaceComparisonTime}ms`)} | ${chalk.green(`Total: ${totalTime}ms`)}`,
+        );
       });
   }
 
@@ -340,7 +349,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
     maps = [map];
   }
 
-  const diffs: { filePath: string; result: string | null; }[] = [];
+  const diffs: { filePath: string; result: string | null }[] = [];
 
   if (filter !== undefined) {
     maps = maps.filter((map) => map.file.toLowerCase().includes(filter.toLowerCase()));
@@ -401,26 +410,31 @@ async function main(): Promise<void> {
     .option('-d, --diff', 'Write diffs to file', false)
     .option('-t, --timing', 'Show per-interface timing information', false)
     .argument('[filter]', 'Only validate interfaces that match the file filter. Example: "SteamClient/Apps"')
-    .action(async (filter?: string, options: ValidateTypesOptions = { verbose: false, interactive: false, force: false, timing: false }) => {
-      logger = new Logger(options);
-      // try {
-      logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
+    .action(
+      async (
+        filter?: string,
+        options: ValidateTypesOptions = { verbose: false, interactive: false, force: false, timing: false },
+      ) => {
+        logger = new Logger(options);
+        // try {
+        logger.log(chalk.cyan('\n🔍 Steam Types Validator\n'));
 
-      const startTime = performance.now();
+        const startTime = performance.now();
 
-      const result = await run(options, filter);
-      sharedJsClient.close();
+        const result = await run(options, filter);
+        sharedJsClient.close();
 
-      const endTime = performance.now();
+        const endTime = performance.now();
 
-      if (result) {
-        logger.log(chalk.yellow('\n⚠️  Operation completed with new types\n'));
-      } else {
-        logger.log(chalk.green('\n✅ Operation completed successfully\n'));
-      }
-      logger.log(chalk.gray(`Memory usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`));
-      logger.log(chalk.gray(`Execution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
-    });
+        if (result) {
+          logger.log(chalk.yellow('\n⚠️  Operation completed with new types\n'));
+        } else {
+          logger.log(chalk.green('\n✅ Operation completed successfully\n'));
+        }
+        logger.log(chalk.gray(`Memory usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`));
+        logger.log(chalk.gray(`Execution time: ${((endTime - startTime) / 1000).toFixed(2)} seconds`));
+      },
+    );
 
   await program.parseAsync();
 }

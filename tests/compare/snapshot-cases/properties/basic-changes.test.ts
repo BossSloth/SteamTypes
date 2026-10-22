@@ -4,11 +4,11 @@ import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 export const basicChangeCases: Record<string, ComparatorTest> = {
   'simple add missing property': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
         newProp: number;
@@ -17,12 +17,12 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'simple remove property': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
         newProp: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
@@ -30,11 +30,11 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'simple type mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -42,12 +42,12 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'property type changes from primitive to interface': {
     interfaceName: 'UserSettings',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserSettings {
         profile: string;
         preferences: Record<string, boolean>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserSettings {
         profile: UserProfile;
         preferences: Record<string, boolean>;
@@ -62,7 +62,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'property type changes from interface to primitive': {
     interfaceName: 'GameState',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface GameState {
         player: PlayerStats;
         gameMode: string;
@@ -73,7 +73,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
         level: number;
         achievements: string[];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface GameState {
         player: string;
         gameMode: string;
@@ -82,7 +82,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'property changes from array to specific interface': {
     interfaceName: 'LibraryContent',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface LibraryContent {
         books: Book[];
         magazines: any[];
@@ -92,7 +92,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
         title: string;
         author: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface LibraryContent {
         books: BookCollection;
         magazines: MagazineCollection;
@@ -125,7 +125,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
 
   'interface with property changing from one interface to another': {
     interfaceName: 'ChatMessage',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ChatMessage {
         content: TextContent;
         id: string;
@@ -137,7 +137,7 @@ export const basicChangeCases: Record<string, ComparatorTest> = {
         text: string;
         contentFormat: 'plain' | 'markdown';
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ChatMessage {
         content: MessageContent;
         id: string;

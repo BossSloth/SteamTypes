@@ -37,7 +37,7 @@ describe('Type classes', () => {
 
   describe('UnionType.createUnionElementType (private)', () => {
     const createUnionElementType = (
-      UnionType as unknown as { createUnionElementType(arrayTypes: ArrayType[]): Type; }
+      UnionType as unknown as { createUnionElementType(arrayTypes: ArrayType[]): Type }
     ).createUnionElementType.bind(UnionType);
 
     it('dedupes overlapping element types across multiple union-array inputs', () => {

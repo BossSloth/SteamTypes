@@ -14,5 +14,8 @@ export interface Messaging {
   // section - "ContentManagement", "JumpList", "PostToLibrary"
   // seems multipurpose
   // callback arguments are the same as in PostMessage
-  RegisterForMessages<T extends string>(section: T, callback: (section: T, param1: string, message: string) => void): Unregisterable;
+  RegisterForMessages<T extends string>(
+    section: T,
+    callback: (section: T, param1: string, message: string) => void,
+  ): Unregisterable;
 }

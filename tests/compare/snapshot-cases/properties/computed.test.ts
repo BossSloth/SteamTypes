@@ -5,7 +5,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
   'computed property name preserved when enum resolves to same key': {
     interfaceName: 'NotificationTargets',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum SomeEnum {
         Value = 1,
       }
@@ -23,7 +23,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface ChildB {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NotificationTargets {
         1: ChildA;
 
@@ -41,7 +41,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
   'computed property that changed type': {
     interfaceName: 'NotificationTargets',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum SomeEnum {
         Value = 1,
       }
@@ -55,7 +55,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface ChildB {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NotificationTargets {
         1: ChildA;
 
@@ -73,7 +73,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
   'computed property name preserved with type correction': {
     interfaceName: 'NotificationTargets',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum SomeEnum {
         Value = 1,
       }
@@ -91,7 +91,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface ChildB {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NotificationTargets {
         1: ChildA;
 
@@ -111,7 +111,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
   'multiple computed property names preserved': {
     interfaceName: 'Config',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum EnumA {
         First = 1,
       }
@@ -139,7 +139,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface TypeC {
         baz: boolean;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         1: TypeA;
 
@@ -163,7 +163,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
   'computed property with additional property': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum EnumA {
         First = 1,
       }
@@ -191,7 +191,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface TypeC {
         baz: boolean;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         1: TypeA;
 
@@ -222,7 +222,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
   'compareOriginalName matches interface by tag': {
     interfaceName: 'Parent',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Parent {
         1: ProtoChild;
 
@@ -243,7 +243,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
         sound: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Parent {
         1: ProtoChild;
 
@@ -268,7 +268,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
   'compareOriginalName preferred over similarity matching': {
     interfaceName: 'Parent',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Parent {
         1: HighSimilarity;
 
@@ -297,7 +297,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
         strTest: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Parent {
         1: HighSimilarity;
 
@@ -329,7 +329,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
   'compareOriginalName with property changes': {
     interfaceName: 'Parent',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Parent {
         1: Child;
       }
@@ -338,7 +338,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface Child {
         name: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Parent {
         1: InvalidName;
       }
@@ -352,7 +352,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
   'computed property with non-literal expression is left untouched': {
     interfaceName: 'Config',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         [Symbol.iterator]: ChildA;
 
@@ -366,7 +366,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface ChildB {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         [Symbol.iterator]: ChildA;
 
@@ -384,7 +384,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
 
   'computed property removed when resolved key missing from source': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       enum SomeEnum {
         Value = 5,
       }
@@ -402,7 +402,7 @@ export const computedPropertyCases: Record<string, ComparatorTest> = {
       export interface ChildB {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         2: ChildB;
       }

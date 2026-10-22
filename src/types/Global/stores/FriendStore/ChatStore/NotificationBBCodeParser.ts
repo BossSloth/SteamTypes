@@ -9,21 +9,21 @@ export interface NotificationBBCodeParser {
 }
 
 export interface DictComponents {
-  gameinvite(e: unknown): { title: string; body: unknown; state: unknown; } | null;
+  gameinvite(e: unknown): { title: string; body: unknown; state: unknown } | null;
 
-  img(t: unknown): { body: unknown; };
+  img(t: unknown): { body: unknown };
 
-  invite(e: unknown): { title: string; body: unknown; } | null;
+  invite(e: unknown): { title: string; body: unknown } | null;
 
-  lobbyinvite(e: unknown): { title: string; body: unknown; state: string; } | null;
+  lobbyinvite(e: unknown): { title: string; body: unknown; state: string } | null;
 
-  roomeffect(e: unknown): { body: unknown; } | null;
+  roomeffect(e: unknown): { body: unknown } | null;
 
-  spoiler(e: unknown): { body: unknown; };
+  spoiler(e: unknown): { body: unknown };
 
-  sticker(t: unknown): { body: unknown; };
+  sticker(t: unknown): { body: unknown };
 
-  tradeoffer(e: unknown): { title: unknown; body: unknown; } | null;
+  tradeoffer(e: unknown): { title: unknown; body: unknown } | null;
 
-  video(t: unknown): { body: unknown; };
+  video(t: unknown): { body: unknown };
 }

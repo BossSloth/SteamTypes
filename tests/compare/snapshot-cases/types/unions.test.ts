@@ -4,11 +4,11 @@ import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 export const unionCases: Record<string, ComparatorTest> = {
   'union type with interface': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string | null;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: DataType | null;
       }
@@ -21,7 +21,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'inverse union type with interface': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: DataType | null;
       }
@@ -30,7 +30,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         value: string;
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: string | null;
       }`,
@@ -38,7 +38,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'nested interface in union type': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Base | Extended;
       }
@@ -51,7 +51,7 @@ export const unionCases: Record<string, ComparatorTest> = {
       export interface Extended {
         details: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: Base | Extended;
       }
@@ -70,11 +70,11 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'union type with different lengths': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string | number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: string | number | boolean;
       }`,
@@ -82,7 +82,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'union type with interface and different lengths': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: A | B;
       }
@@ -96,7 +96,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         fooB: string;
         otherB: boolean;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: A | B | C;
       }
@@ -119,11 +119,11 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'simple union type mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number | string;
       }`,
@@ -132,11 +132,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union literal type with unknown': {
     interfaceName: 'FooInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary: string, result: number } | { summary?: undefined, result: number };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary: unknown, result: number } | { summary?: unknown, result: number };
       }`,
@@ -144,11 +144,11 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'union literal type with unknown wrong optional': {
     interfaceName: 'FooInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary: string, result: number } | { summary?: undefined, result: number };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary?: unknown, result: number } | { summary?: unknown, result: number };
       }`,
@@ -157,11 +157,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union literal type with unknown and extra string': {
     interfaceName: 'FooInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary: string, result: number } | { summary?: undefined, result: number } | string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface FooInterface {
         foo: { summary: unknown, result: number } | { summary?: unknown, result: number } | string;
       }`,
@@ -170,11 +170,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with duplicate members': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         value: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         value: string | string;
       }`,
@@ -182,13 +182,13 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'union with non-union type alias member': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       type Alias = string;
 
       export interface Foo {
         value: Alias | number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         value: boolean;
       }`,
@@ -198,7 +198,7 @@ export const unionCases: Record<string, ComparatorTest> = {
   'qualified name from namespace as property type': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export namespace Foo {
         export interface Bar {
           value: string;
@@ -208,7 +208,7 @@ export const unionCases: Record<string, ComparatorTest> = {
       export interface Container {
         data: Foo.Bar;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: number;
       }`,
@@ -216,7 +216,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'union with qualified name type alias member': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export namespace NS {
         export type Alias = string;
       }
@@ -224,7 +224,7 @@ export const unionCases: Record<string, ComparatorTest> = {
       export interface Container {
         value: NS.Alias | number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         value: boolean;
       }`,
@@ -232,11 +232,11 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'target array against union of array and non-array': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string[];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (string[] | number);
       }`,
@@ -245,11 +245,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'source union with never keeps compatible target': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: string | never;
       }`,
@@ -258,11 +258,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with null to null wrapped': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: (string | null);
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: null;
       }`,
@@ -271,11 +271,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with null to null': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string | null;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: null;
       }`,
@@ -284,11 +284,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with undefined should keep undefined - string': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string | undefined;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: string;
       }`,
@@ -297,11 +297,11 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with undefined should keep undefined - array': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: string[] | undefined;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: string[];
       }`,
@@ -310,7 +310,7 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with undefined should keep undefined - collapsed interface': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Emoticon_list | undefined;
       }
@@ -327,7 +327,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         use_count?: number;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (Emoticon_list | Emoticon_list2);
       }
@@ -357,7 +357,7 @@ export const unionCases: Record<string, ComparatorTest> = {
   'union with undefined should keep undefined - collapsed interface array': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Emoticon_list[] | undefined;
       }
@@ -374,7 +374,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         use_count?: number;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (Emoticon_list | Emoticon_list2)[];
       }
@@ -403,7 +403,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'collapsed interface array - interface misses optional': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Emoticon_list[];
       }
@@ -420,7 +420,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         use_count: number;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (Emoticon_list | Emoticon_list2)[];
       }
@@ -449,7 +449,7 @@ export const unionCases: Record<string, ComparatorTest> = {
 
   'collapsed interface array - interface misses property': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Emoticon_list[];
       }
@@ -464,7 +464,7 @@ export const unionCases: Record<string, ComparatorTest> = {
         name_normalized?: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (Emoticon_list | Emoticon_list2)[];
       }

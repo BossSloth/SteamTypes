@@ -23,7 +23,9 @@ export interface Overlay {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForMicroTxnAuth(callback: (appId: number, microTxnId: string, realm: ESteamRealm, microTxnUrl: string) => void): Unregisterable;
+  RegisterForMicroTxnAuth(
+    callback: (appId: number, microTxnId: string, realm: ESteamRealm, microTxnUrl: string) => void,
+  ): Unregisterable;
 
   /**
    * Registers a callback function to be called when a microtransaction authorization is dismissed by the user in Steam's authorization page.
@@ -41,7 +43,9 @@ export interface Overlay {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForOverlayActivated(callback: (overlayProcessPid: number, appId: number, active: boolean, param3: boolean) => void): Unregisterable;
+  RegisterForOverlayActivated(
+    callback: (overlayProcessPid: number, appId: number, active: boolean, param3: boolean) => void,
+  ): Unregisterable;
 
   /**
    * Registers a callback function to be called when the overlay browser protocols change.

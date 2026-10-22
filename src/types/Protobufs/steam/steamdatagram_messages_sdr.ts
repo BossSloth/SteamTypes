@@ -1,5 +1,12 @@
-import { CMsgSteamDatagramConnectionQuality, CMsgSteamDatagramSessionCryptInfoSigned, CMsgSteamNetworkingICESessionSummary } from './steamnetworkingsockets_messages';
-import { CMsgSteamDatagramCertificateSigned, CMsgSteamNetworkingIdentityLegacyBinary } from './steamnetworkingsockets_messages_certs';
+import {
+  CMsgSteamDatagramConnectionQuality,
+  CMsgSteamDatagramSessionCryptInfoSigned,
+  CMsgSteamNetworkingICESessionSummary,
+} from './steamnetworkingsockets_messages';
+import {
+  CMsgSteamDatagramCertificateSigned,
+  CMsgSteamNetworkingIdentityLegacyBinary,
+} from './steamnetworkingsockets_messages_certs';
 
 export interface CMsgSteamNetworkingIPAddress {
   v4?: number;

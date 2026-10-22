@@ -35,8 +35,12 @@ beforeEach(() => {
   mockedWriteFileSync.mockClear();
   mockedStatSync.mockClear();
   mockedStatSync.mockImplementation(() => ({ size: 1234 }));
-  logSpy = vi.spyOn(console, 'log').mockImplementation(() => { /* silenced */ });
-  errSpy = vi.spyOn(console, 'error').mockImplementation(() => { /* silenced */ });
+  logSpy = vi.spyOn(console, 'log').mockImplementation(() => {
+    /* silenced */
+  });
+  errSpy = vi.spyOn(console, 'error').mockImplementation(() => {
+    /* silenced */
+  });
 });
 
 afterEach(() => {

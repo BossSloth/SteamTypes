@@ -2,7 +2,7 @@ import protobuf from 'protobufjs';
 import { generateFieldComment } from '../../../scripts/proto-scripts/field-comments';
 
 interface FakeField {
-  toJSON(): { options?: Record<string, unknown>; };
+  toJSON(): { options?: Record<string, unknown> };
   options: Record<string, unknown> | undefined;
 }
 
@@ -42,6 +42,7 @@ describe('generateFieldComment', () => {
 
   it('emits @Options header and bullet lines', () => {
     const result = generateFieldComment(fakeField({ '(setting_name)': 'X' }));
+    // oxfmt-ignore
     expect(result).toBe([
       '  /**',
       '   * @Options',
@@ -51,22 +52,26 @@ describe('generateFieldComment', () => {
   });
 
   it('renders boolean and number values via toString', () => {
-    const result = generateFieldComment(fakeField({
-      '(setting_default_bool)': true,
-      '(setting_default_int)': 42,
-    }));
+    const result = generateFieldComment(
+      fakeField({
+        '(setting_default_bool)': true,
+        '(setting_default_int)': 42,
+      }),
+    );
     expect(result).toContain('Default: true');
     expect(result).toContain('Default: 42');
   });
 
   it('combines multiple translations + skips blacklisted entries', () => {
-    const result = generateFieldComment(fakeField({
-      default: 0,
-      '(setting_name)': 'sys/Foo',
-      '(setting_clamp_min)': 1,
-      '(setting_clamp_max)': 9,
-      '(setting_readonly)': true,
-    }));
+    const result = generateFieldComment(
+      fakeField({
+        default: 0,
+        '(setting_name)': 'sys/Foo',
+        '(setting_clamp_min)': 1,
+        '(setting_clamp_max)': 9,
+        '(setting_readonly)': true,
+      }),
+    );
     expect(result).toContain('Setting name: sys/Foo');
     expect(result).toContain('Setting clamp min: 1');
     expect(result).toContain('Setting clamp max: 9');

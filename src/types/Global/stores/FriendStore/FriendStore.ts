@@ -112,7 +112,7 @@ export interface SteamFriend {
    * @returns match: 0=none, 1=name, 2=nickname
    * @ignore
    */
-  MatchSearchString(searchString: string): { match: 0 | 1 | 2; iOffset?: number; bFullMatch?: boolean; };
+  MatchSearchString(searchString: string): { match: 0 | 1 | 2; iOffset?: number; bFullMatch?: boolean };
 
   OpenChatDialog(context: unknown): unknown;
 
@@ -299,7 +299,13 @@ export interface FriendsUIFriendStore {
 
   InviteToWatch(friend: SteamFriend): void;
 
-  OnFriendPersonaStateChanged(friend: SteamFriend, oldState: number, newState: number, gameChanged: boolean, recentlySameApp: boolean): undefined;
+  OnFriendPersonaStateChanged(
+    friend: SteamFriend,
+    oldState: number,
+    newState: number,
+    gameChanged: boolean,
+    recentlySameApp: boolean,
+  ): undefined;
 
   /** @param state 3=away, 4=snooze */
   OnIdle(state: 3 | 4): void;
@@ -326,9 +332,9 @@ export interface FriendsUIFriendStore {
 
   ResetIdleState(): void;
 
-  SendFriendInvite(friend: SteamFriend): Promise<{ eResult: number; eFriendRelationship: number; }>;
+  SendFriendInvite(friend: SteamFriend): Promise<{ eResult: number; eFriendRelationship: number }>;
 
-  SendFriendInviteBySteamID(steamid: SteamID | string): Promise<{ eResult: number; eFriendRelationship: number; }>;
+  SendFriendInviteBySteamID(steamid: SteamID | string): Promise<{ eResult: number; eFriendRelationship: number }>;
 
   /**
    * Rate limited: 200 tokens, refills 1 per 10ms
@@ -366,7 +372,13 @@ export interface FriendsUIFriendStore {
 
   UpdateUnreadMessagesGlobal(): void;
 
-  UpdateUserPersonaStateInternal(state: number, userSet: boolean, clientIdle: boolean, receivedFromServer: boolean, reason: string): void;
+  UpdateUserPersonaStateInternal(
+    state: number,
+    userSet: boolean,
+    clientIdle: boolean,
+    receivedFromServer: boolean,
+    reason: string,
+  ): void;
 
   all_friends: SteamFriend[];
 
@@ -1175,8 +1187,7 @@ export interface ChatGroupBase {
 }
 
 // TODO: If we rename this to anything else we get a `Maximum call stack size exceeded` error. I need to fix this.
-export interface Default_groups extends ChatGroupBase {
-}
+export interface Default_groups extends ChatGroupBase {}
 
 export interface GroupDisplayPrefs {
   GetUserGroupCollapsed(e: unknown): boolean;
@@ -1209,17 +1220,17 @@ export interface Member_counts {
 }
 
 export interface EquippedProfileItems {
-  animated_avatar: (ColorProfileAvatar | ProfileAvatar);
+  animated_avatar: ColorProfileAvatar | ProfileAvatar;
 
-  avatar_frame: (ColorProfileAvatar | ProfileAvatar);
+  avatar_frame: ColorProfileAvatar | ProfileAvatar;
 
-  mini_profile_background: (ColorProfileAvatar | ProfileAvatar);
+  mini_profile_background: ColorProfileAvatar | ProfileAvatar;
 
-  profile_background: (ColorProfileAvatar | Profile_background);
+  profile_background: ColorProfileAvatar | Profile_background;
 
-  profile_modifier: (ColorProfileAvatar | ProfileAvatar);
+  profile_modifier: ColorProfileAvatar | ProfileAvatar;
 
-  steam_deck_keyboard_skin: (ColorProfileAvatar | ProfileAvatar);
+  steam_deck_keyboard_skin: ColorProfileAvatar | ProfileAvatar;
 }
 
 export interface ColorProfileAvatar {

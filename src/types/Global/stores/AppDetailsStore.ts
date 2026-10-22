@@ -136,7 +136,12 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetHeaderImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number, prefer2x?: boolean): [
+  GetHeaderImagesForAppId(
+    appId: number,
+    localCacheVersion?: number,
+    storeAssetTime?: number,
+    prefer2x?: boolean,
+  ): [
     /**
      * This is a relative path that can be appended to https://steamloopback.host
      * @example "/assets/427520/header.jpg?c=${localCacheVersion}"
@@ -167,7 +172,11 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetHeroBlurImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): [
+  GetHeroBlurImagesForAppId(
+    appId: number,
+    localCacheVersion?: number,
+    storeAssetTime?: number,
+  ): [
     /**
      * This is a relative path that can be appended to https://steamloopback.host
      * @example "/assets/427520/library_hero_blur.jpg?c=${localCacheVersion}"
@@ -229,7 +238,11 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetHeroImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
+  GetHeroImagesForAppId(
+    appId: number,
+    localCacheVersion?: number,
+    storeAssetTime?: number,
+  ): {
     rgHeroImages: [
       /**
        * This is a relative path that can be appended to https://steamloopback.host
@@ -272,7 +285,11 @@ export interface AppDetailsStore {
    * The first two are relative paths that can be appended to https://steamloopback.host
    * The last one is an absolute URL to shared.steamstatic.com
    */
-  GetLogoImagesForAppId(appId: number, localCacheVersion?: number, storeAssetTime?: number): {
+  GetLogoImagesForAppId(
+    appId: number,
+    localCacheVersion?: number,
+    storeAssetTime?: number,
+  ): {
     rgLogoImages: [
       /**
        * This is a relative path that can be appended to https://steamloopback.host
@@ -327,7 +344,10 @@ export interface AppDetailsStore {
    * @param appOverview
    * @param logoPosition
    */
-  SaveCustomLogoPosition(appOverview: { appid: number; rt_custom_image_mtime?: number; }, logoPosition: LogoPosition): Promise<void>;
+  SaveCustomLogoPosition(
+    appOverview: { appid: number; rt_custom_image_mtime?: number },
+    logoPosition: LogoPosition,
+  ): Promise<void>;
 
   SetAjaxLibraryAppDetails(appId: number, appData: AppData, ajaxLibraryAppDetails: AjaxLibraryAppDetails): void;
 
@@ -355,19 +375,19 @@ export interface AppData {
    */
   BHasCurrentCustomImageInfo(customImageInfoRtime: number): boolean;
 
-  appDetailsSpotlight: (AppDetailsSpotlight | null);
+  appDetailsSpotlight: AppDetailsSpotlight | null;
 
-  associationData: (AssociationData | null);
+  associationData: AssociationData | null;
 
   bLoadingAchievments: boolean;
 
   cRegistered: number;
 
-  customImageInfo?: (CustomImageInfo | null);
+  customImageInfo?: CustomImageInfo | null;
 
   customImageInfoRtime?: number;
 
-  descriptionsData: (DescriptionsData | null);
+  descriptionsData: DescriptionsData | null;
 
   details: AppDetails;
 
@@ -411,7 +431,7 @@ export interface AssociationData {
 export interface Association {
   strName: string;
 
-  strURL: (null | string);
+  strURL: null | string;
 }
 
 export interface CustomImageInfo {
@@ -541,7 +561,7 @@ export interface AppDetails {
   /** DLC disk space usage, in bytes. */
   lDlcUsageBytes: number;
 
-  libraryAssets?: (AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets | DedicatedServerLibraryAssets);
+  libraryAssets?: AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets | DedicatedServerLibraryAssets;
 
   nBuildID: number;
 
@@ -630,7 +650,7 @@ export interface AppDetails {
 
   vecLanguages: AppLanguage[];
 
-  vecLegacyCDKeys: (LegacyCDKey[] | NamelessLegacyCDKeys[]);
+  vecLegacyCDKeys: LegacyCDKey[] | NamelessLegacyCDKeys[];
 
   vecMusicAlbums: AppSoundtrack[];
 

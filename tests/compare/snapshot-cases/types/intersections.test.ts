@@ -4,7 +4,7 @@ import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 export const intersectionCases: Record<string, ComparatorTest> = {
   'array intersection types': {
     interfaceName: 'Combined',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Combined {
         data: A;
       }
@@ -12,7 +12,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
       export interface A {
         propA: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Combined {
         data: (A | B)[];
       }
@@ -30,7 +30,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
 
   'inverse array intersection types': {
     interfaceName: 'Combined',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Combined {
         data: (A | B)[];
       }
@@ -44,7 +44,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
         propB: number;
         extraB: Date;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Combined {
         data: A;
       }
@@ -56,7 +56,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
 
   'interface with intersection types': {
     interfaceName: 'EnhancedUser',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface EnhancedUser {
         user: BaseUser & UserPermissions;
       }
@@ -70,7 +70,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
         canEdit: boolean;
         canDelete: boolean;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface EnhancedUser {
         user: BaseUser & UserPermissions & UserMetadata;
         isAdmin: boolean;
@@ -97,7 +97,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
   'map intersection type': {
     interfaceName: 'Config',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         map: ObservableMap<'Main', Popup<string>> & ObservableMap<string, Popup>;
       }
@@ -108,7 +108,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         map: ObservableMap<string, Popup>;
       }
@@ -121,7 +121,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
 
   'map intersection type with mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         map: ObservableMap<15, Popup<string>> & ObservableMap<string, Popup>;
       }
@@ -132,7 +132,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         map: ObservableMap<string, Popup>;
       }
@@ -145,11 +145,11 @@ export const intersectionCases: Record<string, ComparatorTest> = {
 
   'intersection type vs primitive': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         value: { a: number; } & { b: string; };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         value: number;
       }`,

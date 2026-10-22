@@ -5,7 +5,7 @@ export const ignoreFormattingCases: Record<string, ComparatorTest> = {
   'preserves @ignoreFormatting nested conditional type indentation': {
     interfaceName: 'Root',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       /** @ignoreFormatting */
       export type Mapped<T> = {
         [K in keyof T]: T[K] extends boolean
@@ -21,14 +21,14 @@ export const ignoreFormattingCases: Record<string, ComparatorTest> = {
       export interface Root {
         value: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         value: string;
       }`,
   },
   'does not preserves nested conditional type indentation without jsdoc': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type Mapped<T> = {
         [K in keyof T]: T[K] extends boolean
           ? 1
@@ -42,7 +42,7 @@ export const ignoreFormattingCases: Record<string, ComparatorTest> = {
       export interface Root {
         value: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         value: string;
       }`,

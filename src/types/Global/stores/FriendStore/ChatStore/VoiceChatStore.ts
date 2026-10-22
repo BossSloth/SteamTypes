@@ -95,7 +95,7 @@ export interface VoiceChatStore {
 
   GetNextVoiceChatPositionIndex(): unknown;
 
-  GetNoiseGateOptions(): { attack: number; release: number; threshold: number; bufferSize: number; };
+  GetNoiseGateOptions(): { attack: number; release: number; threshold: number; bufferSize: number };
 
   GetOneOnOneCallsWaitingForJoinOrAccept(): unknown;
 

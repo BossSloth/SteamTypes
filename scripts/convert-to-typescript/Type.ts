@@ -81,13 +81,13 @@ export class UnionType extends Type {
   }
 
   /**
-     * Optimizes array types within a union to simplify expressions like:
-     *
-     * ((A | B)[] | A[] | B[]) to (A | B)[]
-     *
-     * Only merges array types when a union array type already exists
-     * that contains all the element types to be merged like in the example.
-     */
+   * Optimizes array types within a union to simplify expressions like:
+   *
+   * ((A | B)[] | A[] | B[]) to (A | B)[]
+   *
+   * Only merges array types when a union array type already exists
+   * that contains all the element types to be merged like in the example.
+   */
   private static optimizeArrayTypes(types: Type[]): Type[] {
     // Early return for simple cases
     if (types.length <= 1) {
@@ -118,7 +118,7 @@ export class UnionType extends Type {
     return [...nonArrayTypes, ...optimizedArrayTypes];
   }
 
-  private static separateArrayTypes(types: Type[]): { arrayTypes: ArrayType[]; nonArrayTypes: Type[]; } {
+  private static separateArrayTypes(types: Type[]): { arrayTypes: ArrayType[]; nonArrayTypes: Type[] } {
     const arrayTypes: ArrayType[] = [];
     const nonArrayTypes: Type[] = [];
 
@@ -226,9 +226,7 @@ export class UnionType extends Type {
       }
     }
 
-    return uniqueElementTypes.length === 1
-      ? uniqueElementTypes[0]
-      : new UnionType(uniqueElementTypes);
+    return uniqueElementTypes.length === 1 ? uniqueElementTypes[0] : new UnionType(uniqueElementTypes);
   }
 
   public toString(): string {

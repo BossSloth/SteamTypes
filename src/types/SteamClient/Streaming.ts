@@ -19,7 +19,9 @@ export interface Streaming {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForStreamingClientLaunchProgress(callback: (actionType: string, taskDetails: string, done: number, total: number) => void): Unregisterable;
+  RegisterForStreamingClientLaunchProgress(
+    callback: (actionType: string, taskDetails: string, done: number, total: number) => void,
+  ): Unregisterable;
 
   /**
    * Registers a callback function to be called when the streaming client is started (e.g., when clicking the stream button).

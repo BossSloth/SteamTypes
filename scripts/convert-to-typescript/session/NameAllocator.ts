@@ -22,9 +22,10 @@ export class NameAllocator {
     const lastPathSegment = path.split('.').pop()!;
 
     // When the key would produce InvalidName (e.g. numeric keys), try deriving name from protobuf class
-    const candidateName = lastPathSegment.charAt(1) === '_'
-      ? lastPathSegment
-      : lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
+    const candidateName =
+      lastPathSegment.charAt(1) === '_'
+        ? lastPathSegment //
+        : lastPathSegment.charAt(0).toUpperCase() + lastPathSegment.slice(1);
     const wouldBeInvalid = this.formatInterfaceName(candidateName) === this.INVALID_NAME;
 
     if (wouldBeInvalid) {

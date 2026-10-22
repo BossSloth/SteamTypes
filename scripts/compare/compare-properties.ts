@@ -105,7 +105,7 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
       if (validMaskNames.some((name) => enumDeclaration.getName().toLowerCase().includes(name))) {
         checkBitfield(enumDeclaration, enumCurrentValue, enumMembers);
       } else if (!enumMembers.some((member) => member.getValue() === enumCurrentValue)) {
-      // Add new enum member
+        // Add new enum member
         enumDeclaration.addMember({
           name: `TODO: change me ${enumCurrentValue}`,
           value: enumCurrentValue,
@@ -127,8 +127,8 @@ function checkBitfield(enumDeclaration: EnumDeclaration, enumCurrentValue: numbe
   // For bitfields/masks/flags, check if the value is a power of 2 or a combination of existing values
   const existingValues = enumMembers.map((member) => member.getValue() as number);
   const allFlags = existingValues.reduce((acc, flag) => acc | flag, 0);
-  const isValueCovered = existingValues.includes(enumCurrentValue)
-    || (enumCurrentValue > 0 && (enumCurrentValue & allFlags) === enumCurrentValue);
+  const isValueCovered =
+    existingValues.includes(enumCurrentValue) || (enumCurrentValue > 0 && (enumCurrentValue & allFlags) === enumCurrentValue);
 
   if (!isValueCovered) {
     // Add new flag enum member
@@ -143,7 +143,11 @@ function checkBitfield(enumDeclaration: EnumDeclaration, enumCurrentValue: numbe
 /**
  * Updates a property's type if it's different from the source
  */
-function updatePropertyTypeIfDifferent(targetProp: PropertySignature, sourceProp: PropertySignature, isFromExtendedInterface: boolean): boolean {
+function updatePropertyTypeIfDifferent(
+  targetProp: PropertySignature,
+  sourceProp: PropertySignature,
+  isFromExtendedInterface: boolean,
+): boolean {
   const targetTypeNode = targetProp.getTypeNode();
   const sourceTypeNode = sourceProp.getTypeNode();
 

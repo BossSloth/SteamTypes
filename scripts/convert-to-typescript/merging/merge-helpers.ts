@@ -16,10 +16,7 @@ export interface MergeState {
 /**
  * Determines if two interfaces are similar enough to be merged
  */
-export function shouldMergeInterfaces(
-  interface1: TypeScriptInterface,
-  interface2: TypeScriptInterface,
-): boolean {
+export function shouldMergeInterfaces(interface1: TypeScriptInterface, interface2: TypeScriptInterface): boolean {
   // Don't merge interfaces that have inheritance relationships
   // These will be handled separately to preserve the inheritance hierarchy
   if ((interface1.extendedConstructorString ?? '') !== '' || (interface2.extendedConstructorString ?? '') !== '') {
@@ -95,10 +92,7 @@ function mergePropertyVersions(propName: string, propVersions: InterfaceProperty
 /**
  * Finds common properties across all interfaces in a group
  */
-function findCommonProperties(
-  interfaces: Map<string, TypeScriptInterface>,
-  group: string[],
-): Map<string, InterfaceProperty[]> {
+function findCommonProperties(interfaces: Map<string, TypeScriptInterface>, group: string[]): Map<string, InterfaceProperty[]> {
   const firstInterface = interfaces.get(group[0]);
   /* v8 ignore next -- @preserve */
   if (!firstInterface) {
@@ -142,10 +136,7 @@ function findCommonProperties(
 /**
  * Extracts common properties from a group of interfaces (base class properties)
  */
-export function extractBaseProperties(
-  interfaces: Map<string, TypeScriptInterface>,
-  group: string[],
-): InterfaceProperty[] {
+export function extractBaseProperties(interfaces: Map<string, TypeScriptInterface>, group: string[]): InterfaceProperty[] {
   /* v8 ignore next -- @preserve */
   if (group.length === 0) {
     return [];
@@ -165,11 +156,7 @@ export function extractBaseProperties(
 /**
  * Creates a base interface for an inheritance group
  */
-export function createBaseInterface(
-  baseName: string,
-  baseProperties: InterfaceProperty[],
-  order: number,
-): TypeScriptInterface {
+export function createBaseInterface(baseName: string, baseProperties: InterfaceProperty[], order: number): TypeScriptInterface {
   return {
     name: baseName,
     properties: baseProperties,
@@ -196,10 +183,7 @@ export function removeBaseProperties(
 /**
  * Merges a group of interfaces into a single interface
  */
-export function mergeInterfaceGroup(
-  interfaces: Map<string, TypeScriptInterface>,
-  group: string[],
-): TypeScriptInterface {
+export function mergeInterfaceGroup(interfaces: Map<string, TypeScriptInterface>, group: string[]): TypeScriptInterface {
   /* v8 ignore next -- @preserve */
   if (group.length === 0) {
     throw new Error('Cannot merge empty group');
@@ -253,8 +237,7 @@ export function mergeInterfaceGroup(
   // Now create the merged properties
   for (const [propertyName, propertyVersions] of allProperties.entries()) {
     // Determine if this property should be optional
-    let isOptional = !basePropertyNames.has(propertyName)
-      || propertyVersions.length < group.length;
+    let isOptional = !basePropertyNames.has(propertyName) || propertyVersions.length < group.length;
 
     // Collect all types for this property
     let types: Type[] = [];
@@ -388,10 +371,7 @@ export function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterfac
 /**
  * Updates type references in all interfaces based on the alias map
  */
-export function updateTypeReferences(
-  interfaces: Map<string, TypeScriptInterface>,
-  aliasMap: Map<string, string>,
-): void {
+export function updateTypeReferences(interfaces: Map<string, TypeScriptInterface>, aliasMap: Map<string, string>): void {
   // For each interface
   for (const [, interfaceObj] of interfaces.entries()) {
     // For each property in the interface

@@ -105,7 +105,11 @@ export interface PopupManager {
 
   SetCurrentLoggedInAccountID(accountId: ReturnType<SteamID['GetAccountID']>): void;
 
-  SetRestoreDetails(popupName: string, restoreDetails: RestoreDetail['strRestoreDetails'], expires: RestoreDetail['bExpires']): void;
+  SetRestoreDetails(
+    popupName: string,
+    restoreDetails: RestoreDetail['strRestoreDetails'],
+    expires: RestoreDetail['bExpires'],
+  ): void;
 
   DebouncedSaveSavedDimensionStore_DebounceProperties: DebouncedSaveSavedDimensionStore_DebounceProperties;
 
@@ -145,8 +149,8 @@ export type MainWindowPopup = Popup<MainWindowPopupParameters, MainWindowPopupCa
 export type BasicPopup = Popup<PopupParameters, PopupCallback>;
 
 export interface Popup<
-  paramsType extends (MainWindowPopupParameters | PopupParameters) = (MainWindowPopupParameters | PopupParameters),
-  callbacksType extends (MainWindowPopupCallback | PopupCallback) = (MainWindowPopupCallback | PopupCallback),
+  paramsType extends MainWindowPopupParameters | PopupParameters = MainWindowPopupParameters | PopupParameters,
+  callbacksType extends MainWindowPopupCallback | PopupCallback = MainWindowPopupCallback | PopupCallback,
 > {
   BIsClosed(): Popup['m_popup']['closed'];
 

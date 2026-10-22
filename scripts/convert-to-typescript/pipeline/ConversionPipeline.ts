@@ -13,7 +13,7 @@ export class ConversionPipeline {
     this.session = session;
   }
 
-  public run(): { result: string; processedCount: number; } {
+  public run(): { result: string; processedCount: number } {
     const processedCount = this.build();
 
     const merged = new InterfaceMerger().merge(this.session.interfaceRepository.definitions);

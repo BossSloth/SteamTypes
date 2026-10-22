@@ -1,5 +1,10 @@
 import { createTest } from './create-test';
-import { advancedTestFunctions, complexObjectTestFunctions, dataStructureTestFunctions, returnTypesTestFunctions } from './test-cases';
+import {
+  advancedTestFunctions,
+  complexObjectTestFunctions,
+  dataStructureTestFunctions,
+  returnTypesTestFunctions,
+} from './test-cases';
 
 createTest('Simple Functions', returnTypesTestFunctions);
 

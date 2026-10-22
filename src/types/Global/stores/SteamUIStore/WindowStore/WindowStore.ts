@@ -333,7 +333,7 @@ export interface WindowInstance {
   m_notificationPosition: NotificationPosition;
 
   /** @ignore unreliable */
-  m_params: (Params | Params2);
+  m_params: Params | Params2;
 
   m_setVRDashboardBarPopups: Set<unknown>;
 
@@ -500,7 +500,7 @@ export interface CompositionStateStore {
 export interface FooterStore {
   BShowFooter(): boolean;
 
-  HideFooter(): { unhide: () => void; };
+  HideFooter(): { unhide: () => void };
 
   Init(): never[];
 
@@ -526,7 +526,7 @@ export interface HeaderStore {
 
   Destroy(): void;
 
-  GetCurrentBrowserAndBackstack(): { browser: unknown; bExternal: unknown; bCanEditURL: unknown; };
+  GetCurrentBrowserAndBackstack(): { browser: unknown; bExternal: unknown; bCanEditURL: unknown };
 
   GetCurrentBrowserAndBackstackI(): unknown;
 
@@ -590,7 +590,7 @@ export interface HeaderStore {
 
   m_ShowUniversalSearch: ReducedValue<string, string>;
 
-  m_TitleText: ReducedValue<unknown, (null | string)>;
+  m_TitleText: ReducedValue<unknown, null | string>;
 }
 
 export interface NotificationPosition {

@@ -1,7 +1,13 @@
 /* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 import { TypeScriptInterface } from '../types';
-import { createBaseInterface, extractBaseProperties, mergeInterfaceGroup, MergeState, removeBaseProperties } from './merge-helpers';
+import {
+  createBaseInterface,
+  extractBaseProperties,
+  mergeInterfaceGroup,
+  MergeState,
+  removeBaseProperties,
+} from './merge-helpers';
 
 /**
  * Merges interfaces that share an inheritance hierarchy, extracting a base
@@ -18,7 +24,13 @@ export class InheritanceMergeStrategy {
     const inheritanceGroups = findInheritanceGroups(this.state.source);
 
     for (const [, inheritanceGroup] of inheritanceGroups) {
-      processInheritanceGroup(this.state.source, inheritanceGroup, this.state.merged, this.state.processedInheritance, this.state.aliasMap);
+      processInheritanceGroup(
+        this.state.source,
+        inheritanceGroup,
+        this.state.merged,
+        this.state.processedInheritance,
+        this.state.aliasMap,
+      );
     }
   }
 }
@@ -76,7 +88,7 @@ function findInheritanceGroups(interfaces: Map<string, TypeScriptInterface>): Ma
 function mergeInterfacesWithinGroup(
   interfaces: Map<string, TypeScriptInterface>,
   group: string[],
-): { mergedInterfaces: Map<string, TypeScriptInterface>; aliasMap: Map<string, string>; } {
+): { mergedInterfaces: Map<string, TypeScriptInterface>; aliasMap: Map<string, string> } {
   const mergedInterfaces = new Map<string, TypeScriptInterface>();
   const aliasMap = new Map<string, string>();
 
@@ -253,10 +265,7 @@ function processInheritanceGroup(
   aliasMap: Map<string, string>,
 ): void {
   // First, merge interfaces within the group that have the same constructorString
-  const { mergedInterfaces: groupMerged, aliasMap: groupAliases } = mergeInterfacesWithinGroup(
-    interfaces,
-    inheritanceGroup,
-  );
+  const { mergedInterfaces: groupMerged, aliasMap: groupAliases } = mergeInterfacesWithinGroup(interfaces, inheritanceGroup);
 
   // Update alias map
   for (const [oldName, newName] of groupAliases) {
@@ -286,5 +295,12 @@ function processInheritanceGroup(
   }
 
   // Multiple distinct interfaces - check if they should share a base
-  createBaseAndDerivedInterfaces(groupMerged, mergedGroupNames, mergedInterfaces, processedInheritance, inheritanceGroup, interfaces);
+  createBaseAndDerivedInterfaces(
+    groupMerged,
+    mergedGroupNames,
+    mergedInterfaces,
+    processedInheritance,
+    inheritanceGroup,
+    interfaces,
+  );
 }

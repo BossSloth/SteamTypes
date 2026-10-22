@@ -5,12 +5,12 @@ export const recordCases: Record<string, ComparatorTest> = {
   'numeric interface same as record': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         values: Record<number, string>;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         values: Values;
       }
@@ -26,12 +26,12 @@ export const recordCases: Record<string, ComparatorTest> = {
   'string interface same as record': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         values: Record<string, string>;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         values: Values;
       }
@@ -47,12 +47,12 @@ export const recordCases: Record<string, ComparatorTest> = {
   'string interface with normal properties same as record': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         values: Record<string, string>;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         values: Values;
       }
@@ -69,11 +69,11 @@ export const recordCases: Record<string, ComparatorTest> = {
 
   'target record vs source primitive falls through': {
     interfaceName: 'WithRecord',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface WithRecord {
         data: Record<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface WithRecord {
         data: number;
       }`,
@@ -81,11 +81,11 @@ export const recordCases: Record<string, ComparatorTest> = {
 
   'target record vs source different record': {
     interfaceName: 'WithRecord',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface WithRecord {
         data: Record<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface WithRecord {
         data: Record<string, string>;
       }`,
@@ -93,11 +93,11 @@ export const recordCases: Record<string, ComparatorTest> = {
 
   'target record vs source type alias falls through': {
     interfaceName: 'WithRecord',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface WithRecord {
         data: Record<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export type DataMap = { [key: string]: number };
 
       export interface WithRecord {
@@ -108,11 +108,11 @@ export const recordCases: Record<string, ComparatorTest> = {
   'target record matches source interface with method member': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Record<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NumberMap {
         a: number;
 
@@ -127,11 +127,11 @@ export const recordCases: Record<string, ComparatorTest> = {
   'target record with numeric keys matches numeric-keyed interface': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Record<number, string>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NumberMap {
         1: string;
 

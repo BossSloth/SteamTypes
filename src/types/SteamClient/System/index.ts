@@ -79,7 +79,9 @@ export interface System {
   // {"flProgress":0,"rtEstimatedCompletionTime":0,"eStage":1}
   RegisterForFormatStorageProgress(callback: () => void): Unregisterable;
 
-  RegisterForSettingsChanges(callback: (data: SerializedArrayBuffer<typeof CMsgSystemManagerSettings_Protobuf>) => void): Unregisterable;
+  RegisterForSettingsChanges(
+    callback: (data: SerializedArrayBuffer<typeof CMsgSystemManagerSettings_Protobuf>) => void,
+  ): Unregisterable;
 
   /**
    * Restarts the system.

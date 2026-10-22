@@ -31,11 +31,13 @@ function runFunctionTest(funcName: string, expected: string, result: string): vo
   const jsdocLines: string[] = [];
   let i = funcLineIndex - 1;
   // Go backwards from the function line to find JSDoc comments
-  while (i >= 0
+  while (
+    i >= 0
     && (lines[i].trim().startsWith('*')
       || lines[i].trim().startsWith('/**')
       || lines[i].trim().startsWith('*/')
-      || lines[i].trim() === '')) {
+      || lines[i].trim() === '')
+  ) {
     // Only add non-empty lines
     if (lines[i].trim() !== '') {
       jsdocLines.unshift(lines[i]);

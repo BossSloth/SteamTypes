@@ -1,5 +1,11 @@
 import { createTest } from './create-test';
-import { advancedPropertyTests, basicPropertyTests, edgeCasePropertyTests, mergedInterfaceTests, objectArraysTests } from './test-cases';
+import {
+  advancedPropertyTests,
+  basicPropertyTests,
+  edgeCasePropertyTests,
+  mergedInterfaceTests,
+  objectArraysTests,
+} from './test-cases';
 import { converterFlowTests } from './test-cases/converter-flow-test-cases';
 import { getterThrowsTests } from './test-cases/getter-throws-test-cases';
 import { nativeMethodTests } from './test-cases/native-method-test-cases';
@@ -27,4 +33,6 @@ createTest('Getter Throws Tests', getterThrowsTests, { expectConsoleErrors: ['fa
 
 createTest('Converter Flow Tests', converterFlowTests);
 
-createTest('Native Method Tests', nativeMethodTests, { expectConsoleWarnings: ['Function notOnClass not found in class NativeHost'] });
+createTest('Native Method Tests', nativeMethodTests, {
+  expectConsoleWarnings: ['Function notOnClass not found in class NativeHost'],
+});

@@ -6,7 +6,7 @@ export interface SearchStore {
 
   ClearSearchText(): void;
 
-  FetchSearchSuggestions(e: unknown, t: unknown): Promise<{ total: number; items: unknown[]; }>;
+  FetchSearchSuggestions(e: unknown, t: unknown): Promise<{ total: number; items: unknown[] }>;
 
   GetSearchText(): SearchStore['m_strSearchText'];
 

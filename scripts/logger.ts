@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/class-methods-use-this */
 export class Logger {
-  options: Partial<{ verbose: boolean; }> = {};
+  options: Partial<{ verbose: boolean }> = {};
 
-  constructor(options?: Partial<{ verbose: boolean; }>) {
+  constructor(options?: Partial<{ verbose: boolean }>) {
     this.options = options ?? {};
   }
 

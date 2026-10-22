@@ -316,7 +316,7 @@ export interface CMsgClientRemoveFriendFromGroupResponse {
   eresult?: number;
 }
 
-export interface CMsgClientGetEmoticonList { }
+export interface CMsgClientGetEmoticonList {}
 
 export interface CMsgClientEmoticonList {
   effects?: CMsgClientEmoticonList_Effect[];

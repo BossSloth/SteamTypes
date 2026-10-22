@@ -1,19 +1,29 @@
 import { convertToTypescript } from '../../../scripts/convert-to-typescript';
 
-export function createTest(name: string, testObject: Record<string, unknown>, options?: { expectConsoleErrors?: string[]; expectConsoleWarnings?: string[]; }): void {
+export function createTest(
+  name: string,
+  testObject: Record<string, unknown>,
+  options?: { expectConsoleErrors?: string[]; expectConsoleWarnings?: string[] },
+): void {
   const interfaceName = name.replace(/\s/g, '');
 
   it(name, async () => {
     const capturedErrors: string[] = [];
     const capturedWarnings: string[] = [];
 
-    const consoleErrorSpy = options?.expectConsoleErrors !== undefined
-      ? vi.spyOn(console, 'error').mockImplementation((message: string) => { capturedErrors.push(message); })
-      : null;
+    const consoleErrorSpy =
+      options?.expectConsoleErrors !== undefined
+        ? vi.spyOn(console, 'error').mockImplementation((message: string) => {
+            capturedErrors.push(message);
+          })
+        : null;
 
-    const consoleWarnSpy = options?.expectConsoleWarnings !== undefined
-      ? vi.spyOn(console, 'warn').mockImplementation((message: string) => { capturedWarnings.push(message); })
-      : null;
+    const consoleWarnSpy =
+      options?.expectConsoleWarnings !== undefined
+        ? vi.spyOn(console, 'warn').mockImplementation((message: string) => {
+            capturedWarnings.push(message);
+          })
+        : null;
 
     const result = convertToTypescript(testObject, interfaceName);
 

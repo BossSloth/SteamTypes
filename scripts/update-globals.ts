@@ -30,7 +30,7 @@ function sortLowercase(a: string, b: string): number {
 async function getWindowProperties(
   sharedJsClient: ChromeRemoteInterface.Client,
   logger: Logger,
-): Promise<{ steamProperties: string[]; unwantedProperties: string[]; }> {
+): Promise<{ steamProperties: string[]; unwantedProperties: string[] }> {
   logger.debug(chalk.blue('🔄 Injecting defaultChromeWindow.js script...'));
 
   // Inject the defaultChromeWindow.js script
@@ -73,10 +73,7 @@ function extractDeclaredProperties(fileContent: string): Map<string, string> {
   return sortedProperties;
 }
 
-function updateGlobalsFile(
-  steamProperties: string[],
-  currentFileContent: string,
-): string {
+function updateGlobalsFile(steamProperties: string[], currentFileContent: string): string {
   const declared = extractDeclaredProperties(currentFileContent);
 
   let globalContent = '';
@@ -95,7 +92,10 @@ function updateGlobalsFile(
 
   let updatedContent = currentFileContent;
 
-  updatedContent = updatedContent.replace(/declare global\s*[\s\S]+\n\s*}\n}/, `declare global {\n${globalContent}\n\n  interface Window {\n${windowContent}\n  }\n}`);
+  updatedContent = updatedContent.replace(
+    /declare global\s*[\s\S]+\n\s*}\n}/,
+    `declare global {\n${globalContent}\n\n  interface Window {\n${windowContent}\n  }\n}`,
+  );
 
   return updatedContent;
 }
@@ -103,10 +103,7 @@ function updateGlobalsFile(
 /**
  * Main function to update globals - called from validate-types.ts
  */
-export async function updateGlobals(
-  sharedJsClient: ChromeRemoteInterface.Client,
-  logger: Logger,
-): Promise<void> {
+export async function updateGlobals(sharedJsClient: ChromeRemoteInterface.Client, logger: Logger): Promise<void> {
   const startTime = performance.now();
   logger.log(chalk.blue('\n🔄 Updating Globals File...\n'));
 

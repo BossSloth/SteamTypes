@@ -54,7 +54,18 @@ export interface GamepadNavigationManager {
 
   NewGamepadNavigationTree(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
 
-  OnButtonActionInternal(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown, c: unknown): undefined;
+  OnButtonActionInternal(
+    e: unknown,
+    t: unknown,
+    r: unknown,
+    n: unknown,
+    i: unknown,
+    a: unknown,
+    s: unknown,
+    o: unknown,
+    l: unknown,
+    c: unknown,
+  ): undefined;
 
   OnButtonDown(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown): void;
 
@@ -123,7 +134,12 @@ export interface GamepadNavigationManager {
 
   m_rgAllContexts: FocusNavigationContext[];
 
-  m_rgGamepadInputSources: (StandardGamepadInputSource | MouseGamepadInputSource | TouchGamepadInputSource | VrGamepadInputSource)[];
+  m_rgGamepadInputSources: (
+    | StandardGamepadInputSource
+    | MouseGamepadInputSource
+    | TouchGamepadInputSource
+    | VrGamepadInputSource
+  )[];
 
   m_UnhandledButtonEventsCallbacks: Callbacks;
 
@@ -561,7 +577,7 @@ export interface From {
 
   m_Focused: ObservableValue<boolean>;
 
-  m_FocusRing: (FocusRing | null);
+  m_FocusRing: FocusRing | null;
 
   m_FocusWithin: ObservableValue<boolean>;
 
@@ -569,7 +585,7 @@ export interface From {
 
   m_nDepth: number;
 
-  m_Parent: (From | null);
+  m_Parent: From | null;
 
   m_Properties: Properties;
 
@@ -583,7 +599,7 @@ export interface From {
 
   NavKey?: never;
 
-  Parent: (From | null);
+  Parent: From | null;
 
   SubscribableFocusWithin: ObservableValue<boolean>;
 
@@ -623,7 +639,7 @@ export interface FocusRing {
 }
 
 export interface Properties {
-  actionDescriptionMap: (ActionDescriptionMap | object);
+  actionDescriptionMap: ActionDescriptionMap | object;
 
   autoFocus?: boolean;
 
@@ -795,7 +811,7 @@ export interface Tree {
 
   m_ParentNavTree: undefined;
 
-  m_rgChildNavTrees: unknown[]/* circular reference to ChildTrees */;
+  m_rgChildNavTrees: unknown[] /* circular reference to ChildTrees */;
 
   m_Root: From;
 

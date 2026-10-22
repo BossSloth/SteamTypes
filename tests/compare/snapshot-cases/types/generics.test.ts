@@ -5,7 +5,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'generic argument referencing type parameter is preserved': {
     interfaceName: 'Wrapper',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Box<U> {
         value: U;
       }
@@ -13,7 +13,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
       export interface Wrapper<T> {
         boxed: Box<T>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Box<U> {
         value: U;
       }
@@ -26,7 +26,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   // TODO: generic must be of correct type so it should output `T extends number | string`
   'interface with complex nested generics': {
     interfaceName: 'ApiResponse',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ApiResponse<T> {
         data: T[];
         pagination: Pagination;
@@ -38,7 +38,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         limit: number;
         total: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ApiResponse {
         data: number | string[];
         pagination: Pagination;
@@ -62,7 +62,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'generic type parameter changes': {
     interfaceName: 'DataStore',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface DataStore {
@@ -89,7 +89,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         tracking: boolean;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableMap, ObservableSet } from 'mobx';
 
       export interface DataStore {
@@ -122,7 +122,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'generic type parameter changes with union types': {
     interfaceName: 'DataCollection',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface DataCollection {
@@ -153,7 +153,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         tracking: boolean;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface DataCollection {
@@ -199,13 +199,13 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'generic type with typeof string': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
 
       export interface Container {
         data: Map<typeof MAIN_WINDOW_NAME, string>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: Map<string, string>;
       }`,
@@ -213,13 +213,13 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'generic type with typeof string mismatch': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const MAIN_WINDOW_NAME = 'SP Desktop_uid0';
 
       export interface Container {
         data: Map<typeof MAIN_WINDOW_NAME, string>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: Map<number, string>;
       }`,
@@ -228,7 +228,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'generic interface type in map': {
     interfaceName: 'DataStore',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, UserData<number>>;
       }
@@ -241,7 +241,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, UserData>;
       }
@@ -256,7 +256,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'generic interface type in map mismatch - data': {
     interfaceName: 'DataStore',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, number>;
       }
@@ -269,7 +269,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, UserData>;
       }
@@ -284,7 +284,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'generic interface type in map mismatch - id': {
     interfaceName: 'DataStore',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, UserData<number>>;
       }
@@ -297,7 +297,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: Map<string, UserData>;
       }
@@ -313,7 +313,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'simple generic': {
     interfaceName: 'DataStore',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: UserData<number>;
       }
@@ -326,7 +326,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: UserData;
       }
@@ -342,7 +342,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'simple generic with any type': {
     interfaceName: 'UserData',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserData<T> {
         email: string;
 
@@ -351,7 +351,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserData {
         id: number | string | boolean;
         name: string;
@@ -362,7 +362,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'simple generic mismatch': {
     interfaceName: 'DataStore',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: UserData<number>;
       }
@@ -375,7 +375,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: UserData;
       }
@@ -391,7 +391,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'union constraint': {
     interfaceName: 'DataStore',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: UserData<number>;
       }
@@ -404,7 +404,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: UserData;
       }
@@ -417,11 +417,10 @@ export const genericsCases: Record<string, ComparatorTest> = {
       `,
   },
 
-  'indexed access generic type no default':
-  {
+  'indexed access generic type no default': {
     interfaceName: 'DataStore',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: UserData<number>;
       }
@@ -436,7 +435,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: UserData;
       }
@@ -452,11 +451,10 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   // NOTE: if there is a default value on the generic type
   // and you use a indexed access type on the generic type, you need to define the <T>
-  'indexed access generic type with default':
-  {
+  'indexed access generic type with default': {
     interfaceName: 'DataStore',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataStore {
         data: UserData<number>;
       }
@@ -471,7 +469,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataStore {
         data: UserData;
       }
@@ -487,14 +485,14 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'imported generic type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { Callbacks } from './types';
 
       export interface Foo {
         bar: Callbacks<(arg: string) => void>;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: Callbacks;
       }
@@ -508,7 +506,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'generic property with enum source preserves type parameter': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         items: Item<number>[];
       }
@@ -519,7 +517,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         items: Item[];
       }
@@ -538,7 +536,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'type argument with conditional type referencing type parameter': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       interface TypeMap {
         a: { value: string; };
 
@@ -559,7 +557,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         value: T;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         items: Item[];
       }
@@ -578,7 +576,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   MappedObservable: {
     interfaceName: 'MappedObservable',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       /**
        * @exported
        */
@@ -626,7 +624,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
         m_vecCallbacks: T[];
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface MappedObservable {
         m_fnMap(e: unknown): boolean;
 
@@ -688,13 +686,13 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'indexed access on unconstrained type parameter': {
     interfaceName: 'UserData',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserData<T> {
         id: T;
 
         info: UserData<T>['id'];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserData {
         id: number;
 
@@ -704,13 +702,13 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'indexed access on type alias falls through': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       type Foo = { bar: string; };
 
       export interface Container {
         value: Foo['bar'];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         value: number;
       }`,
@@ -718,7 +716,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
   'indexed access referencing non-existent property': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar: string;
       }
@@ -726,7 +724,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
       export interface Container {
         value: Foo['nonexistent'];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: string;
       }

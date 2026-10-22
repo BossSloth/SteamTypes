@@ -246,7 +246,6 @@ export interface CClientNotificationIncomingVoiceChatNotificationTarget {
 }
 
 export interface CClientNotificationClaimSteamDeckRewardsNotificationTarget {
-
   eFeature: Feature;
 
   fnTray: null;

@@ -30,6 +30,6 @@ export interface PopupResult {
 
   /**
    * URL for usage with `window.open()`.
-  */
+   */
   strCreateURL: string;
 }

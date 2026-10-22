@@ -103,7 +103,7 @@ export interface Input {
 
   /**
    * @params unknown
-  */
+   */
   // {"nActiveController":0}
   RegisterForActiveControllerChanges(): Unregisterable;
 
@@ -116,7 +116,9 @@ export interface Input {
    */
   RegisterForControllerAccountChanges(): Unregisterable;
 
-  RegisterForControllerAnalogInputMessages(callback: (controllerAnalogInputMessages: ControllerAnalogInputMessage[]) => void): Unregisterable;
+  RegisterForControllerAnalogInputMessages(
+    callback: (controllerAnalogInputMessages: ControllerAnalogInputMessage[]) => void,
+  ): Unregisterable;
 
   RegisterForControllerCommandMessages(callback: (controllerCommandMessage: ControllerCommandMessage) => void): Unregisterable;
 
@@ -395,7 +397,13 @@ export interface Input {
      */
   TriggerHapticPulse(controllerIndex: number, eHapticType: number, param2: number): unknown;
 
-  TriggerSimpleHapticEvent(controllerIndex: number, eHapticType: number, unIntensity: number, ndBGain: number, param4: number): unknown;
+  TriggerSimpleHapticEvent(
+    controllerIndex: number,
+    eHapticType: number,
+    unIntensity: number,
+    ndBGain: number,
+    param4: number,
+  ): unknown;
 
   /** @native */
   TurnOffController(): unknown;

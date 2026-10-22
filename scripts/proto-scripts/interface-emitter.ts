@@ -43,7 +43,7 @@ export function normalizeEnumValueName(valueName: string, originalEnumTypeName: 
   }
 
   // If name is fully numeric, prefix with "_"
-  if ((/^\d+$/).test(normalized)) {
+  if (/^\d+$/.test(normalized)) {
     normalized = `_${normalized}`;
   }
 
@@ -55,8 +55,9 @@ export function generateEnumDefinition(enumType: protobuf.Enum, parentName?: str
   const baseEnumName = getFullTypeName(parentName, enumType.name);
   const enumName = ctx.replacedNames.get(baseEnumName) ?? baseEnumName;
 
-  const entries = Object.entries(enumType.values).map(([name, value]) =>
-    `  ${normalizeEnumValueName(name, enumType.name, enumName)} = ${value},`);
+  const entries = Object.entries(enumType.values).map(
+    ([name, value]) => `  ${normalizeEnumValueName(name, enumType.name, enumName)} = ${value},`,
+  );
 
   const enumComments = ctx.existingComments.get(enumName);
   const enumComment = enumComments?.get('__interface_comment');
@@ -71,10 +72,7 @@ export function generateEnumDefinition(enumType: protobuf.Enum, parentName?: str
   return result.join('\n');
 }
 
-export function generateInterfaceDefinition(
-  messageType: protobuf.Type,
-  parentName?: string,
-): string {
+export function generateInterfaceDefinition(messageType: protobuf.Type, parentName?: string): string {
   const ctx = getCtx();
   const interfaceName = getFullTypeName(parentName, messageType.name);
 

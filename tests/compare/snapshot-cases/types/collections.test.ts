@@ -4,13 +4,13 @@ import { ComparatorTest, createTest } from '../shared';
 export const collectionCases: Record<string, ComparatorTest> = {
   'observable map': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
         data: ObservableMap<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
@@ -20,13 +20,13 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'observable set': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableSet } from 'mobx';
 
       export interface Container {
         data: ObservableSet<number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableSet } from 'mobx';
 
       export interface Container {
@@ -36,11 +36,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'set type different': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Set<number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: Set<boolean>;
       }`,
@@ -48,11 +48,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'map type different': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Map<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: Map<string, boolean>;
       }`,
@@ -60,11 +60,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'simple array type mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string[];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number[];
       }`,
@@ -72,11 +72,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'simple set type mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: Set<string>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: Set<number>;
       }`,
@@ -84,11 +84,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'simple string, array mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string[];
       }`,
@@ -96,11 +96,11 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'simple number, set mismatch': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: Set<number>;
       }`,
@@ -108,14 +108,14 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'interface with different ObservableMap type in an intersection': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
         data: number | ObservableMap<string, number>;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
@@ -125,13 +125,13 @@ export const collectionCases: Record<string, ComparatorTest> = {
 
   'mismatching ObservableMap': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
         data: ObservableMap<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { ObservableMap } from 'mobx';
 
       export interface Container {
@@ -142,7 +142,7 @@ export const collectionCases: Record<string, ComparatorTest> = {
   'array type to never type': {
     interfaceName: 'DataContainer',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataContainer {
         items: Item[];
       }
@@ -151,7 +151,7 @@ export const collectionCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataContainer {
         items: never;
       }`,
@@ -160,12 +160,12 @@ export const collectionCases: Record<string, ComparatorTest> = {
   'array type to unknown array': {
     interfaceName: 'DataCollection',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface DataCollection {
         items: string[];
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface DataCollection {
         items: unknown[];
       }`,
@@ -174,14 +174,14 @@ export const collectionCases: Record<string, ComparatorTest> = {
   'external array type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { Values } from './values';
 
       export interface Foo {
         values: Values[];
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         values: ((Values | Values2)[] | Values[]);
       }

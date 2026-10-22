@@ -5,7 +5,7 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
   'simple object type': {
     interfaceName: 'SimpleInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
@@ -13,7 +13,7 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
           prop2: number;
         };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
@@ -24,14 +24,14 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
 
   'object type removed member': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
           prop2: unknown;
         };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
@@ -41,13 +41,13 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
 
   'object type added member': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
         };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: {
           prop1: string;
@@ -58,12 +58,12 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
 
   'interface with complex property types': {
     interfaceName: 'ComplexData',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ComplexData {
         simpleArray: string[];
         record: Record<string, number>;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ComplexData {
         simpleArray: string[];
         record: Record<string, number>;
@@ -74,7 +74,7 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
 
   'interface with complex nested structures': {
     interfaceName: 'AppConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface AppConfig {
         api: ApiConfig;
         ui: UiConfig;
@@ -88,7 +88,7 @@ export const objectTypesCases: Record<string, ComparatorTest> = {
       export interface UiConfig {
         theme: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface AppConfig {
         api: ApiConfig;
         ui: UiConfig;

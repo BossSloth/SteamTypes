@@ -43,17 +43,19 @@ function isReactRoot(obj: object): boolean {
   return 'render' in obj && 'unmount' in obj && '_internalRoot' in obj;
 }
 
-function isSimpleProtobufMessage(obj: object): obj is { getClassName(): string; } {
+function isSimpleProtobufMessage(obj: object): obj is { getClassName(): string } {
   return 'toObject' in obj && 'serializeBinary' in obj && 'serializeBase64String' in obj && 'getClassName' in obj;
 }
 
 function isTanStackQueryObserver(obj: object): boolean {
-  return 'createResult' in obj
+  return (
+    'createResult' in obj
     && typeof obj.createResult === 'function'
     && 'getCurrentResult' in obj
     && typeof obj.getCurrentResult === 'function'
     && 'subscribe' in obj
-    && typeof obj.subscribe === 'function';
+    && typeof obj.subscribe === 'function'
+  );
 }
 
 function isSteamID(obj: object): boolean {
@@ -66,6 +68,7 @@ function isConnectionManager(obj: object): boolean {
 }
 
 function isCallbacks(obj: object): boolean {
+  // oxfmt-ignore
   return 'ClearAllCallbacks' in obj
     && 'CountRegistered' in obj
     && 'Dispatch' in obj
@@ -84,7 +87,7 @@ function importing(moduleName: string, type: string, name: string, defaultImport
   };
 }
 
-function resolveProtobufMessage(obj: { getClassName(): string; }, addImport: boolean, imports: ImportRegistry): string {
+function resolveProtobufMessage(obj: { getClassName(): string }, addImport: boolean, imports: ImportRegistry): string {
   if (addImport) imports.add('shared/protobuf', 'ProtobufInterface');
 
   return `ProtobufInterface<${obj.getClassName()}>`;
@@ -112,10 +115,16 @@ export const objectTypeStrategies: ObjectTypeStrategy[] = [
   { test: (obj) => isWindowObject(obj), resolve: () => 'Window' },
   { test: (obj) => isHTMLElement(obj), resolve: (obj) => obj.constructor.name },
   { test: (obj) => isCssStyleSheet(obj), resolve: () => 'CSSStyleSheet' },
-  { test: (obj) => isComputedValue(obj), resolve: (obj, addImport, imports) => getComputedValueType(obj as unknown as ComputedValue<unknown>, addImport, imports) },
+  {
+    test: (obj) => isComputedValue(obj),
+    resolve: (obj, addImport, imports) => getComputedValueType(obj as unknown as ComputedValue<unknown>, addImport, imports),
+  },
   { test: (obj) => isMutationObserver(obj), resolve: () => 'MutationObserver' },
   { test: (obj) => isReactRoot(obj), resolve: importing('react-dom/client', 'Root as ReactRoot', 'ReactRoot') },
-  { test: (obj) => isConnectionManager(obj), resolve: importing('Global/managers/ConnectionManager', 'ConnectionManager', 'ConnectionManager') },
+  {
+    test: (obj) => isConnectionManager(obj),
+    resolve: importing('Global/managers/ConnectionManager', 'ConnectionManager', 'ConnectionManager'),
+  },
   { test: (obj) => isSimpleProtobufMessage(obj), resolve: resolveProtobufMessage },
   { test: (obj) => isTanStackQueryObserver(obj), resolve: importing('@tanstack/query-core', 'QueryObserver', 'QueryObserver') },
   { test: (obj) => isSteamID(obj), resolve: importing('shared/steamid', 'SteamID', 'SteamID') },

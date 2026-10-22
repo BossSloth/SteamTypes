@@ -5,12 +5,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'return type string literal': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       bar(): 'my string';
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       bar(): string;
     }
@@ -19,11 +19,11 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
 
   'method with interface return type': {
     interfaceName: 'UserService',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserService {
         getUserById(id: number): unknown;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserService {
         getUserById(id: number): User | null;
         createUser(email: string, name: string): User;
@@ -38,14 +38,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'return type imported type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { Unregisterable } from './types';
 
       export interface Foo {
         bar(): Unregisterable;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): { unregister: () => void };
       }
@@ -53,12 +53,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'return type mismatch source array': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): unknown;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): unknown[];
       }
@@ -67,14 +67,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'return type with ReturnType, source has unknown': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): ReturnType<Foo['bar2']>;
 
         bar2(): string[];
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): unknown[];
 
@@ -85,14 +85,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'return type with ReturnType, source is known': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): ReturnType<Foo['bar2']>;
 
         bar2(): string[];
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): string[];
 
@@ -102,14 +102,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'return type with wrong ReturnType, source is known': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): ReturnType<Foo['bar2']>;
 
         bar2(): number[];
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): string[];
 
@@ -120,14 +120,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'typeof return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const MAIN_NAME = 'bar2';
 
       export interface Foo {
         bar(): typeof MAIN_NAME;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): string;
       }
@@ -136,12 +136,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'conditional return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Promise<{ clipSummary: string; result: number; } | { result: number; clipSummary?: undefined; }>;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): Promise<{ clipSummary: unknown; result: number; } | { result: unknown; clipSummary?: undefined; }>;
       }
@@ -150,12 +150,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'void undefined return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): void;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): undefined;
       }
@@ -164,12 +164,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'promise void undefined return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Promise<void>;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): Promise<undefined>;
       }
@@ -178,7 +178,7 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'type literal and interface return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Bar;
       }
@@ -191,7 +191,7 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
         height: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): { name: string, age: number, height: number };
       }
@@ -199,7 +199,7 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'type literal and interface return type different': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Bar;
       }
@@ -210,7 +210,7 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
         height: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): { name: string, age: number, height: number };
       }
@@ -219,14 +219,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'combined union return type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Values | 'ignore' | 'maintain';
       }
 
       export type Values = 'store' | 'foo' | 'bar';
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
       }
@@ -234,14 +234,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'combined union return type mismatch': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): Values | 'ignore' | 'maintain';
       }
 
       export type Values = 'store' | 'bar';
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): 'store' | 'foo' | 'bar' | 'ignore' | 'maintain';
       }
@@ -250,12 +250,12 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   'source method has no return type annotation': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): string;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar();
       }
@@ -263,14 +263,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'return type with ReturnType, target method has no return type annotation': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar(): ReturnType<Foo['bar2']>;
 
         bar2();
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar(): string;
 
@@ -280,14 +280,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'typeof object literal mismatch': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const obj = { a: 1 };
 
       export interface Foo {
         value: typeof obj;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         value: number;
       }
@@ -295,14 +295,14 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
   },
   'typeof function declaration mismatch': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       function fn(): string { return 'a'; }
 
       export interface Foo {
         value: typeof fn;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         value: number;
       }

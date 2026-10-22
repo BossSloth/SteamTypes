@@ -1,4 +1,27 @@
-import { BluetoothDeviceType, CPUGovernor, ColorGamutLabelSet, GPUPerformanceLevel, GraphicsPerfOverlayLevel, HDRToneMapOperator, OSBranch, SDCardFormatStage, SplitScalingFilter, SplitScalingScaler, StorageBlockContentType, StorageBlockFileSystemType, StorageDriveMediaType, SystemAudioChannel, SystemAudioDirection, SystemAudioPortDirection, SystemAudioPortType, SystemDisplayCompatibilityMode, SystemFanControlMode, SystemServiceState, UpdaterState, UpdaterType } from './enums';
+import {
+  BluetoothDeviceType,
+  CPUGovernor,
+  ColorGamutLabelSet,
+  GPUPerformanceLevel,
+  GraphicsPerfOverlayLevel,
+  HDRToneMapOperator,
+  OSBranch,
+  SDCardFormatStage,
+  SplitScalingFilter,
+  SplitScalingScaler,
+  StorageBlockContentType,
+  StorageBlockFileSystemType,
+  StorageDriveMediaType,
+  SystemAudioChannel,
+  SystemAudioDirection,
+  SystemAudioPortDirection,
+  SystemAudioPortType,
+  SystemDisplayCompatibilityMode,
+  SystemFanControlMode,
+  SystemServiceState,
+  UpdaterState,
+  UpdaterType,
+} from './enums';
 
 export interface SteamMessagesClientIClientForcedEnumDependencies {
   a?: BluetoothDeviceType;

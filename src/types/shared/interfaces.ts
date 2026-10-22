@@ -18,7 +18,7 @@ export interface ObservableValue<T> {
    * @param callback The callback to be called when the value changes.
    * @returns An object with an `Unsubscribe` method to remove the subscription.
    */
-  Subscribe(callback: (value: T) => void): { Unsubscribe: () => void; };
+  Subscribe(callback: (value: T) => void): { Unsubscribe: () => void };
 
   m_callbacks: Callbacks<(value: T) => void>;
 
@@ -69,13 +69,16 @@ export interface ReducedValue<TInput, TOutput> {
   /**
    * Internal map of all input values, keyed by their assigned ID.
    */
-  m_mapInputs: Map<number, {
-    value: TInput;
+  m_mapInputs: Map<
+    number,
+    {
+      value: TInput;
 
-    strDebugCallstack: string | null;
+      strDebugCallstack: string | null;
 
-    strDebugName: string;
-  }>;
+      strDebugName: string;
+    }
+  >;
 
   /**
    * Incrementing ID counter for assigning keys to inputs.
@@ -121,7 +124,7 @@ export interface MappedObservable<TSource, TMapped> {
    * @param callback The callback to be called when the mapped value changes.
    * @returns An object with an `Unsubscribe` method to remove the subscription.
    */
-  Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void; };
+  Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void };
 
   /** @native */
   SyncStore(): unknown;
@@ -173,7 +176,7 @@ export interface Callbacks<T extends (...args: any) => unknown = (...args: any) 
    */
   Dispatch(...args: Parameters<T>): void;
 
-  Register(callback: T): { Unregister: () => void; };
+  Register(callback: T): { Unregister: () => void };
 
   m_vecCallbacks: T[];
 }

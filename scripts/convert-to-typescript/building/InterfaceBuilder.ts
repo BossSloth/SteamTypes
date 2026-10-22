@@ -94,8 +94,7 @@ export class InterfaceBuilder {
       let value: unknown;
       try {
         value = obj[key];
-      }
-      catch (e) {
+      } catch (e) {
         console.error(`❌ Error: failed to get property ${key} from ${name}`, e);
 
         const interfaceProperty: InterfaceProperty = {

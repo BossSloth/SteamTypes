@@ -213,17 +213,11 @@ export interface MessageHandlers {
 
   DEBUG_LogMessageDispatch(msg: ProtobufNotification<unknown>, handler: MessageCallback): void;
 
-  DispatchMsgToHandlers(
-    msg: ProtobufNotification<unknown>,
-    sendResponse: (resp: ProtobufInterface<unknown>) => void,
-  ): boolean;
+  DispatchMsgToHandlers(msg: ProtobufNotification<unknown>, sendResponse: (resp: ProtobufInterface<unknown>) => void): boolean;
 
   InstallErrorReportingStore(store: ErrorReportingStore): void;
 
-  RegisterBaseEMessageHandler<T>(
-    eMsg: number,
-    callback: EMsgCallback<T>,
-  ): MessageRegistration<EMsgCallback<T>>;
+  RegisterBaseEMessageHandler<T>(eMsg: number, callback: EMsgCallback<T>): MessageRegistration<EMsgCallback<T>>;
 
   RegisterEMessageAction<T>(
     eMsg: number,
@@ -301,7 +295,7 @@ export interface ErrorReportingStore {
 
   QueueReport(e: unknown): void;
 
-  ReportError(e: unknown, t: unknown): Promise<{ identifier: unknown; identifierHash: unknown; message: unknown; } | null>;
+  ReportError(e: unknown, t: unknown): Promise<{ identifier: unknown; identifierHash: unknown; message: unknown } | null>;
 
   ResumeReporting(): void;
 

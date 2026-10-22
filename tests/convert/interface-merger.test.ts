@@ -151,7 +151,7 @@ defineTests('inheritance grouping', [
         constructorString: 'class CA{}',
         extendedConstructorString: 'class Parent{}',
         properties: [
-          { name: 'shared', jsDoc: ['/** shared docs */'] },
+          { name: 'shared', jsDoc: ['/** shared docs */'] }, //
           { name: 'a' },
         ],
       },
@@ -160,7 +160,7 @@ defineTests('inheritance grouping', [
         constructorString: 'class CB{}',
         extendedConstructorString: 'class Parent{}',
         properties: [
-          { name: 'shared', jsDoc: ['/** shared docs */', '/** more docs */'] },
+          { name: 'shared', jsDoc: ['/** shared docs */', '/** more docs */'] }, //
           { name: 'b' },
         ],
       },

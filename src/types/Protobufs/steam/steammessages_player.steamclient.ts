@@ -103,7 +103,7 @@ export interface CPlayer_GetPlayerLinkDetails_Response_PlayerLinkDetails_Account
   watching_broadcast_viewers?: number;
 }
 
-export interface CPlayer_GetMutualFriendsForIncomingInvites_Request { }
+export interface CPlayer_GetMutualFriendsForIncomingInvites_Request {}
 
 export interface CPlayer_IncomingInviteMutualFriendList {
   mutual_friend_account_ids?: number[];
@@ -301,7 +301,7 @@ export interface CPlayer_SetProfileBackground_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetProfileBackground_Response { }
+export interface CPlayer_SetProfileBackground_Response {}
 
 export interface CPlayer_GetMiniProfileBackground_Request {
   language?: string;
@@ -317,7 +317,7 @@ export interface CPlayer_SetMiniProfileBackground_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetMiniProfileBackground_Response { }
+export interface CPlayer_SetMiniProfileBackground_Response {}
 
 export interface CPlayer_GetAvatarFrame_Request {
   language?: string;
@@ -333,7 +333,7 @@ export interface CPlayer_SetAvatarFrame_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetAvatarFrame_Response { }
+export interface CPlayer_SetAvatarFrame_Response {}
 
 export interface CPlayer_GetAnimatedAvatar_Request {
   language?: string;
@@ -349,7 +349,7 @@ export interface CPlayer_SetAnimatedAvatar_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetAnimatedAvatar_Response { }
+export interface CPlayer_SetAnimatedAvatar_Response {}
 
 export interface CPlayer_GetSteamDeckKeyboardSkin_Request {
   language?: string;
@@ -365,7 +365,7 @@ export interface CPlayer_SetSteamDeckKeyboardSkin_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetSteamDeckKeyboardSkin_Response { }
+export interface CPlayer_SetSteamDeckKeyboardSkin_Response {}
 
 export interface CPlayer_GetProfileItemsOwned_Request {
   filters?: CommunityItemClass[];
@@ -415,9 +415,9 @@ export interface CPlayer_SetEquippedProfileItemFlags_Request {
   flags?: number;
 }
 
-export interface CPlayer_SetEquippedProfileItemFlags_Response { }
+export interface CPlayer_SetEquippedProfileItemFlags_Response {}
 
-export interface CPlayer_GetEmoticonList_Request { }
+export interface CPlayer_GetEmoticonList_Request {}
 
 export interface CPlayer_GetEmoticonList_Response {
   emoticons?: CPlayer_GetEmoticonList_Response_Emoticon[];
@@ -641,7 +641,7 @@ export interface CPlayer_SetFavoriteBadge_Request {
   communityitemid?: number;
 }
 
-export interface CPlayer_SetFavoriteBadge_Response { }
+export interface CPlayer_SetFavoriteBadge_Response {}
 
 export interface CPlayer_GetProfileCustomization_Request {
   include_inactive_customizations?: boolean;
@@ -763,7 +763,7 @@ export interface CPlayer_GetPurchasedAndUpgradedProfileCustomizations_Response_U
   level?: number;
 }
 
-export interface CPlayer_GetProfileThemesAvailable_Request { }
+export interface CPlayer_GetProfileThemesAvailable_Request {}
 
 export interface CPlayer_GetProfileThemesAvailable_Response {
   profile_themes?: ProfileTheme[];
@@ -773,13 +773,13 @@ export interface CPlayer_SetProfileTheme_Request {
   theme_id?: string;
 }
 
-export interface CPlayer_SetProfileTheme_Response { }
+export interface CPlayer_SetProfileTheme_Response {}
 
 export interface CPlayer_SetProfilePreferences_Request {
   profile_preferences?: ProfilePreferences;
 }
 
-export interface CPlayer_SetProfilePreferences_Response { }
+export interface CPlayer_SetProfilePreferences_Response {}
 
 export interface CPlayer_PostStatusToFriends_Request {
   appid?: number;
@@ -787,7 +787,7 @@ export interface CPlayer_PostStatusToFriends_Request {
   status_text?: string;
 }
 
-export interface CPlayer_PostStatusToFriends_Response { }
+export interface CPlayer_PostStatusToFriends_Response {}
 
 export interface CPlayer_GetPostedStatus_Request {
   postid?: number;
@@ -811,7 +811,7 @@ export interface CPlayer_DeletePostedStatus_Request {
   postid?: number;
 }
 
-export interface CPlayer_DeletePostedStatus_Response { }
+export interface CPlayer_DeletePostedStatus_Response {}
 
 export interface CPlayer_GetLastPlayedTimes_Request {
   min_last_played?: number;
@@ -859,7 +859,7 @@ export interface CPlayer_GetLastPlayedTimes_Response_Game {
   playtime_windows_forever?: number;
 }
 
-export interface CPlayer_GetTimeSSAAccepted_Request { }
+export interface CPlayer_GetTimeSSAAccepted_Request {}
 
 export interface CPlayer_GetTimeSSAAccepted_Response {
   time_chinassa_accepted?: number;
@@ -875,9 +875,9 @@ export interface CPlayer_AcceptSSA_Request {
   time_signed_utc?: number;
 }
 
-export interface CPlayer_AcceptSSA_Response { }
+export interface CPlayer_AcceptSSA_Response {}
 
-export interface CPlayer_GetNicknameList_Request { }
+export interface CPlayer_GetNicknameList_Request {}
 
 export interface CPlayer_GetNicknameList_Response {
   nicknames?: CPlayer_GetNicknameList_Response_PlayerNickname[];
@@ -889,7 +889,7 @@ export interface CPlayer_GetNicknameList_Response_PlayerNickname {
   nickname?: string;
 }
 
-export interface CPlayer_GetPerFriendPreferences_Request { }
+export interface CPlayer_GetPerFriendPreferences_Request {}
 
 export interface PerFriendPreferences {
   accountid?: number;
@@ -919,7 +919,7 @@ export interface CPlayer_SetPerFriendPreferences_Request {
   preferences?: PerFriendPreferences;
 }
 
-export interface CPlayer_SetPerFriendPreferences_Response { }
+export interface CPlayer_SetPerFriendPreferences_Response {}
 
 export interface CPlayer_AddFriend_Request {
   steamid?: string;
@@ -951,7 +951,7 @@ export interface CPlayer_IgnoreFriend_Response {
   friend_relationship?: number;
 }
 
-export interface CPlayer_GetCommunityPreferences_Request { }
+export interface CPlayer_GetCommunityPreferences_Request {}
 
 export interface CPlayer_CommunityPreferences {
   parenthesize_nicknames?: boolean;
@@ -975,9 +975,9 @@ export interface CPlayer_SetCommunityPreferences_Request {
   preferences?: CPlayer_CommunityPreferences;
 }
 
-export interface CPlayer_SetCommunityPreferences_Response { }
+export interface CPlayer_SetCommunityPreferences_Response {}
 
-export interface CPlayer_GetTextFilterWords_Request { }
+export interface CPlayer_GetTextFilterWords_Request {}
 
 export interface CPlayer_TextFilterWords {
   text_filter_custom_banned_words?: string[];
@@ -1013,9 +1013,9 @@ export interface CPlayer_UpdateSteamAnnouncementLastRead_Request {
   time_posted?: number;
 }
 
-export interface CPlayer_UpdateSteamAnnouncementLastRead_Response { }
+export interface CPlayer_UpdateSteamAnnouncementLastRead_Response {}
 
-export interface CPlayer_GetPrivacySettings_Request { }
+export interface CPlayer_GetPrivacySettings_Request {}
 
 export interface CPrivacySettings {
   privacy_state?: number;
@@ -1073,7 +1073,7 @@ export interface CPlayer_RecordDisconnectedPlaytime_Request_PlayHistory {
   session_time_start?: number;
 }
 
-export interface CPlayer_RecordDisconnectedPlaytime_Response { }
+export interface CPlayer_RecordDisconnectedPlaytime_Response {}
 
 export interface CPlayer_LastPlayedTimes_Notification {
   games?: CPlayer_GetLastPlayedTimes_Response_Game[];

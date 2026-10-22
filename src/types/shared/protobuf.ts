@@ -120,7 +120,14 @@ type IsInterface<T> = T extends unknown[]
   : T extends object
     ? T extends Function
       ? false
-      : T extends Date | RegExp | Map<unknown, unknown> | Set<unknown> | WeakMap<object, unknown> | WeakSet<object> | Promise<unknown>
+      : T extends
+            | Date
+            | RegExp
+            | Map<unknown, unknown>
+            | Set<unknown>
+            | WeakMap<object, unknown>
+            | WeakSet<object>
+            | Promise<unknown>
         ? false
         : true
     : false;
@@ -133,9 +140,7 @@ type AddMethodParam<T> = IsInterface<T> extends true ? ProtobufInterface<T> : T;
 
 // Add methods for all array properties
 type ProtoAdders<T> = {
-  [K in keyof T as Exclude<T[K], undefined> extends unknown[]
-    ? `add_${string & K}`
-    : never]: (
+  [K in keyof T as Exclude<T[K], undefined> extends unknown[] ? `add_${string & K}` : never]: (
     value: AddMethodParam<ArrayElement<Exclude<T[K], undefined>>>,
   ) => void;
 };
@@ -229,10 +234,11 @@ type InterfaceToTuple<T> = T extends object
 /**
  * An ArrayBuffer that can be deserialized by calling deserializeBinary on an instance of the referenced protobuf class
  */
-export type SerializedArrayBuffer<T> = ArrayBuffer & Partial<{
-  /** @internal doesn't exist in the actual type but is used to store the type in typescript */
-  __deserializesTo: T;
-}>;
+export type SerializedArrayBuffer<T> = ArrayBuffer
+  & Partial<{
+    /** @internal doesn't exist in the actual type but is used to store the type in typescript */
+    __deserializesTo: T;
+  }>;
 
 export interface RequestHandler<TReq, TResp = never> {
   name: string;

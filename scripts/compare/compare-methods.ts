@@ -36,12 +36,18 @@ export function compareAndCorrectMethodTypes(
   return returnTypeNeedsUpdate || parametersNeedUpdate;
 }
 
-function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
+function compareReturnType(
+  targetMethod: MethodSignature,
+  sourceMethod: MethodSignature,
+  isFromExtendedInterface: boolean,
+): boolean {
   // Compare return types
   const targetReturnTypeNode = targetMethod.getReturnTypeNode();
   const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
 
-  const typesAreEqual = targetReturnTypeNode !== undefined && sourceReturnTypeNode !== undefined
+  const typesAreEqual =
+    targetReturnTypeNode !== undefined
+    && sourceReturnTypeNode !== undefined
     && compareTypes(targetReturnTypeNode, sourceReturnTypeNode);
 
   if (!typesAreEqual && sourceReturnTypeNode !== undefined) {
@@ -81,7 +87,11 @@ function compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSi
   // }
 }
 
-function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
+function compareParameters(
+  targetMethod: MethodSignature,
+  sourceMethod: MethodSignature,
+  isFromExtendedInterface: boolean,
+): boolean {
   // Compare parameters
   const targetParams = targetMethod.getParameters();
   const sourceParams = sourceMethod.getParameters();
@@ -93,10 +103,12 @@ function compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSi
   }
 
   // If sourceParams is just '...e: unknown[]' skip type check
-  if (sourceParams.length === 1
-    && sourceParams[0].isRestParameter()) {
+  if (sourceParams.length === 1 && sourceParams[0].isRestParameter()) {
     const sourceTypeNode = sourceParams[0].getTypeNode();
-    if (sourceTypeNode?.isKind(SyntaxKind.ArrayType) === true && sourceTypeNode.getElementTypeNode().isKind(SyntaxKind.UnknownKeyword)) {
+    if (
+      sourceTypeNode?.isKind(SyntaxKind.ArrayType) === true
+      && sourceTypeNode.getElementTypeNode().isKind(SyntaxKind.UnknownKeyword)
+    ) {
       return false;
     }
   }
@@ -146,8 +158,8 @@ function compareParameter(
     return false;
   }
 
-  const typesAreEqual = sourceTypeNode === undefined
-    || (targetTypeNode !== undefined && compareTypes(targetTypeNode, sourceTypeNode));
+  const typesAreEqual =
+    sourceTypeNode === undefined || (targetTypeNode !== undefined && compareTypes(targetTypeNode, sourceTypeNode));
 
   if (isFromExtendedInterface) {
     return !typesAreEqual;

@@ -5,11 +5,11 @@ export const literalCases: Record<string, ComparatorTest> = {
   'string literal': {
     interfaceName: 'SimpleInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: 'a';
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
@@ -18,11 +18,11 @@ export const literalCases: Record<string, ComparatorTest> = {
   'number literal': {
     interfaceName: 'SimpleInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: 1;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -30,11 +30,11 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'mismatching literal string, number': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: 'a';
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -42,11 +42,11 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'mismatching literal number, string': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: 5;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
@@ -55,13 +55,13 @@ export const literalCases: Record<string, ComparatorTest> = {
   'typeof literal string': {
     interfaceName: 'SimpleInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const text = 'a';
 
       export interface SimpleInterface {
         existingProp: typeof text;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: string;
       }`,
@@ -69,13 +69,13 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'mismatching typeof literal string': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const text = 'a';
 
       export interface SimpleInterface {
         existingProp: typeof text;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -84,13 +84,13 @@ export const literalCases: Record<string, ComparatorTest> = {
   'typeof literal number': {
     interfaceName: 'SimpleInterface',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const num = 5;
 
       export interface SimpleInterface {
         existingProp: typeof num;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -98,13 +98,13 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'mismatching typeof literal number': {
     interfaceName: 'SimpleInterface',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       const num = 'a';
 
       export interface SimpleInterface {
         existingProp: typeof num;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SimpleInterface {
         existingProp: number;
       }`,
@@ -113,7 +113,7 @@ export const literalCases: Record<string, ComparatorTest> = {
   'external template literal types': {
     interfaceName: 'RouteConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type HttpMethod = 'GET' | 'POST';
       export type ResourceType = 4 | 5;
 
@@ -124,7 +124,7 @@ export const literalCases: Record<string, ComparatorTest> = {
 
         type: ResourceType;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: string;
 
@@ -137,7 +137,7 @@ export const literalCases: Record<string, ComparatorTest> = {
   'template literal types': {
     interfaceName: 'RouteConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface RouteConfig {
         method: 'GET' | 'POST';
 
@@ -145,7 +145,7 @@ export const literalCases: Record<string, ComparatorTest> = {
 
         type: 4 | 5;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: string;
         path: string;
@@ -155,7 +155,7 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'external template literal types with missing type': {
     interfaceName: 'RouteConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type HttpMethod = 'GET' | 'POST';
       export type ResourceType = 4 | 5;
 
@@ -164,7 +164,7 @@ export const literalCases: Record<string, ComparatorTest> = {
         path: string;
         type: ResourceType;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: number;
         path: string;
@@ -174,13 +174,13 @@ export const literalCases: Record<string, ComparatorTest> = {
 
   'template literal types with missing type': {
     interfaceName: 'RouteConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface RouteConfig {
         method: 'GET' | 'POST';
         path: string;
         type: 4 | 5;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: number;
         path: string;

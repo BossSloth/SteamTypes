@@ -28,10 +28,7 @@ describe('createInterfaceDefinition', () => {
 
     // Second call with the same name should log error and not create duplicate
     builder.createInterfaceDefinition(interfaceName, interfaceToProcess);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      `❌ Error: duplicate interface name?: ${interfaceName}`,
-      interfaceToProcess.obj,
-    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(`❌ Error: duplicate interface name?: ${interfaceName}`, interfaceToProcess.obj);
     // Should still only have one entry
     expect(session.interfaceRepository.definitions.size).toBe(1);
 

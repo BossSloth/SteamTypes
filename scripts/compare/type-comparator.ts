@@ -1,6 +1,22 @@
 /* eslint-disable complexity */
 
-import { ArrayTypeNode, EnumDeclaration, IndexedAccessTypeNode, IntersectionTypeNode, LiteralTypeNode, Node, PropertySignature, ts, TupleTypeNode, TypeLiteralNode, TypeNode, TypeParameterDeclaration, TypeQueryNode, TypeReferenceNode, UnionTypeNode } from 'ts-morph';
+import {
+  ArrayTypeNode,
+  EnumDeclaration,
+  IndexedAccessTypeNode,
+  IntersectionTypeNode,
+  LiteralTypeNode,
+  Node,
+  PropertySignature,
+  ts,
+  TupleTypeNode,
+  TypeLiteralNode,
+  TypeNode,
+  TypeParameterDeclaration,
+  TypeQueryNode,
+  TypeReferenceNode,
+  UnionTypeNode,
+} from 'ts-morph';
 import { handleInterfaceTypeReferences } from './handle-interfaces';
 import { compareAndCorrectMembers, orderMembers } from './interface-comparator';
 import { currentTargetSourceFile, isImportedType } from './shared';
@@ -136,7 +152,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     // This to allow comparison of types like `TypeA<string>` and `TypeA`
     // Example test case 'simple generic'
     const targetTypeArguments = targetTypeReference.getTypeArguments();
-    const sourceTypeArguments = (sourceNode).getTypeArguments();
+    const sourceTypeArguments = sourceNode.getTypeArguments();
 
     if (sourceTypeArguments.length === 0 && targetTypeArguments.length > 0) {
       const targetTypeArgumentStrings = targetTypeArguments.map((typeArgument) => typeArgument.getText());
@@ -181,8 +197,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
   return false;
 }
 
-function getMainEnumType(enumNode: EnumDeclaration): 'number' | 'string'
-{
+function getMainEnumType(enumNode: EnumDeclaration): 'number' | 'string' {
   const members = enumNode.getMembers();
   const firstMember = members[0];
 
@@ -259,8 +274,9 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
  */
 function collapseDuplicateUnionMembers(sourceUnion: UnionTypeNode): TypeNode | undefined {
   const memberNodes = sourceUnion.getTypeNodes();
-  const uniqueNodes = memberNodes.filter((node, index) =>
-    memberNodes.findIndex((other) => other.getText() === node.getText()) === index);
+  const uniqueNodes = memberNodes.filter(
+    (node, index) => memberNodes.findIndex((other) => other.getText() === node.getText()) === index,
+  );
 
   if (uniqueNodes.length === memberNodes.length) {
     return undefined;
@@ -328,8 +344,11 @@ function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): bo
   }
 
   if (Node.isUnionTypeNode(sourceNode)) {
-    return sourceNode.getTypeNodes().every((member) =>
-      Node.isArrayTypeNode(member) && compareTypes(targetArray.getElementTypeNode(), member.getElementTypeNode()));
+    return sourceNode
+      .getTypeNodes()
+      .every(
+        (member) => Node.isArrayTypeNode(member) && compareTypes(targetArray.getElementTypeNode(), member.getElementTypeNode()),
+      );
   }
 
   if (!Node.isArrayTypeNode(sourceNode)) {
@@ -379,12 +398,12 @@ function handleTargetIndexedAccess(targetIndexedAccess: IndexedAccessTypeNode, s
     }
   }
 
-  const targetNode = targetIndexedAccess.getObjectTypeNode().getType().getSymbol()
-    ?.getDeclarations()[0];
+  const targetNode = targetIndexedAccess.getObjectTypeNode().getType().getSymbol()?.getDeclarations()[0];
   if (Node.isInterfaceDeclaration(targetNode)) {
     const indexValue = targetIndexedAccess.getIndexTypeNode().getType().getLiteralValue();
-    const referencedProperty = targetNode.getMembers().find((member): member is PropertySignature =>
-      Node.isPropertySignature(member) && member.getName() === indexValue);
+    const referencedProperty = targetNode
+      .getMembers()
+      .find((member): member is PropertySignature => Node.isPropertySignature(member) && member.getName() === indexValue);
     if (referencedProperty) {
       return compareTypes(referencedProperty.getTypeNodeOrThrow(), sourceNode);
     }
@@ -461,7 +480,9 @@ function containsTypeParameterReference(typeNode: TypeNode): boolean {
   // resolving to a type parameter always matches in compareTypes (see the
   // TypeParameterDeclaration branch in handleTargetTypeReference), so the typeNode here
   // is always a composite (array/union/generic/etc.) wrapping a possible type parameter.
-  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some((desc) => Node.isTypeParameterDeclaration(getDeclarationNode(desc)));
+  return typeNode
+    .getDescendantsOfKind(ts.SyntaxKind.TypeReference)
+    .some((desc) => Node.isTypeParameterDeclaration(getDeclarationNode(desc)));
 }
 
 export function getText(typeNode: TypeNode): string {

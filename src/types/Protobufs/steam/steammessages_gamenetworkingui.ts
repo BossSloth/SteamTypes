@@ -1,7 +1,7 @@
 import { CMsgSteamDatagramP2PRoutingSummary } from './steamdatagram_messages_sdr';
 import { CMsgSteamDatagramConnectionQuality } from './steamnetworkingsockets_messages';
 
-export interface CGameNetworkingUI_GlobalState { }
+export interface CGameNetworkingUI_GlobalState {}
 
 export interface CGameNetworkingUI_ConnectionState {
   address_remote?: string;

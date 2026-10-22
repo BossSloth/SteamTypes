@@ -66,7 +66,13 @@ export interface User {
   RegisterForCurrentUserChanges(callback: (user: CurrentUser) => void): void;
 
   RegisterForLoginStateChange(
-    callback: (accountName: string, loginState: ELoginState, loginResult: number, loginPercentage: number, param4: number) => void,
+    callback: (
+      accountName: string,
+      loginState: ELoginState,
+      loginResult: number,
+      loginPercentage: number,
+      param4: number,
+    ) => void,
   ): Unregisterable;
 
   RegisterForPrepareForSystemSuspendProgress(callback: (data: unknown) => void): Unregisterable;
@@ -98,7 +104,6 @@ export interface User {
 
   RequestSupportSystemReport(reportId: string): Promise<{
     bSuccess: boolean;
-
   }>;
 
   ResumeSuspendedGames(param0: boolean): unknown;

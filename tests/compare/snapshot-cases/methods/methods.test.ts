@@ -4,12 +4,12 @@ import { ComparatorTest, createTest } from '../shared';
 export const methodsCases: Record<string, ComparatorTest> = {
   'interface with method signatures': {
     interfaceName: 'Service',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Service {
         getData(): string;
         setData(value: string): void;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Service {
         getData(): string;
         setData(value: string): void;
@@ -19,14 +19,14 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'external type accessed parameters': {
     interfaceName: 'EventHandler',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export type EventArgs = [type: string, payload: unknown, timestamp: number];
 
     export interface EventHandler {
       notify(...args: EventArgs): void;
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface EventHandler {
       notify(e: unknown, t: unknown, n: number): void;
     }
@@ -34,12 +34,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'parameter added to existing method': {
     interfaceName: 'PopupManager',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface PopupManager {
       GetHeaderImages(appOverview: { appid: number }): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface PopupManager {
       GetHeaderImages(e: unknown, t: unknown): string
     }
@@ -47,12 +47,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'parameter removed from existing method': {
     interfaceName: 'PopupManager',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface PopupManager {
       GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface PopupManager {
       GetHeaderImages(e: unknown): string
     }
@@ -61,12 +61,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter is typed array': {
     interfaceName: 'PopupManager',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(options: string[]): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(e: unknown[]): string
     }
@@ -74,12 +74,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'parameter becomes optional': {
     interfaceName: 'PopupManager',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(options: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(e?: unknown): string
     }
@@ -88,12 +88,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter has default null but is also string': {
     interfaceName: 'PopupManager',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(options?: string | null): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface PopupManager {
       GetOptions(e?: null): string
     }
@@ -102,7 +102,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter typed as enum number': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: EOptions): string
     }
@@ -112,7 +112,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
       Option2,
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(e: number): string
     }
@@ -121,7 +121,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter typed as enum string': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: EOptions): string
     }
@@ -131,7 +131,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
       Option2 = 'Option2',
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(e: string): string
     }
@@ -139,7 +139,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'parameter mismatch typed as enum': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: EOptions): string
     }
@@ -149,7 +149,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
       Option2,
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(e: string): string
     }
@@ -159,12 +159,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter is generated spread in source, but target is just array': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: string[]): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(...e: unknown[]): string
     }
@@ -174,12 +174,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter is generated spread in source, but target is just a type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(...e: unknown[]): string
     }
@@ -189,12 +189,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'parameter is generated spread in source, but target has multiple parameters': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: number, otherInfo: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(...e: unknown[]): string
     }
@@ -203,12 +203,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'target optional method': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions?(options: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: string): string
     }
@@ -216,12 +216,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'source optional method': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         GetOptions(options: string): string
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         GetOptions?(options: string): string
       }
@@ -230,12 +230,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   'source parameter has no type annotation': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         GetOptions(options: string): string
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         GetOptions(e): string
       }
@@ -243,12 +243,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
   },
   'source rest parameter is not unknown array triggers else branch': {
     interfaceName: 'Foo',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface Foo {
       GetOptions(options: string): string
     }
   `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface Foo {
       GetOptions(...e: string[]): string
     }
@@ -257,11 +257,11 @@ export const methodsCases: Record<string, ComparatorTest> = {
 
   'method with jsdoc added from source': {
     interfaceName: 'Api',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Api {
         id: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Api {
         id: number;
 
@@ -274,11 +274,11 @@ export const methodsCases: Record<string, ComparatorTest> = {
 
   'optional property replaced when source declares method of same name': {
     interfaceName: 'Api',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Api {
         foo?: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Api {
         foo(): void;
       }`,

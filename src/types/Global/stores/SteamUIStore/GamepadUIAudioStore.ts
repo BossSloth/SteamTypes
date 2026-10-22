@@ -159,7 +159,8 @@ export interface SteamAudioPlaybackObj {
  * fs.readdirSync(`${os.homedir()}/.steam/steamui/sounds`).map((e) => `'${e}'`).join('|');
  * ```
  */
-type NavAudioFile_t = 'bumper_end.wav'
+type NavAudioFile_t =
+  | 'bumper_end.wav'
   | 'camera1.wav'
   | 'confirmation_negative.wav'
   | 'confirmation_positive.wav'

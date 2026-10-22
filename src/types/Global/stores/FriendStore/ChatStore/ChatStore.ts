@@ -390,7 +390,7 @@ export interface ChatGroup {
 
   GetRoomWithLastMessageForUser(): unknown;
 
-  InternalGetMembersToHighlight(e: unknown, t: unknown): { members: unknown[]; remaining_count: number; };
+  InternalGetMembersToHighlight(e: unknown, t: unknown): { members: unknown[]; remaining_count: number };
 
   InviteFriend(e: unknown, t: unknown): void;
 
@@ -603,7 +603,7 @@ export interface ChatGroup {
 
   watching_broadcast_channel_id: string;
 
-  watching_broadcast_steamid: (null | SteamID);
+  watching_broadcast_steamid: null | SteamID;
 }
 
 export interface FriendChatStore {
@@ -1181,7 +1181,7 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   has_unread_messages: boolean;
 
-  lastChatLinkInfo?: (LastChatLinkInfo | null);
+  lastChatLinkInfo?: LastChatLinkInfo | null;
 
   m_bIsDefaultForGroup: boolean;
 
@@ -1205,7 +1205,7 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   m_groupVoiceActiveMembers: GroupVoiceActiveMembers;
 
-  m_lastChatLink?: (LastChatLinkInfo | null);
+  m_lastChatLink?: LastChatLinkInfo | null;
 
   m_mapMessageReactionReactors: ObservableMap<unknown, unknown>;
 

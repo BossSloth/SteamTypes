@@ -38,7 +38,7 @@ export function propertyStringSorter(a: string, b: string): number {
     j++;
   }
 
-  return (lenA - i) - (lenB - j);
+  return lenA - i - (lenB - j);
 }
 
 /**

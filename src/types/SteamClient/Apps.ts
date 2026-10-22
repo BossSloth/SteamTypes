@@ -1,6 +1,16 @@
-import { CAppOverview_Change_Protobuf, CMsgAchievementChange_Protobuf, CMsgCloudPendingRemoteOperations_Protobuf } from '@Runtime/Protobufs';
+import {
+  CAppOverview_Change_Protobuf,
+  CMsgAchievementChange_Protobuf,
+  CMsgCloudPendingRemoteOperations_Protobuf,
+} from '@Runtime/Protobufs';
 import { AppAchievementProgressCache } from 'Global/AppAchievementProgressCache';
-import { AppDetails, CustomImageInfo, EAppAllowDownloadsWhileRunningBehavior, EAppAutoUpdateBehavior, PlayerAchievement } from 'Global/stores/AppDetailsStore';
+import {
+  AppDetails,
+  CustomImageInfo,
+  EAppAllowDownloadsWhileRunningBehavior,
+  EAppAutoUpdateBehavior,
+  PlayerAchievement,
+} from 'Global/stores/AppDetailsStore';
 import { SerializedJsonString } from 'shared/helpers';
 import { SerializedArrayBuffer } from 'shared/protobuf';
 import { EThirdPartyControllerConfiguration } from './Input';
@@ -356,7 +366,9 @@ export interface Apps {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForAchievementChanges(callback: (data: SerializedArrayBuffer<typeof CMsgAchievementChange_Protobuf>) => void): Unregisterable;
+  RegisterForAchievementChanges(
+    callback: (data: SerializedArrayBuffer<typeof CMsgAchievementChange_Protobuf>) => void,
+  ): Unregisterable;
 
   RegisterForAppBackupStatus(callback: (appBackupStatus: AppBackupStatus) => void): Unregisterable;
 
@@ -412,7 +424,9 @@ export interface Apps {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForGameActionStart(callback: (gameActionIdentifier: number, appId: string, action: string, param3: ELaunchSource) => void): Unregisterable;
+  RegisterForGameActionStart(
+    callback: (gameActionIdentifier: number, appId: string, action: string, param3: ELaunchSource) => void,
+  ): Unregisterable;
 
   /**
    * Registers a callback function to be called when a game action task changes.
@@ -455,7 +469,10 @@ export interface Apps {
    */
   RegisterForWorkshopChanges(callback: (appId: number) => void): Unregisterable;
 
-  RegisterForWorkshopItemDownloads(appId: number, callback: (appId: number, publishedFileId: string, param2: number) => void): Unregisterable;
+  RegisterForWorkshopItemDownloads(
+    appId: number,
+    callback: (appId: number, publishedFileId: string, param2: number) => void,
+  ): Unregisterable;
 
   /**
    * @params unknown
@@ -568,7 +585,12 @@ export interface Apps {
    * @param assetType The type of artwork to set.
    * @returns A Promise that resolves after the custom artwork is set.
    */
-  SetCustomArtworkForApp(appId: number, base64Image: string, imageType: 'jpg' | 'png', assetType: ELibraryAssetType): Promise<unknown>;
+  SetCustomArtworkForApp(
+    appId: number,
+    base64Image: string,
+    imageType: 'jpg' | 'png',
+    assetType: ELibraryAssetType,
+  ): Promise<unknown>;
 
   /**
    * Sets a custom logo position for a specific app.
@@ -771,7 +793,8 @@ export enum ELibraryAssetType {
 
 export type AppAction = 'LaunchApp' | 'VerifyApp';
 
-export type LaunchAppTask = 'None'
+export type LaunchAppTask =
+  | 'None'
   | 'Completed'
   | 'Cancelled'
   | 'Failed'

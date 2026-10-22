@@ -4,12 +4,12 @@ import { ComparatorTest, createTest } from '../shared';
 export const missingCases: Record<string, ComparatorTest> = {
   'missing interface multiple times': {
     interfaceName: 'AppData',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface AppData {
         appInfo: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface AppData {
         appInfo: string;
         associationData: AssociationData;
@@ -31,7 +31,7 @@ export const missingCases: Record<string, ComparatorTest> = {
   'does not delete extended extra JsPbMessage': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar: string;
       }
@@ -40,7 +40,7 @@ export const missingCases: Record<string, ComparatorTest> = {
         data(): string;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: string;
       }
@@ -50,7 +50,7 @@ export const missingCases: Record<string, ComparatorTest> = {
   'does not delete interface that is only extended': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Foo {
         bar: string;
 
@@ -65,7 +65,7 @@ export const missingCases: Record<string, ComparatorTest> = {
         name: string;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: string;
 
@@ -82,7 +82,7 @@ export const missingCases: Record<string, ComparatorTest> = {
   'imported renamed enum': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { EControllerStatus } from './enums';
 
       export interface Foo {
@@ -91,7 +91,7 @@ export const missingCases: Record<string, ComparatorTest> = {
         EControllerPreference: EControllerStatus;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: string;
 
@@ -104,13 +104,13 @@ export const missingCases: Record<string, ComparatorTest> = {
   'interface with nullable imported type': {
     interfaceName: 'ImportedContainer',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { DataType } from './some-module';
 
       export interface ImportedContainer {
         data: DataType | null;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ImportedContainer {
         data: LocalType | null;
       }
@@ -124,7 +124,7 @@ export const missingCases: Record<string, ComparatorTest> = {
   'multiple imported interface renamed': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { DataType } from './some-module';
 
       export interface Foo {
@@ -132,7 +132,7 @@ export const missingCases: Record<string, ComparatorTest> = {
 
         otherValue: DataType;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         data: LocalType;
 
@@ -147,12 +147,12 @@ export const missingCases: Record<string, ComparatorTest> = {
 
   'target property missing type annotation is filled in from source': {
     interfaceName: 'PartiallyTyped',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface PartiallyTyped {
         untyped;
         typed: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface PartiallyTyped {
         untyped: string;
         typed: number;
@@ -161,11 +161,11 @@ export const missingCases: Record<string, ComparatorTest> = {
   'source property missing type annotation does not change target': {
     interfaceName: 'PartiallyTyped',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface PartiallyTyped {
         untyped: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface PartiallyTyped {
         untyped;
       }`,
@@ -174,14 +174,14 @@ export const missingCases: Record<string, ComparatorTest> = {
   'empty source interface matched to empty target interface': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: ExistingEmpty;
       }
 
       export interface ExistingEmpty {
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: NewEmpty;
       }
@@ -192,7 +192,7 @@ export const missingCases: Record<string, ComparatorTest> = {
 
   'unused interface removed when a type alias is present': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type Alias = string;
 
       export interface Root {
@@ -202,7 +202,7 @@ export const missingCases: Record<string, ComparatorTest> = {
       export interface Unused {
         x: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         id: number;
         name: string;
@@ -212,8 +212,8 @@ export const missingCases: Record<string, ComparatorTest> = {
   'error - root interface missing': {
     interfaceName: 'Foo',
     expectedException: 'Interface Foo not found in one of the source files',
-    target: dedent/* ts */``,
-    source: dedent/* ts */`
+    target: dedent /* ts */ ``,
+    source: dedent /* ts */ `
       export interface Foo {
         bar: string;
       }`,

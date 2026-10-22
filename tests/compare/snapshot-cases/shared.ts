@@ -120,7 +120,7 @@ export function runComparisonTest(testValues: ComparatorTest): void {
  * @param sourceContent Content for the source file
  * @returns Object containing the created source files
  */
-function createTestFiles(targetContent: string, sourceContent: string): { targetFile: SourceFile; sourceFile: SourceFile; } {
+function createTestFiles(targetContent: string, sourceContent: string): { targetFile: SourceFile; sourceFile: SourceFile } {
   targetContent = `${targetContent}\n`;
   sourceContent = `${sourceContent}\n`;
 

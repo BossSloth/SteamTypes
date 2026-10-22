@@ -12,7 +12,9 @@ export interface Updates {
 
   GetOSBranchList(): Promise<unknown[]>;
 
-  RegisterForUpdateStateChanges(callback: (data: SerializedArrayBuffer<typeof CMsgSystemUpdateState_Protobuf>) => void): Unregisterable;
+  RegisterForUpdateStateChanges(
+    callback: (data: SerializedArrayBuffer<typeof CMsgSystemUpdateState_Protobuf>) => void,
+  ): Unregisterable;
 
   // 1 - Stable, 2 - Beta, 3 - Preview
   // Return maybe an enum?

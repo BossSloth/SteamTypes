@@ -4,12 +4,12 @@ import { ComparatorTest, createTest } from '../shared';
 export const modifierCases: Record<string, ComparatorTest> = {
   'interface with optional properties': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         name: string;
         version?: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         name?: string;
         version?: string;
@@ -19,12 +19,12 @@ export const modifierCases: Record<string, ComparatorTest> = {
 
   'interface with readonly properties': {
     interfaceName: 'ImmutableData',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ImmutableData {
         readonly id: number;
         data: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ImmutableData {
         readonly id: number;
         readonly data: string;
@@ -35,7 +35,7 @@ export const modifierCases: Record<string, ComparatorTest> = {
   'interface with property changing from optional to required': {
     interfaceName: 'UserAccount',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserAccount {
         email?: string;
 
@@ -45,7 +45,7 @@ export const modifierCases: Record<string, ComparatorTest> = {
 
         phone?: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserAccount {
         email: string;
         id: string;
@@ -56,14 +56,14 @@ export const modifierCases: Record<string, ComparatorTest> = {
 
   'interface with property changing from required to optional': {
     interfaceName: 'ProductDetails',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ProductDetails {
         description: string;
         id: string;
         name: string;
         price: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ProductDetails {
         description?: string;
         discount?: number;
@@ -76,11 +76,11 @@ export const modifierCases: Record<string, ComparatorTest> = {
 
   'method becomes property when source switches kind': {
     interfaceName: 'KindMismatch',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface KindMismatch {
         item(): string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface KindMismatch {
         item: string;
       }`,
@@ -88,11 +88,11 @@ export const modifierCases: Record<string, ComparatorTest> = {
 
   'property becomes method when source switches kind': {
     interfaceName: 'KindMismatch',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface KindMismatch {
         item: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface KindMismatch {
         item(): string;
       }`,

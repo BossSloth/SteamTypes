@@ -1,6 +1,16 @@
 import { isObservableMap, isObservableSet } from 'mobx';
 import { ConversionSession } from '../session/ConversionSession';
-import { ArrayType, createMapType, createSetType, GenericType, InterfaceType, IterableTypeName, PrimitiveType, Type, UnionType } from '../Type';
+import {
+  ArrayType,
+  createMapType,
+  createSetType,
+  GenericType,
+  InterfaceType,
+  IterableTypeName,
+  PrimitiveType,
+  Type,
+  UnionType,
+} from '../Type';
 import { defaultProtoProps, InterfaceToProcess } from '../types';
 import { objectTypeStrategies } from './detection-strategies';
 
@@ -24,14 +34,22 @@ export class TypeDetector {
     const type = typeof value;
 
     switch (type) {
-      case 'undefined': return new PrimitiveType('undefined');
-      case 'string': return new PrimitiveType('string');
-      case 'number': return new PrimitiveType('number');
-      case 'boolean': return new PrimitiveType('boolean');
-      case 'bigint': return new PrimitiveType('bigint');
-      case 'symbol': return new PrimitiveType('symbol');
-      case 'function': return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
-      case 'object': return this.getObjectType(value as Record<string, unknown>, path, storeClassName, addImport);
+      case 'undefined':
+        return new PrimitiveType('undefined');
+      case 'string':
+        return new PrimitiveType('string');
+      case 'number':
+        return new PrimitiveType('number');
+      case 'boolean':
+        return new PrimitiveType('boolean');
+      case 'bigint':
+        return new PrimitiveType('bigint');
+      case 'symbol':
+        return new PrimitiveType('symbol');
+      case 'function':
+        return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
+      case 'object':
+        return this.getObjectType(value as Record<string, unknown>, path, storeClassName, addImport);
     }
   }
 
@@ -67,8 +85,8 @@ export class TypeDetector {
     const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter, protobufClassName };
     if (storeClassName) {
       const constructorString = value.constructor.toString();
-      const isClass = (/^class\s/).test(constructorString);
-      const hasExtends = (/class \w+ extends/).test(constructorString);
+      const isClass = /^class\s/.test(constructorString);
+      const hasExtends = /class \w+ extends/.test(constructorString);
 
       if (isClass) {
         interfaceToProcess.constructorString = constructorString;
@@ -186,7 +204,7 @@ export class TypeDetector {
         return 'ObservableMap';
       case value instanceof Map:
         return 'Map';
-        /* v8 ignore next -- @preserve */
+      /* v8 ignore next -- @preserve */
       default:
         throw new Error('Invalid iterable type');
     }
@@ -194,17 +212,9 @@ export class TypeDetector {
 }
 
 function isIterable(value: unknown): value is Iterable<unknown> {
-  return Array.isArray(value)
-    || value instanceof Set
-    || isObservableSet(value)
-    || value instanceof Map
-    || isObservableMap(value);
+  return Array.isArray(value) || value instanceof Set || isObservableSet(value) || value instanceof Map || isObservableMap(value);
 }
 
-function isSteamObservableValue(obj: object): obj is { m_currentValue: unknown; } {
-  return 'Set' in obj
-    && 'Subscribe' in obj
-    && 'm_currentValue' in obj
-    && 'SubscriberCount' in obj
-    && 'Value' in obj;
+function isSteamObservableValue(obj: object): obj is { m_currentValue: unknown } {
+  return 'Set' in obj && 'Subscribe' in obj && 'm_currentValue' in obj && 'SubscriberCount' in obj && 'Value' in obj;
 }

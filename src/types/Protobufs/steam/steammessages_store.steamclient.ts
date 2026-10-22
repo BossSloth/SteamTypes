@@ -229,7 +229,7 @@ export interface CStore_SkipDiscoveryQueueItem_Request {
   store_page_filter?: CStorePageFilter;
 }
 
-export interface CStore_SkipDiscoveryQueueItem_Response { }
+export interface CStore_SkipDiscoveryQueueItem_Response {}
 
 export interface CStore_GetUserGameInterestState_Request {
   appid?: number;
@@ -313,7 +313,7 @@ export interface CStore_ReportApp_Request {
   report_type?: AppReportType;
 }
 
-export interface CStore_ReportApp_Response { }
+export interface CStore_ReportApp_Response {}
 
 export interface CStore_GetStorePreferences_Request {
   country_code?: string;
@@ -431,7 +431,7 @@ export interface CStore_QueueWishlistDemoEmailToFire_Request {
   demo_appid?: number;
 }
 
-export interface CStore_QueueWishlistDemoEmailToFire_Response { }
+export interface CStore_QueueWishlistDemoEmailToFire_Response {}
 
 export interface CReservationPositionMessage {
   accountid?: number;
@@ -453,7 +453,7 @@ export interface CStore_SetReservationPositionMessage_Request {
   settings?: CReservationPositionMessage[];
 }
 
-export interface CStore_SetReservationPositionMessage_Response { }
+export interface CStore_SetReservationPositionMessage_Response {}
 
 export interface CStore_DeleteReservationPositionMessage_Request {
   edistributor?: number;
@@ -463,15 +463,15 @@ export interface CStore_DeleteReservationPositionMessage_Request {
   start_queue_position?: number;
 }
 
-export interface CStore_DeleteReservationPositionMessage_Response { }
+export interface CStore_DeleteReservationPositionMessage_Response {}
 
-export interface CStore_GetAllReservationPositionMessages_Request { }
+export interface CStore_GetAllReservationPositionMessages_Request {}
 
 export interface CStore_GetAllReservationPositionMessages_Response {
   settings?: CReservationPositionMessage[];
 }
 
-export interface CStore_ReloadAllReservationPositionMessages_Notification { }
+export interface CStore_ReloadAllReservationPositionMessages_Notification {}
 
 export interface CSteamDeckCompatibility_SetFeedback_Request {
   appid?: number;
@@ -481,7 +481,7 @@ export interface CSteamDeckCompatibility_SetFeedback_Request {
   feedback_details?: number;
 }
 
-export interface CSteamDeckCompatibility_SetFeedback_Response { }
+export interface CSteamDeckCompatibility_SetFeedback_Response {}
 
 export interface CSteamDeckCompatibility_ShouldPrompt_Request {
   appid?: number;

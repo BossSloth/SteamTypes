@@ -157,7 +157,7 @@ export interface WebUIServiceTransport {
    */
   m_fnOnStatusEventHandler(): unknown;
 
-  MakeReady(): Promise<{ result: number; message: string; }>;
+  MakeReady(): Promise<{ result: number; message: string }>;
 
   OnStartShutdown(e: unknown): number;
 
@@ -226,7 +226,7 @@ export interface Connection {
 
   Connect(e: unknown): Promise<unknown>;
 
-  ConnectToSocket(e: unknown, t: unknown): Promise<{ result: number; message: string; }>;
+  ConnectToSocket(e: unknown, t: unknown): Promise<{ result: number; message: string }>;
 
   ConnectWithRetry(e: unknown, t: unknown, r: unknown): Promise<unknown>;
 

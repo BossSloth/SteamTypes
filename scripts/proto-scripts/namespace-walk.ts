@@ -13,19 +13,17 @@ function getEnumTypes(ns: protobuf.Namespace): protobuf.Enum[] {
 }
 
 function getNamespaces(ns: protobuf.Namespace): protobuf.Namespace[] {
-  return ns.nestedArray.filter((n): n is protobuf.Namespace =>
-    n instanceof protobuf.Namespace && !(n instanceof protobuf.Type) && !(n instanceof protobuf.Enum));
+  return ns.nestedArray.filter(
+    (n): n is protobuf.Namespace =>
+      n instanceof protobuf.Namespace && !(n instanceof protobuf.Type) && !(n instanceof protobuf.Enum),
+  );
 }
 
 function shouldSkipType(filename: string | null): boolean {
   return filename !== null && !filename.includes(getCtx().currentProtoFile);
 }
 
-function mapTypeToFile(
-  typeName: string,
-  filename: string | null,
-  parentName?: string,
-): void {
+function mapTypeToFile(typeName: string, filename: string | null, parentName?: string): void {
   /* v8 ignore next -- @preserve */
   if (filename === null) return;
 

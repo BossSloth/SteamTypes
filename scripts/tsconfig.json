@@ -5,7 +5,7 @@
     "outDir": null,
     "noUnusedParameters": false,
     "noImplicitAny": false,
-    "strictNullChecks": true,
+    "strictNullChecks": true
   },
-  "include": ["./**/*.ts", "./**/*.js"],
+  "include": ["./**/*.ts", "./**/*.js"]
 }

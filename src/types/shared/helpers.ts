@@ -13,7 +13,8 @@
  * ```
  */
 
-export type SerializedJsonString<T> = string & Partial<{
-  /** @internal doesn't exist in the actual type but is used to store the type in typescript */
-  __deserializesTo: T;
-}>;
+export type SerializedJsonString<T> = string
+  & Partial<{
+    /** @internal doesn't exist in the actual type but is used to store the type in typescript */
+    __deserializesTo: T;
+  }>;

@@ -110,20 +110,22 @@ function processProperties(sortedProperties: InterfaceProperty[]): [string[], st
 
   for (const property of sortedProperties) {
     if (property.functionInfo) {
-      const paramsList = property.functionInfo.params.map((param) => {
-        let paramStr = param.name;
+      const paramsList = property.functionInfo.params
+        .map((param) => {
+          let paramStr = param.name;
 
-        // Add optional marker for optional parameters
-        if (param.optional) {
-          paramStr += '?';
-        }
+          // Add optional marker for optional parameters
+          if (param.optional) {
+            paramStr += '?';
+          }
 
-        paramStr += `: ${param.type}`;
+          paramStr += `: ${param.type}`;
 
-        return paramStr;
-      }).join(', ');
+          return paramStr;
+        })
+        .join(', ');
 
-      const optionalMarker = property.optional ?? false ? '?' : '';
+      const optionalMarker = (property.optional ?? false) ? '?' : '';
 
       if (property.functionInfo.jsDoc) {
         functions.push(`  /**
@@ -134,7 +136,7 @@ ${property.functionInfo.jsDoc.map((jsDoc) => `   * ${jsDoc}`).join('\n')}
         functions.push(`  ${property.name}${optionalMarker}(${paramsList}): ${property.functionInfo.returnType};`);
       }
     } else {
-      const optionalMarker = property.optional ?? false ? '?' : '';
+      const optionalMarker = (property.optional ?? false) ? '?' : '';
       if (property.jsDoc) {
         nonFunctions.push(`  /**
 ${property.jsDoc.map((jsDoc) => `   * ${jsDoc}`).join('\n')}

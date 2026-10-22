@@ -1,10 +1,17 @@
-import { ArrowFunction, FunctionExpression, MethodDeclaration, ParameteredNode, Project, TypeFormatFlags, VariableDeclaration, ts } from 'ts-morph';
+import {
+  ArrowFunction,
+  FunctionExpression,
+  MethodDeclaration,
+  ParameteredNode,
+  Project,
+  TypeFormatFlags,
+  VariableDeclaration,
+  ts,
+} from 'ts-morph';
 import { FunctionInfo, MappedParam } from '../types';
 
 // Type format flags for consistent output
-const typeFormatFlags
-  = TypeFormatFlags.UseSingleQuotesForStringLiteralType
-    | TypeFormatFlags.UseFullyQualifiedType;
+const typeFormatFlags = TypeFormatFlags.UseSingleQuotesForStringLiteralType | TypeFormatFlags.UseFullyQualifiedType;
 
 const enableDiagnostics = false;
 
@@ -84,10 +91,7 @@ export class FunctionExtractor {
   /**
    * Creates and analyzes a source file from generated code
    */
-  private analyzeSourceFile(
-    functionsToProcess: Map<string, Function>,
-    nameMap: Map<string, string>,
-  ): void {
+  private analyzeSourceFile(functionsToProcess: Map<string, Function>, nameMap: Map<string, string>): void {
     const sourceFile = this.project.createSourceFile('functionAnalysisSourceFile.ts', this.sourceCodeBuilder.code);
 
     try {
@@ -138,11 +142,9 @@ export class FunctionExtractor {
   /**
    * Extracts and stores function information
    */
-  private extractAndStoreFunctionInfo(
-    variableDeclaration: VariableDeclaration,
-    originalFunc: Function,
-  ): void {
-    const initializer = variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
+  private extractAndStoreFunctionInfo(variableDeclaration: VariableDeclaration, originalFunc: Function): void {
+    const initializer =
+      variableDeclaration.getInitializerIfKind(ts.SyntaxKind.FunctionExpression)
       ?? variableDeclaration.getInitializerIfKindOrThrow(ts.SyntaxKind.ArrowFunction);
 
     const mappedParams = extractParams(initializer);

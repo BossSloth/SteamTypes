@@ -1,11 +1,30 @@
 import chalk from 'chalk';
 import { createTwoFilesPatch } from 'diff';
 import { compare } from 'natural-orderby';
-import { Identifier, InterfaceDeclaration, MethodSignature, NamedNode, Node, PropertySignature, SourceFile, SyntaxKind, TypeAliasDeclaration, TypeElementMemberedNode, TypeLiteralNode } from 'ts-morph';
+import {
+  Identifier,
+  InterfaceDeclaration,
+  MethodSignature,
+  NamedNode,
+  Node,
+  PropertySignature,
+  SourceFile,
+  SyntaxKind,
+  TypeAliasDeclaration,
+  TypeElementMemberedNode,
+  TypeLiteralNode,
+} from 'ts-morph';
 import { compareAndCorrectMethodTypes } from './compare-methods';
 import { compareAndCorrectPropertyTypes } from './compare-properties';
 import { addMissingInterface, findSimilarInterface } from './handle-interfaces';
-import { currentTargetSourceFile, CustomJsDocTags, getInterfaceMembers, getJsDocTagValues, initGlobalState, interfaceQueue } from './shared';
+import {
+  currentTargetSourceFile,
+  CustomJsDocTags,
+  getInterfaceMembers,
+  getJsDocTagValues,
+  initGlobalState,
+  interfaceQueue,
+} from './shared';
 import * as TypeComparator from './type-comparator';
 
 const processedInterfaces = new Set<string>();
@@ -17,11 +36,7 @@ const processedInterfaces = new Set<string>();
  * @param interfaceName The name of the interface in the target file
  * @returns void - changes are applied directly to the target source file
  */
-function compareAndCorrectInterfaces(
-  targetSourceFile: SourceFile,
-  sourceSourceFile: SourceFile,
-  interfaceName: string,
-): void {
+function compareAndCorrectInterfaces(targetSourceFile: SourceFile, sourceSourceFile: SourceFile, interfaceName: string): void {
   // Get the interfaces from both source files
   const targetInterface = targetSourceFile.getInterface(interfaceName);
   const sourceInterface = sourceSourceFile.getInterface(interfaceName);
@@ -78,15 +93,14 @@ function processInterfaceQueue(): void {
 function findDeclaringInheritedMember(
   targetInterface: InterfaceDeclaration,
   memberName: string,
-): { baseInterface: InterfaceDeclaration; baseMember: PropertySignature | MethodSignature; } | undefined {
+): { baseInterface: InterfaceDeclaration; baseMember: PropertySignature | MethodSignature } | undefined {
   for (const ext of targetInterface.getExtends()) {
     const def = (ext.getExpression() as Identifier).getDefinitionNodes().at(0);
     if (def === undefined || !Node.isInterfaceDeclaration(def)) {
       continue;
     }
 
-    const directMember = (def.getMembers() as (PropertySignature | MethodSignature)[])
-      .find((m) => m.getName() === memberName);
+    const directMember = (def.getMembers() as (PropertySignature | MethodSignature)[]).find((m) => m.getName() === memberName);
 
     if (directMember) {
       return { baseInterface: def, baseMember: directMember };
@@ -109,8 +123,9 @@ function getSourceDerivedInterfacesForSyntheticBase(
   baseInterface: InterfaceDeclaration,
   sourceDerived: InterfaceDeclaration,
 ): InterfaceDeclaration[] {
-  const derivedTargets = currentTargetSourceFile.getInterfaces().filter((i) =>
-    i.getExtends().some((e) => e.getExpression().getText() === baseInterface.getName()));
+  const derivedTargets = currentTargetSourceFile
+    .getInterfaces()
+    .filter((i) => i.getExtends().some((e) => e.getExpression().getText() === baseInterface.getName()));
 
   const sourceFile = sourceDerived.getSourceFile();
   const derivedSources = derivedTargets
@@ -161,10 +176,7 @@ function propertySourcesAgree(sourceMembers: PropertySignature[]): boolean {
 }
 
 /** @returns true if the base member was removed */
-function reconcileSyntheticBasePropertyMember(
-  baseMember: PropertySignature,
-  sourceMembers: PropertySignature[],
-): boolean {
+function reconcileSyntheticBasePropertyMember(baseMember: PropertySignature, sourceMembers: PropertySignature[]): boolean {
   if (!propertySourcesAgree(sourceMembers)) {
     baseMember.remove();
 
@@ -177,10 +189,7 @@ function reconcileSyntheticBasePropertyMember(
 }
 
 /** @returns true if the base member was removed */
-function reconcileSyntheticBaseMethodMember(
-  baseMember: MethodSignature,
-  sourceMembers: MethodSignature[],
-): boolean {
+function reconcileSyntheticBaseMethodMember(baseMember: MethodSignature, sourceMembers: MethodSignature[]): boolean {
   const first = sourceMembers[0];
   for (const other of sourceMembers.slice(1)) {
     if (other.getText() !== first.getText()) {
@@ -230,13 +239,11 @@ function reconcileSyntheticBaseMemberFromDerivedSources(
   return reconcileSyntheticBaseMethodMember(baseMember, agreeingSourceMembers as MethodSignature[]);
 }
 
-function recompareSyntheticBaseDerivedInterfaces(
-  baseInterface: InterfaceDeclaration,
-  sourceDerived: InterfaceDeclaration,
-): void {
+function recompareSyntheticBaseDerivedInterfaces(baseInterface: InterfaceDeclaration, sourceDerived: InterfaceDeclaration): void {
   const sourceFile = sourceDerived.getSourceFile();
-  const targetDerivedInterfaces = currentTargetSourceFile.getInterfaces().filter((i) =>
-    i.getExtends().some((ext) => ext.getExpression().getText() === baseInterface.getName()));
+  const targetDerivedInterfaces = currentTargetSourceFile
+    .getInterfaces()
+    .filter((i) => i.getExtends().some((ext) => ext.getExpression().getText() === baseInterface.getName()));
 
   for (const targetDerivedInterface of targetDerivedInterfaces) {
     const sourceDerivedInterface = sourceFile.getInterface(targetDerivedInterface.getName());
@@ -305,11 +312,7 @@ function handleNeedsExtendUpdate(
   // every derived source. This always reports a change, removing the member when
   // the sources disagree, otherwise correcting it in place.
   if (!sourceBaseInterface) {
-    const baseMemberRemoved = reconcileSyntheticBaseMemberFromDerivedSources(
-      targetInterface,
-      sourceInterface,
-      memberName,
-    );
+    const baseMemberRemoved = reconcileSyntheticBaseMemberFromDerivedSources(targetInterface, sourceInterface, memberName);
     if (baseMemberRemoved) {
       recompareSyntheticBaseDerivedInterfaces(declaring.baseInterface, sourceInterface);
     }
@@ -432,7 +435,11 @@ export function compareAndCorrectMembers(
     if (targetProp instanceof PropertySignature && sourceProp instanceof PropertySignature) {
       needsExtendUpdate = compareAndCorrectPropertyTypes(targetProp, sourceProp, isFromExtendedInterface);
     } else {
-      needsExtendUpdate = compareAndCorrectMethodTypes(targetProp as MethodSignature, sourceProp as MethodSignature, isFromExtendedInterface);
+      needsExtendUpdate = compareAndCorrectMethodTypes(
+        targetProp as MethodSignature,
+        sourceProp as MethodSignature,
+        isFromExtendedInterface,
+      );
     }
 
     if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration && sourceInterface instanceof InterfaceDeclaration) {
@@ -511,10 +518,7 @@ function addMissingMember(
  * @param targetInterface The interface to be edited
  * @param sourceInterface The interface to use as the source of truth
  */
-function compareAndCorrectHeritageClause(
-  targetInterface: InterfaceDeclaration,
-  sourceInterface: InterfaceDeclaration,
-): void {
+function compareAndCorrectHeritageClause(targetInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
   const targetExtends = targetInterface.getExtends();
   const sourceExtends = sourceInterface.getExtends();
   const targetExtendsSet = new Set(targetExtends.map((ext) => ext.getText()));
@@ -576,20 +580,23 @@ function removeUnusedInterfaces(targetSourceFile: SourceFile, rootInterface: Int
     const hasTypeAliasWithName = typeAliases.some((dec) => !dec.wasForgotten() && dec.getName() === targetInterface.getName());
 
     const doesNotHaveJsDocExportTag = getJsDocTagValues(targetInterface, 'exported').length === 0;
-    const hasTypeReferenceWithName = typeReferences.some((dec) => !dec.wasForgotten() && dec.getTypeName().getText() === targetInterface.getName());
-    const hasExpressionWithTypeArgumentsWithName = expressionWithTypeArguments.some((dec) => !dec.wasForgotten() && dec.getExpression().getText() === targetInterface.getName());
+    const hasTypeReferenceWithName = typeReferences.some(
+      (dec) => !dec.wasForgotten() && dec.getTypeName().getText() === targetInterface.getName(),
+    );
+    const hasExpressionWithTypeArgumentsWithName = expressionWithTypeArguments.some(
+      (dec) => !dec.wasForgotten() && dec.getExpression().getText() === targetInterface.getName(),
+    );
     const hasJsDocLink = targetSourceFile.getText().includes(`@link ${targetInterface.getName()}`);
     const extendsJsPbMessage = targetInterface.getExtends().some((ext) => ext.getExpression().getText() === 'JsPbMessage');
 
     if (
       hasTypeAliasWithName
-      || (
-        doesNotHaveJsDocExportTag
+      || (doesNotHaveJsDocExportTag
         && !hasTypeReferenceWithName
         && !hasExpressionWithTypeArgumentsWithName
         && !hasJsDocLink
-        && !extendsJsPbMessage
-      )) {
+        && !extendsJsPbMessage)
+    ) {
       targetInterface.remove();
     }
   }
@@ -602,7 +609,8 @@ export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteral
   }
 
   // Replace all single line comments with jsdoc because ts-morph setOrder doesn't work with single line comments
-  const newText = targetInterface.getFullText()
+  const newText = targetInterface
+    .getFullText()
     .replace(/ {2}\/\/\s*(.*)/g, '/** @moveBack $1 */') // Single line comments
     .replace(/\/\*(\s*\n\s+)([\s\S]*\*\/)/g, '/**$1@moveBack $2'); // Multi line comments
   targetInterface.replaceWithText(newText.trim());
@@ -620,8 +628,14 @@ export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteral
     }
 
     // Strip quotes from property names to ensure correct sorting
-    const aName = (a as NamedNode).getName().toLowerCase().replace(/^['"`]|['"`]$/g, '');
-    const bName = (b as NamedNode).getName().toLowerCase().replace(/^['"`]|['"`]$/g, '');
+    const aName = (a as NamedNode)
+      .getName()
+      .toLowerCase()
+      .replace(/^['"`]|['"`]$/g, '');
+    const bName = (b as NamedNode)
+      .getName()
+      .toLowerCase()
+      .replace(/^['"`]|['"`]$/g, '');
 
     // Use natural-orderby package as that is the same as the perfectionist eslint plugin uses
     return compare({ order: 'desc', locale: 'en' })(aName, bName);
@@ -632,7 +646,8 @@ export function orderMembers(targetInterface: InterfaceDeclaration | TypeLiteral
   }
 
   // Replace all moved jsdoc back to single line comments
-  const newText2 = targetInterface.getFullText()
+  const newText2 = targetInterface
+    .getFullText()
     .replace(/\/\*\*(?!\n)\s*@moveBack\s*(.*?)\s*\*\//g, '  // $1') // Single line comments
     .replace(/\/\*\*(\s+)@moveBack\s*([\s\S]*\*\/)/g, '/*$1$2'); // Multi line comments
   targetInterface.replaceWithText(newText2.trim());
@@ -657,6 +672,7 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
     return null;
   }
 
+  // oxfmt-ignore
   const diffResult = createTwoFilesPatch(
     `a/${filePath}`,
     `b/${filePath}`,
@@ -668,17 +684,20 @@ function generateDiff(originalText: string, newText: string, filePath: string): 
   );
 
   // Format the diff with colors
-  return diffResult.split('\n').map((line) => {
-    if (line.startsWith('+')) {
-      return chalk.green(line);
-    } else if (line.startsWith('-')) {
-      return chalk.red(line);
-    } else if (line.startsWith('@')) {
-      return chalk.cyan(line);
-    }
+  return diffResult
+    .split('\n')
+    .map((line) => {
+      if (line.startsWith('+')) {
+        return chalk.green(line);
+      } else if (line.startsWith('-')) {
+        return chalk.red(line);
+      } else if (line.startsWith('@')) {
+        return chalk.cyan(line);
+      }
 
-    return chalk.gray(line);
-  }).join('\n');
+      return chalk.gray(line);
+    })
+    .join('\n');
 }
 
 function removeDuplicateUnionTypes(sourceText: string): string {

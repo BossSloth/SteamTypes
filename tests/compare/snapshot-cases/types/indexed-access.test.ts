@@ -4,7 +4,7 @@ import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 export const indexedAccessCases: Record<string, ComparatorTest> = {
   'interface with indexed access types': {
     interfaceName: 'UserProfile',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserProfile {
         preferences: User['settings'];
         user: User;
@@ -22,7 +22,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         theme: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserProfile {
         user: User;
         preferences: Settings;
@@ -47,7 +47,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
   'normal indexed access type': {
     interfaceName: 'UserProfile',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserProfile {
         preferences: User['email'];
 
@@ -74,7 +74,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         language: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserProfile {
         user: User;
         preferences: string;
@@ -99,7 +99,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
   // TODO: maybe make it so the indexed access type is not removed by checking at the end if the type is the same
   'indexed access type mismatch': {
     interfaceName: 'UserProfile',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserProfile {
         preferences: User['email'];
 
@@ -126,7 +126,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         theme: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserProfile {
         user: User;
         preferences: string;
@@ -151,7 +151,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
   'indexed access interface type': {
     interfaceName: 'UserProfile',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserProfile {
         theme: User['settings'];
 
@@ -176,7 +176,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         theme: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserProfile {
         user: User;
         theme: Settings;
@@ -199,7 +199,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
 
   'indexed access interface type with mismatch': {
     interfaceName: 'UserProfile',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface UserProfile {
         theme: User['info'];
 
@@ -235,7 +235,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface UserProfile {
         user: User;
         theme: Settings;
@@ -266,7 +266,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
   'indexed access on external generic type': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { Foo } from './bar';
       import { Callbacks } from './types';
 
@@ -276,7 +276,7 @@ export const indexedAccessCases: Record<string, ComparatorTest> = {
         preferences: Foo['bar'];
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Foo {
         bar: ElementChanged;
 

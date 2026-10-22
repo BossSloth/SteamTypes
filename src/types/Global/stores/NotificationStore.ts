@@ -286,7 +286,7 @@ export interface RgNotificationTray<T extends ClientNotificationType = ClientNot
 export interface Notification<T extends ClientNotificationType> {
   bNewIndicator: boolean;
 
-  data: ProtobufInterface<NotificationTargets[T] extends { proto: ProtobufClass<infer U>; } ? U : never>;
+  data: ProtobufInterface<NotificationTargets[T] extends { proto: ProtobufClass<infer U> } ? U : never>;
 
   eSource: ESource;
 

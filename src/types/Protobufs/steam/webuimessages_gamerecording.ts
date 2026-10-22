@@ -1,7 +1,12 @@
 import { ExportCodec, GameRecordingType } from './enums';
-import { CGameRecordingTimelineEvent, CGameRecordingTimelineMetadata, CPhaseAttribute, CTimelineTag } from './webuimessages_gamerecordingfiles';
+import {
+  CGameRecordingTimelineEvent,
+  CGameRecordingTimelineMetadata,
+  CPhaseAttribute,
+  CTimelineTag,
+} from './webuimessages_gamerecordingfiles';
 
-export interface CGameRecording_GetAppsWithBackgroundVideo_Request { }
+export interface CGameRecording_GetAppsWithBackgroundVideo_Request {}
 
 export interface CGameRecording_GetAppsWithBackgroundVideo_Response {
   apps?: CGameRecording_GetAppsWithBackgroundVideo_Response_App[];
@@ -115,13 +120,13 @@ export interface CGameRecording_GetTags_Response {
   tags?: CTimelineTag[];
 }
 
-export interface CGameRecording_GetEnoughDiskSpace_Request { }
+export interface CGameRecording_GetEnoughDiskSpace_Request {}
 
 export interface CGameRecording_GetEnoughDiskSpace_Response {
   enough_space?: boolean;
 }
 
-export interface CGameRecording_GetAvailableDiskSpace_Request { }
+export interface CGameRecording_GetAvailableDiskSpace_Request {}
 
 export interface CGameRecording_GetAvailableDiskSpace_Response {
   size?: number;
@@ -205,7 +210,7 @@ export interface CGameRecording_TimelineEntryRemoved_Notification {
   timeline_id?: string;
 }
 
-export interface CGameRecording_LowDiskSpace_Notification { }
+export interface CGameRecording_LowDiskSpace_Notification {}
 
 export interface CGameRecording_PostGameHighlightsChanged_Notification {
   game_id?: number;
@@ -223,7 +228,7 @@ export interface CGameRecording_OpenOverlayToTimelineEvent_Notification {
   game_id?: number;
 }
 
-export interface CGameRecording_PhaseListChanged_Notification { }
+export interface CGameRecording_PhaseListChanged_Notification {}
 
 export interface CGameRecording_ClipSummary {
   clip_id?: string;
@@ -291,7 +296,7 @@ export interface CGameRecording_DeleteClip_Request {
   clip_id?: string;
 }
 
-export interface CGameRecording_DeleteClip_Response { }
+export interface CGameRecording_DeleteClip_Response {}
 
 export interface CGameRecording_ExportClip_Settings {
   bitrate_kbps?: number;
@@ -315,7 +320,7 @@ export interface CGameRecording_ExportClip_Request {
   use_unique_filename?: boolean;
 }
 
-export interface CGameRecording_ExportClip_Response { }
+export interface CGameRecording_ExportClip_Response {}
 
 export interface CGameRecording_ExportClipPreview_Request {
   clip_id?: string;
@@ -409,7 +414,7 @@ export interface CGameRecording_UserUpdateTimelineEntry_Request {
   game_id?: number;
 }
 
-export interface CGameRecording_UserUpdateTimelineEntry_Response { }
+export interface CGameRecording_UserUpdateTimelineEntry_Response {}
 
 export interface CGameRecording_UserRemoveTimelineEntry_Request {
   clip_id?: string;
@@ -421,13 +426,13 @@ export interface CGameRecording_UserRemoveTimelineEntry_Request {
   timeline_id?: string;
 }
 
-export interface CGameRecording_UserRemoveTimelineEntry_Response { }
+export interface CGameRecording_UserRemoveTimelineEntry_Response {}
 
 export interface CGameRecording_ManuallyDeleteRecordingsForApps_Request {
   game_ids?: number[];
 }
 
-export interface CGameRecording_ManuallyDeleteRecordingsForApps_Response { }
+export interface CGameRecording_ManuallyDeleteRecordingsForApps_Response {}
 
 export interface CGameRecording_GetTotalDiskSpaceUsage_Request {
   folder_path?: string;
@@ -471,7 +476,7 @@ export interface CGameRecording_StartRecording_Request {
   game_id?: number;
 }
 
-export interface CGameRecording_StartRecording_Response { }
+export interface CGameRecording_StartRecording_Response {}
 
 export interface CGameRecording_StopRecording_Request {
   game_id?: number;
@@ -489,11 +494,11 @@ export interface CGameRecording_GetRecordingSize_Response {
   file_size?: number;
 }
 
-export interface CGameRecording_CleanupBackgroundRecordings_Request { }
+export interface CGameRecording_CleanupBackgroundRecordings_Request {}
 
-export interface CGameRecording_CleanupBackgroundRecordings_Response { }
+export interface CGameRecording_CleanupBackgroundRecordings_Response {}
 
-export interface CGameRecording_GetPlatformCapabilities_Request { }
+export interface CGameRecording_GetPlatformCapabilities_Request {}
 
 export interface CGameRecording_GetPlatformCapabilities_Response {
   per_process_audio_capture?: boolean;
@@ -529,7 +534,7 @@ export interface CGameRecording_PerGameSettings {
   minutes?: number;
 }
 
-export interface CGameRecording_GetPerGameSettings_Request { }
+export interface CGameRecording_GetPerGameSettings_Request {}
 
 export interface CGameRecording_GetPerGameSettings_Response {
   settings?: CGameRecording_PerGameSettings[];
@@ -539,13 +544,13 @@ export interface CGameRecording_SetPerGameSettings_Request {
   game_settings?: CGameRecording_PerGameSettings;
 }
 
-export interface CGameRecording_SetPerGameSettings_Response { }
+export interface CGameRecording_SetPerGameSettings_Response {}
 
 export interface CGameRecording_DeletePerGameSettings_Request {
   gameid?: string;
 }
 
-export interface CGameRecording_DeletePerGameSettings_Response { }
+export interface CGameRecording_DeletePerGameSettings_Response {}
 
 export interface CGameRecording_UploadProgress_Notification {
   clip_id?: string;
@@ -559,7 +564,7 @@ export interface CGameRecording_SwitchBackgroundRecordingGame_Request {
   game_id?: number;
 }
 
-export interface CGameRecording_SwitchBackgroundRecordingGame_Response { }
+export interface CGameRecording_SwitchBackgroundRecordingGame_Response {}
 
 export enum TimelineEntryType {
   Invalid = 0,

@@ -75,11 +75,7 @@ export interface Audio {
    * @param channel - Audio channel (EAudioChannel)
    * @param volume - Volume level (0.0 - 1.0)
    */
-  SetDeviceVolume(
-    deviceId: number,
-    channel: EAudioChannel,
-    volume: number
-  ): Promise<void> | undefined;
+  SetDeviceVolume(deviceId: number, channel: EAudioChannel, volume: number): Promise<void> | undefined;
 }
 
 interface GetAppsResponse {

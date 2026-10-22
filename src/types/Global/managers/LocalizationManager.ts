@@ -38,7 +38,7 @@ export interface LocalizationManager {
 
   m_mapFallbackTokens: Map<string, string>;
 
-  m_mapTokens: Map<string, (MapTokens | string)>;
+  m_mapTokens: Map<string, MapTokens | string>;
 
   m_rgLocalesToUse: string[];
 }

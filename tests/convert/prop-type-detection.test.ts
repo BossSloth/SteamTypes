@@ -63,7 +63,12 @@ interface TypeCase {
 function runCase(caseData: TypeCase): Type {
   caseData.setup?.();
   try {
-    return detector.detect(caseData.makeValue(), caseData.path ?? 'root.prop', caseData.storeClassName ?? false, caseData.addImports ?? true);
+    return detector.detect(
+      caseData.makeValue(),
+      caseData.path ?? 'root.prop',
+      caseData.storeClassName ?? false,
+      caseData.addImports ?? true,
+    );
   } finally {
     caseData.teardown?.();
   }
@@ -154,7 +159,9 @@ const primitiveObjectCases: TypeCase[] = [
   {
     name: 'HTMLElement-like (nodeType === 1)',
     makeValue: () => {
-      class HTMLDivElement { public nodeType = 1; }
+      class HTMLDivElement {
+        public nodeType = 1;
+      }
 
       return new HTMLDivElement();
     },
@@ -191,10 +198,18 @@ const primitiveObjectCases: TypeCase[] = [
   {
     name: 'Simple protobuf message',
     makeValue: () => ({
-      toObject() { return {}; },
-      serializeBinary() { return new Uint8Array(); },
-      serializeBase64String() { return ''; },
-      getClassName() { return 'CMsgFoo'; },
+      toObject() {
+        return {};
+      },
+      serializeBinary() {
+        return new Uint8Array();
+      },
+      serializeBase64String() {
+        return '';
+      },
+      getClassName() {
+        return 'CMsgFoo';
+      },
     }),
     expected: 'ProtobufInterface<CMsgFoo>',
     expectedImports: [{ module: 'shared/protobuf', types: ['ProtobufInterface'] }],
@@ -211,7 +226,12 @@ const primitiveObjectCases: TypeCase[] = [
   },
   {
     name: 'SteamID-like',
-    makeValue: () => ({ m_ulSteamID: 0n, ConvertTo64BitString() { return '0'; } }),
+    makeValue: () => ({
+      m_ulSteamID: 0n,
+      ConvertTo64BitString() {
+        return '0';
+      },
+    }),
     expected: 'SteamID',
     expectedImports: [{ module: 'shared/steamid', types: ['SteamID'] }],
   },
@@ -318,7 +338,10 @@ const iterableCases: TypeCase[] = [
   },
   {
     name: 'nested arrays produce nested array types',
-    makeValue: () => [[1, 2], [3, 4]],
+    makeValue: () => [
+      [1, 2],
+      [3, 4],
+    ],
     expected: 'number[][]',
   },
 ];
@@ -365,7 +388,9 @@ const interfaceGenerationCases: TypeCase[] = [
       (MsgFoo as unknown as Record<string, unknown>).toObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).fromObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).deserializeBinary = () => ({});
-      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () { return 'MsgFoo'; };
+      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () {
+        return 'MsgFoo';
+      };
 
       return { msgClass: MsgFoo };
     },
@@ -381,7 +406,9 @@ const interfaceGenerationCases: TypeCase[] = [
       (MsgFoo as unknown as Record<string, unknown>).toObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).fromObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).deserializeBinary = () => ({});
-      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () { return 'MsgFoo'; };
+      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () {
+        return 'MsgFoo';
+      };
 
       return { msgClass: MsgFoo };
     },
@@ -396,7 +423,9 @@ const interfaceGenerationCases: TypeCase[] = [
       (MsgFoo as unknown as Record<string, unknown>).toObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).fromObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).deserializeBinary = () => ({});
-      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () { return 'MsgFoo'; };
+      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () {
+        return 'MsgFoo';
+      };
 
       return { msgClass: MsgFoo };
     },
@@ -414,7 +443,9 @@ const interfaceGenerationCases: TypeCase[] = [
       (MsgFoo as unknown as Record<string, unknown>).toObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).fromObject = () => ({});
       (MsgFoo as unknown as Record<string, unknown>).deserializeBinary = () => ({});
-      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () { return ''; };
+      (MsgFoo.prototype as Record<string, unknown>).getClassName = function () {
+        return '';
+      };
 
       return { msgClass: MsgFoo };
     },
@@ -432,7 +463,9 @@ const interfaceGenerationCases: TypeCase[] = [
   {
     name: 'storeClassName=true captures class constructor string',
     makeValue: () => {
-      class Foo { public a = 1; }
+      class Foo {
+        public a = 1;
+      }
 
       return new Foo();
     },
@@ -491,18 +524,19 @@ describe('getType (prop-type-detection)', () => {
     ['interface generation', interfaceGenerationCases],
     ['ObservableValue', observableValueCases],
   ] as const)('%s', (_group, cases) => {
-    it.each(cases.flatMap((c) => {
-      const base = [c.name, c] as const;
-      // Every case with imports should also be tested without imports
-      if (c.expectedImports && c.expectedImports.length > 0) {
-        return [base, [`${c.name} (without import)`, { ...c, addImports: false, expectedImports: [] }]];
-      }
+    it.each(
+      cases.flatMap((c) => {
+        const base = [c.name, c] as const;
+        // Every case with imports should also be tested without imports
+        if (c.expectedImports && c.expectedImports.length > 0) {
+          return [base, [`${c.name} (without import)`, { ...c, addImports: false, expectedImports: [] }]];
+        }
 
-      return [base];
-    }))('%s', (_n, caseData) => {
-      const errorSpy = caseData.expectConsoleError === true
-        ? vi.spyOn(console, 'error').mockImplementation(() => undefined)
-        : null;
+        return [base];
+      }),
+    )('%s', (_n, caseData) => {
+      const errorSpy =
+        caseData.expectConsoleError === true ? vi.spyOn(console, 'error').mockImplementation(() => undefined) : null;
 
       const result = runCase(caseData);
 

@@ -7,7 +7,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // recursive base member lookup and the non-synthetic base reconciliation.
   'shared deep base property type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -23,7 +23,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends Mid {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -46,7 +46,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // optional modifier, so the sources do not agree and the base member is removed.
   'synthetic base property optional mismatch across sources': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -64,7 +64,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface OtherChat extends BaseChat {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -86,7 +86,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // declaring member.
   'shared base behind imported base property mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { ImportedBase } from './imported';
 
       export interface Config {
@@ -100,7 +100,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends ImportedBase, RealBase {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -119,7 +119,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // interfaces must skip the derived interface missing from the source.
   'synthetic base removed with derived missing from source': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -141,7 +141,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface ThirdChat extends BaseChat {
         third: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -163,7 +163,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // so the base member is removed.
   'synthetic base property missing type in one source': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         otherChats: OtherChat[];
 
@@ -181,7 +181,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface OtherChat extends BaseChat {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         otherChats: OtherChat[];
         chats: ChatRoom[];
@@ -203,7 +203,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // member on the second base.
   'shared base member found on second of two bases': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -219,7 +219,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends EmptyBase, RealBase {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -242,7 +242,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // exercises the method branch of the non-synthetic base reconciliation.
   'shared deep base method return type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -258,7 +258,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends Mid {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -280,7 +280,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // parameter type comparison on an inherited method.
   'shared base method parameter type mismatch': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -292,7 +292,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends Base {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -310,7 +310,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // exercising the missing-parameter detection on an inherited method.
   'shared base method parameter added': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -322,7 +322,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends Base {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -340,7 +340,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // source, exercising the extra-parameter detection on an inherited method.
   'shared base method parameter removed': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -352,7 +352,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface Admin extends Base {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         admin: Admin;
       }
@@ -371,7 +371,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // corrected in place to match the agreeing sources.
   'synthetic base method updated from agreeing sources': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -389,7 +389,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface OtherChat extends BaseChat {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -411,7 +411,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // are re-compared (inlining the differing methods).
   'synthetic base method removed when sources disagree': {
     interfaceName: 'Config',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
 
@@ -429,7 +429,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface OtherChat extends BaseChat {
         role: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Config {
         chats: ChatRoom[];
         otherChats: OtherChat[];
@@ -454,7 +454,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // be added as a new interface, leaving the existing base/derived hierarchy intact.
   'renamed shared base with extra source derived union member': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Root {
         sources: (StandardSource | MouseSource | TouchSource)[];
       }
@@ -487,7 +487,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface TouchSource extends BaseSource {
         OnTouchEnd(e: unknown): void;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         sources: (RgSource | RgSource2 | RgSource3 | RgSource4)[];
       }
@@ -524,7 +524,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // `extends` clause pointing at the existing target base (no remap needed).
   'extra source derived union member with base present in target': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Root {
         items: (ItemA | ItemB)[];
       }
@@ -544,7 +544,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
 
         bb: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         items: (ItemA | ItemB | ItemC)[];
       }
@@ -575,7 +575,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // is dangling, matching the existing "no matching target interface" behaviour).
   'extra source derived union member with base absent from target': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Root {
         items: (ItemA | ItemB)[];
       }
@@ -591,7 +591,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       export interface ItemB extends ItemBase {
         b: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         items: (ItemA | ItemB | ItemC)[];
       }
@@ -625,7 +625,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
   // similarity threshold even after its members are inlined.
   'source extends base with no matching target interface': {
     interfaceName: 'Root',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Root {
         derived: Derived;
       }
@@ -638,7 +638,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
         p4: string;
         p5: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Root {
         derived: Derived;
       }

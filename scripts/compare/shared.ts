@@ -1,4 +1,16 @@
-import { Identifier, ImportSpecifier, InterfaceDeclaration, JSDocableNode, MethodSignature, Node, PropertySignature, SourceFile, Type, TypeLiteralNode, TypeNode } from 'ts-morph';
+import {
+  Identifier,
+  ImportSpecifier,
+  InterfaceDeclaration,
+  JSDocableNode,
+  MethodSignature,
+  Node,
+  PropertySignature,
+  SourceFile,
+  Type,
+  TypeLiteralNode,
+  TypeNode,
+} from 'ts-morph';
 
 export const CustomJsDocTags = {
   originalName: 'compareOriginalName',
@@ -21,10 +33,7 @@ export let interfaceQueue: InterfaceProcessingTask[] = [];
 export let currentTargetSourceFile: SourceFile;
 export let currentStartingInterfaces: InterfaceDeclaration[] = [];
 
-export function initGlobalState(
-  _currentTargetSourceFile: SourceFile,
-  _currentStartingInterfaces: InterfaceDeclaration[],
-): void {
+export function initGlobalState(_currentTargetSourceFile: SourceFile, _currentStartingInterfaces: InterfaceDeclaration[]): void {
   interfaceQueue = [];
   currentTargetSourceFile = _currentTargetSourceFile;
   currentStartingInterfaces = _currentStartingInterfaces;
@@ -55,19 +64,31 @@ export function getJsDocTagValues(prop: JSDocableNode, tagName: string): string[
 export function isImportedType(sourceFile: SourceFile, type: Node | Type | TypeNode): boolean {
   const text = getIdentifierName(type);
 
-  return sourceFile.getImportDeclarations().some((importDecl) =>
-    importDecl.getNamedImports().some((importSpec) => importSpec.getName() === text));
+  return sourceFile
+    .getImportDeclarations()
+    .some((importDecl) => importDecl.getNamedImports().some((importSpec) => importSpec.getName() === text));
 }
 
-export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration | TypeLiteralNode): (PropertySignature | MethodSignature)[] {
+export function getInterfaceMembers(
+  interfaceDeclaration: InterfaceDeclaration | TypeLiteralNode,
+): (PropertySignature | MethodSignature)[] {
   const members = interfaceDeclaration.getMembers() as (PropertySignature | MethodSignature)[];
 
   if (interfaceDeclaration instanceof InterfaceDeclaration) {
     interfaceDeclaration.getExtends().forEach((ext) => {
-      const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
-      if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
+      const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as
+        | InterfaceDeclaration
+        | ImportSpecifier
+        | undefined;
+      if (
+        extendedInterface
+        && extendedInterface instanceof InterfaceDeclaration
+        && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)
+      ) {
         // Get extended members and remove duplicates
-        const extendedMembers = getInterfaceMembers(extendedInterface).filter((member) => !members.some((m) => m.getName() === member.getName()));
+        const extendedMembers = getInterfaceMembers(extendedInterface).filter(
+          (member) => !members.some((m) => m.getName() === member.getName()),
+        );
         members.push(...extendedMembers);
       }
     });

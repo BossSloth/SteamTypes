@@ -21,7 +21,7 @@ If you also depend on `@steambrew/client`, both packages declare some of the sam
 
 ```jsonc
 {
-  "files": ["node_modules/steam-types/global-overrides.d.ts"]
+  "files": ["node_modules/steam-types/global-overrides.d.ts"],
 }
 ```
 
@@ -33,19 +33,21 @@ Millennium plugins split their code across `frontend/` and `webkit/` directories
 // frontend/tsconfig.json  (and the same in webkit/tsconfig.json)
 {
   "extends": "../tsconfig.json",
-  "files": ["../node_modules/steam-types/global-overrides.d.ts"]
+  "files": ["../node_modules/steam-types/global-overrides.d.ts"],
 }
 ```
 
 ## Project Structure
 
 This project consists of:
+
 1. Generated TypeScript definitions in the `src/types` folder
 2. Automation scripts in the `scripts` folder for generating and validating types see [Development](#development)
 
 ### Type Definitions
 
 The type definitions cover the Steam client's global SharedJSContext window objects, including:
+
 - `SteamClient` object and all its submodules (Apps, UI, System, etc.)
 - All the other global objects (appDetailsStore, collectionStore, etc.)
 
@@ -54,6 +56,7 @@ The type definitions cover the Steam client's global SharedJSContext window obje
 ### Scripts
 
 The project includes scripts for:
+
 - Converting runtime JS objects to TypeScript interfaces
 - Comparing and validating the generated types against the actual Steam client
 - Automating the type generation process
@@ -61,16 +64,23 @@ The project includes scripts for:
 ### Useful Commands for generating types
 
 Fill a lot of data:
+
 ```javascript
 fillAppData();
 ```
 
 map an app details value:
+
 ```javascript
-[...appDetailsStore.m_mapAppData.values()].map(data => {return {value: data.details?.eCloudSync, name: data.details?.strDisplayName}}).filter(d => d.value !== undefined)
+[...appDetailsStore.m_mapAppData.values()]
+  .map((data) => {
+    return { value: data.details?.eCloudSync, name: data.details?.strDisplayName };
+  })
+  .filter((d) => d.value !== undefined);
 ```
 
 Profile a script:
+
 ```
 tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert-to-typescript/index.ts
 ```
@@ -78,6 +88,7 @@ tsx --cpu-prof --cpu-prof-dir .profiler --no-warnings scripts/convert-to-typescr
 ### Type Validation
 
 Run the type validation script to ensure definitions match the runtime objects:
+
 ```bash
 bun validate-types
 ```
@@ -87,4 +98,5 @@ bun validate-types
 Contributions are welcome! Please follow the existing naming conventions and ensure all generated interfaces are properly exported.
 
 ## Special thanks
+
 - [This decky pr](https://github.com/SteamDeckHomebrew/decky-frontend-lib/pull/92) for the initial SteamClient type definitions and the inspiration for this project.

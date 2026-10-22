@@ -90,7 +90,7 @@ describe('imports', () => {
       setCtx(ctx);
 
       expect(generateImportStatements()).toEqual([
-        "import { A, B } from './alpha';",
+        "import { A, B } from './alpha';", //
         "import { A, Z } from './zeta';",
       ]);
     });
@@ -105,7 +105,7 @@ describe('imports', () => {
       const lines = ['export interface X { kind?: EFoo; }', '// EFoo reference EFoo'];
       applyNameReplacements(lines);
       expect(lines).toEqual([
-        'export interface X { kind?: Foo; }',
+        'export interface X { kind?: Foo; }', //
         '// Foo reference Foo',
       ]);
     });
@@ -116,7 +116,7 @@ describe('imports', () => {
       setCtx(ctx);
 
       const lines = [
-        'foo: Inner;',
+        'foo: Inner;', //
         'export enum Inner { Inner = 1 }',
       ];
       applyNameReplacements(lines);

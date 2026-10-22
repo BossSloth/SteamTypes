@@ -15,7 +15,7 @@ describe('parseExistingComments', () => {
   });
 
   it('captures interface-level JSDoc', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       /**
        * Top-level docs
        */
@@ -29,7 +29,7 @@ describe('parseExistingComments', () => {
   });
 
   it('captures enum-level JSDoc', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       /**
        * Enum docs
        */
@@ -43,7 +43,7 @@ describe('parseExistingComments', () => {
   });
 
   it('captures field comments above optional and required field syntax', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       export interface Foo {
         /**
          * required field
@@ -63,7 +63,7 @@ describe('parseExistingComments', () => {
   });
 
   it('saves a pending interface-level comment when followed by another interface', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       /**
        * Docs A
        */
@@ -85,7 +85,7 @@ describe('parseExistingComments', () => {
   });
 
   it('resets buffered comment when an unrelated non-comment line follows', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       /**
        * Stale comment
        */
@@ -101,7 +101,7 @@ describe('parseExistingComments', () => {
   });
 
   it('reuses the existing entry when the same interface name appears twice without a pending comment', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       export interface Foo {
         x?: string;
       }
@@ -120,7 +120,7 @@ describe('parseExistingComments', () => {
   });
 
   it('ignores buffered field comments that are not followed by a field declaration', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       export interface Foo {
         /**
          * dangling comment
@@ -136,7 +136,7 @@ describe('parseExistingComments', () => {
   });
 
   it('does not duplicate the entry when the interface name appears twice', () => {
-    parseExistingComments(dedent/* ts */`
+    parseExistingComments(dedent /* ts */ `
       export interface Foo { x?: string; }
       /**
        * second

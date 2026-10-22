@@ -13,7 +13,8 @@ export default {
     },
     schema: [],
     messages: {
-      tooFewMembers: "Enum '{{enumName}}' must have at least two members. Found {{memberCount}}.\nThis can cause issues with the comparison script due to it being optimized away.",
+      tooFewMembers:
+        "Enum '{{enumName}}' must have at least two members. Found {{memberCount}}.\nThis can cause issues with the comparison script due to it being optimized away.",
     },
   },
   create(context) {

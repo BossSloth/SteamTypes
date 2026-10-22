@@ -55,7 +55,7 @@ export interface Settings {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForAppsWithAutoUpdateOverrides(callback: (updateOverrides: { appid: number; }[][]) => void): Unregisterable;
+  RegisterForAppsWithAutoUpdateOverrides(callback: (updateOverrides: { appid: number }[][]) => void): Unregisterable;
 
   /**
    * @params unknown
@@ -66,7 +66,9 @@ export interface Settings {
    * `data` can be deserialized with {@link CMsgClientSettings_Protobuf}
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForSettingsArrayChanges(callback: (data: SerializedArrayBuffer<typeof CMsgClientSettings_Protobuf>) => void): Unregisterable;
+  RegisterForSettingsArrayChanges(
+    callback: (data: SerializedArrayBuffer<typeof CMsgClientSettings_Protobuf>) => void,
+  ): Unregisterable;
 
   RegisterForSettingsChanges(callback: (steamSettings: SteamSettings) => void): Unregisterable;
 

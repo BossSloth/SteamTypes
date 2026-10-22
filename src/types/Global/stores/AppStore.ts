@@ -4,7 +4,12 @@ import { ConnectionManager } from 'Global/managers/ConnectionManager';
 import Long from 'long';
 import { ObservableMap, ObservableSet } from 'mobx';
 import { ProtoAppType, SteamDeckCompatibilityCategory } from 'Protobufs/steam/enums';
-import { AppControllerSupportLevel, CAppOverview, CAppOverview_Change, DisplayStatus } from 'Protobufs/steam/steammessages_appoverview';
+import {
+  AppControllerSupportLevel,
+  CAppOverview,
+  CAppOverview_Change,
+  DisplayStatus,
+} from 'Protobufs/steam/steammessages_appoverview';
 import { ProtobufInterface, SerializedArrayBuffer } from 'shared/protobuf';
 
 export interface AppStore {
@@ -42,17 +47,17 @@ export interface AppStore {
 
   GetStorePageURLForApp(appOverview: SteamAppOverview): string | null;
 
-  GetTopStoreTags(filter?: string): { nTagId: number; nCount: number; }[];
+  GetTopStoreTags(filter?: string): { nTagId: number; nCount: number }[];
 
   GetVerticalCapsuleURLForApp(appOverview: SteamAppOverview): string;
 
-  HandleSteamVRAppIconRequest(e: unknown): Promise<{ icon_url: unknown; }>;
+  HandleSteamVRAppIconRequest(e: unknown): Promise<{ icon_url: unknown }>;
 
   Init(connectionManager: ConnectionManager, cloudStorage: CloudStorage): Promise<void>;
 
   OnCloudStorageChanged(changeType: number, changedKeys: string[]): Promise<void>;
 
-  OnPrivateAppsChanged(result: { isSuccess: boolean; data: Set<number>; }): void;
+  OnPrivateAppsChanged(result: { isSuccess: boolean; data: Set<number> }): void;
 
   RefreshTagsIfNeeded(): void;
 
@@ -88,7 +93,7 @@ export interface AppStore {
 
   sharedLibraryAccountIds: number[];
 
-  siteLicenseApps: { strSiteName: string; rgApps: SteamAppOverview[]; } | null;
+  siteLicenseApps: { strSiteName: string; rgApps: SteamAppOverview[] } | null;
 
   storeTagCounts: Map<number, number>;
 }
@@ -219,7 +224,7 @@ export interface SteamAppOverview {
 
   GetPerClientData(type: 'local' | 'mostavailable' | 'selected'): SteamAppOverviewClientData;
 
-  GetPreservedState(): { icon_data: string; icon_data_format: string; } | undefined;
+  GetPreservedState(): { icon_data: string; icon_data_format: string } | undefined;
 
   GetPrimaryAppID(): number;
 
@@ -234,7 +239,7 @@ export interface SteamAppOverview {
    */
   LOG_CHANGE(...args: unknown[]): void;
 
-  RestorePreservedState(state: { icon_data: string; icon_data_format: string; }): void;
+  RestorePreservedState(state: { icon_data: string; icon_data_format: string }): void;
 
   /**
    * Sets the game ID from the proto.

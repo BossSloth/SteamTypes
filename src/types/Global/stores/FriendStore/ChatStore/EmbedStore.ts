@@ -9,7 +9,7 @@ export interface EmbedStore {
 
   GetOrCreateEmbedData(e: unknown, t: unknown): unknown;
 
-  GetWidths(e: unknown, t: unknown): { nDesiredWidth: unknown; nDefaultWidth: unknown; } | undefined;
+  GetWidths(e: unknown, t: unknown): { nDesiredWidth: unknown; nDefaultWidth: unknown } | undefined;
 
   Init(): void;
 

@@ -5,7 +5,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'interface with enum property - number': {
     interfaceName: 'StatusHolder',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         status: Status;
       }
@@ -15,7 +15,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         Active,
         Inactive,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         /**
          * @currentValue 1
@@ -27,7 +27,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'interface with enum property - string': {
     interfaceName: 'StatusHolder',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         status: GameType;
       }
@@ -37,7 +37,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         Active,
         Inactive,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         /**
          * @currentValue 1
@@ -48,7 +48,7 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'interface with missing enum property': {
     interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         status: GameType;
       }
@@ -58,7 +58,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         Active,
         Inactive,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         /**
          * @currentValue 3
@@ -69,11 +69,11 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'new enum property': {
     interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         foo: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         foo: string;
         /**
@@ -86,11 +86,11 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'implied enum property': {
     interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         m_eStatus: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         /**
          * this value is an enum
@@ -102,11 +102,11 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'implied enum property with multiple currentValues': {
     interfaceName: 'StatusHolder',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusHolder {
         m_eStatus: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusHolder {
         /**
          * this value is an enum
@@ -119,7 +119,7 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'property with enum value changes': {
     interfaceName: 'StatusConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         status: ConnectionStatus;
         message: string;
@@ -130,7 +130,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 2,
         PENDING = 3,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 5
@@ -144,7 +144,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'property with enum stays same': {
     interfaceName: 'StatusConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         message: string;
 
@@ -156,7 +156,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 2,
         PENDING = 3,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 2
@@ -169,7 +169,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'property with enum stays same different name': {
     interfaceName: 'StatusConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         eResult: StatusResultType;
 
@@ -181,7 +181,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 2,
         PENDING = 3,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 2
@@ -193,12 +193,12 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'interface with implied enum property': {
     interfaceName: 'SteamStatus',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SteamStatus {
         m_eResult: number;
         m_bRequireRestart: boolean;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SteamStatus {
         /**
          * @currentValue 1
@@ -215,7 +215,7 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'property with shorter enum value changes': {
     interfaceName: 'StatusConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         eStatus: ConnectionStatus;
         message: string;
@@ -226,7 +226,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 2,
         PENDING = 3,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 5
@@ -239,11 +239,11 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'shorted implied enum property': {
     interfaceName: 'SteamStatus',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface SteamStatus {
         eResult: number;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface SteamStatus {
         /**
          * @currentValue 1
@@ -260,7 +260,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'flags enum': {
     interfaceName: 'StatusConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         eStatusFlags: EStatusFlags;
 
@@ -272,7 +272,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 1 << 1,
         PENDING = 1 << 2,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 7
@@ -284,7 +284,7 @@ export const enumCases: Record<string, ComparatorTest> = {
 
   'flags enum with missing value': {
     interfaceName: 'StatusConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface StatusConfig {
         eStatusFlags: EStatusFlags;
 
@@ -296,7 +296,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         DISCONNECTED = 1 << 1,
         PENDING = 1 << 2,
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface StatusConfig {
         /**
          * @currentValue 12
@@ -308,7 +308,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   'target enum keeps type when source is plain number': {
     interfaceName: 'EnumProperty',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export enum Status {
         Ready = 1,
         Working = 2,
@@ -317,7 +317,7 @@ export const enumCases: Record<string, ComparatorTest> = {
       export interface EnumProperty {
         status: Status;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface EnumProperty {
         status: number;
       }`,
@@ -325,13 +325,13 @@ export const enumCases: Record<string, ComparatorTest> = {
   'optional imported enum is preserved when source has @currentValue': {
     interfaceName: 'EnumProperty',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { StoreAppType } from 'other-file';
 
       export interface EnumProperty {
         m_eAppType?: StoreAppType;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface EnumProperty {
         /**
          * @currentValue 0
@@ -341,7 +341,7 @@ export const enumCases: Record<string, ComparatorTest> = {
   },
   'existing enum is used when source has @currentValue': {
     interfaceName: 'EnumProperty',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface EnumProperty {
         foo: number;
 
@@ -363,7 +363,7 @@ export const enumCases: Record<string, ComparatorTest> = {
         EStatus2 = 2,
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface EnumProperty {
         foo: number;
         /**

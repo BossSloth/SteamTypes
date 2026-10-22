@@ -48,7 +48,14 @@ export interface WebChat {
 
   OnGroupChatUserStateChange(chatGroupId: unknown, accountId: unknown, action: unknown): unknown;
 
-  OnNewGroupChatMsgAdded(groupId: number, chatId: number, accountId: number, timestamp: number, param4: number, message: string): unknown;
+  OnNewGroupChatMsgAdded(
+    groupId: number,
+    chatId: number,
+    accountId: number,
+    timestamp: number,
+    param4: number,
+    message: string,
+  ): unknown;
 
   // Opens the URL in default web browser, despite what the name says ?
   OpenURLInClient(url: string, pid: number, forceExternal: boolean): void;

@@ -1,6 +1,15 @@
 import { InterfaceDeclaration, PropertySignature, SyntaxKind, Type, TypeNode, TypeReferenceNode } from 'ts-morph';
 import { orderMembers } from './interface-comparator';
-import { currentStartingInterfaces, currentTargetSourceFile, CustomJsDocTags, getIdentifierName, getInterfaceMembers, getJsDocTagValues, interfaceQueue, isImportedType } from './shared';
+import {
+  currentStartingInterfaces,
+  currentTargetSourceFile,
+  CustomJsDocTags,
+  getIdentifierName,
+  getInterfaceMembers,
+  getJsDocTagValues,
+  interfaceQueue,
+  isImportedType,
+} from './shared';
 
 const REQUIRED_OVERLAP = 0.65;
 
@@ -31,7 +40,10 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
       continue;
     }
 
-    if (isImportedType(currentTargetSourceFile, targetInterface.getType()) && !isImportedType(sourceInterface.getSourceFile(), sourceInterface.getType())) {
+    if (
+      isImportedType(currentTargetSourceFile, targetInterface.getType())
+      && !isImportedType(sourceInterface.getSourceFile(), sourceInterface.getType())
+    ) {
       const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
       if (!sourceInterfaceDeclaration) {
         // We get here if the interface was for example already renamed and now doesn't exist anymore, so we can ignore this
@@ -101,8 +113,9 @@ function collectMergedProperties(sourceInterfaces: InterfaceDeclaration[]): Map<
   const merged = new Map<string, MergedPropertyInfo>();
 
   for (const sourceInterface of sourceInterfaces) {
-    const properties = getInterfaceMembers(sourceInterface)
-      .filter((prop): prop is PropertySignature => prop.isKind(SyntaxKind.PropertySignature));
+    const properties = getInterfaceMembers(sourceInterface).filter((prop): prop is PropertySignature =>
+      prop.isKind(SyntaxKind.PropertySignature),
+    );
 
     for (const prop of properties) {
       const propName = prop.getName();
@@ -163,8 +176,9 @@ function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterfa
       continue;
     }
 
-    const allSourceTypesMatched = [...info.types].every((sourceType) =>
-      targetType === sourceType || targetType.includes(sourceType));
+    const allSourceTypesMatched = [...info.types].every(
+      (sourceType) => targetType === sourceType || targetType.includes(sourceType),
+    );
 
     if (!allSourceTypesMatched) {
       return false;
@@ -182,10 +196,7 @@ function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterfa
  * are folded into the first one (their references are renamed to the merged interface so unions
  * like `(A | B)[]` collapse to `(A | A)[]`) and the merged interface is queued for comparison.
  */
-function mergeSourcesIntoTarget(
-  sourceInterfaces: TypeReferenceNode[],
-  targetInterface: InterfaceDeclaration,
-): void {
+function mergeSourcesIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterface: InterfaceDeclaration): void {
   const sourceDeclarations = sourceInterfaces
     .map((ref) => getInterfaceDeclaration(ref))
     .filter((decl): decl is InterfaceDeclaration => decl !== undefined);
@@ -251,8 +262,14 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
 
   interfaces.push(...type.getDescendantsOfKind(SyntaxKind.TypeReference));
 
-  return interfaces.filter((interf) => (interf.getType().getSymbol()?.getDeclarations()
-    .some((d) => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf));
+  return interfaces.filter(
+    (interf) =>
+      interf
+        .getType()
+        .getSymbol()
+        ?.getDeclarations()
+        .some((d) => d.isKind(SyntaxKind.InterfaceDeclaration)) === true || isImportedType(currentTargetSourceFile, interf),
+  );
 }
 
 /**
@@ -295,8 +312,8 @@ export function findSimilarInterface(sourceInterface: InterfaceDeclaration): Int
 /**
  * Gets all properties of an interface type
  */
-function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { name: string; type: string; }[] {
-  const properties: { name: string; type: string; }[] = [];
+function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { name: string; type: string }[] {
+  const properties: { name: string; type: string }[] = [];
 
   for (const property of getInterfaceMembers(interfaceDeclaration)) {
     // const propertyType = property.getType();
@@ -321,8 +338,8 @@ function getInterfaceProperties(interfaceDeclaration: InterfaceDeclaration): { n
  * Returns a value between 0 (no similarity) and 1 (identical)
  */
 function calculateSimilarityScore(
-  sourceProps: { name: string; type: string; }[],
-  targetProps: { name: string; type: string; }[],
+  sourceProps: { name: string; type: string }[],
+  targetProps: { name: string; type: string }[],
 ): number {
   if (sourceProps.length === 0 && targetProps.length === 0) return 1;
   if (sourceProps.length === 0 || targetProps.length === 0) return 0;
@@ -331,9 +348,11 @@ function calculateSimilarityScore(
   let matchingProps = 0;
 
   for (const sourceProp of sourceProps) {
-    const matchingTargetProp = targetProps.find((tp) =>
-      /* v8 ignore next -- @preserve */
-      tp.name === sourceProp.name && (tp.type === sourceProp.type || sourceProp.type.includes('unknown')));
+    const matchingTargetProp = targetProps.find(
+      (tp) =>
+        /* v8 ignore next -- @preserve */
+        tp.name === sourceProp.name && (tp.type === sourceProp.type || sourceProp.type.includes('unknown')),
+    );
 
     if (matchingTargetProp) {
       matchingProps++;
@@ -362,9 +381,13 @@ function isDerivedToBaseMismatch(sourceInterface: InterfaceDeclaration, matchedT
     return false;
   }
 
-  return currentTargetSourceFile.getInterfaces().some((other) =>
-    other !== matchedTarget
-    && other.getExtends().some((ext) => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget));
+  return currentTargetSourceFile
+    .getInterfaces()
+    .some(
+      (other) =>
+        other !== matchedTarget
+        && other.getExtends().some((ext) => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget),
+    );
 }
 
 function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | undefined {

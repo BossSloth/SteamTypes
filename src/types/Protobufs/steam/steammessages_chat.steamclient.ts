@@ -1,9 +1,9 @@
 import { ContentReportReason, ContentReportResolution, ContentReportSubjectType } from './enums';
 import { CMsgClientPersonaState_Friend } from './steammessages_clientserver_friends';
 
-export interface CChat_RequestFriendPersonaStates_Request { }
+export interface CChat_RequestFriendPersonaStates_Request {}
 
-export interface CChat_RequestFriendPersonaStates_Response { }
+export interface CChat_RequestFriendPersonaStates_Response {}
 
 export interface CChatRoom_CreateChatRoomGroup_Request {
   name?: string;
@@ -189,7 +189,7 @@ export interface CChatRoom_SaveChatRoomGroup_Request {
   name?: string;
 }
 
-export interface CChatRoom_SaveChatRoomGroup_Response { }
+export interface CChatRoom_SaveChatRoomGroup_Response {}
 
 export interface CChatRoom_RenameChatRoomGroup_Request {
   chat_group_id?: number;
@@ -207,7 +207,7 @@ export interface CChatRoom_SetChatRoomGroupTagline_Request {
   tagline?: string;
 }
 
-export interface CChatRoom_SetChatRoomGroupTagline_Response { }
+export interface CChatRoom_SetChatRoomGroupTagline_Response {}
 
 export interface CChatRoom_SetChatRoomGroupAvatar_Request {
   avatar_sha?: Uint8Array;
@@ -215,7 +215,7 @@ export interface CChatRoom_SetChatRoomGroupAvatar_Request {
   chat_group_id?: number;
 }
 
-export interface CChatRoom_SetChatRoomGroupAvatar_Response { }
+export interface CChatRoom_SetChatRoomGroupAvatar_Response {}
 
 export interface CChatRoom_SetChatRoomGroupWatchingBroadcast_Request {
   chat_group_id?: number;
@@ -225,7 +225,7 @@ export interface CChatRoom_SetChatRoomGroupWatchingBroadcast_Request {
   watching_broadcast_channel_id?: number;
 }
 
-export interface CChatRoom_SetChatRoomGroupWatchingBroadcast_Response { }
+export interface CChatRoom_SetChatRoomGroupWatchingBroadcast_Response {}
 
 export interface CChatRoom_JoinMiniGameForChatRoomGroup_Request {
   chat_group_id?: number;
@@ -245,7 +245,7 @@ export interface CChatRoom_EndMiniGameForChatRoomGroup_Request {
   minigame_id?: number;
 }
 
-export interface CChatRoom_EndMiniGameForChatRoomGroup_Response { }
+export interface CChatRoom_EndMiniGameForChatRoomGroup_Response {}
 
 export interface CChatRoom_MuteUser_Request {
   chat_group_id?: number;
@@ -255,7 +255,7 @@ export interface CChatRoom_MuteUser_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_MuteUser_Response { }
+export interface CChatRoom_MuteUser_Response {}
 
 export interface CChatRoom_KickUser_Request {
   chat_group_id?: number;
@@ -265,7 +265,7 @@ export interface CChatRoom_KickUser_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_KickUser_Response { }
+export interface CChatRoom_KickUser_Response {}
 
 export interface CChatRoom_SetUserBanState_Request {
   ban_state?: boolean;
@@ -275,7 +275,7 @@ export interface CChatRoom_SetUserBanState_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_SetUserBanState_Response { }
+export interface CChatRoom_SetUserBanState_Response {}
 
 export interface CChatRoom_RevokeInvite_Request {
   chat_group_id?: number;
@@ -283,7 +283,7 @@ export interface CChatRoom_RevokeInvite_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_RevokeInvite_Response { }
+export interface CChatRoom_RevokeInvite_Response {}
 
 export interface CChatRoom_CreateRole_Request {
   chat_group_id?: number;
@@ -311,7 +311,7 @@ export interface CChatRoom_RenameRole_Request {
   role_id?: number;
 }
 
-export interface CChatRoom_RenameRole_Response { }
+export interface CChatRoom_RenameRole_Response {}
 
 export interface CChatRoom_ReorderRole_Request {
   chat_group_id?: number;
@@ -321,7 +321,7 @@ export interface CChatRoom_ReorderRole_Request {
   role_id?: number;
 }
 
-export interface CChatRoom_ReorderRole_Response { }
+export interface CChatRoom_ReorderRole_Response {}
 
 export interface CChatRoom_DeleteRole_Request {
   chat_group_id?: number;
@@ -329,7 +329,7 @@ export interface CChatRoom_DeleteRole_Request {
   role_id?: number;
 }
 
-export interface CChatRoom_DeleteRole_Response { }
+export interface CChatRoom_DeleteRole_Response {}
 
 export interface CChatRoom_GetRoleActions_Request {
   chat_group_id?: number;
@@ -349,7 +349,7 @@ export interface CChatRoom_ReplaceRoleActions_Request {
   role_id?: number;
 }
 
-export interface CChatRoom_ReplaceRoleActions_Response { }
+export interface CChatRoom_ReplaceRoleActions_Response {}
 
 export interface CChatRoom_AddRoleToUser_Request {
   chat_group_id?: number;
@@ -359,7 +359,7 @@ export interface CChatRoom_AddRoleToUser_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_AddRoleToUser_Response { }
+export interface CChatRoom_AddRoleToUser_Response {}
 
 export interface CChatRoom_GetRolesForUser_Request {
   chat_group_id?: number;
@@ -379,7 +379,7 @@ export interface CChatRoom_DeleteRoleFromUser_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_DeleteRoleFromUser_Response { }
+export interface CChatRoom_DeleteRoleFromUser_Response {}
 
 export interface CChatRoom_JoinChatRoomGroup_Request {
   chat_group_id?: number;
@@ -409,13 +409,13 @@ export interface CChatRoom_InviteFriendToChatRoomGroup_Request {
   steamid?: string;
 }
 
-export interface CChatRoom_InviteFriendToChatRoomGroup_Response { }
+export interface CChatRoom_InviteFriendToChatRoomGroup_Response {}
 
 export interface CChatRoom_LeaveChatRoomGroup_Request {
   chat_group_id?: number;
 }
 
-export interface CChatRoom_LeaveChatRoomGroup_Response { }
+export interface CChatRoom_LeaveChatRoomGroup_Response {}
 
 export interface CChatRoom_CreateChatRoom_Request {
   allow_voice?: boolean;
@@ -435,7 +435,7 @@ export interface CChatRoom_DeleteChatRoom_Request {
   chat_id?: number;
 }
 
-export interface CChatRoom_DeleteChatRoom_Response { }
+export interface CChatRoom_DeleteChatRoom_Response {}
 
 export interface CChatRoom_RenameChatRoom_Request {
   chat_group_id?: number;
@@ -445,7 +445,7 @@ export interface CChatRoom_RenameChatRoom_Request {
   name?: string;
 }
 
-export interface CChatRoom_RenameChatRoom_Response { }
+export interface CChatRoom_RenameChatRoom_Response {}
 
 export interface CChatRoom_ReorderChatRoom_Request {
   chat_group_id?: number;
@@ -455,7 +455,7 @@ export interface CChatRoom_ReorderChatRoom_Request {
   move_after_chat_id?: number;
 }
 
-export interface CChatRoom_ReorderChatRoom_Response { }
+export interface CChatRoom_ReorderChatRoom_Response {}
 
 export interface CChatRoom_SendChatMessage_Request {
   chat_group_id?: number;
@@ -493,7 +493,7 @@ export interface CChatRoom_LeaveVoiceChat_Request {
   chat_id?: number;
 }
 
-export interface CChatRoom_LeaveVoiceChat_Response { }
+export interface CChatRoom_LeaveVoiceChat_Response {}
 
 export interface CChatRoom_GetMessageHistory_Request {
   chat_group_id?: number;
@@ -551,7 +551,7 @@ export interface CChatRoom_GetMessageHistory_Response_ChatMessage_MessageReactio
   reaction_type?: ChatRoomMessageReactionType;
 }
 
-export interface CChatRoom_GetMyChatRoomGroups_Request { }
+export interface CChatRoom_GetMyChatRoomGroups_Request {}
 
 export interface CChatRoom_GetChatRoomGroupSummary_Response {
   accountid_owner?: number;
@@ -753,7 +753,7 @@ export interface CChatRoom_DeleteInviteLink_Request {
   invite_code?: string;
 }
 
-export interface CChatRoom_DeleteInviteLink_Response { }
+export interface CChatRoom_DeleteInviteLink_Response {}
 
 export interface CChatRoom_SetSessionActiveChatRoomGroups_Request {
   chat_group_ids?: number[];
@@ -797,7 +797,7 @@ export interface CChatRoom_SetUserChatGroupPreferences_Request_ChatRoomPreferenc
   unread_indicator_muted?: boolean;
 }
 
-export interface CChatRoom_SetUserChatGroupPreferences_Response { }
+export interface CChatRoom_SetUserChatGroupPreferences_Response {}
 
 export interface CChatRoom_DeleteChatMessages_Request {
   chat_group_id?: number;
@@ -813,7 +813,7 @@ export interface CChatRoom_DeleteChatMessages_Request_Message {
   server_timestamp?: number;
 }
 
-export interface CChatRoom_DeleteChatMessages_Response { }
+export interface CChatRoom_DeleteChatMessages_Response {}
 
 export interface CChatRoom_UpdateMemberListView_Notification {
   chat_group_id?: number;
@@ -915,7 +915,7 @@ export interface CChatRoom_ReportMessage_Request {
   timestamp?: number;
 }
 
-export interface CChatRoom_ReportMessage_Response { }
+export interface CChatRoom_ReportMessage_Response {}
 
 export interface CChatRoom_ResolveReport_Request {
   chat_group_id?: number;
@@ -935,7 +935,7 @@ export interface CChatRoom_ResolveReport_Request {
   subject_type?: ContentReportSubjectType;
 }
 
-export interface CChatRoom_ResolveReport_Response { }
+export interface CChatRoom_ResolveReport_Response {}
 
 export interface CClanChatRooms_GetClanChatRoomInfo_Request {
   autocreate?: boolean;

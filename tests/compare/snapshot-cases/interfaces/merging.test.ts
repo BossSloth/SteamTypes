@@ -4,7 +4,7 @@ import { ComparatorTest, createTest } from '../shared';
 export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'manual merge skips unresolved source interface reference': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       import { Imported } from 'somewhere';
 
       export interface Container {
@@ -16,7 +16,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       import { Imported } from 'somewhere';
 
       export interface Container {
@@ -32,7 +32,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
 
   'adds new interface even when structurally similar to an existing one if source has both': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         existing: Existing;
       }
@@ -47,7 +47,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         d: number;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         existing: Existing;
         added: NewSimilar;
@@ -73,7 +73,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'manual merge unions differing property types': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         items: Item[];
       }
@@ -84,7 +84,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         items: (Item | Item2)[];
       }
@@ -103,7 +103,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'manual merge of empty interfaces': {
     interfaceName: 'Container',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         data: Empty;
       }
@@ -111,7 +111,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
       export interface Empty {
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         data: (Empty | Empty2);
       }
@@ -125,7 +125,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'manual merge falls back when source property type mismatches target': {
     interfaceName: 'Container',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Container {
         items: Item[];
       }
@@ -135,7 +135,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Container {
         items: (Item | Item2)[];
       }
@@ -154,7 +154,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'basic merge': {
     interfaceName: 'Info',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Info {
         developers: Developers[];
       }
@@ -165,7 +165,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         name: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Info {
         developers: (Developers | Developers2)[];
       }
@@ -182,7 +182,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'merge with union': {
     interfaceName: 'Friend',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Friend {
         info: Community_data
         extra_info?: (Community_data | Foo)
@@ -208,7 +208,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         bar: string;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Friend {
         info: (Community_data | Community_data2)
         extra_info?: (Community_data | Community_data2 | Foo)
@@ -252,7 +252,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'manual merge multiple into one': {
     interfaceName: 'Chat',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Chat {
         emoticons: Emoticon[]
       }
@@ -269,7 +269,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         use_count?: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Chat {
         emoticons: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[]
       }
@@ -309,7 +309,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'manual merge multiple into one with extra property': {
     interfaceName: 'Chat',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Chat {
         emoticons: Emoticon[]
       }
@@ -326,7 +326,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         use_count?: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Chat {
         emoticons: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[]
       }
@@ -368,7 +368,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   },
   'manual merge multiple into one with wrong optional': {
     interfaceName: 'Chat',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Chat {
         emoticons: Emoticon[]
       }
@@ -385,7 +385,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         use_count?: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Chat {
         emoticons: (Emoticon_list | Emoticon_list2 | Emoticon_list3 | Emoticon_list4)[]
       }
@@ -428,7 +428,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'extends base interface that was renamed': {
     interfaceName: 'Data',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Data {
         multipleData: (OtherData | OtherData2)[];
       }
@@ -465,7 +465,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         foo: string;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Data {
         multipleData: (MultipleData | MultipleData2)[];
       }
@@ -506,7 +506,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'manual merge with untyped properties': {
     interfaceName: 'Info',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Info {
         developers: Developers[];
       }
@@ -519,7 +519,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         untyped?;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Info {
         developers: (Developers | Developers2)[];
       }
@@ -539,7 +539,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
   'merge multiple array into one': {
     interfaceName: 'Data',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Data {
         clientData: ClientData[];
       }
@@ -560,7 +560,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         status_percentage?: number;
       }
     `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Data {
         clientData: (ClientData[] | ClientData2[]);
       }

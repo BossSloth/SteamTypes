@@ -1,7 +1,15 @@
 import { ObservableMap } from 'mobx';
 import { GameRecordingRequestHandler } from 'Modules/GameRecordingRequestHandler';
-import { CTimelineEntry, CGameRecording_ClipSummary, CGameRecording_GetAppsWithBackgroundVideo_Response_App, CGameRecording_RecordingSessionChanged_Notification } from 'Protobufs/steam/webuimessages_gamerecording';
-import { CGameRecordingTimelineMetadata, CGameRecordingTimelineMetadata_Recording } from 'Protobufs/steam/webuimessages_gamerecordingfiles';
+import {
+  CGameRecording_ClipSummary,
+  CGameRecording_GetAppsWithBackgroundVideo_Response_App,
+  CGameRecording_RecordingSessionChanged_Notification,
+  CTimelineEntry,
+} from 'Protobufs/steam/webuimessages_gamerecording';
+import {
+  CGameRecordingTimelineMetadata,
+  CGameRecordingTimelineMetadata_Recording,
+} from 'Protobufs/steam/webuimessages_gamerecordingfiles';
 
 export interface GameRecordingStore {
   BEnoughDiskSpace(): boolean;
@@ -12,13 +20,20 @@ export interface GameRecordingStore {
 
   CheckEnoughDiskSpace(): Promise<void>;
 
-  CreateUserTimelineMarkers(gameId: string, clipId: string, entry: CTimelineEntry): Promise<{ eResult: number; entry_id: string; }>;
+  CreateUserTimelineMarkers(
+    gameId: string,
+    clipId: string,
+    entry: CTimelineEntry,
+  ): Promise<{ eResult: number; entry_id: string }>;
 
   DeleteClip(clipId: string): Promise<number>;
 
   ExportClip(clipId: string, exportMp4Path: string, settings: unknown, useUniqueFilename: boolean): Promise<number>;
 
-  GetAchievementInfo(gameId: string, achievementName: string): { name: string; description: string; iconURL: string; } | null | undefined;
+  GetAchievementInfo(
+    gameId: string,
+    achievementName: string,
+  ): { name: string; description: string; iconURL: string } | null | undefined;
 
   GetAppsWithBackgroundVideo(): AppWithBackgroundVideo[];
 
@@ -44,15 +59,24 @@ export interface GameRecordingStore {
 
   GetRecordingState(): RecordingState | null;
 
-  GetTimelineLoaderForClip(clipId: string): { loader: TimelineLoader; release: () => void; };
+  GetTimelineLoaderForClip(clipId: string): { loader: TimelineLoader; release: () => void };
 
-  GetTimelineLoaderForGame(gameId: string): { loader: TimelineLoader; release: () => void; };
+  GetTimelineLoaderForGame(gameId: string): { loader: TimelineLoader; release: () => void };
 
-  GetTimelineLoaderForSharedClip(sharedClip: SharedClip): { loader: TimelineLoader; release: () => void; };
+  GetTimelineLoaderForSharedClip(sharedClip: SharedClip): {
+    loader: TimelineLoader;
+    release: () => void;
+  };
 
   GetTotalDiskSpaceUsage(folderPath: string, isTemporary: boolean): Promise<number>;
 
-  Init(transport: Transport, fnGetAchievementInfo: (gameId: string, achievementName: string) => { name: string; description: string; iconURL: string; } | null): Promise<void>;
+  Init(
+    transport: Transport,
+    fnGetAchievementInfo: (
+      gameId: string,
+      achievementName: string,
+    ) => { name: string; description: string; iconURL: string } | null,
+  ): Promise<void>;
 
   InternalAddClipSummary(clipSummary: CGameRecording_ClipSummary): void;
 
@@ -60,28 +84,46 @@ export interface GameRecordingStore {
 
   LoadAppsWithBackgroundVideo(): Promise<undefined>;
 
-  LoadThumbnails(recordingId: string, clipId: string, timelineId: string, startOffsetUs: number[], majorAxis: number, timePrecisionUs: boolean): Promise<unknown>;
+  LoadThumbnails(
+    recordingId: string,
+    clipId: string,
+    timelineId: string,
+    startOffsetUs: number[],
+    majorAxis: number,
+    timePrecisionUs: boolean,
+  ): Promise<unknown>;
 
-  m_fnGetAchievementInfo(gameId: string, achievementName: string): { name: string; description: string; iconURL: string; } | null;
+  m_fnGetAchievementInfo(gameId: string, achievementName: string): { name: string; description: string; iconURL: string } | null;
 
   ManuallyDeleteRecordingForApps(gameIds: string[]): void;
 
+  // oxfmt-ignore
   OnClipCreated(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyClipCreated']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnExportProgress(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyExportProgress']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnLowDiskSpace(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyLowDiskSpace']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnRecordingSessionChanged(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyRecordingSessionChanged']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnTimelineChanged(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyTimelineChanged']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnTimelineEntryChanged(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyTimelineEntryChanged']>[0] extends (notification: infer N) => void ? N : never): number;
 
+  // oxfmt-ignore
   OnTimelineEntryRemoved(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyTimelineEntryRemoved']>[0] extends (notification: infer N) => void ? N : never): number;
 
-  RegisterManualRecordingCallback(gameId: string, callback: (notification: RecordingSessionChangedNotification) => void): () => void;
+  RegisterManualRecordingCallback(
+    gameId: string,
+    callback: (notification: RecordingSessionChangedNotification) => void,
+  ): () => void;
 
+  // oxfmt-ignore
   ReloadAppsWithBackgroundVideoIfNecessary(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyTimelineChanged']>[0] extends (notification: infer N) => void ? N : never): void;
 
   RemoveUserTimelineMarker(gameId: string, clipId: string, timelineId: string, entryId: string): Promise<number>;
@@ -90,7 +132,15 @@ export interface GameRecordingStore {
 
   ReportClipShare(gameId: GameID, shareMethod: number, seconds: number, bytes: number, eresult: number): void;
 
-  SaveClip(gameId: string, srcClipId: string, name: string, start: number, end: number, temporary: boolean, forceThumbnail: boolean): Promise<{ clipSummary: CGameRecording_ClipSummary; result: number; } | { result: number; clipSummary?: undefined; }>;
+  SaveClip(
+    gameId: string,
+    srcClipId: string,
+    name: string,
+    start: number,
+    end: number,
+    temporary: boolean,
+    forceThumbnail: boolean,
+  ): Promise<{ clipSummary: CGameRecording_ClipSummary; result: number } | { result: number; clipSummary?: undefined }>;
 
   StartRecording(gameId: string): Promise<ReturnType<GameRecordingRequestHandler['StartRecording']>>;
 
@@ -98,13 +148,23 @@ export interface GameRecordingStore {
 
   SwitchRecordedGame(gameId: string): Promise<ReturnType<GameRecordingRequestHandler['SwitchBackgroundRecordingGame']>>;
 
-  TakeScreenshot(gameId: string, timelineId: string, timelineOffsetMs: number, i: unknown): Promise<{ handle: number; result: number; } | { result: number; handle?: undefined; }>;
+  TakeScreenshot(
+    gameId: string,
+    timelineId: string,
+    timelineOffsetMs: number,
+    i: unknown,
+  ): Promise<{ handle: number; result: number } | { result: number; handle?: undefined }>;
 
   UpdateClipExportPath(clipId: string, exportPath: string): void;
 
   UpdateUserTimelineMarkers(gameId: string, clipId: string, entry: CTimelineEntry): Promise<number>;
 
-  UploadClip(clipId: string, title: string, desc: string, visibility: number): Promise<{ eResult: number; strURL: string | undefined; }>;
+  UploadClip(
+    clipId: string,
+    title: string,
+    desc: string,
+    visibility: number,
+  ): Promise<{ eResult: number; strURL: string | undefined }>;
 
   m_bClipLoadingTriggered: boolean;
 
@@ -161,7 +221,16 @@ export interface TimelineLoaderWithRefCount {
 }
 
 export interface TimelineLoader {
-  AddEventToTimeline(timelineId: string, time: number, markerIcon: string, entryId: string, markerPriority: number, rangeTitle: string, markerDescription: string, rangeDuration: number): boolean;
+  AddEventToTimeline(
+    timelineId: string,
+    time: number,
+    markerIcon: string,
+    entryId: string,
+    markerPriority: number,
+    rangeTitle: string,
+    markerDescription: string,
+    rangeDuration: number,
+  ): boolean;
 
   AddRunningTimeline(timelineId: string, gameId: string, startTime: number): void;
 
@@ -247,43 +316,92 @@ export interface ActiveTimelineLoader extends TimelineLoader {
   ClampGlobalRangeToTimeline(timelineId: string, startMS: number, endMS: number): [number, number];
 
   /** Converts a global offset to a specific recording ID and relative offset within that recording */
-  ConvertGlobaOffsetToRecordingAndRelativeOffset(globalOffsetMS: number): { strRecordingID: string; nRecordingOffsetMS: number; nStartOffsetMS: number; } | null;
+  ConvertGlobaOffsetToRecordingAndRelativeOffset(
+    globalOffsetMS: number,
+  ): { strRecordingID: string; nRecordingOffsetMS: number; nStartOffsetMS: number } | null;
 
   /** Converts a recording offset to a global timeline offset */
-  ConvertRecordingOffsetToGlobalOffset(recordingId: string, offsetMS: number, rounding: number): { nGlobalOffsetMS: number; nRoundedDurationMS: number; strTimelineID: string; nTimelineOffsetMS: number; } | null;
+  ConvertRecordingOffsetToGlobalOffset(
+    recordingId: string,
+    offsetMS: number,
+    rounding: number,
+  ): {
+    nGlobalOffsetMS: number;
+    nRoundedDurationMS: number;
+    strTimelineID: string;
+    nTimelineOffsetMS: number;
+  } | null;
 
   ConvertRecordingTimeMStoPreTrimTimeMS(e: unknown, t: unknown): unknown;
 
   CreateGlobalRangeForTimeline(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
 
-  CreateTimelineIterator(e: unknown, t: unknown): { m_timeline: unknown; m_data: unknown; m_nTimelineOffsetMS: number; m_iGameModeChanges: number; m_iEntries: number; };
+  CreateTimelineIterator(
+    e: unknown,
+    t: unknown,
+  ): {
+    m_timeline: unknown;
+    m_data: unknown;
+    m_nTimelineOffsetMS: number;
+    m_iGameModeChanges: number;
+    m_iEntries: number;
+  };
 
   FindRangeEventsAtGlobalMS(e: unknown): never[];
 
-  FindRecordingAndOffsetForEntry(e: unknown): Promise<{ strRecordingID: unknown; nRecordingOffsetMS: number; nStartOffsetMS: number; } | undefined>;
+  FindRecordingAndOffsetForEntry(
+    e: unknown,
+  ): Promise<{ strRecordingID: unknown; nRecordingOffsetMS: number; nStartOffsetMS: number } | undefined>;
 
   /** Finds the timeline at a specific global offset */
-  FindTimelineAtOffset(globalOffsetMS: number, rounding: number): { timeline: TimelineMetadata; nTimelineOffsetMS: number; ulGlobalToTimelineOffset: number; } | null;
+  FindTimelineAtOffset(
+    globalOffsetMS: number,
+    rounding: number,
+  ): {
+    timeline: TimelineMetadata;
+    nTimelineOffsetMS: number;
+    ulGlobalToTimelineOffset: number;
+  } | null;
 
   FireEvent(e: unknown, ...t: unknown[]): void;
 
   GenerateClipNameFromTimeline(e: unknown, t: unknown, r: unknown, n: unknown): Promise<string>;
 
-  GenerateNamePartsFromTimeline(e: unknown, t: unknown, r: unknown, n: unknown): Promise<{ strTimelinePart: unknown; strAppNamePart: unknown; rtStart: unknown; rtEnd: unknown; }>;
+  GenerateNamePartsFromTimeline(
+    e: unknown,
+    t: unknown,
+    r: unknown,
+    n: unknown,
+  ): Promise<{
+    strTimelinePart: unknown;
+    strAppNamePart: unknown;
+    rtStart: unknown;
+    rtEnd: unknown;
+  }>;
 
   /** Returns the clip ID if this loader is for a clip */
   GetClipID(): ActiveTimelineLoader['m_clipID'];
 
-  GetClosestNextEntryInGlobalTimeline(e: unknown): { timelineID: unknown; timelineState: unknown; entry: unknown; globalMS: unknown; };
+  GetClosestNextEntryInGlobalTimeline(e: unknown): {
+    timelineID: unknown;
+    timelineState: unknown;
+    entry: unknown;
+    globalMS: unknown;
+  };
 
-  GetClosestNextEntryInTimeline(e: unknown, t: unknown): { entry: null; timelineState: unknown; };
+  GetClosestNextEntryInTimeline(e: unknown, t: unknown): { entry: null; timelineState: unknown };
 
   /** Gets the next recording after the specified global offset */
   GetClosestNextRecordingInGlobalTimeline(globalOffsetMS: GlobalOffsetMS): RunningRecording | null;
 
-  GetClosestPreviousEntryInGlobalTimeline(e: unknown): { timelineID: unknown; timelineState: unknown; entry: unknown; globalMS: unknown; };
+  GetClosestPreviousEntryInGlobalTimeline(e: unknown): {
+    timelineID: unknown;
+    timelineState: unknown;
+    entry: unknown;
+    globalMS: unknown;
+  };
 
-  GetClosestPreviousEntryInTimeline(e: unknown, t: unknown): { entry: null; timelineState: unknown; };
+  GetClosestPreviousEntryInTimeline(e: unknown, t: unknown): { entry: null; timelineState: unknown };
 
   /** Gets the previous recording before the specified global offset */
   GetClosestPreviousRecordingInGlobalTimeline(globalOffsetMS: GlobalOffsetMS): RunningRecording | null;
@@ -298,7 +416,10 @@ export interface ActiveTimelineLoader extends TimelineLoader {
   GetGameID(): string;
 
   /** Gets the global offset data for a specific timeline */
-  GetGlobalOffsetDataForTimeline(timelineId: string, rounding: number): { nGlobalOffsetMS: number; nRoundedDurationMS: number; } | null;
+  GetGlobalOffsetDataForTimeline(
+    timelineId: string,
+    rounding: number,
+  ): { nGlobalOffsetMS: number; nRoundedDurationMS: number } | null;
 
   GetGlobalTimelineEndMS(): unknown;
 
@@ -335,7 +456,10 @@ export interface ActiveTimelineLoader extends TimelineLoader {
   GetTimelineMetadataIndex(timelineId: string): number;
 
   /** Converts a global offset to a timeline-specific offset */
-  GetTimelineOffsetFromGlobal(globalOffsetMS: number, rounding: number): { strTimelineID: string | undefined; nTimelineOffsetMS: GlobalOffsetMS; };
+  GetTimelineOffsetFromGlobal(
+    globalOffsetMS: number,
+    rounding: number,
+  ): { strTimelineID: string | undefined; nTimelineOffsetMS: GlobalOffsetMS };
 
   /** Returns all timeline metadata */
   GetTimelines(): TimelineMetadata[];
@@ -368,7 +492,7 @@ export interface ActiveTimelineLoader extends TimelineLoader {
   MakeRelativeToTimelineEndIfActive(timelineId: string, offsetMS: number): number;
 
   /** Processes raw timeline entries, sorting them by type and time */
-  ProcessTimelineEntries(rawData: { entries?: unknown[]; }): TimelineData;
+  ProcessTimelineEntries(rawData: { entries?: unknown[] }): TimelineData;
 
   RemoveUserMarker(e: unknown, t: unknown): boolean;
 
@@ -613,7 +737,14 @@ export interface RgListeners {
 
   GetPhasePreview(): unknown;
 
-  GetPlaybackStats(): { nMean: number; nStdDev: number; nMax: number; nMin: number; nLength: unknown; nLastVal: unknown; } | null;
+  GetPlaybackStats(): {
+    nMean: number;
+    nStdDev: number;
+    nMax: number;
+    nMin: number;
+    nLength: unknown;
+    nLastVal: unknown;
+  } | null;
 
   GetPreviousHighlightEntry(): unknown;
 
@@ -947,7 +1078,13 @@ export interface RgListeners3 {
 
   ComputeEntriesForTimeline(e: unknown): void;
 
-  ComputeTimelineOffset(e: unknown): { timelineID: unknown; globalOffsetMS: unknown; nDurationMS: number; recordingOffsets: unknown; phaseOffsets: unknown; };
+  ComputeTimelineOffset(e: unknown): {
+    timelineID: unknown;
+    globalOffsetMS: unknown;
+    nDurationMS: number;
+    recordingOffsets: unknown;
+    phaseOffsets: unknown;
+  };
 
   ConvertDeltaPXToDurationMS(e: unknown): number;
 

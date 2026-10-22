@@ -22,7 +22,9 @@ export interface OpenVR {
 
   RegisterForStartupErrors(callback: (clientError: unknown, initError: unknown, initErrorString: string) => void): Unregisterable;
 
-  RegisterForVRHardwareDetected(callback: (m_bHMDPresent: unknown, m_bHMDHardwareDetected: unknown, m_strHMDName: unknown) => void): Unregisterable;
+  RegisterForVRHardwareDetected(
+    callback: (m_bHMDPresent: unknown, m_bHMDHardwareDetected: unknown, m_strHMDName: unknown) => void,
+  ): Unregisterable;
 
   RegisterForVRModeChange(callback: (m_bIsVRRunning: boolean) => void): Unregisterable;
 
@@ -78,7 +80,9 @@ export interface Keyboard {
   /**
    * @param m_eKeyboardFlags Bitmask flags representing keyboard state
    */
-  RegisterForStatus(callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: EKeyboardFlags, m_sInitialKeyboardText: string) => void): Unregisterable;
+  RegisterForStatus(
+    callback: (m_bIsKeyboardOpen: boolean, m_eKeyboardFlags: EKeyboardFlags, m_sInitialKeyboardText: string) => void,
+  ): Unregisterable;
 
   SendDone(): unknown;
 

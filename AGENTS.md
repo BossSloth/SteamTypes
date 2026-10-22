@@ -1,6 +1,7 @@
 # SteamTypes Project Overview
 
 ## Purpose
+
 TypeScript type definitions for the Steam client (`steam-types` npm package). Types cover the Steam `SharedJSContext` window — `SteamClient` and all its submodules, plus global store/manager objects. Types are **auto-generated** by running scripts against a live Steam client via Chrome DevTools Protocol (CDP).
 
 ---
@@ -23,13 +24,15 @@ steamtypes/
 ## `scripts/` — Generation Scripts
 
 ### Entry Points
+
 - **`validate-types.ts`** — Main developer script. Connects to Steam via CDP, injects the convert script, runs `convertToTypescript()` on each mapped object, compares results against existing source files, and writes diffs.
   - Requires Steam running with CEF debugging on **port 8080** (it almost always is)
   - Requires `build/scripts/convert-to-typescript.js` to exist first (run `bun run build-convert-debug`)
 - **`update-globals.ts`** — Updates `src/Globals/index.ts` with actual window properties discovered from Steam. Called automatically by `validate-types.ts`.
 
 ### Sub-directories
-- **`convert-to-typescript/`** — Core JS->TS conversion pipeline (runs *inside* Steam's browser context)
+
+- **`convert-to-typescript/`** — Core JS->TS conversion pipeline (runs _inside_ Steam's browser context)
   - `index.ts` — Initialises global `tsProject` and exports `convertToTypescript`
   - `converter.ts` — Main orchestrator: processes interfaces, merges, generates output
   - `interface-generation.ts` — Creates `TypeScriptInterface` objects from JS objects
@@ -88,6 +91,7 @@ src/
 ```
 
 ### Key Conventions
+
 - Each file in `src/types/` corresponds to one `IMap` entry in `scripts/maps/`
 - `src/Globals/index.ts` is auto-managed — do not manually reorder global property lists; the script keeps them alphabetical
 - Files use `@compareOriginalName` JSDoc tag to track renames; `@ignore` to skip comparison
@@ -176,11 +180,11 @@ bun run lint:fix
 
 ## JSDoc Tags Used in Source Files
 
-| Tag | Purpose |
-|-----|---------|
+| Tag                           | Purpose                                            |
+| ----------------------------- | -------------------------------------------------- |
 | `@compareOriginalName <name>` | Tracks a renamed property/interface for comparison |
-| `@currentValue <value>` | Documents the current runtime value of a property |
-| `@ignore` | Tells the comparator to skip this member |
+| `@currentValue <value>`       | Documents the current runtime value of a property  |
+| `@ignore`                     | Tells the comparator to skip this member           |
 
 ---
 

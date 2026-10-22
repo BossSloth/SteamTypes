@@ -1,5 +1,21 @@
 import { ServiceTransport } from 'Global/managers/ConnectionManager';
-import { StoreAppType, StoreBrowseFilterFailure, StoreBrowseItemDataRequest, StoreItem_BasicInfo, StoreItem_Categories, StoreItem_Link, StoreItem_Platforms, StoreItem_PurchaseOption, StoreItem_RelatedItems, StoreItem_ReleaseInfo, StoreItem_Reviews, StoreItem_SupportedLanguage, StoreItem_Tag, StoreItemType, TrailerCategory } from 'Protobufs/steam/steammessages_storebrowse.steamclient';
+import {
+  StoreAppType,
+  StoreBrowseFilterFailure,
+  StoreBrowseItemDataRequest,
+  StoreItem_BasicInfo,
+  StoreItem_Categories,
+  StoreItem_Link,
+  StoreItem_Platforms,
+  StoreItem_PurchaseOption,
+  StoreItem_RelatedItems,
+  StoreItem_ReleaseInfo,
+  StoreItem_Reviews,
+  StoreItem_SupportedLanguage,
+  StoreItem_Tag,
+  StoreItemType,
+  TrailerCategory,
+} from 'Protobufs/steam/steammessages_storebrowse.steamclient';
 
 export interface StoreItemCache {
   BHasApp(e: unknown, t: unknown): unknown;
@@ -102,7 +118,11 @@ export interface StoreItemCache {
 
   QueuePackageRequest(e: unknown, t: unknown): Promise<unknown>;
 
-  QueueStoreItemRequest(storeItemId: number, storeItemType: StoreItemType, dataRequest: StoreBrowseItemDataRequest): Promise<unknown>;
+  QueueStoreItemRequest(
+    storeItemId: number,
+    storeItemType: StoreItemType,
+    dataRequest: StoreBrowseItemDataRequest,
+  ): Promise<unknown>;
 
   QueueTagRequest(e: unknown, t: unknown): Promise<unknown>;
 

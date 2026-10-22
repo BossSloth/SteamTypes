@@ -10,7 +10,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
   'external template literal types': {
     interfaceName: 'RouteConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type HttpMethodType = 'GET' | 'POST';
       export type ResourceTypeValue = 4 | 5;
 
@@ -21,7 +21,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
 
         type: ResourceTypeValue;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: string;
 
@@ -33,7 +33,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
 
   'external template literal types with missing type': {
     interfaceName: 'RouteConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export type HttpMethodType = 'GET' | 'POST';
       export type ResourceTypeValue = 4 | 5;
 
@@ -42,7 +42,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
         path: string;
         type: ResourceTypeValue;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface RouteConfig {
         method: number;
         path: string;
@@ -52,7 +52,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
 
   'interface with complex nested structures': {
     interfaceName: 'AppConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface AppConfig {
         api: ApiSettings;
         ui: UiSettings;
@@ -68,7 +68,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
       export interface UiSettings {
         theme: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface AppConfig {
         api: ApiConfig;
         ui: UiConfig;
@@ -115,7 +115,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
 
   'interface with property and member renamed': {
     interfaceName: 'ChatMessage',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ChatMessage {
         content: TextData;
         id: string;
@@ -127,7 +127,7 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
         text: string;
         informationFormat: 'plain' | 'markdown';
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ChatMessage {
         content: MessageContent;
         id: string;

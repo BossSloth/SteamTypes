@@ -128,7 +128,7 @@ export interface CClientNotificationIncomingVoiceChat {
   steamid?: string;
 }
 
-export interface CClientNotificationClaimSteamDeckRewards { }
+export interface CClientNotificationClaimSteamDeckRewards {}
 
 export interface CClientNotificationGiftReceived {
   sender_name?: string;
@@ -140,7 +140,7 @@ export interface CClientNotificationItemAnnouncement {
   new_item_count?: number;
 }
 
-export interface CClientNotificationHardwareSurveyPending { }
+export interface CClientNotificationHardwareSurveyPending {}
 
 export interface CClientNotificationLowDiskSpace {
   folder_index?: number;
@@ -152,7 +152,7 @@ export interface CClientNotificationBatteryTemperature {
   temperature?: number;
 }
 
-export interface CClientNotificationDockUnsupportedFirmware { }
+export interface CClientNotificationDockUnsupportedFirmware {}
 
 export interface CClientNotificationPeerContentUpload {
   appid?: number;
@@ -164,7 +164,7 @@ export interface CClientNotificationCannotReadControllerGuideButton {
   controller_index?: number;
 }
 
-export interface CClientNotificationOverlaySplashScreen { }
+export interface CClientNotificationOverlaySplashScreen {}
 
 export interface CClientNotificationBroadcastAvailableToWatch {
   broadcast_permission?: number;
@@ -182,9 +182,9 @@ export interface CClientNotificationTimedTrialRemaining {
   played_seconds?: number;
 }
 
-export interface CClientNotificationLoginRefresh { }
+export interface CClientNotificationLoginRefresh {}
 
-export interface CClientNotificationTimerExpired { }
+export interface CClientNotificationTimerExpired {}
 
 export interface CClientNotificationSteamInputActionSetChanged {
   action_set_name?: string;

@@ -1,4 +1,8 @@
-import { CGameNetworkingUI_AppSummary_Protobuf, CGameNetworkingUI_ConnectionState_Protobuf, CMsgNetworkDevicesData_Protobuf } from '@Runtime/Protobufs';
+import {
+  CGameNetworkingUI_AppSummary_Protobuf,
+  CGameNetworkingUI_ConnectionState_Protobuf,
+  CMsgNetworkDevicesData_Protobuf,
+} from '@Runtime/Protobufs';
 import { SerializedArrayBuffer } from 'shared/protobuf';
 import { OperationResponse, Unregisterable } from 'SteamClient/shared';
 import { Device } from './Device';
@@ -12,11 +16,15 @@ export interface Network {
 
   RegisterForAppSummaryUpdate(callback: (data: AppSummaryUpdate) => void): Unregisterable;
 
-  RegisterForConnectionStateUpdate(callback: (state: SerializedArrayBuffer<typeof CGameNetworkingUI_ConnectionState_Protobuf>) => void): Unregisterable;
+  RegisterForConnectionStateUpdate(
+    callback: (state: SerializedArrayBuffer<typeof CGameNetworkingUI_ConnectionState_Protobuf>) => void,
+  ): Unregisterable;
 
   RegisterForConnectivityTestChanges(callback: (connectivityTestChange: ConnectivityTestChange) => void): Unregisterable;
 
-  RegisterForDeviceChanges(callback: (data: SerializedArrayBuffer<typeof CMsgNetworkDevicesData_Protobuf>) => void): Unregisterable;
+  RegisterForDeviceChanges(
+    callback: (data: SerializedArrayBuffer<typeof CMsgNetworkDevicesData_Protobuf>) => void,
+  ): Unregisterable;
 
   SetFakeLocalSystemState(state: ENetFakeLocalSystemState): void;
 

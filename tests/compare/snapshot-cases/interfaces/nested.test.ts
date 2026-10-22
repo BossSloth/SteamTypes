@@ -4,7 +4,7 @@ import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 export const nestedCases: Record<string, ComparatorTest> = {
   'nested interfaces': {
     interfaceName: 'Parent',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Parent {
         child: Child;
       }
@@ -12,7 +12,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
       export interface Child {
         name: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Parent {
         child: Child;
         id: number;
@@ -26,7 +26,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'deeply nested interfaces': {
     interfaceName: 'GrandParent',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface GrandParent {
         parent: Parent;
       }
@@ -38,7 +38,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
       export interface Child {
         name: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface GrandParent {
         parent: Parent;
         generation: number;
@@ -57,11 +57,11 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'interface with circular reference': {
     interfaceName: 'Node',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Node {
         value: string;
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Node {
         value: string;
         next: Node | null;
@@ -70,7 +70,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'interface with mismatched interface types': {
     interfaceName: 'ServiceConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
     export interface ServiceConfig {
       userService: UserService;
     }
@@ -87,7 +87,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
       name: string;
       email: string;
     }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
     export interface ServiceConfig {
       userService: UserService;
     }
@@ -102,7 +102,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'interface with added nested interfaces': {
     interfaceName: 'AppConfiguration',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface AppConfiguration {
         version: string;
         settings: {
@@ -110,7 +110,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
           language: string;
         };
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface AppConfiguration {
         version: string;
         settings: AppSettings;
@@ -138,7 +138,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'interface with modified nested interfaces': {
     interfaceName: 'NetworkConfig',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface NetworkConfig {
         baseUrl: string;
         connection: ConnectionParams;
@@ -152,7 +152,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
         retries: number;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface NetworkConfig {
         baseUrl: string;
         connection: ConnectionParams;
@@ -176,13 +176,13 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   'recursive interface': {
     interfaceName: 'Node',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface Node {
         value: string;
         children: Node[];
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface Node {
         value: string;
         children: Node[];
@@ -193,7 +193,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
   '2 level recursive interface': {
     interfaceName: 'TreeNode',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface TreeNode {
         children: Node[];
 
@@ -208,7 +208,7 @@ export const nestedCases: Record<string, ComparatorTest> = {
         value: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface TreeNode {
         value: string;
         children: Node[];
@@ -224,13 +224,13 @@ export const nestedCases: Record<string, ComparatorTest> = {
 
   '2 level recursive interface missing interface': {
     interfaceName: 'TreeNode',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface TreeNode {
         value: id;
         foo: string;
       }
       `,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface TreeNode {
         value: string;
         children: Node[];

@@ -5,11 +5,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
   'tuple types': {
     interfaceName: 'CoordinateSystem',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface CoordinateSystem {
         point: [number, number];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface CoordinateSystem {
         point: number[];
       }`,
@@ -18,11 +18,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
   'mixed tuple types': {
     interfaceName: 'CoordinateSystem',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface CoordinateSystem {
         point: [number, string];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface CoordinateSystem {
         point: (number | string)[];
       }`,
@@ -30,11 +30,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
 
   'mixed missing tuple types': {
     interfaceName: 'CoordinateSystem',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface CoordinateSystem {
         point: [number, number];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface CoordinateSystem {
         point: (number | string)[];
       }`,
@@ -43,11 +43,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
   'tuple types with optional elements': {
     interfaceName: 'ParameterConfig',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface ParameterConfig {
         options: [number, boolean, string, string];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface ParameterConfig {
         options: (string | number | boolean)[];
       }`,
@@ -56,11 +56,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
   'simple tuple type': {
     interfaceName: 'CoordinateSystem',
     expectsNoDiff: true,
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface CoordinateSystem {
         point: [number, number];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface CoordinateSystem {
         point: number[];
       }`,
@@ -68,11 +68,11 @@ export const tupleCases: Record<string, ComparatorTest> = {
 
   'interface with tuple type': {
     interfaceName: 'TupleContainer',
-    target: dedent/* ts */`
+    target: dedent /* ts */ `
       export interface TupleContainer {
         coordinates: [number, number];
       }`,
-    source: dedent/* ts */`
+    source: dedent /* ts */ `
       export interface TupleContainer {
         coordinates: [number, boolean, number];
         labels: [string, string];

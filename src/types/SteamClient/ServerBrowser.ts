@@ -162,7 +162,10 @@ export interface ServerBrowser {
    * @param callback The callback function to be called.
    * @returns An object that can be used to unregister the callback.
    */
-  RegisterForPlayerDetails(dialogId: number, callback: (player: ServerBrowserPlayer | ServerBrowserPlayerRefreshStatus) => void): Unregisterable;
+  RegisterForPlayerDetails(
+    dialogId: number,
+    callback: (player: ServerBrowserPlayer | ServerBrowserPlayerRefreshStatus) => void,
+  ): Unregisterable;
 
   /**
    * Registers a callback function to be called when a server gets pinged.

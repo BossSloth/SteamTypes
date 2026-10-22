@@ -15,7 +15,8 @@ export default {
     type: 'suggestion',
     fixable: 'code',
     docs: {
-      description: 'Enforce variable declarations inside a `declare global {}` block to be sorted alphabetically (natural order).',
+      description:
+        'Enforce variable declarations inside a `declare global {}` block to be sorted alphabetically (natural order).',
       category: 'Stylistic Issues',
     },
     schema: [],
@@ -32,8 +33,9 @@ export default {
         const body = node.body?.body;
         if (!Array.isArray(body)) return;
 
-        const declarations = body.filter((statement) =>
-          statement.type === 'VariableDeclaration' && statement.declarations[0]?.id.type === 'Identifier');
+        const declarations = body.filter(
+          (statement) => statement.type === 'VariableDeclaration' && statement.declarations[0]?.id.type === 'Identifier',
+        );
         if (declarations.length < 2) return;
 
         const names = declarations.map((statement) => statement.declarations[0].id.name);
@@ -51,10 +53,12 @@ export default {
           },
           fix(fixer) {
             const sortedStatements = [...declarations].sort((a, b) =>
-              naturalCompare(a.declarations[0].id.name, b.declarations[0].id.name));
+              naturalCompare(a.declarations[0].id.name, b.declarations[0].id.name),
+            );
 
             return declarations.map((statement, index) =>
-              fixer.replaceText(statement, sourceCode.getText(sortedStatements[index])));
+              fixer.replaceText(statement, sourceCode.getText(sortedStatements[index])),
+            );
           },
         });
       },

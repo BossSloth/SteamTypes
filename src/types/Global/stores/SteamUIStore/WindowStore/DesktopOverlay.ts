@@ -187,7 +187,7 @@ export interface DesktopOverlay {
 
   m_mapPinnedWindows: ObservableMap<string, MapPinnedWindows>;
 
-  m_mapPopupForWindow: Map<string, (null | Window)>;
+  m_mapPopupForWindow: Map<string, null | Window>;
 
   m_mapWindowVisibilityState: ObservableMap<string, number>;
 
