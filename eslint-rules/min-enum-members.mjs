@@ -20,7 +20,7 @@ export default {
   create(context) {
     return {
       TSEnumDeclaration(node) {
-        const memberCount = node.members.length;
+        const memberCount = node.body.members.length;
         if (memberCount < 2) {
           context.report({
             node: node.id,

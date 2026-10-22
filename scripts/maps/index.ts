@@ -1,10 +1,3 @@
-import { FriendStoreMaps } from './FriendStore';
-import { GlobalMaps } from './Global';
-import { ModulesMaps } from './Modules';
-import { SharedMaps } from './Shared';
-import { SteamClientMaps } from './SteamClient';
-import { SteamUIStoreMaps } from './SteamUIStore';
-
 export interface InterfaceMap extends InterfaceMapOptions {
   /** Path to the file relative to src/types */
   file: string;
@@ -40,12 +33,3 @@ export function IMap(file: string, interfaceName: string, objectExpression: stri
     ...options,
   };
 }
-
-export const interfaceMaps: InterfaceMap[] = [
-  ...GlobalMaps,
-  ...SharedMaps,
-  ...SteamClientMaps,
-  ...SteamUIStoreMaps,
-  ...ModulesMaps,
-  ...FriendStoreMaps,
-];

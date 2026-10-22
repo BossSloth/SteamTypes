@@ -4,6 +4,7 @@ declare global {
   }
 }
 
+// oxlint-disable-next-line import/exports-last
 export const steambrew: typeof import('@steambrew/client') = window.MILLENNIUM_API as typeof import('@steambrew/client');
 
 if (typeof steambrew.findModuleExport === 'undefined') {

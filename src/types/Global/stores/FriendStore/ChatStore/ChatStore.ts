@@ -5,7 +5,7 @@ import { CChatRoleActions } from 'Protobufs/steam/steammessages_chat.steamclient
 import { ProtobufInterface } from 'shared/protobuf';
 import { SteamID } from 'shared/steamid';
 import { Callbacks } from 'types/shared/interfaces';
-import { FriendDisplayType, FriendsUIFriendStore, SteamFriend } from '../FriendStore';
+import { FriendDisplayType, FriendsUIFriendStore, SteamFriend } from '../FriendStore'; // oxlint-disable-line import/no-cycle
 import { EmbedStore } from './EmbedStore';
 import { EmoticonStore } from './EmoticonStore';
 import { GameInviteStore } from './GameInviteStore';

@@ -1,3 +1,4 @@
+// oxlint-disable import/no-unassigned-import
 import { Project, ScriptTarget } from 'ts-morph';
 import { convertToTypescript } from './converter';
 import './fill-app-data';

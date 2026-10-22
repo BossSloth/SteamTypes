@@ -4,7 +4,7 @@ import { SteamID } from 'shared/steamid';
 import { Unregisterable } from 'SteamClient/shared';
 import { Callbacks } from 'types/shared/interfaces';
 import { GamingDeviceType } from 'types/SteamClient/System';
-import { ChatStore } from './ChatStore/ChatStore';
+import { ChatStore } from './ChatStore/ChatStore'; // oxlint-disable-line import/no-cycle
 
 export interface FriendStore {
   BShouldCachePlayer(e: unknown): unknown;

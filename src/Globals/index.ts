@@ -1,3 +1,4 @@
+// oxlint-disable import/no-relative-parent-imports
 /* eslint-disable perfectionist/sort-interfaces */
 import { LocalizationManager } from 'Global/managers/LocalizationManager';
 import { AppStore } from 'Global/stores/AppStore';

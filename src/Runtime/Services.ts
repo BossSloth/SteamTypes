@@ -1,3 +1,4 @@
+// oxlint-disable-next-line import/no-relative-parent-imports
 import { GameRecordingRequestHandler } from '../types/Modules/GameRecordingRequestHandler';
 import { steambrew } from './steambrew';
 

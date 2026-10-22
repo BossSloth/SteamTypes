@@ -8,5 +8,5 @@
     "enum": true,
     "type": true
   },
-  "ignoreDependencies": ["@semantic-release/github", "@semantic-release/npm"]
+  "ignoreDependencies": ["@semantic-release/github", "@semantic-release/npm", "eslint-import-resolver-typescript"]
 }

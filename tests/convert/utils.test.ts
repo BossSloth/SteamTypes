@@ -1,5 +1,6 @@
 import { NameAllocator } from '@Convert/session/NameAllocator';
 import { describe, expect, it } from 'vitest';
+// oxlint-disable-next-line import/no-unassigned-import
 import '../../scripts/convert-to-typescript';
 import { formatPropertyName, getProperties } from '../../scripts/convert-to-typescript/utils';
 

@@ -20,7 +20,8 @@ import path from 'path';
 import { compareInterfaces } from './compare/interface-checker';
 import { __dirname } from './dirname';
 import { Logger } from './logger';
-import { InterfaceMap, interfaceMaps } from './maps';
+import { InterfaceMap } from './maps';
+import { interfaceMaps } from './maps/maps';
 import { updateGlobals } from './update-globals';
 
 const convertToTsFilePath = path.join(path.resolve(`${__dirname}/../`), 'build', 'scripts', 'convert-to-typescript.js');

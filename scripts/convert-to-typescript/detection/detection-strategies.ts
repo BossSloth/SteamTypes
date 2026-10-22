@@ -64,6 +64,7 @@ function isSteamID(obj: object): boolean {
 
 function isConnectionManager(obj: object): boolean {
   // @ts-expect-error cm is not defined
+  // oxlint-disable-next-line typescript/prefer-optional-chain
   return typeof window !== 'undefined' && typeof window.cm !== 'undefined' && obj === window.cm;
 }
 
