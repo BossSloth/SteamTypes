@@ -70,7 +70,7 @@ exports[`Comparator Extended Interfaces > extended interface multiple extra func
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,23 +3,23 @@
+@@ -3,20 +3,20 @@
 
   otherChats: OtherChat[];
 }
@@ -87,15 +87,12 @@ export interface BaseChat {
 }
 
 export interface ChatRoom extends BaseChat {
++  GetInfo(): string;
++
   SetInfo(info: string): void;
 
   email: string;
-+
-+  GetInfo(): string;
-}
-
-export interface OtherChat extends BaseChat {
-  counter: number;"
+}"
 `;
 
 exports[`Comparator Extended Interfaces > extended interface multiple interface type mismatch 1`] = `
@@ -193,11 +190,11 @@ export interface BaseChat {
 export interface ChatRoom extends BaseChat {
 +  AddMessage(message: string): void;
 +
++  GetInfo(): string;
++
   SetInfo(info: string): void;
 
   email: string;
-+
-+  GetInfo(): string;
 }
 
 export interface OtherChat extends BaseChat {
@@ -255,11 +252,11 @@ export interface ChatRoom extends BaseChat {
 export interface OtherChat extends BaseChat {
   counter: number;
 
++  info: undefined;
++
   permissions: string[];
 
   role: string;
-+
-+  info: undefined;
 }"
 `;
 
@@ -382,7 +379,8 @@ interface B {
 -  w: number;
 }
 
-export interface A extends B {
+-export interface A extends B {
++export interface A {
   y: number;
 -  z: string;
 +

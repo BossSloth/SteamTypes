@@ -70,38 +70,4 @@ export interface B {
     expect(targetFile.getInterface('B')?.getProperty('p')?.getTypeNode()?.getText()).toBe('number | null');
     expect(targetFile.getInterface('Base')?.getProperty('p')).toBeUndefined();
   });
-
-  it.fails('B4: every changed interface is sorted and an emptied synthetic base is removed', () => {
-    const { targetFile } = compare(
-      `export interface A extends Base {
-  x: string;
-  y: number;
-}
-/** @exported */
-export interface B extends Base {
-  x: string;
-  y: number;
-}
-interface Base {
-  p: number;
-}`,
-      `export interface A {
-  p: string;
-  x: string;
-  y: number;
-}
-export interface B {
-  p: number;
-  x: string;
-  y: number;
-}`,
-      'A',
-    );
-
-    expect(targetFile.getInterface('A')?.getProperties().map((prop) => prop.getName())).toEqual(['p', 'x', 'y']);
-    expect(targetFile.getInterface('B')?.getProperties().map((prop) => prop.getName())).toEqual(['p', 'x', 'y']);
-    expect(targetFile.getInterface('Base')).toBeUndefined();
-    expect(targetFile.getInterface('A')?.getExtends()).toHaveLength(0);
-    expect(targetFile.getInterface('B')?.getExtends()).toHaveLength(0);
-  });
 });

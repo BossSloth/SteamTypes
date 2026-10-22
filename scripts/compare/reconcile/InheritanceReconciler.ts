@@ -1,5 +1,6 @@
 import { Identifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SyntaxKind } from 'ts-morph';
 import type { ComparisonSession } from '../session/ComparisonSession';
+import { orderMembers } from '../member-ordering';
 import { getInterfaceMembers } from '../shared';
 import type { MemberReconciliation } from './MemberReconciler';
 import type { TypeReconciler } from './TypeReconciler';
@@ -181,7 +182,18 @@ export class InheritanceReconciler {
 
   private recompareSyntheticBaseDerivedInterfaces(baseInterface: InterfaceDeclaration, sourceDerived: InterfaceDeclaration): void {
     const sourceFile = sourceDerived.getSourceFile();
-    const targetDerivedInterfaces = this.findTargetInterfacesExtending(baseInterface.getName());
+    const baseName = baseInterface.getName();
+    const targetDerivedInterfaces = this.findTargetInterfacesExtending(baseName);
+
+    if (baseInterface.getMembers().length === 0) {
+      for (const targetDerivedInterface of targetDerivedInterfaces) {
+        targetDerivedInterface.getExtends().forEach((ext) => {
+          if (ext.getExpression().getText() === baseName) {
+            targetDerivedInterface.removeExtends(ext);
+          }
+        });
+      }
+    }
 
     for (const targetDerivedInterface of targetDerivedInterfaces) {
       const sourceDerivedInterface = sourceFile.getInterface(targetDerivedInterface.getName());
@@ -189,7 +201,9 @@ export class InheritanceReconciler {
         continue;
       }
 
-      this.members.reconcileMembers(targetDerivedInterface, sourceDerivedInterface);
+      if (this.members.reconcileMembers(targetDerivedInterface, sourceDerivedInterface)) {
+        orderMembers(targetDerivedInterface);
+      }
     }
   }
 

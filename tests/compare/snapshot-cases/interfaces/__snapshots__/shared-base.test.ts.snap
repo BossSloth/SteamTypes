@@ -1,5 +1,97 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Shared Base Interfaces > emptied synthetic base drops extends and sorts derived interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,14 +1,16 @@
+-export interface A extends Base {
++export interface A {
++  p: string;
++
+  x: string;
++
+  y: number;
+}
+
+/** @exported */
+-export interface B extends Base {
++export interface B {
++  p: number;
++
+  x: string;
++
+  y: number;
+}
+-
+-interface Base {
+-  p: number;
+-}"
+`;
+
+exports[`Comparator Shared Base Interfaces > emptied synthetic base keeps other extends clauses of derived interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,18 +1,20 @@
+-export interface A extends Base, Other {
++export interface A extends Other {
++  p: string;
++
+  x: string;
++
+  y: number;
+}
+
+/** @exported */
+-export interface B extends Base {
++export interface B {
++  p: number;
++
+  x: string;
++
+  y: number;
+}
+
+-interface Base {
+-  p: number;
+-}
+-
+interface Other {
+  z: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > emptied synthetic base with @exported is kept without extends 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,20 @@
+-export interface A extends Base {
++export interface A {
++  p: string;
++
+  x: string;
++
+  y: number;
+}
+
+/** @exported */
+-export interface B extends Base {
++export interface B {
++  p: number;
++
+  x: string;
++
+  y: number;
+}
+
+/** @exported */
+export interface Base {
+-  p: number;
+}"
+`;
+
 exports[`Comparator Shared Base Interfaces > extra source derived union member with base absent from target 1`] = `
 "===================================================================
 --- a/target.ts
@@ -261,29 +353,59 @@ export interface Root {
 }"
 `;
 
+exports[`Comparator Shared Base Interfaces > synthetic base keeping other members keeps extends and sorts derived interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,15 +1,20 @@
+export interface A extends Base {
++  p: string;
++
+  x: string;
++
+  y: number;
+}
+
+/** @exported */
+export interface B extends Base {
++  p: number;
++
+  x: string;
++
+  y: number;
+}
+
+interface Base {
+-  p: number;
+  q: string;
+}"
+`;
+
 exports[`Comparator Shared Base Interfaces > synthetic base method removed when sources disagree 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,15 +3,18 @@
+@@ -2,16 +2,16 @@
+  chats: ChatRoom[];
 
   otherChats: OtherChat[];
 }
 
-export interface BaseChat {
+-export interface BaseChat {
 -  getInfo(): number;
-}
-
-export interface ChatRoom extends BaseChat {
+-}
++export interface ChatRoom {
 +  getInfo(): string;
-+
+
+-export interface ChatRoom extends BaseChat {
   email: string;
 }
 
-export interface OtherChat extends BaseChat {
-  role: string;
-+
+-export interface OtherChat extends BaseChat {
++export interface OtherChat {
 +  getInfo(): boolean;
++
+  role: string;
 }"
 `;
 
@@ -310,20 +432,23 @@ exports[`Comparator Shared Base Interfaces > synthetic base property missing typ
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,15 +3,16 @@
+@@ -2,16 +2,14 @@
+  otherChats: OtherChat[];
 
   chats: ChatRoom[];
 }
 
-export interface BaseChat {
+-export interface BaseChat {
 -  info: undefined;
-}
-
-export interface ChatRoom extends BaseChat {
+-}
+-
+-export interface ChatRoom extends BaseChat {
++export interface ChatRoom {
   email: string;
 }
 
-export interface OtherChat extends BaseChat {
+-export interface OtherChat extends BaseChat {
++export interface OtherChat {
 +  info: string[];
 +
   role: string;
@@ -334,25 +459,28 @@ exports[`Comparator Shared Base Interfaces > synthetic base property optional mi
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,15 +3,18 @@
+@@ -2,16 +2,16 @@
+  chats: ChatRoom[];
 
   otherChats: OtherChat[];
 }
 
-export interface BaseChat {
+-export interface BaseChat {
 -  info: undefined;
-}
-
-export interface ChatRoom extends BaseChat {
+-}
+-
+-export interface ChatRoom extends BaseChat {
++export interface ChatRoom {
   email: string;
 +
 +  info: string[];
 }
 
-export interface OtherChat extends BaseChat {
-  role: string;
-+
+-export interface OtherChat extends BaseChat {
++export interface OtherChat {
 +  info?: string[];
++
+  role: string;
 }"
 `;
 
@@ -360,27 +488,31 @@ exports[`Comparator Shared Base Interfaces > synthetic base removed with derived
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -3,19 +3,18 @@
+@@ -2,20 +2,16 @@
+  chats: ChatRoom[];
 
   otherChats: OtherChat[];
 }
 
-export interface BaseChat {
+-export interface BaseChat {
 -  info: undefined;
-}
-
-export interface ChatRoom extends BaseChat {
+-}
+-
+-export interface ChatRoom extends BaseChat {
++export interface ChatRoom {
   email: string;
 +
 +  info: string[];
 }
 
-export interface OtherChat extends BaseChat {
+-export interface OtherChat extends BaseChat {
++export interface OtherChat {
++  info?: string[];
++
   role: string;
--}
-
+}
+-
 -export interface ThirdChat extends BaseChat {
 -  third: string;
-+  info?: string[];
-}"
+-}"
 `;

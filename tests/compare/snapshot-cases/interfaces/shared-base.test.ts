@@ -658,6 +658,147 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
         gamma: string;
       }`,
   },
+
+  'emptied synthetic base drops extends and sorts derived interfaces': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {
+        x: string;
+        y: number;
+      }
+
+      /** @exported */
+      export interface B extends Base {
+        x: string;
+        y: number;
+      }
+
+      interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+        x: string;
+        y: number;
+      }
+
+      export interface B {
+        p: number;
+        x: string;
+        y: number;
+      }
+      `,
+  },
+
+  'emptied synthetic base with @exported is kept without extends': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {
+        x: string;
+        y: number;
+      }
+
+      /** @exported */
+      export interface B extends Base {
+        x: string;
+        y: number;
+      }
+
+      /** @exported */
+      export interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+        x: string;
+        y: number;
+      }
+
+      export interface B {
+        p: number;
+        x: string;
+        y: number;
+      }
+      `,
+  },
+
+  'emptied synthetic base keeps other extends clauses of derived interfaces': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base, Other {
+        x: string;
+        y: number;
+      }
+
+      /** @exported */
+      export interface B extends Base {
+        x: string;
+        y: number;
+      }
+
+      interface Base {
+        p: number;
+      }
+
+      interface Other {
+        z: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+        x: string;
+        y: number;
+        z: string;
+      }
+
+      export interface B {
+        p: number;
+        x: string;
+        y: number;
+      }
+      `,
+  },
+
+  'synthetic base keeping other members keeps extends and sorts derived interfaces': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {
+        x: string;
+        y: number;
+      }
+
+      /** @exported */
+      export interface B extends Base {
+        x: string;
+        y: number;
+      }
+
+      interface Base {
+        p: number;
+        q: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+        q: string;
+        x: string;
+        y: number;
+      }
+
+      export interface B {
+        p: number;
+        q: string;
+        x: string;
+        y: number;
+      }
+      `,
+  },
 };
 
 createTest('Shared Base Interfaces', sharedBaseCases);
