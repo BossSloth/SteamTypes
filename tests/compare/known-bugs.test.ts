@@ -49,30 +49,6 @@ export interface A extends B {
     expect(diff).toContain('+  z: boolean;');
   });
 
-  it.fails('B2: every missing referenced interface is added, not only the first', () => {
-    const { targetFile } = compare(
-      `export interface X {
-  x: string;
-}
-interface Foo {
-  a: string;
-}`,
-      `export interface X {
-  x: string;
-  p: Foo | Bar;
-}
-interface Foo {
-  a: string;
-}
-interface Bar {
-  b: string;
-}`,
-      'X',
-    );
-
-    expect(targetFile.getInterface('Bar')).toBeDefined();
-  });
-
   it.fails('B3: agreeing sources do not mutate the source and the widest type becomes the base', () => {
     const { targetFile, sourceFile } = compare(
       `export interface A extends Base {}

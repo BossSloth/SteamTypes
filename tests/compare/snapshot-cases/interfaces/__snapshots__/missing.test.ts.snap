@@ -1,5 +1,45 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Missing Interfaces > missing interface in union with existing interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,13 @@
+export interface X {
++  p: Foo | Bar;
++
+  x: string;
+}
+
+export interface Foo {
+  a: string;
+}
++
++export interface Bar {
++  b: string;
++}"
+`;
+
+exports[`Comparator Missing Interfaces > missing interface inside generic wrappers does not copy lib interfaces 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,13 @@
+export interface X {
++  list: Missing[];
++
++  map: Map<string, Missing>;
++
++  promise: Promise<Missing>;
++
+  x: string;
+}
++
++export interface Missing {
++  id: number;
++}"
+`;
+
 exports[`Comparator Missing Interfaces > missing interface multiple times 1`] = `
 "===================================================================
 --- a/target.ts

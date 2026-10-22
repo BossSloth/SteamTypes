@@ -209,6 +209,54 @@ export const missingCases: Record<string, ComparatorTest> = {
       }`,
   },
 
+  'missing interface in union with existing interface': {
+    interfaceName: 'X',
+    target: dedent /* ts */ `
+      export interface X {
+        x: string;
+      }
+
+      export interface Foo {
+        a: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface X {
+        x: string;
+        p: Foo | Bar;
+      }
+
+      export interface Foo {
+        a: string;
+      }
+
+      export interface Bar {
+        b: string;
+      }
+      `,
+  },
+
+  'missing interface inside generic wrappers does not copy lib interfaces': {
+    interfaceName: 'X',
+    target: dedent /* ts */ `
+      export interface X {
+        x: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface X {
+        x: string;
+        map: Map<string, Missing>;
+        promise: Promise<Missing>;
+        list: Missing[];
+      }
+
+      export interface Missing {
+        id: number;
+      }
+      `,
+  },
+
   'error - root interface missing': {
     interfaceName: 'Foo',
     expectedException: 'Interface Foo not found in one of the source files',

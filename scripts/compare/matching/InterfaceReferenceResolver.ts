@@ -188,12 +188,12 @@ export class InterfaceReferenceResolver {
 
     for (const typeReference of typeReferences) {
       const interfaceDeclaration = getInterfaceDeclaration(typeReference);
-      if (!interfaceDeclaration) return;
+      if (!interfaceDeclaration) continue;
 
       const interfaceName = interfaceDeclaration.getName();
       const existingInterface = this.session.targetFile.getInterface(interfaceName);
       if (existingInterface) {
-        return;
+        continue;
       }
 
       const similarInterface = this.matcher.findSimilarInterface(interfaceDeclaration);
@@ -204,7 +204,7 @@ export class InterfaceReferenceResolver {
         // both coexist in source -> this is a genuinely new interface, not a rename. Add it.
         const sourceHasSimilarByName = interfaceDeclaration.getSourceFile().getInterface(similarInterface.getName()) !== undefined;
         if (!sourceHasSimilarByName) {
-          return;
+          continue;
         }
       }
 
