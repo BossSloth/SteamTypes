@@ -18,7 +18,7 @@ export function createTest(name: string, testFunctions: Record<string, TestFunct
 
 function runFunctionTest(funcName: string, expected: string, result: string): void {
   const lines = result.split('\n');
-  const funcLineIndex = lines.findIndex(line => line.trim().startsWith(funcName));
+  const funcLineIndex = lines.findIndex((line) => line.trim().startsWith(funcName));
 
   if (funcLineIndex === -1) {
     throw new Error(`Function ${funcName} not found in output`);

@@ -127,7 +127,7 @@ function processProperties(sortedProperties: InterfaceProperty[]): [string[], st
 
       if (property.functionInfo.jsDoc) {
         functions.push(`  /**
-${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
+${property.functionInfo.jsDoc.map((jsDoc) => `   * ${jsDoc}`).join('\n')}
    */
   ${property.name}${optionalMarker}(${paramsList}): ${property.functionInfo.returnType};`);
       } else {
@@ -137,7 +137,7 @@ ${property.functionInfo.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
       const optionalMarker = property.optional ?? false ? '?' : '';
       if (property.jsDoc) {
         nonFunctions.push(`  /**
-${property.jsDoc.map(jsDoc => `   * ${jsDoc}`).join('\n')}
+${property.jsDoc.map((jsDoc) => `   * ${jsDoc}`).join('\n')}
    */
   ${property.name}${optionalMarker}: ${property.type.toString()};`);
       } else {

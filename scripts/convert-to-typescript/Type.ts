@@ -73,7 +73,7 @@ export class UnionType extends Type {
       return types[0];
     }
 
-    if (types.every(t => t.toString() === types[0].toString())) {
+    if (types.every((t) => t.toString() === types[0].toString())) {
       return types[0];
     }
 
@@ -147,7 +147,7 @@ export class UnionType extends Type {
       }
     }
 
-    const validGroups = [...arrayGroups.values()].filter(group => group.length > 0 && group[0].valueType instanceof UnionType);
+    const validGroups = [...arrayGroups.values()].filter((group) => group.length > 0 && group[0].valueType instanceof UnionType);
 
     // Second pass: assign simple array types to appropriate groups
     for (const arrayType of arrayTypes) {
@@ -161,7 +161,7 @@ export class UnionType extends Type {
       // Try to find a group where this element type is part of the union
       for (const group of validGroups) {
         const firstGroupType = group[0].valueType as UnionType;
-        const unionElementStrings = firstGroupType.types.map(t => t.toString());
+        const unionElementStrings = firstGroupType.types.map((t) => t.toString());
 
         // If this element type is in the union, add it to the group
         if (unionElementStrings.includes(elementTypeString)) {
@@ -240,7 +240,7 @@ export class UnionType extends Type {
       return this.types[0].toString();
     }
 
-    return `(${this.types.map(t => t.toString()).join(' | ')})`;
+    return `(${this.types.map((t) => t.toString()).join(' | ')})`;
   }
 }
 
@@ -281,8 +281,8 @@ export class GenericType extends Type {
     typeParameters: Type[] | string[],
   ) {
     super();
-    if (typeParameters.every(param => typeof param === 'string')) {
-      this.typeParameters = typeParameters.map(param => new PrimitiveType(param));
+    if (typeParameters.every((param) => typeof param === 'string')) {
+      this.typeParameters = typeParameters.map((param) => new PrimitiveType(param));
     } else {
       this.typeParameters = typeParameters;
     }
@@ -293,13 +293,13 @@ export class GenericType extends Type {
       return this.genericName;
     }
 
-    const typeParamsString = this.typeParameters.map(t => t.toString()).join(', ');
+    const typeParamsString = this.typeParameters.map((t) => t.toString()).join(', ');
 
     return `${this.genericName}<${typeParamsString}>`;
   }
 
   public isFullyUnknown(): boolean {
-    return this.typeParameters.every(t => t.kind === 'unknown');
+    return this.typeParameters.every((t) => t.kind === 'unknown');
   }
 }
 

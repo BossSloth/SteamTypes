@@ -234,7 +234,7 @@ const mixedComplexEdgeCases = {
     tags: ['tag1', 'tag2'],
     metadata: { created: new Date(), version: '1.0' },
     process() { return this.id; },
-    calculate: x => x * 2,
+    calculate: (x) => x * 2,
     [Symbol.iterator]: function* () {
       yield 1;
       yield 2;

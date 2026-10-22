@@ -32,7 +32,7 @@ const STEAM_PROTOBUF_FILES = [
   'webuimessages_steamos.proto',
 ];
 
-const DEFAULT_PROTOBUF_FILES = [...STEAM_PROTOBUF_FILES.map(file => join('steam', file))];
+const DEFAULT_PROTOBUF_FILES = [...STEAM_PROTOBUF_FILES.map((file) => join('steam', file))];
 
 export interface GenerateConfig {
   protoDir?: string;

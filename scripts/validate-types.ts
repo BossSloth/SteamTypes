@@ -57,7 +57,7 @@ ${chalk.yellow('⚠️  Make sure Steam is running with -dev and CEF is enabled.
   const targets = await Target.getTargets();
 
   // Find the target with title 'SharedJsContext'
-  const sharedJsContextTarget = targets.targetInfos.find(target => target.title === 'SharedJSContext');
+  const sharedJsContextTarget = targets.targetInfos.find((target) => target.title === 'SharedJSContext');
 
   if (!sharedJsContextTarget) {
     await client.close();
@@ -185,7 +185,7 @@ async function extractInterface(map: InterfaceMap): Promise<{ content: string | 
   }
 
   const response = await sharedJsClient.Runtime.evaluate({
-    expression: `(async () => window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}', {ignoredProperties: [${map.ignoredProperties?.map(p => `'${p}'`).join(', ')}]}))()`,
+    expression: `(async () => window.convertToTypescript(${map.objectExpression}, '${map.interfaceName}', {ignoredProperties: [${map.ignoredProperties?.map((p) => `'${p}'`).join(', ')}]}))()`,
     returnByValue: true,
     awaitPromise: true,
   });
@@ -331,7 +331,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
   let maps = interfaceMaps;
 
   if (options.single !== undefined) {
-    const map = maps.find(m => m.file === options.single);
+    const map = maps.find((m) => m.file === options.single);
     if (!map) {
       logger.error(chalk.red(`❌ Invalid object: ${options.single}`));
       process.exit(1);
@@ -343,7 +343,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
   const diffs: { filePath: string; result: string | null; }[] = [];
 
   if (filter !== undefined) {
-    maps = maps.filter(map => map.file.toLowerCase().includes(filter.toLowerCase()));
+    maps = maps.filter((map) => map.file.toLowerCase().includes(filter.toLowerCase()));
   }
   logger.log(chalk.blue(`Comparing ${maps.length} maps`));
 
@@ -354,7 +354,7 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
 
   if (diffs.length > 0) {
     logger.log('\n');
-    logger.log(diffs.map(d => d.result).join('\n\n'));
+    logger.log(diffs.map((d) => d.result).join('\n\n'));
   }
 
   logger.log(chalk.blue(`Extract time: ${extractTime} ms`));

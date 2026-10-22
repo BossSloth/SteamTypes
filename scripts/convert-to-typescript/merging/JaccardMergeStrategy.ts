@@ -17,7 +17,7 @@ export class JaccardMergeStrategy {
     const groups = findInterfaceGroups(source);
 
     for (const group of groups) {
-      const filteredGroup = group.filter(name => !processedInheritance.has(name));
+      const filteredGroup = group.filter((name) => !processedInheritance.has(name));
       if (filteredGroup.length === 0) continue;
 
       if (filteredGroup.length === 1) {

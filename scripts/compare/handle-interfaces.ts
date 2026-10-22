@@ -53,7 +53,7 @@ export function handleInterfaceTypeReferences(targetTypeNode: TypeNode, sourceTy
     const sourceInterfaceName = sourceInterface.getTypeName().getText();
 
     // Try to find a matching interface by name first
-    const matchingTargetInterface = targetInterfaces.find(i => i.getTypeName().getText() === sourceInterfaceName);
+    const matchingTargetInterface = targetInterfaces.find((i) => i.getTypeName().getText() === sourceInterfaceName);
     let targetInterfaceDeclaration: InterfaceDeclaration | undefined;
 
     // If no exact name match, try to find by structure similarity
@@ -136,19 +136,19 @@ function collectMergedProperties(sourceInterfaces: InterfaceDeclaration[]): Map<
  */
 function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterface: InterfaceDeclaration): boolean {
   const targetPropMap = new Map<string, string>();
-  for (const prop of getInterfaceMembers(targetInterface).filter(p => p.isKind(SyntaxKind.PropertySignature))) {
+  for (const prop of getInterfaceMembers(targetInterface).filter((p) => p.isKind(SyntaxKind.PropertySignature))) {
     const typeNode = prop.getTypeNode();
     targetPropMap.set(prop.getName(), typeNode ? typeNode.getText() : 'any');
   }
 
   const sourceDeclarations = sourceInterfaces
-    .map(ref => getInterfaceDeclaration(ref))
+    .map((ref) => getInterfaceDeclaration(ref))
     .filter((decl): decl is InterfaceDeclaration => decl !== undefined);
   const allSourceProperties = collectMergedProperties(sourceDeclarations);
 
   // Overlap gate: too few shared property names means the single target is unlikely to be a
   // merged representation of the source union, so leave it to the normal per-interface handling.
-  const sharedNames = [...allSourceProperties.keys()].filter(name => targetPropMap.has(name)).length;
+  const sharedNames = [...allSourceProperties.keys()].filter((name) => targetPropMap.has(name)).length;
   const totalNames = new Set([...allSourceProperties.keys(), ...targetPropMap.keys()]).size;
   const overlap = totalNames === 0 ? 1 : sharedNames / totalNames;
   if (overlap < REQUIRED_OVERLAP) {
@@ -163,7 +163,7 @@ function canMergeIntoTarget(sourceInterfaces: TypeReferenceNode[], targetInterfa
       continue;
     }
 
-    const allSourceTypesMatched = [...info.types].every(sourceType =>
+    const allSourceTypesMatched = [...info.types].every((sourceType) =>
       targetType === sourceType || targetType.includes(sourceType));
 
     if (!allSourceTypesMatched) {
@@ -187,7 +187,7 @@ function mergeSourcesIntoTarget(
   targetInterface: InterfaceDeclaration,
 ): void {
   const sourceDeclarations = sourceInterfaces
-    .map(ref => getInterfaceDeclaration(ref))
+    .map((ref) => getInterfaceDeclaration(ref))
     .filter((decl): decl is InterfaceDeclaration => decl !== undefined);
 
   /* v8 ignore next -- canMergeIntoTarget already validated there are source declarations @preserve */
@@ -251,8 +251,8 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
 
   interfaces.push(...type.getDescendantsOfKind(SyntaxKind.TypeReference));
 
-  return interfaces.filter(interf => (interf.getType().getSymbol()?.getDeclarations()
-    .some(d => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf));
+  return interfaces.filter((interf) => (interf.getType().getSymbol()?.getDeclarations()
+    .some((d) => d.isKind(SyntaxKind.InterfaceDeclaration)) === true) || isImportedType(currentTargetSourceFile, interf));
 }
 
 /**
@@ -260,7 +260,7 @@ function extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
  * Uses a similarity score to determine the best match
  */
 export function findSimilarInterface(sourceInterface: InterfaceDeclaration): InterfaceDeclaration | undefined {
-  const targetInterfaces = currentStartingInterfaces.filter(i => !i.wasForgotten());
+  const targetInterfaces = currentStartingInterfaces.filter((i) => !i.wasForgotten());
   const sourceInterfaceName = sourceInterface.getName();
 
   // Check for @compareOriginalName match first
@@ -331,7 +331,7 @@ function calculateSimilarityScore(
   let matchingProps = 0;
 
   for (const sourceProp of sourceProps) {
-    const matchingTargetProp = targetProps.find(tp =>
+    const matchingTargetProp = targetProps.find((tp) =>
       /* v8 ignore next -- @preserve */
       tp.name === sourceProp.name && (tp.type === sourceProp.type || sourceProp.type.includes('unknown')));
 
@@ -343,8 +343,8 @@ function calculateSimilarityScore(
 
   // Calculate Jaccard similarity: intersection / union
   const totalUniqueProps = new Set([
-    ...sourceProps.map(p => `${p.name}:${p.type}`),
-    ...targetProps.map(p => `${p.name}:${p.type}`),
+    ...sourceProps.map((p) => `${p.name}:${p.type}`),
+    ...targetProps.map((p) => `${p.name}:${p.type}`),
   ]).size;
 
   return matchingProps / totalUniqueProps;
@@ -362,9 +362,9 @@ function isDerivedToBaseMismatch(sourceInterface: InterfaceDeclaration, matchedT
     return false;
   }
 
-  return currentTargetSourceFile.getInterfaces().some(other =>
+  return currentTargetSourceFile.getInterfaces().some((other) =>
     other !== matchedTarget
-    && other.getExtends().some(ext => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget));
+    && other.getExtends().some((ext) => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget));
 }
 
 function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | undefined {
@@ -376,7 +376,7 @@ function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | 
   const symbol = type.getSymbol();
   if (!symbol) return undefined;
 
-  return symbol.getDeclarations().find(d => d.isKind(SyntaxKind.InterfaceDeclaration));
+  return symbol.getDeclarations().find((d) => d.isKind(SyntaxKind.InterfaceDeclaration));
 }
 
 /**
@@ -386,7 +386,7 @@ function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | 
  */
 function remapNewInterfaceExtends(newInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
   const sourceExtends = sourceInterface.getExtends();
-  newInterface.getExtends().forEach(ext => newInterface.removeExtends(ext));
+  newInterface.getExtends().forEach((ext) => newInterface.removeExtends(ext));
 
   for (const sourceExt of sourceExtends) {
     const sourceExtName = sourceExt.getExpression().getText();

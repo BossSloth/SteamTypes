@@ -36,16 +36,16 @@ export function shouldMergeInterfaces(
   }
 
   // Don't merge interfaces if they have a property named proto, this is a special case
-  if (interface1.properties.some(p => p.name === 'proto') || interface2.properties.some(p => p.name === 'proto')) {
+  if (interface1.properties.some((p) => p.name === 'proto') || interface2.properties.some((p) => p.name === 'proto')) {
     return false;
   }
 
   // Get property names from both interfaces
-  const props1 = interface1.properties.map(p => p.name);
-  const props2 = interface2.properties.map(p => p.name);
+  const props1 = interface1.properties.map((p) => p.name);
+  const props2 = interface2.properties.map((p) => p.name);
 
   // Calculate Jaccard similarity: intersection / union
-  const intersection = props1.filter(prop => props2.includes(prop)).length;
+  const intersection = props1.filter((prop) => props2.includes(prop)).length;
   const union = props1.length + props2.length - intersection;
 
   // No properties in either interface
@@ -62,7 +62,7 @@ export function shouldMergeInterfaces(
  * Merges multiple versions of a property into a single property
  */
 function mergePropertyVersions(propName: string, propVersions: InterfaceProperty[]): InterfaceProperty {
-  const types: Type[] = propVersions.map(p => p.type);
+  const types: Type[] = propVersions.map((p) => p.type);
   let functionInfo: FunctionInfo | undefined;
   const jsDoc = new Set<string>();
 
@@ -71,14 +71,14 @@ function mergePropertyVersions(propName: string, propVersions: InterfaceProperty
       functionInfo = property.functionInfo;
     }
     if (property.jsDoc) {
-      property.jsDoc.forEach(jsDocLine => jsDoc.add(jsDocLine));
+      property.jsDoc.forEach((jsDocLine) => jsDoc.add(jsDocLine));
     }
   }
 
   const mergedProperty: InterfaceProperty = {
     name: propName,
     type: UnionType.create(types),
-    optional: propVersions.some(p => p.optional === true),
+    optional: propVersions.some((p) => p.optional === true),
   };
 
   if (functionInfo) {
@@ -105,7 +105,7 @@ function findCommonProperties(
     return new Map();
   }
 
-  const firstProps = new Map(firstInterface.properties.map(p => [p.name, p]));
+  const firstProps = new Map(firstInterface.properties.map((p) => [p.name, p]));
   const commonProps = new Map<string, InterfaceProperty[]>();
 
   // Initialize with properties from the first interface
@@ -119,7 +119,7 @@ function findCommonProperties(
     /* v8 ignore next -- @preserve */
     if (!currentInterface) continue;
 
-    const currentPropNames = new Set(currentInterface.properties.map(p => p.name));
+    const currentPropNames = new Set(currentInterface.properties.map((p) => p.name));
 
     // Remove properties that are not in the current interface
     for (const propName of commonProps.keys()) {
@@ -127,7 +127,7 @@ function findCommonProperties(
         commonProps.delete(propName);
       } else {
         // Add the property version from this interface
-        const prop = currentInterface.properties.find(p => p.name === propName);
+        const prop = currentInterface.properties.find((p) => p.name === propName);
         /* v8 ignore else -- @preserve */
         if (prop) {
           commonProps.get(propName)?.push(prop);
@@ -184,8 +184,8 @@ export function removeBaseProperties(
   derivedInterface: TypeScriptInterface,
   baseProperties: InterfaceProperty[],
 ): TypeScriptInterface {
-  const basePropertyNames = new Set(baseProperties.map(p => p.name));
-  const filteredProperties = derivedInterface.properties.filter(p => !basePropertyNames.has(p.name));
+  const basePropertyNames = new Set(baseProperties.map((p) => p.name));
+  const filteredProperties = derivedInterface.properties.filter((p) => !basePropertyNames.has(p.name));
 
   return {
     ...derivedInterface,
@@ -248,7 +248,7 @@ export function mergeInterfaceGroup(
   }
 
   // Determine which properties are in the base interface
-  const basePropertyNames = new Set(baseInterface.properties.map(p => p.name));
+  const basePropertyNames = new Set(baseInterface.properties.map((p) => p.name));
 
   // Now create the merged properties
   for (const [propertyName, propertyVersions] of allProperties.entries()) {
@@ -269,14 +269,14 @@ export function mergeInterfaceGroup(
         functionInfo = property.functionInfo;
       }
       if (property.jsDoc) {
-        property.jsDoc.forEach(jsDocLine => jsDoc.add(jsDocLine));
+        property.jsDoc.forEach((jsDocLine) => jsDoc.add(jsDocLine));
       }
     }
 
     // If undefined is present, make the property optional and remove undefined from the types
-    if (types.find(t => t.kind === 'undefined')) {
+    if (types.find((t) => t.kind === 'undefined')) {
       isOptional = true;
-      types = types.filter(t => t.kind !== 'undefined');
+      types = types.filter((t) => t.kind !== 'undefined');
     }
 
     // Create the merged property with a union type if needed
@@ -424,12 +424,12 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
     return new ArrayType(updatedValueType);
   } else if (type instanceof GenericType) {
     // Recursively update each type parameter
-    const updatedTypeParams = type.typeParameters.map(param => replaceTypeReferences(param, aliasMap));
+    const updatedTypeParams = type.typeParameters.map((param) => replaceTypeReferences(param, aliasMap));
 
     return new GenericType(type.genericName, updatedTypeParams);
   } else if (type instanceof UnionType) {
     // Recursively update each type in the union
-    const updatedTypes = type.types.map(t => replaceTypeReferences(t, aliasMap));
+    const updatedTypes = type.types.map((t) => replaceTypeReferences(t, aliasMap));
 
     return new UnionType(updatedTypes);
   }

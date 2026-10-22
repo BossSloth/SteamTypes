@@ -10,7 +10,7 @@ declare const StoreItemCache: any;
 declare const appActivityStore: any;
 
 async function fillAppDetails(): Promise<void> {
-  const apps = collectionStore.allAppsCollection.m_rgApps.filter(appId => appId);
+  const apps = collectionStore.allAppsCollection.m_rgApps.filter((appId) => appId);
   const time = Date.now();
 
   await Promise.all(apps.map(async (appId) => {

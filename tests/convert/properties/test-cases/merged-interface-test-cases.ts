@@ -343,7 +343,7 @@ const classBasedMergedInterfaceTests = {
       type: 'calculator',
       status: 'active',
       createdAt: new Date(),
-      calculate: x => x * 2,
+      calculate: (x) => x * 2,
     },
     {
       id17: 2,

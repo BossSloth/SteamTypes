@@ -11,9 +11,9 @@ describe('convertToTypescript options', () => {
 
     convertToTypescript({ name: 'value' }, 'Profiled', { profiling: true });
 
-    const messages = logSpy.mock.calls.map(call => String(call[0]));
-    expect(messages.some(msg => msg.startsWith('Processed'))).toBe(true);
-    expect(messages.some(msg => msg.startsWith('Execution time'))).toBe(true);
+    const messages = logSpy.mock.calls.map((call) => String(call[0]));
+    expect(messages.some((msg) => msg.startsWith('Processed'))).toBe(true);
+    expect(messages.some((msg) => msg.startsWith('Execution time'))).toBe(true);
   });
 
   it('ignoredProperties marks listed keys as unknown with a TODO note', () => {

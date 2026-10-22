@@ -139,7 +139,7 @@ function handleTargetTypeReference(targetTypeReference: TypeReferenceNode, sourc
     const sourceTypeArguments = (sourceNode).getTypeArguments();
 
     if (sourceTypeArguments.length === 0 && targetTypeArguments.length > 0) {
-      const targetTypeArgumentStrings = targetTypeArguments.map(typeArgument => typeArgument.getText());
+      const targetTypeArgumentStrings = targetTypeArguments.map((typeArgument) => typeArgument.getText());
       for (const typeArgument of targetTypeArguments) {
         targetTypeReference.removeTypeArgument(typeArgument);
       }
@@ -209,7 +209,7 @@ function handleIndexedReturnType(targetTypeReference: TypeReferenceNode, sourceN
 function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): boolean {
   const targetMembers = targetUnion.getTypeNodes();
 
-  const typeReferenceMembers = targetMembers.filter(node => node.isKind(ts.SyntaxKind.TypeReference));
+  const typeReferenceMembers = targetMembers.filter((node) => node.isKind(ts.SyntaxKind.TypeReference));
   if (typeReferenceMembers.length > 0) {
     // If type references are TypeAliases, expand them
     // Example test case 'combined union return type'
@@ -242,7 +242,7 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
     // Consider compatible if ANY member of the target union matches the source type
     // This avoids mutating unions like `string | null` to `null` when `null` is already a member.
     // Example test case 'argument has default null but is also string'
-    const hasMatch = targetMembers.some(targetMember => compareTypes(targetMember, sourceNode));
+    const hasMatch = targetMembers.some((targetMember) => compareTypes(targetMember, sourceNode));
 
     if (!hasMatch) {
       targetUnion.replaceWithText(getText(sourceNode));
@@ -260,7 +260,7 @@ function handleTargetUnion(targetUnion: UnionTypeNode, sourceNode: TypeNode): bo
 function collapseDuplicateUnionMembers(sourceUnion: UnionTypeNode): TypeNode | undefined {
   const memberNodes = sourceUnion.getTypeNodes();
   const uniqueNodes = memberNodes.filter((node, index) =>
-    memberNodes.findIndex(other => other.getText() === node.getText()) === index);
+    memberNodes.findIndex((other) => other.getText() === node.getText()) === index);
 
   if (uniqueNodes.length === memberNodes.length) {
     return undefined;
@@ -270,12 +270,12 @@ function collapseDuplicateUnionMembers(sourceUnion: UnionTypeNode): TypeNode | u
     return uniqueNodes[0];
   }
 
-  return sourceUnion.replaceWithText(uniqueNodes.map(node => node.getText()).join(' | ')) as TypeNode;
+  return sourceUnion.replaceWithText(uniqueNodes.map((node) => node.getText()).join(' | ')) as TypeNode;
 }
 
 function handleSourceUnion(targetNode: TypeNode, sourceUnion: UnionTypeNode): boolean {
   // Duplicate members are already collapsed by collapseDuplicateUnionMembers before this point.
-  const isCompatible = sourceUnion.getTypeNodes().every(sourceMember => compareTypes(targetNode, sourceMember));
+  const isCompatible = sourceUnion.getTypeNodes().every((sourceMember) => compareTypes(targetNode, sourceMember));
 
   if (!isCompatible) {
     targetNode.replaceWithText(getText(sourceUnion));
@@ -293,7 +293,7 @@ function handleTargetIntersection(targetIntersection: IntersectionTypeNode, sour
     const sourceMembers = sourceNode.getTypeNodes();
 
     for (const sourceMember of sourceMembers) {
-      const hasMatch = targetMembers.some(targetMember => compareTypes(targetMember, sourceMember));
+      const hasMatch = targetMembers.some((targetMember) => compareTypes(targetMember, sourceMember));
 
       if (!hasMatch) {
         targetIntersection.replaceWithText(getText(sourceNode));
@@ -301,7 +301,7 @@ function handleTargetIntersection(targetIntersection: IntersectionTypeNode, sour
       }
     }
   } else {
-    const isCompatible = targetMembers.every(targetMember => compareTypes(targetMember, sourceNode));
+    const isCompatible = targetMembers.every((targetMember) => compareTypes(targetMember, sourceNode));
 
     if (!isCompatible) {
       targetIntersection.replaceWithText(getText(sourceNode));
@@ -328,7 +328,7 @@ function handleTargetArray(targetArray: ArrayTypeNode, sourceNode: TypeNode): bo
   }
 
   if (Node.isUnionTypeNode(sourceNode)) {
-    return sourceNode.getTypeNodes().every(member =>
+    return sourceNode.getTypeNodes().every((member) =>
       Node.isArrayTypeNode(member) && compareTypes(targetArray.getElementTypeNode(), member.getElementTypeNode()));
   }
 
@@ -349,13 +349,13 @@ function handleTargetTuple(targetTuple: TupleTypeNode, sourceNode: TypeNode): bo
 
     if (sourceElements.length > 0) {
       for (const sourceElement of sourceElements) {
-        if (!targetElements.some(targetElement => sourceElement.isAssignableTo(targetElement.getType()))) {
+        if (!targetElements.some((targetElement) => sourceElement.isAssignableTo(targetElement.getType()))) {
           return false;
         }
       }
     }
 
-    return targetElements.every(targetElement => targetElement.getType().isAssignableTo(sourceNode.getType()));
+    return targetElements.every((targetElement) => targetElement.getType().isAssignableTo(sourceNode.getType()));
   }
 
   return false;
@@ -461,7 +461,7 @@ function containsTypeParameterReference(typeNode: TypeNode): boolean {
   // resolving to a type parameter always matches in compareTypes (see the
   // TypeParameterDeclaration branch in handleTargetTypeReference), so the typeNode here
   // is always a composite (array/union/generic/etc.) wrapping a possible type parameter.
-  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some(desc => Node.isTypeParameterDeclaration(getDeclarationNode(desc)));
+  return typeNode.getDescendantsOfKind(ts.SyntaxKind.TypeReference).some((desc) => Node.isTypeParameterDeclaration(getDeclarationNode(desc)));
 }
 
 export function getText(typeNode: TypeNode): string {

@@ -18,7 +18,7 @@ globalThis.checkConversionTime = function checkConversionTime(obj: Record<string
       times.push({ property, time });
     }
   }
-  console.log(times.sort((a, b) => b.time - a.time).map(item => `${item.property}: ${item.time}ms`).join('\n'));
+  console.log(times.sort((a, b) => b.time - a.time).map((item) => `${item.property}: ${item.time}ms`).join('\n'));
   console.log('Total properties:', properties.length);
   console.log('Total time:', times.reduce((acc, curr) => acc + curr.time, 0));
 };

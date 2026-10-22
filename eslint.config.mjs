@@ -11,14 +11,7 @@ import customRules from './eslint-rules/index.mjs';
 
 export default defineConfig(
   { files: ['**/*.{js,mjs,cjs,ts}'] },
-  globalIgnores([
-    'build/*',
-    'dist/*',
-    'coverage/*',
-    'node_modules/*',
-    '**/*.js',
-    'eslint.config.mjs',
-  ]),
+  globalIgnores(['build/*', 'dist/*', 'coverage/*', 'node_modules/*', '**/*.js', 'eslint.config.mjs']),
   {
     languageOptions: {
       globals: globals.node,
@@ -42,6 +35,7 @@ export default defineConfig(
     quotes: 'single',
     blockSpacing: true,
     commaDangle: 'always-multiline',
+    arrowParens: true,
   }),
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
@@ -193,7 +187,8 @@ export default defineConfig(
     rules: {
       // Published code: every (type) import must resolve to a runtime `dependencies`/`peerDependencies` entry not `devDependencies`
       'import-x/no-extraneous-dependencies': [
-        'error', {
+        'error',
+        {
           devDependencies: false,
           optionalDependencies: false,
           peerDependencies: true,

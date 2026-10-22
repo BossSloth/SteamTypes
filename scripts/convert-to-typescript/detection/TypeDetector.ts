@@ -57,7 +57,7 @@ export class TypeDetector {
       return new PrimitiveType('unknown');
     }
 
-    if (Object.keys(value).filter(key => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
+    if (Object.keys(value).filter((key) => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
 
     const { interfaceName, nameCounter, protobufClassName } = this.session.names.allocateForObject(value, path);
 
@@ -85,7 +85,7 @@ export class TypeDetector {
   }
 
   private detectPrimitiveObject(value: Record<string, unknown>, addImport: boolean): string | null {
-    const validStrategies = objectTypeStrategies.filter(strategy => strategy.test(value));
+    const validStrategies = objectTypeStrategies.filter((strategy) => strategy.test(value));
     if (validStrategies.length === 0) return null;
     /* v8 ignore next -- @preserve */
     if (validStrategies.length > 1) throw new Error('Multiple object type strategies matched, one expected');

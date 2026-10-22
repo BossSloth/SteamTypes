@@ -26,7 +26,7 @@ export function compareAndCorrectMethodTypes(
   }
 
   // If it has the @native jsDoc don't compare
-  if (sourceMethod.getJsDocs().some(doc => doc.getTags().some(tag => tag.getTagName() === 'native'))) {
+  if (sourceMethod.getJsDocs().some((doc) => doc.getTags().some((tag) => tag.getTagName() === 'native'))) {
     return false;
   }
 

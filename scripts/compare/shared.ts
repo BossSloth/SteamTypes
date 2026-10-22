@@ -55,8 +55,8 @@ export function getJsDocTagValues(prop: JSDocableNode, tagName: string): string[
 export function isImportedType(sourceFile: SourceFile, type: Node | Type | TypeNode): boolean {
   const text = getIdentifierName(type);
 
-  return sourceFile.getImportDeclarations().some(importDecl =>
-    importDecl.getNamedImports().some(importSpec => importSpec.getName() === text));
+  return sourceFile.getImportDeclarations().some((importDecl) =>
+    importDecl.getNamedImports().some((importSpec) => importSpec.getName() === text));
 }
 
 export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration | TypeLiteralNode): (PropertySignature | MethodSignature)[] {
@@ -67,7 +67,7 @@ export function getInterfaceMembers(interfaceDeclaration: InterfaceDeclaration |
       const extendedInterface = (ext.getExpression() as Identifier).getDefinitionNodes()[0] as InterfaceDeclaration | ImportSpecifier | undefined;
       if (extendedInterface && extendedInterface instanceof InterfaceDeclaration && !isImportedType(interfaceDeclaration.getSourceFile(), extendedInterface)) {
         // Get extended members and remove duplicates
-        const extendedMembers = getInterfaceMembers(extendedInterface).filter(member => !members.some(m => m.getName() === member.getName()));
+        const extendedMembers = getInterfaceMembers(extendedInterface).filter((member) => !members.some((m) => m.getName() === member.getName()));
         members.push(...extendedMembers);
       }
     });

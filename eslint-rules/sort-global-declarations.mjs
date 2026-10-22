@@ -32,11 +32,11 @@ export default {
         const body = node.body?.body;
         if (!Array.isArray(body)) return;
 
-        const declarations = body.filter(statement =>
+        const declarations = body.filter((statement) =>
           statement.type === 'VariableDeclaration' && statement.declarations[0]?.id.type === 'Identifier');
         if (declarations.length < 2) return;
 
-        const names = declarations.map(statement => statement.declarations[0].id.name);
+        const names = declarations.map((statement) => statement.declarations[0].id.name);
         const sorted = [...names].sort(naturalCompare);
 
         const firstWrongIndex = names.findIndex((name, index) => name !== sorted[index]);

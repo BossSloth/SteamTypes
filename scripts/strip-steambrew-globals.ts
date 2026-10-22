@@ -100,7 +100,7 @@ function main(): void {
     return;
   }
 
-  const changed = TARGETS.map(target => processTarget(packageRoot, target)).filter(Boolean);
+  const changed = TARGETS.map((target) => processTarget(packageRoot, target)).filter(Boolean);
   if (changed.length === 0) {
     console.log('strip-steambrew-globals: nothing to strip (already clean)');
 

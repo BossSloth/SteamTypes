@@ -27,7 +27,7 @@ export default {
     const options = context.options[0] ?? {};
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : 1;
     const ignorePatterns = Array.isArray(options.ignorePatterns)
-      ? options.ignorePatterns.map(pattern => new RegExp(pattern))
+      ? options.ignorePatterns.map((pattern) => new RegExp(pattern))
       : [];
 
     /**
@@ -36,7 +36,7 @@ export default {
      * @returns {boolean} - True if the import should be ignored
      */
     function shouldIgnore(importPath) {
-      return ignorePatterns.some(pattern => pattern.test(importPath));
+      return ignorePatterns.some((pattern) => pattern.test(importPath));
     }
 
     /**

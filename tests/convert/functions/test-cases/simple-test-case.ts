@@ -73,7 +73,7 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
     expected: 'directReturnEmptyObject(): object | unknown;',
   },
   directReturnExpression: {
-    func: x => x + 1,
+    func: (x) => x + 1,
     expected: 'directReturnExpression(x: unknown): unknown;',
   },
   // #endregion
@@ -130,14 +130,14 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
     expected: 'returnComplexObject(): { a: number; b: string; c: () => number; };',
   },
   returnCallback: {
-    func: x => () => { return x; },
+    func: (x) => () => { return x; },
     expected: 'returnCallback(x: unknown): () => unknown;',
   },
   // #endregion
 
   // #region Parameters
   returnParameter: {
-    func: param => param,
+    func: (param) => param,
     expected: 'returnParameter(param: unknown): unknown;',
   },
   multipleParameters: {
@@ -145,7 +145,7 @@ export const returnTypesTestFunctions: Record<string, TestFunction> = {
     expected: 'multipleParameters(a: unknown, b: unknown, c: unknown): unknown;',
   },
   paramWithReturn: {
-    func: myParam => null,
+    func: (myParam) => null,
     expected: 'paramWithReturn(myParam: unknown): null;',
   },
   spreadParameters: {

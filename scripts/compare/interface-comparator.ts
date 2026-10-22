@@ -86,7 +86,7 @@ function findDeclaringInheritedMember(
     }
 
     const directMember = (def.getMembers() as (PropertySignature | MethodSignature)[])
-      .find(m => m.getName() === memberName);
+      .find((m) => m.getName() === memberName);
 
     if (directMember) {
       return { baseInterface: def, baseMember: directMember };
@@ -102,19 +102,19 @@ function findDeclaringInheritedMember(
 }
 
 function removeAllExtends(targetInterface: InterfaceDeclaration): void {
-  targetInterface.getExtends().forEach(ext => targetInterface.removeExtends(ext));
+  targetInterface.getExtends().forEach((ext) => targetInterface.removeExtends(ext));
 }
 
 function getSourceDerivedInterfacesForSyntheticBase(
   baseInterface: InterfaceDeclaration,
   sourceDerived: InterfaceDeclaration,
 ): InterfaceDeclaration[] {
-  const derivedTargets = currentTargetSourceFile.getInterfaces().filter(i =>
-    i.getExtends().some(e => e.getExpression().getText() === baseInterface.getName()));
+  const derivedTargets = currentTargetSourceFile.getInterfaces().filter((i) =>
+    i.getExtends().some((e) => e.getExpression().getText() === baseInterface.getName()));
 
   const sourceFile = sourceDerived.getSourceFile();
   const derivedSources = derivedTargets
-    .map(t => sourceFile.getInterface(t.getName()))
+    .map((t) => sourceFile.getInterface(t.getName()))
     .filter((i): i is InterfaceDeclaration => i !== undefined);
 
   /* v8 ignore next -- @preserve */
@@ -129,7 +129,7 @@ function collectAgreeingSourceMembers(
   const agreeingSourceMembers: (PropertySignature | MethodSignature)[] = [];
 
   for (const srcIface of sourceDerivedInterfaces) {
-    const srcMember = getInterfaceMembers(srcIface).find(m => m.getName() === memberName);
+    const srcMember = getInterfaceMembers(srcIface).find((m) => m.getName() === memberName);
     if (srcMember?.getKind() !== baseMemberKind) {
       return undefined;
     }
@@ -235,8 +235,8 @@ function recompareSyntheticBaseDerivedInterfaces(
   sourceDerived: InterfaceDeclaration,
 ): void {
   const sourceFile = sourceDerived.getSourceFile();
-  const targetDerivedInterfaces = currentTargetSourceFile.getInterfaces().filter(i =>
-    i.getExtends().some(ext => ext.getExpression().getText() === baseInterface.getName()));
+  const targetDerivedInterfaces = currentTargetSourceFile.getInterfaces().filter((i) =>
+    i.getExtends().some((ext) => ext.getExpression().getText() === baseInterface.getName()));
 
   for (const targetDerivedInterface of targetDerivedInterfaces) {
     const sourceDerivedInterface = sourceFile.getInterface(targetDerivedInterface.getName());
@@ -395,12 +395,12 @@ export function compareAndCorrectMembers(
 
   // Create maps for easier lookup
   const targetMembersMap = new Map<string, PropertySignature | MethodSignature>();
-  targetMembers.forEach(member => targetMembersMap.set(member.getName(), member));
+  targetMembers.forEach((member) => targetMembersMap.set(member.getName(), member));
   const realTargetMembersMap = new Map<string, PropertySignature | MethodSignature>();
-  realTargetMembers.forEach(member => realTargetMembersMap.set(member.getName(), member));
+  realTargetMembers.forEach((member) => realTargetMembersMap.set(member.getName(), member));
 
   const sourceMembersMap = new Map<string, PropertySignature | MethodSignature>();
-  sourceMembers.forEach(member => sourceMembersMap.set(member.getName(), member));
+  sourceMembers.forEach((member) => sourceMembersMap.set(member.getName(), member));
 
   // Reconcile computed property names (e.g. [Enum.Value]) with source numeric keys
   reconcileComputedPropertyNames(targetMembers, targetMembersMap, realTargetMembersMap, sourceMembersMap);
@@ -476,12 +476,12 @@ function addMissingMember(
   // Property missing in target, add it
   if (sourceProp instanceof MethodSignature) {
     // Filter out @native jsdoc
-    const docs = sourceProp.getJsDocs().map(doc => doc.getInnerText());
-    const filteredDocs = docs.filter(doc => doc !== '');
+    const docs = sourceProp.getJsDocs().map((doc) => doc.getInnerText());
+    const filteredDocs = docs.filter((doc) => doc !== '');
 
     targetInterface.addMethod({
       name: propName,
-      parameters: sourceProp.getParameters().map(param => ({
+      parameters: sourceProp.getParameters().map((param) => ({
         name: param.getName(),
         type: param.getTypeNode()?.getText(),
         hasQuestionToken: param.hasQuestionToken(),
@@ -499,7 +499,7 @@ function addMissingMember(
       type: typeNode.getText(),
       hasQuestionToken: sourceProp.hasQuestionToken(),
       isReadonly: sourceProp.isReadonly(),
-      docs: sourceProp.getJsDocs().map(doc => doc.getStructure()),
+      docs: sourceProp.getJsDocs().map((doc) => doc.getStructure()),
     });
 
     addMissingInterface(typeNode);
@@ -517,7 +517,7 @@ function compareAndCorrectHeritageClause(
 ): void {
   const targetExtends = targetInterface.getExtends();
   const sourceExtends = sourceInterface.getExtends();
-  const targetExtendsSet = new Set(targetExtends.map(ext => ext.getText()));
+  const targetExtendsSet = new Set(targetExtends.map((ext) => ext.getText()));
 
   // Process extended interfaces and keep target heritage in sync
   for (const sourceExt of sourceExtends) {
@@ -573,13 +573,13 @@ function removeUnusedInterfaces(targetSourceFile: SourceFile, rootInterface: Int
       continue;
     }
 
-    const hasTypeAliasWithName = typeAliases.some(dec => !dec.wasForgotten() && dec.getName() === targetInterface.getName());
+    const hasTypeAliasWithName = typeAliases.some((dec) => !dec.wasForgotten() && dec.getName() === targetInterface.getName());
 
     const doesNotHaveJsDocExportTag = getJsDocTagValues(targetInterface, 'exported').length === 0;
-    const hasTypeReferenceWithName = typeReferences.some(dec => !dec.wasForgotten() && dec.getTypeName().getText() === targetInterface.getName());
-    const hasExpressionWithTypeArgumentsWithName = expressionWithTypeArguments.some(dec => !dec.wasForgotten() && dec.getExpression().getText() === targetInterface.getName());
+    const hasTypeReferenceWithName = typeReferences.some((dec) => !dec.wasForgotten() && dec.getTypeName().getText() === targetInterface.getName());
+    const hasExpressionWithTypeArgumentsWithName = expressionWithTypeArguments.some((dec) => !dec.wasForgotten() && dec.getExpression().getText() === targetInterface.getName());
     const hasJsDocLink = targetSourceFile.getText().includes(`@link ${targetInterface.getName()}`);
-    const extendsJsPbMessage = targetInterface.getExtends().some(ext => ext.getExpression().getText() === 'JsPbMessage');
+    const extendsJsPbMessage = targetInterface.getExtends().some((ext) => ext.getExpression().getText() === 'JsPbMessage');
 
     if (
       hasTypeAliasWithName
@@ -698,7 +698,7 @@ const ignoreFormattingTextOptions = { includeJsDocComments: true };
 function getIgnoreFormattingNodes(sourceFile: SourceFile): (InterfaceDeclaration | TypeAliasDeclaration)[] {
   const nodes = [...sourceFile.getTypeAliases(), ...sourceFile.getInterfaces()];
 
-  return nodes.filter(node => getJsDocTagValues(node, CustomJsDocTags.ignoreFormatting).length > 0);
+  return nodes.filter((node) => getJsDocTagValues(node, CustomJsDocTags.ignoreFormatting).length > 0);
 }
 
 /**

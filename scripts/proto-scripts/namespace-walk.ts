@@ -50,13 +50,13 @@ function collectInterfaceNames(ns: protobuf.Namespace, parentName?: string): Set
     if (messageType.nested) {
       const nestedParentName = getFullTypeName(parentName, messageType.name);
       const nestedNames = collectInterfaceNames(messageType, nestedParentName);
-      nestedNames.forEach(name => interfaceNames.add(name));
+      nestedNames.forEach((name) => interfaceNames.add(name));
     }
   }
 
   for (const nestedNs of getNamespaces(ns)) {
     const nestedNames = collectInterfaceNames(nestedNs, parentName);
-    nestedNames.forEach(name => interfaceNames.add(name));
+    nestedNames.forEach((name) => interfaceNames.add(name));
   }
 
   return interfaceNames;

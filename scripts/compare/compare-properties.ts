@@ -53,7 +53,7 @@ export function compareAndCorrectPropertyTypes(
 function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignature): boolean {
   // Check if the source property has a @currentValue JSDoc tag (indicating it's an enum)
   const currentStrValues = getJsDocTagValues(sourceProp, CustomJsDocTags.currentValue);
-  const enumCurrentValues = currentStrValues.length > 0 ? currentStrValues.map(value => parseInt(value)) : undefined;
+  const enumCurrentValues = currentStrValues.length > 0 ? currentStrValues.map((value) => parseInt(value)) : undefined;
 
   // If it's an enum in the source, preserve the type and copy the JSDoc
   if (enumCurrentValues !== undefined) {
@@ -74,7 +74,7 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
         // Add new enum to target
         currentTargetSourceFile.addEnum({
           name: enumName,
-          members: enumCurrentValues.map(value => ({
+          members: enumCurrentValues.map((value) => ({
             name: `${enumName}${value}`,
             value,
           })),
@@ -102,9 +102,9 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 
     // Do special checks if enum is a bitfield/mask/flags
     for (const enumCurrentValue of enumCurrentValues) {
-      if (validMaskNames.some(name => enumDeclaration.getName().toLowerCase().includes(name))) {
+      if (validMaskNames.some((name) => enumDeclaration.getName().toLowerCase().includes(name))) {
         checkBitfield(enumDeclaration, enumCurrentValue, enumMembers);
-      } else if (!enumMembers.some(member => member.getValue() === enumCurrentValue)) {
+      } else if (!enumMembers.some((member) => member.getValue() === enumCurrentValue)) {
       // Add new enum member
         enumDeclaration.addMember({
           name: `TODO: change me ${enumCurrentValue}`,
@@ -125,7 +125,7 @@ function compareEnums(targetProp: PropertySignature, sourceProp: PropertySignatu
 
 function checkBitfield(enumDeclaration: EnumDeclaration, enumCurrentValue: number, enumMembers: EnumMember[]): void {
   // For bitfields/masks/flags, check if the value is a power of 2 or a combination of existing values
-  const existingValues = enumMembers.map(member => member.getValue() as number);
+  const existingValues = enumMembers.map((member) => member.getValue() as number);
   const allFlags = existingValues.reduce((acc, flag) => acc | flag, 0);
   const isValueCovered = existingValues.includes(enumCurrentValue)
     || (enumCurrentValue > 0 && (enumCurrentValue & allFlags) === enumCurrentValue);
