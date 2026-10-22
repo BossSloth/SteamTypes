@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { compareAndCorrectAllInterfaces } from '../../scripts/compare/interface-comparator';
 
 /**
- * Runs the comparator on in-memory files. Each bug pins the correct behavior, so its
- * `it.fails` passes while the bug is present and must be flipped to `it` when fixed.
+ * AST-level checks for synthetic base agreement, where the source must not be mutated and the
+ * target's type text is asserted directly. Snapshot cases cover the rendered diffs.
  */
 function compare(
   targetContent: string,
@@ -27,8 +27,8 @@ function compare(
   return { diff: stripAnsi(diff ?? ''), targetFile, sourceFile };
 }
 
-describe('known bugs', () => {
-  it.fails('B3: agreeing sources do not mutate the source and the widest type becomes the base', () => {
+describe('synthetic base agreement', () => {
+  it('agreeing sources do not mutate the source and the widest type becomes the base', () => {
     const { targetFile, sourceFile } = compare(
       `export interface A extends Base {}
 /** @exported */
@@ -49,7 +49,7 @@ export interface B {
     expect(sourceFile.getInterface('A')?.getProperty('p')?.getTypeNode()?.getText()).toBe('string');
   });
 
-  it.fails('B3: disagreeing sources push the member down to each derived interface', () => {
+  it('disagreeing sources push the member down to each derived interface', () => {
     const { targetFile } = compare(
       `export interface A extends Base {}
 /** @exported */

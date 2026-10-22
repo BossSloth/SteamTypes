@@ -39,7 +39,7 @@ export class MemberReconciler implements MemberReconciliation {
     this.types = new TypeReconciler(session, references, this);
     this.properties = new PropertyReconciler(session, references, this.types);
     this.methods = new MethodReconciler(this.types);
-    this.inheritance = new InheritanceReconciler(session, this.types, this);
+    this.inheritance = new InheritanceReconciler(session, this);
   }
 
   /**

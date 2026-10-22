@@ -799,6 +799,135 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+
+  'synthetic base agreeing sources use the widest type without mutating the source': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {}
+
+      /** @exported */
+      export interface B extends Base {}
+
+      interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+      }
+
+      export interface B {
+        p: string | null;
+      }
+      `,
+  },
+
+  'synthetic base sources with unrelated union types are pushed down': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {}
+
+      /** @exported */
+      export interface B extends Base {}
+
+      interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+      }
+
+      export interface B {
+        p: number | null;
+      }
+      `,
+  },
+
+  'synthetic base sources with disjoint types are pushed down and the base is dropped': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {}
+
+      /** @exported */
+      export interface B extends Base {}
+
+      interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+      }
+
+      export interface B {
+        p: number;
+      }
+      `,
+  },
+
+  'synthetic base three agreeing sources in a subset chain use the widest type': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {}
+
+      /** @exported */
+      export interface B extends Base {}
+
+      /** @exported */
+      export interface C extends Base {}
+
+      interface Base {
+        p: number;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: string;
+      }
+
+      export interface B {
+        p: string | null;
+      }
+
+      export interface C {
+        p: string | null | undefined;
+      }
+      `,
+  },
+
+  'synthetic base overlapping union sources that are not a chain are pushed down': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      export interface A extends Base {}
+
+      /** @exported */
+      export interface B extends Base {}
+
+      /** @exported */
+      export interface C extends Base {}
+
+      interface Base {
+        p: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        p: number;
+      }
+
+      export interface B {
+        p: string | null;
+      }
+
+      export interface C {
+        p: number | null;
+      }
+      `,
+  },
 };
 
 createTest('Shared Base Interfaces', sharedBaseCases);

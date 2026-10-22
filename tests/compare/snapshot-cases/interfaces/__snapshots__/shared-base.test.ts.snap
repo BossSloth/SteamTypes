@@ -353,6 +353,24 @@ export interface Root {
 }"
 `;
 
+exports[`Comparator Shared Base Interfaces > synthetic base agreeing sources use the widest type without mutating the source 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,8 @@
+-export interface A extends Base {}
++export interface A extends Base { }
+
+/** @exported */
+-export interface B extends Base {}
++export interface B extends Base { }
+
+interface Base {
+-  p: number;
++  p: string | null;
+}"
+`;
+
 exports[`Comparator Shared Base Interfaces > synthetic base keeping other members keeps extends and sorts derived interfaces 1`] = `
 "===================================================================
 --- a/target.ts
@@ -425,6 +443,32 @@ export interface BaseChat {
 
 export interface ChatRoom extends BaseChat {
   email: string;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base overlapping union sources that are not a chain are pushed down 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,13 @@
+-export interface A extends Base {}
++export interface A {
++  p: number;
++}
+
+/** @exported */
+-export interface B extends Base {}
++export interface B {
++  p: string | null;
++}
+
+/** @exported */
+-export interface C extends Base {}
+-
+-interface Base {
+-  p: string;
++export interface C {
++  p: number | null;
 }"
 `;
 
@@ -515,4 +559,65 @@ exports[`Comparator Shared Base Interfaces > synthetic base removed with derived
 -export interface ThirdChat extends BaseChat {
 -  third: string;
 -}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base sources with disjoint types are pushed down and the base is dropped 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,8 @@
+-export interface A extends Base {}
++export interface A {
++  p: string;
++}
+
+/** @exported */
+-export interface B extends Base {}
+-
+-interface Base {
++export interface B {
+  p: number;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base sources with unrelated union types are pushed down 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,8 @@
+-export interface A extends Base {}
++export interface A {
++  p: string;
++}
+
+/** @exported */
+-export interface B extends Base {}
+-
+-interface Base {
+-  p: number;
++export interface B {
++  p: number | null;
+}"
+`;
+
+exports[`Comparator Shared Base Interfaces > synthetic base three agreeing sources in a subset chain use the widest type 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,11 @@
+-export interface A extends Base {}
++export interface A extends Base { }
+
+/** @exported */
+-export interface B extends Base {}
++export interface B extends Base { }
+
+/** @exported */
+-export interface C extends Base {}
++export interface C extends Base { }
+
+interface Base {
+-  p: number;
++  p: string | null | undefined;
+}"
 `;

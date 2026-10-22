@@ -1,9 +1,8 @@
 import { Identifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SyntaxKind } from 'ts-morph';
 import type { ComparisonSession } from '../session/ComparisonSession';
 import { orderMembers } from '../member-ordering';
-import { getInterfaceMembers } from '../shared';
+import { getInterfaceMembers, getTypeText } from '../shared';
 import type { MemberReconciliation } from './MemberReconciler';
-import type { TypeReconciler } from './TypeReconciler';
 
 /**
  * Reconciles members inherited through `extends`, including synthetic bases that exist only in the target.
@@ -11,12 +10,10 @@ import type { TypeReconciler } from './TypeReconciler';
  */
 export class InheritanceReconciler {
   private readonly session: ComparisonSession;
-  private readonly types: TypeReconciler;
   private readonly members: MemberReconciliation;
 
-  public constructor(session: ComparisonSession, types: TypeReconciler, members: MemberReconciliation) {
+  public constructor(session: ComparisonSession, members: MemberReconciliation) {
     this.session = session;
-    this.types = types;
     this.members = members;
   }
 
@@ -95,36 +92,16 @@ export class InheritanceReconciler {
     return derivedSources.length > 0 ? derivedSources : [sourceDerived];
   }
 
-  private propertySourcesAgree(sourceMembers: PropertySignature[]): boolean {
-    const first = sourceMembers[0];
-    const firstTypeNode = first.getTypeNode();
-    if (!firstTypeNode) {
-      return false;
-    }
-
-    for (const other of sourceMembers.slice(1)) {
-      const otherTypeNode = other.getTypeNode();
-      if (!otherTypeNode || !this.types.reconcile(firstTypeNode, otherTypeNode)) {
-        return false;
-      }
-
-      if (other.hasQuestionToken() !== first.hasQuestionToken() || other.isReadonly() !== first.isReadonly()) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   /** @returns true if the base member was removed */
   private reconcileSyntheticBasePropertyMember(baseMember: PropertySignature, sourceMembers: PropertySignature[]): boolean {
-    if (!this.propertySourcesAgree(sourceMembers)) {
+    const widest = findWidestAgreeingSource(sourceMembers);
+    if (!widest) {
       baseMember.remove();
 
       return true;
     }
 
-    this.members.reconcileMember(baseMember, sourceMembers[0], false);
+    this.members.reconcileMember(baseMember, widest, false);
 
     return false;
   }
@@ -255,6 +232,30 @@ function findDeclaringInheritedMember(
   }
 
   return undefined;
+}
+
+/**
+ * Returns the source member whose union members contain every other source's members (the widest type in a subset chain),
+ * or undefined when the sources don't form a chain or their modifiers differ. Never mutates.
+ */
+function findWidestAgreeingSource(sourceMembers: PropertySignature[]): PropertySignature | undefined {
+  const first = sourceMembers[0];
+  if (sourceMembers.some((member) => member.getTypeNode() === undefined)) {
+    return undefined;
+  }
+
+  if (sourceMembers.some((member) => member.hasQuestionToken() !== first.hasQuestionToken() || member.isReadonly() !== first.isReadonly())) {
+    return undefined;
+  }
+
+  const memberSets = sourceMembers.map((member) => {
+    const typeNode = member.getTypeNodeOrThrow();
+
+    return new Set(Node.isUnionTypeNode(typeNode) ? typeNode.getTypeNodes().map((node) => getTypeText(node)) : [getTypeText(typeNode)]);
+  });
+
+  return sourceMembers.find((_member, candidateIndex) =>
+    memberSets.every((otherSet) => [...otherSet].every((text) => memberSets[candidateIndex].has(text))));
 }
 
 function removeAllExtends(targetInterface: InterfaceDeclaration): void {
