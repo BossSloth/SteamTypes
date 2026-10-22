@@ -28,7 +28,7 @@
       "SteamClient": ["./src/types/SteamClient/index"],
       "@Runtime/*": ["./src/Runtime/*"],
       "@Convert/*": ["./scripts/convert-to-typescript/*"],
-      "@Compare/*": ["./scripts/compare-to-typescript/*"]
+      "@Compare/*": ["./scripts/compare/*"]
     }
   },
   "include": ["src/**/*", "tests/**/*", "global-overrides.d.ts"],

@@ -47,13 +47,20 @@ steamtypes/
   - `index.ts` — Entry point used by `build-convert-debug` esbuild bundle
 
 - **`compare/`** — Interface comparison & auto-correction (runs on the host, uses ts-morph)
-  - `interface-comparator.ts` — Core: compares source (generated) vs target (existing file), queues interfaces, applies corrections, produces diffs
   - `interface-checker.ts` — Entry: `compareInterfaces()` called from `validate-types.ts`
-  - `compare-methods.ts` — Method signature comparison logic
-  - `compare-properties.ts` — Property type comparison logic
-  - `handle-interfaces.ts` — Adds missing interfaces, finds similar ones
-  - `type-comparator.ts` — Deep type comparison utilities
-  - `shared.ts` — Shared state (queue, logger, JSDoc tag helpers, `CustomJsDocTags`)
+  - `interface-comparator.ts` — Entry for tests and checker: `compareAndCorrectAllInterfaces()` creates a `ComparisonSession` and runs a `ComparisonPipeline`
+  - `session/ComparisonSession.ts` — Per-call state: starting target interfaces, FIFO queue, processed set (dedupe by target name at dequeue time)
+  - `pipeline/ComparisonPipeline.ts` — Looks up the root pair, drains the queue (members, then heritage), removes unused interfaces, renders the diff
+  - `matching/InterfaceMatcher.ts` — Read-only similarity matching against the starting interfaces; `resolveBaseName()`
+  - `matching/InterfaceReferenceResolver.ts` — Pairs or inserts interfaces for type references, syncs `extends`, adds missing interfaces (mutates source and target ASTs)
+  - `matching/manual-merge.ts` — Folds several source union members into one target interface
+  - `reconcile/MemberReconciler.ts` — Hub: reconciles members and builds the type, property, method and inheritance reconcilers
+  - `reconcile/TypeReconciler.ts` — `reconcile()`: `true` means compatible after in-place fixes, `false` means the caller replaces the target text
+  - `reconcile/PropertyReconciler.ts`, `MethodReconciler.ts`, `InheritanceReconciler.ts` — Property, method and inherited-member reconciliation
+  - `output/diff-output.ts` — Renders the colored diff (`@ignoreFormatting` handling, formatting, duplicate-union cleanup)
+  - `member-ordering.ts` — `orderMembers()`; `shared.ts` — `CustomJsDocTags` and AST helpers
+
+  Each comparison creates one session and holds no module-level state. `MemberReconciler` is the hub: it passes itself to the type and inheritance reconcilers as the narrow `MemberReconciliation` interface (imported with `import type`), which keeps the runtime import graph acyclic.
 
 - **`maps/`** — Declares what Steam objects map to what TypeScript files
   - `index.ts` — Exports `interfaceMaps` array and `IMap()`/`GMap()` factory helpers
@@ -104,9 +111,10 @@ Two test suites configured in `vitest.config.ts`:
 
 - **`tests/compare/`** — Tests for the `scripts/compare/` interface comparator
   - `shared.ts` — Test helpers: `createTest()`, `runComparisonTest()`, `assertDiff()`
-  - `test-cases/` — TypeScript test case files (target + source interface strings + expected diff snapshots)
-  - `__snapshots__/` — Vitest snapshot files
+  - `snapshot-cases/` — Test case files (target + source interface strings) with expected diff snapshots in `__snapshots__/`
   - Each `*.test.ts` file imports a test case file and calls `createTest()`
+  - `known-bugs.test.ts` — One `it.fails` per confirmed bug, asserting the correct behavior. Flip to `it` when the bug is fixed
+  - `unit/` — Unit tests for `ComparisonSession` and `InterfaceMatcher`
 
 - **`tests/convert/`** — Tests for the `scripts/convert-to-typescript/` converter
   - `functions/` — Function extraction test cases
@@ -126,6 +134,10 @@ bun run test:coverage
 
 # Run tests with coverage showing all files (including 100% covered) only run when the file doesn't appear in the normal command
 bun run test:coverage --coverage.reporter=text
+
+# Typecheck the scripts, and the compare tests (tests/tsconfig.json has pre-existing convert fixture errors; the filter shows only compare paths)
+bunx tsc --noEmit -p scripts/tsconfig.json
+bunx tsc --noEmit -p tests/tsconfig.json 2>&1 | rg 'tests/compare|scripts/compare'
 
 # IMPORTANT: NEVER pipe test or coverage output through `tail`, `head`, etc.
 # Vitest detects the truncated TTY and shortens its own per-file uncovered-line list,

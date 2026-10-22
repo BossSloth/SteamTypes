@@ -592,6 +592,49 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
       }
     `,
   },
+
+  'manual merge into empty target with imported-only source union': {
+    interfaceName: 'Container',
+    target: dedent /* ts */ `
+      import { Imported1, Imported2 } from 'somewhere';
+
+      export interface Container {
+        items: Item[];
+      }
+
+      export interface Item {}
+      `,
+    source: dedent /* ts */ `
+      import { Imported1, Imported2 } from 'somewhere';
+
+      export interface Container {
+        items: (Imported1 | Imported2)[];
+      }
+      `,
+  },
+
+  'manual merge of the same interface repeated in a source union': {
+    interfaceName: 'Container',
+    target: dedent /* ts */ `
+      export interface Container {
+        items: Item[];
+      }
+
+      export interface Item {
+        a: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface Container {
+        items: (Item | Item)[];
+      }
+
+      export interface Item {
+        a: string;
+      }
+      `,
+    expectsNoDiff: true,
+  },
 };
 
 createTest('Interface Merging', mergedInterfaceCases);

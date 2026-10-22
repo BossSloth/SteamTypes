@@ -6,12 +6,6 @@ import { __dirname } from '../dirname';
 import { Logger } from '../logger';
 import { compareAndCorrectAllInterfaces } from './interface-comparator';
 
-let logger: Logger;
-
-function setLogger(newLogger: Logger): void {
-  logger = newLogger;
-}
-
 const project = new Project({
   compilerOptions: {
     lib: ['ES2015'],
@@ -37,8 +31,6 @@ function extractMembersFromString(interfaceString: string): SourceFile {
   return project.createSourceFile(`${Math.random().toString(36).substring(2)}.ts`, interfaceString);
 }
 
-let sourceSourceFile: SourceFile;
-
 // Main function to compare interfaces
 function compareInterfaces(
   filePath: string,
@@ -46,7 +38,7 @@ function compareInterfaces(
   providedInterfaceString: string,
   verbose = false,
 ): string | null {
-  setLogger(new Logger({ verbose }));
+  const logger = new Logger({ verbose });
 
   logger.debug(chalk.cyan(`🔄 Comparing interfaces for ${chalk.bold(interfaceName)}...`));
 
@@ -54,14 +46,11 @@ function compareInterfaces(
   logger.debug(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceName)}...`));
   const targetSourceFile = extractInterfaceMembers(filePath);
 
-  // if (sourceSourceFile === undefined) {
   // Extract members from the provided interface string
   logger.debug(chalk.blue('🔍 Extracting members from provided interface string...'));
-  sourceSourceFile = extractMembersFromString(providedInterfaceString);
-  // }
+  const sourceSourceFile = extractMembersFromString(providedInterfaceString);
 
   // Compare members and optionally apply changes
-  // const result = editInterfaceToMatch(srcFileInfo.interfaceDeclaration, steamObjectInfo.interfaceDeclaration, srcFileInfo.sourceFile, filePath);
   const diff = compareAndCorrectAllInterfaces(targetSourceFile, sourceSourceFile, interfaceName, filePath);
 
   // Cleanup

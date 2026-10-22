@@ -48,6 +48,21 @@ export interface Item {
 }"
 `;
 
+exports[`Comparator Interface Merging > manual merge into empty target with imported-only source union 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,5 @@
+import { Imported1, Imported2 } from 'somewhere';
+
+export interface Container {
+-  items: Item[];
++  items: (Imported1 | Imported2)[];
+}
+-
+-export interface Item {}"
+`;
+
 exports[`Comparator Interface Merging > manual merge multiple into one with extra property 1`] = `
 "===================================================================
 --- a/target.ts

@@ -7,6 +7,7 @@ import {
   Node,
   PropertySignature,
   SourceFile,
+  SyntaxKind,
   Type,
   TypeLiteralNode,
   TypeNode,
@@ -18,26 +19,9 @@ export const CustomJsDocTags = {
   ignore: 'ignore',
   dontSort: 'dontSort',
   ignoreFormatting: 'ignoreFormatting',
+  exported: 'exported',
+  native: 'native',
 };
-
-/**
- * Interface to represent a task in the processing queue
- */
-interface InterfaceProcessingTask {
-  targetInterface: InterfaceDeclaration;
-  sourceInterface: InterfaceDeclaration;
-}
-
-// Global state for interface processing
-export let interfaceQueue: InterfaceProcessingTask[] = [];
-export let currentTargetSourceFile: SourceFile;
-export let currentStartingInterfaces: InterfaceDeclaration[] = [];
-
-export function initGlobalState(_currentTargetSourceFile: SourceFile, _currentStartingInterfaces: InterfaceDeclaration[]): void {
-  interfaceQueue = [];
-  currentTargetSourceFile = _currentTargetSourceFile;
-  currentStartingInterfaces = _currentStartingInterfaces;
-}
 
 /**
  * Extracts a specific tag value from JSDoc comments
@@ -56,6 +40,10 @@ export function getJsDocTagValues(prop: JSDocableNode, tagName: string): string[
   }
 
   return values;
+}
+
+export function hasJsDocTag(node: JSDocableNode, tagName: string): boolean {
+  return getJsDocTagValues(node, tagName).length > 0;
 }
 
 /**
@@ -114,7 +102,7 @@ export function getIdentifierName(node: Node | Type | TypeNode): string {
 }
 
 export function updatePropertyModifiers(target: Node, source: Node): void {
-  /* v8 ignore else -- @preserve */
+  /* v8 ignore else -- callers always pass question-tokenable nodes @preserve */
   if (Node.isQuestionTokenable(target) && Node.isQuestionTokenable(source)) {
     // Update optional status if different
     if (!target.hasQuestionToken() && source.hasQuestionToken()) {
@@ -128,4 +116,24 @@ export function updatePropertyModifiers(target: Node, source: Node): void {
       target.setIsReadonly(source.isReadonly());
     }
   }
+}
+
+export function getInterfaceDeclaration(type: TypeNode | Type): InterfaceDeclaration | undefined {
+  if (type instanceof TypeNode) {
+    type = type.getType();
+  }
+
+  const symbol = type.getSymbol();
+  if (!symbol) return undefined;
+
+  return symbol.getDeclarations().find((d) => d.isKind(SyntaxKind.InterfaceDeclaration));
+}
+
+export function getTypeText(typeNode: TypeNode): string {
+  let text = typeNode.getText();
+  if (Node.isIndexedAccessTypeNode(typeNode)) {
+    text = typeNode.getType().getText();
+  }
+
+  return text.replace(/import\(".+?\)\./, '');
 }
