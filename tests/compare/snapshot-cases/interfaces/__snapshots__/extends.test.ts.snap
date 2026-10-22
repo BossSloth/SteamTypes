@@ -372,6 +372,74 @@ export interface User {
 }"
 `;
 
+exports[`Comparator Extended Interfaces > extra inherited member followed by own member change 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,8 @@
+interface B {
+-  x: string;
+-  w: number;
+}
+
+export interface A extends B {
+  y: number;
+-  z: string;
++
++  z: boolean;
+}"
+`;
+
+exports[`Comparator Extended Interfaces > inherited member narrowed by derived source does not loop 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,5 +1,5 @@
+interface B {
+  x: unknown;
+}
+
+-export interface A extends B {}
++export interface A extends B { }"
+`;
+
+exports[`Comparator Extended Interfaces > inherited mismatch does not skip later own member changes 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,9 @@
+interface B {
+-  x: string;
++  x: number;
+}
+
+export interface A extends B {
+-  y: number;
+-  z: string;
++  y: string;
++
++  z: boolean;
+}"
+`;
+
+exports[`Comparator Extended Interfaces > inherited mismatch in the middle of member order, own change after it 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,9 @@
+interface B {
+-  x: string;
++  x: number;
+}
+
+export interface A extends B {
+  y: number;
+-  z: string;
++
++  z: boolean;
+}"
+`;
+
 exports[`Comparator Extended Interfaces > matching extends clause with generics is not re-added 1`] = `
 "===================================================================
 --- a/target.ts

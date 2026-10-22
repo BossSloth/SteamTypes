@@ -787,6 +787,89 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
   //     }
   //     `,
   // },
+
+  'inherited mismatch does not skip later own member changes': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      interface B {
+        x: string;
+      }
+
+      export interface A extends B {
+        y: number;
+        z: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        x: number;
+        y: string;
+        z: boolean;
+      }
+      `,
+  },
+
+  'inherited mismatch in the middle of member order, own change after it': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      interface B {
+        x: string;
+      }
+
+      export interface A extends B {
+        y: number;
+        z: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        y: number;
+        x: number;
+        z: boolean;
+      }
+      `,
+  },
+
+  'extra inherited member followed by own member change': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      interface B {
+        x: string;
+        w: number;
+      }
+
+      export interface A extends B {
+        y: number;
+        z: string;
+      }
+      `,
+    source: dedent /* ts */ `
+      export interface A {
+        y: number;
+        z: boolean;
+      }
+      `,
+  },
+
+  'inherited member narrowed by derived source does not loop': {
+    interfaceName: 'A',
+    target: dedent /* ts */ `
+      interface B {
+        x: unknown;
+      }
+
+      export interface A extends B {}
+      `,
+    source: dedent /* ts */ `
+      interface B {
+        x: unknown;
+      }
+
+      export interface A extends B {
+        x: string;
+      }
+      `,
+  },
 };
 
 createTest('Extended Interfaces', extendedInterfaceCases);

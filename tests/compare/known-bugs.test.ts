@@ -28,27 +28,6 @@ function compare(
 }
 
 describe('known bugs', () => {
-  it.fails('B1: members after an inheritance correction are still compared', () => {
-    const { diff } = compare(
-      `interface B {
-  x: string;
-}
-export interface A extends B {
-  y: number;
-  z: string;
-}`,
-      `export interface A {
-  x: number;
-  y: string;
-  z: boolean;
-}`,
-      'A',
-    );
-
-    expect(diff).toContain('+  y: string;');
-    expect(diff).toContain('+  z: boolean;');
-  });
-
   it.fails('B3: agreeing sources do not mutate the source and the widest type becomes the base', () => {
     const { targetFile, sourceFile } = compare(
       `export interface A extends Base {}

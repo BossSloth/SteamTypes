@@ -50,6 +50,39 @@ export class MemberReconciler implements MemberReconciliation {
    * @returns true if properties were added or removed
    */
   public reconcileMembers(targetInterface: InterfaceDeclaration | TypeLiteralNode, sourceInterface: InterfaceDeclaration | TypeLiteralNode): boolean {
+    return this.reconcileMembersPass(targetInterface, sourceInterface, new Set<string>());
+  }
+
+  /** Runs an inheritance correction for `memberName` at most once per pass, then re-runs the pass with fresh maps. @returns false when the name was already handled in this pass */
+  private reconcileInheritedOnce(
+    target: InterfaceDeclaration,
+    source: InterfaceDeclaration,
+    memberName: string,
+    handledInherited: Set<string>,
+    correct: () => void,
+  ): boolean {
+    if (handledInherited.has(memberName)) {
+      return false;
+    }
+
+    handledInherited.add(memberName);
+    correct();
+    this.reconcileMembersPass(target, source, handledInherited);
+
+    return true;
+  }
+
+  /**
+   * One pass over the members. `handledInherited` holds the inherited names whose inheritance correction already ran in
+   * this reconciliation. After a correction the pass re-runs with the same set, so later members are still compared.
+   * A name that was handled once is not sent to the inheritance path again, which stops the re-run from recursing forever
+   * when a correction does not resolve the mismatch.
+   */
+  private reconcileMembersPass(
+    targetInterface: InterfaceDeclaration | TypeLiteralNode,
+    sourceInterface: InterfaceDeclaration | TypeLiteralNode,
+    handledInherited: Set<string>,
+  ): boolean {
     const targetMembers = getInterfaceMembers(targetInterface);
     const realTargetMembers = targetInterface.getMembers() as (PropertySignature | MethodSignature)[];
     const sourceMembers = getInterfaceMembers(sourceInterface);
@@ -92,9 +125,11 @@ export class MemberReconciler implements MemberReconciliation {
       const needsExtendUpdate = this.reconcileMember(targetProp, sourceProp, isFromExtendedInterface);
 
       if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration && sourceInterface instanceof InterfaceDeclaration) {
-        this.inheritance.reconcileInheritedMismatch(targetInterface, sourceInterface, propName);
-
-        return true;
+        if (this.reconcileInheritedOnce(targetInterface, sourceInterface, propName, handledInherited, () => {
+          this.inheritance.reconcileInheritedMismatch(targetInterface, sourceInterface, propName);
+        })) {
+          return true;
+        }
       }
     }
 
@@ -109,7 +144,9 @@ export class MemberReconciler implements MemberReconciliation {
         }
 
         // An extra inherited member can only exist on an InterfaceDeclaration
-        this.inheritance.reconcileExtraInheritedMember(targetInterface as InterfaceDeclaration, sourceInterface as InterfaceDeclaration, propName);
+        this.reconcileInheritedOnce(targetInterface as InterfaceDeclaration, sourceInterface as InterfaceDeclaration, propName, handledInherited, () => {
+          this.inheritance.reconcileExtraInheritedMember(targetInterface as InterfaceDeclaration, sourceInterface as InterfaceDeclaration, propName);
+        });
 
         return true;
       }
