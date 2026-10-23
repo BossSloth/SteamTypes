@@ -18,6 +18,8 @@ export interface CClientNotificationDownloadCompleted {
   appid?: number;
 
   dlc_appid?: number;
+
+  remote_client_name?: string;
 }
 
 export interface CClientNotificationFriendInvite {
@@ -270,6 +272,12 @@ export interface CClientNotificationControllerDisconnected {
   controller_type?: number;
 }
 
+export interface CClientNotificationLoggedInAsUser {}
+
+export interface CClientNotificationRestartNeeded {}
+
+export interface CClientNotificationRedeemFramePromo {}
+
 /**
  * @note make sure to copy these values if updated to NotificationTargets.ts
  */
@@ -337,6 +345,9 @@ export enum ClientNotificationType {
   ControllerLowBattery = 62,
   ControllerConnected = 63,
   ControllerDisconnected = 64,
+  LoggedInAsUser = 65,
+  RestartNeeded = 66,
+  RedeemFramePromo = 67,
 }
 
 export enum SystemUpdateNotificationType {

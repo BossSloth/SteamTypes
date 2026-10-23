@@ -8,18 +8,11 @@ export interface User {
 
   CancelMicrotxn(txnId: unknown): unknown;
 
-  CancelRefreshLogin(): void;
-
   /**
    * Tries to cancel Steam shutdown.
    * @remarks Used in the "Shutting down" dialog.
    */
   CancelShutdown(): void;
-
-  /**
-   * Opens the "Change Account" dialog.
-   */
-  ChangeUser(): void;
 
   Connect(): Promise<OperationResponse>;
 
@@ -48,6 +41,9 @@ export interface User {
 
   GetLoginUsers(): Promise<LoginUser[]>;
 
+  /** @native */
+  GetStartupUserChooserState(): unknown;
+
   GoOffline(): void;
 
   GoOnline(): void;
@@ -75,6 +71,9 @@ export interface User {
     ) => void,
   ): Unregisterable;
 
+  /** @native */
+  RegisterForLoginUsersChanged(): unknown;
+
   RegisterForPrepareForSystemSuspendProgress(callback: (data: unknown) => void): Unregisterable;
 
   RegisterForResumeSuspendedGamesProgress(): Unregisterable;
@@ -96,6 +95,9 @@ export interface User {
   /** @native */
   RegisterShowSaveHardwareDialog(): unknown;
 
+  /** @native */
+  RemoveAllUsers(): unknown;
+
   /**
    * Removes an account from remembered users.
    * @param accountName The account to remove.
@@ -105,6 +107,17 @@ export interface User {
   RequestSupportSystemReport(reportId: string): Promise<{
     bSuccess: boolean;
   }>;
+  /** @native */
+  RestartAsCurrentUser(): unknown;
+
+  /** @native */
+  RestartAsUser(): unknown;
+
+  /** @native */
+  RestartToLoginScreen(): unknown;
+
+  /** @native */
+  RestartToUserChooser(): unknown;
 
   ResumeSuspendedGames(param0: boolean): unknown;
 
@@ -115,6 +128,9 @@ export interface User {
 
   SetAsyncNotificationEnabled(appId: number, enable: boolean): unknown;
 
+  /** @native */
+  SetCheckForUpdatesOnRestart(): unknown;
+
   /**
    * Sets given login credentials, but don't log in to that account.
    * @param accountName Account name.
@@ -122,8 +138,6 @@ export interface User {
    * @param rememberMe Whether to remember that account.
    */
   SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
-
-  ShouldShowUserChooser(): Promise<boolean>;
 
   /** @native */
   ShowSaveHardwareDialog(): unknown;
@@ -137,8 +151,6 @@ export interface User {
 
   // is param0 offline mode?
   StartOffline(param0: boolean): unknown;
-
-  StartRefreshLogin(): void;
 
   /**
    * Restarts the Steam client.

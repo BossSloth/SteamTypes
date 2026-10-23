@@ -33,6 +33,8 @@ export interface VoiceChatStore {
 
   BSelfHasAcceptedOrInitiatedOneOnOneChat(e: unknown): boolean;
 
+  BShouldUseEchoCancellation(): Promise<boolean>;
+
   BSupportsDataChannels(): boolean;
 
   /**
@@ -181,7 +183,7 @@ export interface VoiceChatStore {
 
   InitiateRoomChat(e: unknown, t: unknown): void;
 
-  InitiateVoiceChat(e: unknown, t: unknown): undefined;
+  InitiateVoiceChat(e: unknown, t: unknown): void;
 
   IPIntToString(e: unknown): string;
 
@@ -391,9 +393,11 @@ export interface VoiceChatStore {
 
   RegisterForVoiceChatActiveStateChange(e: unknown): unknown;
 
-  RemoveStreamToOutput(e: unknown): undefined;
+  RemoveStreamToOutput(e: unknown): void;
 
   RenegotiateSDP(): void;
+
+  ResetSettings(): void;
 
   RestartVoiceChatIfConnected(): void;
 
@@ -505,7 +509,7 @@ export interface VoiceChatStore {
 
   UpdateStreamsForPerUseGainChange(e: unknown): void;
 
-  UpdateUserVideoStatus(e: unknown, t: unknown): undefined;
+  UpdateUserVideoStatus(e: unknown, t: unknown): void;
 
   UpdateUserVoiceStatus(e: unknown): void;
 
@@ -529,6 +533,8 @@ export interface VoiceChatStore {
   m_bLocalMicEchoStateBeforeMicTest: boolean;
 
   m_bLocalMicTestActive: boolean;
+
+  m_bMicMuted: boolean;
 
   m_bOutputMuted: boolean;
 
@@ -632,6 +638,8 @@ export interface RgPositions {
 
 export interface Settings {
   LoadFromLocalStorage(e: unknown): void;
+
+  RemoveSettingsFromLocalStorage(): void;
 
   SaveToLocalStorage(): void;
 

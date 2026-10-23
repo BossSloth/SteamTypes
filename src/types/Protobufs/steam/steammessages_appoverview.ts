@@ -1,4 +1,5 @@
 import { ProtoAppType } from './enums';
+import { ContentDescriptorID } from './enums_productinfo';
 
 export interface CAppOverview_PerClientData {
   active_beta?: string;
@@ -32,6 +33,10 @@ export interface CAppOverview {
   appid?: number;
 
   bitfield_supported_languages?: number;
+
+  content_descriptors?: ContentDescriptorID[];
+
+  custom_images_found?: number;
 
   display_name?: string;
 
@@ -199,6 +204,7 @@ export enum AppCloudStatus {
 }
 
 export enum AppControllerSupportLevel {
+  Unknown = -1,
   None = 0,
   Partial = 1,
   Full = 2,

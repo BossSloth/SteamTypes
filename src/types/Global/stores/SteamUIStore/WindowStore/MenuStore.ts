@@ -36,6 +36,9 @@ export interface MenuStore {
 
   RequestExtendSideMenuVisibility(): () => number;
 
+  /** @native */
+  SetQuickAccessTab(): unknown;
+
   SetSuppressMenus(): () => number;
 
   ToggleSideMenu(e: unknown, t: unknown): void;
@@ -64,6 +67,8 @@ export interface MainMenuStore {
 
   GetFocusedColumn(): unknown;
 
+  GetFocusedDesktopStream(): unknown;
+
   GetGamingDeviceType(): unknown;
 
   GetRunningApps(): unknown;
@@ -82,6 +87,8 @@ export interface MainMenuStore {
 
   SetFocusedColumn(e: unknown): void;
 
+  SetFocusedDesktopStream(D: unknown): void;
+
   SetSelectedGuide(e: unknown, t: unknown): void;
 
   m_eFocusedColumn: SideMenu;
@@ -89,6 +96,8 @@ export interface MainMenuStore {
   m_eGamingDeviceType: GamingDeviceType;
 
   m_focusedApp: null;
+
+  m_focusedDesktopStream: null;
 
   m_mapAppControlsLastLocation: Map<unknown, unknown>;
 

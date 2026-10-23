@@ -3,12 +3,21 @@ import { Unregisterable } from './shared';
 export interface OpenVR {
   ExtendActivityTimeout(): unknown;
 
+  /** @native */
+  GetFrameHLAlyxPromoRegistration(): unknown;
+
   /**
    * @throws OperationResponse if mutual capabilities haven't been loaded.
    */
   GetMutualCapabilities(): Promise<unknown>;
 
   GetWebSecret(): Promise<string>;
+
+  /** @native */
+  GetWebServerAddress(): unknown;
+
+  /** @native */
+  IgnoreFrameHLAlyxPromo(): unknown;
 
   InstallVR(): unknown;
 
@@ -17,6 +26,9 @@ export interface OpenVR {
   RegisterForButtonPress(): Unregisterable;
 
   RegisterForHMDActivityLevelChanged(callback: (m_eHMDActivityLevel: EHMDActivityLevel) => void): Unregisterable;
+
+  /** @native */
+  RegisterForHMDSerialDetails(): unknown;
 
   RegisterForInstallDialog(): Unregisterable;
 
@@ -34,6 +46,9 @@ export interface OpenVR {
   RegisterForVRTrackedDevices(): unknown;
 
   SetOverlayInteractionAffordance(): unknown;
+
+  /** @native */
+  SetRegisteredFrameHLAlyxPromo(): unknown;
 
   StartVR(): unknown;
 

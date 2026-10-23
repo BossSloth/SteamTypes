@@ -16,7 +16,7 @@ export interface LocalizationManager {
 
   InitDirect(e: unknown, t: unknown): void;
 
-  InitFromObjects(e: unknown, t: unknown, n: unknown, r: unknown, i: unknown, s: unknown): void;
+  InitFromObjects(e: unknown, t: unknown, n: unknown, r: unknown): void;
 
   LocalizeIfToken(str: string, silent?: boolean): string | undefined;
 
@@ -31,6 +31,10 @@ export interface LocalizationManager {
   LocalizeStringFromFallback(str: string): string;
 
   SetPreferredLocales(e: string[]): void;
+
+  SetReady(E: unknown): void;
+
+  m_bReady: boolean;
 
   m_bReportIndividualMissingTokens: boolean;
 
@@ -161,6 +165,8 @@ export interface MapTokens {
   Activate_SubscriptionSuccess_Headline: string;
 
   Activate_SubscriptionSuccess_Headline_WithProduct: string;
+
+  ActiveGamesWarning_Description: string;
 
   AddNonSteam_AddSelected: string;
 
@@ -426,7 +432,15 @@ export interface MapTokens {
 
   AppBox_TotalPlayTime_Minutes: string;
 
+  AppControllerConfiguration_BackToSharedConfig: string;
+
+  AppControllerConfiguration_BackToSharedConfig_Desc: string;
+
   AppControllerConfiguration_BuiltInSupport: string;
+
+  AppControllerConfiguration_ConfigForDifferentGame: string;
+
+  AppControllerConfiguration_ConfigForDifferentGame_Tooltip: string;
 
   AppControllerConfiguration_ConfigNeedsGameInstall: string;
 
@@ -472,6 +486,8 @@ export interface MapTokens {
 
   AppControllerConfiguration_ControllerSupportInfo_YourController: string;
 
+  AppControllerConfiguration_ConvertToUniqueConfig: string;
+
   AppControllerConfiguration_CurrentConfiguration: string;
 
   AppControllerConfiguration_DeleteConfig_Cancel: string;
@@ -510,6 +526,10 @@ export interface MapTokens {
 
   AppControllerConfiguration_FindCommunityConfig_Desc: string;
 
+  AppControllerConfiguration_GoToVRSettings: string;
+
+  AppControllerConfiguration_IbexSharedConfig: string;
+
   AppControllerConfiguration_Import: string;
 
   AppControllerConfiguration_Link: string;
@@ -524,6 +544,10 @@ export interface MapTokens {
 
   AppControllerConfiguration_OfficialExport: string;
 
+  AppControllerConfiguration_OutdatedConfig: string;
+
+  AppControllerConfiguration_OutdatedConfig_Tooltip: string;
+
   AppControllerConfiguration_OverwriteConfig_Desc: string;
 
   AppControllerConfiguration_OverwriteConfig_New: string;
@@ -536,7 +560,15 @@ export interface MapTokens {
 
   AppControllerConfiguration_RecommendedTemplateConfigUsing: string;
 
+  AppControllerConfiguration_RequiresSteamInputConfig: string;
+
+  AppControllerConfiguration_RequiresSteamInputConfig_Tooltip: string;
+
   AppControllerConfiguration_RevertChanges: string;
+
+  AppControllerConfiguration_RevertToSharedConfig: string;
+
+  AppControllerConfiguration_RevertToSharedDeckConfig: string;
 
   AppControllerConfiguration_SearchResult: string;
 
@@ -555,6 +587,10 @@ export interface MapTokens {
   AppControllerConfiguration_Settings: string;
 
   AppControllerConfiguration_Share: string;
+
+  AppControllerConfiguration_Shared: string;
+
+  AppControllerConfiguration_SharedWithDeck: string;
 
   AppControllerConfiguration_SteamInput: string;
 
@@ -584,9 +620,15 @@ export interface MapTokens {
 
   AppControllerConfiguration_TemplateConfigUsing: string;
 
+  AppControllerConfiguration_Unique: string;
+
   AppControllerConfiguration_Upvotes: string;
 
   AppControllerConfiguration_Upvotes_Plural: string;
+
+  AppControllerConfiguration_UseGamepadInput: string;
+
+  AppControllerConfiguration_UseGamepadInput_Desc: string;
 
   AppControllerConfiguration_ViewLayout: string;
 
@@ -1192,17 +1234,33 @@ export interface MapTokens {
 
   AppDetailsControllerSection_NoSupportForDevice: string;
 
+  AppDetailsControllerSection_SC_Full: string;
+
+  AppDetailsControllerSection_SC_Mnk: string;
+
+  AppDetailsControllerSection_SC_Partial: string;
+
   AppDetailsControllerSection_SteamInput: string;
 
   AppDetailsControllerSection_SteamInputTranslation: string;
 
   AppDetailsControllerSection_Title_Playable: string;
 
+  AppDetailsControllerSection_Title_SC_Full: string;
+
+  AppDetailsControllerSection_Title_SC_Mnk: string;
+
+  AppDetailsControllerSection_Title_SC_Partial: string;
+
   AppDetailsControllerSection_Title_Supported_Dualsense: string;
 
   AppDetailsControllerSection_Title_Supported_DualShock: string;
 
   AppDetailsControllerSection_Title_Supported_Generic: string;
+
+  AppDetailsControllerSection_Title_Supported_SteamController: string;
+
+  AppDetailsControllerSection_Title_Supported_SteamDeck: string;
 
   AppDetailsControllerSection_Title_Supported_Xbox: string;
 
@@ -1552,13 +1610,15 @@ export interface MapTokens {
 
   AppProperties_ChoosePreferredLender: string;
 
-  AppProperties_CompatibilityNoOptions: string;
+  AppProperties_Compat_Alias: string;
+
+  AppProperties_Compat_Incompatible: string;
+
+  AppProperties_Compat_SelectTool: string;
 
   AppProperties_CompatibilityPage: string;
 
   AppProperties_Compatilibity_OverrideArmTranslationOptions: string;
-
-  AppProperties_CompatilibityForceTool: string;
 
   AppProperties_Controller_Generic: string;
 
@@ -1620,11 +1680,17 @@ export interface MapTokens {
 
   AppProperties_EnableSteamCloudSyncOnSuspend: string;
 
+  AppProperties_FDMEnable: string;
+
+  AppProperties_FDMEnable_Description: string;
+
   AppProperties_FeedbackPage: string;
 
   AppProperties_FeedbackPage_Agree: string;
 
   AppProperties_FeedbackPage_Disagree: string;
+
+  AppProperties_ForceIdentAsSteamDeck: string;
 
   AppProperties_GameRecording: string;
 
@@ -1762,6 +1828,10 @@ export interface MapTokens {
 
   AppProperties_OwnedButOtherAvailable: string;
 
+  AppProperties_PerformanceNoOptions: string;
+
+  AppProperties_PerformancePage: string;
+
   AppProperties_Privacy_DialogDescription: string;
 
   AppProperties_Privacy_DLC_Customized: string;
@@ -1784,13 +1854,33 @@ export interface MapTokens {
 
   AppProperties_ResolutionOverride: string;
 
+  AppProperties_ResolutionOverride_ApplyToInternal: string;
+
+  AppProperties_ResolutionOverride_Description: string;
+
+  AppProperties_ResolutionOverride_Description_Verified: string;
+
   AppProperties_ResolutionOverride_Internal: string;
+
+  AppProperties_ResolutionOverride_Title: string;
+
+  AppProperties_RPOEnable: string;
+
+  AppProperties_RPOEnable_Description: string;
+
+  AppProperties_RumbleIntensity: string;
+
+  AppProperties_RumbleIntensity_UseGlobal: string;
 
   AppProperties_RunningInstallScript: string;
 
   AppProperties_SelectLanguage: string;
 
   AppProperties_SelectLanguage_Description: string;
+
+  AppProperties_SettingOverridden: string;
+
+  AppProperties_SettingSetByValve: string;
 
   AppProperties_SharingNotSupported: string;
 
@@ -1857,6 +1947,16 @@ export interface MapTokens {
   AppProperties_SteamInputStatus: string;
 
   AppProperties_Title: string;
+
+  AppProperties_TSOEnable: string;
+
+  AppProperties_TSOEnable_Auto: string;
+
+  AppProperties_TSOEnable_Description: string;
+
+  AppProperties_TSOEnable_ForceOff: string;
+
+  AppProperties_TSOEnable_ForceOn: string;
 
   AppProperties_UpdatesPage: string;
 
@@ -2002,7 +2102,11 @@ export interface MapTokens {
 
   ArtworkModal_ViewAll: string;
 
+  Audio_Bitstream_Note: string;
+
   Audio_Channels_5Point1: string;
+
+  Audio_Channels_5Point1_AC3: string;
 
   Audio_Channels_5Point1_Testing: string;
 
@@ -2043,6 +2147,18 @@ export interface MapTokens {
   Audio_OutputDevice: string;
 
   Audio_OutputVolume: string;
+
+  Audio_Reset_Config: string;
+
+  Audio_Reset_Config_Confirm_Description: string;
+
+  Audio_Reset_Config_Confirm_Title: string;
+
+  Audio_Reset_Config_Description: string;
+
+  Audio_Setting_Bluetooth_Profile_Preference: string;
+
+  Audio_Setting_Bluetooth_Profile_Preference_Hint: string;
 
   Audio_Setting_Enable_Hdmi_Cec: string;
 
@@ -2144,13 +2260,9 @@ export interface MapTokens {
 
   BetaOptIn_Dismiss: string;
 
-  BetaOptIn_SeeChanged: string;
-
-  BetaOptIn_ThankYou: string;
+  BetaOptIn_Ended: string;
 
   BetaOptIn_Updated: string;
-
-  BetaOptIn_WeShipped: string;
 
   BigPictureMode: string;
 
@@ -2276,6 +2388,10 @@ export interface MapTokens {
 
   Browser_InputSupportLevel_None_Desktop: string;
 
+  Browser_InputSupportLevel_None_Joystick: string;
+
+  Browser_InputSupportLevel_None_Trackpad: string;
+
   Browser_Loading: string;
 
   Browser_NewTab: string;
@@ -2331,18 +2447,6 @@ export interface MapTokens {
   Button_Prev: string;
 
   ChangeUser: string;
-
-  ChangeUser_Desc1: string;
-
-  ChangeUser_Desc2: string;
-
-  ChangeUser_Description: string;
-
-  ChangeUser_Description_NoCachedCredentials: string;
-
-  ChangeUser_OKButton: string;
-
-  ChangeUser_Prompt: string;
 
   ChangeUser_ShouldShowUserChooser: string;
 
@@ -2471,6 +2575,22 @@ export interface MapTokens {
   CloudConflict_Newer: string;
 
   CloudConflict_Older: string;
+
+  CloudConflict_RemoteHost_ControllerConfigs_Description: string;
+
+  CloudConflict_RemoteHost_ControllerConfigs_KeepLocal: string;
+
+  CloudConflict_RemoteHost_ControllerConfigs_KeepLocal_Description: string;
+
+  CloudConflict_RemoteHost_ControllerConfigs_KeepRemote_Description: string;
+
+  CloudConflict_RemoteHost_Description: string;
+
+  CloudConflict_RemoteHost_KeepLocal: string;
+
+  CloudConflict_RemoteHost_KeepLocal_Description: string;
+
+  CloudConflict_RemoteHost_KeepRemote_Description: string;
 
   CloudConflict_Unknown: string;
 
@@ -2865,6 +2985,8 @@ export interface MapTokens {
   controller_steamcontroller_triton: string;
 
   controller_steamcontroller_unknown: string;
+
+  controller_steamframe_pair: string;
 
   controller_steamos_handheld: string;
 
@@ -3619,6 +3741,10 @@ export interface MapTokens {
   ControllerBinding_Chord_Interruptable_On: string;
 
   ControllerBinding_Chord_Interruptable_On_Description: string;
+
+  ControllerBinding_Chord_Invert: string;
+
+  ControllerBinding_Chord_Invert_Description: string;
 
   ControllerBinding_Chord_RepeatRate: string;
 
@@ -8042,6 +8168,14 @@ export interface MapTokens {
 
   ControllerBinding_VerticalSensitivityMouseRegion_Description: string;
 
+  ControllerBinding_VirtualCapSizeRelMouse: string;
+
+  ControllerBinding_VirtualCapSizeRelMouse_Description: string;
+
+  ControllerBinding_VirtualCapThrowRelMouse: string;
+
+  ControllerBinding_VirtualCapThrowRelMouse_Description: string;
+
   ControllerBinding_XButton: string;
 
   ControllerBinding_XButton_Description: string;
@@ -8078,6 +8212,8 @@ export interface MapTokens {
 
   ControllerConfigurationQuickSettings_GyroSensitivity: string;
 
+  ControllerConfigurationQuickSettings_GyroToJoystickCameraMinOutput: string;
+
   ControllerConfigurationQuickSettings_NoQuickSettings_ForActionSet: string;
 
   ControllerConfigurationQuickSettings_NoQuickSettings_ForLayer: string;
@@ -8105,6 +8241,70 @@ export interface MapTokens {
   ControllerConfigurator_ActionButtonLabel_ResetToDefault: string;
 
   ControllerConfigurator_ActionButtonLabel_Settings: string;
+
+  ControllerConfigurator_Actions_AddBinding: string;
+
+  ControllerConfigurator_Actions_BindingSettings: string;
+
+  ControllerConfigurator_Actions_ChangeBinding: string;
+
+  ControllerConfigurator_Actions_ChangeControl: string;
+
+  ControllerConfigurator_Actions_ChooseInput_NoneAvailable: string;
+
+  ControllerConfigurator_Actions_ChooseInput_Title_1: string;
+
+  ControllerConfigurator_Actions_ChooseMode_Title_1: string;
+
+  ControllerConfigurator_Actions_EditControl: string;
+
+  ControllerConfigurator_Actions_InUse: string;
+
+  ControllerConfigurator_Actions_Kind_AnalogTrigger: string;
+
+  ControllerConfigurator_Actions_Kind_Button: string;
+
+  ControllerConfigurator_Actions_Kind_StickPadGyro: string;
+
+  ControllerConfigurator_Actions_ModeDesc_AbsoluteMouse: string;
+
+  ControllerConfigurator_Actions_ModeDesc_CameraAngles: string;
+
+  ControllerConfigurator_Actions_ModeDesc_Disabled: string;
+
+  ControllerConfigurator_Actions_ModeDesc_FlickStick: string;
+
+  ControllerConfigurator_Actions_ModeDesc_GyroToJoystickCamera: string;
+
+  ControllerConfigurator_Actions_ModeDesc_GyroToJoystickDeflection: string;
+
+  ControllerConfigurator_Actions_ModeDesc_GyroToMouse: string;
+
+  ControllerConfigurator_Actions_ModeDesc_JoystickCamera: string;
+
+  ControllerConfigurator_Actions_ModeDesc_JoystickMouse: string;
+
+  ControllerConfigurator_Actions_ModeDesc_JoystickMove_Gyro: string;
+
+  ControllerConfigurator_Actions_ModeDesc_JoystickMove_Trackpad: string;
+
+  ControllerConfigurator_Actions_ModeDesc_MouseJoystick_Gyro: string;
+
+  ControllerConfigurator_Actions_ModeDesc_MouseJoystick_Trackpad: string;
+
+  ControllerConfigurator_Actions_ModeDesc_MouseRegion: string;
+
+  ControllerConfigurator_Actions_ModeDesc_RelativeMouse: string;
+
+  ControllerConfigurator_Actions_MouseRow: string;
+
+  ControllerConfigurator_Actions_QualifiedTitle_2: string;
+
+  ControllerConfigurator_Actions_RemoveBinding: string;
+
+  ControllerConfigurator_Actions_ShowUnboundOnly: string;
+
+  ControllerConfigurator_Actions_Unbound: string;
 
   ControllerConfigurator_ActionSet: string;
 
@@ -8176,6 +8376,10 @@ export interface MapTokens {
 
   ControllerConfigurator_ActionSets_UnnamedSet_Title: string;
 
+  ControllerConfigurator_Activator_AdjustTimings: string;
+
+  ControllerConfigurator_Activator_AdjustTimings_Desc: string;
+
   ControllerConfigurator_Activator_Command_Cycles_Desc: string;
 
   ControllerConfigurator_Activator_Command_Desc: string;
@@ -8190,11 +8394,17 @@ export interface MapTokens {
 
   ControllerConfigurator_Activator_ContextMenuItem_AddCommand_Title: string;
 
+  ControllerConfigurator_Activator_ContextMenuItem_AddExtraBinding_Button: string;
+
   ControllerConfigurator_Activator_ContextMenuItem_AddExtraBinding_Title: string;
+
+  ControllerConfigurator_Activator_ContextMenuItem_MultiBindingTiming_Title: string;
 
   ControllerConfigurator_Activator_ContextMenuItem_RemoveActivator_Title: string;
 
   ControllerConfigurator_Activator_ContextMenuItem_RemoveAllActivators_Title: string;
+
+  ControllerConfigurator_Activator_ContextMenuItem_RemoveCommand_Button: string;
 
   ControllerConfigurator_Activator_ContextMenuItem_RemoveCommand_Title: string;
 
@@ -8216,6 +8426,8 @@ export interface MapTokens {
 
   ControllerConfigurator_Activators_Desc: string;
 
+  ControllerConfigurator_Activators_SubCommands_Desc: string;
+
   ControllerConfigurator_ChooseBinding_ActionSet: string;
 
   ControllerConfigurator_ChooseBinding_CameraAngleAction: string;
@@ -8233,6 +8445,8 @@ export interface MapTokens {
   ControllerConfigurator_ChooseBinding_Keyboard: string;
 
   ControllerConfigurator_ChooseBinding_Listener: string;
+
+  ControllerConfigurator_ChooseBinding_Listener_Desc: string;
 
   ControllerConfigurator_ChooseBinding_Mouse: string;
 
@@ -8302,9 +8516,17 @@ export interface MapTokens {
 
   ControllerConfigurator_ConfigInfo_Title: string;
 
+  ControllerConfigurator_ConfigLoadFailed_ChooseNew: string;
+
+  ControllerConfigurator_ConfigLoadFailed_Description: string;
+
+  ControllerConfigurator_ConfigLoadFailed_Title: string;
+
   ControllerConfigurator_CreateVirtualMenuDialog_Description_1: string;
 
   ControllerConfigurator_CreateVirtualMenuDialog_Title_1: string;
+
+  ControllerConfigurator_EControllerPresetType_Default: string;
 
   ControllerConfigurator_EControllerPresetType_NextSet: string;
 
@@ -8600,7 +8822,57 @@ export interface MapTokens {
 
   ControllerConfigurator_Main_ContextMenu_Title: string;
 
+  ControllerConfigurator_MultiBinding_Collapse: string;
+
+  ControllerConfigurator_MultiBinding_Delay_1: string;
+
+  ControllerConfigurator_MultiBinding_Desc: string;
+
+  ControllerConfigurator_MultiBinding_EndDelay: string;
+
+  ControllerConfigurator_MultiBinding_Expand: string;
+
+  ControllerConfigurator_MultiBinding_FireDelay: string;
+
+  ControllerConfigurator_MultiBinding_Hold: string;
+
+  ControllerConfigurator_MultiBinding_Hold_Desc: string;
+
+  ControllerConfigurator_MultiBinding_Milliseconds_1: string;
+
+  ControllerConfigurator_MultiBinding_NamedSummary_2: string;
+
+  ControllerConfigurator_MultiBinding_Percent_1: string;
+
+  ControllerConfigurator_MultiBinding_Press: string;
+
+  ControllerConfigurator_MultiBinding_RangeEnd: string;
+
+  ControllerConfigurator_MultiBinding_RangeStart: string;
+
+  ControllerConfigurator_MultiBinding_Release: string;
+
+  ControllerConfigurator_MultiBinding_Section_Bindings: string;
+
+  ControllerConfigurator_MultiBinding_Section_Timeline: string;
+
+  ControllerConfigurator_MultiBinding_SingleBinding: string;
+
+  ControllerConfigurator_MultiBinding_Sort: string;
+
+  ControllerConfigurator_MultiBinding_SortByTime: string;
+
+  ControllerConfigurator_MultiBinding_Title: string;
+
+  ControllerConfigurator_MultiBinding_Unnamed: string;
+
+  ControllerConfigurator_MultiBinding_WontFire_Interrupted_1: string;
+
+  ControllerConfigurator_MultiBinding_WontFire_TooShort_1: string;
+
   ControllerConfigurator_Options: string;
+
+  ControllerConfigurator_Section_Actions: string;
 
   ControllerConfigurator_Section_ActionSets: string;
 
@@ -8681,6 +8953,8 @@ export interface MapTokens {
   ControllerConfigurator_Setting_Section_Trackpad: string;
 
   ControllerConfigurator_Setting_Section_TriggerDampening: string;
+
+  ControllerConfigurator_SkipCloudSyncWait: string;
 
   ControllerConfigurator_Source_ABXY_Title: string;
 
@@ -8853,6 +9127,8 @@ export interface MapTokens {
   ControllerConfigurator_SourceMode_Trigger_Title: string;
 
   ControllerConfigurator_SourceMode_UnnamedVirtualMenu_Title: string;
+
+  ControllerConfigurator_SyncingCloudFiles: string;
 
   ControllerConfigurator_VirtualMenu_AddBindingSlot: string;
 
@@ -9430,11 +9706,19 @@ export interface MapTokens {
 
   ControllerWelcome_Error_TryAgain: string;
 
+  ControllerWelcome_FindOtherDevices_Body: string;
+
+  ControllerWelcome_FindOtherDevices_Title: string;
+
   ControllerWelcome_Next: string;
 
   ControllerWelcome_PlugInController_Body_KnownHardware: string;
 
   ControllerWelcome_PlugInController_Body_UnknownHardware: string;
+
+  ControllerWelcome_PlugInController_BodyWithPuck_KnownHardware: string;
+
+  ControllerWelcome_PlugInController_BodyWithPuck_UnknownHardware: string;
 
   ControllerWelcome_PlugInController_Title: string;
 
@@ -9450,9 +9734,21 @@ export interface MapTokens {
 
   ControllerWelcome_PuckIntro_BodyWithPuck_UnknownHardware: string;
 
+  ControllerWelcome_RequiredDismiss_Body: string;
+
+  ControllerWelcome_RequiredDismiss_RestartSteam: string;
+
+  ControllerWelcome_RequiredDismiss_Title: string;
+
+  ControllerWelcome_RequiredDismiss_Update: string;
+
   ControllerWelcome_Setting_Label: string;
 
   ControllerWelcome_Skip: string;
+
+  ControllerWelcome_Success_Body: string;
+
+  ControllerWelcome_Success_Title: string;
 
   ControllerWelcome_Title: string;
 
@@ -9581,6 +9877,8 @@ export interface MapTokens {
   DeskJobPromo_SubTitle: string;
 
   DeskJobPromo_Title: string;
+
+  DesktopStream: string;
 
   Developer_SLS_Devcoredump_Enabled: string;
 
@@ -9716,25 +10014,39 @@ export interface MapTokens {
 
   DisplayStatus_DownloadFailed: string;
 
+  DisplayStatus_DownloadFailed_Remote: string;
+
   DisplayStatus_Downloading: string;
+
+  DisplayStatus_Downloading_Remote: string;
 
   DisplayStatus_DownloadPaused: string;
 
+  DisplayStatus_DownloadPaused_Remote: string;
+
   DisplayStatus_DownloadQueued: string;
+
+  DisplayStatus_DownloadQueued_Remote: string;
 
   DisplayStatus_DownloadRequired: string;
 
   DisplayStatus_Installing: string;
 
+  DisplayStatus_Installing_Remote: string;
+
   DisplayStatus_InvalidPlatform: string;
 
   DisplayStatus_Launching: string;
+
+  DisplayStatus_Launching_Remote: string;
 
   DisplayStatus_LicenseExpired: string;
 
   DisplayStatus_LicensePending: string;
 
   DisplayStatus_NotLaunchable: string;
+
+  DisplayStatus_NotLaunchable_Remote: string;
 
   DisplayStatus_OwnerLocked: string;
 
@@ -9746,15 +10058,23 @@ export interface MapTokens {
 
   DisplayStatus_PreloadComplete: string;
 
+  DisplayStatus_PreloadComplete_Remote: string;
+
   DisplayStatus_PresaleOnly: string;
 
   DisplayStatus_Purchase: string;
 
   DisplayStatus_ReadyToInstall: string;
 
+  DisplayStatus_ReadyToInstall_Remote: string;
+
   DisplayStatus_ReadyToLaunch: string;
 
+  DisplayStatus_ReadyToLaunch_Remote: string;
+
   DisplayStatus_ReadyToPreload: string;
+
+  DisplayStatus_ReadyToPreload_Remote: string;
 
   DisplayStatus_RegionRestricted: string;
 
@@ -9762,13 +10082,19 @@ export interface MapTokens {
 
   DisplayStatus_Running: string;
 
+  DisplayStatus_Running_Remote: string;
+
   DisplayStatus_Synchronizing: string;
 
   DisplayStatus_Terminating: string;
 
+  DisplayStatus_Terminating_Remote: string;
+
   DisplayStatus_Unavailable: string;
 
   DisplayStatus_Uninstalling: string;
+
+  DisplayStatus_Uninstalling_Remote: string;
 
   DisplayStatus_UpdateAvailableButDisabledByApp: string;
 
@@ -9776,15 +10102,27 @@ export interface MapTokens {
 
   DisplayStatus_UpdateFailed: string;
 
+  DisplayStatus_UpdateFailed_Remote: string;
+
   DisplayStatus_UpdatePaused: string;
+
+  DisplayStatus_UpdatePaused_Remote: string;
 
   DisplayStatus_UpdateQueued: string;
 
+  DisplayStatus_UpdateQueued_Remote: string;
+
   DisplayStatus_UpdateRequired: string;
+
+  DisplayStatus_UpdateRequired_Remote: string;
 
   DisplayStatus_Updating: string;
 
+  DisplayStatus_Updating_Remote: string;
+
   DisplayStatus_Validating: string;
+
+  DisplayStatus_Validating_Remote: string;
 
   DLC_DateAdded: string;
 
@@ -9938,11 +10276,19 @@ export interface MapTokens {
 
   Downloads_State_Downloading: string;
 
+  Downloads_State_Downloading_Remote: string;
+
   Downloads_State_Finalizing: string;
+
+  Downloads_State_Finalizing_Remote: string;
 
   Downloads_State_Hosting: string;
 
+  Downloads_State_Hosting_Remote: string;
+
   Downloads_State_Installing: string;
+
+  Downloads_State_Installing_Remote: string;
 
   Downloads_State_MinutesRemaining: string;
 
@@ -9952,13 +10298,19 @@ export interface MapTokens {
 
   Downloads_State_Patching: string;
 
+  Downloads_State_Patching_Remote: string;
+
   Downloads_State_Paused: string;
 
   Downloads_State_PercentComplete: string;
 
   Downloads_State_Preallocating: string;
 
+  Downloads_State_Preallocating_Remote: string;
+
   Downloads_State_Preloading: string;
+
+  Downloads_State_Preloading_Remote: string;
 
   Downloads_State_Queued: string;
 
@@ -9968,11 +10320,19 @@ export interface MapTokens {
 
   Downloads_State_Starting: string;
 
+  Downloads_State_Starting_Remote: string;
+
   Downloads_State_Stopping: string;
+
+  Downloads_State_Stopping_Remote: string;
 
   Downloads_State_Transferring: string;
 
+  Downloads_State_Transferring_Remote: string;
+
   Downloads_State_Unpacking: string;
+
+  Downloads_State_Unpacking_Remote: string;
 
   Downloads_State_UpdatesDiabled: string;
 
@@ -9980,13 +10340,21 @@ export interface MapTokens {
 
   Downloads_State_Updating: string;
 
+  Downloads_State_Updating_Remote: string;
+
   Downloads_State_UpNext: string;
 
   Downloads_State_Validating: string;
 
+  Downloads_State_Validating_Remote: string;
+
   Downloads_State_Verifying: string;
 
+  Downloads_State_Verifying_Remote: string;
+
   Downloads_State_WaitingForPrevious: string;
+
+  Downloads_State_WaitingForPrevious_Remote: string;
 
   Downloads_Stats_CurrentRate: string;
 
@@ -10494,7 +10862,19 @@ export interface MapTokens {
 
   FilterElement_SteamDeckVerified: string;
 
+  FilterElement_SteamFramePlayable: string;
+
+  FilterElement_SteamFrameUnknown: string;
+
+  FilterElement_SteamFrameVerified: string;
+
   FilterElement_SteamInputAPI: string;
+
+  FilterElement_SteamMachinePlayable: string;
+
+  FilterElement_SteamMachineUnknown: string;
+
+  FilterElement_SteamMachineVerified: string;
 
   FilterElement_SteamOSCompatible: string;
 
@@ -10572,7 +10952,19 @@ export interface MapTokens {
 
   FilterElement_Tooltip_SteamDeckVerified: string;
 
+  FilterElement_Tooltip_SteamFramePlayable: string;
+
+  FilterElement_Tooltip_SteamFrameUnknown: string;
+
+  FilterElement_Tooltip_SteamFrameVerified: string;
+
   FilterElement_Tooltip_SteamInputAPI: string;
+
+  FilterElement_Tooltip_SteamMachinePlayable: string;
+
+  FilterElement_Tooltip_SteamMachineUnknown: string;
+
+  FilterElement_Tooltip_SteamMachineVerified: string;
 
   FilterElement_Tooltip_SteamOSCompatible: string;
 
@@ -10609,6 +11001,16 @@ export interface MapTokens {
   FilterElement_Workshop: string;
 
   FilterToolTip_SearchText: string;
+
+  FrameVerified_FilterDescription_AllGames: string;
+
+  FrameVerified_FilterDescription_Verified: string;
+
+  FrameVerified_FilterDescription_Verified_NotOnFrame: string;
+
+  FrameVerified_FilterDescription_Verified_Playable: string;
+
+  FrameVerified_FilterDescription_Verified_Playable_Unknown: string;
 
   FriendContextMenu_OpenFriends: string;
 
@@ -10756,6 +11158,8 @@ export interface MapTokens {
 
   GameAction_Download: string;
 
+  GameAction_DownloadOnRemote: string;
+
   GameAction_FamilyMenu: string;
 
   GameAction_Favorite: string;
@@ -10763,6 +11167,8 @@ export interface MapTokens {
   GameAction_GameProperties: string;
 
   GameAction_Install: string;
+
+  GameAction_InstallOnRemote: string;
 
   GameAction_Launch: string;
 
@@ -10818,6 +11224,8 @@ export interface MapTokens {
 
   GameAction_PreLoad: string;
 
+  GameAction_PreloadOnRemote: string;
+
   GameAction_PurchaseApp: string;
 
   GameAction_RemoveAppFromCollection: string;
@@ -10862,6 +11270,8 @@ export interface MapTokens {
 
   GameAction_Stream: string;
 
+  GameAction_StreamOnRemote: string;
+
   GameAction_Terminating: string;
 
   GameAction_ThisAppIsPrivate: string;
@@ -10869,6 +11279,8 @@ export interface MapTokens {
   GameAction_UnFavorite: string;
 
   GameAction_Uninstall: string;
+
+  GameAction_UninstallOnRemote: string;
 
   GameAction_UnmarkAsPrivate: string;
 
@@ -10947,6 +11359,8 @@ export interface MapTokens {
   GameInfoDialog_BotPlayers: string;
 
   GameInfoDialog_Close: string;
+
+  GameInfoDialog_FriendsCount: string;
 
   GameInfoDialog_GameInfo: string;
 
@@ -11302,7 +11716,103 @@ export interface MapTokens {
 
   GuidedTour_ContinueMessage_Template_NonDeck: string;
 
+  GuidedTour_Frame_ConfirmSkip: string;
+
+  GuidedTour_Frame_ConfirmSkipDesc: string;
+
+  GuidedTour_Frame_ConfirmSkipDongleDesc: string;
+
+  GuidedTour_Frame_Continue: string;
+
+  GuidedTour_Frame_Finish: string;
+
+  GuidedTour_Frame_GamepadModeToggle: string;
+
+  GuidedTour_Frame_HealthAndSafety: string;
+
+  GuidedTour_Frame_HealthAndSafetyClickHere: string;
+
+  GuidedTour_Frame_HealthAndSafetyTitle: string;
+
+  GuidedTour_Frame_LaserMouse_ChooseDesired: string;
+
+  GuidedTour_Frame_LaserMouse_ClickNextDesc: string;
+
+  GuidedTour_Frame_LaserMouse_Desc: string;
+
+  GuidedTour_Frame_LaserMouse_PressADesc: string;
+
+  GuidedTour_Frame_LaserMouseToggle: string;
+
+  GuidedTour_Frame_LaserMouseToggleOff: string;
+
+  GuidedTour_Frame_LaserMouseToggleOn: string;
+
+  GuidedTour_Frame_LaserMouseToggleTitle: string;
+
+  GuidedTour_Frame_Next: string;
+
+  GuidedTour_Frame_Pair: string;
+
+  GuidedTour_Frame_PairingSuccess: string;
+
+  GuidedTour_Frame_ReplayTour: string;
+
+  GuidedTour_Frame_ReplayTourLink: string;
+
+  GuidedTour_Frame_SetupComplete: string;
+
+  GuidedTour_Frame_Skip: string;
+
+  GuidedTour_Frame_SkipTour: string;
+
+  GuidedTour_Frame_SystemButton: string;
+
+  GuidedTour_Frame_SystemButtonDesc: string;
+
+  GuidedTour_Frame_TutorailVideos: string;
+
+  GuidedTour_Frame_TutorialVideos_ErgonomicAccessory: string;
+
+  GuidedTour_Frame_TutorialVideos_FitComfort: string;
+
+  GuidedTour_Frame_TutorialVideos_InstallingControllerHandstrap: string;
+
+  GuidedTour_Frame_TutorialVideos_InstallingHeadstrap: string;
+
+  GuidedTour_Frame_TutorialVideos_IPDAdjustment: string;
+
+  GuidedTour_Frame_TutorialVideos_SignIn: string;
+
+  GuidedTour_Frame_TutorialVideos_Unboxing: string;
+
+  GuidedTour_Frame_TutorialVideos_WirelessAdapter: string;
+
+  GuidedTour_Frame_Welcome_Description: string;
+
+  GuidedTour_FrameAlreadyPairedWith: string;
+
+  GuidedTour_FrameNowPairedWith: string;
+
+  GuidedTour_FramePairingWith: string;
+
+  GuidedTour_FrameUnknownPCName: string;
+
   GuidedTour_Generic_Welcome_Description: string;
+
+  GuidedTour_HostComputer: string;
+
+  GuidedTour_PairingComplete: string;
+
+  GuidedTour_PairingInstructions1: string;
+
+  GuidedTour_PairingInstructions2: string;
+
+  GuidedTour_PairingInstructions3: string;
+
+  GuidedTour_PairingWithComputer: string;
+
+  GuidedTour_PairWithComputer: string;
 
   GuidedTour_ParentalControls_Description_LGS: string;
 
@@ -11358,6 +11868,8 @@ export interface MapTokens {
 
   GuidedTour_SDCard_Title_SteamMachine: string;
 
+  GuidedTour_SearchingForWirelessAdapter: string;
+
   GuidedTour_SendOff_Description: string;
 
   GuidedTour_SendOff_Description_LGS: string;
@@ -11394,9 +11906,27 @@ export interface MapTokens {
 
   GuidedTour_Welcome_Description_LGS: string;
 
+  GuidedTour_Welcome_PlayspaceResetup: string;
+
+  GuidedTour_Welcome_PlayspaceSetup: string;
+
+  GuidedTour_Welcome_PlayspaceSetupButton: string;
+
+  GuidedTour_Welcome_PlayspaceSetupConfirmSkip: string;
+
+  GuidedTour_Welcome_PlayspaceSetupDesc: string;
+
+  GuidedTour_Welcome_PlayspaceSetupDesc2: string;
+
+  GuidedTour_Welcome_PlayspaceSetupSuccess: string;
+
   GuidedTour_Welcome_Title: string;
 
+  GuidedTour_Welcome_Title_Frame: string;
+
   GuidedTour_Welcome_Title_LGS: string;
+
+  GuidedTour_WirelessAdapterDetected: string;
 
   HardwareDeviceName_Generic: string;
 
@@ -11408,9 +11938,67 @@ export interface MapTokens {
 
   HardwareDeviceName_SteamController: string;
 
+  HardwarePromo_FrameHLAlyx_Account_Desc: string;
+
+  HardwarePromo_FrameHLAlyx_Account_Title: string;
+
+  HardwarePromo_FrameHLAlyx_AlreadyOwned_Desc: string;
+
+  HardwarePromo_FrameHLAlyx_Btn_GoToAlyx: string;
+
+  HardwarePromo_FrameHLAlyx_Btn_Owned: string;
+
+  HardwarePromo_FrameHLAlyx_Btn_Redeem: string;
+
+  HardwarePromo_FrameHLAlyx_Btn_Redeemed: string;
+
+  HardwarePromo_FrameHLAlyx_Btn_Redeeming: string;
+
+  HardwarePromo_FrameHLAlyx_Claimed_Desc: string;
+
+  HardwarePromo_FrameHLAlyx_ClaimedByOtherAccount_Desc: string;
+
+  HardwarePromo_FrameHLAlyx_Ignore_Btn: string;
+
+  HardwarePromo_FrameHLAlyx_Ignore_Desc: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_AccessDenied: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_AlreadyOwn: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_Confirm: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_Duplicate: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_Error: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_InvalidParam: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_InvalidVersion: string;
+
+  HardwarePromo_FrameHLAlyx_Redeem_Success: string;
+
   HardwareUpdateField_Button: string;
 
   HardwareUpdateField_Button_Test: string;
+
+  HardwareUpdateField_Description_Downgrade: string;
+
+  HardwareUpdateField_Description_FrameControllersUpdateSuccess: string;
+
+  HardwareUpdateField_Description_FrameControllersUpdating: string;
+
+  HardwareUpdateField_Description_FrameControllerUpdatesTitle: string;
+
+  HardwareUpdateField_Description_FramePreparingUpgradeLeft: string;
+
+  HardwareUpdateField_Description_FramePreparingUpgradeRight: string;
+
+  HardwareUpdateField_Description_FrameUpgradeReadyLeft: string;
+
+  HardwareUpdateField_Description_FrameUpgradeReadyRight: string;
+
+  HardwareUpdateField_Description_Updgrade: string;
 
   HardwareUpdateField_Label: string;
 
@@ -11433,6 +12021,8 @@ export interface MapTokens {
   HardwareUpdaterWizard_Success_Button: string;
 
   HardwareUpdaterWizard_Success_Description: string;
+
+  HardwareUpdaterWizard_Success_Description_NoController: string;
 
   HardwareUpdaterWizard_Success_Title: string;
 
@@ -11460,7 +12050,15 @@ export interface MapTokens {
 
   HardwareVariant_SteamDeck: string;
 
+  HardwareVariant_SteamDeck_Verified: string;
+
+  HardwareVariant_SteamFrame: string;
+
+  HardwareVariant_SteamFrame_Verified: string;
+
   HardwareVariant_SteamMachine: string;
+
+  HardwareVariant_SteamMachine_Verified: string;
 
   Header_BatteryFull: string;
 
@@ -11978,6 +12576,8 @@ export interface MapTokens {
 
   KeyboardLayout_Korean: string;
 
+  KeyboardLayout_Malay: string;
+
   KeyboardLayout_Norwegian: string;
 
   KeyboardLayout_Polish: string;
@@ -12080,6 +12680,10 @@ export interface MapTokens {
 
   LaunchApp_InstallScript_Failed_Title: string;
 
+  LaunchApp_Notice_ResolutionOverride: string;
+
+  LaunchApp_Notice_ResolutionOverride_Description: string;
+
   LaunchApp_OtherSessionPlaying_Text: string;
 
   LaunchApp_OtherSessionPlaying_Title: string;
@@ -12087,6 +12691,14 @@ export interface MapTokens {
   LaunchApp_ShowGameArgs_Text: string;
 
   LaunchApp_ShowGameArgs_Title: string;
+
+  LaunchInterstitial_UnclaimedEntitlement_ClaimButton: string;
+
+  LaunchInterstitial_UnclaimedEntitlement_Description1: string;
+
+  LaunchInterstitial_UnclaimedEntitlement_Description2: string;
+
+  LaunchInterstitial_UnclaimedEntitlement_Title: string;
 
   LaunchOptionsDialog_Ask: string;
 
@@ -12217,6 +12829,12 @@ export interface MapTokens {
   Library_FilterCollectionDescription: string;
 
   Library_FilterCollectionDescription_CompatNotOnDeck: string;
+
+  Library_FilterCollectionDescription_SteamFrame: string;
+
+  Library_FilterCollectionDescription_SteamMachine: string;
+
+  Library_FilterCollectionDescription_SteamOS: string;
 
   Library_FilterCollectionTitle: string;
 
@@ -12412,6 +13030,8 @@ export interface MapTokens {
 
   LibraryHome_Spotlight_Midweek: string;
 
+  LibraryHome_Spotlight_NewGame: string;
+
   LibraryHome_Spotlight_PlayNow: string;
 
   LibraryHome_Spotlight_PreloadNow: string;
@@ -12434,7 +13054,9 @@ export interface MapTokens {
 
   LibraryTab_Favorites: string;
 
-  LibraryTab_FrameVerified: string;
+  LibraryTab_GreatOnFrame: string;
+
+  LibraryTab_GreatOnMachine: string;
 
   LibraryTab_Installed: string;
 
@@ -12524,8 +13146,6 @@ export interface MapTokens {
 
   Login_Login: string;
 
-  Login_LoginOffline: string;
-
   Login_LoginRestrictionFailed: string;
 
   Login_NewLogin: string;
@@ -12554,17 +13174,7 @@ export interface MapTokens {
 
   Login_Remember: string;
 
-  Login_Remove_Desc1: string;
-
-  Login_Remove_Desc2: string;
-
-  Login_Remove_Remove: string;
-
-  Login_Remove_Title: string;
-
   Login_RemoveUser: string;
-
-  Login_RemoveUser_Menu: string;
 
   Login_RemoveUser_MenuOption: string;
 
@@ -12590,8 +13200,6 @@ export interface MapTokens {
 
   Login_TwoFactorMismatch: string;
 
-  Login_UserChooser_AccountName: string;
-
   Login_Username_Placeholder: string;
 
   Login_WaitingForNetwork: string;
@@ -12605,8 +13213,6 @@ export interface MapTokens {
   Login_Welcome_Continue: string;
 
   Login_WelcomeDevelopers_Title: string;
-
-  Login_ZoomForVR: string;
 
   MainMenu_Title: string;
 
@@ -13090,6 +13696,8 @@ export interface MapTokens {
 
   Notification_DownloadComplete_Title: string;
 
+  Notification_DownloadComplete_Title_RemoteClient: string;
+
   Notification_FamilyGroup_PlaytimeWarning_Body: string;
 
   Notification_FamilyGroup_PlaytimeWarning_Body_Plural: string;
@@ -13162,6 +13770,10 @@ export interface MapTokens {
 
   Notification_InstantClip_Title: string;
 
+  Notification_LoggedInAsUser_Body: string;
+
+  Notification_LoggedInAsUser_Title: string;
+
   Notification_NewOfflineMessagesPinned_Body: string;
 
   Notification_NewOfflineMessagesPinned_Body_Plural: string;
@@ -13182,6 +13794,10 @@ export interface MapTokens {
 
   Notification_RecordingStopped_Title: string;
 
+  Notification_RedeemFramePromo_Body: string;
+
+  Notification_RedeemFramePromo_Title: string;
+
   Notification_RemoteClientConnected: string;
 
   Notification_RemoteClientDisconnected: string;
@@ -13189,6 +13805,10 @@ export interface MapTokens {
   Notification_RemoteClientStartStream: string;
 
   Notification_RemotePlay_Title: string;
+
+  Notification_RestartNeeded_Body: string;
+
+  Notification_RestartNeeded_Title: string;
 
   Notification_SteamDeckRewards_Body: string;
 
@@ -13260,6 +13880,8 @@ export interface MapTokens {
 
   NotificationsSettings_Notification_GroupEvent: string;
 
+  NotificationsSettings_Notification_LoggedInAsUser: string;
+
   NotificationsSettings_Notification_UnlockAchievement: string;
 
   NotificationsSettings_PlaySoundOnToast: string;
@@ -13281,6 +13903,10 @@ export interface MapTokens {
   OOBE_HardwareUpdater_PlugInController: string;
 
   OOBE_HardwareUpdater_UpdatingController: string;
+
+  OOBE_HardwareUpdater_UpdatingExternalPuck: string;
+
+  OOBE_HardwareUpdater_UpdatingInternalPuck: string;
 
   OOBE_KeepScreenReaderOn_Header: string;
 
@@ -13434,6 +14060,10 @@ export interface MapTokens {
 
   PairControllerScreen_ControllerType_Dropdown: string;
 
+  PairControllerScreen_ControllerType_PairAgain: string;
+
+  PairControllerScreen_ControllerType_PairAgain_Button: string;
+
   PairControllerScreen_Explainer: string;
 
   PairControllerScreen_Explainer_NoImage: string;
@@ -13443,6 +14073,8 @@ export interface MapTokens {
   PairControllerScreen_Explainer_PS4: string;
 
   PairControllerScreen_Explainer_PS5: string;
+
+  PairControllerScreen_Explainer_SteamController: string;
 
   PairControllerScreen_Explainer_Switch: string;
 
@@ -13582,7 +14214,111 @@ export interface MapTokens {
 
   QuickAccess_ReorderControllers_Reorder: string;
 
+  QuickAccess_ReorderControllers_SIAPIHint: string;
+
   QuickAccess_ReorderControllers_StopReorder: string;
+
+  QuickAccess_Streaming_2D_Active: string;
+
+  QuickAccess_Streaming_Advanced: string;
+
+  QuickAccess_Streaming_AvailableComputersWithCount: string;
+
+  QuickAccess_Streaming_Connection_Active: string;
+
+  QuickAccess_Streaming_Connection_Inactive: string;
+
+  QuickAccess_Streaming_ConnectionInfo_PacketLoss: string;
+
+  QuickAccess_Streaming_ConnectionInfo_Ping_Milliseconds: string;
+
+  QuickAccess_Streaming_Host_Disabled: string;
+
+  QuickAccess_Streaming_Host_InstallingSteamVR: string;
+
+  QuickAccess_Streaming_Host_LocalWifiNotConnected: string;
+
+  QuickAccess_Streaming_Host_LocalWifiReady: string;
+
+  QuickAccess_Streaming_Host_None_Found: string;
+
+  QuickAccess_Streaming_Host_NotReadyForVR: string;
+
+  QuickAccess_Streaming_Host_Ready: string;
+
+  QuickAccess_Streaming_Host_ReadyFor2D: string;
+
+  QuickAccess_Streaming_HostComputerConnectedWirelesslyToRouter: string;
+
+  QuickAccess_Streaming_InstallSteamVR: string;
+
+  QuickAccess_Streaming_MultiLink_Active: string;
+
+  QuickAccess_Streaming_MultiLink_Inactive: string;
+
+  QuickAccess_Streaming_MultiLink_Streaming: string;
+
+  QuickAccess_Streaming_No_Available_Hosts: string;
+
+  QuickAccess_Streaming_PairWirelessAdapter: string;
+
+  QuickAccess_Streaming_SameSteamAccountExplainer: string;
+
+  QuickAccess_Streaming_SelectGameToStream: string;
+
+  QuickAccess_Streaming_Spectating_HideIndicator: string;
+
+  QuickAccess_Streaming_Spectating_NoSpectator: string;
+
+  QuickAccess_Streaming_Spectating_NotSharingView: string;
+
+  QuickAccess_Streaming_Spectating_SharingView: string;
+
+  QuickAccess_Streaming_Spectating_ShowIndicator: string;
+
+  QuickAccess_Streaming_Spectating_StopSharing: string;
+
+  QuickAccess_Streaming_Spectating_Title: string;
+
+  QuickAccess_Streaming_StreamVRWithoutGame: string;
+
+  QuickAccess_Streaming_Title: string;
+
+  QuickAccess_Streaming_Unknown_Host: string;
+
+  QuickAccess_Streaming_VR_Active: string;
+
+  QuickAccess_Streaming_VRLinkQuality_Bad: string;
+
+  QuickAccess_Streaming_VRLinkQuality_Excellent: string;
+
+  QuickAccess_Streaming_VRLinkQuality_Good: string;
+
+  QuickAccess_Streaming_VRLinkQuality_Missing: string;
+
+  QuickAccess_Streaming_VRLinkQuality_None: string;
+
+  QuickAccess_Streaming_VRLinkQuality_Searching: string;
+
+  QuickAccess_Streaming_VRLinkType_Unknown: string;
+
+  QuickAccess_Streaming_VRLinkType_USB: string;
+
+  QuickAccess_Streaming_VRLinkType_WiFiConnection: string;
+
+  QuickAccess_Streaming_VRLinkType_WirelessAdapter: string;
+
+  QuickAccess_Streaming_WirelessAdapterConnectingInProgress: string;
+
+  QuickAccess_Streaming_WirelessAdapterNotDetected: string;
+
+  QuickAccess_Streaming_WirelessAdapterPairingInProgress: string;
+
+  QuickAccess_Streaming_WirelessAdapterPairingNeeded: string;
+
+  QuickAccess_Streaming_WirelessAdapterReady: string;
+
+  QuickAccess_Streaming_WirelessAdapterWaiting: string;
 
   QuickAccess_Tab_Bluetooth_AddDevice: string;
 
@@ -13664,6 +14400,8 @@ export interface MapTokens {
 
   QuickAccess_Tab_Help_ViewManual: string;
 
+  QuickAccess_Tab_Help_VRTutorialVideos: string;
+
   QuickAccess_Tab_Notifications_BatteryLow: string;
 
   QuickAccess_Tab_Notifications_LowDiskSpace: string;
@@ -13705,6 +14443,8 @@ export interface MapTokens {
   QuickAccess_Tab_Perf_CalculatingBatteryLife: string;
 
   QuickAccess_Tab_Perf_CalculatingChargingTime: string;
+
+  QuickAccess_Tab_Perf_Common_Settings: string;
 
   QuickAccess_Tab_Perf_ConnectedSlowDetails_KnownHardware: string;
 
@@ -13812,6 +14552,8 @@ export interface MapTokens {
 
   QuickAccess_Tab_Perf_LowLatency: string;
 
+  QuickAccess_Tab_Perf_NonVR_Settings: string;
+
   QuickAccess_Tab_Perf_Overlay: string;
 
   QuickAccess_Tab_Perf_Overlay_Explainer: string;
@@ -13825,6 +14567,10 @@ export interface MapTokens {
   QuickAccess_Tab_Perf_PerfOverlayOverSteam: string;
 
   QuickAccess_Tab_Perf_PerfOverlayOverVR: string;
+
+  QuickAccess_Tab_Perf_PerfRecordTracking: string;
+
+  QuickAccess_Tab_Perf_PerfRecordVRStats: string;
 
   QuickAccess_Tab_Perf_ProjectedBatteryLife: string;
 
@@ -13888,6 +14634,12 @@ export interface MapTokens {
 
   QuickAccess_Tab_Perf_Sharpness: string;
 
+  QuickAccess_Tab_Perf_SystemProfile: string;
+
+  QuickAccess_Tab_Perf_SystemProfile_Performance: string;
+
+  QuickAccess_Tab_Perf_SystemProfile_Playtime: string;
+
   QuickAccess_Tab_Perf_TDPLimit: string;
 
   QuickAccess_Tab_Perf_TDPLimit_Explainer_KnownHardware: string;
@@ -13912,6 +14664,12 @@ export interface MapTokens {
 
   QuickAccess_Tab_Perf_VariableResolutionDescription: string;
 
+  QuickAccess_Tab_Perf_VR_Settings: string;
+
+  QuickAccess_Tab_Perf_VRMotionSmoothing: string;
+
+  QuickAccess_Tab_Perf_VRMotionSmoothing_Explainer: string;
+
   QuickAccess_Tab_Perf_VRR_Capable: string;
 
   QuickAccess_Tab_Perf_VRR_Disabled: string;
@@ -13919,6 +14677,14 @@ export interface MapTokens {
   QuickAccess_Tab_Perf_VRR_Enabled: string;
 
   QuickAccess_Tab_Perf_VRR_NotCapable: string;
+
+  QuickAccess_Tab_Perf_VRSupersampleManualOverride: string;
+
+  QuickAccess_Tab_Perf_VRSupersampleManualOverride_Explainer: string;
+
+  QuickAccess_Tab_Perf_VRSupersampleScale_WidthByHeight: string;
+
+  QuickAccess_Tab_Perf_VRSupersampleScale_WidthByHeight_Explainer: string;
 
   QuickAccess_Tab_Settings_Section_Audio_Title: string;
 
@@ -14036,6 +14802,10 @@ export interface MapTokens {
 
   RemoteDevicePIN_Title: string;
 
+  RemoteDeviceSpectatePermission_Text: string;
+
+  RemoteDeviceSpectatePermission_Title: string;
+
   RemoteDeviceUnpair_Text: string;
 
   RemoteDeviceUnpair_Title: string;
@@ -14078,7 +14848,17 @@ export interface MapTokens {
 
   RemotePlay_LearnMore_Button: string;
 
+  RemotePlay_PairWifiAP_Connecting: string;
+
+  RemotePlay_PairWifiAP_Paired: string;
+
+  RemotePlay_PairWifiAP_Pairing: string;
+
   RemotePlay_PairWifiAPResult_Canceled: string;
+
+  RemotePlay_PairWifiAPResult_Connected: string;
+
+  RemotePlay_PairWifiAPResult_ConnectFailed: string;
 
   RemotePlay_PairWifiAPResult_Fail: string;
 
@@ -14095,6 +14875,8 @@ export interface MapTokens {
   RemotePlay_PairWifiAPResult_Unauthorized: string;
 
   RemotePlay_Tip_Callout: string;
+
+  RemotePlay_Tip_CalloutFrameVerified: string;
 
   RemotePlay_Tip_Text: string;
 
@@ -14156,7 +14938,21 @@ export interface MapTokens {
 
   RestoreBackup_Title: string;
 
-  Resuming: string;
+  Resume_ChangeAccountButton: string;
+
+  Resume_Description: string;
+
+  Resume_Description_Plural: string;
+
+  Resume_ExitGameButton: string;
+
+  Resume_ExitGameButton_Plural: string;
+
+  Resume_ResumeButton: string;
+
+  Resume_Title: string;
+
+  ScreenReader_Enabled_Alert: string;
 
   ScreenshotManager_UnknownApp: string;
 
@@ -14544,11 +15340,25 @@ export interface MapTokens {
 
   Settings_Broadcast_VideoDimensions: string;
 
+  Settings_CEC_Control: string;
+
   Settings_CEC_Enabled: string;
 
   Settings_CEC_Header: string;
 
+  Settings_CEC_Header_Long: string;
+
+  Settings_CEC_SuspendDevice: string;
+
+  Settings_CEC_SuspendTV: string;
+
+  Settings_CEC_WakeDevice: string;
+
+  Settings_CEC_WakeDeviceSupportedDesc: string;
+
   Settings_CEC_WakeOnResume: string;
+
+  Settings_CEC_WakeTV: string;
 
   Settings_CEFDisableGPUBlocklist: string;
 
@@ -14604,6 +15414,8 @@ export interface MapTokens {
 
   Settings_Controller_BaseConfigurations: string;
 
+  Settings_Controller_Battery: string;
+
   Settings_Controller_BindInput: string;
 
   Settings_Controller_BindInput_Click: string;
@@ -14617,6 +15429,10 @@ export interface MapTokens {
   Settings_Controller_Calibration_HapticsWarning: string;
 
   Settings_Controller_Calibration_HapticTest: string;
+
+  Settings_Controller_Calibration_IbexGyroCalValue: string;
+
+  Settings_Controller_Calibration_IbexGyroCalValue_Desc: string;
 
   Settings_Controller_Calibration_LEDBrightness: string;
 
@@ -14696,6 +15512,24 @@ export interface MapTokens {
 
   Settings_Controller_EndpointStrength_Weak: string;
 
+  Settings_Controller_Frame_Pairing_AllControllers: string;
+
+  Settings_Controller_Frame_Pairing_Desc: string;
+
+  Settings_Controller_Frame_Pairing_DisconnectAll: string;
+
+  Settings_Controller_Frame_Pairing_Forget: string;
+
+  Settings_Controller_Frame_Pairing_ForgetAll: string;
+
+  Settings_Controller_Frame_Pairing_Identify: string;
+
+  Settings_Controller_Frame_Pairing_SameHandWarning: string;
+
+  Settings_Controller_Frame_Pairing_Searching: string;
+
+  Settings_Controller_Frame_Pairing_TurnOffController: string;
+
   Settings_Controller_GenericGamepadSupport: string;
 
   Settings_Controller_GuideButtonFocus: string;
@@ -14705,6 +15539,12 @@ export interface MapTokens {
   Settings_Controller_IdentifyController: string;
 
   Settings_Controller_IdentifyController_Click: string;
+
+  Settings_Controller_IdentifyLeftController_Click: string;
+
+  Settings_Controller_IdentifyRightController_Click: string;
+
+  Settings_Controller_InternalPuckDetectedNoIbex: string;
 
   Settings_Controller_NoBluetooth: string;
 
@@ -14727,6 +15567,10 @@ export interface MapTokens {
   Settings_Controller_PairingInfo_Disconnected: string;
 
   Settings_Controller_PairingInfo_Forget: string;
+
+  Settings_Controller_PairingInfo_ForgetLeft: string;
+
+  Settings_Controller_PairingInfo_ForgetRight: string;
 
   Settings_Controller_PairingInfo_Inactive: string;
 
@@ -14757,6 +15601,22 @@ export interface MapTokens {
   Settings_Controller_RSSI_Puck_Description: string;
 
   Settings_Controller_RSSI_Value: string;
+
+  Settings_Controller_RumbleIntensity_8bit: string;
+
+  Settings_Controller_RumbleIntensity_ExtraHigh: string;
+
+  Settings_Controller_RumbleIntensity_ExtraLow: string;
+
+  Settings_Controller_RumbleIntensity_High: string;
+
+  Settings_Controller_RumbleIntensity_Low: string;
+
+  Settings_Controller_RumbleIntensity_Medium: string;
+
+  Settings_Controller_RumbleIntensity_MediumHigh: string;
+
+  Settings_Controller_RumbleIntensity_MediumLow: string;
 
   Settings_Controller_SCPairing: string;
 
@@ -14886,6 +15746,10 @@ export interface MapTokens {
 
   Settings_ControllerCalibration_HapticsEnable: string;
 
+  Settings_ControllerCalibration_IbexSWFilter: string;
+
+  Settings_ControllerCalibration_IbexSWFilter_Desc: string;
+
   Settings_ControllerCalibration_Joystick: string;
 
   Settings_ControllerCalibration_JoystickLowDeadzoneWarning: string;
@@ -14899,6 +15763,10 @@ export interface MapTokens {
   Settings_ControllerCalibration_LeftJoystick: string;
 
   Settings_ControllerCalibration_LockOutNavigation: string;
+
+  Settings_ControllerCalibration_LowHWCalibrationThreshold: string;
+
+  Settings_ControllerCalibration_LowHWCalibrationThreshold_Description: string;
 
   Settings_ControllerCalibration_OneEuroFilter: string;
 
@@ -14917,6 +15785,8 @@ export interface MapTokens {
   Settings_ControllerCalibration_RightJoystick: string;
 
   Settings_ControllerCalibration_RumbleEnable: string;
+
+  Settings_ControllerCalibration_RumbleIntensity: string;
 
   Settings_ControllerCalibration_Sensors: string;
 
@@ -15130,6 +16000,44 @@ export interface MapTokens {
 
   Settings_Customization_ChatRadialMenu: string;
 
+  Settings_Customization_CurrentScreensaver: string;
+
+  Settings_Customization_HomeScreen: string;
+
+  Settings_Customization_HomeScreen_BigArt: string;
+
+  Settings_Customization_HomeScreen_BigArt_Desc: string;
+
+  Settings_Customization_Preview: string;
+
+  Settings_Customization_PreviewButton: string;
+
+  Settings_Customization_Screensaver: string;
+
+  Settings_Customization_Screensaver_ConfigureTimeouts: string;
+
+  Settings_Customization_Screensaver_GameArtwork: string;
+
+  Settings_Customization_Screensaver_Idle: string;
+
+  Settings_Customization_Screensaver_Screenshots: string;
+
+  Settings_Customization_Screensaver_Screenshots_All: string;
+
+  Settings_Customization_Screensaver_Screenshots_General: string;
+
+  Settings_Customization_Screensaver_Screenshots_None: string;
+
+  Settings_Customization_Screensaver_ViewPowerSettings: string;
+
+  Settings_Customization_Screensaver_WhileInGame: string;
+
+  Settings_Customization_ScreensaverBouncingLogo: string;
+
+  Settings_Customization_ScreensaverGameSlideshow: string;
+
+  Settings_Customization_ScreensaverUser: string;
+
   Settings_Customization_StartupVideo: string;
 
   Settings_Customization_StartupVideo_Default: string;
@@ -15226,6 +16134,10 @@ export interface MapTokens {
 
   Settings_Developer_DesktopSessionDropdown: string;
 
+  Settings_Developer_EnableECLog: string;
+
+  Settings_Developer_EnableECLog_Description: string;
+
   Settings_Developer_EnableGamescopeComposer: string;
 
   Settings_Developer_EnableGamescopeVRComposer: string;
@@ -15237,6 +16149,12 @@ export interface MapTokens {
   Settings_Developer_HDRCompatTesting: string;
 
   Settings_Developer_HDRCompatTesting_Desc: string;
+
+  Settings_Developer_KeyboardNavGlyphs: string;
+
+  Settings_Developer_KeyboardNavGlyphs_Desc: string;
+
+  Settings_Developer_Logging_Title: string;
 
   Settings_Developer_MuraReArm: string;
 
@@ -15356,9 +16274,29 @@ export interface MapTokens {
 
   Settings_Display_GameResolution_Default: string;
 
-  Settings_Display_GameResolution_Explainer: string;
+  Settings_Display_GameResolution_Description: string;
+
+  Settings_Display_GameResolution_Explain_Body: string;
+
+  Settings_Display_GameResolution_Explain_ListAspectRatio: string;
+
+  Settings_Display_GameResolution_Explain_ListHeader: string;
+
+  Settings_Display_GameResolution_Explain_ListMaxRes: string;
+
+  Settings_Display_GameResolution_Explain_ListMaxResVerified: string;
+
+  Settings_Display_GameResolution_Explain_ListSupersampling: string;
+
+  Settings_Display_GameResolution_GlobalSetting: string;
+
+  Settings_Display_GameResolution_MoreOptions: string;
 
   Settings_Display_GameResolution_Native: string;
+
+  Settings_Display_GameResolution_NoLimit: string;
+
+  Settings_Display_GameResolution_Recommended: string;
 
   Settings_Display_InternalDisplayName_KnownHardware: string;
 
@@ -15398,6 +16336,18 @@ export interface MapTokens {
 
   Settings_Display_PreferredMonitor_None: string;
 
+  Settings_Display_Range: string;
+
+  Settings_Display_Range_Automatic: string;
+
+  Settings_Display_Range_Description: string;
+
+  Settings_Display_Range_DisabledReason: string;
+
+  Settings_Display_Range_Full: string;
+
+  Settings_Display_Range_Limited: string;
+
   Settings_Display_Resolution: string;
 
   Settings_Display_Resolution_Auto_Resolution: string;
@@ -15423,6 +16373,12 @@ export interface MapTokens {
   Settings_Display_Underscan_Notch_Larger: string;
 
   Settings_Display_Underscan_Notch_Smaller: string;
+
+  Settings_Display_VirtualDisplay_DefaultName: string;
+
+  Settings_Display_VR_EnvironmentBrightness: string;
+
+  Settings_Display_VR_TheaterBrightness: string;
 
   Settings_DockUpdate_Error_Generic_KnownHardware: string;
 
@@ -15636,6 +16592,8 @@ export interface MapTokens {
 
   Settings_Interface_StartInBigPicture: string;
 
+  Settings_Interface_StartInBigPicture_SteamOS: string;
+
   Settings_Interface_StartPage: string;
 
   Settings_Interface_StartPage_Description: string;
@@ -15667,6 +16625,10 @@ export interface MapTokens {
   Settings_Internet_Connect: string;
 
   Settings_Internet_Connect_Advanced_Enable: string;
+
+  Settings_Internet_Connect_Advanced_Enable_Label: string;
+
+  Settings_Internet_Connected_Networks: string;
 
   Settings_Internet_Connected_To_Internet_But_Not_Steam: string;
 
@@ -15770,6 +16732,8 @@ export interface MapTokens {
 
   Settings_Internet_No_Other_Networks_Found: string;
 
+  Settings_Internet_No_Other_Networks_Found_Wifi_Disabled: string;
+
   Settings_Internet_NoProxy: string;
 
   Settings_Internet_Not_Connected_To_Network: string;
@@ -15777,6 +16741,8 @@ export interface MapTokens {
   Settings_Internet_Offline_Mode_Disabled: string;
 
   Settings_Internet_Port: string;
+
+  Settings_Internet_Preferred_Connection: string;
 
   Settings_Internet_Primary_DNS: string;
 
@@ -15886,6 +16852,8 @@ export interface MapTokens {
 
   Settings_Keyboard_TrackpadingTyping_TriggerAsClick_Desc: string;
 
+  Settings_Language_BetaTag: string;
+
   Settings_Language_NeedsRestart: string;
 
   Settings_Language_Restart: string;
@@ -15987,6 +16955,8 @@ export interface MapTokens {
   Settings_LowPowerDownloads_Details: string;
 
   Settings_LowPowerDownloads_Enable: string;
+
+  Settings_LowPowerDownloads_Section: string;
 
   Settings_Miscellaneous_Title: string;
 
@@ -16232,11 +17202,9 @@ export interface MapTokens {
 
   Settings_RemotePlay_Framerate_3000: string;
 
-  Settings_RemotePlay_Framerate_4975: string;
-
   Settings_RemotePlay_Framerate_5000: string;
 
-  Settings_RemotePlay_Framerate_5975: string;
+  Settings_RemotePlay_Framerate_5994: string;
 
   Settings_RemotePlay_Framerate_6000: string;
 
@@ -16277,6 +17245,20 @@ export interface MapTokens {
   Settings_RemotePlay_PerformanceOverlay_Disabled: string;
 
   Settings_RemotePlay_PerformanceOverlay_Icons: string;
+
+  Settings_RemotePlay_Pyrowave: string;
+
+  Settings_RemotePlay_Pyrowave_AutomaticBitrate: string;
+
+  Settings_RemotePlay_Pyrowave_CustomBitrate: string;
+
+  Settings_RemotePlay_Pyrowave_QualityModifier: string;
+
+  Settings_RemotePlay_Pyrowave_Settings: string;
+
+  Settings_RemotePlay_Pyrowave_YUV444: string;
+
+  Settings_RemotePlay_PyrowaveDescription: string;
 
   Settings_RemotePlay_RemoteClientConfig: string;
 
@@ -16500,9 +17482,15 @@ export interface MapTokens {
 
   Settings_SteamOS_WifiDebug: string;
 
+  Settings_SteamPlay_Advanced: string;
+
   Settings_SteamPlay_ChooseTool: string;
 
   Settings_SteamPlay_DefaultTool: string;
+
+  Settings_SteamPlay_DefaultToolEntry: string;
+
+  Settings_SteamPlay_DefaultToolEntry_Fallback: string;
 
   Settings_SteamPlay_Enable: string;
 
@@ -16524,6 +17512,8 @@ export interface MapTokens {
 
   Settings_SteamPlay_RunOtherTitlesWith: string;
 
+  Settings_SteamPlay_ShowAll: string;
+
   Settings_SteamPlay_SteamPlay: string;
 
   Settings_SteamRuntimeSystemInformation: string;
@@ -16536,6 +17526,14 @@ export interface MapTokens {
 
   Settings_SteamRuntimeSystemInformation_PleaseWait: string;
 
+  Settings_SteamVR_NeedsRestart: string;
+
+  Settings_SteamVR_Restart: string;
+
+  Settings_SteamVR_SetPath_Failed_Description: string;
+
+  Settings_SteamVR_SetPath_Failed_Title: string;
+
   Settings_System_About: string;
 
   Settings_System_Advanced_BIOS_Update: string;
@@ -16543,10 +17541,6 @@ export interface MapTokens {
   Settings_System_Advanced_Header: string;
 
   Settings_System_BacklightDimTime_Label: string;
-
-  Settings_System_BacklightDimTimeNotPlugged_Label: string;
-
-  Settings_System_BacklightDimTimePlugged_Label: string;
 
   Settings_System_BIOSVersion: string;
 
@@ -16574,6 +17568,8 @@ export interface MapTokens {
 
   Settings_System_Components: string;
 
+  Settings_System_CPUAvailableLogicalCores: string;
+
   Settings_System_CPUFrequency: string;
 
   Settings_System_CPULogicalCores: string;
@@ -16589,6 +17585,8 @@ export interface MapTokens {
   Settings_System_DeckControllerVersion: string;
 
   Settings_System_DeckSerialNumber: string;
+
+  Settings_System_DesktopModeDefault: string;
 
   Settings_System_Devkit: string;
 
@@ -16656,11 +17654,17 @@ export interface MapTokens {
 
   Settings_System_Hostname_Change: string;
 
-  Settings_System_Idle_AC_Section: string;
+  Settings_System_Idle_Dim_Label: string;
 
-  Settings_System_Idle_Battery_Section: string;
+  Settings_System_Idle_NoBattery_Section: string;
 
-  Settings_System_Idle_Dim: string;
+  Settings_System_Idle_OnBattery_Section: string;
+
+  Settings_System_Idle_PluggedIn_Section: string;
+
+  Settings_System_Idle_Screensaver_Label: string;
+
+  Settings_System_Idle_Sleep_Label: string;
 
   Settings_System_IdleCustom: string;
 
@@ -16715,12 +17719,6 @@ export interface MapTokens {
   Settings_System_SteamVRWebBuildDate: string;
 
   Settings_System_SteamWebBuildDate: string;
-
-  Settings_System_SuspendTime_Label: string;
-
-  Settings_System_SuspendTimeNotPlugged_Label: string;
-
-  Settings_System_SuspendTimePlugged_Label: string;
 
   Settings_System_TrimAll_Description: string;
 
@@ -17104,8 +18102,6 @@ export interface MapTokens {
 
   Shutdown: string;
 
-  ShuttingDown: string;
-
   SignIn_Title: string;
 
   SignInHelp_Title: string;
@@ -17298,17 +18294,15 @@ export interface MapTokens {
 
   Steam_ErrorCondition_LoggedInElsewhere: string;
 
-  Steam_ErrorCondition_Offline: string;
-
   Steam_ErrorCondition_OK: string;
 
   Steam_ErrorCondition_RefreshLogin: string;
 
+  Steam_ErrorCondition_RestartNeeded: string;
+
   Steam_ErrorCondition_SteamGuard: string;
 
   Steam_ErrorCondition_Title: string;
-
-  Steam_ErrorCondition_UnhandledMailTo: string;
 
   Steam_IncorrectVRSDKWarning_Desc: string;
 
@@ -17358,8 +18352,6 @@ export interface MapTokens {
 
   Steam_RefreshLogin_AccountAlreadyLoggedInNoPassword: string;
 
-  Steam_RefreshLogin_AccountAlreadyLoggedReAuth: string;
-
   Steam_RefreshLogin_InfoTicketExpired: string;
 
   Steam_RefreshLogin_InvalidPassword: string;
@@ -17367,6 +18359,8 @@ export interface MapTokens {
   Steam_RefreshLogin_InvalidTwoFactorCode: string;
 
   Steam_Reloading_Title: string;
+
+  Steam_Shutdown_ChangeUser: string;
 
   Steam_Shutdown_Dialog_Title: string;
 
@@ -17378,6 +18372,12 @@ export interface MapTokens {
 
   Steam_Shutdown_Out_Of_Battery: string;
 
+  Steam_Shutdown_Restart: string;
+
+  Steam_Shutdown_Restart_Other_Account: string;
+
+  Steam_Shutdown_SignOut: string;
+
   Steam_Shutdown_Waiting_For_Cloud: string;
 
   Steam_Shutdown_Waiting_For_Download: string;
@@ -17385,6 +18385,8 @@ export interface MapTokens {
   Steam_Shutdown_Waiting_For_Download_Anonymous: string;
 
   Steam_Shutdown_Waiting_For_Game: string;
+
+  Steam_Shutdown_Waiting_For_Hardware_Update: string;
 
   Steam_Shutdown_Waiting_For_Logoff: string;
 
@@ -17420,6 +18422,12 @@ export interface MapTokens {
 
   SteamDock_UnsupportedFirmwareModal_Title: string;
 
+  SteamFrame_CompatibilitySection_Details: string;
+
+  SteamFrame_CompatibilitySection_Title: string;
+
+  SteamFrameWirelessAdapterAirplaneDialog_Description: string;
+
   SteamFrameWirelessAdapterDialog_Description: string;
 
   SteamFrameWirelessAdapterDialog_DontShowAgain: string;
@@ -17428,9 +18436,27 @@ export interface MapTokens {
 
   SteamFrameWirelessAdapterDialog_Pair: string;
 
+  SteamFrameWirelessAdapterTroubleshootingDialog_Description_Failed: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_Description_Success: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_Description_WaitingForResult: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_Description_WaitingForUser: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_DontShowAgain: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_Fix: string;
+
+  SteamFrameWirelessAdapterTroubleshootingDialog_Header: string;
+
   SteamInput_ChangeActionSet_Toast: string;
 
   SteamInputAPI_LogoText: string;
+
+  SteamMachine_CompatibilitySection_Details: string;
+
+  SteamMachine_CompatibilitySection_Title: string;
 
   SteamNetSockets_AppClose_Normal: string;
 
@@ -17603,6 +18629,8 @@ export interface MapTokens {
   SteamUI_Selection_Korean: string;
 
   SteamUI_Selection_Latam_Spanish: string;
+
+  SteamUI_Selection_Malay: string;
 
   SteamUI_Selection_Norwegian: string;
 
@@ -17831,6 +18859,8 @@ export interface MapTokens {
   SteamUI_ValveSurvey_Summary_GameController: string;
 
   SteamUI_ValveSurvey_Summary_GameController_None: string;
+
+  SteamUI_ValveSurvey_Summary_GlibcVersion: string;
 
   SteamUI_ValveSurvey_Summary_HardwareModel: string;
 
@@ -18074,6 +19104,8 @@ export interface MapTokens {
 
   SteamUI_ValveSurvey_Title: string;
 
+  SteamVR_DeviceInUseInVR: string;
+
   SteamVRInstall_Description: string;
 
   SteamVRInstall_DontShowAgain: string;
@@ -18141,6 +19173,8 @@ export interface MapTokens {
   StoreSettings_SteamDeckFeedback_Label: string;
 
   StreamingClient_AnotherDevice: string;
+
+  StreamingClient_InstallOn: string;
 
   StreamingClient_LinkDesc_Generic: string;
 
@@ -18606,6 +19640,8 @@ export interface MapTokens {
 
   UninstallDialog_Confirmation_Single: string;
 
+  UninstallDialog_Confirmation_SingleRemote: string;
+
   UninstallDialog_ErrorMessage: string;
 
   UninstallDialog_SecuROM: string;
@@ -18746,7 +19782,19 @@ export interface MapTokens {
 
   VRDashboard_AddDesktopWindow: string;
 
+  VRDashboard_FocusDashboardBar: string;
+
+  VRDashboard_FocusDashboardFrame: string;
+
+  VRDashboard_HideLaserMouse: string;
+
   VRDashboard_LaunchNonSteamApp: string;
+
+  VRDashboard_QuickAccessMenu: string;
+
+  VRDashboard_ShowDashboardBar: string;
+
+  VRDashboard_ShowLaserMouse: string;
 
   VRDashboardBar_AmbidextrousController: string;
 
@@ -18764,6 +19812,10 @@ export interface MapTokens {
 
   VRDashboardBar_LeftController: string;
 
+  VRDashboardBar_NoStreamingHosts: string;
+
+  VRDashboardBar_NoVRReadyHosts: string;
+
   VRDashboardBar_QuickSettings_Header: string;
 
   VRDashboardBar_QuickSettings_ViewAllSettings: string;
@@ -18773,6 +19825,20 @@ export interface MapTokens {
   VRDashboardBar_RightController: string;
 
   VRDashboardBar_SlimeVRVirtualTracker: string;
+
+  VRDashboardBar_Streaming: string;
+
+  VRDashboardBar_StreamingFromHost_Tooltip: string;
+
+  VRDashboardBar_StreamingFromHost_Tooltip_Generic: string;
+
+  VRDashboardBar_StreamingInboundAndOutbound_Tooltip: string;
+
+  VRDashboardBar_StreamingStatus: string;
+
+  VRDashboardBar_StreamingVRView_Tooltip: string;
+
+  VRDashboardBar_StreamingVRView_Tooltip_Generic: string;
 
   VRDashboardBar_swift: string;
 
@@ -18789,6 +19855,8 @@ export interface MapTokens {
   VRDashboardBar_VIVEUltimateTracker2: string;
 
   VRDashboardBar_VIVEUltimateTracker3: string;
+
+  VRDashboardBar_VRStreamingReady: string;
 
   VRDashboardBar_WifiPopup_ConnectingToWifi: string;
 

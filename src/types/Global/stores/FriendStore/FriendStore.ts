@@ -305,7 +305,7 @@ export interface FriendsUIFriendStore {
     newState: number,
     gameChanged: boolean,
     recentlySameApp: boolean,
-  ): undefined;
+  ): void;
 
   /** @param state 3=away, 4=snooze */
   OnIdle(state: 3 | 4): void;

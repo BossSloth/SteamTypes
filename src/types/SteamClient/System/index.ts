@@ -297,6 +297,8 @@ export interface SystemInfo {
   /** @deprecated Use {@link eGamingDeviceType} instead. */
   eHardwareVariant_DoNotUse: GamingDeviceType;
 
+  nCPUAvailableLogicalCores: number;
+
   nCPUHz: number;
 
   nCPULogicalCores: number;

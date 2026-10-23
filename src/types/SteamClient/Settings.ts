@@ -1,6 +1,5 @@
 import { CMsgClientSettings_Protobuf, CMsgMonitorInfo_Protobuf } from '@Runtime/Protobufs';
 import { SerializedArrayBuffer } from 'shared/protobuf';
-import { CompatibilityToolInfo } from './Apps';
 import { OperationResponse, Unregisterable } from './shared';
 
 export interface Settings {
@@ -26,8 +25,6 @@ export interface Settings {
 
   // Returns the current language "english"
   GetCurrentLanguage(): Promise<string>;
-
-  GetGlobalCompatTools(): Promise<CompatibilityToolInfo[]>;
 
   /**
    * @note doesn't seem to work on linux as it returns an empty array buffer

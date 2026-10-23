@@ -23,6 +23,8 @@ export interface CMsgProtoBufHeader {
 
   auth_account_flags?: number;
 
+  browserapi_site?: string;
+
   client_sessionid?: number;
 
   cm_sysid?: number;
@@ -79,6 +81,8 @@ export interface CMsgProtoBufHeader {
 
   token_source?: number;
 
+  trace_flags?: number;
+
   trace_tag?: string;
 
   transport_error?: number;
@@ -86,6 +90,18 @@ export interface CMsgProtoBufHeader {
   webapi_key_id?: number;
 
   webui_auth_key?: string;
+
+  wg_msg_trace_flags?: number;
+
+  wg_msg_trace_gid?: number;
+
+  wg_msg_trace_instance?: number;
+
+  wg_msg_trace_status?: string;
+
+  wg_msg_trace_steamid?: string;
+
+  wg_msg_trace_token?: string;
 
   wg_token?: string;
 }
@@ -229,8 +245,6 @@ export interface CCuratorPreferences {
   platform_windows?: boolean;
 
   show_broadcast?: boolean;
-
-  supported_languages?: number;
 
   tagids_curated?: number[];
 
@@ -408,17 +422,25 @@ export interface CBilling_Address {
 }
 
 export interface CPackageReservationStatus {
+  collection_time_active?: number;
+
   expired?: boolean;
 
   notificaton_token?: string;
 
   packageid?: number;
 
+  position_is_waitlist?: boolean;
+
   queue_head_position_at_reservation?: number;
 
   queue_head_position_now?: number;
 
+  queue_in_waitlist?: boolean;
+
   queue_position?: number;
+
+  queue_waitlist_token?: string;
 
   reservation_country_code?: string;
 
@@ -431,6 +453,8 @@ export interface CPackageReservationStatus {
   time_reserved?: number;
 
   total_queue_size?: number;
+
+  user_waitlist_token?: string;
 }
 
 export interface CMsgKeyValuePair {

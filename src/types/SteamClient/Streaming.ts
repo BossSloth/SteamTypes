@@ -7,6 +7,9 @@ export interface Streaming {
   // existing stream
   CancelStreamGame(): void;
 
+  /** @native */
+  RegisterForInstallAppComplete(): unknown;
+
   /**
    * Registers a callback function to be called when the streaming client finishes.
    * @param callback The callback function to be called.
@@ -40,6 +43,9 @@ export interface Streaming {
   /** @native */
   RegisterForStreamingPrelaunchCheck(callback: (...args: unknown[]) => unknown): Unregisterable;
 
+  /** @native */
+  RegisterForStreamingShowCloudConflict(): unknown;
+
   RegisterForStreamingShowEula(callback: (appId: number) => void): Unregisterable;
 
   /**
@@ -54,6 +60,9 @@ export interface Streaming {
 
   // existing game running on another streaming capable device
   StreamingContinueStreamGame(): void;
+
+  /** @native */
+  StreamingSetCloudConflictResolution(): unknown;
 
   /**
    * Chooses the launch option for the streamed app by its index

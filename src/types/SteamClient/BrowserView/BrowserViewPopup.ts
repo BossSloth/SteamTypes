@@ -108,6 +108,9 @@ export interface BrowserViewPopup {
    */
   SetBlockedProtocols(protocols: string): void;
 
+  /** @native */
+  SetBlockInput(): unknown;
+
   /**
    * Sets the browser window position.
    * @param x Browser window X position.

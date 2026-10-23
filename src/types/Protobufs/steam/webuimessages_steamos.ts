@@ -27,6 +27,14 @@ export interface CSteamOSManagerState {
 
   is_charge_limit_available?: boolean;
 
+  is_desktop_default_login_mode?: boolean;
+
+  is_ec_logging_available?: boolean;
+
+  is_extended_cec_available?: boolean;
+
+  is_extended_cec_wake_device_supported?: boolean;
+
   is_mandatory_update_available?: boolean;
 
   is_manual_gpu_clock_available?: boolean;
@@ -139,6 +147,42 @@ export interface CSteamOSManager_SetDefaultDesktopSession_Request {
 }
 
 export interface CSteamOSManager_SetDefaultDesktopSession_Response {}
+
+export interface CSteamOSManager_CECWakeAndSetActive_Request {}
+
+export interface CSteamOSManager_CECWakeAndSetActive_Response {}
+
+export interface CSteamOSManager_GetSteamVRPaths_Request {}
+
+export interface CSteamVRPathRecord {
+  path?: string;
+
+  version?: string;
+}
+
+export interface CSteamOSManager_GetSteamVRPaths_Response {
+  active_path?: string;
+
+  default_path?: CSteamVRPathRecord;
+
+  sideloaded_paths?: CSteamVRPathRecord[];
+
+  steam_steamvr_main_path?: CSteamVRPathRecord;
+
+  steam_steamvr_rel_path?: CSteamVRPathRecord;
+}
+
+export interface CSteamOSManager_SetSteamVRPath_Request {
+  path?: string;
+}
+
+export interface CSteamOSManager_SetSteamVRPath_Response {}
+
+export interface CSteamOSManager_SetDesktopAsDefaultLoginMode_Request {
+  is_desktop_default?: boolean;
+}
+
+export interface CSteamOSManager_SetDesktopAsDefaultLoginMode_Response {}
 
 export interface CSteamOSSLSPlugin {
   etype?: SLSHelper;

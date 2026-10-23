@@ -29,7 +29,7 @@ export interface SteamUIStore {
 
   BShowControllerConfigInOverlay(e: unknown): unknown;
 
-  CancelRefreshLogin(): void;
+  BWindowInstanceSupportsKeyboard(Zt: unknown): unknown;
 
   ClearSaleCache(): void;
 
@@ -161,8 +161,6 @@ export interface SteamUIStore {
   SetConsoleEnabled(): void;
 
   SetLastLibraryTab(e: unknown, t: unknown): void;
-
-  SetRefreshLogin(): void;
 
   SetRunningApp(e: unknown): void;
 
@@ -301,6 +299,12 @@ export interface ShutdownState {
   bAllowForceQuit: boolean;
 
   bFailed: boolean;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eShutdownReason: EShutdownReason;
 
   /**
    * This value is an enum
@@ -451,4 +455,9 @@ export enum EPlayerSlotLEDSetting {
 /** @generated */
 export enum ERumblePreference {
   'ERumblePreference-1' = -1,
+}
+
+/** @generated */
+export enum EShutdownReason {
+  EShutdownReason0 = 0,
 }

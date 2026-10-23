@@ -174,11 +174,11 @@ export interface m_callbacksOnConnect {
 
   m_ClientConnectionCallbacks: Callbacks;
 
-  m_mapServerTypeCallbacks: never;
+  m_mapServerTypeCallbacks: Map<unknown, unknown>;
 }
 
-export interface MessageRegistration<TInvoke extends (...args: never[]) => unknown> {
-  unregister(): void;
+export interface MessageRegistration<TInvoke extends (...args: never[]) => void> {
+  unregister: () => void;
 
   invoke: TInvoke;
 }
@@ -214,8 +214,6 @@ export interface MessageHandlers {
   DEBUG_LogMessageDispatch(msg: ProtobufNotification<unknown>, handler: MessageCallback): void;
 
   DispatchMsgToHandlers(msg: ProtobufNotification<unknown>, sendResponse: (resp: ProtobufInterface<unknown>) => void): boolean;
-
-  InstallErrorReportingStore(store: ErrorReportingStore): void;
 
   RegisterBaseEMessageHandler<T>(eMsg: number, callback: EMsgCallback<T>): MessageRegistration<EMsgCallback<T>>;
 
@@ -253,8 +251,6 @@ export interface MessageHandlers {
 
   emsg_list: number[];
 
-  m_ErrorReportingStore: ErrorReportingStore;
-
   m_mapCallbacks: Map<number, MessageCallback[]>;
 
   m_mapServiceMethodHandlers: Map<string, MessageCallback[]>;
@@ -277,59 +273,6 @@ export interface ServiceTransport {
   SendNotification(e: unknown, t: unknown): unknown;
 }
 
-export interface ErrorReportingStore {
-  BIsBlacklisted(e: unknown): boolean;
-
-  /**
-   * @param n default: {}
-   */
-  Init(e: unknown, t: unknown, r: unknown, n?: unknown): void;
-
-  m_fnGetReportingInterval(): number;
-
-  m_fnGetReportTags(): never[];
-
-  PauseReporting(): void;
-
-  PauseReportingForDuration(e: unknown): void;
-
-  QueueReport(e: unknown): void;
-
-  ReportError(e: unknown, t: unknown): Promise<{ identifier: unknown; identifierHash: unknown; message: unknown } | null>;
-
-  ResumeReporting(): void;
-
-  ScheduleSend(): void;
-
-  SendErrorReport(e: unknown): void;
-
-  SendErrorReports(e: unknown): void;
-
-  m_bEnabled: boolean;
-
-  m_bInitialized: boolean;
-
-  m_bReportingPaused: boolean;
-
-  m_pauseTimer: number;
-
-  m_rgErrorQueue: RgErrorQueue[];
-
-  m_sendTimer: null | number;
-
-  m_strProduct: string;
-
-  m_strVersion: string;
-
-  m_transport: ServiceTransport;
-
-  product: string;
-
-  reporting_enabled: boolean;
-
-  version: string;
-}
-
 export interface MessageCallback<T = unknown> {
   invoke(msg: ProtobufNotification<T>, sendResponse?: (resp: ProtobufInterface<unknown>) => void): void;
 
@@ -337,12 +280,4 @@ export interface MessageCallback<T = unknown> {
    * This is the protobuf class for the message
    */
   msgClass: ProtobufClass<T> | undefined;
-}
-
-export interface RgErrorQueue {
-  identifier: string;
-
-  identifierHash: string;
-
-  message: ((number | string)[] | string)[];
 }

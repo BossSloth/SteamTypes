@@ -1,6 +1,9 @@
 import { CStorePageFilter } from './contenthubs';
 import { SteamDeckCompatibilityCategory, SteamOSCompatibilityCategory } from './enums';
-import { ContentDescriptorID } from './enums_productinfo';
+import { ContentDescriptorID, InteractiveElement } from './enums_productinfo';
+import { RatingAgency, RatingDescriptorImage } from './steammessages_appratings_types';
+import { CSeasonPass } from './steammessages_seasonpass_types';
+import { SteamAward } from './steammessages_steamawards_types';
 
 export interface StoreItemID {
   appid?: number;
@@ -12,6 +15,8 @@ export interface StoreItemID {
   hubcategoryid?: number;
 
   packageid?: number;
+
+  salepagegid?: string;
 
   tagid?: number;
 }
@@ -35,11 +40,17 @@ export interface StoreBrowseItemDataRequest {
 
   include_basic_info?: boolean;
 
+  include_best_purchase_option?: boolean;
+
+  include_extra_details?: boolean;
+
   include_full_description?: boolean;
 
   include_included_items?: boolean;
 
   include_links?: boolean;
+
+  include_optin_registration_tags?: boolean;
 
   include_platforms?: boolean;
 
@@ -83,6 +94,8 @@ export interface StoreItem {
 
   content_descriptorids?: ContentDescriptorID[];
 
+  extra_details?: StoreItem_ExtraDetails;
+
   free_weekend?: StoreItem_FreeWeekend;
 
   full_description_bbcode?: string;
@@ -90,6 +103,8 @@ export interface StoreItem {
   game_count?: number;
 
   game_rating?: StoreGameRating;
+
+  gid?: string;
 
   id?: number;
 
@@ -115,11 +130,15 @@ export interface StoreItem {
 
   name?: string;
 
+  optin_registration_tags?: StoreItem_OptInRegistrationTags[];
+
   package_groups?: StoreItem_PackageGroup[];
 
   platforms?: StoreItem_Platforms;
 
   purchase_description_bbcode?: string;
+
+  purchase_notes?: StoreItem_PurchaseNote[];
 
   purchase_options?: StoreItem_PurchaseOption[];
 
@@ -136,6 +155,8 @@ export interface StoreItem {
   store_url_path?: string;
 
   store_url_path_override?: string;
+
+  store_url_slug?: string;
 
   success?: number;
 
@@ -172,14 +193,26 @@ export interface StoreItem_Playtest {
   is_open?: boolean;
 }
 
+export interface StoreItem_RelatedF2P {
+  appid?: number;
+
+  description_text?: string;
+
+  header_text?: string;
+}
+
 export interface StoreItem_RelatedItems {
   demo_appid?: number[];
 
   demos?: StoreItem_Demo[];
 
+  dlc_parent_appids?: number[];
+
   parent_appid?: number;
 
   playtests?: StoreItem_Playtest[];
+
+  related_f2p?: StoreItem_RelatedF2P;
 
   standalone_demo_appid?: number[];
 
@@ -190,6 +223,8 @@ export interface StoreItem_IncludedItems {
   included_apps?: StoreItem[];
 
   included_bundles?: StoreItem[];
+
+  included_creators?: StoreItem[];
 
   included_packages?: StoreItem[];
 }
@@ -251,6 +286,8 @@ export interface StoreItem_Assets {
 
   community_icon?: string;
 
+  creator_home_background?: string;
+
   edition_comparison?: string;
 
   header?: string;
@@ -260,6 +297,8 @@ export interface StoreItem_Assets {
   hero_capsule?: string;
 
   hero_capsule_2x?: string;
+
+  last_modified?: number;
 
   library_capsule?: string;
 
@@ -287,6 +326,8 @@ export interface StoreItem_Assets {
 }
 
 export interface StoreItem_ReleaseInfo {
+  advance_access_date?: number;
+
   coming_soon_display?: string;
 
   custom_release_date_message?: string;
@@ -321,6 +362,10 @@ export interface StoreItem_Platforms {
 
   steam_deck_compat_category?: SteamDeckCompatibilityCategory;
 
+  steam_frame_compat_category?: SteamDeckCompatibilityCategory;
+
+  steam_machine_compat_category?: SteamDeckCompatibilityCategory;
+
   steam_os_compat_category?: SteamOSCompatibilityCategory;
 
   steamos_linux?: boolean;
@@ -334,6 +379,8 @@ export interface StoreItem_Platforms_VRSupport {
   htc_vive?: boolean;
 
   oculus_rift?: boolean;
+
+  show_optional_vr_mode_notice?: boolean;
 
   valve_index?: boolean;
 
@@ -357,6 +404,8 @@ export interface StoreItem_PurchaseOption {
 
   formatted_final_price?: string;
 
+  formatted_lowest_recent_price?: string;
+
   formatted_original_price?: string;
 
   formatted_price_before_bundle_discount?: string;
@@ -374,6 +423,8 @@ export interface StoreItem_PurchaseOption {
   is_commercial_license?: boolean;
 
   is_edition?: boolean;
+
+  is_free_license?: boolean;
 
   is_free_to_keep?: boolean;
 
@@ -410,6 +461,8 @@ export interface StoreItem_PurchaseOption_Discount {
   discount_description?: string;
 
   discount_end_date?: number;
+
+  master_sub_appid?: number;
 }
 
 export interface StoreItem_PurchaseOption_RecurrenceInfo {
@@ -491,6 +544,8 @@ export interface StoreItem_SupportedLanguage {
 }
 
 export interface StoreItem_FreeWeekend {
+  appid?: number;
+
   end_time?: number;
 
   start_time?: number;
@@ -523,8 +578,314 @@ export enum StoreItem_PackageGroup_PackageGroupDisplayType {
   Dropdown = 1,
 }
 
+export interface StoreItem_ExtraDetails {
+  ai_generation_service?: StoreItem_ExtraDetails_AIGeneratedContentService;
+
+  anticheat?: StoreItem_ExtraDetails_Anticheat;
+
+  cast_and_crew?: StoreItem_ExtraDetails_CastAndCrew;
+
+  content_survey_ai_notes?: string;
+
+  content_survey_notes?: string;
+
+  controller_wizard_complete?: boolean;
+
+  drm_activation_limit?: string;
+
+  drm_third_party_type?: string;
+
+  early_access?: StoreItem_ExtraDetails_EarlyAccess;
+
+  episode?: StoreItem_ExtraDetails_Episode;
+
+  eula?: StoreItem_ExtraDetails_Eula[];
+
+  interactive_elements?: InteractiveElement[];
+
+  item_store_eligible?: boolean;
+
+  legal_notice_bbcode?: string;
+
+  links_and_info?: StoreItem_ExtraDetails_LinksAndInfo;
+
+  metacritic?: StoreItem_ExtraDetails_Metacritic;
+
+  no_mouse_keyboard_support?: boolean;
+
+  partner_awards_bbcode?: string;
+
+  points_shop_eligible?: boolean;
+
+  press_review?: StoreItem_ExtraDetails_PressReview[];
+
+  refund_checks_ea_playtime?: boolean;
+
+  running_time_minutes?: number;
+
+  season_pass?: CSeasonPass;
+
+  seasons?: StoreItem_ExtraDetails_Season[];
+
+  section?: StoreItem_ExtraDetails_PageSection[];
+
+  steam_award?: SteamAward[];
+
+  system_requirements?: StoreItem_ExtraDetails_SystemRequirements;
+
+  user_account_third_party?: string;
+
+  user_account_third_party_link_to_steam?: boolean;
+
+  vetted?: boolean;
+
+  video_extras_note?: StoreItem_ExtraDetails_VideoExtrasNote;
+}
+
+export interface StoreItem_ExtraDetails_Anticheat {
+  boot_protection?: boolean;
+
+  boot_protection_name?: string;
+
+  kernel_mode?: boolean;
+
+  name?: string;
+
+  name_loc?: string;
+
+  uninstall_completely?: boolean;
+}
+
+export interface StoreItem_ExtraDetails_Eula {
+  name?: string;
+
+  url?: string;
+}
+
+export interface StoreItem_ExtraDetails_AIGeneratedContentService {
+  name?: string;
+
+  url?: string;
+}
+
+export interface StoreItem_ExtraDetails_PageSection {
+  banner?: StoreItem_ExtraDetails_PageSection_PageSectionBanner;
+
+  content_bbcode?: string;
+
+  label?: string;
+}
+
+export enum StoreItem_ExtraDetails_PageSection_PageSectionBanner {
+  None = 0,
+  Workshop = 1,
+  Follow = 2,
+  MachineController = 3,
+}
+
+export interface StoreItem_ExtraDetails_PressReview {
+  quote?: string;
+
+  score?: string;
+
+  site?: string;
+
+  url?: string;
+}
+
+export interface StoreItem_ExtraDetails_EarlyAccess {
+  community_bbcode?: string;
+
+  current_state_bbcode?: string;
+
+  description_bbcode?: string;
+
+  full_version_bbcode?: string;
+
+  how_long_bbcode?: string;
+
+  pricing_bbcode?: string;
+
+  why_bbcode?: string;
+}
+
+export interface StoreItem_ExtraDetails_LinksAndInfo {
+  achievement_count?: number;
+
+  achievements_visible?: boolean;
+
+  available_documents?: StoreAppDocumentType[];
+
+  genreids?: number[];
+
+  health_warning_url?: string;
+
+  manufacturers?: string[];
+
+  online_manual_url?: string;
+
+  privacy_policy_url?: string;
+
+  stats_url?: string;
+
+  website?: string;
+}
+
+export interface StoreItem_ExtraDetails_Metacritic {
+  always_show?: boolean;
+
+  score?: number;
+
+  url?: string;
+}
+
+export interface StoreItem_ExtraDetails_CastAndCrew {
+  actors?: string[];
+
+  directors?: string[];
+
+  music?: string[];
+
+  producers?: string[];
+
+  writers?: string[];
+}
+
+export interface StoreItem_ExtraDetails_SystemRequirements {
+  platforms?: StoreItem_ExtraDetails_SystemRequirements_PlatformRequirements[];
+}
+
+export interface StoreItem_ExtraDetails_SystemRequirements_Size {
+  amount?: string;
+
+  units?: string;
+}
+
+export interface StoreItem_ExtraDetails_SystemRequirements_Requirements {
+  broadband?: boolean;
+
+  directx?: string;
+
+  graphics?: string;
+
+  legacy_bbcode?: string;
+
+  memory?: StoreItem_ExtraDetails_SystemRequirements_Size;
+
+  notes?: string;
+
+  os_version?: string;
+
+  os_version_unsupported?: boolean;
+
+  processor?: string;
+
+  sound_card?: string;
+
+  storage?: StoreItem_ExtraDetails_SystemRequirements_Size;
+
+  storage_hq?: StoreItem_ExtraDetails_SystemRequirements_Size;
+
+  vr_support?: string;
+}
+
+export interface StoreItem_ExtraDetails_SystemRequirements_PlatformRequirements {
+  minimum?: StoreItem_ExtraDetails_SystemRequirements_Requirements;
+
+  platform?: StoreItem_ExtraDetails_SystemRequirements_SysReqPlatform;
+
+  recommended?: StoreItem_ExtraDetails_SystemRequirements_Requirements;
+
+  requires_64bit?: boolean;
+
+  requires_apple_silicon?: boolean;
+
+  unsupported_os_note?: StoreItem_ExtraDetails_SystemRequirements_UnsupportedOSNote;
+}
+
+export enum StoreItem_ExtraDetails_SystemRequirements_UnsupportedOSNote {
+  None = 0,
+  Windows = 1,
+  Mac = 2,
+}
+
+export enum StoreItem_ExtraDetails_SystemRequirements_SysReqPlatform {
+  Unknown = 0,
+  Windows = 1,
+  Mac = 2,
+  Linux = 3,
+  Android = 4,
+}
+
+export interface StoreItem_ExtraDetails_Episode {
+  hide_details?: boolean;
+
+  number?: string;
+
+  type?: StoreItem_ExtraDetails_Episode_EpisodeType;
+}
+
+export enum StoreItem_ExtraDetails_Episode_EpisodeType {
+  Unknown = 0,
+  Episode = 1,
+  Chapter = 2,
+  Bonus = 3,
+  BehindTheScenes = 4,
+  Deleted = 5,
+}
+
+export interface StoreItem_ExtraDetails_Season {
+  episode_appids?: number[];
+
+  index?: number;
+
+  name?: string;
+}
+
+export enum StoreItem_ExtraDetails_VideoExtrasNote {
+  Purchase = 0,
+  Rental = 1,
+  PurchaseRental = 2,
+  PurchaseSpecialEdition = 3,
+  PurchaseDeluxeEdition = 4,
+}
+
+export interface StoreItem_OptInRegistrationTags {
+  optin_name?: string;
+
+  values?: string[];
+}
+
+export interface StoreItem_PurchaseNote {
+  highlighted?: boolean;
+
+  text_bbcode?: string;
+
+  type?: StoreItem_PurchaseNote_PurchaseNoteType;
+}
+
+export enum StoreItem_PurchaseNote_PurchaseNoteType {
+  None = 0,
+  Notice = 1,
+  LowViolence = 2,
+  CreditCardRequired = 3,
+  SystemRequirements = 4,
+}
+
 export interface StoreGameRating {
+  agency?: RatingAgency;
+
+  banned?: boolean;
+
+  content_survey_notes?: string;
+
+  descriptor_images?: RatingDescriptorImage[];
+
   descriptors?: string[];
+
+  esrb_online_interactions_not_rated?: boolean;
+
+  esrb_online_music_not_rated?: boolean;
 
   image_target?: string;
 
@@ -535,6 +896,8 @@ export interface StoreGameRating {
   rating?: string;
 
   required_age?: number;
+
+  survey_interactive_elements?: InteractiveElement[];
 
   type?: string;
 
@@ -556,7 +919,13 @@ export interface StoreBrowseFilterFailure {
 
   ignored?: boolean;
 
-  nonpreferred_product_type?: boolean;
+  nonpreferred_product_early_access?: boolean;
+
+  nonpreferred_product_prepurchase?: boolean;
+
+  nonpreferred_product_software?: boolean;
+
+  nonpreferred_product_vr?: boolean;
 
   not_in_users_language?: boolean;
 
@@ -728,6 +1097,8 @@ export interface CHardwarePackageDetails {
 
   appid_ownership_not_allowed_to_reserve?: number;
 
+  collection_time_active?: number;
+
   estimated_delivery_latest_business_days?: number;
 
   estimated_delivery_soonest_business_days?: number;
@@ -746,7 +1117,17 @@ export interface CHardwarePackageDetails {
 
   packageid?: number;
 
+  position_is_waitlist?: boolean;
+
+  queue_in_waitlist?: boolean;
+
+  queue_waitlist_token?: string;
+
   requires_reservation?: boolean;
+
+  requires_signature?: boolean;
+
+  reservation_not_allowed?: boolean;
 
   reservation_state?: number;
 
@@ -755,6 +1136,8 @@ export interface CHardwarePackageDetails {
   time_expires?: number;
 
   time_reserved?: number;
+
+  user_waitlist_token?: string;
 }
 
 export interface CStoreBrowse_GetHardwareItems_Response {
@@ -770,6 +1153,7 @@ export enum StoreItemType {
   Tag = 4,
   Creator = 5,
   HubCategory = 6,
+  SalePage = 7,
 }
 
 export enum StoreAppType {
@@ -849,6 +1233,19 @@ export enum StoreLinkType {
   QQChannel = 23,
   RedNote = 24,
   MAX = 25,
+}
+
+export enum StoreAppDocumentType {
+  None = 0,
+  Manual = 1,
+  QuickRef = 2,
+  Map = 3,
+  GettingStarted = 4,
+  ReadMe = 5,
+  TechTree = 6,
+  Keybindings = 7,
+  Warranty = 8,
+  MAX = 9,
 }
 
 export enum StoreCategoryType {

@@ -21,7 +21,7 @@ export interface GamepadNavigationManager {
 
   DestroyContext(e: unknown): void;
 
-  DispatchVirtualButtonClick(e: unknown, t: unknown): void;
+  DispatchVirtualButtonClick(e: unknown, t: unknown, Er: unknown): void;
 
   DispatchVirtualGamepad(e: unknown, t: unknown): void;
 
@@ -52,6 +52,8 @@ export interface GamepadNavigationManager {
 
   m_fnGamepadEventUpdateBatcher(e: unknown, t: unknown): unknown;
 
+  m_fnSystemKeyContextResolver(Nt: unknown): unknown;
+
   NewGamepadNavigationTree(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
 
   OnButtonActionInternal(
@@ -65,7 +67,7 @@ export interface GamepadNavigationManager {
     o: unknown,
     l: unknown,
     c: unknown,
-  ): undefined;
+  ): void;
 
   OnButtonDown(e: unknown, t: unknown, r: unknown, n: unknown, i: unknown, a: unknown, s: unknown, o: unknown, l: unknown): void;
 
@@ -95,13 +97,15 @@ export interface GamepadNavigationManager {
 
   RestoreHistoryTransaction(e: unknown): Promise<void>;
 
-  SetCatchAllGamepadInput(e: unknown): void;
+  SetCatchAllGamepadInput(e: unknown): { Unregister: () => void };
 
   SetGamepadEventUpdateBatcher(e: unknown): void;
 
   SetShowDebugFocusRing(e: unknown): void;
 
-  SetSuppressGamepadInput(e: unknown): void;
+  SetSystemKeyAppIDHint(Zt: unknown): void;
+
+  SetSystemKeyContextResolver(Zt: unknown): void;
 
   TakeFocusChangingIFrame(): void;
 
@@ -122,8 +126,6 @@ export interface GamepadNavigationManager {
 
   m_DefaultContext?: never;
 
-  m_fnCatchAllGamepadInput: null;
-
   m_glyphInfo: ObservableValue<GlyphInfo>;
 
   m_LastActiveContext: FocusNavigationContext;
@@ -132,7 +134,11 @@ export interface GamepadNavigationManager {
 
   m_navigationSourceSupportsFocus: NavigationSourceSupportsFocus;
 
+  m_nSystemKeyAppIDHint?: never;
+
   m_rgAllContexts: FocusNavigationContext[];
+
+  m_rgCatchAllGamepadInput: unknown[];
 
   m_rgGamepadInputSources: (
     | StandardGamepadInputSource
@@ -201,6 +207,8 @@ export interface FocusNavigationContext {
 
   SetGamepadInputSuppressed(e: unknown): void;
 
+  SetNavTreeToActivateOverride(Zt: unknown): void;
+
   UnregisterGamepadNavigationTree(e: unknown): Promise<void>;
 
   ActiveWindow: Window | undefined;
@@ -222,6 +230,8 @@ export interface FocusNavigationContext {
   m_bVR: boolean;
 
   m_controller: GamepadNavigationManager;
+
+  m_fnGetNavTreeToActivateOverride: undefined;
 
   m_FocusChangedCallbacks: Callbacks;
 
@@ -266,6 +276,8 @@ export interface BaseGamepadInputSource {
   GetActiveControllerTime(): unknown;
 
   GetSourceType(): unknown;
+
+  Init(V: unknown): unknown;
 
   OnAnalogPad(e: unknown, t: unknown, n: unknown, r: unknown): void;
 
@@ -329,17 +341,23 @@ export interface StandardGamepadInputSource extends BaseGamepadInputSource {
 
   HandleSystemKeyEvents(e: unknown): void;
 
+  Init(V: unknown): unknown;
+
   OnControllerListChanged(e: unknown): void;
 
   OnSystemButtonPress(e: unknown, t: unknown): void;
+
+  m_NavController: GamepadNavigationManager;
 
   m_rgControllers: Map<number, RgControllers>;
 }
 
 export interface MouseGamepadInputSource extends BaseGamepadInputSource {
+  Init(V: unknown): unknown;
+
   OnMouseDown(e: unknown): void;
 
-  OnMouseMove(e: unknown): undefined;
+  OnMouseMove(e: unknown): void;
 
   OnMouseUp(e: unknown): void;
 
@@ -362,20 +380,64 @@ export interface MouseGamepadInputSource extends BaseGamepadInputSource {
 }
 
 export interface TouchGamepadInputSource extends BaseGamepadInputSource {
+  Init(V: unknown): unknown;
+
   OnTouchEnd(e: unknown): void;
 
   OnTouchStart(e: unknown): void;
 }
 
 export interface VrGamepadInputSource extends BaseGamepadInputSource {
-  OnVROverlayInputFocusChanged(e: unknown): void;
+  CatchAllGamepadInput(V: unknown, ee: unknown, De: unknown): boolean;
+
+  FocusItemUnderMouse(V: unknown): void;
+
+  GetNavTreeForSteamVRGamepadFocus(): unknown;
+
+  GetOpenVRKeyboardNavTree(): unknown;
+
+  InitFocusNavContext(V: unknown): () => void;
+
+  OnNavTreeActivatedOrReactivated(V: unknown): void;
+
+  OnPopupMouseLeave(V: unknown): void;
+
+  OnPopupMouseOver(V: unknown): void;
+
+  OnVROverlayInputFocusChanged(V: unknown): void;
+
+  RegisterPopupEventListeners(V: unknown): void;
+
+  SetNullNavTreeActionDescriptions(V: unknown): void;
+
+  TakeFocusIfNothingIsFocused(V: unknown): void;
+
+  UnregisterPopupEventListeners(V: unknown): void;
 
   EnableGamepadInVR: boolean;
 
+  FocusedVROverlayOwnedBySteam: boolean;
+
+  IsInGamepadNav: boolean;
+
+  m_bCurrentlyActivatingTreeDueToOverlayFocusChange: boolean;
+
+  m_bFocusedVROverlayOwnedBySteam: boolean;
+
+  m_lastHoverElem: undefined;
+
+  m_lastHoverElemTimeout: number;
+
   m_lastOverlayInputFocusChangedMessage: undefined;
+
+  m_NullNavTree: undefined;
+
+  m_VRFocusNavWindowContext: undefined;
 
   /** @todo property ignored by configuration, please type this */
   NonVRWindowInstance: unknown;
+
+  ShowGamepadFocusMode: boolean;
 }
 
 export interface ActiveFocusChange {

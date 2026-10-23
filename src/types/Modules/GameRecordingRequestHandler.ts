@@ -29,6 +29,8 @@ import {
   CGameRecording_GetPlatformCapabilities_Response,
   CGameRecording_GetRecordingSize_Request,
   CGameRecording_GetRecordingSize_Response,
+  CGameRecording_GetState_Request,
+  CGameRecording_GetState_Response,
   CGameRecording_GetTags_Request,
   CGameRecording_GetTags_Response,
   CGameRecording_GetThumbnails_Request,
@@ -55,6 +57,7 @@ import {
   CGameRecording_SetPerGameSettings_Response,
   CGameRecording_StartRecording_Request,
   CGameRecording_StartRecording_Response,
+  CGameRecording_StateChanged_Notification,
   CGameRecording_StopRecording_Request,
   CGameRecording_StopRecording_Response,
   CGameRecording_SwitchBackgroundRecordingGame_Request,
@@ -143,6 +146,8 @@ export interface GameRecordingRequestHandler {
     transport?: unknown,
   ): Promise<ProtobufNotification<CGameRecording_GetPlatformCapabilities_Response>>;
 
+  GetState(en: unknown, er: unknown): unknown;
+
   GetTags(
     request?: CGameRecording_GetTags_Request,
     transport?: unknown,
@@ -208,6 +213,8 @@ export interface GameRecordingRequestHandler {
     notification: ProtobufNotification<CGameRecording_RecordingSessionChanged_Notification>,
     transport?: unknown,
   ): boolean;
+
+  NotifyStateChanged(en: unknown, er: unknown): unknown;
 
   NotifyTimelineChanged(
     notification: ProtobufNotification<CGameRecording_TimelineChanged_Notification>,
@@ -278,6 +285,8 @@ export interface GameRecordingRequestHandler {
     callback: (notification: ProtobufNotification<CGameRecording_RecordingSessionChanged_Notification>) => void,
     handlerRegistry?: unknown,
   ): Unregisterable;
+
+  RegisterForNotifyStateChanged(en: unknown, er: unknown): unknown;
 
   RegisterForNotifyTimelineChanged(
     callback: (notification: ProtobufNotification<CGameRecording_TimelineChanged_Notification>) => void,
@@ -356,6 +365,8 @@ export interface GameRecordingRequestHandler {
     ...args: Parameters<GameRecordingRequestHandler['GetPlatformCapabilities']>
   ): ReturnType<GameRecordingRequestHandler['GetPlatformCapabilities']>;
 
+  SendMsgGetState(en: unknown, er: unknown): unknown;
+
   SendMsgGetTags(...args: Parameters<GameRecordingRequestHandler['GetTags']>): ReturnType<GameRecordingRequestHandler['GetTags']>;
 
   SendMsgGetThumbnails(
@@ -413,6 +424,8 @@ export interface GameRecordingRequestHandler {
   SendMsgNotifyRecordingSessionChanged(
     ...args: Parameters<GameRecordingRequestHandler['NotifyRecordingSessionChanged']>
   ): ReturnType<GameRecordingRequestHandler['NotifyRecordingSessionChanged']>;
+
+  SendMsgNotifyStateChanged(en: unknown, er: unknown): unknown;
 
   SendMsgNotifyTimelineChanged(
     ...args: Parameters<GameRecordingRequestHandler['NotifyTimelineChanged']>
@@ -579,6 +592,8 @@ export interface GameRecordingRequestHandler {
     CGameRecording_GetPlatformCapabilities_Response
   >;
 
+  GetStateHandler: RequestHandler<CGameRecording_GetState_Request, CGameRecording_GetState_Response>;
+
   GetTagsHandler: RequestHandler<CGameRecording_GetTags_Request, CGameRecording_GetTags_Response>;
 
   GetThumbnailsHandler: RequestHandler<CGameRecording_GetThumbnails_Request, CGameRecording_GetThumbnails_Response>;
@@ -620,6 +635,8 @@ export interface GameRecordingRequestHandler {
   NotifyPostGameHighlightsChangedHandler: RequestHandler<CGameRecording_PostGameHighlightsChanged_Notification>;
 
   NotifyRecordingSessionChangedHandler: RequestHandler<CGameRecording_RecordingSessionChanged_Notification>;
+
+  NotifyStateChangedHandler: RequestHandler<CGameRecording_StateChanged_Notification>;
 
   NotifyTimelineChangedHandler: RequestHandler<CGameRecording_TimelineChanged_Notification>;
 

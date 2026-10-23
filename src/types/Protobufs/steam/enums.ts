@@ -161,6 +161,7 @@ export enum SpeakerConfiguration {
   Stereo = 1,
   _51 = 2,
   _71 = 3,
+  _51_Ac3 = 4,
 }
 
 export enum SystemAudioDirection {
@@ -200,6 +201,11 @@ export enum SystemServiceState {
   Unavailable = 0,
   Disabled = 1,
   Enabled = 2,
+}
+
+export enum BluetoothAudioPreference {
+  Quality = 0,
+  Latency = 1,
 }
 
 export enum GraphicsPerfOverlayLevel {
@@ -584,6 +590,7 @@ export enum CompromiseDetectionType {
   MaliciousRefund = 5,
   Move2FA = 6,
   DeviceType = 7,
+  LeakedCredentialList = 8,
 }
 
 export enum AsyncGameSessionUserState {
@@ -642,10 +649,15 @@ export enum ProtoAppType {
   EAppTypeDepotOnly = -2147483648,
 }
 
-export enum ChildProcessQueryCommand {
-  Invalid = 0,
-  GpuTopology = 1,
-  Max = 2,
+export enum AppTestType {
+  BuildReview = 0,
+  StorePageReview = 1,
+  SteamChina_BuildReview = 2,
+  SteamChina_StorePageReview = 3,
+  SteamChinaPlatformOperator_StorePageReview = 4,
+  SteamChinaPlatformOperator_BuildReview = 5,
+  SteamDeckCompatibilityReview = 6,
+  SteamFrameCompatibilityReview = 7,
 }
 
 export enum ChildProcessQueryExitCode {
@@ -671,6 +683,16 @@ export enum WindowsUpdateRebootBehavior {
   MightNeedReboot = 2,
 }
 
+export enum WindowsUpdateOperationResult {
+  Unknown = -1,
+  NotStarted = 0,
+  InProgress = 1,
+  Succeeded = 2,
+  SucceededWithErrors = 3,
+  Failed = 4,
+  Aborted = 5,
+}
+
 export enum ExternalSaleEventType {
   Unknown = 0,
   Publisher = 1,
@@ -690,7 +712,7 @@ export enum EnhancedMarketAppearanceStatus {
 export enum ContentReportSubjectType {
   Invalid = 0,
   ForumPost = 1,
-  Unused = 2,
+  CommentThread = 2,
   UGCFile = 3,
   FriendChatMsg = 4,
   ChatRoomMsg = 5,
@@ -745,7 +767,10 @@ export enum ContentModerationSanction {
   Warned = 8,
   KickedFromGroup = 9,
   HarassmentBanned = 10,
-  MAX = 11,
+  HarassmentStrike = 11,
+  Escalate = 12,
+  MarkedIncompatible = 13,
+  MAX = 14,
 }
 
 export enum ContentReportSubjectAction {
@@ -757,7 +782,7 @@ export enum ContentReportSubjectAction {
   Updated = 5,
   Escalated = 6,
   Disputed = 7,
-  SustainedOnDispute = 8,
+  Sustained = 8,
   Locked = 9,
   Unlocked = 10,
   Deleted = 11,
@@ -840,7 +865,13 @@ export enum ContentReportReason {
   NegativeEffectonDiscourseOrElections = 61,
   QuotesModeratedContent = 62,
   CredibleThreatOfViolence = 63,
-  MAX = 64,
+  AutoCreatedOnModeration = 64,
+  Piracy = 65,
+  ToSViolation = 66,
+  Miscategorized = 67,
+  BypassingProfanityFilter = 68,
+  BulkDeletion = 69,
+  MAX = 70,
 }
 
 export enum ResolutionAutomation {
@@ -882,4 +913,13 @@ export enum CommentDeleteReason {
   Support = 4,
   Spam = 5,
   AccountDeletion = 6,
+}
+
+export enum DLCHighlightReason {
+  None = 0,
+  New = 1,
+  ComingSoon = 2,
+  PlayerFavorite = 3,
+  Recommended = 4,
+  NewPlayers = 5,
 }

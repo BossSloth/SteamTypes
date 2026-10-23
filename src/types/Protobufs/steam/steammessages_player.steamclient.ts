@@ -122,6 +122,8 @@ export interface CPlayer_GetOwnedGames_Request {
 
   include_extended_appinfo?: boolean;
 
+  include_family_licenses?: boolean;
+
   include_free_sub?: boolean;
 
   include_played_free_games?: boolean;
@@ -145,6 +147,8 @@ export interface CPlayer_GetOwnedGames_Response_Game {
   capsule_filename?: string;
 
   content_descriptorids?: number[];
+
+  family_shared?: boolean;
 
   has_community_visible_stats?: boolean;
 
@@ -193,6 +197,8 @@ export interface CPlayer_GetPlayNext_Response {
 
 export interface CPlayer_GetFriendsGameplayInfo_Request {
   appid?: number;
+
+  include_family_licenses?: boolean;
 }
 
 export interface CPlayer_GetFriendsGameplayInfo_Response {
@@ -512,7 +518,17 @@ export interface CPlayer_GetAchievementsProgress_Response_AchievementProgress {
 
   appid?: number;
 
+  base_game_total?: number;
+
   cache_time?: number;
+
+  groups_completed_base?: number;
+
+  groups_completed_dlc?: number;
+
+  groups_total_base?: number;
+
+  groups_total_dlc?: number;
 
   percentage?: number;
 
@@ -560,15 +576,23 @@ export interface CPlayer_GetGameAchievements_Response_Achievement {
 
   localized_name?: string;
 
-  max_progress?: number;
+  max_progress_float?: number;
 
-  min_progress?: number;
+  max_progress_int?: number;
+
+  min_progress_float?: number;
+
+  min_progress_int?: number;
 
   player_percent_unlocked?: string;
+
+  progress_type?: AchievementProgressType;
 }
 
 export interface CPlayer_GetGameAchievements_Response_Group {
   archived?: boolean;
+
+  completion_achievements?: number;
 
   developeronly?: boolean;
 
@@ -576,13 +600,83 @@ export interface CPlayer_GetGameAchievements_Response_Group {
 
   groupid?: number;
 
+  ispublic?: boolean;
+
   localized_name?: string;
 
   order?: number;
+
+  total_achievements?: number;
+}
+
+export interface CPlayer_GetUserAchievements_Request {
+  appid?: number;
+
+  steamid?: number;
+}
+
+export interface CPlayer_GetUserAchievements_Response {
+  achievements?: CPlayer_GetUserAchievements_Response_Achievement[];
+
+  groups?: CPlayer_GetUserAchievements_Response_Group[];
+
+  schema_hash?: number;
+
+  schema_version?: number;
+}
+
+export interface CPlayer_GetUserAchievements_Response_Achievement {
+  internal_key?: number;
+
+  progress_float?: number;
+
+  progress_int?: number;
+
+  unlock_time?: number;
+
+  unlocked?: boolean;
+}
+
+export interface CPlayer_GetUserAchievements_Response_Group {
+  completed_achievements?: number;
+
+  groupid?: number;
+
+  is_achievable?: boolean;
+
+  is_completed?: boolean;
+
+  time_completed?: number;
+}
+
+export interface CPlayer_GetGlobalAchievementPercentages_Request {
+  appid?: number;
+}
+
+export interface CPlayer_GetGlobalAchievementPercentages_Response {
+  achievements?: CPlayer_GetGlobalAchievementPercentages_Response_Achievement[];
+
+  groups?: CPlayer_GetGlobalAchievementPercentages_Response_Group[];
+}
+
+export interface CPlayer_GetGlobalAchievementPercentages_Response_Achievement {
+  internal_key?: number;
+
+  player_percent_unlocked?: number;
+}
+
+export interface CPlayer_GetGlobalAchievementPercentages_Response_Group {
+  groupid?: number;
+
+  player_percent_completed?: number;
 }
 
 export interface CPlayer_GetUserStats_Request {
+  app_running?: boolean;
+
   appid?: number;
+
+  crc_schema?: number;
 
   crc_stats?: number;
 
@@ -592,6 +686,8 @@ export interface CPlayer_GetUserStats_Request {
 }
 
 export interface CPlayer_GetUserStats_Response {
+  crc_schema?: number;
+
   crc_stats?: number;
 
   schema?: Uint8Array;
@@ -1121,6 +1217,12 @@ export interface CPlayer_PerFriendPreferencesChanged_Notification {
 
 export interface CPlayer_PrivacySettingsChanged_Notification {
   privacy_settings?: CPrivacySettings;
+}
+
+export enum AchievementProgressType {
+  Invalid = 0,
+  Int = 1,
+  Float = 2,
 }
 
 export enum ProfileCustomizationStyle {

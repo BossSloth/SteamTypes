@@ -2,7 +2,7 @@ import { User } from '../SteamClient';
 import { ConnectionManager } from './managers/ConnectionManager';
 
 export interface App {
-  BFinishedInitStageOne(): boolean;
+  BFinishedInitBeforeLogin(): unknown;
 
   BHardwareSurveyPending(): CurrentUser['bHWSurveyPending'];
 
@@ -37,7 +37,7 @@ export interface App {
 
   Init(e: unknown): Promise<void>;
 
-  InitStage2(): Promise<void>;
+  InitAfterLogin(): Promise<void>;
 
   /**
    * Is registered to {@link ConnectionManager.AddOnDisconnectCallback}
@@ -78,13 +78,13 @@ export interface App {
 
   LoginState: ELoginState;
 
-  m_bFinishedStage1: boolean;
+  m_bFinishedInitBeforeLogin: boolean;
 
   m_bHaveShownSupportAlertModal: boolean;
 
   m_bServicesInitialized: boolean;
 
-  m_bStartedStage2: boolean;
+  m_bStartedInitAfterLogin: boolean;
 
   m_bWasEverLoggedIn: boolean;
 
@@ -187,4 +187,5 @@ export enum ENamespace {
   Invalid,
   Library,
   Unknown3 = 3,
+  'TODO: change me 4' = 4,
 }

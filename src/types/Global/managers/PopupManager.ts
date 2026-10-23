@@ -2,6 +2,7 @@ import { ObservableMap } from 'mobx';
 import { Callbacks } from 'shared/interfaces';
 import { SteamID } from 'shared/steamid';
 import { Window as SteamWindow } from 'SteamClient/Window';
+import { BrowserViewPopup } from 'types/SteamClient/BrowserView/BrowserViewPopup';
 
 export interface PopupManager {
   /**
@@ -271,6 +272,8 @@ export interface Popup<
    */
   OnUnload(): unknown;
 
+  RegisterChildBrowserView(v: unknown): { Unregister: () => unknown };
+
   /**
    * Releases the popup.
    */
@@ -299,6 +302,8 @@ export interface Popup<
   UpdateParamsBeforeShow(params: AllPopupParameters): AllPopupParameters;
 
   browser_info: Popup['m_rgParams']['target_browser'];
+
+  childBrowserViews: BrowserViewPopup[];
 
   focused: boolean;
 
@@ -329,6 +334,8 @@ export interface Popup<
   m_popup: Window;
 
   m_renderWhenReady: RenderWhenReady;
+
+  m_rgChildBrowserViews: BrowserViewPopup[];
 
   m_rgParams: paramsType;
 
@@ -407,17 +414,17 @@ export interface RenderWhenReady {
 
   m_fnRender?: never;
 
-  m_rgLoadingLinks: never;
+  m_rgLoadingLinks: unknown[];
 }
 
 export type AllPopupParameters = PopupParameters | MainWindowPopupParameters;
 
 export interface MainWindowPopupParameters extends BasePopupParameters {
-  bNoFocusOnShow: boolean;
-
   body_role: undefined;
 
   browserType: EBrowserType;
+
+  eWindowBringToFront: EWindowBringToFront;
 
   minHeight: number;
 
@@ -538,6 +545,7 @@ export enum EWindowBringToFront {
   Invalid,
   AndForceOS,
   WithoutForcingOS,
+  'TODO: change me 3' = 3,
 }
 
 export enum EUIMode {

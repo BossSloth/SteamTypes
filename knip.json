@@ -2,11 +2,17 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "project": ["src/**", "tests/**", "scripts/**"],
   "entry": ["src/index.ts", "src/Runtime/*.ts"],
-  "ignore": ["tests/**/__snapshots__/**", "tests/**/__fixtures__/**", "scripts/defaultChromeWindow.js", "src/types/Protobufs/**"],
+  "ignore": [
+    "tests/**/__snapshots__/**",
+    "tests/**/__fixtures__/**",
+    "scripts/defaultChromeWindow.js",
+    "src/types/Protobufs/**",
+    "dist/**"
+  ],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "enum": true,
     "type": true
   },
-  "ignoreDependencies": ["@semantic-release/github", "@semantic-release/npm", "eslint-import-resolver-typescript"]
+  "ignoreDependencies": ["@semantic-release/github", "@semantic-release/npm"]
 }

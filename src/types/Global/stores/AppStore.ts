@@ -107,6 +107,8 @@ export interface SteamAppOverview {
    */
   BAreCategoriesEqual(proto: ProtoAppOverview): boolean;
 
+  BAreContentDescriptorsEqual(V: unknown): unknown;
+
   /**
    * Compares a set with an array and returns true if they are equal.
    * @param set The set to compare with.
@@ -119,6 +121,8 @@ export interface SteamAppOverview {
    * @param proto The proto to compare with.
    */
   BAreStoreTagsEqual(proto: ProtoAppOverview): boolean;
+
+  BHasContentDescriptor(V: unknown): unknown;
 
   BHasCustomImages(): boolean;
 
@@ -200,6 +204,10 @@ export interface SteamAppOverview {
 
   BIsSteamDeckVerified(): boolean;
 
+  BIsSteamFrameCompatible(): boolean;
+
+  BIsSteamMachineCompatible(): boolean;
+
   BIsSteamOSCompatible(): boolean;
 
   BIsSteamVR(): boolean;
@@ -240,6 +248,8 @@ export interface SteamAppOverview {
   LOG_CHANGE(...args: unknown[]): void;
 
   RestorePreservedState(state: { icon_data: string; icon_data_format: string }): void;
+
+  SetContentDescriptors(V: unknown): void;
 
   /**
    * Sets the game ID from the proto.
@@ -297,6 +307,8 @@ export interface SteamAppOverview {
 
   canonicalAppType: number;
 
+  content_descriptors: number[];
+
   custom_sort_as_display?: string;
 
   display_name: string;
@@ -334,6 +346,8 @@ export interface SteamAppOverview {
   local_per_client_data: SteamAppOverviewClientData;
 
   m_gameid?: string;
+
+  m_setContentDescriptors: Set<number>;
 
   m_setStoreCategories: Set<number>;
 
@@ -419,7 +433,11 @@ export interface SteamAppOverview {
 
   steam_deck_compat_category: SteamDeckCompatibilityCategory;
 
+  steam_frame_compat_category: number;
+
   steam_hw_compat_category_packed: number;
+
+  steam_machine_compat_category: number;
 
   steam_os_compat_category: SteamDeckCompatibilityCategory;
 

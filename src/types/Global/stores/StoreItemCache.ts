@@ -460,7 +460,7 @@ export interface StoreApp {
 
   m_StoreCategories: StoreItem_Categories;
 
-  m_strFullDescriptionBBCode?: never;
+  m_strFullDescriptionBBCode?: string;
 
   m_strInternalName?: never;
 
@@ -582,6 +582,8 @@ export interface HighlightTrailers {
 
   ExtractTrailerFormats(e: unknown, t: unknown): object | unknown;
 
+  GetCaptionManifest(): unknown;
+
   GetMicroTrailer(): unknown;
 
   GetName(): unknown;
@@ -607,6 +609,8 @@ export interface HighlightTrailers {
   m_rgDashTrailers: string[];
 
   m_rgHlsTrailer?: string;
+
+  m_strCaptionManifest?: never;
 
   m_strScreenshotFull?: string;
 

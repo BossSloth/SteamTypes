@@ -360,12 +360,6 @@ export interface CMsgSystemPerfLimits {
 
   fsr_sharpness_min?: number;
 
-  gpu_performance_levels_available?: GPUPerformanceLevel[];
-
-  gpu_performance_manual_max_mhz?: number;
-
-  gpu_performance_manual_min_mhz?: number;
-
   is_dynamic_refresh_rate_in_steam_supported?: boolean;
 
   is_manual_display_refresh_rate_available?: boolean;
@@ -423,10 +417,6 @@ export interface CMsgSystemPerfSettingsPerApp {
   fps_limit_external?: number;
 
   fsr_sharpness?: number;
-
-  gpu_performance_level?: GPUPerformanceLevel;
-
-  gpu_performance_manual_mhz?: number;
 
   is_dynamic_refresh_rate_enabled?: boolean;
 
@@ -706,15 +696,27 @@ export interface CMsgSystemDisplay {
 
   refresh_rate_min?: number;
 
+  rgb_range?: DisplayManagerRGBRange;
+
   supported_refresh_rates?: number[];
 
   width_mm?: number;
+}
+
+export interface CMsgSystemDisplayManagerGameResolution {
+  height?: number;
+
+  width?: number;
 }
 
 export interface CMsgSystemDisplayManagerState {
   compatibility_mode?: SystemDisplayCompatibilityMode;
 
   displays?: CMsgSystemDisplay[];
+
+  game_resolution_override_default?: CMsgSystemDisplayManagerGameResolution;
+
+  game_resolution_override_native?: CMsgSystemDisplayManagerGameResolution;
 
   is_mode_switching_supported?: boolean;
 }
@@ -723,6 +725,8 @@ export interface CMsgSystemDisplayManagerSetMode {
   display_id?: number;
 
   mode_id?: number;
+
+  rgb_range?: DisplayManagerRGBRange;
 }
 
 export interface CMsgSystemManagerSettings {
@@ -800,9 +804,11 @@ export interface CMsgSelectOSBranchParams {
 export interface CMsgSystemUpdateProgress {
   rtime_estimated_completion?: number;
 
-  stage_progress?: number;
+  stage_bytes_downloaded?: number;
 
   stage_size_bytes?: number;
+
+  total_progress?: number;
 }
 
 export interface CMsgSystemUpdateCheckResult {
@@ -823,6 +829,8 @@ export interface CMsgSystemUpdateCheckResult {
 
 export interface CMsgSystemUpdateApplyParams {
   apply_types?: UpdaterType[];
+
+  recheck_types?: UpdaterType[];
 }
 
 export interface CMsgSystemUpdateApplyResult {
@@ -957,6 +965,12 @@ export enum CloudPendingRemoteOperation {
   UploadInProgress = 2,
   UploadPending = 3,
   AppSessionSuspended = 4,
+}
+
+export enum DisplayManagerRGBRange {
+  Automatic = 0,
+  Full = 1,
+  Limited = 2,
 }
 
 export enum SteamDeckKeyboardLayout {

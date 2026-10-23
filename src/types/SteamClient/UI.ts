@@ -23,6 +23,9 @@ export interface UI {
 
   NotifyAppInitialized(): void;
 
+  /** @native */
+  NotifyMainWindowShown(): unknown;
+
   RegisterDesiredSteamUIWindowsChanged(callback: () => void): Unregisterable;
 
   /**

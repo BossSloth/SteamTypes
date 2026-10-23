@@ -763,7 +763,21 @@ export interface CChatRoom_SetSessionActiveChatRoomGroups_Request {
   virtualize_members_threshold?: number;
 }
 
+export interface CChatRoomMemberNotice {
+  accountid?: number;
+
+  notice_type?: ChatRoomNotice;
+}
+
+export interface CChatRoomGroupMemberNotices {
+  chat_group_id?: number;
+
+  member_notices?: CChatRoomMemberNotice[];
+}
+
 export interface CChatRoom_SetSessionActiveChatRoomGroups_Response {
+  chat_group_notices?: CChatRoomGroupMemberNotices[];
+
   chat_states?: CChatRoomGroupState[];
 
   virtualize_members_chat_group_ids?: number[];
@@ -814,6 +828,14 @@ export interface CChatRoom_DeleteChatMessages_Request_Message {
 }
 
 export interface CChatRoom_DeleteChatMessages_Response {}
+
+export interface CChatRoom_DismissChatRoomNotice_Notification {
+  chat_group_id?: number;
+
+  notice_type?: ChatRoomNotice;
+
+  steamid_sender?: string;
+}
 
 export interface CChatRoom_UpdateMemberListView_Notification {
   chat_group_id?: number;
@@ -923,6 +945,8 @@ export interface CChatRoom_ResolveReport_Request {
   kick_expiration_time?: number;
 
   reason?: ContentReportReason;
+
+  reported_content_id?: number;
 
   resolution?: ContentReportResolution;
 
@@ -1105,6 +1129,16 @@ export interface CChatRoom_MessageReaction_Notification {
   reactor?: string;
 
   server_timestamp?: number;
+}
+
+export interface CChatRoom_ChatRoomNotice_Notification {
+  active?: boolean;
+
+  chat_group_id?: number;
+
+  notice_type?: ChatRoomNotice;
+
+  steamid_sender?: string;
 }
 
 export interface CChatUsability_ClientUsabilityMetrics_Notification {
@@ -1319,6 +1353,11 @@ export enum ChatRoomMessageReactionType {
   Invalid = 0,
   Emoticon = 1,
   Sticker = 2,
+}
+
+export enum ChatRoomNotice {
+  Invalid = 0,
+  Suspicious = 1,
 }
 
 export enum ChatRoomMemberStateChange {

@@ -212,8 +212,6 @@ export interface CMsgSteamDatagramClientPingSampleRequest {
 export interface CMsgSteamDatagramClientPingSampleReply {
   connection_id?: number;
 
-  legacy_data_centers?: CMsgSteamDatagramClientPingSampleReply_LegacyDataCenter[];
-
   pops?: CMsgSteamDatagramClientPingSampleReply_POP[];
 
   relay_override_active?: boolean;
@@ -222,53 +220,23 @@ export interface CMsgSteamDatagramClientPingSampleReply {
 }
 
 export interface CMsgSteamDatagramClientPingSampleReply_POP {
-  alt_addresses?: CMsgSteamDatagramClientPingSampleReply_POP_AltAddress[];
-
-  best_dc_ping_ms?: number;
-
-  best_dc_score?: number;
-
-  best_dc_via_relay_pop_id?: number;
-
   cluster_penalty?: number;
 
-  default_dc_ping_ms?: number;
+  dc_ping_ms?: number;
 
-  default_dc_score?: number;
+  dc_score?: number;
 
-  default_dc_via_relay_pop_id?: number;
+  dc_via_relay_pop_id?: number;
 
-  default_e2e_ping_ms?: number;
+  e2e_p2p_peer_relay_pop_id?: number;
 
-  default_e2e_score?: number;
+  e2e_ping_ms?: number;
 
-  default_front_ping_ms?: number;
+  e2e_score?: number;
 
-  p2p_via_peer_relay_pop_id?: number;
-
-  pop_id?: number;
-
-  test_dc_ping_ms?: number;
-
-  test_dc_score?: number;
-
-  test_dc_via_relay_pop_id?: number;
-}
-
-export interface CMsgSteamDatagramClientPingSampleReply_POP_AltAddress {
   front_ping_ms?: number;
 
-  id?: string;
-
-  penalty?: number;
-}
-
-export interface CMsgSteamDatagramClientPingSampleReply_LegacyDataCenter {
-  best_dc_ping_ms?: number;
-
-  best_dc_via_relay_pop_id?: number;
-
-  data_center_id?: number;
+  pop_id?: number;
 }
 
 export interface CMsgSteamDatagramClientSwitchedPrimary {
@@ -281,6 +249,8 @@ export interface CMsgSteamDatagramClientSwitchedPrimary {
   from_dropped_reason?: string;
 
   from_ip?: number;
+
+  from_migrate_request?: CMsgSteamDatagramClientSwitchedPrimary_MigrateRequest;
 
   from_port?: number;
 
@@ -305,6 +275,13 @@ export interface CMsgSteamDatagramClientSwitchedPrimary_RouterQuality {
   score?: number;
 
   seconds_until_down?: number;
+}
+
+export enum CMsgSteamDatagramClientSwitchedPrimary_MigrateRequest {
+  Unknown = 0,
+  None = 1,
+  ObeyedTarget = 2,
+  ChoseDifferent = 3,
 }
 
 export interface CMsgSteamDatagramConnectRequest {

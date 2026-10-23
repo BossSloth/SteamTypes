@@ -11,6 +11,9 @@ export interface Internal {
    */
   ExecutePromise(): unknown;
 
+  /** @native */
+  GetBrowserProcessDetails(): unknown;
+
   /**
    * @native
    */

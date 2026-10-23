@@ -31,12 +31,11 @@ declare global {
   let appSpotlightStore: unknown;
   let appStore: AppStore;
   let badgeStore: unknown;
+  let BrowserAndBackstackInstances: unknown;
   let ClearBackgroundInterval: unknown;
   let ClearBackgroundTimeout: unknown;
-  let ClientConnectionAPI: unknown;
   let cloudStorage: unknown;
   let cloudStorageInternalState: unknown;
-  let CLSTAMP: string;
   let cm: ConnectionManager;
   let collectionStore: unknown;
   let communityStore: unknown;
@@ -60,7 +59,6 @@ declare global {
   let FocusNavController: unknown;
   let friendStore: FriendStore;
   let g_ClanStore: unknown;
-  let g_CreatorHomeListInfoStore: unknown;
   let g_CreatorHomeStore: unknown;
   let g_EventCalendarDevFeatures: unknown;
   let g_EventCalendarTrackingStore: unknown;
@@ -70,8 +68,10 @@ declare global {
   let g_PartnerEventStore: unknown;
   let g_PartnerEventSummaryStore: unknown;
   let g_PopupManager: PopupManager;
+  let g_WindowFocusCoordinator: unknown;
   let gameReleaseStore: unknown;
   let Gio: unknown;
+  let hardwarePromoStore: unknown;
   let IBus: unknown;
   let installFolderStore: unknown;
   let jsonit: unknown;
@@ -106,10 +106,12 @@ declare global {
   let SetVoiceForceReconnectingStatus: unknown;
   let SetVoiceLogDetails: unknown;
   let showcaseStore: unknown;
+  let ShowVROverlay: unknown;
   let steamAjaxRequest: unknown;
   let SteamClient: SteamClient;
   let SteamUIStore: SteamUIStore;
   let StoreItemCache: StoreItemCache;
+  let streamingStore: unknown;
   let subscriberAgreementStore: unknown;
   let SuspendResumeStore: unknown;
   let SystemDisplayManagerStore: unknown;
@@ -124,6 +126,7 @@ declare global {
   let urlStore: UrlStore;
   let userProfileStore: unknown;
   let vrAudioSettingsStore: unknown;
+  let vrGamepadInput: unknown;
   let VRPathProperties: unknown;
   let workshopStore: unknown;
 
@@ -138,12 +141,11 @@ declare global {
     appSpotlightStore: unknown;
     appStore: AppStore;
     badgeStore: unknown;
+    BrowserAndBackstackInstances: unknown;
     ClearBackgroundInterval: unknown;
     ClearBackgroundTimeout: unknown;
-    ClientConnectionAPI: unknown;
     cloudStorage: unknown;
     cloudStorageInternalState: unknown;
-    CLSTAMP: string;
     cm: ConnectionManager;
     collectionStore: unknown;
     communityStore: unknown;
@@ -167,7 +169,6 @@ declare global {
     FocusNavController: unknown;
     friendStore: FriendStore;
     g_ClanStore: unknown;
-    g_CreatorHomeListInfoStore: unknown;
     g_CreatorHomeStore: unknown;
     g_EventCalendarDevFeatures: unknown;
     g_EventCalendarTrackingStore: unknown;
@@ -177,8 +178,10 @@ declare global {
     g_PartnerEventStore: unknown;
     g_PartnerEventSummaryStore: unknown;
     g_PopupManager: PopupManager;
+    g_WindowFocusCoordinator: unknown;
     gameReleaseStore: unknown;
     Gio: unknown;
+    hardwarePromoStore: unknown;
     IBus: unknown;
     installFolderStore: unknown;
     jsonit: unknown;
@@ -213,10 +216,12 @@ declare global {
     SetVoiceForceReconnectingStatus: unknown;
     SetVoiceLogDetails: unknown;
     showcaseStore: unknown;
+    ShowVROverlay: unknown;
     steamAjaxRequest: unknown;
     SteamClient: SteamClient;
     SteamUIStore: SteamUIStore;
     StoreItemCache: StoreItemCache;
+    streamingStore: unknown;
     subscriberAgreementStore: unknown;
     SuspendResumeStore: unknown;
     SystemDisplayManagerStore: unknown;
@@ -231,6 +236,7 @@ declare global {
     urlStore: UrlStore;
     userProfileStore: unknown;
     vrAudioSettingsStore: unknown;
+    vrGamepadInput: unknown;
     VRPathProperties: unknown;
     workshopStore: unknown;
   }

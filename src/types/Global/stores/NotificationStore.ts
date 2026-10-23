@@ -21,6 +21,8 @@ export interface NotificationStore {
 
   BAnyToastDisplayAlone(e: unknown): boolean;
 
+  BCanNotifyAboutLoggedInUser(oe: unknown): unknown;
+
   BContextRenderingToasts(e: unknown): unknown;
 
   BIsToastRateLimited(e: unknown, t: unknown, r: unknown): boolean;
@@ -63,7 +65,11 @@ export interface NotificationStore {
 
   GetNotificationTargets(): NotificationTargets;
 
-  IncomingVoiceChat(e: unknown, t: unknown): undefined;
+  HandlePendingErrorCondition(): void;
+
+  HideLoggedInUserToast(): void;
+
+  IncomingVoiceChat(e: unknown, t: unknown): void;
 
   Init(): void;
 
@@ -71,19 +77,23 @@ export interface NotificationStore {
 
   MarkNotificationRead(e: unknown): void;
 
+  MaybeNotifyAboutLoggedInUser(): void;
+
   NotifyClaimSteamDeckRewards(): void;
 
   NotifyLowDiskSpace(e: unknown): void;
 
+  NotifyRedeemFramePromo(): void;
+
   NotifyTimerExpired(e: unknown): void;
 
-  OnBatteryLevelChange(e: unknown, t: unknown, r: unknown): undefined;
+  OnBatteryLevelChange(e: unknown, t: unknown, r: unknown): void;
 
   OnBatteryTemperatureChange(e: unknown): void;
 
   OnNewNotificationReceived(e: unknown): void;
 
-  OnNotification(e: unknown, t: unknown, r: unknown): undefined;
+  OnNotification(e: unknown, t: unknown, r: unknown, ue: unknown): void;
 
   OnNotificationUpdateReceived(e: unknown, t: unknown): void;
 
@@ -91,13 +101,11 @@ export interface NotificationStore {
 
   OnSystemResumedFromSuspend(): number;
 
-  PendingLoginRefresh(e: unknown): void;
-
   PlayNotificationSound(e: unknown): void;
 
   PopNextToastNotification(e: unknown): unknown;
 
-  ProcessNotification(e: unknown, t: unknown, r: unknown): undefined;
+  ProcessNotification(e: unknown, t: unknown, r: unknown): void;
 
   RemoveExpiredTray(): void;
 
@@ -120,19 +128,19 @@ export interface NotificationStore {
   /**
    * @param t default: !1
    */
-  TestAchievement(e: unknown, t?: boolean): Promise<undefined>;
+  TestAchievement(e: unknown, t?: boolean): Promise<void>;
 
   TestAsyncGame(e: unknown): void;
 
   TestClipDownloaded(): Promise<void>;
 
-  TestCloudSyncConflict(e: unknown): undefined;
+  TestCloudSyncConflict(e: unknown): void;
 
-  TestCloudSyncFailure(e: unknown): undefined;
+  TestCloudSyncFailure(e: unknown): void;
 
   TestComment(): Promise<void>;
 
-  TestDownloadComplete(e: unknown): undefined;
+  TestDownloadComplete(e: unknown): void;
 
   TestFamilyInvite(e: unknown): void;
 
@@ -212,7 +220,7 @@ export interface NotificationStore {
 
   TestStreamingClientConnection(): void;
 
-  TestSystemUpdate(e: unknown): undefined;
+  TestSystemUpdate(e: unknown): void;
 
   TestTradeOffer(): void;
 
@@ -220,13 +228,17 @@ export interface NotificationStore {
 
   TestUnsupportedDock(): void;
 
-  TestWishlist(e: unknown): undefined;
+  TestWishlist(e: unknown): void;
 
   Viewed(): void;
 
   CurrentToastSubscribableValue: ObservableValue<null>;
 
+  LoggedInUserToastShowing: boolean;
+
   m_bCheckBatteryAfterResume: boolean;
+
+  m_bLoggedInUserToastShowing: boolean;
 
   m_bShowClientItemAnnouncementToasts: boolean;
 
@@ -234,11 +246,15 @@ export interface NotificationStore {
 
   m_bShowedLowBatteryTempNotification: boolean;
 
-  m_bShowedRefreshLogin: boolean;
-
   m_bTestNotifications: boolean;
 
   m_cbkNotificationTray: Callbacks;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  m_eErrorConditionNotificationShowing: EErrorConditionNotificationShowing;
 
   m_hPendingToastTimer: undefined;
 
@@ -267,6 +283,8 @@ export interface NotificationStore {
   m_setContextsRenderingToasts: ObservableSet<unknown>;
 
   m_valueCurrentToast: ObservableValue<null>;
+
+  ToastCount: number;
 }
 
 export interface LastSystemUpdateNotification {
@@ -304,4 +322,10 @@ export enum ESource {
   Unknwon = 0,
   ESource1 = 1,
   ESource2 = 2,
+}
+
+/** @generated */
+export enum EErrorConditionNotificationShowing {
+  Unknown = -1,
+  EErrorConditionNotificationShowing0 = 0,
 }

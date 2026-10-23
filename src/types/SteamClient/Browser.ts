@@ -42,6 +42,9 @@ export interface Browser {
 
   RegisterForOpenNewTab(): Unregisterable;
 
+  /** @native */
+  RemoveAllBackstackEntries(): unknown;
+
   ReplaceMisspelling(): unknown;
 
   /**

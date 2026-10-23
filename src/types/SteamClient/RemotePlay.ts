@@ -22,6 +22,9 @@ export interface RemotePlay {
 
   CreateInviteAndSession(steam64Id: string, param1: unknown): unknown;
 
+  /** @native */
+  EnableWifiRadioSoftwareState(): unknown;
+
   GetClientID(): Promise<string>;
 
   // todo: -1 not streaming??
@@ -118,6 +121,12 @@ export interface RemotePlay {
     callback: (steam64Id: string, guestId: number, networkUtilization: number, networkDuration: number) => void,
   ): Unregisterable;
 
+  /** @native */
+  RegisterForPairWifiAPProgress(): unknown;
+
+  /** @native */
+  RegisterForPairWifiAPResult(): unknown;
+
   RegisterForPlaceholderStateChanged(callback: (isShowingPlaceholder: boolean) => void): Unregisterable;
 
   /**
@@ -143,6 +152,12 @@ export interface RemotePlay {
   RegisterForRemoteDeviceAuthorizationRequested(callback: (device: string) => void): Unregisterable;
 
   RegisterForRemoteDevicePairingPINChanged(callback: (device: string, pin: string) => void): Unregisterable;
+
+  /** @native */
+  RegisterForRemoteDeviceSpectatePermissionCanceled(): unknown;
+
+  /** @native */
+  RegisterForRemoteDeviceSpectatePermissionRequested(): unknown;
 
   RegisterForRestrictedSessionChanges(callback: (restrictedSession: boolean) => void): Unregisterable;
 
@@ -183,6 +198,9 @@ export interface RemotePlay {
   SetRemoteDeviceAuthorized(): unknown;
 
   SetRemoteDevicePIN(pin: number): void;
+
+  /** @native */
+  SetRemoteDeviceSpectateAllowed(): unknown;
 
   SetRemotePlayEnabled(enabled: boolean): void;
 

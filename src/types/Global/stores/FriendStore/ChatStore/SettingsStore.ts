@@ -172,7 +172,7 @@ export interface IFriendSettingsStore {
    */
   m_fnFriendSettingsChanged(): unknown;
 
-  OnClientSettingsChange(e: unknown): undefined;
+  OnClientSettingsChange(e: unknown): void;
 
   m_bClientInitComplete: boolean;
 

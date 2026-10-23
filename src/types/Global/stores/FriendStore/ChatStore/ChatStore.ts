@@ -91,7 +91,7 @@ export interface ChatStore {
 
   RestoreStatePostDisconnect(e: unknown): void;
 
-  SendActiveChatRoomGroupsToServer(): Promise<undefined>;
+  SendActiveChatRoomGroupsToServer(): Promise<void>;
 
   SetReadyToRender(): void;
 
@@ -297,6 +297,8 @@ export interface ChatGroup {
 
   BIsMemberListVirtualized(): unknown;
 
+  BIsSenderSuspicious(U: unknown): unknown;
+
   BIsTempVoiceChannel(e: unknown): unknown;
 
   BIsUnreadIndicatorMuted(): unknown;
@@ -330,6 +332,8 @@ export interface ChatGroup {
   DeleteInviteLink(e: unknown, t: unknown): unknown;
 
   DeleteRole(e: unknown): unknown;
+
+  DismissSuspicion(U: unknown): void;
 
   GetAvatarOrAppIconURL(e: unknown): unknown;
 
@@ -461,6 +465,8 @@ export interface ChatGroup {
 
   SetRoleAction(e: unknown, t: unknown, r: unknown): unknown;
 
+  SetSenderSuspicious(U: unknown, K: unknown): void;
+
   SetUserBanState(e: unknown, t: unknown): unknown;
 
   ToggleMemberRoleState(e: unknown, t: unknown): unknown;
@@ -480,6 +486,8 @@ export interface ChatGroup {
   UpdateGroupStateFromSummary(e: unknown): void;
 
   UpdateLastAckTimeFromServer(e: unknown): void;
+
+  UpdateMemberNotices(U: unknown): void;
 
   UpdateUserState(e: unknown): void;
 
@@ -548,6 +556,8 @@ export interface ChatGroup {
   m_rtLastAck: number;
 
   m_rtTimeJoined: number;
+
+  m_setSuspiciousSenders: ObservableSet<unknown>;
 
   m_strAvatarSHA: string;
 
@@ -676,7 +686,7 @@ export interface HiddenRecentChatSettings {
 
   Init(e: unknown): void;
 
-  InitFromStorage(): Promise<undefined>;
+  InitFromStorage(): Promise<void>;
 
   ParseStoredObject(e: unknown): boolean;
 
@@ -888,8 +898,6 @@ export interface ChatRoomListBase {
 
   AddRoomEffectIfNeeded(e: unknown): void;
 
-  AddSessionNotice(e: unknown): void;
-
   AddVoiceChannelInviteMsg(e: unknown, t: unknown, r: unknown): void;
 
   AppendChatMsg(e: unknown, t: unknown, r: unknown, n: unknown): unknown;
@@ -900,8 +908,6 @@ export interface ChatRoomListBase {
    * @native
    */
   BASELOG(): unknown;
-
-  BHasSessionNotice(e: unknown): boolean;
 
   BIsVoiceAllowed(): boolean;
 
@@ -988,8 +994,6 @@ export interface ChatRoomListBase {
 
   RemoveMessage(e: unknown): void;
 
-  RemoveSessionNotice(e: unknown): void;
-
   ResetPrepended(): void;
 
   RetryFailedMessage(e: unknown): void;
@@ -1004,7 +1008,7 @@ export interface ChatRoomListBase {
 
   SetupAppCustomServerMsg(e: unknown): Promise<string>;
 
-  ToggleVoiceChat(): boolean;
+  ToggleVoiceChat(): void;
 
   TrimLogsIfPossible(): void;
 
@@ -1088,8 +1092,6 @@ export interface ChatRoomListBase {
 
   m_setInflightClientMessageID: Set<unknown>;
 
-  m_setSessionNotices: ObservableSet<unknown>;
-
   m_strLastMessage?: undefined;
 
   name: string;
@@ -1114,6 +1116,8 @@ export interface ChatRoomList extends ChatRoomListBase {
 
   BIsDefaultRoom(): unknown;
 
+  BIsSenderSuspicious(T: unknown): unknown;
+
   BIsUnreadIndicatorMuted(): unknown;
 
   ChangeNameWhileWaitingForRenameRequest(e: unknown): void;
@@ -1121,6 +1125,8 @@ export interface ChatRoomList extends ChatRoomListBase {
   CreateInviteLink(e: unknown): void;
 
   DeleteChatMessages(e: unknown): Promise<unknown>;
+
+  DismissSuspicion(T: unknown): void;
 
   GetChatRoomGroup(): unknown;
 

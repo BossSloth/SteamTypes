@@ -131,6 +131,12 @@ export interface NotificationTargets extends ClientNotificationTypeMap {
   [ClientNotificationType.ControllerConnected]: CClientNotificationControllerConnectedNotificationTarget;
 
   [ClientNotificationType.ControllerDisconnected]: CClientNotificationControllerDisconnectedNotificationTarget;
+
+  [ClientNotificationType.LoggedInAsUser]: CClientNotificationLoggedInAsUserNotificationTarget;
+
+  [ClientNotificationType.RestartNeeded]: CClientNotificationRestartNeededNotificationTarget;
+
+  [ClientNotificationType.RedeemFramePromo]: CClientNotificationRedeemFramePromoNotificationTarget;
 }
 
 export interface CClientNotificationDownloadCompletedNotificationTarget {
@@ -780,6 +786,66 @@ export interface CClientNotificationControllerDisconnectedNotificationTarget {
   toastDurationMS: number;
 }
 
+export interface CClientNotificationLoggedInAsUserNotificationTarget {
+  fnTest(): unknown;
+
+  playSound(): unknown;
+
+  showToast(): unknown;
+
+  bEnableInReducedUI: boolean;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eFeature: Feature;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationLoggedInAsUser>;
+
+  sound: number;
+
+  strTest: string;
+}
+
+export interface CClientNotificationRestartNeededNotificationTarget {
+  bEnableInReducedUI: boolean;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eFeature: Feature;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationRestartNeeded>;
+
+  showToast: boolean;
+
+  sound: number;
+}
+
+export interface CClientNotificationRedeemFramePromoNotificationTarget {
+  fnTest(): unknown;
+
+  /**
+   * This value is an enum
+   * @currentValue 1
+   */
+  eFeature: Feature;
+
+  fnTray: null;
+
+  proto: ProtobufClass<NotificationTypes.CClientNotificationRedeemFramePromo>;
+
+  showToast: boolean;
+
+  sound: number;
+
+  strTest: string;
+
+  toastDurationMS: number;
+}
+
 export enum Feature {
   NotPresent,
   Failed,
@@ -858,4 +924,7 @@ export enum ClientNotificationType {
   ControllerLowBattery = 62,
   ControllerConnected = 63,
   ControllerDisconnected = 64,
+  LoggedInAsUser = 65,
+  RestartNeeded = 66,
+  RedeemFramePromo = 67,
 }

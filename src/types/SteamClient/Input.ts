@@ -348,12 +348,6 @@ export interface Input {
   // state
   SetXboxDriverInstallState(param0: unknown): unknown;
 
-  /**
-   * Opens the Steam Input controller settings.
-   * This function displays the Steam Input controller settings for configuration.
-   */
-  ShowControllerSettings(): void;
-
   StandaloneKeyboardDismissed(): unknown;
 
   StartControllerDeviceSupportFlow(param0: unknown, param1: unknown, callback: (param2: unknown) => void): unknown;

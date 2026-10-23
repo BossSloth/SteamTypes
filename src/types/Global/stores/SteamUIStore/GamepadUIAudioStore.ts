@@ -52,7 +52,7 @@ export interface GamepadUIAudioStore {
 }
 
 export interface AudioPlaybackManager {
-  CleanupContextIfUneeded(e: unknown): undefined;
+  CleanupContextIfUneeded(e: unknown): void;
 
   /**
    * @param e default: void 0
@@ -91,8 +91,6 @@ export interface AudioPlaybackManager {
   SetVoiceStore(e: unknown): void;
 
   context: undefined | object;
-
-  m_bIsFrameFactoryImage: boolean;
 
   m_bSupportsAudioWorkletProcessors: boolean;
 

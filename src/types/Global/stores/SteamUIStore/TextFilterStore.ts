@@ -133,7 +133,7 @@ export interface WebUIServiceTransport {
 
   CreateConnection(e: unknown, t: unknown, r: unknown, n: unknown): void;
 
-  DispatchMethodResponse(e: unknown): undefined;
+  DispatchMethodResponse(e: unknown): void;
 
   DispatchNotification(e: unknown): void;
 
@@ -165,7 +165,7 @@ export interface WebUIServiceTransport {
 
   OnWebsocketMessage(e: unknown): void;
 
-  OnWebsocketReconnectFinish(e: unknown): undefined;
+  OnWebsocketReconnectFinish(e: unknown): void;
 
   OnWebsocketReconnectStart(e: unknown): void;
 
@@ -254,7 +254,7 @@ export interface Connection {
    */
   m_fnOnReconnectStartHandler(): unknown;
 
-  OnSocketClose(e: unknown): undefined;
+  OnSocketClose(e: unknown): void;
 
   OnSocketError(e: unknown): void;
 
@@ -268,7 +268,7 @@ export interface Connection {
 
   SendSerializedMessage(e: unknown): 2 | 1;
 
-  StartReconnect(): Promise<undefined>;
+  StartReconnect(): Promise<void>;
 
   WaitForSocketOpen(e: unknown, t: unknown): Promise<boolean>;
 

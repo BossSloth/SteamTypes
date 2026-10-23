@@ -331,7 +331,7 @@ export interface AppDetailsStore {
 
   RequestAppDetails(appId: number): Promise<AppDetails>;
 
-  RequestAppDetailsSpotlight(appId: number): Promise<undefined>;
+  RequestAppDetailsSpotlight(appId: number): Promise<void>;
 
   RequestAssociationData(appId: number): Promise<void>;
 
@@ -469,11 +469,13 @@ export interface AppDetails {
 
   bControllerSurveyFilledOut: boolean;
 
-  bDisableSteamDeckAutoDetection: boolean;
-
   bDisableUserMediaUpload: boolean;
 
   bEnableAllowDesktopConfiguration: boolean;
+
+  bFDMEnable: boolean;
+
+  bForceIdentAsSteamDeck: boolean;
 
   bFreeRemovableLicense: boolean;
 
@@ -505,11 +507,15 @@ export interface AppDetails {
 
   bRequiresLegacyCDKey: boolean;
 
+  bRPOEnable: boolean;
+
   bShortcutIsVR?: boolean;
 
   bShowCDKeyInMenus: boolean;
 
   bShowControllerConfig: boolean;
+
+  bSteamInputVRControllerPreferGamepad: boolean;
 
   bStorePagePublished: boolean;
 
@@ -537,6 +543,12 @@ export interface AppDetails {
 
   eCloudSync: ECloudSync;
 
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eControllerRumbleIntensity: EControllerRumbleIntensity;
+
   eControllerRumblePreference: EControllerRumbleSetting;
 
   eDisplayStatus: DisplayStatus;
@@ -547,6 +559,12 @@ export interface AppDetails {
    * A bitmask of {@link ESteamInputControllerMask} that indicates which controllers are supported by this app.
    */
   eSteamInputControllerMask: ESteamInputControllerMask;
+
+  /**
+   * This value is an enum
+   * @currentValue 0
+   */
+  eTSOEnable: ETSOEnable;
 
   /**
    * Index of the install folder. -1 if not installed.
@@ -659,6 +677,10 @@ export interface AppDetails {
 
   vecScreenShots: Screenshot[];
 
+  vecSteamFrameCompatTestResults: DeckCompatTestResult[];
+
+  vecSteamMachineCompatTestResults: DeckCompatTestResult[];
+
   vecSteamOSCompatTestResults: DeckCompatTestResult[];
 }
 
@@ -675,6 +697,8 @@ export interface Achievements {
 }
 
 export interface AppDeckDerivedProperties {
+  fdm_enable?: boolean;
+
   gamescope_frame_limiter_not_supported?: boolean;
 
   hdr_support: number;
@@ -692,6 +716,8 @@ export interface AppDeckDerivedProperties {
   requires_manual_keyboard_invoke: boolean;
 
   requires_non_controller_launcher_nav: boolean;
+
+  rpo_enable?: boolean;
 
   small_text: boolean;
 
@@ -745,18 +771,16 @@ export interface ToolLibraryAssets {
  * This specific interface structure is in my library only used for "SCP: CB Multiplayer Dedicated Server" (1801280). Don't know why this one doesn't line up with AppLibraryAssets
  */
 export interface DedicatedServerLibraryAssets {
+  logoPosition: LogoPosition;
+
+  strCapsuleImage: string;
+
   strHeaderImage: string;
 
-  strHeroBlurImage: string;
-
-  strHeroImage: string;
-
-  strLogoImage: string;
+  strHeaderImage_2x: string;
 }
 
 export interface AppLanguage {
-  strDisplayName: string;
-
   /** A localization string for the language. */
   strShortName: string;
 }
@@ -1051,4 +1075,16 @@ export enum ECloudSync {
 export enum ELegacyCDKeyResult {
   Unknown,
   Success,
+}
+
+/** @generated */
+export enum EControllerRumbleIntensity {
+  Unknown = -1,
+  EControllerRumbleIntensity0 = 0,
+}
+
+/** @generated */
+export enum ETSOEnable {
+  Unknown = -1,
+  ETSOEnable0 = 0,
 }

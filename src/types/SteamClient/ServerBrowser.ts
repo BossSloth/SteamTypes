@@ -167,6 +167,9 @@ export interface ServerBrowser {
     callback: (player: ServerBrowserPlayer | ServerBrowserPlayerRefreshStatus) => void,
   ): Unregisterable;
 
+  /** @native */
+  RegisterForServerFriends(): unknown;
+
   /**
    * Registers a callback function to be called when a server gets pinged.
    * @param dialogId The dialog ID to use.
@@ -192,6 +195,9 @@ export interface ServerBrowser {
    * @param dialogId The dialog ID to use.
    */
   RequestPlayerDetails(dialogId: number): Promise<number | OperationResponse>;
+
+  /** @native */
+  RequestServerFriends(): unknown;
 
   /**
    * Sets the server browser preferences.

@@ -320,7 +320,9 @@ export interface CGameRecording_ExportClip_Request {
   use_unique_filename?: boolean;
 }
 
-export interface CGameRecording_ExportClip_Response {}
+export interface CGameRecording_ExportClip_Response {
+  result?: number;
+}
 
 export interface CGameRecording_ExportClipPreview_Request {
   clip_id?: string;
@@ -332,6 +334,8 @@ export interface CGameRecording_ExportClipPreview_Request {
 
 export interface CGameRecording_ExportClipPreview_Response {
   estimated_size?: number;
+
+  result?: number;
 
   settings?: CGameRecording_ExportClip_Settings;
 }
@@ -517,8 +521,6 @@ export interface CGameRecording_ClipDeleted_Notification {
 export interface CGameRecording_ExportProgress_Notification {
   clip_id?: string;
 
-  eresult?: number;
-
   progress?: number;
 }
 
@@ -565,6 +567,14 @@ export interface CGameRecording_SwitchBackgroundRecordingGame_Request {
 }
 
 export interface CGameRecording_SwitchBackgroundRecordingGame_Response {}
+
+export interface CGameRecording_GetState_Request {}
+
+export interface CGameRecording_GetState_Response {
+  is_h265_enabled?: boolean;
+}
+
+export interface CGameRecording_StateChanged_Notification {}
 
 export enum TimelineEntryType {
   Invalid = 0,

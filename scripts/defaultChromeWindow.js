@@ -273,6 +273,9 @@
     '__millennium_cdp_resolve__',
     '__millennium_extension_route__',
     '__millennium_sdk_ready__',
+    '__millennium_plugin_console_binding__',
+    '__zod_globalConfig',
+    '__zod_globalRegistry',
   ];
 
   const unwantedWindowProperties = [

@@ -123,13 +123,6 @@ export interface Apps {
   GetActiveGameActions(): Promise<GameAction[]>;
 
   /**
-   * Retrieves a list of available compatibility tools for a specific application.
-   * @param appId The ID of the application to retrieve compatibility tools for.
-   * @returns A Promise that resolves to an array of CompatibilityToolInfo objects.
-   */
-  GetAvailableCompatTools(appId: number): Promise<CompatibilityToolInfo[]>;
-
-  /**
    * Represents a function to retrieve the name of the application in a backup folder.
    * @param appBackupPath The path to the application's backup folder.
    * @returns A Promise that resolves to the name of the application in the backup folder, or undefined if the path is invalid.
@@ -217,6 +210,9 @@ export interface Apps {
       taskName: AppAction,
     ) => void,
   ): void;
+
+  /** @native */
+  GetIsSubscribedApp(): unknown;
 
   /**
    * Retrieves launch options for a specified application.
@@ -574,6 +570,9 @@ export interface Apps {
    */
   SetCachedAppDetails(appId: number, details: string): Promise<void>;
 
+  /** @native */
+  SetControllerRumbleIntensity(): unknown;
+
   // param1 - enum for preference
   SetControllerRumblePreference(appId: number, param1: number): unknown;
 
@@ -600,9 +599,6 @@ export interface Apps {
    */
   SetCustomLogoPositionForApp(appId: number, details: SerializedJsonString<CustomImageInfo>): Promise<void>;
 
-  /** @native */
-  SetDisableSteamDeckAutoDetection(): unknown;
-
   /**
    * Sets the enabled state for downloadable content (DLC) of a specific app.
    * @param appId The ID of the parent application.
@@ -610,6 +606,12 @@ export interface Apps {
    * @param value The value to set (true for enabled, false for disabled).
    */
   SetDLCEnabled(appId: number, appDLCId: number, value: boolean): void;
+
+  /** @native */
+  SetFDMEnable(): unknown;
+
+  /** @native */
+  SetForceIdentAsSteamDeck(): unknown;
 
   /**
    * Set a local screenshot's caption.
@@ -634,6 +636,9 @@ export interface Apps {
    * @param spoilered Is the screenshot spoilered?
    */
   SetLocalScreenshotSpoiler(appId: string, hHandle: unknown, spoilered: boolean): void;
+
+  /** @native */
+  SetRPOEnable(): unknown;
 
   /**
    * Sets the executable path for a non-Steam application shortcut.
@@ -692,6 +697,9 @@ export interface Apps {
   SetStreamingClientForApp(appId: number, clientId: string): void;
 
   SetThirdPartyControllerConfiguration(appId: number, value: EThirdPartyControllerConfiguration): void;
+
+  /** @native */
+  SetTSOEnable(): unknown;
 
   /**
    * Sets the workshop items disabled state.
@@ -862,17 +870,6 @@ export interface ConflictingFileTimestamp {
   rtLocalTime: number;
 
   rtRemoteTime: number;
-}
-
-/**
- * Represents information about a compatibility tool.
- */
-export interface CompatibilityToolInfo {
-  /** Display name of the compatibility tool. */
-  strDisplayName: string;
-
-  /** Name of the compatibility tool. */
-  strToolName: string;
 }
 
 /**

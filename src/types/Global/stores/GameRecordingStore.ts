@@ -65,6 +65,7 @@ export interface GameRecordingStore {
 
   GetTimelineLoaderForSharedClip(sharedClip: SharedClip): {
     loader: TimelineLoader;
+
     release: () => void;
   };
 
@@ -80,9 +81,11 @@ export interface GameRecordingStore {
 
   InternalAddClipSummary(clipSummary: CGameRecording_ClipSummary): void;
 
+  IsGameRecordingH265Enabled(): unknown;
+
   LazyLoadClips(): Promise<void>;
 
-  LoadAppsWithBackgroundVideo(): Promise<undefined>;
+  LoadAppsWithBackgroundVideo(): Promise<void>;
 
   LoadThumbnails(
     recordingId: string,
@@ -108,6 +111,8 @@ export interface GameRecordingStore {
 
   // oxfmt-ignore
   OnRecordingSessionChanged(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyRecordingSessionChanged']>[0] extends (notification: infer N) => void ? N : never): number;
+
+  OnStateChanged(): unknown;
 
   // oxfmt-ignore
   OnTimelineChanged(notification: Parameters<GameRecordingRequestHandler['RegisterForNotifyTimelineChanged']>[0] extends (notification: infer N) => void ? N : never): number;
@@ -157,6 +162,8 @@ export interface GameRecordingStore {
 
   UpdateClipExportPath(clipId: string, exportPath: string): void;
 
+  UpdateState(): Promise<void>;
+
   UpdateUserTimelineMarkers(gameId: string, clipId: string, entry: CTimelineEntry): Promise<number>;
 
   UploadClip(
@@ -167,6 +174,8 @@ export interface GameRecordingStore {
   ): Promise<{ eResult: number; strURL: string | undefined }>;
 
   m_bClipLoadingTriggered: boolean;
+
+  m_bEnableH265Recording: boolean;
 
   m_bEnoughDiskSpace: boolean;
 
@@ -327,8 +336,11 @@ export interface ActiveTimelineLoader extends TimelineLoader {
     rounding: number,
   ): {
     nGlobalOffsetMS: number;
+
     nRoundedDurationMS: number;
+
     strTimelineID: string;
+
     nTimelineOffsetMS: number;
   } | null;
 
@@ -341,9 +353,13 @@ export interface ActiveTimelineLoader extends TimelineLoader {
     t: unknown,
   ): {
     m_timeline: unknown;
+
     m_data: unknown;
+
     m_nTimelineOffsetMS: number;
+
     m_iGameModeChanges: number;
+
     m_iEntries: number;
   };
 
@@ -359,7 +375,9 @@ export interface ActiveTimelineLoader extends TimelineLoader {
     rounding: number,
   ): {
     timeline: TimelineMetadata;
+
     nTimelineOffsetMS: number;
+
     ulGlobalToTimelineOffset: number;
   } | null;
 
@@ -374,8 +392,11 @@ export interface ActiveTimelineLoader extends TimelineLoader {
     n: unknown,
   ): Promise<{
     strTimelinePart: unknown;
+
     strAppNamePart: unknown;
+
     rtStart: unknown;
+
     rtEnd: unknown;
   }>;
 
@@ -384,8 +405,11 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   GetClosestNextEntryInGlobalTimeline(e: unknown): {
     timelineID: unknown;
+
     timelineState: unknown;
+
     entry: unknown;
+
     globalMS: unknown;
   };
 
@@ -396,8 +420,11 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   GetClosestPreviousEntryInGlobalTimeline(e: unknown): {
     timelineID: unknown;
+
     timelineState: unknown;
+
     entry: unknown;
+
     globalMS: unknown;
   };
 
@@ -739,10 +766,15 @@ export interface RgListeners {
 
   GetPlaybackStats(): {
     nMean: number;
+
     nStdDev: number;
+
     nMax: number;
+
     nMin: number;
+
     nLength: unknown;
+
     nLastVal: unknown;
   } | null;
 
@@ -1080,9 +1112,13 @@ export interface RgListeners3 {
 
   ComputeTimelineOffset(e: unknown): {
     timelineID: unknown;
+
     globalOffsetMS: unknown;
+
     nDurationMS: number;
+
     recordingOffsets: unknown;
+
     phaseOffsets: unknown;
   };
 

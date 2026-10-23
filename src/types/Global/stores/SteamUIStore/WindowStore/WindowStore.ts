@@ -96,9 +96,9 @@ export interface WindowStore {
 
   RemoveRunningAppWindowIDs(e: unknown): void;
 
-  SetFocusedAppWindowID(e: unknown, t: unknown): undefined;
+  SetFocusedAppWindowID(e: unknown, t: unknown): void;
 
-  SetRunningAppWindowIDs(e: unknown, t: unknown): undefined;
+  SetRunningAppWindowIDs(e: unknown, t: unknown): void;
 
   UpdateDesiredWindows(e: unknown): void;
 
@@ -154,9 +154,11 @@ export interface WindowInstance {
 
   BViewingPreLoginRoute(): unknown;
 
-  CreateBrowserView(e: unknown, t: unknown): unknown;
+  CreateBrowserView(e: unknown, t?: unknown): unknown;
 
   Destroy(): void;
+
+  EnsureVROverlayVisible(): void;
 
   FocusApplicationRoot(): void;
 
@@ -179,6 +181,8 @@ export interface WindowInstance {
   InitializeDefaultActions(): void;
 
   InitNavigation(e: unknown, t: unknown): () => void;
+
+  InitVRStores(): () => void;
 
   IsAnyVRWindow(): boolean;
 
@@ -251,7 +255,7 @@ export interface WindowInstance {
 
   OnApplicationUIInitComplete(): void;
 
-  OnHomeButtonPressed(): undefined;
+  OnHomeButtonPressed(): void;
 
   OnQuickAccessButtonPressed(): void;
 
@@ -409,33 +413,41 @@ export interface ActionDescriptionStore {
 
   GetActionDescription(e: unknown): unknown;
 
+  GetActionDescriptions(): object | unknown;
+
   InitContext(e: unknown): unknown;
 
   IsDefaultAction(e: unknown): boolean;
 
-  NotifyAll(): void;
+  Notify(): void;
 
-  NotifyUpdate(e: unknown): void;
+  OnActiveNavTreeChanged(j: unknown): void;
 
   OnFocusNavigationChanged(e: unknown, t: unknown, r: unknown): void;
 
-  SetAction(e: unknown, t: unknown): void;
+  SetAction(e: unknown, t: unknown): boolean;
 
   SetActionDescriptionsFromMap(e: unknown): void;
 
   SetActionsFromMap(e: unknown): void;
 
-  SetDefaultAction(e: unknown, t: unknown): void;
+  SetDefaultAction(e: unknown, t: unknown): boolean;
 
-  SubscribeToActionFunction(e: unknown, t: unknown): () => void;
+  SetDefaultActionsFromMap(j: unknown): void;
+
+  SubscribeToActions(j: unknown): () => void;
+
+  UpdateForFocusedNode(j: unknown): void;
 
   m_actionDescriptionChangedCallbackRegistrations: unknown[];
-
-  m_actionSubscriptions: Map<unknown, unknown>;
 
   m_boundActions: Map<unknown, unknown>;
 
   m_defaultActions: Map<unknown, unknown>;
+
+  m_globalActionsSubscriptions: unknown[];
+
+  m_nodeForCurrentDescriptions: undefined;
 }
 
 export interface CompositionStateStore {
@@ -540,6 +552,8 @@ export interface HeaderStore {
 
   OnAcceptSearchText(): void;
 
+  OnPlayingElsewhere(): void;
+
   OnSideMenuOpen(): void;
 
   OnSystemResumeFromSuspend(): number;
@@ -630,7 +644,7 @@ export interface Params2 {
 export interface VirtualKeyboardManager {
   AddVirtualKeyboardOwner(e: unknown): void;
 
-  BIsVRKeyboard(): unknown;
+  BUseVRKeyboard(): unknown;
 
   ClearCurrentVirtualKeyboardRef(): void;
 
@@ -642,13 +656,13 @@ export interface VirtualKeyboardManager {
 
   GetEnterKeyLabel(): unknown;
 
-  HandleDeadKeyDown(e: unknown, t: unknown, r: unknown): undefined;
+  HandleDeadKeyDown(e: unknown, t: unknown, r: unknown): void;
 
   HandleNavOut(e: unknown): boolean | undefined;
 
-  HandleVirtualKeyDown(e: unknown, t: unknown): undefined;
+  HandleVirtualKeyDown(e: unknown, t: unknown): void;
 
-  Init(e: unknown, t: unknown): void;
+  Init(): void;
 
   InitKeyboardLocation(e: unknown, t: unknown, r: unknown): void;
 
@@ -663,7 +677,7 @@ export interface VirtualKeyboardManager {
    */
   RotateKeyboardLocation(e: unknown, t: unknown, r?: number): void;
 
-  SelectBestModalPosition(e: unknown): undefined;
+  SelectBestModalPosition(e: unknown): void;
 
   SendChatRadialMenuMsg(): void;
 
@@ -687,7 +701,15 @@ export interface VirtualKeyboardManager {
 
   SetVirtualKeyboardVisible(): void;
 
+  SetVRKeyboardOnTextEnteredOverride(A: unknown): void;
+
+  SetVRKeyboardOpenForThisInstance(A: unknown): void;
+
   ShowVirtualKeyboard(e: unknown, t: unknown, r: unknown): void;
+
+  Shutdown(): void;
+
+  UpdateIsShowingVirtualKeyboard(): void;
 
   IsShowingVirtualKeyboard: VirtualKeyboardManager['m_bIsInlineVirtualKeyboardOpen'];
 
@@ -707,13 +729,23 @@ export interface VirtualKeyboardManager {
 
   m_bIsVirtualKeyboardModal: ObservableValue<boolean>;
 
-  m_bUseVRKeyboard: boolean;
+  m_bIsVirtualKeyboardShowing: ObservableValue<boolean>;
+
+  m_bVRKeyboardOpenForThisInstance: ObservableValue<boolean>;
 
   m_ChatRadialMenuParams: null;
 
   m_currentVirtualKeyboardRef: CurrentVirtualKeyboardRef | null;
 
+  m_fnDisposeVRKeyboardReaction: null;
+
+  m_fnVROnTextEnteredOverride: null;
+
+  m_hDelayHideTimeout: number;
+
   m_iKeyboardLocation: number;
+
+  m_Instance: WindowInstance;
 
   m_KeyboardOwners: Set<unknown>;
 

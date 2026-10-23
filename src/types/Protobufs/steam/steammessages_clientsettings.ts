@@ -277,6 +277,14 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: Compatibility/ShowAllTools
+   * Default: false
+   */
+  compat_show_all_tools?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: SteamInput/ChatRadialMenu/0
    */
   controller_chat_radial_menu_option_0?: string;
@@ -615,12 +623,6 @@ export interface CMsgClientSettings {
    * Setting store: k_ClientSettingStore_CustomFunc
    */
   enable_shader_precache?: boolean;
-
-  /**
-   * @Options
-   * Setting store: k_ClientSettingStore_CustomFunc
-   */
-  enable_steamrt64_client?: boolean;
 
   /**
    * @Options
@@ -1015,24 +1017,10 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
-   * Setting store: k_ClientSettingStore_CustomFunc
-   * Setting pre-login: true
-   */
-  in_client_beta?: boolean;
-
-  /**
-   * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: UI/Display/Current/IsExternalDisplay
    */
   is_external_display?: boolean;
-
-  /**
-   * @Options
-   * Setting store: k_ClientSettingStore_CustomFunc
-   * Setting pre-login: true
-   */
-  is_steam_sideloaded?: boolean;
 
   /**
    * @Options
@@ -1067,6 +1055,13 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: LibraryHomeBigArt
+   */
+  library_home_big_art?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: LibraryLowBandwidthMode
    */
   library_low_bandwidth_mode?: boolean;
@@ -1084,6 +1079,22 @@ export interface CMsgClientSettings {
    * Setting name: LibraryWhatsNewShowOnlyProductUpdates
    */
   library_whats_new_show_only_product_updates?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\LoggedInAsUserNotificationSound
+   * Default: false
+   */
+  logged_in_as_user_notification_sound?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\LoggedInAsUserNotificationToast
+   * Default: true
+   */
+  logged_in_as_user_notification_toast?: boolean;
 
   /**
    * @Options
@@ -1438,6 +1449,28 @@ export interface CMsgClientSettings {
 
   /**
    * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Customization/Screensaver/CurrentScreensaver
+   */
+  screensaver_current_id?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Customization/Screensaver/Settings
+   */
+  screensaver_settings?: string;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: Customization/Screensaver/WhileInGame
+   * Default: true
+   */
+  screensaver_while_ingame?: boolean;
+
+  /**
+   * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserRoaming
    * Setting name: ScreenshotViewItemsPerRow
    * Default: 1
@@ -1588,9 +1621,23 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\SteamFrameWirelessAdapterAirplaneDialogSkip
+   */
+  skip_steamframe_airplane_dialog?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
    * Setting name: system\SteamFrameWirelessAdapterPairingDialog
    */
   skip_steamframe_pairing_dialog?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_UserLocal
+   * Setting name: system\SteamFrameWirelessAdapterTroubleshootingDialogSkip
+   */
+  skip_steamframe_troubleshooting_dialog?: boolean;
 
   /**
    * @Options
@@ -1692,6 +1739,14 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/CECControl
+   * Default: true
+   */
+  steamos_cec_control?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: SteamOS/CECEnabled
    * Default: true
    */
@@ -1700,10 +1755,42 @@ export interface CMsgClientSettings {
   /**
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/CECSuspendDevice
+   * Default: true
+   */
+  steamos_cec_suspend_device?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/CECSuspendTV
+   * Default: true
+   */
+  steamos_cec_suspend_tv?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/CECWakeDevice
+   * Default: true
+   */
+  steamos_cec_wake_device?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: SteamOS/WakeOnResume
    * Default: true
    */
   steamos_cec_wake_on_resume?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/CECWakeTV
+   * Default: true
+   */
+  steamos_cec_wake_tv?: boolean;
 
   /**
    * @Options
@@ -1728,6 +1815,14 @@ export interface CMsgClientSettings {
    * Default: false
    */
   steamos_charge_limit_enabled?: boolean;
+
+  /**
+   * @Options
+   * Setting store: k_ClientSettingStore_ConfigStore_Install
+   * Setting name: SteamOS/ECLoggingEnabled
+   * Default: false
+   */
+  steamos_ec_logging_enabled?: boolean;
 
   /**
    * @Options
@@ -1835,7 +1930,7 @@ export interface CMsgClientSettings {
    * @Options
    * Setting store: k_ClientSettingStore_ConfigStore_Install
    * Setting name: SteamOS/WifiPowerManagement
-   * Default: false
+   * Default: true
    */
   steamos_wifi_power_management_enabled?: boolean;
 
@@ -1939,22 +2034,6 @@ export interface CMsgClientSettings {
    * Setting store: k_ClientSettingStore_CustomFunc
    */
   voice_speaker_output_gain?: number;
-
-  /**
-   * @Options
-   * Setting store: k_ClientSettingStore_ConfigStore_Install
-   * Setting name: Audio/Spatialize
-   * Default: false
-   */
-  vr_audio_spatialize?: boolean;
-
-  /**
-   * @Options
-   * Setting store: k_ClientSettingStore_ConfigStore_Install
-   * Setting name: Audio/SpatializeSurround
-   * Default: false
-   */
-  vr_audio_spatialize_surround?: boolean;
 
   /**
    * @Options
