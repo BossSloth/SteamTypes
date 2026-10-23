@@ -41,25 +41,29 @@ import { ObservableMap } from 'mobx';
 
 export interface DataStore {
 -  cache: Set<string>;
--  items: Map<string, ItemRenamed>;
--  reactive: ObservableMap<string, ReactiveDataRenamed>;
--  users: ObservableSet<UserDataRenamed>;
 +  cache: Set<number>;
 +
-+  items: Map<string, Item>;
+  items: Map<string, ItemRenamed>;
+-  reactive: ObservableMap<string, ReactiveDataRenamed>;
 +
 +  reactive: ObservableMap<number, ReactiveDataRenamed>;
 +
-+  users: ObservableSet<ItemRenamed>;
+  users: ObservableSet<UserDataRenamed>;
 }
 
 export interface ItemRenamed {
--  id: string;
--  name: string;
--}
-+  avatarUrl: string;
++  data: string;
++
+  id: string;
++
+  name: string;
++
++  type: 'text' | 'image' | 'file';
+}
 
--export interface UserDataRenamed {
+export interface UserDataRenamed {
++  avatarUrl: string;
++
   id: number;
 +
   name: string;
@@ -72,17 +76,7 @@ export interface ReactiveDataRenamed {
   name: string;
 +
   tracking: boolean;
-}
-+
-+export interface Item {
-+  data: string;
-+
-+  id: string;
-+
-+  name: string;
-+
-+  type: 'text' | 'image' | 'file';
-+}"
+}"
 `;
 
 exports[`Comparator Generic Renames > generic type parameter changes with union types - renamed 1`] = `

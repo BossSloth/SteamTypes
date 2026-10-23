@@ -63,6 +63,7 @@ export class InterfaceReferenceResolver {
     sourceInterfaces = this.extractInterfaceReferences(sourceTypeNode);
 
     // For each source interface, find a matching target interface and update it
+    const unmatched: { reference: TypeReferenceNode; declaration: InterfaceDeclaration }[] = [];
     for (const sourceInterface of sourceInterfaces) {
       const sourceInterfaceDeclaration = getInterfaceDeclaration(sourceInterface);
       if (!sourceInterfaceDeclaration) {
@@ -93,10 +94,11 @@ export class InterfaceReferenceResolver {
         sourceInterfaceDeclaration.rename(targetInterfaceDeclaration.getName());
         this.session.enqueue(targetInterfaceDeclaration, sourceInterfaceDeclaration);
       } else {
-        // If no matching interface found, add the source interface to the target
-        this.addMissingInterface(sourceInterface);
+        unmatched.push({ reference: sourceInterface, declaration: sourceInterfaceDeclaration });
       }
     }
+
+    this.resolveRenamedInterfaces(targetInterfaces, unmatched);
   }
 
   /**
@@ -183,6 +185,28 @@ export class InterfaceReferenceResolver {
           this.addMissingInterface(child);
         }
       });
+    }
+  }
+
+  /**
+   * Pairs unmatched source interfaces with the unclaimed target interfaces of the same type, otherwise adds them
+   */
+  private resolveRenamedInterfaces(
+    targetInterfaces: TypeReferenceNode[],
+    unmatched: { reference: TypeReferenceNode; declaration: InterfaceDeclaration }[],
+  ): void {
+    const candidates = [...new Set(targetInterfaces.map((i) => getInterfaceDeclaration(i)))].filter(
+      (i): i is InterfaceDeclaration => i !== undefined,
+    );
+    for (const { reference, declaration } of unmatched) {
+      const renamedTarget = this.matcher.findRenamedInterface(declaration, candidates);
+      if (renamedTarget) {
+        declaration.rename(renamedTarget.getName());
+        this.session.enqueueRenamed(renamedTarget, declaration);
+      } else {
+        // If no matching interface found, add the source interface to the target
+        this.addMissingInterface(reference);
+      }
     }
   }
 

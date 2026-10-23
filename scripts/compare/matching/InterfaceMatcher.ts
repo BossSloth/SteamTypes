@@ -43,6 +43,10 @@ export class InterfaceMatcher {
     const sourceNames = getInterfacePropertyNames(sourceInterface);
 
     for (const targetInterface of targetInterfaces) {
+      if (this.session.isPairedByRename(targetInterface)) {
+        continue;
+      }
+
       const targetNames = getInterfacePropertyNames(targetInterface);
 
       // Calculate similarity score (0-1)
@@ -77,6 +81,39 @@ export class InterfaceMatcher {
           other !== matchedTarget
           && other.getExtends().some((ext) => getInterfaceDeclaration(ext.getExpression().getType()) === matchedTarget),
       );
+  }
+
+  /**
+   * Fallback for a source interface that matched nothing by name or similarity: pairs it with one of the target
+   * interfaces referenced from the same type (e.g. the same property) that shares the most property names.
+   */
+  public findRenamedInterface(
+    sourceInterface: InterfaceDeclaration,
+    candidates: InterfaceDeclaration[],
+  ): InterfaceDeclaration | undefined {
+    const sourceNames = getInterfacePropertyNames(sourceInterface);
+    let bestMatch: InterfaceDeclaration | undefined;
+    let highestScore = 0;
+
+    for (const candidate of candidates) {
+      if (
+        candidate.wasForgotten()
+        || this.session.isClaimed(candidate)
+        || !this.session.startingInterfaces.includes(candidate)
+        || sourceInterface.getSourceFile().getInterface(candidate.getName()) !== undefined
+        || this.isDerivedToBaseMismatch(sourceInterface, candidate)
+      ) {
+        continue;
+      }
+
+      const score = calculateSimilarityScore(sourceNames, getInterfacePropertyNames(candidate));
+      if (score > highestScore) {
+        highestScore = score;
+        bestMatch = candidate;
+      }
+    }
+
+    return bestMatch;
   }
 
   public resolveBaseName(sourceExt: ExpressionWithTypeArguments, sourceFile: SourceFile): ResolvedBaseName {

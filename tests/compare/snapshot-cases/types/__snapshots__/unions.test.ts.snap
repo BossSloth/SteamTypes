@@ -52,8 +52,7 @@ exports[`Comparator Union Renames > nested interface in union type - renamed 1`]
 +++ b/target.ts
 @@ -1,12 +1,17 @@
 export interface Container {
--  data: BaseRenamed | ExtendedRenamed;
-+  data: BaseRenamed | Extended;
+  data: BaseRenamed | ExtendedRenamed;
 }
 
 export interface BaseRenamed {
@@ -64,8 +63,7 @@ export interface BaseRenamed {
   name: string;
 }
 
--export interface ExtendedRenamed {
-+export interface Extended {
+export interface ExtendedRenamed {
 +  active: boolean;
 +
   details: string;

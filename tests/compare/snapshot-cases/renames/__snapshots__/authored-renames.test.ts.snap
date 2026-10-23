@@ -25,11 +25,10 @@ exports[`Comparator Authored Renames > interface with complex nested structures 
 @@ -1,15 +1,57 @@
 export interface AppConfig {
   api: ApiSettings;
--  ui: UiSettings;
 +
 +  features: Record<string, boolean>;
 +
-+  ui: UiConfig;
+  ui: UiSettings;
 }
 
 export interface ApiSettings {
@@ -48,8 +47,7 @@ export interface ApiSettings {
 +  timeout: number;
 }
 
--export interface UiSettings {
-+export interface UiConfig {
+export interface UiSettings {
 +  animations: boolean;
 +
 +  components: ComponentsConfig;
@@ -58,6 +56,14 @@ export interface ApiSettings {
 +
   theme: string;
 }
++
++export interface EndpointConfig {
++  method: string;
++
++  path: string;
++
++  requiresAuth: boolean;
++}
 +
 +export interface ComponentsConfig {
 +  button: ButtonConfig;
@@ -75,14 +81,6 @@ export interface ApiSettings {
 +  borderRadius: number;
 +
 +  padding: number;
-+}
-+
-+export interface EndpointConfig {
-+  method: string;
-+
-+  path: string;
-+
-+  requiresAuth: boolean;
 +}"
 `;
 
@@ -117,4 +115,110 @@ export interface ChatMessage {
   text: string;
 -  informationFormat: 'plain' | 'markdown';
 }"
+`;
+
+exports[`Comparator Authored Renames > renamed interface below similarity threshold is updated in place 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,9 +1,9 @@
+export interface AppDetails {
+  selectedLanguage: AppLanguage;
++
+  vecLanguages: AppLanguage[];
+}
+
+export interface AppLanguage {
+-  strDisplayName: string;
+  strShortName: string;
+}"
+`;
+
+exports[`Comparator Authored Renames > renamed union member below similarity threshold is updated in place 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,30 +2,39 @@
+  libraryAssets?: AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets | DedicatedServerLibraryAssets;
+}
+
+export interface AppLibraryAssets {
+  strCapsuleImage: string;
++
+  strHeaderImage: string;
++
+  strHeroImage: string;
++
+  strLogoImage: string;
+}
+
+export interface LegacyLibraryAssets {
+  strCapsuleImage: string;
++
+  strHeaderImage: string;
++
+  strLibraryHero: string;
+}
+
+export interface ToolLibraryAssets {
+  strHeaderImage: string;
++
+  strLogoImage: string;
+}
+
+/**
+ * Dedicated server assets.
+ */
+export interface DedicatedServerLibraryAssets {
++  logoPosition: string;
++
++  strCapsuleImage: string;
++
+  strHeaderImage: string;
+-  strHeroBlurImage: string;
+-  strHeroImage: string;
+-  strLogoImage: string;
++
++  strHeaderImage_2x: string;
+}"
+`;
+
+exports[`Comparator Authored Renames > replacement interface with no shared properties is added as new 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,7 +1,7 @@
+export interface Parent {
+-  child: OldChild;
++  child: NewChild;
+}
+
+-export interface OldChild {
+-  a: string;
++export interface NewChild {
++  b: number;
+}"
+`;
+
+exports[`Comparator Authored Renames > source interface with the target name is not paired by position 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,15 @@
+export interface Root {
+-  a: Foo;
++  a: Bar;
++
++  b: Foo;
+}
+
+export interface Foo {
+  x: string;
++
+  y: number;
+}
++
++export interface Bar {
++  x: string;
++}"
 `;

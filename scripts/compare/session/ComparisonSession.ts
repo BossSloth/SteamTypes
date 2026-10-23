@@ -6,7 +6,9 @@ export interface InterfacePair {
 }
 
 /**
- * Per-call comparison state: the FIFO queue of pending pairs and the keys of processed target interfaces.
+ * Per-call comparison state: the FIFO queue of pending pairs, the keys of processed target interfaces, the target
+ * interfaces already paired with a source interface (claimed) and those paired by a rename fallback (pairedByRename).
+ * Similarity matching ignores the latter only, so several source interfaces can still merge into one target.
  * Created once per compareAndCorrectAllInterfaces call. Mutates only its own queue and processed set.
  */
 export class ComparisonSession {
@@ -15,6 +17,8 @@ export class ComparisonSession {
   public readonly startingInterfaces: readonly InterfaceDeclaration[];
   private readonly queue: InterfacePair[] = [];
   private readonly processed = new Set<string>();
+  private readonly claimed = new Set<InterfaceDeclaration>();
+  private readonly pairedByRename = new Set<InterfaceDeclaration>();
 
   public constructor(targetFile: SourceFile) {
     this.targetFile = targetFile;
@@ -22,7 +26,21 @@ export class ComparisonSession {
   }
 
   public enqueue(targetInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
+    this.claimed.add(targetInterface);
     this.queue.push({ targetInterface, sourceInterface });
+  }
+
+  public enqueueRenamed(targetInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
+    this.enqueue(targetInterface, sourceInterface);
+    this.pairedByRename.add(targetInterface);
+  }
+
+  public isClaimed(targetInterface: InterfaceDeclaration): boolean {
+    return this.claimed.has(targetInterface);
+  }
+
+  public isPairedByRename(targetInterface: InterfaceDeclaration): boolean {
+    return this.pairedByRename.has(targetInterface);
   }
 
   /**

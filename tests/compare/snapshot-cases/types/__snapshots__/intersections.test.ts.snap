@@ -7,11 +7,10 @@ exports[`Comparator Intersection Renames > array intersection types - renamed 1`
 @@ -1,7 +1,15 @@
 export interface Combined {
 -  data: ARenamed;
-+  data: (A | B)[];
++  data: (ARenamed | B)[];
 }
 
--export interface ARenamed {
-+export interface A {
+export interface ARenamed {
 +  extraA: boolean;
 +
   propA: string;
@@ -67,11 +66,10 @@ exports[`Comparator Intersection Renames > inverse array intersection types - re
 @@ -1,13 +1,7 @@
 export interface Combined {
 -  data: (ARenamed | BRenamed)[];
-+  data: A;
++  data: ARenamed;
 }
 
--export interface ARenamed {
-+export interface A {
+export interface ARenamed {
   propA: string;
 -  extraA: boolean;
 }

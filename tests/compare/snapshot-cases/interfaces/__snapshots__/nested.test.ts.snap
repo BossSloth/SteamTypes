@@ -202,22 +202,18 @@ exports[`Comparator Nested Renames > deeply nested interfaces - renamed 1`] = `
 +++ b/target.ts
 @@ -1,11 +1,17 @@
 export interface GrandParent {
--  parent: ParentRenamed;
 +  generation: number;
 +
-+  parent: Parent;
+  parent: ParentRenamed;
 }
 
--export interface ParentRenamed {
--  child: ChildRenamed;
-+export interface Parent {
-+  child: Child;
+export interface ParentRenamed {
+  child: ChildRenamed;
 +
 +  id: number;
 }
 
--export interface ChildRenamed {
-+export interface Child {
+export interface ChildRenamed {
 +  age: number;
 +
   name: string;
@@ -256,29 +252,27 @@ exports[`Comparator Nested Renames > interface with modified nested interfaces -
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,12 +1,25 @@
+@@ -1,12 +1,28 @@
 export interface NetworkConfig {
   baseUrl: string;
--  connection: ConnectionParamsRenamed;
 +
-+  connection: ConnectionParams;
+  connection: ConnectionParamsRenamed;
 +
 +  endpoints: Record<string, string>;
 }
 
--export interface ConnectionParamsRenamed {
--  /**
--   * Timeout in milliseconds
--   */
--  timeout: number;
-+export interface ConnectionParams {
+export interface ConnectionParamsRenamed {
 +  keepAlive: boolean;
 +
 +  proxy?: ProxySettings;
 +
-  retries: number;
++  retries: number;
 +
-+  timeout: number;
+  /**
+   * Timeout in milliseconds
+   */
+  timeout: number;
+-  retries: number;
 }
 +
 +export interface ProxySettings {
@@ -296,14 +290,12 @@ exports[`Comparator Nested Renames > nested interfaces - renamed 1`] = `
 +++ b/target.ts
 @@ -1,7 +1,11 @@
 export interface Parent {
--  child: ChildRenamed;
-+  child: Child;
+  child: ChildRenamed;
 +
 +  id: number;
 }
 
--export interface ChildRenamed {
-+export interface Child {
+export interface ChildRenamed {
 +  age: number;
 +
   name: string;

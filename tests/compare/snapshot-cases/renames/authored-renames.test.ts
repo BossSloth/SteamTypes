@@ -160,6 +160,141 @@ export const authoredRenameCases: Record<string, ComparatorTest> = {
         type: string;
       }`,
   },
+
+  'renamed interface below similarity threshold is updated in place': {
+    interfaceName: 'AppDetails',
+    target: dedent /* ts */ `
+      export interface AppDetails {
+        selectedLanguage: AppLanguage;
+        vecLanguages: AppLanguage[];
+      }
+
+      export interface AppLanguage {
+        strDisplayName: string;
+        strShortName: string;
+      }`,
+    source: dedent /* ts */ `
+      export interface AppDetails {
+        selectedLanguage: SelectedLanguage;
+        vecLanguages: SelectedLanguage[];
+      }
+
+      export interface SelectedLanguage {
+        strShortName: string;
+      }`,
+  },
+
+  'renamed union member below similarity threshold is updated in place': {
+    interfaceName: 'AppDetails',
+    target: dedent /* ts */ `
+      export interface AppDetails {
+        libraryAssets?: AppLibraryAssets | LegacyLibraryAssets | ToolLibraryAssets | DedicatedServerLibraryAssets;
+      }
+
+      export interface AppLibraryAssets {
+        strCapsuleImage: string;
+        strHeaderImage: string;
+        strHeroImage: string;
+        strLogoImage: string;
+      }
+
+      export interface LegacyLibraryAssets {
+        strCapsuleImage: string;
+        strHeaderImage: string;
+        strLibraryHero: string;
+      }
+
+      export interface ToolLibraryAssets {
+        strHeaderImage: string;
+        strLogoImage: string;
+      }
+
+      /**
+       * Dedicated server assets.
+       */
+      export interface DedicatedServerLibraryAssets {
+        strHeaderImage: string;
+        strHeroBlurImage: string;
+        strHeroImage: string;
+        strLogoImage: string;
+      }`,
+    source: dedent /* ts */ `
+      export interface AppDetails {
+        libraryAssets?: LibraryAssets | LibraryAssets2 | LibraryAssets3 | LibraryAssets4;
+      }
+
+      export interface LibraryAssets {
+        strCapsuleImage: string;
+        strHeaderImage: string;
+        strHeroImage: string;
+        strLogoImage: string;
+      }
+
+      export interface LibraryAssets2 {
+        strCapsuleImage: string;
+        strHeaderImage: string;
+        strLibraryHero: string;
+      }
+
+      export interface LibraryAssets3 {
+        strHeaderImage: string;
+        strLogoImage: string;
+      }
+
+      export interface LibraryAssets4 {
+        logoPosition: string;
+        strCapsuleImage: string;
+        strHeaderImage: string;
+        strHeaderImage_2x: string;
+      }`,
+  },
+
+  'replacement interface with no shared properties is added as new': {
+    interfaceName: 'Parent',
+    target: dedent /* ts */ `
+      export interface Parent {
+        child: OldChild;
+      }
+
+      export interface OldChild {
+        a: string;
+      }`,
+    source: dedent /* ts */ `
+      export interface Parent {
+        child: NewChild;
+      }
+
+      export interface NewChild {
+        b: number;
+      }`,
+  },
+
+  'source interface with the target name is not paired by position': {
+    interfaceName: 'Root',
+    target: dedent /* ts */ `
+      export interface Root {
+        a: Foo;
+      }
+
+      export interface Foo {
+        x: string;
+        y: number;
+      }`,
+    source: dedent /* ts */ `
+      export interface Root {
+        a: Bar;
+        b: Foo;
+      }
+
+      export interface Bar {
+        x: string;
+      }
+
+      export interface Foo {
+        x: string;
+        y: number;
+      }`,
+  },
 };
 
 createTest('Authored Renames', authoredRenameCases);
