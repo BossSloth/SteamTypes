@@ -1,9 +1,12 @@
 import {
   InterfaceDeclaration,
   MethodSignature,
+  MethodSignatureStructure,
+  Node,
   PropertySignature,
+  PropertySignatureStructure,
+  StructureKind,
   SyntaxKind,
-  TypeElementMemberedNode,
   TypeLiteralNode,
 } from 'ts-morph';
 import type { InterfaceReferenceResolver } from '../matching/InterfaceReferenceResolver';
@@ -123,6 +126,7 @@ export class MemberReconciler implements MemberReconciliation {
     reconcileComputedPropertyNames(targetMembers, targetMembersMap, realTargetMembersMap, sourceMembersMap);
 
     let changed = false;
+    const pending: (PropertySignatureStructure | MethodSignatureStructure)[] = [];
 
     // Check for missing properties in target and add them
     for (const [propName, sourceProp] of sourceMembersMap) {
@@ -137,21 +141,23 @@ export class MemberReconciler implements MemberReconciliation {
       }
 
       if (!targetProp) {
-        this.addMissingMember(targetInterface, sourceProp, propName);
+        const missingMember = this.createMissingMember(sourceProp, propName);
+        if (missingMember) pending.push(missingMember);
         changed = true;
 
         continue;
       }
 
       // Property exists in both, check for type differences
-      const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
-      const needsExtendUpdate = this.reconcileMember(targetProp, sourceProp, isFromExtendedInterface);
+      if (targetProp.getFirstDescendantByKind(SyntaxKind.TypeReference)) this.flushMissingMembers(targetInterface, pending);
+      const needsExtendUpdate = this.reconcileMember(targetProp, sourceProp, !realTargetMembersMap.has(targetProp.getName()));
 
       if (
         needsExtendUpdate
         && targetInterface instanceof InterfaceDeclaration
         && sourceInterface instanceof InterfaceDeclaration
       ) {
+        this.flushMissingMembers(targetInterface, pending);
         if (
           this.reconcileInheritedOnce(targetInterface, sourceInterface, propName, handledInherited, () => {
             this.inheritance.reconcileInheritedMismatch(targetInterface, sourceInterface, propName);
@@ -162,17 +168,20 @@ export class MemberReconciler implements MemberReconciliation {
       }
     }
 
+    this.flushMissingMembers(targetInterface, pending);
+
     // Check for extra properties in target that don't exist in source
+    const toRemove: (PropertySignature | MethodSignature)[] = [];
     for (const [propName, targetProp] of targetMembersMap) {
       if (!sourceMembersMap.has(propName) && !targetProp.hasQuestionToken()) {
         if (realTargetMembersMap.has(propName)) {
           // Property exists in target but not in source, remove it
-          targetProp.remove();
-          changed = true;
+          toRemove.push(targetProp);
           continue;
         }
 
         // An extra inherited member can only exist on an InterfaceDeclaration
+        this.removeMembers(targetInterface, toRemove);
         this.reconcileInheritedOnce(
           targetInterface as InterfaceDeclaration,
           sourceInterface as InterfaceDeclaration,
@@ -191,27 +200,29 @@ export class MemberReconciler implements MemberReconciliation {
       }
     }
 
-    return changed;
+    this.removeMembers(targetInterface, toRemove);
+
+    return changed || toRemove.length > 0;
   }
 
   /**
-   * Adds a missing property to the target interface
-   * @param targetInterface The interface to add the property to
-   * @param sourceProp The property to add
-   * @param propName The name of the property to add
+   * Builds the structure for a property or method missing from the target interface
+   * @param sourceProp The property or method to copy
+   * @param propName The name of the member to add
+   *
+   * @returns the structure to insert, or undefined when the source property has no type
    */
-  private addMissingMember(
-    targetInterface: TypeElementMemberedNode,
+  private createMissingMember(
     sourceProp: PropertySignature | MethodSignature,
     propName: string,
-  ): void {
-    // Property missing in target, add it
+  ): PropertySignatureStructure | MethodSignatureStructure | undefined {
     if (sourceProp instanceof MethodSignature) {
       // Filter out @native jsdoc
       const docs = sourceProp.getJsDocs().map((doc) => doc.getInnerText());
       const filteredDocs = docs.filter((doc) => doc !== '');
 
-      targetInterface.addMethod({
+      return {
+        kind: StructureKind.MethodSignature,
         name: propName,
         parameters: sourceProp.getParameters().map((param) => ({
           name: param.getName(),
@@ -221,21 +232,101 @@ export class MemberReconciler implements MemberReconciliation {
         returnType: sourceProp.getReturnTypeNode()?.getText(),
         hasQuestionToken: sourceProp.hasQuestionToken(),
         docs: filteredDocs,
-      });
-    } else {
-      const typeNode = sourceProp.getTypeNode();
-      if (!typeNode) return;
-
-      targetInterface.addProperty({
-        name: propName,
-        type: typeNode.getText(),
-        hasQuestionToken: sourceProp.hasQuestionToken(),
-        isReadonly: sourceProp.isReadonly(),
-        docs: sourceProp.getJsDocs().map((doc) => doc.getStructure()),
-      });
-
-      this.references.addMissingInterface(typeNode);
+      };
     }
+
+    const typeNode = sourceProp.getTypeNode();
+    if (!typeNode) return undefined;
+
+    this.references.addMissingInterface(typeNode);
+
+    return {
+      kind: StructureKind.PropertySignature,
+      name: propName,
+      type: typeNode.getText(),
+      hasQuestionToken: sourceProp.hasQuestionToken(),
+      isReadonly: sourceProp.isReadonly(),
+      docs: sourceProp.getJsDocs().map((doc) => doc.getStructure()),
+    };
+  }
+
+  /**
+   * Inserts the pending members in one edit. Skips names the target already has, since a nested reconcile of the
+   * same interface may have added them.
+   * @param targetInterface The interface to add the members to
+   * @param pending The structures to add. Cleared after the call.
+   */
+  private flushMissingMembers(
+    targetInterface: InterfaceDeclaration | TypeLiteralNode,
+    pending: (PropertySignatureStructure | MethodSignatureStructure)[],
+  ): void {
+    if (pending.length === 0) return;
+
+    const existingNames = new Set(
+      targetInterface
+        .getMembers()
+        .filter(
+          (member): member is PropertySignature | MethodSignature =>
+            member instanceof PropertySignature || member instanceof MethodSignature,
+        )
+        .map((member) => member.getName()),
+    );
+    const newMembers = pending.filter((member) => !existingNames.has(member.name));
+    pending.length = 0;
+
+    targetInterface.addMembers(newMembers);
+  }
+
+  /**
+   * Removes the members in one edit. Adjacent members are removed as one run, with the same whitespace handling as
+   * ts-morph's own removal, so the result matches removing them one at a time.
+   * @param targetInterface The interface to remove the members from
+   * @param members The members to remove
+   */
+  private removeMembers(
+    targetInterface: InterfaceDeclaration | TypeLiteralNode,
+    members: (PropertySignature | MethodSignature)[],
+  ): void {
+    if (members.length === 0) return;
+
+    if (members.length === 1) {
+      members[0].remove();
+
+      return;
+    }
+
+    const siblings = members[0].getParentSyntaxListOrThrow().getChildren();
+    const removed = new Set<Node>(members);
+    const indices = siblings.flatMap((sibling, index) => (removed.has(sibling) ? [index] : []));
+
+    const runs: number[][] = [];
+    let previous = -2;
+    for (const index of indices) {
+      if (index === previous + 1) {
+        runs[runs.length - 1].push(index);
+      } else {
+        runs.push([index]);
+      }
+      previous = index;
+    }
+
+    const fullText = targetInterface.getSourceFile().getFullText();
+    let newFullText = fullText;
+    for (const run of runs.reverse()) {
+      const first = run[0];
+      const last = run[run.length - 1];
+      const { start, end, spacing } = getRunRemoval(
+        siblings[first],
+        siblings[last],
+        siblings[first - 1],
+        siblings[last + 1],
+        fullText,
+      );
+      newFullText = newFullText.slice(0, start) + spacing + newFullText.slice(end);
+    }
+
+    const delta = newFullText.length - fullText.length;
+    targetInterface.replaceWithText(newFullText.slice(targetInterface.getStart(true), targetInterface.getEnd() + delta));
   }
 }
 
@@ -267,4 +358,69 @@ function reconcileComputedPropertyNames(
     targetMembersMap.delete(computedName);
     realTargetMembersMap.set(resolvedKey, member);
   }
+}
+
+/**
+ * Computes the text range that ts-morph's removal deletes for a run of adjacent interface or type literal members,
+ * and the separator it leaves behind. Ports RemoveChildrenWithFormattingTextManipulator, where member formatting is
+ * always a newline.
+ */
+function getRunRemoval(
+  firstChild: Node,
+  lastChild: Node,
+  previousSibling: Node | undefined,
+  nextSibling: Node | undefined,
+  fullText: string,
+): { start: number; end: number; spacing: string } {
+  let start: number;
+  if (previousSibling !== undefined) {
+    const trailingEnd = previousSibling.getTrailingTriviaEnd();
+    start = isNewLineAtPos(fullText, trailingEnd) ? trailingEnd : previousSibling.getEnd();
+  } else {
+    const firstPos = getPreviousNonWhitespacePos(fullText, firstChild.getPos());
+    start = firstChild.isFirstNodeOnLine() ? firstPos : firstChild.getNonWhitespaceStart();
+  }
+
+  const triviaEnd = lastChild.getTrailingTriviaEnd();
+  let end: number;
+  if (previousSibling !== undefined && nextSibling !== undefined) {
+    end = getPosAtStartOfLineOrNonWhitespace(fullText, nextSibling.getNonWhitespaceStart());
+  } else if (isNewLineAtPos(fullText, triviaEnd)) {
+    end = getPosAtEndOfPreviousLine(fullText, getPosAtNextNonBlankLine(fullText, triviaEnd));
+  } else {
+    end = previousSibling === undefined ? triviaEnd : lastChild.getEnd();
+  }
+
+  const spacing = previousSibling !== undefined && nextSibling !== undefined ? '\n' : '';
+
+  return { start, end, spacing };
+}
+
+function isNewLineAtPos(fullText: string, pos: number): boolean {
+  const newLine = /\r?\n/y;
+  newLine.lastIndex = pos;
+
+  return newLine.test(fullText);
+}
+
+function getPreviousNonWhitespacePos(fullText: string, pos: number): number {
+  return fullText.slice(0, pos).replace(/\s+$/, '').length;
+}
+
+function getPosAtStartOfLineOrNonWhitespace(fullText: string, pos: number): number {
+  return fullText.slice(0, pos).replace(/[ \t]+$/, '').length;
+}
+
+function getPosAtEndOfPreviousLine(fullText: string, pos: number): number {
+  const newLine = fullText.lastIndexOf('\n', pos - 1);
+
+  return newLine - Number(fullText[newLine - 1] === '\r');
+}
+
+function getPosAtNextNonBlankLine(fullText: string, pos: number): number {
+  const blankLines = /(?:[ \t]*\r?\n)*/y;
+  blankLines.lastIndex = pos;
+  blankLines.exec(fullText);
+
+  return blankLines.lastIndex;
 }

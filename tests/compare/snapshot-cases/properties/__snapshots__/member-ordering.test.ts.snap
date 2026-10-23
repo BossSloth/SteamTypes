@@ -1,5 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Member Ordering > block and jsdoc comments move with their member when reordered 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,11 +1,13 @@
+export interface BlockCommentInterface {
+-  zebra: string;
+-
+  /*
+   * multi-line block note
+   */
+  alpha: number;
+
+  /** jsdoc for charlie */
+  charlie: string;
++
++  delta: number;
++
++  zebra: string;
+}"
+`;
+
 exports[`Comparator Member Ordering > interface with @dontSort preserves member order 1`] = `
 "===================================================================
 --- a/target.ts
@@ -33,6 +55,25 @@ export interface OrderedInterface {
 
 -  methodA(): boolean;
 +  zebra: string;
+}"
+`;
+
+exports[`Comparator Member Ordering > line comment above member moves with it when reordered 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,8 +1,10 @@
+export interface CommentedInterface {
+  alpha: number;
+
++  charlie: string;
++
++  delta: number;
++
+  // some note
+  zebra: string;
+-
+-  charlie: string;
 }"
 `;
 
@@ -128,5 +169,51 @@ export interface HyphenInterface {
   mProp: boolean;
 +
 +  zProp: string;
+}"
+`;
+
+exports[`Comparator Member Ordering > single-line literal without trailing separator stays valid when reordered 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,7 @@
+export interface Holder {
+-  Get(): { b: string; a: number };
++  Get(): {
++    a: number; b: string;
++
++    c: boolean;
++  };
+}"
+`;
+
+exports[`Comparator Member Ordering > single-line nested type literal members are reordered in place 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,7 @@
+export interface SingleLineHolder {
+-  pair: { b: string; a: number; };
++  pair: {
++    a: number; b: string;
++
++    c: boolean;
++  };
+}"
+`;
+
+exports[`Comparator Member Ordering > trailing same-line comment in nested type literal stays with its member 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,6 +1,8 @@
+export interface NestedInterface {
+  holder: {
+-    b: string; // note
+    a: number;
++
++    b: string; // note
++    c: boolean;
+  };
 }"
 `;

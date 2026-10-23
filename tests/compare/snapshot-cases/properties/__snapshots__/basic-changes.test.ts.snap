@@ -125,6 +125,61 @@ export interface ChatMessage {
 }"
 `;
 
+exports[`Comparator Basic Property Changes > missing member added by self-referential nested reconcile is not duplicated 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,5 @@
+export interface Config {
++  c: string;
++
+  self: Config;
+}"
+`;
+
+exports[`Comparator Basic Property Changes > multiple extra members removed from a single-line literal 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,3 +1,3 @@
+export interface Holder2 {
+-  pair: { extraA: string; keep: string; extraB: string; };
++  pair: { keep: string; };
+}"
+`;
+
+exports[`Comparator Basic Property Changes > multiple extra members removed in one pass 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,25 +1,10 @@
+export interface Extras {
+-  extraA: string;
+-
+-  extraB: string;
+-
+  kept1: string;
+
+  // note
+-  extraC: number;
+-
+  kept2: (
+    | string
+    | number
+  )[];
+-
+-  extraD: boolean;
+-
+-  extraE: boolean;
+-
+  kept3: string;
+-
+-  extraF: number;
+-
+-  extraG: number;
+}"
+`;
+
 exports[`Comparator Basic Property Changes > property changes from array to specific interface 1`] = `
 "===================================================================
 --- a/target.ts

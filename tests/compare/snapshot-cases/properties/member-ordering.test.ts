@@ -164,6 +164,92 @@ export const memberOrderingCases: Record<string, ComparatorTest> = {
         ping_1000: string;
       }`,
   },
+
+  'line comment above member moves with it when reordered': {
+    interfaceName: 'CommentedInterface',
+    target: dedent /* ts */ `
+      export interface CommentedInterface {
+        alpha: number;
+
+        // some note
+        zebra: string;
+
+        charlie: string;
+      }`,
+    source: dedent /* ts */ `
+      export interface CommentedInterface {
+        alpha: number;
+        zebra: string;
+        charlie: string;
+        delta: number;
+      }`,
+  },
+
+  'block and jsdoc comments move with their member when reordered': {
+    interfaceName: 'BlockCommentInterface',
+    target: dedent /* ts */ `
+      export interface BlockCommentInterface {
+        zebra: string;
+
+        /*
+         * multi-line block note
+         */
+        alpha: number;
+
+        /** jsdoc for charlie */
+        charlie: string;
+      }`,
+    source: dedent /* ts */ `
+      export interface BlockCommentInterface {
+        zebra: string;
+        alpha: number;
+        charlie: string;
+        delta: number;
+      }`,
+  },
+
+  'trailing same-line comment in nested type literal stays with its member': {
+    interfaceName: 'NestedInterface',
+    target: dedent /* ts */ `
+      export interface NestedInterface {
+        holder: {
+          b: string; // note
+          a: number;
+        };
+      }`,
+    source: dedent /* ts */ `
+      export interface NestedInterface {
+        holder: {
+          b: string;
+          a: number;
+          c: boolean;
+        };
+      }`,
+  },
+
+  'single-line nested type literal members are reordered in place': {
+    interfaceName: 'SingleLineHolder',
+    target: dedent /* ts */ `
+      export interface SingleLineHolder {
+        pair: { b: string; a: number; };
+      }`,
+    source: dedent /* ts */ `
+      export interface SingleLineHolder {
+        pair: { b: string; a: number; c: boolean; };
+      }`,
+  },
+
+  'single-line literal without trailing separator stays valid when reordered': {
+    interfaceName: 'Holder',
+    target: dedent /* ts */ `
+      export interface Holder {
+        Get(): { b: string; a: number };
+      }`,
+    source: dedent /* ts */ `
+      export interface Holder {
+        Get(): { b: string; a: number; c: boolean };
+      }`,
+  },
 };
 
 createTest('Member Ordering', memberOrderingCases);

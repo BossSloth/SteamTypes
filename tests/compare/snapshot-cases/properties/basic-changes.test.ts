@@ -2,6 +2,75 @@ import dedent from 'dedent';
 import { ComparatorTest, createRenamedTest, createTest } from '../shared';
 
 export const basicChangeCases: Record<string, ComparatorTest> = {
+  'missing member added by self-referential nested reconcile is not duplicated': {
+    interfaceName: 'Config',
+    target: dedent /* ts */ `
+      export interface Config {
+        self: Config;
+      }`,
+    source: dedent /* ts */ `
+      export interface Config {
+        c: string;
+        self: {
+          c: string;
+          self: unknown;
+        };
+      }`,
+  },
+
+  'multiple extra members removed in one pass': {
+    interfaceName: 'Extras',
+    target: dedent /* ts */ `
+      export interface Extras {
+        extraA: string;
+
+        extraB: string;
+
+        kept1: string;
+
+        // note
+        extraC: number;
+
+        kept2: (
+          | string
+          | number
+        )[];
+
+        extraD: boolean;
+
+        extraE: boolean;
+
+        kept3: string;
+
+        extraF: number;
+
+        extraG: number;
+      }`,
+    source: dedent /* ts */ `
+      export interface Extras {
+        kept1: string;
+
+        kept2: (
+          | string
+          | number
+        )[];
+
+        kept3: string;
+      }`,
+  },
+
+  'multiple extra members removed from a single-line literal': {
+    interfaceName: 'Holder2',
+    target: dedent /* ts */ `
+      export interface Holder2 {
+        pair: { extraA: string; keep: string; extraB: string; };
+      }`,
+    source: dedent /* ts */ `
+      export interface Holder2 {
+        pair: { keep: string; };
+      }`,
+  },
+
   'simple add missing property': {
     interfaceName: 'SimpleInterface',
     target: dedent /* ts */ `

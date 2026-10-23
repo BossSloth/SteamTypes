@@ -270,6 +270,10 @@ async function processInterfaces(
 
   for (const map of maps) {
     progressBar.update(completedCount, { name: map.interfaceName });
+    // Comparisons block the redraw timer, so show the current interface before starting work.
+    if (progressBar.isActive) {
+      progressBar.render();
+    }
 
     // eslint-disable-next-line no-await-in-loop
     const { content: interfaceContent, extractTime: currentExtractTime } = await extractInterface(map);
