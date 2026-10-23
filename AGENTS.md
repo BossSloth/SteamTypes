@@ -113,8 +113,6 @@ Two test suites configured in `vitest.config.ts`:
   - `shared.ts` — Test helpers: `createTest()`, `runComparisonTest()`, `assertDiff()`
   - `snapshot-cases/` — Test case files (target + source interface strings) with expected diff snapshots in `__snapshots__/`
   - Each `*.test.ts` file imports a test case file and calls `createTest()`
-  - `synthetic-base-agreement.test.ts` — AST-level checks for synthetic base agreement (the source must not be mutated, and the target's type text is asserted directly)
-  - Convention: a newly found comparator bug is pinned first as an `it.fails` test that asserts the correct behavior, then fixed and flipped to `it` (or moved into a snapshot case)
   - `unit/` — Unit tests for `ComparisonSession` and `InterfaceMatcher`
 
 - **`tests/convert/`** — Tests for the `scripts/convert-to-typescript/` converter

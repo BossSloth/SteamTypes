@@ -1,8 +1,8 @@
 import { InterfaceDeclaration, SyntaxKind, TypeNode, TypeReferenceNode } from 'ts-morph';
-import { orderMembers } from '../member-ordering';
 import type { ComparisonSession } from '../session/ComparisonSession';
-import { getIdentifierName, getInterfaceDeclaration, isImportedType } from '../shared';
 import type { InterfaceMatcher } from './InterfaceMatcher';
+import { orderMembers } from '../member-ordering';
+import { getIdentifierName, getInterfaceDeclaration, isImportedType } from '../shared';
 import { canMergeIntoTarget, mergeSourcesIntoTarget } from './manual-merge';
 
 /**
@@ -79,7 +79,10 @@ export class InterfaceReferenceResolver {
         targetInterfaceDeclaration = this.matcher.findSimilarInterface(sourceInterfaceDeclaration);
 
         // Never collapse an extra source derived interface into a target base.
-        if (targetInterfaceDeclaration && this.matcher.isDerivedToBaseMismatch(sourceInterfaceDeclaration, targetInterfaceDeclaration)) {
+        if (
+          targetInterfaceDeclaration
+          && this.matcher.isDerivedToBaseMismatch(sourceInterfaceDeclaration, targetInterfaceDeclaration)
+        ) {
           targetInterfaceDeclaration = undefined;
         }
       } else {
@@ -93,46 +96,6 @@ export class InterfaceReferenceResolver {
         // If no matching interface found, add the source interface to the target
         this.addMissingInterface(sourceInterface);
       }
-    }
-  }
-
-  /**
-   * Extracts all interface references from a type, including those in arrays, unions, etc.
-   */
-  private extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
-    const interfaces: TypeReferenceNode[] = [];
-
-    if (type.isKind(SyntaxKind.TypeReference)) {
-      interfaces.push(type);
-    }
-
-    interfaces.push(...type.getDescendantsOfKind(SyntaxKind.TypeReference));
-
-    return interfaces.filter(
-      (interf) =>
-        interf
-          .getType()
-          .getSymbol()
-          ?.getDeclarations()
-          .some((d) => d.isKind(SyntaxKind.InterfaceDeclaration)) === true || isImportedType(this.session.targetFile, interf),
-    );
-  }
-
-  /**
-   * Repoints a freshly added interface's `extends` clauses at the matching target base.
-   * The structure is copied verbatim from the source, so a renamed base (e.g. matched via
-   * `@compareOriginalName`) would otherwise leave a dangling reference to the source's name.
-   */
-  private remapNewInterfaceExtends(newInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
-    const sourceExtends = sourceInterface.getExtends();
-    newInterface.getExtends().forEach((ext) => newInterface.removeExtends(ext));
-
-    for (const sourceExt of sourceExtends) {
-      const sourceExtName = sourceExt.getExpression().getText();
-
-      // Only remap when the source's base name is missing from the target.
-      const { targetName } = this.matcher.resolveBaseName(sourceExt, sourceInterface.getSourceFile());
-      newInterface.addExtends(sourceExt.getText().replace(sourceExtName, targetName));
     }
   }
 
@@ -202,7 +165,8 @@ export class InterfaceReferenceResolver {
       if (similarInterface && !this.matcher.isDerivedToBaseMismatch(interfaceDeclaration, similarInterface)) {
         // If the source file also contains an interface with the similar's name,
         // both coexist in source -> this is a genuinely new interface, not a rename. Add it.
-        const sourceHasSimilarByName = interfaceDeclaration.getSourceFile().getInterface(similarInterface.getName()) !== undefined;
+        const sourceHasSimilarByName =
+          interfaceDeclaration.getSourceFile().getInterface(similarInterface.getName()) !== undefined;
         if (!sourceHasSimilarByName) {
           continue;
         }
@@ -219,6 +183,46 @@ export class InterfaceReferenceResolver {
           this.addMissingInterface(child);
         }
       });
+    }
+  }
+
+  /**
+   * Extracts all interface references from a type, including those in arrays, unions, etc.
+   */
+  private extractInterfaceReferences(type: TypeNode): TypeReferenceNode[] {
+    const interfaces: TypeReferenceNode[] = [];
+
+    if (type.isKind(SyntaxKind.TypeReference)) {
+      interfaces.push(type);
+    }
+
+    interfaces.push(...type.getDescendantsOfKind(SyntaxKind.TypeReference));
+
+    return interfaces.filter(
+      (interf) =>
+        interf
+          .getType()
+          .getSymbol()
+          ?.getDeclarations()
+          .some((d) => d.isKind(SyntaxKind.InterfaceDeclaration)) === true || isImportedType(this.session.targetFile, interf),
+    );
+  }
+
+  /**
+   * Repoints a freshly added interface's `extends` clauses at the matching target base.
+   * The structure is copied verbatim from the source, so a renamed base (e.g. matched via
+   * `@compareOriginalName`) would otherwise leave a dangling reference to the source's name.
+   */
+  private remapNewInterfaceExtends(newInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration): void {
+    const sourceExtends = sourceInterface.getExtends();
+    newInterface.getExtends().forEach((ext) => newInterface.removeExtends(ext));
+
+    for (const sourceExt of sourceExtends) {
+      const sourceExtName = sourceExt.getExpression().getText();
+
+      // Only remap when the source's base name is missing from the target.
+      const { targetName } = this.matcher.resolveBaseName(sourceExt, sourceInterface.getSourceFile());
+      newInterface.addExtends(sourceExt.getText().replace(sourceExtName, targetName));
     }
   }
 }

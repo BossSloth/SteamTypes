@@ -1,10 +1,10 @@
 import { InterfaceDeclaration, SourceFile, SyntaxKind } from 'ts-morph';
+import type { ComparisonSession } from '../session/ComparisonSession';
 import { InterfaceMatcher } from '../matching/InterfaceMatcher';
 import { InterfaceReferenceResolver } from '../matching/InterfaceReferenceResolver';
 import { orderMembers } from '../member-ordering';
 import { renderDiff } from '../output/diff-output';
 import { MemberReconciler } from '../reconcile/MemberReconciler';
-import type { ComparisonSession } from '../session/ComparisonSession';
 import { CustomJsDocTags, hasJsDocTag } from '../shared';
 
 /**

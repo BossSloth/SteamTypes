@@ -1,6 +1,6 @@
 import { MethodSignature, Node, ParameterDeclaration, SyntaxKind } from 'ts-morph';
-import { CustomJsDocTags, hasJsDocTag, updatePropertyModifiers } from '../shared';
 import type { TypeReconciler } from './TypeReconciler';
+import { CustomJsDocTags, hasJsDocTag, updatePropertyModifiers } from '../shared';
 
 /**
  * Reconciles method return types, parameters and modifiers. Mutates the target method and its parameters.
@@ -40,7 +40,11 @@ export class MethodReconciler {
     return returnTypeNeedsUpdate || parametersNeedUpdate;
   }
 
-  private compareReturnType(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
+  private compareReturnType(
+    targetMethod: MethodSignature,
+    sourceMethod: MethodSignature,
+    isFromExtendedInterface: boolean,
+  ): boolean {
     // Compare return types
     const targetReturnTypeNode = targetMethod.getReturnTypeNode();
     const sourceReturnTypeNode = sourceMethod.getReturnTypeNode();
@@ -60,7 +64,11 @@ export class MethodReconciler {
     return false;
   }
 
-  private compareParameters(targetMethod: MethodSignature, sourceMethod: MethodSignature, isFromExtendedInterface: boolean): boolean {
+  private compareParameters(
+    targetMethod: MethodSignature,
+    sourceMethod: MethodSignature,
+    isFromExtendedInterface: boolean,
+  ): boolean {
     // Compare parameters
     const targetParams = targetMethod.getParameters();
     const sourceParams = sourceMethod.getParameters();

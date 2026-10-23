@@ -353,7 +353,7 @@ export interface Root {
 }"
 `;
 
-exports[`Comparator Shared Base Interfaces > synthetic base agreeing sources use the widest type without mutating the source 1`] = `
+exports[`Comparator Shared Base Interfaces > synthetic base agreeing sources use the widest type 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts

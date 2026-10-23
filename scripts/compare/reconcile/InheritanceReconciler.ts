@@ -1,8 +1,8 @@
 import { Identifier, InterfaceDeclaration, MethodSignature, Node, PropertySignature, SyntaxKind } from 'ts-morph';
 import type { ComparisonSession } from '../session/ComparisonSession';
+import type { MemberReconciliation } from './MemberReconciler';
 import { orderMembers } from '../member-ordering';
 import { getInterfaceMembers, getTypeText } from '../shared';
-import type { MemberReconciliation } from './MemberReconciler';
 
 /**
  * Reconciles members inherited through `extends`, including synthetic bases that exist only in the target.
@@ -17,7 +17,11 @@ export class InheritanceReconciler {
     this.members = members;
   }
 
-  public reconcileInheritedMismatch(targetInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration, memberName: string): void {
+  public reconcileInheritedMismatch(
+    targetInterface: InterfaceDeclaration,
+    sourceInterface: InterfaceDeclaration,
+    memberName: string,
+  ): void {
     if (this.reconcileNonSyntheticBaseMember(targetInterface, sourceInterface, memberName)) {
       return;
     }
@@ -52,7 +56,11 @@ export class InheritanceReconciler {
     this.members.reconcileMembers(targetInterface, sourceInterface);
   }
 
-  public reconcileExtraInheritedMember(targetInterface: InterfaceDeclaration, sourceInterface: InterfaceDeclaration, memberName: string): void {
+  public reconcileExtraInheritedMember(
+    targetInterface: InterfaceDeclaration,
+    sourceInterface: InterfaceDeclaration,
+    memberName: string,
+  ): void {
     const declaring = findDeclaringInheritedMember(targetInterface, memberName);
     /* v8 ignore next -- declaring is always found for an inherited member @preserve */
     if (!declaring) {
@@ -74,7 +82,9 @@ export class InheritanceReconciler {
   }
 
   private findTargetInterfacesExtending(baseName: string): InterfaceDeclaration[] {
-    return this.session.targetFile.getInterfaces().filter((i) => i.getExtends().some((ext) => ext.getExpression().getText() === baseName));
+    return this.session.targetFile
+      .getInterfaces()
+      .filter((i) => i.getExtends().some((ext) => ext.getExpression().getText() === baseName));
   }
 
   private getSourceDerivedInterfacesForSyntheticBase(
@@ -157,7 +167,10 @@ export class InheritanceReconciler {
     return this.reconcileSyntheticBaseMethodMember(baseMember, agreeingSourceMembers as MethodSignature[]);
   }
 
-  private recompareSyntheticBaseDerivedInterfaces(baseInterface: InterfaceDeclaration, sourceDerived: InterfaceDeclaration): void {
+  private recompareSyntheticBaseDerivedInterfaces(
+    baseInterface: InterfaceDeclaration,
+    sourceDerived: InterfaceDeclaration,
+  ): void {
     const sourceFile = sourceDerived.getSourceFile();
     const baseName = baseInterface.getName();
     const targetDerivedInterfaces = this.findTargetInterfacesExtending(baseName);
@@ -184,7 +197,11 @@ export class InheritanceReconciler {
     }
   }
 
-  private reconcileNonSyntheticBaseMember(targetDerived: InterfaceDeclaration, sourceDerived: InterfaceDeclaration, memberName: string): boolean {
+  private reconcileNonSyntheticBaseMember(
+    targetDerived: InterfaceDeclaration,
+    sourceDerived: InterfaceDeclaration,
+    memberName: string,
+  ): boolean {
     const targetDeclaring = findDeclaringInheritedMember(targetDerived, memberName);
     const sourceDeclaring = findDeclaringInheritedMember(sourceDerived, memberName);
 
@@ -244,18 +261,25 @@ function findWidestAgreeingSource(sourceMembers: PropertySignature[]): PropertyS
     return undefined;
   }
 
-  if (sourceMembers.some((member) => member.hasQuestionToken() !== first.hasQuestionToken() || member.isReadonly() !== first.isReadonly())) {
+  if (
+    sourceMembers.some(
+      (member) => member.hasQuestionToken() !== first.hasQuestionToken() || member.isReadonly() !== first.isReadonly(),
+    )
+  ) {
     return undefined;
   }
 
   const memberSets = sourceMembers.map((member) => {
     const typeNode = member.getTypeNodeOrThrow();
 
-    return new Set(Node.isUnionTypeNode(typeNode) ? typeNode.getTypeNodes().map((node) => getTypeText(node)) : [getTypeText(typeNode)]);
+    return new Set(
+      Node.isUnionTypeNode(typeNode) ? typeNode.getTypeNodes().map((node) => getTypeText(node)) : [getTypeText(typeNode)],
+    );
   });
 
   return sourceMembers.find((_member, candidateIndex) =>
-    memberSets.every((otherSet) => [...otherSet].every((text) => memberSets[candidateIndex].has(text))));
+    memberSets.every((otherSet) => [...otherSet].every((text) => memberSets[candidateIndex].has(text))),
+  );
 }
 
 function removeAllExtends(targetInterface: InterfaceDeclaration): void {

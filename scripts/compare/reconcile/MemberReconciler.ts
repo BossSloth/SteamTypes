@@ -19,7 +19,11 @@ import { TypeReconciler } from './TypeReconciler';
  */
 export interface MemberReconciliation {
   reconcileMembers(target: InterfaceDeclaration | TypeLiteralNode, source: InterfaceDeclaration | TypeLiteralNode): boolean;
-  reconcileMember(target: PropertySignature | MethodSignature, source: PropertySignature | MethodSignature, isInherited: boolean): boolean;
+  reconcileMember(
+    target: PropertySignature | MethodSignature,
+    source: PropertySignature | MethodSignature,
+    isInherited: boolean,
+  ): boolean;
 }
 
 /**
@@ -49,8 +53,27 @@ export class MemberReconciler implements MemberReconciliation {
    *
    * @returns true if properties were added or removed
    */
-  public reconcileMembers(targetInterface: InterfaceDeclaration | TypeLiteralNode, sourceInterface: InterfaceDeclaration | TypeLiteralNode): boolean {
+  public reconcileMembers(
+    targetInterface: InterfaceDeclaration | TypeLiteralNode,
+    sourceInterface: InterfaceDeclaration | TypeLiteralNode,
+  ): boolean {
     return this.reconcileMembersPass(targetInterface, sourceInterface, new Set<string>());
+  }
+
+  /**
+   * Reconciles a single property or method pair. Properties go to the property reconciler, everything else to the method reconciler.
+   * @returns true if an inherited member needs an extends update
+   */
+  public reconcileMember(
+    target: PropertySignature | MethodSignature,
+    source: PropertySignature | MethodSignature,
+    isInherited: boolean,
+  ): boolean {
+    if (target instanceof PropertySignature && source instanceof PropertySignature) {
+      return this.properties.reconcile(target, source, isInherited);
+    }
+
+    return this.methods.reconcile(target as MethodSignature, source as MethodSignature, isInherited);
   }
 
   /** Runs an inheritance correction for `memberName` at most once per pass, then re-runs the pass with fresh maps. @returns false when the name was already handled in this pass */
@@ -124,10 +147,16 @@ export class MemberReconciler implements MemberReconciliation {
       const isFromExtendedInterface = !realTargetMembersMap.has(targetProp.getName());
       const needsExtendUpdate = this.reconcileMember(targetProp, sourceProp, isFromExtendedInterface);
 
-      if (needsExtendUpdate && targetInterface instanceof InterfaceDeclaration && sourceInterface instanceof InterfaceDeclaration) {
-        if (this.reconcileInheritedOnce(targetInterface, sourceInterface, propName, handledInherited, () => {
-          this.inheritance.reconcileInheritedMismatch(targetInterface, sourceInterface, propName);
-        })) {
+      if (
+        needsExtendUpdate
+        && targetInterface instanceof InterfaceDeclaration
+        && sourceInterface instanceof InterfaceDeclaration
+      ) {
+        if (
+          this.reconcileInheritedOnce(targetInterface, sourceInterface, propName, handledInherited, () => {
+            this.inheritance.reconcileInheritedMismatch(targetInterface, sourceInterface, propName);
+          })
+        ) {
           return true;
         }
       }
@@ -144,9 +173,19 @@ export class MemberReconciler implements MemberReconciliation {
         }
 
         // An extra inherited member can only exist on an InterfaceDeclaration
-        this.reconcileInheritedOnce(targetInterface as InterfaceDeclaration, sourceInterface as InterfaceDeclaration, propName, handledInherited, () => {
-          this.inheritance.reconcileExtraInheritedMember(targetInterface as InterfaceDeclaration, sourceInterface as InterfaceDeclaration, propName);
-        });
+        this.reconcileInheritedOnce(
+          targetInterface as InterfaceDeclaration,
+          sourceInterface as InterfaceDeclaration,
+          propName,
+          handledInherited,
+          () => {
+            this.inheritance.reconcileExtraInheritedMember(
+              targetInterface as InterfaceDeclaration,
+              sourceInterface as InterfaceDeclaration,
+              propName,
+            );
+          },
+        );
 
         return true;
       }
@@ -156,24 +195,16 @@ export class MemberReconciler implements MemberReconciliation {
   }
 
   /**
-   * Reconciles a single property or method pair. Properties go to the property reconciler, everything else to the method reconciler.
-   * @returns true if an inherited member needs an extends update
-   */
-  public reconcileMember(target: PropertySignature | MethodSignature, source: PropertySignature | MethodSignature, isInherited: boolean): boolean {
-    if (target instanceof PropertySignature && source instanceof PropertySignature) {
-      return this.properties.reconcile(target, source, isInherited);
-    }
-
-    return this.methods.reconcile(target as MethodSignature, source as MethodSignature, isInherited);
-  }
-
-  /**
    * Adds a missing property to the target interface
    * @param targetInterface The interface to add the property to
    * @param sourceProp The property to add
    * @param propName The name of the property to add
    */
-  private addMissingMember(targetInterface: TypeElementMemberedNode, sourceProp: PropertySignature | MethodSignature, propName: string): void {
+  private addMissingMember(
+    targetInterface: TypeElementMemberedNode,
+    sourceProp: PropertySignature | MethodSignature,
+    propName: string,
+  ): void {
     // Property missing in target, add it
     if (sourceProp instanceof MethodSignature) {
       // Filter out @native jsdoc

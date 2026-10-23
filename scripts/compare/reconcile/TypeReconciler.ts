@@ -18,10 +18,10 @@ import {
   UnionTypeNode,
 } from 'ts-morph';
 import type { InterfaceReferenceResolver } from '../matching/InterfaceReferenceResolver';
-import { orderMembers } from '../member-ordering';
 import type { ComparisonSession } from '../session/ComparisonSession';
-import { getTypeText, isImportedType } from '../shared';
 import type { MemberReconciliation } from './MemberReconciler';
+import { orderMembers } from '../member-ordering';
+import { getTypeText, isImportedType } from '../shared';
 
 /**
  * Reconciles a target type node against a source type node. Mutates the target in place (unions, intersections,
@@ -315,7 +315,10 @@ export class TypeReconciler {
     if (Node.isUnionTypeNode(sourceNode)) {
       return sourceNode
         .getTypeNodes()
-        .every((member) => Node.isArrayTypeNode(member) && this.reconcile(targetArray.getElementTypeNode(), member.getElementTypeNode()));
+        .every(
+          (member) =>
+            Node.isArrayTypeNode(member) && this.reconcile(targetArray.getElementTypeNode(), member.getElementTypeNode()),
+        );
     }
 
     if (!Node.isArrayTypeNode(sourceNode)) {

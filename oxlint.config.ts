@@ -132,6 +132,7 @@ export default defineConfig({
     'customRules/no-undefined-types': ['error', { disableReporting: true }],
     'typescript/consistent-type-imports': 'off',
     'import/no-named-as-default-member': 'off',
+    'class-methods-use-this': 'off',
     // #endregion
 
     // #region TypeScript compatibility

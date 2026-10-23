@@ -1,8 +1,8 @@
 import { EnumDeclaration, EnumMember, PropertySignature, TypeNode } from 'ts-morph';
 import type { InterfaceReferenceResolver } from '../matching/InterfaceReferenceResolver';
 import type { ComparisonSession } from '../session/ComparisonSession';
-import { CustomJsDocTags, getJsDocTagValues, getTypeText, hasJsDocTag, isImportedType, updatePropertyModifiers } from '../shared';
 import type { TypeReconciler } from './TypeReconciler';
+import { CustomJsDocTags, getJsDocTagValues, getTypeText, hasJsDocTag, isImportedType, updatePropertyModifiers } from '../shared';
 
 /**
  * Reconciles property types and modifiers. Mutates the target property, the target file (adds enums, enum members)

@@ -800,7 +800,7 @@ export const sharedBaseCases: Record<string, ComparatorTest> = {
       `,
   },
 
-  'synthetic base agreeing sources use the widest type without mutating the source': {
+  'synthetic base agreeing sources use the widest type': {
     interfaceName: 'A',
     target: dedent /* ts */ `
       export interface A extends Base {}

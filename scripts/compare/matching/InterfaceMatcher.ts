@@ -89,7 +89,8 @@ export class InterfaceMatcher {
     const targetBase = this.session.targetFile.getInterface(sourceExtName);
 
     // If the base interface name does not exist in the target, try to find a similar one
-    const similarTarget = targetBase === undefined && sourceBase !== undefined ? this.findSimilarInterface(sourceBase) : undefined;
+    const similarTarget =
+      targetBase === undefined && sourceBase !== undefined ? this.findSimilarInterface(sourceBase) : undefined;
 
     if (similarTarget === undefined) {
       return { targetName: sourceExtName, targetBase, sourceBase, matchedBySimilarity: false };
