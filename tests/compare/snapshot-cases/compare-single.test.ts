@@ -6,7 +6,7 @@ setImportCasesOnly();
 const { genericsCases } = await import('./types/generics.test');
 
 describe('Comparator - Single debug', () => {
-  it('single', () => {
-    runComparisonTest(genericsCases['generic interface type in map']);
+  it('single', async () => {
+    await runComparisonTest(genericsCases['generic interface type in map']);
   });
 });

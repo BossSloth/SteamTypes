@@ -30,6 +30,9 @@ const STEAM_PROTOBUF_FILES = [
   'steamnetworkingsockets_messages_certs.proto',
   'steammessages_clientnotificationtypes.proto',
   'webuimessages_steamos.proto',
+  'steammessages_appratings_types.proto',
+  'steammessages_seasonpass_types.proto',
+  'steammessages_steamawards_types.proto',
 ];
 
 const DEFAULT_PROTOBUF_FILES = [...STEAM_PROTOBUF_FILES.map((file) => join('steam', file))];

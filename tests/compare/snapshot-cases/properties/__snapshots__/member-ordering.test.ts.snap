@@ -123,14 +123,16 @@ exports[`Comparator Member Ordering > mixed quoted and unquoted properties 1`] =
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -2,6 +2,8 @@
-  'a': number;
+@@ -1,7 +1,9 @@
+export interface MixedInterface {
+-  'a': number;
++  a: number;
 
   b: boolean;
 
   c: string;
 +
-+  'd': string;
++  d: string;
 }"
 `;
 
@@ -141,14 +143,16 @@ exports[`Comparator Member Ordering > quoted property names should be ordered co
 @@ -1,9 +1,11 @@
 export interface TestInterface {
 -  zebra: string;
++  alpha: number;
+
+-  'alpha': number;
++  beta: boolean;
+
+-  'beta': boolean;
 -
-  'alpha': number;
-
-  'beta': boolean;
-
   charlie: string;
 +
-+  'delta': number;
++  delta: number;
 +
 +  zebra: string;
 }"
@@ -176,14 +180,10 @@ exports[`Comparator Member Ordering > single-line literal without trailing separ
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,3 +1,7 @@
+@@ -1,3 +1,3 @@
 export interface Holder {
 -  Get(): { b: string; a: number };
-+  Get(): {
-+    a: number; b: string;
-+
-+    c: boolean;
-+  };
++  Get(): { a: number; b: string; c: boolean };
 }"
 `;
 
@@ -191,14 +191,10 @@ exports[`Comparator Member Ordering > single-line nested type literal members ar
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,3 +1,7 @@
+@@ -1,3 +1,3 @@
 export interface SingleLineHolder {
 -  pair: { b: string; a: number; };
-+  pair: {
-+    a: number; b: string;
-+
-+    c: boolean;
-+  };
++  pair: { a: number; b: string; c: boolean };
 }"
 `;
 

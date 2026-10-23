@@ -102,7 +102,7 @@ export const intersectionCases: Record<string, ComparatorTest> = {
         map: ObservableMap<'Main', Popup<string>> & ObservableMap<string, Popup>;
       }
 
-      export interface Popup<T extends (number | string) = number> {
+      export interface Popup<T extends number | string = number> {
         id: T;
 
         name: string;

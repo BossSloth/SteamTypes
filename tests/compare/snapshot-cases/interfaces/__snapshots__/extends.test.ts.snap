@@ -373,11 +373,12 @@ exports[`Comparator Extended Interfaces > extra inherited member followed by own
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,9 +1,8 @@
-interface B {
+@@ -1,9 +1,7 @@
+-interface B {
 -  x: string;
 -  w: number;
-}
+-}
++interface B {}
 
 -export interface A extends B {
 +export interface A {

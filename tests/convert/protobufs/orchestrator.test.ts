@@ -6,6 +6,8 @@ import { generateTypeScriptDefinitions } from '../../../scripts/proto-scripts/or
 
 type FsActual = typeof fsModule;
 
+vi.mock('bun', () => ({ $: vi.fn() }));
+
 vi.mock('fs', async (importOriginal) => {
   const actual = await importOriginal<FsActual>();
 

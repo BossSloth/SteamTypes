@@ -10,11 +10,11 @@ import { ComparisonSession } from './session/ComparisonSession';
  * @param filePath The file path for labeling the diff
  * @returns A diff of all changes made to the entire source file
  */
-export function compareAndCorrectAllInterfaces(
+export async function compareAndCorrectAllInterfaces(
   targetSourceFile: SourceFile,
   sourceSourceFile: SourceFile,
   interfaceName: string,
   filePath: string,
-): string | null {
+): Promise<string | null> {
   return new ComparisonPipeline(new ComparisonSession(targetSourceFile), sourceSourceFile, interfaceName, filePath).run();
 }

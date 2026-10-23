@@ -50,6 +50,7 @@
     "lint": "knip ; oxlint && echo 'Lint passed'",
     "lint:fix": "knip --fix ; oxlint --fix",
     "format": "oxfmt",
+    "typecheck": "bun check -p ./src && bun check -p ./scripts",
     "prepublishOnly": "bun run build",
     "proto:generate": "bun run scripts/proto-scripts/generate-protobufs.ts",
     "proto:watch": "bun run --watch scripts/proto-scripts/generate-protobufs.ts"
@@ -68,6 +69,7 @@
     "@semantic-release/npm": "^13.1.5",
     "@steambrew/client": "^5.8.5",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/bun": "^1.4.3",
     "@types/chrome-remote-interface": "^0.34.0",
     "@types/cli-progress": "^3.11.6",
     "@types/node": "^25.9.3",

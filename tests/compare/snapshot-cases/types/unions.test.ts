@@ -134,7 +134,7 @@ export const unionCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface FooInterface {
-        foo: { summary: string, result: number } | { summary?: undefined, result: number };
+        foo: { summary: string; result: number } | { summary?: undefined; result: number };
       }`,
     source: dedent /* ts */ `
       export interface FooInterface {
@@ -146,11 +146,11 @@ export const unionCases: Record<string, ComparatorTest> = {
     interfaceName: 'FooInterface',
     target: dedent /* ts */ `
       export interface FooInterface {
-        foo: { summary: string, result: number } | { summary?: undefined, result: number };
+        foo: { summary: string; result: number } | { summary?: undefined; result: number };
       }`,
     source: dedent /* ts */ `
       export interface FooInterface {
-        foo: { summary?: unknown, result: number } | { summary?: unknown, result: number };
+        foo: { summary?: unknown; result: number } | { summary?: unknown; result: number };
       }`,
   },
 
@@ -159,7 +159,7 @@ export const unionCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface FooInterface {
-        foo: { summary: string, result: number } | { summary?: undefined, result: number } | string;
+        foo: { summary: string; result: number } | { summary?: undefined; result: number } | string;
       }`,
     source: dedent /* ts */ `
       export interface FooInterface {
@@ -238,7 +238,7 @@ export const unionCases: Record<string, ComparatorTest> = {
       }`,
     source: dedent /* ts */ `
       export interface Container {
-        data: (string[] | number);
+        data: string[] | number;
       }`,
   },
 
@@ -260,7 +260,7 @@ export const unionCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface Container {
-        data: (string | null);
+        data: string | null;
       }`,
     source: dedent /* ts */ `
       export interface Container {

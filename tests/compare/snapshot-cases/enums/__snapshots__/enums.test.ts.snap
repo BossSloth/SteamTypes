@@ -30,7 +30,7 @@ export enum EStatusFlags {
   DISCONNECTED = 1 << 1,
   PENDING = 1 << 2,
 +  /** @generated bitfield value */
-+  Flag_12 = 12
++  Flag_12 = 12,
 }"
 `;
 
@@ -46,7 +46,7 @@ export interface StatusHolder {
 +
 +/** @generated */
 +export enum EStatus {
-+  EStatus7 = 7
++  EStatus7 = 7,
 +}"
 `;
 
@@ -63,7 +63,7 @@ export interface StatusHolder {
 +/** @generated */
 +export enum EStatus {
 +  EStatus7 = 7,
-+  EStatus8 = 8
++  EStatus8 = 8,
 +}"
 `;
 
@@ -87,7 +87,7 @@ export interface SteamStatus {
 +
 +/** @generated */
 +export enum EResult {
-+  EResult1 = 1
++  EResult1 = 1,
 +}"
 `;
 
@@ -101,7 +101,7 @@ export enum GameType {
   Pending,
   Active,
   Inactive,
-+  "TODO: change me 3" = 3
++  'TODO: change me 3' = 3,
 }"
 `;
 
@@ -139,7 +139,7 @@ export enum ConnectionStatus {
   CONNECTED = 1,
   DISCONNECTED = 2,
   PENDING = 3,
-+  "TODO: change me 5" = 5
++  'TODO: change me 5' = 5,
 }"
 `;
 
@@ -160,7 +160,7 @@ export enum ConnectionStatus {
   CONNECTED = 1,
   DISCONNECTED = 2,
   PENDING = 3,
-+  "TODO: change me 5" = 5
++  'TODO: change me 5' = 5,
 }"
 `;
 
@@ -182,6 +182,6 @@ export interface SteamStatus {
 +
 +/** @generated */
 +export enum EResult {
-+  EResult1 = 1
++  EResult1 = 1,
 +}"
 `;

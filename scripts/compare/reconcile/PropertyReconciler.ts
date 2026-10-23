@@ -78,8 +78,9 @@ export class PropertyReconciler {
 
       if (!targetProp.getType().isEnum()) {
         const enumName = sourceProp.getName().replace(/^m_e|^e(?=[A-Z])/, 'E');
+        const enumNameWithoutPrefix = enumName.replace(/^E/, '');
         // Check if the enum already exists in the target file
-        const existingEnum = this.session.targetFile.getEnum(enumName);
+        const existingEnum = this.session.targetFile.getEnum(enumName) ?? this.session.targetFile.getEnum(enumNameWithoutPrefix);
         if (!existingEnum) {
           // Add new enum to target
           this.session.targetFile.addEnum({
@@ -94,7 +95,7 @@ export class PropertyReconciler {
         }
 
         // Update target property to use the new enum
-        targetProp.setType(enumName);
+        targetProp.setType(existingEnum?.getName() ?? enumName);
 
         return true;
       }

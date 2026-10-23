@@ -32,7 +32,7 @@ export class ComparisonPipeline {
   /**
    * @returns A diff of all changes made to the entire target source file, or null when nothing changed
    */
-  public run(): string | null {
+  public async run(): Promise<string | null> {
     // Store the original text of the entire source file for diff generation
     const originalSourceText = this.session.targetFile.getFullText();
 

@@ -108,8 +108,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
         data: Empty;
       }
 
-      export interface Empty {
-      }
+      export interface Empty {}
       `,
     source: dedent /* ts */ `
       export interface Container {
@@ -184,8 +183,9 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Friend',
     target: dedent /* ts */ `
       export interface Friend {
-        info: Community_data
-        extra_info?: (Community_data | Foo)
+        info: Community_data;
+
+        extra_info?: Community_data | Foo;
       }
 
       export interface Community_data {
@@ -254,7 +254,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface Chat {
-        emoticons: Emoticon[]
+        emoticons: Emoticon[];
       }
 
       export interface Emoticon {
@@ -311,7 +311,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Chat',
     target: dedent /* ts */ `
       export interface Chat {
-        emoticons: Emoticon[]
+        emoticons: Emoticon[];
       }
 
       export interface Emoticon {
@@ -370,7 +370,7 @@ export const mergedInterfaceCases: Record<string, ComparatorTest> = {
     interfaceName: 'Chat',
     target: dedent /* ts */ `
       export interface Chat {
-        emoticons: Emoticon[]
+        emoticons: Emoticon[];
       }
 
       export interface Emoticon {

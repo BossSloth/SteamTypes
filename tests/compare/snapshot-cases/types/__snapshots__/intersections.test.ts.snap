@@ -86,14 +86,18 @@ exports[`Comparator Intersection Renames > map intersection type with mismatch -
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,7 @@
+@@ -1,9 +1,9 @@
 export interface Config {
 -  map: ObservableMap<15, PopupRenamed<string>> & ObservableMap<string, PopupRenamed>;
 +  map: ObservableMap<string, PopupRenamed<string>> & ObservableMap<string, PopupRenamed>;
 }
 
-export interface PopupRenamed<T extends (number | string) = number> {
-  id: T;"
+-export interface PopupRenamed<T extends (number | string) = number> {
++export interface PopupRenamed<T extends number | string = number> {
+  id: T;
+
+  name: string;
+}"
 `;
 
 exports[`Comparator Intersections > array intersection types 1`] = `
@@ -191,12 +195,16 @@ exports[`Comparator Intersections > map intersection type with mismatch 1`] = `
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,7 +1,7 @@
+@@ -1,9 +1,9 @@
 export interface Config {
 -  map: ObservableMap<15, Popup<string>> & ObservableMap<string, Popup>;
 +  map: ObservableMap<string, Popup<string>> & ObservableMap<string, Popup>;
 }
 
-export interface Popup<T extends (number | string) = number> {
-  id: T;"
+-export interface Popup<T extends (number | string) = number> {
++export interface Popup<T extends number | string = number> {
+  id: T;
+
+  name: string;
+}"
 `;

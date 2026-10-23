@@ -138,7 +138,7 @@ export const returnTypesCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface Foo {
-        bar(): Promise<{ clipSummary: string; result: number; } | { result: number; clipSummary?: undefined; }>;
+        bar(): Promise<{ clipSummary: string; result: number } | { result: number; clipSummary?: undefined }>;
       }
     `,
     source: dedent /* ts */ `

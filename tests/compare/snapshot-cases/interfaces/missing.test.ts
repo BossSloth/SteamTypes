@@ -179,8 +179,7 @@ export const missingCases: Record<string, ComparatorTest> = {
         data: ExistingEmpty;
       }
 
-      export interface ExistingEmpty {
-      }`,
+      export interface ExistingEmpty {}`,
     source: dedent /* ts */ `
       export interface Container {
         data: NewEmpty;

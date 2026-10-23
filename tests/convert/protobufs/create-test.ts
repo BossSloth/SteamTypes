@@ -3,6 +3,8 @@ import path from 'path';
 import protobuf from 'protobufjs';
 import { generateTypeScriptFromReflection } from '../../../scripts/proto-scripts/generate-protobufs';
 
+vi.mock('bun', () => ({ $: vi.fn() }));
+
 const TEST_PROTO_DIR = path.join(__dirname, 'test-protos');
 const REAL_PROTO_DIR = path.join(__dirname, '..', '..', '..', 'scripts', 'Protobufs');
 
@@ -21,6 +23,11 @@ function makeRoot(): protobuf.Root {
     const realFallback = path.join(REAL_PROTO_DIR, target);
     if (existsSync(realFallback)) {
       return realFallback;
+    }
+
+    const steamFallback = path.join(REAL_PROTO_DIR, 'steam', target);
+    if (existsSync(steamFallback)) {
+      return steamFallback;
     }
 
     return path.join(TEST_PROTO_DIR, target);

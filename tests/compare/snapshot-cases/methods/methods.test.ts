@@ -36,12 +36,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'PopupManager',
     target: dedent /* ts */ `
     export interface PopupManager {
-      GetHeaderImages(appOverview: { appid: number }): string
+      GetHeaderImages(appOverview: { appid: number }): string;
     }
   `,
     source: dedent /* ts */ `
     export interface PopupManager {
-      GetHeaderImages(e: unknown, t: unknown): string
+      GetHeaderImages(e: unknown, t: unknown): string;
     }
   `,
   },
@@ -49,12 +49,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'PopupManager',
     target: dedent /* ts */ `
     export interface PopupManager {
-      GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string
+      GetHeaderImages(appOverview: { appid: number }, otherInfo: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface PopupManager {
-      GetHeaderImages(e: unknown): string
+      GetHeaderImages(e: unknown): string;
     }
   `,
   },
@@ -63,12 +63,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface PopupManager {
-      GetOptions(options: string[]): string
+      GetOptions(options: string[]): string;
     }
   `,
     source: dedent /* ts */ `
     export interface PopupManager {
-      GetOptions(e: unknown[]): string
+      GetOptions(e: unknown[]): string;
     }
   `,
   },
@@ -76,12 +76,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'PopupManager',
     target: dedent /* ts */ `
     export interface PopupManager {
-      GetOptions(options: string): string
+      GetOptions(options: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface PopupManager {
-      GetOptions(e?: unknown): string
+      GetOptions(e?: unknown): string;
     }
   `,
   },
@@ -90,7 +90,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface PopupManager {
-      GetOptions(options?: string | null): string
+      GetOptions(options?: string | null): string;
     }
   `,
     source: dedent /* ts */ `
@@ -104,7 +104,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: EOptions): string
+      GetOptions(options: EOptions): string;
     }
 
     export enum EOptions {
@@ -114,7 +114,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(e: number): string
+      GetOptions(e: number): string;
     }
   `,
   },
@@ -123,7 +123,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: EOptions): string
+      GetOptions(options: EOptions): string;
     }
 
     export enum EOptions {
@@ -133,7 +133,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(e: string): string
+      GetOptions(e: string): string;
     }
   `,
   },
@@ -141,7 +141,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'Foo',
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: EOptions): string
+      GetOptions(options: EOptions): string;
     }
 
     export enum EOptions {
@@ -151,7 +151,7 @@ export const methodsCases: Record<string, ComparatorTest> = {
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(e: string): string
+      GetOptions(e: string): string;
     }
   `,
   },
@@ -161,12 +161,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: string[]): string
+      GetOptions(options: string[]): string;
     }
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(...e: unknown[]): string
+      GetOptions(...e: unknown[]): string;
     }
   `,
   },
@@ -176,12 +176,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: string): string
+      GetOptions(options: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(...e: unknown[]): string
+      GetOptions(...e: unknown[]): string;
     }
   `,
   },
@@ -191,12 +191,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: number, otherInfo: string): string
+      GetOptions(options: number, otherInfo: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(...e: unknown[]): string
+      GetOptions(...e: unknown[]): string;
     }
   `,
   },
@@ -205,12 +205,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions?(options: string): string
+      GetOptions?(options: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: string): string
+      GetOptions(options: string): string;
     }
   `,
   },
@@ -218,12 +218,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'Foo',
     target: dedent /* ts */ `
       export interface Foo {
-        GetOptions(options: string): string
+        GetOptions(options: string): string;
       }
     `,
     source: dedent /* ts */ `
       export interface Foo {
-        GetOptions?(options: string): string
+        GetOptions?(options: string): string;
       }
     `,
   },
@@ -232,12 +232,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       export interface Foo {
-        GetOptions(options: string): string
+        GetOptions(options: string): string;
       }
     `,
     source: dedent /* ts */ `
       export interface Foo {
-        GetOptions(e): string
+        GetOptions(e): string;
       }
     `,
   },
@@ -245,12 +245,12 @@ export const methodsCases: Record<string, ComparatorTest> = {
     interfaceName: 'Foo',
     target: dedent /* ts */ `
     export interface Foo {
-      GetOptions(options: string): string
+      GetOptions(options: string): string;
     }
   `,
     source: dedent /* ts */ `
     export interface Foo {
-      GetOptions(...e: string[]): string
+      GetOptions(...e: string[]): string;
     }
   `,
   },

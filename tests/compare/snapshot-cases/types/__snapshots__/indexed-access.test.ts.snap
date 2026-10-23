@@ -12,7 +12,18 @@ export interface UserProfile {
   user: User;
 }
 
-export interface User {"
+export interface User {
+@@ -12,11 +12,10 @@
+  info: Info;
+
+  name: string;
+
+  settings: Settings;
+-
+}
+
+export interface Settings {
+  language: string;"
 `;
 
 exports[`Comparator Indexed Access > indexed access type mismatch 1`] = `
@@ -95,7 +106,18 @@ export interface UserProfile {
   user: UserRenamed;
 }
 
-export interface UserRenamed {"
+export interface UserRenamed {
+@@ -12,11 +12,10 @@
+  info: InfoRenamed;
+
+  name: string;
+
+  settings: SettingsRenamed;
+-
+}
+
+export interface SettingsRenamed {
+  language: string;"
 `;
 
 exports[`Comparator Indexed Access Renames > indexed access type mismatch - renamed 1`] = `

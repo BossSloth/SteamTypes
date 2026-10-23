@@ -43,8 +43,8 @@ export function createTest(name: string, testCases: Record<string, ComparatorTes
 
   describe(`Comparator ${name}`, () => {
     Object.entries(testCases).forEach(([testName, testValues]) => {
-      it(testName, () => {
-        runComparisonTest(testValues);
+      it(testName, async () => {
+        await runComparisonTest(testValues);
       });
     });
   });
@@ -96,16 +96,18 @@ export function createRenamedTest(name: string, baseCases: Record<string, Compar
   createTest(name, renamed);
 }
 
-export function runComparisonTest(testValues: ComparatorTest): void {
+export async function runComparisonTest(testValues: ComparatorTest): Promise<void> {
   const { targetFile, sourceFile } = createTestFiles(testValues.target, testValues.source);
 
   if (testValues.expectedException !== undefined) {
-    expect(() => runComparison(targetFile, sourceFile, testValues.interfaceName)).toThrow(testValues.expectedException);
+    await expect(async () => runComparison(targetFile, sourceFile, testValues.interfaceName)).rejects.toThrow(
+      testValues.expectedException,
+    );
 
     return;
   }
 
-  const diff = runComparison(targetFile, sourceFile, testValues.interfaceName);
+  const diff = await runComparison(targetFile, sourceFile, testValues.interfaceName);
 
   if (testValues.expectsNoDiff ?? false) {
     expect(diff).toBeNull();
@@ -137,7 +139,7 @@ function createTestFiles(targetContent: string, sourceContent: string): { target
  * @param interfaceName Name of the interface to compare
  * @returns The diff result
  */
-function runComparison(targetFile: SourceFile, sourceFile: SourceFile, interfaceName: string): string | null {
+async function runComparison(targetFile: SourceFile, sourceFile: SourceFile, interfaceName: string): Promise<string | null> {
   return compareAndCorrectAllInterfaces(targetFile, sourceFile, interfaceName, 'target.ts');
 }
 

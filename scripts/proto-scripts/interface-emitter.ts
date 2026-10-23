@@ -43,7 +43,7 @@ export function normalizeEnumValueName(valueName: string, originalEnumTypeName: 
   }
 
   // If name is fully numeric, prefix with "_"
-  if (/^\d+$/.test(normalized)) {
+  if (/^\d+/.test(normalized)) {
     normalized = `_${normalized}`;
   }
 

@@ -538,9 +538,9 @@ export const genericsCases: Record<string, ComparatorTest> = {
     expectsNoDiff: true,
     target: dedent /* ts */ `
       interface TypeMap {
-        a: { value: string; };
+        a: { value: string };
 
-        b: { value: number; };
+        b: { value: number };
       }
 
       export interface Container {
@@ -583,7 +583,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
       export interface MappedObservable<TSource, TMapped> {
         m_fnMap(value: TSource): TMapped;
 
-        Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void; };
+        Subscribe(callback: (value: TMapped) => void): { Unsubscribe: () => void };
 
         UpdateMappedValue(): void;
 
@@ -601,7 +601,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
         Set(value: T): void;
 
-        Subscribe(callback: (value: T) => void): { Unsubscribe: () => void; };
+        Subscribe(callback: (value: T) => void): { Unsubscribe: () => void };
 
         m_callbacks: Callbacks<(value: T) => void>;
 
@@ -619,7 +619,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
 
         Dispatch(...args: Parameters<T>): void;
 
-        Register(callback: T): { Unregister: () => void; };
+        Register(callback: T): { Unregister: () => void };
 
         m_vecCallbacks: T[];
       }
@@ -703,7 +703,7 @@ export const genericsCases: Record<string, ComparatorTest> = {
   'indexed access on type alias falls through': {
     interfaceName: 'Container',
     target: dedent /* ts */ `
-      type Foo = { bar: string; };
+      type Foo = { bar: string };
 
       export interface Container {
         value: Foo['bar'];

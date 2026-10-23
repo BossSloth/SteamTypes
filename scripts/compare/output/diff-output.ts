@@ -1,7 +1,12 @@
 import chalk from 'chalk';
 import { createTwoFilesPatch } from 'diff';
+import { readFileSync } from 'node:fs';
+import { format, FormatConfig } from 'oxfmt';
 import { InterfaceDeclaration, SourceFile, TypeAliasDeclaration } from 'ts-morph';
 import { CustomJsDocTags, hasJsDocTag } from '../shared';
+
+// The programmatic API does not discover configuration files.
+const formatConfig = JSON.parse(readFileSync(new URL('../../../.oxfmtrc.json', import.meta.url), 'utf8')) as FormatConfig;
 
 /**
  * Generates a colored diff between original and new text
@@ -54,7 +59,7 @@ const ignoreFormattingTextOptions = { includeJsDocComments: true };
 
 /**
  * Collects every type alias and interface tagged with `@ignoreFormatting`.
- * The set is identical before and after `formatText` since formatting never
+ * The set is identical before and after formatting since formatting never
  * adds or removes declarations.
  */
 function getIgnoreFormattingNodes(sourceFile: SourceFile): (InterfaceDeclaration | TypeAliasDeclaration)[] {
@@ -65,8 +70,8 @@ function getIgnoreFormattingNodes(sourceFile: SourceFile): (InterfaceDeclaration
 
 /**
  * Captures the exact text (including JSDoc) of every `@ignoreFormatting` declaration.
- * Taken after the comparator's structural edits but before `formatText`, so legitimate
- * changes are kept while `formatText`'s reformatting can later be reverted.
+ * Taken after the comparator's structural edits but before formatting, so legitimate
+ * changes are kept while reformatting can later be reverted.
  */
 function snapshotIgnoreFormatting(sourceFile: SourceFile): Map<string, string> {
   const snapshot = new Map<string, string>();
@@ -78,9 +83,7 @@ function snapshotIgnoreFormatting(sourceFile: SourceFile): Map<string, string> {
 }
 
 /**
- * Restores the pre-`formatText` text of every `@ignoreFormatting` declaration that
- * `formatText` modified, undoing reformatting that would otherwise break lint rules
- * such as `@stylistic/indent` on nested conditional types.
+ * Restores the text of every `@ignoreFormatting` declaration modified by the formatter.
  */
 function restoreIgnoreFormatting(sourceFile: SourceFile, snapshot: Map<string, string>): void {
   for (const node of getIgnoreFormattingNodes(sourceFile)) {
@@ -93,25 +96,19 @@ function restoreIgnoreFormatting(sourceFile: SourceFile, snapshot: Map<string, s
   }
 }
 
-export function renderDiff(targetFile: SourceFile, originalText: string, filePath: string): string | null {
+export async function renderDiff(targetFile: SourceFile, originalText: string, filePath: string): Promise<string | null> {
   // Snapshot `@ignoreFormatting` declarations after structural edits but before formatting
   const ignoreFormattingSnapshot = snapshotIgnoreFormatting(targetFile);
 
-  // Get the updated text of the entire source file
-  targetFile.formatText({
-    indentSize: 2,
-    ensureNewLineAtEndOfFile: true,
-    insertSpaceAfterOpeningAndBeforeClosingEmptyBraces: false,
-  });
+  const { code, errors } = await format(filePath, removeDuplicateUnionTypes(targetFile.getFullText()), formatConfig);
+  if (errors.length > 0) {
+    throw new Error(`Failed to format ${filePath}: ${errors.map((error) => error.message).join('\n')}`);
+  }
 
-  // Revert formatText's reformatting of `@ignoreFormatting` declarations
+  // Oxfmt preserves member spacing; the comparator additionally requires blank lines between members.
+  targetFile.replaceWithText(code.replace(/^(?!import).+[^\s]:.+;(?!\n\n)(?!\n\s*})$/gm, '$&\n'));
   restoreIgnoreFormatting(targetFile, ignoreFormattingSnapshot);
 
-  const newSourceText = targetFile.getFullText();
-
-  let formattedSourceText = newSourceText.replace(/^(?!import).+[^\s]:.+;(?!\n\n)(?!\n\s*})$/gm, '$&\n');
-  formattedSourceText = removeDuplicateUnionTypes(formattedSourceText);
-
   // Generate a diff of the entire source file
-  return generateDiff(originalText, formattedSourceText, filePath);
+  return generateDiff(originalText, targetFile.getFullText(), filePath);
 }

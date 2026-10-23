@@ -66,7 +66,7 @@ exports[`Comparator Shared Base Interfaces > emptied synthetic base with @export
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,15 +1,20 @@
+@@ -1,15 +1,19 @@
 -export interface A extends Base {
 +export interface A {
 +  p: string;
@@ -87,9 +87,10 @@ exports[`Comparator Shared Base Interfaces > emptied synthetic base with @export
 }
 
 /** @exported */
-export interface Base {
+-export interface Base {
 -  p: number;
-}"
+-}
++export interface Base {}"
 `;
 
 exports[`Comparator Shared Base Interfaces > extra source derived union member with base absent from target 1`] = `

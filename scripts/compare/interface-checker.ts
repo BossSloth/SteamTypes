@@ -32,12 +32,12 @@ function extractMembersFromString(interfaceString: string): SourceFile {
 }
 
 // Main function to compare interfaces
-function compareInterfaces(
+async function compareInterfaces(
   filePath: string,
   interfaceName: string,
   providedInterfaceString: string,
   verbose = false,
-): string | null {
+): Promise<string | null> {
   const logger = new Logger({ verbose });
 
   logger.debug(chalk.cyan(`🔄 Comparing interfaces for ${chalk.bold(interfaceName)}...`));
@@ -51,13 +51,12 @@ function compareInterfaces(
   const sourceSourceFile = extractMembersFromString(providedInterfaceString);
 
   // Compare members and optionally apply changes
-  const diff = compareAndCorrectAllInterfaces(targetSourceFile, sourceSourceFile, interfaceName, filePath);
-
-  // Cleanup
-  project.removeSourceFile(targetSourceFile);
-  project.removeSourceFile(sourceSourceFile);
-
-  return diff;
+  try {
+    return await compareAndCorrectAllInterfaces(targetSourceFile, sourceSourceFile, interfaceName, filePath);
+  } finally {
+    project.removeSourceFile(targetSourceFile);
+    project.removeSourceFile(sourceSourceFile);
+  }
 }
 
 export { compareInterfaces };

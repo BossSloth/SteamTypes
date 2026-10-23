@@ -291,7 +291,8 @@ async function processInterfaces(
     let currentComparisonTime: number;
     try {
       const comparisonStartTime = Date.now();
-      const result = compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
+      // eslint-disable-next-line no-await-in-loop
+      const result = await compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
       currentComparisonTime = Date.now() - comparisonStartTime;
       comparisonTime += currentComparisonTime;
 
