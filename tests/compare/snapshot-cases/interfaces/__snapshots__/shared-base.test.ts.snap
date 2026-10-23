@@ -357,13 +357,10 @@ exports[`Comparator Shared Base Interfaces > synthetic base agreeing sources use
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,8 +1,8 @@
--export interface A extends Base {}
-+export interface A extends Base { }
+@@ -2,7 +2,7 @@
 
 /** @exported */
--export interface B extends Base {}
-+export interface B extends Base { }
+export interface B extends Base {}
 
 interface Base {
 -  p: number;
@@ -604,17 +601,10 @@ exports[`Comparator Shared Base Interfaces > synthetic base three agreeing sourc
 "===================================================================
 --- a/target.ts
 +++ b/target.ts
-@@ -1,11 +1,11 @@
--export interface A extends Base {}
-+export interface A extends Base { }
+@@ -5,7 +5,7 @@
 
 /** @exported */
--export interface B extends Base {}
-+export interface B extends Base { }
-
-/** @exported */
--export interface C extends Base {}
-+export interface C extends Base { }
+export interface C extends Base {}
 
 interface Base {
 -  p: number;

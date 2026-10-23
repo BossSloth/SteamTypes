@@ -115,6 +115,11 @@ Two test suites configured in `vitest.config.ts`:
   - Each `*.test.ts` file imports a test case file and calls `createTest()`
   - `unit/` — Unit tests for `ComparisonSession` and `InterfaceMatcher`
 
+For compare changes, use `tests/compare/snapshot-cases/` for regression coverage.
+Most compare behavior is already covered there; update or extend those cases instead
+of adding unit tests. Only add a unit test when the behavior cannot be tested through
+snapshot cases.
+
 - **`tests/convert/`** — Tests for the `scripts/convert-to-typescript/` converter
   - `functions/` — Function extraction test cases
   - `properties/` — Property type detection test cases

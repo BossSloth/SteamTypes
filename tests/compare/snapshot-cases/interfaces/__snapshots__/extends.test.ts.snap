@@ -388,19 +388,6 @@ interface B {
 }"
 `;
 
-exports[`Comparator Extended Interfaces > inherited member narrowed by derived source does not loop 1`] = `
-"===================================================================
---- a/target.ts
-+++ b/target.ts
-@@ -1,5 +1,5 @@
-interface B {
-  x: unknown;
-}
-
--export interface A extends B {}
-+export interface A extends B { }"
-`;
-
 exports[`Comparator Extended Interfaces > inherited mismatch does not skip later own member changes 1`] = `
 "===================================================================
 --- a/target.ts

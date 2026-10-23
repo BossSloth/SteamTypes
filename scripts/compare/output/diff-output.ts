@@ -101,6 +101,7 @@ export function renderDiff(targetFile: SourceFile, originalText: string, filePat
   targetFile.formatText({
     indentSize: 2,
     ensureNewLineAtEndOfFile: true,
+    insertSpaceAfterOpeningAndBeforeClosingEmptyBraces: false,
   });
 
   // Revert formatText's reformatting of `@ignoreFormatting` declarations

@@ -853,6 +853,7 @@ export const extendedInterfaceCases: Record<string, ComparatorTest> = {
 
   'inherited member narrowed by derived source does not loop': {
     interfaceName: 'A',
+    expectsNoDiff: true,
     target: dedent /* ts */ `
       interface B {
         x: unknown;
