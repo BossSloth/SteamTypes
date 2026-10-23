@@ -1,3 +1,29 @@
+# [2.3.0](https://github.com/BossSloth/SteamTypes/compare/v2.2.0...v2.3.0) (2026-10-23)
+
+
+### Bug Fixes
+
+* **compare,convert:** fix a couple bugs in comparing ([4f8115f](https://github.com/BossSloth/SteamTypes/commit/4f8115fe6f359996ddbc678bdbf391799284522e))
+* **compare:** Add [@ignore](https://github.com/ignore)Formatting tag to preserve manual formatting on complex types ([1d32a98](https://github.com/BossSloth/SteamTypes/commit/1d32a98cb5db015d3aab538d27a130dac677dcbc))
+* **compare:** add every missing referenced interface, not only the first ([edc32bb](https://github.com/BossSloth/SteamTypes/commit/edc32bba1d7dee1ef5179fff660345fc7fd3f067))
+* **compare:** disable empty brace spacing in formatText to match project style ([d3b5dfa](https://github.com/BossSloth/SteamTypes/commit/d3b5dfa306039c38c8530386f32a0b95745313d3))
+* **compare:** keep comparing members after an inheritance correction ([69afc4a](https://github.com/BossSloth/SteamTypes/commit/69afc4a2d1dcd9632814e3abf5f8df4d5a227c78))
+* **compare:** merge synthetic base members only along a subset chain, without mutating sources ([00c5623](https://github.com/BossSloth/SteamTypes/commit/00c5623a6a19d4a73833edb9ed995d49baecbc48))
+* **compare:** pair unmatched source interfaces with target candidates by similarity before adding as new ([c1b761d](https://github.com/BossSloth/SteamTypes/commit/c1b761d4726cccc53c0e8433c82741c4d791c438))
+* **compare:** sort pushed-down derived interfaces and drop emptied synthetic bases ([b67d29f](https://github.com/BossSloth/SteamTypes/commit/b67d29f411e67f5c64edb7f12ad8573ed3d7a1a2))
+
+
+### Features
+
+* **types:** Updated all types for steam version 1780352834 (Jun  1 2026 22:04:51) ([690246e](https://github.com/BossSloth/SteamTypes/commit/690246ea429c1f0e3a7b201d402209114653ee54))
+* **types:** Updated all types for steam version 1781041600 (Jun  9 2026 21:11:12) ([b38c0cc](https://github.com/BossSloth/SteamTypes/commit/b38c0cc5993e5f8f3e662abd006ef9a96e7d4d4c))
+* **types:** Updated all types for steam version 1792618285 (Oct 21 2026 21:09:51) ([164ba89](https://github.com/BossSloth/SteamTypes/commit/164ba899846709a8956bd4040d252784115fce4c))
+
+
+### Performance Improvements
+
+* **compare:** Sped up compare performance from full ~48s to ~3.6 ([0e8bed1](https://github.com/BossSloth/SteamTypes/commit/0e8bed1b72314f14decdcfcceac38b65a779ceb4))
+
 # [2.2.0](https://github.com/BossSloth/SteamTypes/compare/v2.1.0...v2.2.0) (2026-06-06)
 
 
