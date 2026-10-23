@@ -5,6 +5,7 @@ tsconfig.tsbuildinfo
 !bun.lockb
 .profiler/
 coverage/
+.vitest/
 diffs/
 chunk~*.js
 !.vscode
