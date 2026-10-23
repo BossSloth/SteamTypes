@@ -33,7 +33,7 @@ export function convertToTypescript(
   // Add the main interface
   session.interfaceRepository.queue.set(mainInterfaceName, { obj, nameCounter: undefined });
 
-  const { result, processedCount } = new ConversionPipeline(session).run();
+  const { result, processedCount } = new ConversionPipeline(session, mainInterfaceName).run();
 
   if (profiling) {
     console.log(`Processed ${processedCount} interfaces`);

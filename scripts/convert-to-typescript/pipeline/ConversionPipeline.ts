@@ -1,6 +1,7 @@
 import { InterfaceBuilder } from '@Convert/building/InterfaceBuilder';
 import { CodeGenerator } from '../generation/CodeGenerator';
 import { InterfaceMerger } from '../merging/InterfaceMerger';
+import { renameImportCollisions, updateTypeReferences } from '../merging/merge-helpers';
 import { ConversionSession } from '../session/ConversionSession';
 
 /**
@@ -8,15 +9,19 @@ import { ConversionSession } from '../session/ConversionSession';
  */
 export class ConversionPipeline {
   private readonly session: ConversionSession;
+  private readonly rootName: string;
 
-  constructor(session: ConversionSession) {
+  constructor(session: ConversionSession, rootName: string) {
     this.session = session;
+    this.rootName = rootName;
   }
 
   public run(): { result: string; processedCount: number } {
     const processedCount = this.build();
 
     const merged = new InterfaceMerger().merge(this.session.interfaceRepository.definitions);
+    const importAliasMap = renameImportCollisions(merged, this.session.imports.localNames(), this.rootName);
+    updateTypeReferences(merged, importAliasMap);
 
     const result = new CodeGenerator(merged, this.session.imports).generate();
 

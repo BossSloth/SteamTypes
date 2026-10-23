@@ -27,4 +27,18 @@ export class ImportRegistry {
   public entries(): IterableIterator<[string, ImportEntry]> {
     return this.imports.entries();
   }
+
+  /**
+   * The local identifiers the imports introduce (the alias for `Root as ReactRoot`, the name otherwise)
+   */
+  public localNames(): Set<string> {
+    const names = new Set<string>();
+    for (const { types } of this.imports.values()) {
+      for (const type of types) {
+        names.add(type.replace(/^.* as /, ''));
+      }
+    }
+
+    return names;
+  }
 }

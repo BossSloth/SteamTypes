@@ -369,6 +369,41 @@ export function fixInterfaceNumbering(interfaces: Map<string, TypeScriptInterfac
 }
 
 /**
+ * Renames generated interfaces that share a name with an import (except the root), so the import keeps its name
+ */
+export function renameImportCollisions(
+  interfaces: Map<string, TypeScriptInterface>,
+  importNames: Set<string>,
+  rootName: string,
+): Map<string, string> {
+  const aliasMap = new Map<string, string>();
+
+  for (const name of Array.from(interfaces.keys())) {
+    if (!importNames.has(name) || name === rootName) continue;
+
+    const interfaceObj = interfaces.get(name);
+    /* v8 ignore next -- @preserve */
+    if (!interfaceObj) {
+      throw new Error(`Interface ${name} not found`);
+    }
+
+    let counter = 2;
+    while (interfaces.has(`${name}${counter}`) || importNames.has(`${name}${counter}`)) {
+      counter++;
+    }
+
+    const newName = `${name}${counter}`;
+    interfaces.delete(name);
+    interfaceObj.name = newName;
+    interfaceObj.nameCounter = counter;
+    interfaces.set(newName, interfaceObj);
+    aliasMap.set(name, newName);
+  }
+
+  return aliasMap;
+}
+
+/**
  * Updates type references in all interfaces based on the alias map
  */
 export function updateTypeReferences(interfaces: Map<string, TypeScriptInterface>, aliasMap: Map<string, string>): void {

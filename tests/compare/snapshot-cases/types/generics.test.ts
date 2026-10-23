@@ -733,6 +733,45 @@ export const genericsCases: Record<string, ComparatorTest> = {
         value: number;
       }`,
   },
+
+  'function constraint satisfied by source function': {
+    interfaceName: 'Root',
+    expectsNoDiff: true,
+    target: dedent /* ts */ `
+      export interface Root {
+        reg: Registration<() => void>;
+      }
+
+      export interface Registration<TInvoke extends (...args: never[]) => void> {
+        invoke: TInvoke;
+
+        unregister: () => void;
+      }`,
+    source: dedent /* ts */ `
+      export interface Root {
+        reg: {
+          invoke: (x: unknown, h: unknown) => void;
+          unregister: () => void;
+        };
+      }`,
+  },
+
+  'union of generic instantiations matches generic target member': {
+    interfaceName: 'MessageCallback',
+    expectsNoDiff: true,
+    target: dedent /* ts */ `
+      import { ProtobufClass } from 'shared/protobuf';
+
+      export interface MessageCallback<T = unknown> {
+        msgClass: ProtobufClass<T> | undefined;
+      }`,
+    source: dedent /* ts */ `
+      import { ProtobufClass } from 'shared/protobuf';
+
+      export interface MessageCallback {
+        msgClass: ProtobufClass<CMsgA> | ProtobufClass<CMsgB> | ProtobufClass<CMsgC>;
+      }`,
+  },
 };
 
 createTest('Generics', genericsCases);

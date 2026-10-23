@@ -23,4 +23,21 @@ describe('convertToTypescript options', () => {
     expect(result).toContain('@todo property ignored by configuration');
     expect(result).toContain('visible: number;');
   });
+
+  it('generated interfaces that collide with an import are renamed and the import keeps its name', () => {
+    function noop(): undefined {
+      return undefined;
+    }
+    const result = convertToTypescript(
+      {
+        cb: { ClearAllCallbacks: noop, CountRegistered: noop, Dispatch: noop, Register: noop, m_vecCallbacks: [] },
+        m_callbacks: { onLoad: noop, onMove: noop },
+      },
+      'ImportCollision',
+    );
+
+    expect(result).toContain("import { Callbacks } from 'shared/interfaces';");
+    expect(result).not.toMatch(/export interface Callbacks \{/);
+    expect(result).toMatch(/export interface Callbacks\d+ \{/);
+  });
 });

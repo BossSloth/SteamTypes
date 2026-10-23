@@ -1,4 +1,5 @@
 import { InterfaceMerger } from '@Convert/merging/InterfaceMerger';
+import { renameImportCollisions } from '@Convert/merging/merge-helpers';
 import { PrimitiveType, Type } from '@Convert/Type';
 import { InterfaceProperty, TypeScriptInterface } from '@Convert/types';
 import { describe, expect, it } from 'vitest';
@@ -245,3 +246,31 @@ defineTests('inheritance grouping', [
     ],
   },
 ]);
+
+describe('renameImportCollisions', () => {
+  it('renames a generated interface that shares an import name and skips the root', () => {
+    const interfaces = buildInterfaces([
+      { name: 'Callbacks', properties: [{ name: 'a' }] },
+      { name: 'Root', properties: [{ name: 'b' }] },
+    ]);
+
+    const aliasMap = renameImportCollisions(interfaces, new Set(['Callbacks', 'Root']), 'Root');
+
+    expect(aliasMap).toEqual(new Map([['Callbacks', 'Callbacks2']]));
+    expect(Array.from(interfaces.keys())).toEqual(['Root', 'Callbacks2']);
+    expect(interfaces.get('Callbacks2')?.nameCounter).toBe(2);
+  });
+
+  it('picks the first number that is free in the map and not an import', () => {
+    const interfaces = buildInterfaces([
+      { name: 'Callbacks', properties: [{ name: 'a' }] },
+      { name: 'Callbacks2', properties: [{ name: 'b' }] },
+      { name: 'Callbacks3', properties: [{ name: 'c' }] },
+    ]);
+
+    const aliasMap = renameImportCollisions(interfaces, new Set(['Callbacks', 'Callbacks4']), 'Root');
+
+    expect(aliasMap).toEqual(new Map([['Callbacks', 'Callbacks5']]));
+    expect(interfaces.has('Callbacks5')).toBe(true);
+  });
+});

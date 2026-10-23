@@ -136,6 +136,10 @@ export class TypeReconciler {
         // Example test case 'simple generic with any type'
         return true;
       }
+      // Generated sources only ever have `unknown` parameters, so they can't refine or disprove a hand-written function constraint
+      if (Node.isFunctionTypeNode(constraint) && Node.isFunctionTypeNode(sourceNode)) {
+        return true;
+      }
       const matches = this.reconcile(constraint, sourceNode);
       if (!matches) {
         constraint.replaceWithText(getTypeText(sourceNode));
@@ -236,7 +240,7 @@ export class TypeReconciler {
       const sourceMembers = sourceNode.getTypeNodes();
 
       for (const [index, sourceMember] of sourceMembers.entries()) {
-        const targetMember = targetMembers.at(index);
+        const targetMember = findSameNamedTypeReference(targetMembers, sourceMember) ?? targetMembers.at(index);
         const hasMatch = targetMember ? this.reconcile(targetMember, sourceMember) : false;
 
         if (!hasMatch) {
@@ -444,6 +448,16 @@ export class TypeReconciler {
 
     return getTypeText(targetTypeReference) === recordType;
   }
+}
+
+function findSameNamedTypeReference(targetMembers: TypeNode[], sourceMember: TypeNode): TypeNode | undefined {
+  if (!Node.isTypeReference(sourceMember)) {
+    return undefined;
+  }
+
+  const sourceName = sourceMember.getTypeName().getText();
+
+  return targetMembers.find((member) => Node.isTypeReference(member) && member.getTypeName().getText() === sourceName);
 }
 
 function isUnknownTypeNode(typeNode: TypeNode): boolean {

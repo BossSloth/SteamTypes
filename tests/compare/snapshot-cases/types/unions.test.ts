@@ -490,6 +490,35 @@ export const unionCases: Record<string, ComparatorTest> = {
       }
       `,
   },
+
+  'reordered union of interfaces': {
+    interfaceName: 'Container',
+    expectsNoDiff: true,
+    target: dedent /* ts */ `
+      export interface Container {
+        a: Foo | Bar;
+      }
+
+      export interface Foo {
+        x: string;
+      }
+
+      export interface Bar {
+        y: number;
+      }`,
+    source: dedent /* ts */ `
+      export interface Container {
+        a: Bar | Foo;
+      }
+
+      export interface Foo {
+        x: string;
+      }
+
+      export interface Bar {
+        y: number;
+      }`,
+  },
 };
 
 createTest('Unions', unionCases);
