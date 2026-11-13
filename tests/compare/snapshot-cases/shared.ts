@@ -2,9 +2,11 @@ import dedent from 'dedent';
 import stripAnsi from 'strip-ansi';
 import { Project, SourceFile } from 'ts-morph';
 import { describe, expect, it } from 'vitest';
-import { compareAndCorrectAllInterfaces } from '../../../scripts/compare/interface-comparator';
+import { compareAndCorrectAllInterfaces, InterfaceComparison } from '../../../scripts/compare/interface-comparator';
 
 export interface ComparatorTest {
+  /** additional comparisons to run against the same target file after the main one */
+  additionalComparisons?: { interfaceName: string; source: string }[];
   /** expected thrown exceptions */
   expectedException?: string;
   /** whether the diff is expected to be null */
@@ -58,7 +60,11 @@ export function createTest(name: string, testCases: Record<string, ComparatorTes
 function renameNestedInterfaces(testCase: ComparatorTest, suffix = 'Renamed'): ComparatorTest | null {
   const file = project.createSourceFile('rename.ts', testCase.target, { overwrite: true });
 
-  const nested = file.getInterfaces().filter((iface) => iface.getName() !== testCase.interfaceName);
+  const rootNames = new Set([
+    testCase.interfaceName,
+    ...(testCase.additionalComparisons ?? []).map((comparison) => comparison.interfaceName),
+  ]);
+  const nested = file.getInterfaces().filter((iface) => !rootNames.has(iface.getName()));
 
   if (nested.length === 0) {
     return null;
@@ -98,16 +104,25 @@ export function createRenamedTest(name: string, baseCases: Record<string, Compar
 
 export async function runComparisonTest(testValues: ComparatorTest): Promise<void> {
   const { targetFile, sourceFile } = createTestFiles(testValues.target, testValues.source);
+  const additionalSourceFiles = (testValues.additionalComparisons ?? []).map((comparison, index) =>
+    project.createSourceFile(`additional-${index}.ts`, `${comparison.source}\n`, { overwrite: true }),
+  );
+
+  const comparisons = [
+    { interfaceName: testValues.interfaceName, sourceFile },
+    ...(testValues.additionalComparisons ?? []).map((comparison, index) => ({
+      interfaceName: comparison.interfaceName,
+      sourceFile: additionalSourceFiles[index],
+    })),
+  ];
 
   if (testValues.expectedException !== undefined) {
-    await expect(async () => runComparison(targetFile, sourceFile, testValues.interfaceName)).rejects.toThrow(
-      testValues.expectedException,
-    );
+    await expect(async () => runComparison(targetFile, comparisons)).rejects.toThrow(testValues.expectedException);
 
     return;
   }
 
-  const diff = await runComparison(targetFile, sourceFile, testValues.interfaceName);
+  const diff = await runComparison(targetFile, comparisons);
 
   if (testValues.expectsNoDiff ?? false) {
     expect(diff).toBeNull();
@@ -135,12 +150,11 @@ function createTestFiles(targetContent: string, sourceContent: string): { target
 /**
  * Runs the interface comparison and returns the diff
  * @param targetFile Target source file
- * @param sourceFile Source source file
- * @param interfaceName Name of the interface to compare
+ * @param comparisons The comparisons to run, in order
  * @returns The diff result
  */
-async function runComparison(targetFile: SourceFile, sourceFile: SourceFile, interfaceName: string): Promise<string | null> {
-  return compareAndCorrectAllInterfaces(targetFile, sourceFile, interfaceName, 'target.ts');
+async function runComparison(targetFile: SourceFile, comparisons: InterfaceComparison[]): Promise<string | null> {
+  return compareAndCorrectAllInterfaces(targetFile, comparisons, 'target.ts');
 }
 
 /**

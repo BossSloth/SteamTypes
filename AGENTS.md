@@ -48,9 +48,9 @@ steamtypes/
 
 - **`compare/`** — Interface comparison & auto-correction (runs on the host, uses ts-morph)
   - `interface-checker.ts` — Entry: `compareInterfaces()` called from `validate-types.ts`
-  - `interface-comparator.ts` — Entry for tests and checker: `compareAndCorrectAllInterfaces()` creates a `ComparisonSession` and runs a `ComparisonPipeline`
-  - `session/ComparisonSession.ts` — Per-call state: starting target interfaces, FIFO queue, processed set (dedupe by target name at dequeue time)
-  - `pipeline/ComparisonPipeline.ts` — Looks up the root pair, drains the queue (members, then heritage), removes unused interfaces, renders the diff
+  - `interface-comparator.ts` — Entry for tests and checker: `compareAndCorrectAllInterfaces()` runs a fresh `ComparisonSession` + `ComparisonPipeline` per comparison, then calls `removeUnusedInterfaces` and renders one diff
+  - `session/ComparisonSession.ts` — Per-comparison state: starting target interfaces, FIFO queue, processed set (dedupe by target name at dequeue time)
+  - `pipeline/ComparisonPipeline.ts` — Looks up the root pair and drains the queue (members, then heritage); exports `removeUnusedInterfaces` for the comparator to call after all comparisons
   - `matching/InterfaceMatcher.ts` — Read-only similarity matching against the starting interfaces; `resolveBaseName()`
   - `matching/InterfaceReferenceResolver.ts` — Pairs or inserts interfaces for type references, syncs `extends`, adds missing interfaces (mutates source and target ASTs)
   - `matching/manual-merge.ts` — Folds several source union members into one target interface

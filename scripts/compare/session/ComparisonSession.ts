@@ -9,7 +9,7 @@ export interface InterfacePair {
  * Per-call comparison state: the FIFO queue of pending pairs, the keys of processed target interfaces, the target
  * interfaces already paired with a source interface (claimed) and those paired by a rename fallback (pairedByRename).
  * Similarity matching ignores the latter only, so several source interfaces can still merge into one target.
- * Created once per compareAndCorrectAllInterfaces call. Mutates only its own queue and processed set.
+ * Created once per comparison inside compareAndCorrectAllInterfaces. Mutates only its own queue and processed set.
  */
 export class ComparisonSession {
   public readonly targetFile: SourceFile;

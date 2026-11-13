@@ -34,28 +34,33 @@ function extractMembersFromString(interfaceString: string): SourceFile {
 // Main function to compare interfaces
 async function compareInterfaces(
   filePath: string,
-  interfaceName: string,
-  providedInterfaceString: string,
+  comparisons: readonly { interfaceName: string; content: string }[],
   verbose = false,
 ): Promise<string | null> {
   const logger = new Logger({ verbose });
 
-  logger.debug(chalk.cyan(`🔄 Comparing interfaces for ${chalk.bold(interfaceName)}...`));
+  const interfaceNames = comparisons.map((comparison) => comparison.interfaceName).join(', ');
+  logger.debug(chalk.cyan(`🔄 Comparing interfaces for ${chalk.bold(interfaceNames)}...`));
 
   // Extract members from the actual file
-  logger.debug(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceName)}...`));
+  logger.debug(chalk.blue(`🔍 Extracting members from ${chalk.bold(filePath)} for interface ${chalk.bold(interfaceNames)}...`));
   const targetSourceFile = extractInterfaceMembers(filePath);
 
-  // Extract members from the provided interface string
-  logger.debug(chalk.blue('🔍 Extracting members from provided interface string...'));
-  const sourceSourceFile = extractMembersFromString(providedInterfaceString);
+  // Extract members from the provided interface strings
+  const sourceComparisons = comparisons.map((comparison) => {
+    logger.debug(chalk.blue('🔍 Extracting members from provided interface string...'));
+
+    return { interfaceName: comparison.interfaceName, sourceFile: extractMembersFromString(comparison.content) };
+  });
 
   // Compare members and optionally apply changes
   try {
-    return await compareAndCorrectAllInterfaces(targetSourceFile, sourceSourceFile, interfaceName, filePath);
+    return await compareAndCorrectAllInterfaces(targetSourceFile, sourceComparisons, filePath);
   } finally {
     project.removeSourceFile(targetSourceFile);
-    project.removeSourceFile(sourceSourceFile);
+    for (const comparison of sourceComparisons) {
+      project.removeSourceFile(comparison.sourceFile);
+    }
   }
 }
 

@@ -270,64 +270,84 @@ async function processInterfaces(
   const interfaceTimings: { interfaceName: string; extractTime: number; comparisonTime: number }[] = [];
   const extractionErrors: { interfaceName: string; error: unknown }[] = [];
 
+  // Group maps by target file preserving first-appearance order, so each file is compared once
+  const mapsByFile = new Map<string, InterfaceMap[]>();
+  for (const map of maps) {
+    const group = mapsByFile.get(map.file);
+    if (group !== undefined) {
+      group.push(map);
+    } else {
+      mapsByFile.set(map.file, [map]);
+    }
+  }
+
   try {
-    for (const map of maps) {
-      progressBar.update(completedCount, { name: map.interfaceName });
-      // Comparisons block the redraw timer, so show the current interface before starting work.
-      if (progressBar.isActive) {
-        progressBar.render();
+    for (const [file, fileMaps] of mapsByFile) {
+      const comparisons: { interfaceName: string; content: string }[] = [];
+      let fileExtractTime = 0;
+      let skipFile = false;
+
+      for (const map of fileMaps) {
+        progressBar.update(completedCount, { name: map.interfaceName });
+        // Comparisons block the redraw timer, so show the current interface before starting work.
+        if (progressBar.isActive) {
+          progressBar.render();
+        }
+
+        let result: Awaited<ReturnType<typeof extractInterface>> | null = null;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          result = await extractInterface(map);
+          fileExtractTime += result.extractTime;
+        } catch (error) {
+          extractionErrors.push({ interfaceName: map.interfaceName, error });
+        }
+
+        const content = result?.content ?? null;
+        if (content === null) {
+          skipFile = true;
+        } else {
+          comparisons.push({ interfaceName: map.interfaceName, content });
+        }
+        completedCount++;
       }
 
-      let interfaceContent: string | null;
-      let currentExtractTime: number;
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        const result = await extractInterface(map);
-        interfaceContent = result.content;
-        currentExtractTime = result.extractTime;
-      } catch (error) {
-        extractionErrors.push({ interfaceName: map.interfaceName, error });
-        completedCount++;
+      // A missing root would be deleted from the file, so skip comparing entirely
+      if (skipFile) {
         continue;
       }
 
-      if (interfaceContent === null) {
-        completedCount++;
-        continue;
-      }
-
-      const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
+      const filePath = path.join(rootDir, `src/types/${file}.ts`);
       if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, interfaceContent);
+        fs.writeFileSync(filePath, comparisons[0].content);
       }
 
       let currentComparisonTime: number;
       try {
         const comparisonStartTime = Date.now();
         // eslint-disable-next-line no-await-in-loop
-        const result = await compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
+        const result = await compareInterfaces(`src/types/${file}.ts`, comparisons, options.verbose);
         currentComparisonTime = Date.now() - comparisonStartTime;
         comparisonTime += currentComparisonTime;
 
         if (result !== null) {
           diffs.push({
-            filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
+            filePath: file.replaceAll('/', '_').replaceAll('\\', '_'),
             result,
           });
         }
       } catch (error) {
-        throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
+        throw new Error(`Failed to validate types for ${file}`, { cause: error });
       }
 
       if (options.timing === true) {
         interfaceTimings.push({
-          interfaceName: map.interfaceName,
-          extractTime: currentExtractTime,
+          interfaceName: fileMaps.map((map) => map.interfaceName).join(', '),
+          extractTime: fileExtractTime,
           comparisonTime: currentComparisonTime,
         });
       }
-      completedCount++;
-      progressBar.update(completedCount, { name: map.interfaceName });
+      progressBar.update(completedCount, { name: fileMaps.map((map) => map.interfaceName).join(', ') });
     }
   } finally {
     progressBar.update(completedCount);
@@ -364,13 +384,11 @@ async function run(options: ValidateTypesOptions, filter?: string): Promise<bool
   let maps = interfaceMaps;
 
   if (options.single !== undefined) {
-    const map = maps.find((m) => m.file === options.single);
-    if (!map) {
+    maps = maps.filter((m) => m.file === options.single);
+    if (maps.length === 0) {
       logger.error(chalk.red(`❌ Invalid object: ${options.single}`));
       process.exit(1);
     }
-
-    maps = [map];
   }
 
   const diffs: { filePath: string; result: string | null }[] = [];

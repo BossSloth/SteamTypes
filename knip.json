@@ -2,13 +2,7 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "project": ["src/**", "tests/**", "scripts/**"],
   "entry": ["src/index.ts", "src/Runtime/*.ts"],
-  "ignore": [
-    "tests/**/__snapshots__/**",
-    "tests/**/__fixtures__/**",
-    "scripts/defaultChromeWindow.js",
-    "src/types/Protobufs/**",
-    "dist/**"
-  ],
+  "ignore": ["tests/**/__snapshots__/**", "tests/**/__fixtures__/**", "scripts/defaultChromeWindow.js", "src/types/Protobufs/**"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "enum": true,

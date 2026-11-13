@@ -5,7 +5,6 @@ import { Audio } from './Audio';
 import { Devkit } from './Devkit';
 import { Display } from './Display';
 import { Network } from './Network';
-import { Report } from './Report';
 import { UI } from './UI';
 
 export interface System {

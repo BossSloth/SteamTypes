@@ -265,6 +265,107 @@ export const missingCases: Record<string, ComparatorTest> = {
         bar: string;
       }`,
   },
+
+  'keeps unreferenced roots of other comparisons in the same file': {
+    interfaceName: 'Foo',
+    expectsNoDiff: true,
+    target: dedent /* ts */ `
+      export interface Foo {
+        bar: string;
+
+        nested: FooNested;
+      }
+
+      export interface FooNested {
+        a: string;
+      }
+
+      export interface Bar {
+        items: Record<number, BarItem>;
+      }
+
+      export interface BarItem {
+        id: number;
+      }
+    `,
+    source: dedent /* ts */ `
+      export interface Foo {
+        bar: string;
+
+        nested: FooNested;
+      }
+
+      export interface FooNested {
+        a: string;
+      }
+    `,
+    additionalComparisons: [
+      {
+        interfaceName: 'Bar',
+        source: dedent /* ts */ `
+          export interface Bar {
+            items: Record<number, BarItem>;
+          }
+
+          export interface BarItem {
+            id: number;
+          }
+        `,
+      },
+    ],
+  },
+
+  'merges changes from multiple roots into one diff': {
+    interfaceName: 'Foo',
+    target: dedent /* ts */ `
+      export interface Foo {
+        bar: string;
+
+        nested: FooNested;
+      }
+
+      export interface FooNested {
+        a: string;
+      }
+
+      export interface Bar {
+        items: Record<number, BarItem>;
+      }
+
+      export interface BarItem {
+        id: number;
+      }
+    `,
+    source: dedent /* ts */ `
+      export interface Foo {
+        bar: string;
+
+        baz: number;
+
+        nested: FooNested;
+      }
+
+      export interface FooNested {
+        a: string;
+      }
+    `,
+    additionalComparisons: [
+      {
+        interfaceName: 'Bar',
+        source: dedent /* ts */ `
+          export interface Bar {
+            items: Record<number, BarItem>;
+          }
+
+          export interface BarItem {
+            id: number;
+
+            name: string;
+          }
+        `,
+      },
+    ],
+  },
 };
 
 createTest('Missing Interfaces', missingCases);
