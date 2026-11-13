@@ -268,67 +268,74 @@ async function processInterfaces(
   const diffs: { filePath: string; result: string | null }[] = [];
   let completedCount = 0;
   const interfaceTimings: { interfaceName: string; extractTime: number; comparisonTime: number }[] = [];
+  const extractionErrors: { interfaceName: string; error: unknown }[] = [];
 
-  for (const map of maps) {
-    progressBar.update(completedCount, { name: map.interfaceName });
-    // Comparisons block the redraw timer, so show the current interface before starting work.
-    if (progressBar.isActive) {
-      progressBar.render();
-    }
+  try {
+    for (const map of maps) {
+      progressBar.update(completedCount, { name: map.interfaceName });
+      // Comparisons block the redraw timer, so show the current interface before starting work.
+      if (progressBar.isActive) {
+        progressBar.render();
+      }
 
-    let interfaceContent: string | null;
-    let currentExtractTime: number;
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const result = await extractInterface(map);
-      interfaceContent = result.content;
-      currentExtractTime = result.extractTime;
-    } catch (error) {
-      console.error(`Failed to extract interface ${map.interfaceName}:`, error);
-      completedCount++;
-      continue;
-    }
+      let interfaceContent: string | null;
+      let currentExtractTime: number;
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await extractInterface(map);
+        interfaceContent = result.content;
+        currentExtractTime = result.extractTime;
+      } catch (error) {
+        extractionErrors.push({ interfaceName: map.interfaceName, error });
+        completedCount++;
+        continue;
+      }
 
-    if (interfaceContent === null) {
-      completedCount++;
-      continue;
-    }
+      if (interfaceContent === null) {
+        completedCount++;
+        continue;
+      }
 
-    const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, interfaceContent);
-    }
+      const filePath = path.join(rootDir, `src/types/${map.file}.ts`);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, interfaceContent);
+      }
 
-    let currentComparisonTime: number;
-    try {
-      const comparisonStartTime = Date.now();
-      // eslint-disable-next-line no-await-in-loop
-      const result = await compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
-      currentComparisonTime = Date.now() - comparisonStartTime;
-      comparisonTime += currentComparisonTime;
+      let currentComparisonTime: number;
+      try {
+        const comparisonStartTime = Date.now();
+        // eslint-disable-next-line no-await-in-loop
+        const result = await compareInterfaces(`src/types/${map.file}.ts`, map.interfaceName, interfaceContent, options.verbose);
+        currentComparisonTime = Date.now() - comparisonStartTime;
+        comparisonTime += currentComparisonTime;
 
-      if (result !== null) {
-        diffs.push({
-          filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
-          result,
+        if (result !== null) {
+          diffs.push({
+            filePath: map.file.replaceAll('/', '_').replaceAll('\\', '_'),
+            result,
+          });
+        }
+      } catch (error) {
+        throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
+      }
+
+      if (options.timing === true) {
+        interfaceTimings.push({
+          interfaceName: map.interfaceName,
+          extractTime: currentExtractTime,
+          comparisonTime: currentComparisonTime,
         });
       }
-    } catch (error) {
-      throw new Error(`Failed to validate types for ${map.file}`, { cause: error });
+      completedCount++;
+      progressBar.update(completedCount, { name: map.interfaceName });
     }
-
-    if (options.timing === true) {
-      interfaceTimings.push({
-        interfaceName: map.interfaceName,
-        extractTime: currentExtractTime,
-        comparisonTime: currentComparisonTime,
-      });
+  } finally {
+    progressBar.update(completedCount);
+    progressBar.stop();
+    for (const { interfaceName, error } of extractionErrors) {
+      console.error(`\nFailed to extract interface ${interfaceName}:\n`, error);
     }
-    completedCount++;
-    progressBar.update(completedCount, { name: map.interfaceName });
   }
-
-  progressBar.stop();
 
   if (options.timing === true && interfaceTimings.length > 0) {
     logger.log(chalk.blue('\n📊 Per-interface Timing:'));
