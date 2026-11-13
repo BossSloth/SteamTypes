@@ -60,7 +60,7 @@ export interface SteamUIStore {
 
   InitWithoutUser(): Promise<void>;
 
-  InitWithUser(): Promise<void>;
+  InitWithUser(Zt: unknown): Promise<void>;
 
   IsAnyAppRunning(): boolean;
 
@@ -84,6 +84,8 @@ export interface SteamUIStore {
    * @param e default: false
    */
   NavigateToRunningApp(e?: boolean): void;
+
+  OnDifferentLauncherRequested(Zt: unknown): void;
 
   OnDismissKeyboardMessage(e: unknown): void;
 

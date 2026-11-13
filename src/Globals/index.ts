@@ -36,6 +36,7 @@ declare global {
   let ClearBackgroundTimeout: unknown;
   let cloudStorage: unknown;
   let cloudStorageInternalState: unknown;
+  let CLSTAMP: unknown;
   let cm: ConnectionManager;
   let collectionStore: unknown;
   let communityStore: unknown;
@@ -61,7 +62,6 @@ declare global {
   let g_ClanStore: unknown;
   let g_CreatorHomeStore: unknown;
   let g_EventCalendarDevFeatures: unknown;
-  let g_EventCalendarTrackingStore: unknown;
   let g_FriendsUIApp: unknown;
   let g_GRS: GameRecordingStore;
   let g_LogManager: unknown;
@@ -70,9 +70,7 @@ declare global {
   let g_PopupManager: PopupManager;
   let g_WindowFocusCoordinator: unknown;
   let gameReleaseStore: unknown;
-  let Gio: unknown;
   let hardwarePromoStore: unknown;
-  let IBus: unknown;
   let installFolderStore: unknown;
   let jsonit: unknown;
   let lastScrollTime: unknown;
@@ -146,6 +144,7 @@ declare global {
     ClearBackgroundTimeout: unknown;
     cloudStorage: unknown;
     cloudStorageInternalState: unknown;
+    CLSTAMP: unknown;
     cm: ConnectionManager;
     collectionStore: unknown;
     communityStore: unknown;
@@ -171,7 +170,6 @@ declare global {
     g_ClanStore: unknown;
     g_CreatorHomeStore: unknown;
     g_EventCalendarDevFeatures: unknown;
-    g_EventCalendarTrackingStore: unknown;
     g_FriendsUIApp: unknown;
     g_GRS: GameRecordingStore;
     g_LogManager: unknown;
@@ -180,9 +178,7 @@ declare global {
     g_PopupManager: PopupManager;
     g_WindowFocusCoordinator: unknown;
     gameReleaseStore: unknown;
-    Gio: unknown;
     hardwarePromoStore: unknown;
-    IBus: unknown;
     installFolderStore: unknown;
     jsonit: unknown;
     lastScrollTime: unknown;

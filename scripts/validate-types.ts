@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// oxlint-disable max-lines-per-function
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /**
  * Validate Types Script
@@ -275,8 +276,18 @@ async function processInterfaces(
       progressBar.render();
     }
 
-    // eslint-disable-next-line no-await-in-loop
-    const { content: interfaceContent, extractTime: currentExtractTime } = await extractInterface(map);
+    let interfaceContent: string | null;
+    let currentExtractTime: number;
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await extractInterface(map);
+      interfaceContent = result.content;
+      currentExtractTime = result.extractTime;
+    } catch (error) {
+      console.error(`Failed to extract interface ${map.interfaceName}:`, error);
+      completedCount++;
+      continue;
+    }
 
     if (interfaceContent === null) {
       completedCount++;

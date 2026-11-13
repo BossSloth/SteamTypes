@@ -17,6 +17,8 @@ export interface AppAchievementProgressCache {
    */
   GetAchievementProgress(appId: number): AchievementCache['percentage'];
 
+  GetCompletedGroups(appId: number): { base: number; dlc: number } | undefined;
+
   Init(connectionManager: ConnectionManager): Promise<void>;
 
   /**
@@ -78,10 +80,20 @@ export interface AchievementCache {
    */
   appid: number;
 
+  base_game_total: number;
+
   /**
    * Cache time
    */
   cache_time: number;
+
+  groups_completed_base: number;
+
+  groups_completed_dlc: number;
+
+  groups_total_base: number;
+
+  groups_total_dlc: number;
 
   /**
    * Percentage of achievements unlocked

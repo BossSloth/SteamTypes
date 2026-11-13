@@ -113,8 +113,6 @@ export interface System {
 
   Network: Network;
 
-  Report: Report;
-
   UI: UI;
 }
 

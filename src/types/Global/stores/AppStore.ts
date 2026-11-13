@@ -13,21 +13,27 @@ import {
 import { ProtobufInterface, SerializedArrayBuffer } from 'shared/protobuf';
 
 export interface AppStore {
+  BHasCachedLibraryAsset(Be: unknown, ze: unknown, G: unknown): boolean;
+
   BIsAppPrivate(appid: number): boolean;
 
   CompareSortAs(app1: SteamAppOverview, app2: SteamAppOverview): number;
 
-  GetAlbumCoverURLForApp(appOverview: SteamAppOverview): string | null;
+  GetAlbumCoverURLsForApp(appOverview: SteamAppOverview): string[];
 
   GetAppOverviewByAppID(appid: number): SteamAppOverview | null;
 
   GetAppOverviewByGameID(gameid: string): SteamAppOverview | null;
 
-  GetCachedAlbumCoverURL(appOverview: SteamAppOverview): string | null;
+  GetCachedAlbumCoverURLs(appOverview: SteamAppOverview): unknown[];
+
+  GetCachedIconURLsForApp(appOverview: SteamAppOverview): unknown;
 
   GetCachedVerticalCapsuleURL(appOverview: SteamAppOverview): [string, string];
 
   GetCustomHeroImageURLs(appOverview: SteamAppOverview): string[];
+
+  GetCustomImageSuffix(appOverview: SteamAppOverview): 'p' | '_hero' | '_logo' | '';
 
   GetCustomImageURLs(appOverview: SteamAppOverview, suffix: string): string[];
 
@@ -84,6 +90,8 @@ export interface AppStore {
   m_mapApps: ObservableMap<number, SteamAppOverview>;
 
   m_mapStoreTagLocalization: Record<number, string>;
+
+  m_mapUncachedAssetReportTimes: Map<string, number>;
 
   m_msTagMapLoaded: number;
 
@@ -308,6 +316,8 @@ export interface SteamAppOverview {
   canonicalAppType: number;
 
   content_descriptors: number[];
+
+  custom_images_found?: number;
 
   custom_sort_as_display?: string;
 

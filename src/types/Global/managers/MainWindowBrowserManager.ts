@@ -32,7 +32,7 @@ export interface MainWindowBrowserManager {
    * Loads a URL in the browser
    * @param url - The URL to load
    */
-  LoadURL(url: string): void;
+  LoadURL(url: string, N?: boolean): void;
 
   /**
    * Called when a request finishes loading
@@ -125,12 +125,12 @@ export interface MainWindowBrowserManager {
   /**
    * The description of the last load error, if any
    */
-  LoadErrorDescription: string | null;
+  LoadErrorDescription?: string | null;
 
   /**
    * The URL that failed to load, if any
    */
-  LoadErrorURL: string | null;
+  LoadErrorURL?: string | null;
 
   /**
    * Whether the browser is currently loading
@@ -189,12 +189,12 @@ export interface MainWindowBrowserManager {
   /**
    * Internal error description storage
    */
-  m_loadErrorDesc: string | null;
+  m_loadErrorDesc?: string | null;
 
   /**
    * Internal error URL storage
    */
-  m_loadErrorURL: string | null;
+  m_loadErrorURL?: string | null;
 
   /**
    * Internal page security storage

@@ -253,7 +253,7 @@ export interface TimelineLoader {
 
   LoadTimelinesForSharedClip(sharedClip: SharedClip): void;
 
-  RecordingSessionChanged(notification: RecordingSessionChangedNotification): undefined;
+  RecordingSessionChanged(notification: RecordingSessionChangedNotification): void;
 
   RemoveTimelineEvent(timelineId: string, entryId: string): boolean;
 
@@ -314,7 +314,7 @@ export interface ActiveTimelineLoader extends TimelineLoader {
 
   AdvanceGameModeIndex(e: unknown): void;
 
-  AdvanceIterator(e: unknown, t: unknown): undefined;
+  AdvanceIterator(e: unknown, t: unknown): void;
 
   /** Returns whether the timeline loader has been initialized */
   BInitialized(): boolean;

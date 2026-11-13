@@ -140,6 +140,9 @@ export interface User {
   SetLoginCredentials(accountName: string, password: string, rememberMe: boolean): void;
 
   /** @native */
+  SetRestartArgs(): unknown;
+
+  /** @native */
   ShowSaveHardwareDialog(): unknown;
 
   /**

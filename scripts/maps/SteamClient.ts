@@ -37,6 +37,7 @@ export const SteamClientMaps: InterfaceMap[] = [
   IMap('SteamClient/ServerBrowser', 'ServerBrowser', /* ts */ `SteamClient.ServerBrowser`),
   IMap('SteamClient/Settings', 'Settings', /* ts */ `SteamClient.Settings`),
   IMap('SteamClient/SharedConnection', 'SharedConnection', /* ts */ `SteamClient.SharedConnection`),
+  IMap('SteamClient/SiteLicense', 'SiteLicense', /* ts */ `SteamClient.SiteLicense`),
   IMap('SteamClient/Stats', 'Stats', /* ts */ `SteamClient.Stats`),
   IMap('SteamClient/SteamChina', 'SteamChina', /* ts */ `SteamClient.SteamChina`),
   IMap('SteamClient/Storage', 'Storage', /* ts */ `SteamClient.Storage`),
@@ -58,7 +59,6 @@ export const SteamClientMaps: InterfaceMap[] = [
   IMap('SteamClient/System/Display', 'Display', /* ts */ `SteamClient.System.Display`),
   IMap('SteamClient/System/Network/index', 'Network', /* ts */ `SteamClient.System.Network`),
   IMap('SteamClient/System/Network/Device', 'Device', /* ts */ `SteamClient.System.Network.Device`),
-  IMap('SteamClient/System/Report', 'Report', /* ts */ `SteamClient.System.Report`),
   IMap('SteamClient/System/UI', 'UI', /* ts */ `SteamClient.System.UI`),
   IMap('SteamClient/System/Audio', 'Audio', /* ts */ `SteamClient.System.Audio`),
 ];

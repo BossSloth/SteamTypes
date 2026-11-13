@@ -302,6 +302,8 @@ export interface MapTokens {
 
   AppActivity_EndofFeed: string;
 
+  AppActivity_EventLoadFailed: string;
+
   AppActivity_EventType_GameUpdate: string;
 
   AppActivity_FeaturedDLC: string;
@@ -634,6 +636,14 @@ export interface MapTokens {
 
   AppControllerConfigurator_ChooseConfiguration_CopyURL: string;
 
+  AppDetails_Achievements_BaseGameSets: string;
+
+  AppDetails_Achievements_BaseGameSets_Plural: string;
+
+  AppDetails_Achievements_DLCSets: string;
+
+  AppDetails_Achievements_DLCSets_Plural: string;
+
   AppDetails_Achievements_Locked: string;
 
   AppDetails_Achievements_Unlocked: string;
@@ -889,8 +899,6 @@ export interface MapTokens {
   AppDetails_OpenScreenshotUploader: string;
 
   AppDetails_OriginalReleaseDate: string;
-
-  AppDetails_PartnerEventFailedLoad: string;
 
   AppDetails_PctUnlocked: string;
 
@@ -2120,6 +2128,10 @@ export interface MapTokens {
 
   Audio_DeviceAux: string;
 
+  Audio_DeviceBuiltinInput: string;
+
+  Audio_DeviceBuiltinOutput: string;
+
   Audio_DeviceDefault: string;
 
   Audio_DeviceDefaultWithDevice: string;
@@ -2129,6 +2141,16 @@ export interface MapTokens {
   Audio_DeviceMicrophone: string;
 
   Audio_DeviceSpeakers: string;
+
+  Audio_EnableEchoCancellation: string;
+
+  Audio_EnableEchoCancellation_Description: string;
+
+  Audio_EnableNoiseSuppression: string;
+
+  Audio_EnableNoiseSuppression_Description: string;
+
+  Audio_Header_Apps: string;
 
   Audio_Header_General: string;
 
@@ -2143,6 +2165,8 @@ export interface MapTokens {
   Audio_No_Input_Devices_Detected: string;
 
   Audio_No_Output_Devices_Detected: string;
+
+  Audio_NoAppsPlayingAudio: string;
 
   Audio_OutputDevice: string;
 
@@ -2183,6 +2207,12 @@ export interface MapTokens {
   Audio_SpeakerConfiguration: string;
 
   Audio_SpeakerTuning: string;
+
+  Audio_StrName_AudioStream: string;
+
+  Audio_StrName_CaptureStream: string;
+
+  Audio_StrName_PlaybackStream: string;
 
   Audio_Tv_Volume: string;
 
@@ -2602,6 +2632,8 @@ export interface MapTokens {
 
   CloudPendingOps_Header: string;
 
+  CloudPendingOps_OK: string;
+
   CloudPendingOps_Operation_AppRunning: string;
 
   CloudPendingOps_Operation_AppSuspended: string;
@@ -2789,6 +2821,8 @@ export interface MapTokens {
   ContentManagement_Error_NotEmptyFolder: string;
 
   ContentManagement_Error_NotExecutableFolder: string;
+
+  ContentManagement_Error_NotSharedWithContainer: string;
 
   ContentManagement_Error_NotWritableFolder: string;
 
@@ -11006,8 +11040,6 @@ export interface MapTokens {
 
   FrameVerified_FilterDescription_Verified: string;
 
-  FrameVerified_FilterDescription_Verified_NotOnFrame: string;
-
   FrameVerified_FilterDescription_Verified_Playable: string;
 
   FrameVerified_FilterDescription_Verified_Playable_Unknown: string;
@@ -12164,6 +12196,8 @@ export interface MapTokens {
 
   Installer_Error_AppName_ErrorDescription: string;
 
+  Installer_Error_Offline_Mode: string;
+
   Installer_Eula: string;
 
   Installer_EulaAccept: string;
@@ -12736,6 +12770,10 @@ export interface MapTokens {
 
   Library_ActionSetLayerDropdown_CodeLabel: string;
 
+  Library_CompletedSets: string;
+
+  Library_CompletedSets_Plural: string;
+
   Library_ControllerSaveDefaultDescription: string;
 
   Library_ControllerSaveDefaultTitle: string;
@@ -12931,6 +12969,8 @@ export interface MapTokens {
   Library_SortByMetacriticScore: string;
 
   Library_SortByPctAchievementsComplete: string;
+
+  Library_SortByPctAchievementsComplete_ShortTag: string;
 
   Library_SortByPctAchievementsComplete_Tag: string;
 
@@ -13518,6 +13558,8 @@ export interface MapTokens {
 
   Menu_OldSettings: string;
 
+  Menu_PersonalCalendar: string;
+
   Menu_Players: string;
 
   Menu_PointsShop: string;
@@ -13728,6 +13770,8 @@ export interface MapTokens {
 
   Notification_FriendInviteRollup_Title: string;
 
+  Notification_FriendMessage_RollupCount: string;
+
   Notification_FriendMessage_Title: string;
 
   Notification_FriendOnline_Body: string;
@@ -13809,6 +13853,12 @@ export interface MapTokens {
   Notification_RestartNeeded_Body: string;
 
   Notification_RestartNeeded_Title: string;
+
+  Notification_SiteAssociation_ApprovalRequest: string;
+
+  Notification_SiteAssociation_ApprovalRequest_Mandatory: string;
+
+  Notification_SiteAssociation_Title: string;
 
   Notification_SteamDeckRewards_Body: string;
 
@@ -14232,6 +14282,8 @@ export interface MapTokens {
 
   QuickAccess_Streaming_ConnectionInfo_Ping_Milliseconds: string;
 
+  QuickAccess_Streaming_EnableWirelessAdapter: string;
+
   QuickAccess_Streaming_Host_Disabled: string;
 
   QuickAccess_Streaming_Host_InstallingSteamVR: string;
@@ -14309,6 +14361,8 @@ export interface MapTokens {
   QuickAccess_Streaming_VRLinkType_WirelessAdapter: string;
 
   QuickAccess_Streaming_WirelessAdapterConnectingInProgress: string;
+
+  QuickAccess_Streaming_WirelessAdapterDisabled: string;
 
   QuickAccess_Streaming_WirelessAdapterNotDetected: string;
 
@@ -14802,6 +14856,12 @@ export interface MapTokens {
 
   RemoteDevicePIN_Title: string;
 
+  RemoteDeviceSpectatePermission_Allow: string;
+
+  RemoteDeviceSpectatePermission_AlwaysAllow: string;
+
+  RemoteDeviceSpectatePermission_Deny: string;
+
   RemoteDeviceSpectatePermission_Text: string;
 
   RemoteDeviceSpectatePermission_Title: string;
@@ -14867,6 +14927,8 @@ export interface MapTokens {
   RemotePlay_PairWifiAPResult_NoDonglePresent: string;
 
   RemotePlay_PairWifiAPResult_OK: string;
+
+  RemotePlay_PairWifiAPResult_PairingTimeout: string;
 
   RemotePlay_PairWifiAPResult_Timeout: string;
 
@@ -15342,8 +15404,6 @@ export interface MapTokens {
 
   Settings_CEC_Control: string;
 
-  Settings_CEC_Enabled: string;
-
   Settings_CEC_Header: string;
 
   Settings_CEC_Header_Long: string;
@@ -15355,8 +15415,6 @@ export interface MapTokens {
   Settings_CEC_WakeDevice: string;
 
   Settings_CEC_WakeDeviceSupportedDesc: string;
-
-  Settings_CEC_WakeOnResume: string;
 
   Settings_CEC_WakeTV: string;
 
@@ -16598,8 +16656,6 @@ export interface MapTokens {
 
   Settings_Interface_StartPage_Description: string;
 
-  Settings_Interface_SteamRTClient: string;
-
   Settings_Interface_TaskbarPreferences: string;
 
   Settings_Internet_Active_Networks: string;
@@ -17174,6 +17230,14 @@ export interface MapTokens {
 
   Settings_RemotePlay_DisplaySettingResolution: string;
 
+  Settings_RemotePlay_DisplayStyle: string;
+
+  Settings_RemotePlay_DisplayStyle_Letterbox: string;
+
+  Settings_RemotePlay_DisplayStyle_Stretch: string;
+
+  Settings_RemotePlay_DisplayStyle_Zoom: string;
+
   Settings_RemotePlay_EditValue: string;
 
   Settings_RemotePlay_EnableCaptureNVFBC: string;
@@ -17217,6 +17281,14 @@ export interface MapTokens {
   Settings_RemotePlay_Framerate_24000: string;
 
   Settings_RemotePlay_HardwareDecoding: string;
+
+  Settings_RemotePlay_HDRMode: string;
+
+  Settings_RemotePlay_HDRMode_Auto: string;
+
+  Settings_RemotePlay_HDRMode_Off: string;
+
+  Settings_RemotePlay_HDRMode_On: string;
 
   Settings_RemotePlay_HEVC: string;
 
@@ -17419,6 +17491,8 @@ export interface MapTokens {
   Settings_ScreenReader_Locale_ja: string;
 
   Settings_ScreenReader_Locale_ko: string;
+
+  Settings_ScreenReader_Locale_ms: string;
 
   Settings_ScreenReader_Locale_nb: string;
 
@@ -18110,6 +18184,12 @@ export interface MapTokens {
 
   SignOut_Title: string;
 
+  SiteAssociation_Approval_Mandatory_OK: string;
+
+  SiteAssociation_Approval_No: string;
+
+  SiteAssociation_Approval_Yes: string;
+
   Sleep: string;
 
   SoundtrackControls_Browse: string;
@@ -18273,6 +18353,10 @@ export interface MapTokens {
   Steam_AppUpdateError_56: string;
 
   Steam_AppUpdateError_57: string;
+
+  Steam_DifferentLauncher_Description: string;
+
+  Steam_DifferentLauncher_Title: string;
 
   Steam_DualSense_FirmwareUpdate_Ignore: string;
 
@@ -19306,6 +19390,8 @@ export interface MapTokens {
 
   TimeZoneCities_Alaska: string;
 
+  TimeZoneCities_Alberta: string;
+
   TimeZoneCities_Arabia: string;
 
   TimeZoneCities_Arabian: string;
@@ -19315,6 +19401,8 @@ export interface MapTokens {
   TimeZoneCities_Azores: string;
 
   TimeZoneCities_Brazil: string;
+
+  TimeZoneCities_BritishColumbia: string;
 
   TimeZoneCities_CapeVerde: string;
 
@@ -19372,6 +19460,10 @@ export interface MapTokens {
 
   TimeZoneCities_Korea: string;
 
+  TimeZoneCities_Manitoba: string;
+
+  TimeZoneCities_Morocco: string;
+
   TimeZoneCities_Moscow: string;
 
   TimeZoneCities_Mountain: string;
@@ -19379,6 +19471,8 @@ export interface MapTokens {
   TimeZoneCities_MountainArizona: string;
 
   TimeZoneCities_MountainMexico: string;
+
+  TimeZoneCities_MountainUS: string;
 
   TimeZoneCities_Myanmar: string;
 
@@ -19393,6 +19487,8 @@ export interface MapTokens {
   TimeZoneCities_NorthCentralAsia: string;
 
   TimeZoneCities_Pacific: string;
+
+  TimeZoneCities_PacificUS: string;
 
   TimeZoneCities_SAmericaEast: string;
 
@@ -19432,6 +19528,8 @@ export interface MapTokens {
 
   TimeZoneRegion_Alaska: string;
 
+  TimeZoneRegion_Alberta: string;
+
   TimeZoneRegion_Arabia: string;
 
   TimeZoneRegion_Arabian: string;
@@ -19441,6 +19539,8 @@ export interface MapTokens {
   TimeZoneRegion_Azores: string;
 
   TimeZoneRegion_Brazil: string;
+
+  TimeZoneRegion_BritishColumbia: string;
 
   TimeZoneRegion_CapeVerde: string;
 
@@ -19497,6 +19597,10 @@ export interface MapTokens {
   TimeZoneRegion_Japan: string;
 
   TimeZoneRegion_Korea: string;
+
+  TimeZoneRegion_Manitoba: string;
+
+  TimeZoneRegion_Morocco: string;
 
   TimeZoneRegion_Moscow: string;
 
@@ -19789,6 +19893,14 @@ export interface MapTokens {
   VRDashboard_HideLaserMouse: string;
 
   VRDashboard_LaunchNonSteamApp: string;
+
+  VRDashboard_LaunchNonSteamApp_EditMenu: string;
+
+  VRDashboard_LaunchNonSteamApp_FinishEdits: string;
+
+  VRDashboard_LaunchNonSteamApp_ShowAll: string;
+
+  VRDashboard_LaunchNonSteamApp_ShowLess: string;
 
   VRDashboard_QuickAccessMenu: string;
 

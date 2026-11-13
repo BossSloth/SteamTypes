@@ -38,6 +38,9 @@ export interface UI {
    */
   RegisterForClientConVar(convar: string, callback: (value: string) => void): Unregisterable;
 
+  /** @native */
+  RegisterForDifferentLauncherRequested(): unknown;
+
   RegisterForErrorCondition(callback: (param0: number, param1: number) => void): Unregisterable;
 
   RegisterForKioskModeResetSignal(callback: () => void): Unregisterable;

@@ -131,14 +131,6 @@ export interface Apps {
   GetBackupsInFolder(appBackupPath: string): Promise<string | undefined>;
 
   /**
-   * Retrieves cached details for a specific application.
-   * @param appId The ID of the application.
-   * @returns A Promise that resolves to a stringified object.
-   */
-  // todo: Parsing nightmare
-  GetCachedAppDetails(appId: number): Promise<string>;
-
-  /**
    * @returns a ProtoBuf message. Can be deserialized using {@link CMsgCloudPendingRemoteOperations_Protobuf}.
    */
   GetCloudPendingRemoteOperations(appId: number): Promise<{
@@ -458,6 +450,9 @@ export interface Apps {
   /** @native */
   RegisterForShowPendingGiftsDialog(): unknown;
 
+  /** @native */
+  RegisterForStatsSchemaChanges(): unknown;
+
   /**
    * Registers a callback function to be notified when workshop items are added or removed from a Steam application.
    * @param callback The callback function to be called.
@@ -561,14 +556,6 @@ export interface Apps {
    * @param resolution The resolution to be set for the application. It can be "Default", "Native", or other compatible resolutions for the user's monitor.
    */
   SetAppResolutionOverride(appId: number, resolution: string): unknown;
-
-  /**
-   * Sets cached details for a specific application.
-   * @param appId The ID of the application.
-   * @param details The details to be cached, a stringified object.
-   * @returns A Promise that resolves when the details are successfully cached.
-   */
-  SetCachedAppDetails(appId: number, details: string): Promise<void>;
 
   /** @native */
   SetControllerRumbleIntensity(): unknown;

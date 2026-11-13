@@ -17,6 +17,8 @@ export interface TextFilterStore {
 
   DeobfuscateString(e: unknown): unknown;
 
+  EnsureFiltersLoaded(): unknown;
+
   FilterText(e: unknown, t: unknown): unknown;
 
   GetSteamEngineTextFilterDictionary(e: unknown, t: unknown): unknown;
@@ -28,7 +30,7 @@ export interface TextFilterStore {
    * @param t default: null
    * @param r default: null
    */
-  Init(e?: number, t?: null, r?: null): Promise<void>;
+  Init(e?: number, t?: null, r?: null, L?: null): Promise<void>;
 
   InitFiltersWithRetry(): Promise<void>;
 
@@ -38,12 +40,12 @@ export interface TextFilterStore {
 
   LoadFilter(): Promise<void>;
 
-  LoadLanguage(e: unknown): Promise<void>;
+  LoadLanguage(e: unknown): Promise<boolean>;
 
   /**
    * @param e default: 15
    */
-  LoadLanguages(e?: number): Promise<void>;
+  LoadLanguages(): Promise<void>;
 
   LoadObfuscatedString(e: unknown): Promise<unknown>;
 
@@ -51,11 +53,17 @@ export interface TextFilterStore {
 
   LoadTextFilterWords(): Promise<void>;
 
+  m_fnUnregisterDictionaryChanged(): void;
+
   ObfuscateString(e: unknown): unknown;
 
   OnFilterDataChanged(): void;
 
+  OnPlayerSettingsChanged(): void;
+
   OnTextFilterDictionaryChanged(e: unknown): 1;
+
+  RegisterPlayerNotifications(x: unknown): void;
 
   RequestUpdatedSettings(): Promise<void>;
 
@@ -75,21 +83,31 @@ export interface TextFilterStore {
 
   m_bFilterChangedWhileLoading: boolean;
 
+  m_bHaveCompleteFilter: boolean;
+
   m_bInitialized: boolean;
 
   m_bOngoingLoad: boolean;
 
   m_bShownFilterTip: boolean;
 
+  m_bWordListsComplete: boolean;
+
   m_DataAccess: DataAccess;
 
   m_mapPlayerCache: ObservableMap<unknown, unknown>;
 
+  m_nLoadLanguagesRetryDelaySec: number;
+
   m_nLoadLanguagesRetryTimeout: undefined;
+
+  m_promiseOngoingLoad: null;
 
   m_regexBannedWords: null;
 
   m_regexCleanWords: RegExp;
+
+  m_rgUnregisterPlayerNotifications: unknown[];
 
   m_Storage: object;
 

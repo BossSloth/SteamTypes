@@ -490,6 +490,8 @@ export interface CompositionStateStore {
 
   m_bLatestAppOverlayStateActive: boolean;
 
+  m_bPushedOverlayUISinceHidden: boolean;
+
   m_currentlyFocusedAppid: ObservableValue<number>;
 
   m_currentlyFocusedWindowID: ObservableValue<number | undefined>;

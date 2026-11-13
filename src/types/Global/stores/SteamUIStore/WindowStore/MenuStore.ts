@@ -3,6 +3,8 @@ import { GamingDeviceType } from 'SteamClient/System';
 import { WindowInstance } from './WindowStore';
 
 export interface MenuStore {
+  BQuickAccessContentFocusRequested(): unknown;
+
   ClearLastRequestedSideMenu(): void;
 
   CloseSideMenus(): void;
@@ -37,11 +39,16 @@ export interface MenuStore {
   RequestExtendSideMenuVisibility(): () => number;
 
   /** @native */
+  SetQuickAccessContentFocusRequested(): unknown;
+
+  /** @native */
   SetQuickAccessTab(): unknown;
 
   SetSuppressMenus(): () => number;
 
   ToggleSideMenu(e: unknown, t: unknown): void;
+
+  m_bQuickAccessContentFocusRequested: boolean;
 
   m_cSideMenuExtendedVisibilityRequests: number;
 

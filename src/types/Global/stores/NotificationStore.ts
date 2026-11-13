@@ -31,6 +31,10 @@ export interface NotificationStore {
 
   BNextToastDisplayAlone(e: unknown): unknown;
 
+  BReadyToShowToast(_e: unknown): unknown;
+
+  BRollupFriendMessage(_e: unknown): boolean;
+
   BShouldSupressToasts(): unknown;
 
   BShowToast(e: unknown, t: unknown): unknown;
@@ -56,6 +60,8 @@ export interface NotificationStore {
   DoScreenshotNotification(e: unknown, t: unknown): void;
 
   ExpireToast(e: unknown): void;
+
+  GetAppsWithOverlayRunning(): unknown[];
 
   GetCurrentAppOverlayNotification(e: unknown): unknown;
 
@@ -124,6 +130,8 @@ export interface NotificationStore {
   SendPendingServerToasts(): void;
 
   SetContextRenderingToast(e: unknown, t: unknown): void;
+
+  ShowPendingFriendMessages(_e: unknown): void;
 
   /**
    * @param t default: !1
@@ -265,6 +273,8 @@ export interface NotificationStore {
   m_LastSystemUpdateNotification: LastSystemUpdateNotification | null;
 
   m_mapAppOverlayToasts: ObservableMap<unknown, unknown>;
+
+  m_mapFriendMessageRollups: Map<unknown, unknown>;
 
   m_mapToastLastShown: Map<unknown, unknown>;
 

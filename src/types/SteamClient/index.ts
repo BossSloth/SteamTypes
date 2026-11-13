@@ -32,6 +32,7 @@ import { Screenshots } from './Screenshots';
 import { ServerBrowser } from './ServerBrowser';
 import { Settings } from './Settings';
 import { SharedConnection } from './SharedConnection';
+import { SiteLicense } from './SiteLicense';
 import { Stats } from './Stats';
 import { SteamChina } from './SteamChina';
 import { Storage } from './Storage';
@@ -117,6 +118,8 @@ export interface SteamClient {
   Settings: Settings;
 
   SharedConnection: SharedConnection;
+
+  SiteLicense: SiteLicense;
 
   Stats: Stats;
 

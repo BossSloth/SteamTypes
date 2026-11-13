@@ -367,11 +367,13 @@ export interface CClientNotificationCannotReadControllerGuideButtonNotificationT
 }
 
 export interface CClientNotificationFriendInGameNotificationTarget {
+  fnShowInTray(_e: unknown): unknown;
+
   fnTest(): unknown;
 
   fnTray(e: unknown, t: unknown): void;
 
-  playSound(): unknown;
+  playSound(lt: unknown, Mt: unknown): unknown;
 
   showToast(e: unknown): boolean;
 
@@ -453,11 +455,13 @@ export interface CClientNotificationTimerExpiredNotificationTarget {
 }
 
 export interface CClientNotificationFriendOnlineNotificationTarget {
+  fnShowInTray(_e: unknown): unknown;
+
   fnTest(): unknown;
 
   fnTray(e: unknown, t: unknown): void;
 
-  playSound(): unknown;
+  playSound(lt: unknown, Mt: unknown): unknown;
 
   showToast(e: unknown): boolean;
 
@@ -699,13 +703,15 @@ export interface CClientNotificationSystemUpdateNotificationTarget {
 }
 
 export interface CClientNotificationFriendMessageNotificationTarget {
+  fnShowInTray(_e: unknown): unknown;
+
   fnTest(): unknown;
 
   fnTray(e: unknown, t: unknown): void;
 
-  playSound(): unknown;
+  playSound(Ie: unknown, _e: unknown): unknown;
 
-  showToast(): unknown;
+  showToast(_e: unknown): unknown;
 
   bEnableInReducedUI: boolean;
 
@@ -719,11 +725,13 @@ export interface CClientNotificationFriendMessageNotificationTarget {
 }
 
 export interface CClientNotificationGroupChatMessageNotificationTarget {
+  fnShowInTray(): unknown;
+
   fnTest(): unknown;
 
   fnTray(e: unknown, t: unknown): void;
 
-  playSound(): unknown;
+  playSound(Ie: unknown, _e: unknown): unknown;
 
   showToast(): unknown;
 

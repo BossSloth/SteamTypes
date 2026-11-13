@@ -34,6 +34,8 @@ export interface AppDetailsStore {
    */
   BHasRecentlyLaunched(appId: number): boolean;
 
+  BIsWorkshopLocked(p: unknown): unknown;
+
   /**
    * Checks if the application has a workshop presence
    *
@@ -351,6 +353,8 @@ export interface AppDetailsStore {
 
   SetAjaxLibraryAppDetails(appId: number, appData: AppData, ajaxLibraryAppDetails: AjaxLibraryAppDetails): void;
 
+  testSetAppCloudStatus(p: unknown, C: unknown): void;
+
   UnregisterForAppData(appData: AppData, callback: (appData: AppData) => void): void;
 
   /**
@@ -389,7 +393,7 @@ export interface AppData {
 
   descriptionsData: DescriptionsData | null;
 
-  details: AppDetails;
+  details: AppDetails | null;
 
   hAppDetails: Unregisterable;
 
@@ -520,6 +524,8 @@ export interface AppDetails {
   bStorePagePublished: boolean;
 
   bSupportsCDKeyCopyToClipboard: boolean;
+
+  bWorkshopLocked: boolean;
 
   /**
    * Indicates whether the application has the community workshop available.

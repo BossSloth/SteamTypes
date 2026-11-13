@@ -4,7 +4,7 @@ import { GMap, InterfaceMap } from '.';
 export const GlobalMaps: InterfaceMap[] = [
   GMap('App', 'App', /* ts */ `window.App`),
   GMap('AppAchievementProgressCache', 'AppAchievementProgressCache', /* ts */ `window.appAchievementProgressCache`, {
-    initFunction: 'window.appAchievementProgressCache.RequestCacheUpdate()',
+    initFunction: /* ts */ `window.appAchievementProgressCache.m_mapQueuedCacheMisses.set(227300, true); window.appAchievementProgressCache.RequestCacheUpdate()`,
   }),
 
   // Managers

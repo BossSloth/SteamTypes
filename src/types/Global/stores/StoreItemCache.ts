@@ -346,6 +346,8 @@ export interface StoreApp {
 
   GetName(): unknown;
 
+  GetOptInRegistrationTagValues(j: unknown): unknown;
+
   GetOriginalReleaseDateRTime(): unknown;
 
   GetParentAppID(): unknown;
@@ -445,6 +447,8 @@ export interface StoreApp {
   m_rgIncludedAppTypes: number[];
 
   m_rgLinks?: StoreItem_Link[];
+
+  m_rgOptInRegistrationTags?: never;
 
   m_rgPurchaseOptions?: StoreItem_PurchaseOption[];
 

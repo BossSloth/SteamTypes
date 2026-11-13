@@ -14,8 +14,6 @@ export interface UrlStore {
 
   BuildCustomAssetURL(appId: string, imageName: string, extension: string, version: string): string;
 
-  BuildLegacyCachedLibraryAssetURL(folder: string, file: string, cacheBust?: number): string;
-
   BuildLibraryAssetURL(folder: string, file: string, timestamp?: number): string;
 
   BuildSteamURL(baseUrl: string, ...params: string[]): string;
@@ -101,11 +99,6 @@ export interface UrlStore {
   GetStoreGreatOnFrameURL(): unknown;
 
   /**
-   * GetBaseURLSharedCDN() + "store_item_assets/steam/apps/"
-   */
-  GetStoreIconBaseURL(): string;
-
-  /**
    * ResolveURL("StoreFrontPage")
    */
   GetStoreURL(): string;
@@ -148,541 +141,545 @@ export interface UrlStore {
 }
 
 export interface m_steamUrls {
-  allnotifications: SteamUrl;
-
   AllNotifications: SteamUrl;
 
-  apphoverpublic: SteamUrl;
+  allnotifications: SteamUrl;
 
   AppHoverPublic: SteamUrl;
 
-  apphoverpublicfull: SteamUrl;
+  apphoverpublic: SteamUrl;
 
   AppHoverPublicFull: SteamUrl;
 
-  appnewspage: SteamUrl;
+  apphoverpublicfull: SteamUrl;
 
   AppNewsPage: SteamUrl;
 
-  asyncgames: SteamUrl;
+  appnewspage: SteamUrl;
 
   AsyncGames: SteamUrl;
 
-  avatarbaseurl: SteamUrl;
+  asyncgames: SteamUrl;
 
   AvatarBaseURL: SteamUrl;
 
-  baseurlsharedcdn: SteamUrl;
+  avatarbaseurl: SteamUrl;
 
   BaseURLSharedCDN: SteamUrl;
 
-  chatroot: SteamUrl;
+  baseurlsharedcdn: SteamUrl;
 
   ChatRoot: SteamUrl;
 
-  claimentitlements: SteamUrl;
+  chatroot: SteamUrl;
 
   ClaimEntitlements: SteamUrl;
 
-  clanassetcdn: SteamUrl;
+  claimentitlements: SteamUrl;
 
   ClanAssetCDN: SteamUrl;
 
-  commentnotifications: SteamUrl;
+  clanassetcdn: SteamUrl;
 
   CommentNotifications: SteamUrl;
 
-  communityaddfriends: SteamUrl;
+  commentnotifications: SteamUrl;
 
   CommunityAddFriends: SteamUrl;
 
-  communitycdn: SteamUrl;
+  communityaddfriends: SteamUrl;
 
   CommunityCDN: SteamUrl;
 
-  communityfilepage: SteamUrl;
+  communitycdn: SteamUrl;
 
   CommunityFilePage: SteamUrl;
 
-  communityfriendsthatplay: SteamUrl;
+  communityfilepage: SteamUrl;
 
   CommunityFriendsThatPlay: SteamUrl;
 
-  communityfrontpage: SteamUrl;
+  communityfriendsthatplay: SteamUrl;
 
   CommunityFrontPage: SteamUrl;
 
-  communitygroupsearch: SteamUrl;
+  communityfrontpage: SteamUrl;
 
   CommunityGroupSearch: SteamUrl;
 
-  communityhome: SteamUrl;
+  communitygroupsearch: SteamUrl;
 
   CommunityHome: SteamUrl;
 
-  communityimages: SteamUrl;
+  communityhome: SteamUrl;
 
   CommunityImages: SteamUrl;
 
-  communityinventory: SteamUrl;
+  communityimages: SteamUrl;
 
   CommunityInventory: SteamUrl;
 
-  communitymarket: SteamUrl;
+  communityinventory: SteamUrl;
 
   CommunityMarket: SteamUrl;
 
-  communitymarketapp: SteamUrl;
+  communitymarket: SteamUrl;
 
   CommunityMarketApp: SteamUrl;
 
-  communityrecommendations: SteamUrl;
+  communitymarketapp: SteamUrl;
 
   CommunityRecommendations: SteamUrl;
 
-  communityscreenshots: SteamUrl;
+  communityrecommendations: SteamUrl;
 
   CommunityScreenshots: SteamUrl;
 
-  communitysinglescreenshot: SteamUrl;
+  communityscreenshots: SteamUrl;
 
   CommunitySingleScreenshot: SteamUrl;
 
-  currentlyplayedwith: SteamUrl;
+  communitysinglescreenshot: SteamUrl;
 
   CurrentlyPlayedWith: SteamUrl;
 
-  eventannouncementpage: SteamUrl;
+  currentlyplayedwith: SteamUrl;
 
   EventAnnouncementPage: SteamUrl;
 
-  familymanagement: SteamUrl;
+  eventannouncementpage: SteamUrl;
 
   FamilyManagement: SteamUrl;
 
-  familysharing: SteamUrl;
+  familymanagement: SteamUrl;
 
   FamilySharing: SteamUrl;
 
-  gamehub: SteamUrl;
+  familysharing: SteamUrl;
 
   GameHub: SteamUrl;
 
-  gamehubbroadcasts: SteamUrl;
+  gamehub: SteamUrl;
 
   GameHubBroadcasts: SteamUrl;
 
-  gamehubdiscussions: SteamUrl;
+  gamehubbroadcasts: SteamUrl;
 
   GameHubDiscussions: SteamUrl;
 
-  gamehubguides: SteamUrl;
+  gamehubdiscussions: SteamUrl;
 
   GameHubGuides: SteamUrl;
 
-  gamehubnews: SteamUrl;
+  gamehubguides: SteamUrl;
 
   GameHubNews: SteamUrl;
 
-  gamehubreviews: SteamUrl;
+  gamehubnews: SteamUrl;
 
   GameHubReviews: SteamUrl;
 
-  globalachievementstatspage: SteamUrl;
+  gamehubreviews: SteamUrl;
 
   GlobalAchievementStatsPage: SteamUrl;
 
-  globalleaderboardspage: SteamUrl;
+  globalachievementstatspage: SteamUrl;
 
   GlobalLeaderboardsPage: SteamUrl;
 
-  groupsteamidpage: SteamUrl;
+  globalleaderboardspage: SteamUrl;
 
   GroupSteamIDPage: SteamUrl;
 
-  hardwaresurvey: SteamUrl;
+  groupsteamidpage: SteamUrl;
 
   HardwareSurvey: SteamUrl;
 
-  helpapppage: SteamUrl;
+  hardwaresurvey: SteamUrl;
 
   HelpAppPage: SteamUrl;
 
-  helpchangeemail: SteamUrl;
+  helpapppage: SteamUrl;
 
   HelpChangeEmail: SteamUrl;
 
-  helpchangepassword: SteamUrl;
+  helpchangeemail: SteamUrl;
 
   HelpChangePassword: SteamUrl;
 
-  helpfaq: SteamUrl;
+  helpchangepassword: SteamUrl;
 
   HelpFAQ: SteamUrl;
 
-  helpfrontpage: SteamUrl;
+  helpfaq: SteamUrl;
 
   HelpFrontPage: SteamUrl;
 
-  helpvacbans: SteamUrl;
+  helpfrontpage: SteamUrl;
 
   HelpVacBans: SteamUrl;
 
-  helpwithlogin: SteamUrl;
+  helpvacbans: SteamUrl;
 
   HelpWithLogin: SteamUrl;
 
-  helpwithlogininfo: SteamUrl;
+  helpwithlogin: SteamUrl;
 
   HelpWithLoginInfo: SteamUrl;
 
-  helpwithsteamguardcode: SteamUrl;
+  helpwithlogininfo: SteamUrl;
 
   HelpWithSteamGuardCode: SteamUrl;
 
-  itemstoredetailpage: SteamUrl;
+  helpwithsteamguardcode: SteamUrl;
 
   ItemStoreDetailPage: SteamUrl;
 
-  itemstorepage: SteamUrl;
+  itemstoredetailpage: SteamUrl;
 
   ItemStorePage: SteamUrl;
 
-  jointrade: SteamUrl;
+  itemstorepage: SteamUrl;
 
   JoinTrade: SteamUrl;
 
-  legalinformation: SteamUrl;
+  jointrade: SteamUrl;
 
   LegalInformation: SteamUrl;
 
-  libraryappdetails: SteamUrl;
+  legalinformation: SteamUrl;
 
   LibraryAppDetails: SteamUrl;
 
-  libraryappreview: SteamUrl;
+  libraryappdetails: SteamUrl;
 
   LibraryAppReview: SteamUrl;
 
-  libraryfeaturedbroadcasts: SteamUrl;
+  libraryappreview: SteamUrl;
 
   LibraryFeaturedBroadcasts: SteamUrl;
 
-  managegiftspage: SteamUrl;
+  libraryfeaturedbroadcasts: SteamUrl;
 
   ManageGiftsPage: SteamUrl;
 
-  managesteamguard: SteamUrl;
+  managegiftspage: SteamUrl;
 
   ManageSteamGuard: SteamUrl;
 
-  mobile: SteamUrl;
+  managesteamguard: SteamUrl;
 
   Mobile: SteamUrl;
 
-  moderatormessages: SteamUrl;
+  mobile: SteamUrl;
 
   ModeratorMessages: SteamUrl;
 
-  myhelprequests: SteamUrl;
+  moderatormessages: SteamUrl;
 
   MyHelpRequests: SteamUrl;
 
-  newshomepage: SteamUrl;
+  myhelprequests: SteamUrl;
 
   NewsHomePage: SteamUrl;
 
-  officialgamegrouppage: SteamUrl;
+  newshomepage: SteamUrl;
 
   OfficialGameGroupPage: SteamUrl;
 
-  parentalblocked: SteamUrl;
+  officialgamegrouppage: SteamUrl;
 
   ParentalBlocked: SteamUrl;
 
-  parentalsetup: SteamUrl;
+  parentalblocked: SteamUrl;
 
   ParentalSetup: SteamUrl;
 
-  pendingfriends: SteamUrl;
+  parentalsetup: SteamUrl;
 
   PendingFriends: SteamUrl;
 
-  pendinggift: SteamUrl;
+  pendingfriends: SteamUrl;
 
   PendingGift: SteamUrl;
 
-  pointsshop: SteamUrl;
+  pendinggift: SteamUrl;
 
   PointsShop: SteamUrl;
 
-  privacypolicy: SteamUrl;
+  pointsshop: SteamUrl;
 
   PrivacyPolicy: SteamUrl;
 
-  recommendgame: SteamUrl;
+  privacypolicy: SteamUrl;
 
   RecommendGame: SteamUrl;
 
-  redeemwalletvoucher: SteamUrl;
+  recommendgame: SteamUrl;
 
   RedeemWalletVoucher: SteamUrl;
 
-  registerkey: SteamUrl;
+  redeemwalletvoucher: SteamUrl;
 
   RegisterKey: SteamUrl;
 
-  registerkeynoparams: SteamUrl;
+  registerkey: SteamUrl;
 
   RegisterKeyNoParams: SteamUrl;
 
-  ssa: SteamUrl;
+  registerkeynoparams: SteamUrl;
 
   SSA: SteamUrl;
 
-  steamannouncements: SteamUrl;
+  ssa: SteamUrl;
 
   SteamAnnouncements: SteamUrl;
 
-  steamclientbetabugreports: SteamUrl;
+  steamannouncements: SteamUrl;
 
   SteamClientBetaBugReports: SteamUrl;
 
-  steamclientbetanewspage: SteamUrl;
+  steamclientbetabugreports: SteamUrl;
 
   SteamClientBetaNewsPage: SteamUrl;
 
-  steamclientbetanewspagefancy: SteamUrl;
+  steamclientbetanewspage: SteamUrl;
 
   SteamClientBetaNewsPageFancy: SteamUrl;
 
-  steamclientnewspage: SteamUrl;
+  steamclientbetanewspagefancy: SteamUrl;
 
   SteamClientNewsPage: SteamUrl;
 
-  steamclientpatchnotes: SteamUrl;
+  steamclientnewspage: SteamUrl;
 
   SteamClientPatchNotes: SteamUrl;
 
-  steamdiscussions: SteamUrl;
+  steamclientpatchnotes: SteamUrl;
 
   SteamDiscussions: SteamUrl;
 
-  steamidachievementspage: SteamUrl;
+  steamdiscussions: SteamUrl;
 
   SteamIDAchievementsPage: SteamUrl;
 
-  steamidapptradingcardspage: SteamUrl;
+  steamidachievementspage: SteamUrl;
 
   SteamIDAppTradingCardsPage: SteamUrl;
 
-  steamidbadgeinfo: SteamUrl;
+  steamidapptradingcardspage: SteamUrl;
 
   SteamIDBadgeInfo: SteamUrl;
 
-  steamidbadgepage: SteamUrl;
+  steamidbadgeinfo: SteamUrl;
 
   SteamIDBadgePage: SteamUrl;
 
-  steamidbroadcastpage: SteamUrl;
+  steamidbadgepage: SteamUrl;
 
   SteamIDBroadcastPage: SteamUrl;
 
-  steamideditpage: SteamUrl;
+  steamidbroadcastpage: SteamUrl;
 
   SteamIDEditPage: SteamUrl;
 
-  steamideditprivacypage: SteamUrl;
+  steamideditpage: SteamUrl;
 
   SteamIDEditPrivacyPage: SteamUrl;
 
-  steamidfriendslist: SteamUrl;
+  steamideditprivacypage: SteamUrl;
 
   SteamIDFriendsList: SteamUrl;
 
-  steamidfriendspage: SteamUrl;
+  steamidfriendslist: SteamUrl;
 
   SteamIDFriendsPage: SteamUrl;
 
-  steamidgroupspage: SteamUrl;
+  steamidfriendspage: SteamUrl;
 
   SteamIDGroupsPage: SteamUrl;
 
-  steamidmyprofile: SteamUrl;
+  steamidgroupspage: SteamUrl;
 
   SteamIDMyProfile: SteamUrl;
 
-  steamidpage: SteamUrl;
+  steamidmyprofile: SteamUrl;
 
   SteamIDPage: SteamUrl;
 
-  steamlanguage: SteamUrl;
+  steamidpage: SteamUrl;
 
   SteamLanguage: SteamUrl;
 
-  steampreferences: SteamUrl;
+  steamlanguage: SteamUrl;
 
   SteamPreferences: SteamUrl;
 
-  steamvrhmdhelp: SteamUrl;
+  steampreferences: SteamUrl;
 
   SteamVRHMDHelp: SteamUrl;
 
-  steamworkshop: SteamUrl;
+  steamvrhmdhelp: SteamUrl;
 
   SteamWorkshop: SteamUrl;
 
-  steamworkshoppage: SteamUrl;
+  steamworkshop: SteamUrl;
 
   SteamWorkshopPage: SteamUrl;
 
-  steamworkshopsubscriptions: SteamUrl;
+  steamworkshoppage: SteamUrl;
 
   SteamWorkshopSubscriptions: SteamUrl;
 
-  steamworkshopupdatedsubscriptions: SteamUrl;
+  steamworkshopsubscriptions: SteamUrl;
 
   SteamWorkshopUpdatedSubscriptions: SteamUrl;
 
-  storeaccount: SteamUrl;
+  steamworkshopupdatedsubscriptions: SteamUrl;
 
   StoreAccount: SteamUrl;
 
-  storeaccountgatedaccessapp: SteamUrl;
+  storeaccount: SteamUrl;
 
   StoreAccountGatedAccessApp: SteamUrl;
 
-  storeaddfundspage: SteamUrl;
+  storeaccountgatedaccessapp: SteamUrl;
 
   StoreAddFundsPage: SteamUrl;
 
-  storeapphover: SteamUrl;
+  storeaddfundspage: SteamUrl;
 
   StoreAppHover: SteamUrl;
 
-  storeappimages: SteamUrl;
+  storeapphover: SteamUrl;
 
   StoreAppImages: SteamUrl;
 
-  storeapppage: SteamUrl;
+  storeappimages: SteamUrl;
 
   StoreAppPage: SteamUrl;
 
-  storeapppageaddtocart: SteamUrl;
+  storeapppage: SteamUrl;
 
   StoreAppPageAddToCart: SteamUrl;
 
-  storecart: SteamUrl;
+  storeapppageaddtocart: SteamUrl;
 
   StoreCart: SteamUrl;
 
-  storecdn: SteamUrl;
+  storecart: SteamUrl;
 
   StoreCDN: SteamUrl;
 
-  storedlcpage: SteamUrl;
+  storecdn: SteamUrl;
 
   StoreDlcPage: SteamUrl;
 
-  storeexplore: SteamUrl;
+  storedlcpage: SteamUrl;
 
   StoreExplore: SteamUrl;
 
-  storeexplorenew: SteamUrl;
+  storeexplore: SteamUrl;
 
   StoreExploreNew: SteamUrl;
 
-  storefreetoplay: SteamUrl;
+  storeexplorenew: SteamUrl;
 
   StoreFreeToPlay: SteamUrl;
 
-  storefrontpage: SteamUrl;
+  storefreetoplay: SteamUrl;
 
   StoreFrontPage: SteamUrl;
 
-  storegamesearchpage: SteamUrl;
+  storefrontpage: SteamUrl;
 
   StoreGameSearchPage: SteamUrl;
 
-  storegreatondeck: SteamUrl;
+  storegamesearchpage: SteamUrl;
 
   StoreGreatOnDeck: SteamUrl;
 
-  storegreatonframe: SteamUrl;
+  storegreatondeck: SteamUrl;
 
   StoreGreatOnFrame: SteamUrl;
 
-  storepublisherpage: SteamUrl;
+  storegreatonframe: SteamUrl;
+
+  storepersonalcalendar: SteamUrl;
+
+  StorePersonalCalendar: SteamUrl;
 
   StorePublisherPage: SteamUrl;
 
-  storespecials: SteamUrl;
+  storepublisherpage: SteamUrl;
 
   StoreSpecials: SteamUrl;
 
-  storestats: SteamUrl;
+  storespecials: SteamUrl;
 
   StoreStats: SteamUrl;
 
-  storevr: SteamUrl;
+  storestats: SteamUrl;
 
   StoreVR: SteamUrl;
 
-  storewebmicrotxnpage: SteamUrl;
+  storevr: SteamUrl;
 
   StoreWebMicroTxnPage: SteamUrl;
 
-  supportmessages: SteamUrl;
+  storewebmicrotxnpage: SteamUrl;
 
   SupportMessages: SteamUrl;
 
-  textfiltersettings: SteamUrl;
+  supportmessages: SteamUrl;
 
   TextFilterSettings: SteamUrl;
 
-  todaypage: SteamUrl;
+  textfiltersettings: SteamUrl;
 
   TodayPage: SteamUrl;
 
-  tradeoffers: SteamUrl;
+  todaypage: SteamUrl;
 
   TradeOffers: SteamUrl;
 
-  userachievementspage: SteamUrl;
+  tradeoffers: SteamUrl;
 
   UserAchievementsPage: SteamUrl;
 
-  userleaderboardspage: SteamUrl;
+  userachievementspage: SteamUrl;
 
   UserLeaderboardsPage: SteamUrl;
 
-  userstatspage: SteamUrl;
+  userleaderboardspage: SteamUrl;
 
   UserStatsPage: SteamUrl;
 
-  userwishlist: SteamUrl;
+  userstatspage: SteamUrl;
 
   UserWishlist: SteamUrl;
 
-  videocdn: SteamUrl;
+  userwishlist: SteamUrl;
 
   VideoCDN: SteamUrl;
 
-  watchvideo: SteamUrl;
+  videocdn: SteamUrl;
 
   WatchVideo: SteamUrl;
 
-  webapi: SteamUrl;
+  watchvideo: SteamUrl;
 
   WebAPI: SteamUrl;
 
-  workshopeula: SteamUrl;
+  webapi: SteamUrl;
 
   WorkshopEula: SteamUrl;
 
-  yearinreview: SteamUrl;
+  workshopeula: SteamUrl;
 
   YearInReview: SteamUrl;
+
+  yearinreview: SteamUrl;
 }
 
 /**

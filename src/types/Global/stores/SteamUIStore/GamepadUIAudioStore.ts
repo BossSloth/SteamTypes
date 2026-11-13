@@ -4,6 +4,8 @@ import { ObservableValue, Unsubscribable } from 'shared/interfaces';
 import { FocusNavigationContext } from './GamepadNavigationManager';
 
 export interface GamepadUIAudioStore {
+  BReadyToPlaySoundWithoutBlocking(): boolean;
+
   Init(e: unknown, t: unknown): void;
 
   m_fnGetUIMode(): EUIMode;
@@ -52,6 +54,8 @@ export interface GamepadUIAudioStore {
 }
 
 export interface AudioPlaybackManager {
+  BHasContext(): boolean;
+
   CleanupContextIfUneeded(e: unknown): void;
 
   /**
@@ -62,6 +66,8 @@ export interface AudioPlaybackManager {
   DelayedCleanupContextIfInactive(): void;
 
   EnsureContext(): void;
+
+  EnsureContextWhenIdle(): unknown;
 
   GetActiveDestination(): unknown;
 
@@ -109,6 +115,8 @@ export interface AudioPlaybackManager {
   m_MediaStreamDestination: undefined;
 
   m_nLastObservedSampleRate: number;
+
+  m_promiseIdleContext: undefined;
 
   m_voiceStore: undefined;
 

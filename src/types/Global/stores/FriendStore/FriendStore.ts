@@ -240,8 +240,12 @@ export interface FriendsUIFriendStore {
   /** Adjusts persona state based on idle time (300s->away, 7200s->snooze) */
   AdjustPersonaStateForIdleTime(personaState: number): number;
 
+  ApplyFriendsListEntry(re: unknown, Ie: unknown): string;
+
   /** Checks if non-friend has 24h message approval */
   BApprovedNonFriendMessages(accountId: number): boolean;
+
+  BeginFullFriendsListUpdate(): void;
 
   BIsInvisibleMode(): boolean;
 
@@ -261,6 +265,8 @@ export interface FriendsUIFriendStore {
   FillMessageFromPerFriendNotificationSettings(message: unknown, settings: NotificationSettings): void;
 
   FillPerFriendNotificationSettingsFromMessage(settings: NotificationSettings, message: unknown): void;
+
+  FinishFullFriendsListUpdate(): void;
 
   ForceReadyToRender(): void;
 
@@ -332,6 +338,8 @@ export interface FriendsUIFriendStore {
 
   ResetIdleState(): void;
 
+  RetryFriendsListLoad(): void;
+
   SendFriendInvite(friend: SteamFriend): Promise<{ eResult: number; eFriendRelationship: number }>;
 
   SendFriendInviteBySteamID(steamid: SteamID | string): Promise<{ eResult: number; eFriendRelationship: number }>;
@@ -347,6 +355,10 @@ export interface FriendsUIFriendStore {
   SetApprovedNonFriendMessages(accountId: number): void;
 
   SetFriendsList(friendsList: unknown): void;
+
+  SetInitialFriendsListInSlices(re: unknown): Promise<void>;
+
+  SetNonFriendRelationship(re: unknown, Ie: unknown, _e: unknown): void;
 
   /** @param nonFriendsOnly If true, only sets non-friends offline */
   SetPersonasOffline(nonFriendsOnly: boolean): void;
@@ -390,9 +402,15 @@ export interface FriendsUIFriendStore {
 
   FriendGroupStore: FriendGroupStore;
 
+  friends_list_load_failed: boolean;
+
   friends_list_ready: boolean;
 
+  m_bApplyingInitialFriendsList: boolean;
+
   m_bAwayCallbackFired: boolean;
+
+  m_bFriendsListLoadFailed: boolean;
 
   m_bInitialAppInfoLoaded: boolean;
 
@@ -444,6 +462,8 @@ export interface FriendsUIFriendStore {
 
   m_FriendStorePrefs: FriendStorePrefs;
 
+  m_iFriendsListRequestSeq: number;
+
   m_iIntervalDelayLoadFriendsList: number | undefined;
 
   m_iIntervalSubscribeToPersonaStateUpdates: number;
@@ -453,11 +473,15 @@ export interface FriendsUIFriendStore {
   /** Expiration timestamps for 24h approval */
   m_mapApprovedNonFriendMessages: Map<number, number> | undefined;
 
+  m_mapDeferredRelationships: Map<number, number>;
+
   m_mapPlayerCache: Map<number, SteamFriend>;
 
   m_nMissingPersonaStateMaxRetries: number;
 
   m_nMissingPersonaStateRetryCount: number;
+
+  m_rgFriendsListUpdatesWhileApplyingInitial: unknown[];
 
   m_rgPersonaStateChangeCallbacks: Callbacks;
 

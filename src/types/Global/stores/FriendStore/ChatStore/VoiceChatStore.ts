@@ -15,6 +15,8 @@ export interface VoiceChatStore {
 
   AddStreamToOutput(e: unknown): void;
 
+  ApplyPersistedPerUserGainLevels(ue: unknown): void;
+
   BackOffAndRetryInitiateVoiceChat(): void;
 
   BHasSampleRateTooHighInBrowser(): boolean;
@@ -650,6 +652,8 @@ export interface Settings {
   m_bSettingsLoaded: boolean;
 
   m_bUseSteamAudioSpatialization: boolean;
+
+  m_mapPerUserGain: Map<unknown, unknown>;
 
   m_NoiseGateLevel: number;
 

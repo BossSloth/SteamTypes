@@ -327,6 +327,8 @@ export interface BaseGamepadInputSource {
 }
 
 export interface StandardGamepadInputSource extends BaseGamepadInputSource {
+  Destroy(): void;
+
   DoControllerListQuery(): Promise<void>;
 
   EnableAnalogInputMessages(e: unknown): void;
@@ -348,6 +350,8 @@ export interface StandardGamepadInputSource extends BaseGamepadInputSource {
   OnSystemButtonPress(e: unknown, t: unknown): void;
 
   m_NavController: GamepadNavigationManager;
+
+  m_registrations: Registrations;
 
   m_rgControllers: Map<number, RgControllers>;
 }
@@ -964,4 +968,23 @@ export interface RgControllers {
   controllerStyle: number;
 
   controllerType: number;
+}
+
+export interface Registrations {
+  Add(c: unknown): void;
+
+  Unregister(): void;
+
+  m_rgHandles: (RgHandles | RgHandles2)[];
+}
+
+export interface RgHandles {
+  /** @native */
+  unregister(): unknown;
+}
+
+export interface RgHandles2 {
+  invoke(y: unknown, p: unknown): void;
+
+  unregister(): void;
 }
