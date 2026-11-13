@@ -17,9 +17,9 @@ export interface ObjectArraysTests {
 
   objectArray: MixedArray[];
 
-  objectsWithArrays: ObjectsWithArrays[];
+  objectsWithArrays: ObjectsWithArray[];
 
-  objectsWithFunctions: ObjectsWithFunctions[];
+  objectsWithFunctions: ObjectsWithFunction[];
 }
 
 export interface ComplexNested {
@@ -54,13 +54,13 @@ export interface MixedNestedArray2 {
   completelyDifferent: CompletelyDifferent;
 }
 
-export interface ObjectsWithArrays {
+export interface ObjectsWithArray {
   name: string;
 
   values: number[];
 }
 
-export interface ObjectsWithFunctions {
+export interface ObjectsWithFunction {
   process(): string;
 
   id: number;

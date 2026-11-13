@@ -7,9 +7,10 @@ import {
   GenericType,
   InterfaceType,
   IterableTypeName,
+  NumberRecordType,
   PrimitiveType,
   Type,
-  UnionType,
+  uniqueTypeUnion,
 } from '../Type';
 import { defaultProtoProps, InterfaceToProcess } from '../types';
 import { objectTypeStrategies } from './detection-strategies';
@@ -28,7 +29,7 @@ export class TypeDetector {
   /**
    * Gets the TypeScript type for a value
    */
-  public detect(value: unknown, path: string, storeClassName = false, addImport = true): Type {
+  public detect(value: unknown, path: string, isCollectionItem = false, addImport = true): Type {
     if (value === null) return new PrimitiveType('null');
 
     const type = typeof value;
@@ -49,11 +50,11 @@ export class TypeDetector {
       case 'function':
         return new PrimitiveType('unknown'); // Placeholder, will be used differently in generateInterface
       case 'object':
-        return this.getObjectType(value as Record<string, unknown>, path, storeClassName, addImport);
+        return this.getObjectType(value as Record<string, unknown>, path, isCollectionItem, addImport);
     }
   }
 
-  private getObjectType(value: Record<string, unknown>, path: string, storeClassName: boolean, addImport: boolean): Type {
+  private getObjectType(value: Record<string, unknown>, path: string, isCollectionItem: boolean, addImport: boolean): Type {
     const circularPath = this.session.circular.get(value);
     if (circularPath !== undefined) {
       return new InterfaceType(circularPath);
@@ -69,6 +70,8 @@ export class TypeDetector {
     const genericObjectType = this.getGenericObjectType(value, path, addImport);
     if (genericObjectType !== null) return genericObjectType;
 
+    if (isNumberRecord(value)) return this.getNumberRecordType(value, path, isCollectionItem);
+
     if (!path) {
       console.error('❌ Error: path is undefined?', path, value);
 
@@ -77,13 +80,13 @@ export class TypeDetector {
 
     if (Object.keys(value).filter((key) => !defaultProtoProps.has(key)).length === 0) return new PrimitiveType('object');
 
-    const { interfaceName, nameCounter, protobufClassName } = this.session.names.allocateForObject(value, path);
+    const { interfaceName, nameCounter, protobufClassName } = this.session.names.allocateForObject(value, path, isCollectionItem);
 
     // Register this object as being processed to detect circular references
     this.session.circular.register(value, interfaceName);
 
     const interfaceToProcess: InterfaceToProcess = { obj: value, nameCounter, protobufClassName };
-    if (storeClassName) {
+    if (isCollectionItem) {
       const constructorString = value.constructor.toString();
       const isClass = /^class\s/.test(constructorString);
       const hasExtends = /class \w+ extends/.test(constructorString);
@@ -156,6 +159,15 @@ export class TypeDetector {
     return createSetType(valueType, iterableTypeName);
   }
 
+  private getNumberRecordType(value: Record<string, unknown>, path: string, isCollectionItem: boolean): NumberRecordType {
+    const order = this.session.interfaceRepository.nextOrder();
+    const entries = Object.entries(value).map(
+      ([key, item]) => [key, this.detect(item, `${path}.${key}`, true)] as [string, Type],
+    );
+
+    return new NumberRecordType(entries, { value, path, isCollectionItem, order });
+  }
+
   /**
    * Extracts and formats the types from an array of values
    */
@@ -165,24 +177,7 @@ export class TypeDetector {
       return new PrimitiveType('unknown');
     }
 
-    // Get unique types by mapping each item to its type and filtering out undefined
-    const uniqueTypes: Type[] = [];
-    const typeStrings = new Set<string>();
-
-    for (const item of items) {
-      const itemType = this.detect(item, path, true);
-      const typeString = itemType.toString();
-      if (!typeStrings.has(typeString)) {
-        typeStrings.add(typeString);
-        uniqueTypes.push(itemType);
-      }
-    }
-
-    if (uniqueTypes.length === 1) {
-      return uniqueTypes[0];
-    }
-
-    return new UnionType(uniqueTypes);
+    return uniqueTypeUnion(items.map((item) => this.detect(item, path, true)));
   }
 
   /**
@@ -213,6 +208,14 @@ export class TypeDetector {
 
 function isIterable(value: unknown): value is Iterable<unknown> {
   return Array.isArray(value) || value instanceof Set || isObservableSet(value) || value instanceof Map || isObservableMap(value);
+}
+
+function isNumberRecord(value: object): boolean {
+  const prototype: unknown = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) return false;
+  const keys = Object.keys(value);
+
+  return keys.length > 0 && keys.every((key) => /^\d+$/.test(key));
 }
 
 function isSteamObservableValue(obj: object): obj is { m_currentValue: unknown } {

@@ -375,6 +375,14 @@ const interfaceGenerationCases: TypeCase[] = [
     expectedInterfaces: ['InvalidName'],
   },
   {
+    name: 'single-segment numeric path for collection item -> InvalidName',
+    makeValue: () => ({ a: 1 }),
+    path: '0',
+    storeClassName: true,
+    expected: 'InvalidName',
+    expectedInterfaces: ['InvalidName'],
+  },
+  {
     name: 'object with only default proto props -> primitive `object`',
     makeValue: () => Object.create({}),
     expected: 'object',
@@ -394,9 +402,9 @@ const interfaceGenerationCases: TypeCase[] = [
       return { msgClass: MsgFoo };
     },
     path: 'root.things.0',
-    // singular parent of "things" is "thing"
-    expected: 'MsgFoothing',
-    expectedInterfaces: ['MsgFoothing'],
+    // singular parent of "things" is "Thing"
+    expected: 'MsgFooThing',
+    expectedInterfaces: ['MsgFooThing'],
   },
   {
     name: 'numeric path with embedded protobuf class without parent',

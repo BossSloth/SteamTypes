@@ -1,5 +1,40 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Comparator Record Types > record value interface gains missing property 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -2,6 +2,8 @@
+  achievements: Record<number, Achievement>;
+}
+
+export interface Achievement {
+  internal_key: number;
++
++  unlocked?: boolean;
+}"
+`;
+
+exports[`Comparator Record Types > source record replaces numeric-keyed interface 1`] = `
+"===================================================================
+--- a/target.ts
++++ b/target.ts
+@@ -1,12 +1,7 @@
+export interface Root {
+-  achievements: Achievements;
++  achievements: Record<number, Achievement>;
+}
+
+-export interface Achievements {
+-  1027: Achievement;
+-  1032: Achievement;
+-}
+-
+export interface Achievement {
+  internal_key: number;
+}"
+`;
+
 exports[`Comparator Record Types > target record vs source different record 1`] = `
 "===================================================================
 --- a/target.ts

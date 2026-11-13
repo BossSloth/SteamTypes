@@ -1,4 +1,4 @@
-import { ArrayType, GenericType, InterfaceType, Type, UnionType } from '../Type';
+import { ArrayType, GenericType, InterfaceType, NumberRecordType, Type, UnionType } from '../Type';
 import { FunctionInfo, InterfaceProperty, TypeScriptInterface } from '../types';
 
 const REQUIRED_OVERLAP = 0.65;
@@ -437,6 +437,13 @@ function replaceTypeReferences(type: Type, aliasMap: Map<string, string>): Type 
     const updatedValueType = replaceTypeReferences(type.valueType, aliasMap);
 
     return new ArrayType(updatedValueType);
+  } else if (type instanceof NumberRecordType) {
+    // Recursively update each entry type, keeping the subclass so records can be resolved after merging
+    const updatedEntries = type.entries.map(
+      ([key, entryType]) => [key, replaceTypeReferences(entryType, aliasMap)] as [string, Type],
+    );
+
+    return new NumberRecordType(updatedEntries, type.source);
   } else if (type instanceof GenericType) {
     // Recursively update each type parameter
     const updatedTypeParams = type.typeParameters.map((param) => replaceTypeReferences(param, aliasMap));

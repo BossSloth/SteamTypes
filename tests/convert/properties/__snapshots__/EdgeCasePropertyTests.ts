@@ -23,7 +23,7 @@ export interface EdgeCasePropertyTests {
 export interface ArrayTypeOptimizationTests {
   mergeableArrays: (number | string)[][];
 
-  nestedArrays: ((boolean | NestedArrays2)[] | (NestedArrays | NestedArrays2)[] | (number | string)[])[];
+  nestedArrays: ((boolean | NestedArray2)[] | (NestedArray | NestedArray2)[] | (number | string)[])[];
 
   unmergableArrays: (number[] | string[])[];
 }
@@ -39,7 +39,7 @@ export interface CircularReferenceTests {
 }
 
 export interface InterfaceWithEnumTest {
-  dataObjects: DataObjects[];
+  dataObjects: DataObject[];
 }
 
 export interface MixedComplexEdgeCases {
@@ -108,11 +108,11 @@ export interface SpecialValueTests {
   windowObject: WindowObject;
 }
 
-export interface NestedArrays {
+export interface NestedArray {
   b: number;
 }
 
-export interface NestedArrays2 {
+export interface NestedArray2 {
   c: number;
 }
 
@@ -138,7 +138,7 @@ export interface SimpleCircularReference {
   self: SimpleCircularReference;
 }
 
-export interface DataObjects {
+export interface DataObject {
   /**
    * This value is an enum
    * @currentValue 1

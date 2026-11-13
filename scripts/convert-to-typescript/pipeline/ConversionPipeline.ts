@@ -2,6 +2,7 @@ import { InterfaceBuilder } from '@Convert/building/InterfaceBuilder';
 import { CodeGenerator } from '../generation/CodeGenerator';
 import { InterfaceMerger } from '../merging/InterfaceMerger';
 import { renameImportCollisions, updateTypeReferences } from '../merging/merge-helpers';
+import { resolveNumberRecords } from '../merging/resolve-number-records';
 import { ConversionSession } from '../session/ConversionSession';
 
 /**
@@ -20,6 +21,7 @@ export class ConversionPipeline {
     const processedCount = this.build();
 
     const merged = new InterfaceMerger().merge(this.session.interfaceRepository.definitions);
+    resolveNumberRecords(merged, this.session.names);
     const importAliasMap = renameImportCollisions(merged, this.session.imports.localNames(), this.rootName);
     updateTypeReferences(merged, importAliasMap);
 

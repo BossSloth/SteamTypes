@@ -4,6 +4,7 @@ import {
   basicPropertyTests,
   edgeCasePropertyTests,
   mergedInterfaceTests,
+  numberRecordTests,
   objectArraysTests,
 } from './test-cases';
 import { converterFlowTests } from './test-cases/converter-flow-test-cases';
@@ -20,6 +21,8 @@ createTest('Advanced Property Tests', advancedPropertyTests);
 createTest('Edge Case Property Tests', edgeCasePropertyTests);
 
 createTest('Merged Interface Tests', mergedInterfaceTests);
+
+createTest('Number Record Tests', numberRecordTests);
 
 createTest('Object Arrays Tests', objectArraysTests);
 

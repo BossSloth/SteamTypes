@@ -268,7 +268,7 @@ export type IterableTypeName = SetName | MapName;
 
 type ProtoBufNames = 'ProtobufClass' | 'ProtobufInterface';
 
-export type GenericTypeName = IterableTypeName | ProtoBufNames | 'ObservableValue';
+export type GenericTypeName = IterableTypeName | ProtoBufNames | 'ObservableValue' | 'Record';
 
 export class GenericType extends Type {
   public readonly kind: string = 'generic';
@@ -308,4 +308,47 @@ export function createSetType(valueType: Type, setName: SetName = 'Set'): Generi
 
 export function createMapType(keyType: Type, valueType: Type, mapName: MapName = 'Map'): GenericType {
   return new GenericType(mapName, [keyType, valueType]);
+}
+
+export function uniqueTypeUnion(types: Type[]): Type {
+  const uniqueTypes: Type[] = [];
+  const typeStrings = new Set<string>();
+
+  for (const type of types) {
+    const typeString = type.toString();
+    if (!typeStrings.has(typeString)) {
+      typeStrings.add(typeString);
+      uniqueTypes.push(type);
+    }
+  }
+
+  if (uniqueTypes.length === 1) {
+    return uniqueTypes[0];
+  }
+
+  return new UnionType(uniqueTypes);
+}
+
+export interface NumberRecordSource {
+  value: Record<string, unknown>;
+  path: string;
+  isCollectionItem: boolean;
+  order: number;
+}
+
+/**
+ * A number-keyed record whose final shape is decided after merging: it stays a `Record` when every value
+ * resolves to the same type, otherwise it is turned back into an interface with numeric properties.
+ */
+export class NumberRecordType extends GenericType {
+  constructor(
+    public readonly entries: [string, Type][],
+    public readonly source: NumberRecordSource,
+  ) {
+    super('Record', [new PrimitiveType('number'), uniqueTypeUnion(entries.map(([, type]) => type))]);
+  }
+
+  public get valueType(): Type {
+    return this.typeParameters[1];
+  }
 }

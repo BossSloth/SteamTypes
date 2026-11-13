@@ -23,6 +23,57 @@ export const recordCases: Record<string, ComparatorTest> = {
     `,
   },
 
+  'source record replaces numeric-keyed interface': {
+    interfaceName: 'Root',
+    target: dedent /* ts */ `
+      export interface Root {
+        achievements: Achievements;
+      }
+
+      export interface Achievements {
+        1027: Achievement;
+        1032: Achievement;
+      }
+
+      export interface Achievement {
+        internal_key: number;
+      }
+    `,
+    source: dedent /* ts */ `
+      export interface Root {
+        achievements: Record<number, Achievement>;
+      }
+
+      export interface Achievement {
+        internal_key: number;
+        unlocked?: boolean;
+      }
+    `,
+  },
+
+  'record value interface gains missing property': {
+    interfaceName: 'Root',
+    target: dedent /* ts */ `
+      export interface Root {
+        achievements: Record<number, Achievement>;
+      }
+
+      export interface Achievement {
+        internal_key: number;
+      }
+    `,
+    source: dedent /* ts */ `
+      export interface Root {
+        achievements: Record<number, Achievement>;
+      }
+
+      export interface Achievement {
+        internal_key: number;
+        unlocked?: boolean;
+      }
+    `,
+  },
+
   'string interface same as record': {
     interfaceName: 'Foo',
     expectsNoDiff: true,
