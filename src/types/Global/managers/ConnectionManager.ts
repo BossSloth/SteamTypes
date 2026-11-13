@@ -41,7 +41,7 @@ export interface ConnectionManager {
 
   GetServerTimeMS(): unknown;
 
-  GetServiceTransport(): unknown;
+  GetServiceTransport(): ServiceTransport;
 
   InternalAdjustClock(): Promise<unknown>;
 
